@@ -1,182 +1,85 @@
 package org.asciidoctor;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.xmlmatchers.xpath.HasXPath.hasXPath;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
 
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.junit.Test;
+import org.xml.sax.SAXException;
+
+import com.google.common.io.CharStreams;
 
 public class WhenAnAsciidoctorClassIsInstantiated {
 
 	private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 	
-	private static final String EXPECTED_GENERATED_FILE = "<div id=\"preamble\">\n" + 
-			"  <div class=\"sectionbody\">\n" + 
-			"<div class=\"paragraph\">\n" + 
-			"    \n" + 
-			"  <p>Preamble paragraph.</p>\n" + 
-			"</div>\n" + 
-			"<div class=\"admonitionblock\">\n" + 
-			"  <table>\n" + 
-			"    <tr>\n" + 
-			"      <td class=\"icon\">\n" + 
-			"        \n" + 
-			"        <div class=\"title\">Note</div>\n" + 
-			"        \n" + 
-			"      </td>\n" + 
-			"      <td class=\"content\">\n" + 
-			"        \n" + 
-			"        This is test, only a test.\n" + 
-			"\n" + 
-			"      </td>\n" + 
-			"    </tr>\n" + 
-			"  </table>\n" + 
-			"</div>\n" + 
-			"\n" + 
-			"  </div>\n" + 
-			"</div>\n" + 
-			"\n" + 
-			"<div class=\"sect1\">\n" + 
-			"  <h2 id=\"id_section_a\">Section A</h2>\n" + 
-			"  \n" + 
-			"  <div class=\"sectionbody\">\n" + 
-			"<div class=\"paragraph\">\n" + 
-			"    \n" + 
-			"  <p><strong>Section A</strong> paragraph.</p>\n" + 
-			"</div>\n" + 
-			"\n" + 
-			"<div class=\"sect2\">\n" + 
-			"  <h3 id=\"id_section_a_subsection\">Section A Subsection</h3>\n" + 
-			"  \n" + 
-			"<div class=\"paragraph\">\n" + 
-			"    \n" + 
-			"  <p><strong>Section A</strong> <em>subsection</em> paragraph.</p>\n" + 
-			"</div>\n" + 
-			"\n" + 
-			"  \n" + 
-			"</div>\n" + 
-			"\n" + 
-			"\n" + 
-			"  </div>\n" + 
-			"  \n" + 
-			"</div>\n" + 
-			"\n" + 
-			"\n" + 
-			"<div class=\"sect1\">\n" + 
-			"  <h2 id=\"id_section_b\">Section B</h2>\n" + 
-			"  \n" + 
-			"  <div class=\"sectionbody\">\n" + 
-			"<div class=\"paragraph\">\n" + 
-			"    \n" + 
-			"  <p><strong>Section B</strong> paragraph.</p>\n" + 
-			"</div>\n" + 
-			"<div class=\"ulist\">\n" + 
-			"  <div class=\"title\">Section B list</div>\n" + 
-			"  <ul>\n" + 
-			"  \n" + 
-			"    <li>\n" + 
-			"      <p>Item 1</p>\n" + 
-			"      \n" + 
-			"    </li>\n" + 
-			"  \n" + 
-			"    <li>\n" + 
-			"      <p>Item 2</p>\n" + 
-			"      \n" + 
-			"    </li>\n" + 
-			"  \n" + 
-			"    <li>\n" + 
-			"      <p>Item 3</p>\n" + 
-			"      \n" + 
-			"    </li>\n" + 
-			"  \n" + 
-			"  </ul>\n" + 
-			"</div>\n" + 
-			"\n" + 
-			"  </div>\n" + 
-			"  \n" + 
-			"</div>";
-	
 	@Test
-	public void file_document_should_be_rendered_into_default_backend() {
+	public void file_document_should_be_rendered_into_default_backend() throws IOException, SAXException, ParserConfigurationException {
 		
-		String render_file = asciidoctor.render_file("build/resources/test/src/asciidoc/sample.asciidoc", new HashMap<Object, Object>());
-		assertThat(render_file.trim(), is(EXPECTED_GENERATED_FILE));
+		String render_file = asciidoctor.render_file("target/test-classes/src/documents/rendersample.asciidoc", new HashMap<Object, Object>());
+		assertRenderedFile(render_file);
+		
 	}
 	
 	@Test
-	public void string_content_document_should_be_rendered_into_default_backend() {
+	public void string_content_document_should_be_rendered_into_default_backend() throws IOException, SAXException, ParserConfigurationException {
 		
-		String content = "Document Title\r\n" + 
-				"==============\r\n" + 
-				"Doc Writer <thedoc@asciidoctor.org>\r\n" + 
-				":idprefix: id_\r\n" + 
-				"\r\n" + 
-				"Preamble paragraph.\r\n" + 
-				"\r\n" + 
-				"NOTE: This is test, only a test.\r\n" + 
-				"\r\n" + 
-				"== Section A\r\n" + 
-				"\r\n" + 
-				"*Section A* paragraph.\r\n" + 
-				"\r\n" + 
-				"=== Section A Subsection\r\n" + 
-				"\r\n" + 
-				"*Section A* 'subsection' paragraph.\r\n" + 
-				"\r\n" + 
-				"== Section B\r\n" + 
-				"\r\n" + 
-				"*Section B* paragraph.\r\n" + 
-				"\r\n" + 
-				".Section B list\r\n" + 
-				"* Item 1\r\n" + 
-				"* Item 2\r\n" + 
-				"* Item 3";
+		InputStream content = new FileInputStream("target/test-classes/src/documents/rendersample.asciidoc");
+		String render_file = asciidoctor.render(toString(content), new HashMap<Object, Object>());
 		
-		
-		
-		String render_file = asciidoctor.render(content, new HashMap<Object, Object>());
-		assertThat(render_file.trim(), is(EXPECTED_GENERATED_FILE));
+		assertRenderedFile(render_file);
 	}
 	
 	@Test
-	public void document_object_should_be_loaded_from_file_and_be_accessible_() {
-		Document document = asciidoctor.load_file("build/resources/test/src/asciidoc/sample.asciidoc", new HashMap<Object, Object>());
-		assertThat(document.author(), is("Doc Writer"));
+	public void document_object_should_be_loaded_from_file_and_be_accessible_() throws IOException, SAXException, ParserConfigurationException {
+		Document document = asciidoctor.load_file("target/test-classes/src/documents/rendersample.asciidoc", new HashMap<Object, Object>());
+		String render_file = document.render(new HashMap<Object, Object>());
+		
+		assertRenderedFile(render_file);
 	}
 
 	@Test
-	public void document_object_should_be_loaded_from_string_content_and_be_accessible_() {
+	public void document_object_should_be_loaded_from_string_content_and_be_accessible_() throws IOException, SAXException, ParserConfigurationException {
+	
+		InputStream content = new FileInputStream("target/test-classes/src/documents/rendersample.asciidoc");
+		Document document = asciidoctor.load(toString(content), new HashMap<Object, Object>());
 		
-		String content = "Document Title\r\n" + 
-				"==============\r\n" + 
-				"Doc Writer <thedoc@asciidoctor.org>\r\n" + 
-				":idprefix: id_\r\n" + 
-				"\r\n" + 
-				"Preamble paragraph.\r\n" + 
-				"\r\n" + 
-				"NOTE: This is test, only a test.\r\n" + 
-				"\r\n" + 
-				"== Section A\r\n" + 
-				"\r\n" + 
-				"*Section A* paragraph.\r\n" + 
-				"\r\n" + 
-				"=== Section A Subsection\r\n" + 
-				"\r\n" + 
-				"*Section A* 'subsection' paragraph.\r\n" + 
-				"\r\n" + 
-				"== Section B\r\n" + 
-				"\r\n" + 
-				"*Section B* paragraph.\r\n" + 
-				"\r\n" + 
-				".Section B list\r\n" + 
-				"* Item 1\r\n" + 
-				"* Item 2\r\n" + 
-				"* Item 3";
+		String render_file = document.render(new HashMap<Object, Object>());
+		assertRenderedFile(render_file);
 		
-		Document document = asciidoctor.load(content, new HashMap<Object, Object>());
-		assertThat(document.author(), is("Doc Writer"));
+	}
+	
+	private void assertRenderedFile(String render_file) throws IOException, SAXException, ParserConfigurationException {
+		Source renderFileSource = new DOMSource(inputStream2Document(new ByteArrayInputStream(render_file.getBytes())));
+		
+		assertThat(renderFileSource, hasXPath("/div[@class='sect1']"));
+		assertThat(renderFileSource, hasXPath("/div/h2[@id='_section_a']"));
+		assertThat(renderFileSource, hasXPath("/div/h2", is("Section A")));
+		assertThat(renderFileSource, hasXPath("/div/div[@class='sectionbody']"));
+	}
+	
+	private static String toString(InputStream inputStream) throws IOException {
+		return CharStreams.toString( new InputStreamReader( inputStream ));
+	}
+	
+	private static org.w3c.dom.Document inputStream2Document(InputStream inputStream) throws IOException, SAXException, ParserConfigurationException {
+	    DocumentBuilderFactory newInstance = DocumentBuilderFactory.newInstance();
+	    newInstance.setNamespaceAware(true);
+	    org.w3c.dom.Document parse = newInstance.newDocumentBuilder().parse(inputStream);
+	    return parse;
 	}
 	
 }

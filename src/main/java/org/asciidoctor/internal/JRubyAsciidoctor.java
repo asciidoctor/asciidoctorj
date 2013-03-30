@@ -10,11 +10,11 @@ import org.jruby.javasupport.JavaEmbedUtils;
 
 public class JRubyAsciidoctor implements Asciidoctor {
 
-	private Ruby runtime;
 	private AsciidoctorModule asciidoctorModule;
 
-	private JRubyAsciidoctor() {
+	private JRubyAsciidoctor(AsciidoctorModule asciidoctorModule) {
 		super();
+		this.asciidoctorModule = asciidoctorModule;
 	}
 
 	public static Asciidoctor create() {
@@ -25,23 +25,18 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
 		AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory.createAsciidoctorModule();
 		
-		JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor();
-		jRubyAsciidoctor.asciidoctorModule = asciidoctorModule;
-		jRubyAsciidoctor.runtime = rubyRuntime;
-		
+		JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule);
 		return jRubyAsciidoctor;
 	}
 
 	@Override
 	public Document load(String content, Map<Object, Object> options) {
-		Object document = this.asciidoctorModule.load(content, options);
-		return RubyUtils.rubyToJava(runtime, (org.jruby.runtime.builtin.IRubyObject) document, Document.class);
+		return  this.asciidoctorModule.load(content, options);
 	}
 
 	@Override
 	public Document load_file(String filename, Map<Object, Object> options) {
-		Object document = this.asciidoctorModule.load_file(filename, options);
-		return RubyUtils.rubyToJava(runtime, (org.jruby.runtime.builtin.IRubyObject) document, Document.class);
+		return  this.asciidoctorModule.load_file(filename, options);
 	}
 
 	@Override
