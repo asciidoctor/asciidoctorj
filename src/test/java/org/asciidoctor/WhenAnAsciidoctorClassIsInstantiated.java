@@ -29,7 +29,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	@Test
 	public void file_document_should_be_rendered_into_default_backend() throws IOException, SAXException, ParserConfigurationException {
 		
-		String render_file = asciidoctor.render_file("target/test-classes/src/documents/rendersample.asciidoc", new HashMap<Object, Object>());
+		String render_file = asciidoctor.render_file("target/test-classes/rendersample.asciidoc", new HashMap<Object, Object>());
 		assertRenderedFile(render_file);
 		
 	}
@@ -37,7 +37,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	@Test
 	public void string_content_document_should_be_rendered_into_default_backend() throws IOException, SAXException, ParserConfigurationException {
 		
-		InputStream content = new FileInputStream("target/test-classes/src/documents/rendersample.asciidoc");
+		InputStream content = new FileInputStream("target/test-classes/rendersample.asciidoc");
 		String render_file = asciidoctor.render(toString(content), new HashMap<Object, Object>());
 		
 		assertRenderedFile(render_file);
@@ -45,7 +45,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	
 	@Test
 	public void document_object_should_be_loaded_from_file_and_be_accessible_() throws IOException, SAXException, ParserConfigurationException {
-		Document document = asciidoctor.load_file("target/test-classes/src/documents/rendersample.asciidoc", new HashMap<Object, Object>());
+		Document document = asciidoctor.load_file("target/test-classes/rendersample.asciidoc", new HashMap<Object, Object>());
 		String render_file = document.render(new HashMap<Object, Object>());
 		
 		assertRenderedFile(render_file);
@@ -54,7 +54,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	@Test
 	public void document_object_should_be_loaded_from_string_content_and_be_accessible_() throws IOException, SAXException, ParserConfigurationException {
 	
-		InputStream content = new FileInputStream("target/test-classes/src/documents/rendersample.asciidoc");
+		InputStream content = new FileInputStream("target/test-classes/rendersample.asciidoc");
 		Document document = asciidoctor.load(toString(content), new HashMap<Object, Object>());
 		
 		String render_file = document.render(new HashMap<Object, Object>());

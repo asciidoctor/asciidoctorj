@@ -13,15 +13,15 @@ public class WhenDirectoriesWithAsciidocFilesAreScanned {
 	@Test
 	public void only_asciidoc_files_should_be_returned() {
 
-		DirectoryWalker directoryWalker = new AsciidocDirectoryWalker("build/resources/test/src");
+		DirectoryWalker directoryWalker = new AsciidocDirectoryWalker("target/test-classes/src");
 		List<File> asciidocFiles = directoryWalker.scan();
 
 		assertThat(
 				asciidocFiles,
-				containsInAnyOrder(new File("build/resources/test/src/documents/sample.ad"), new File(
-						"build/resources/test/src/documents/sample.adoc"), new File(
-						"build/resources/test/src/documents/sample.asciidoc"), new File(
-						"build/resources/test/src/documents/sample.asc")));
+				containsInAnyOrder(new File("target/test-classes/src/documents/sample.ad"), new File(
+						"target/test-classes/src/documents/sample.adoc"), new File(
+						"target/test-classes/src/documents/sample.asciidoc"), new File(
+						"target/test-classes/src/documents/sample.asc")));
 
 	}
 
