@@ -9,7 +9,6 @@ class JRubyAsciidoctorModuleFactory {
 	
 	private static final String script = 
 			"require 'java'\n" +
-			"require 'bundler/setup'\n" + 
 			"require 'asciidoctor'\n"+
 			"class AsciidoctorModule\n" + 
 			"  java_implements Java::Asciidoctor\n" + 
