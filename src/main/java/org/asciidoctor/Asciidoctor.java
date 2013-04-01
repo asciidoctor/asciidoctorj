@@ -8,10 +8,10 @@ import org.asciidoctor.internal.JRubyAsciidoctor;
 public interface Asciidoctor {
 
 	Document load(String content, Map<Object, Object> options);
-	Document load_file(String filename, Map<Object, Object> options);
+	Document loadFile(String filename, Map<Object, Object> options);
 	
 	String render(String content, Map<Object, Object> options);
-	String render_file(String filename, Map<Object, Object> options);
+	String renderFile(String filename, Map<Object, Object> options);
 	
 	public static class Factory {
 		

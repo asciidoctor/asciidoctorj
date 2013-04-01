@@ -35,7 +35,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	}
 
 	@Override
-	public Document load_file(String filename, Map<Object, Object> options) {
+	public Document loadFile(String filename, Map<Object, Object> options) {
 		return  this.asciidoctorModule.load_file(filename, options);
 	}
 
@@ -45,7 +45,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	}
 
 	@Override
-	public String render_file(String filename, Map<Object, Object> options) {
+	public String renderFile(String filename, Map<Object, Object> options) {
 		return this.asciidoctorModule.render_file(filename, options);
 	}
 
