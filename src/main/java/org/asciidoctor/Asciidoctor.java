@@ -12,27 +12,6 @@ import org.asciidoctor.internal.JRubyAsciidoctor;
  */
 public interface Asciidoctor {
 
-	
-	/**
-	 * Parse the AsciiDoc source input into an Asciidoctor Document {@link Document}.
-	 * 
-	 * @param content the AsciiDoc source as String.
-	 * @param options a Hash of options to control processing (default: {}).
-	 * @return Asciidoctor document.
-	 * @see Document
-	 */
-	Document load(String content, Map<Object, Object> options);
-	
-	/**
-	 * Parse the AsciiDoc source input into an Asciidoctor Document {@link Document}
-	 * 
-	 * @param filename an input Asciidoctor file. 
-	 * @param options a Hash of options to control processing (default: {}).
-	 * @return Asciidoctor document.
-	 * @see Document
-	 */
-	Document loadFile(String filename, Map<Object, Object> options);
-	
 	/**
 	 * Parse the AsciiDoc source input into an Document {@link Document} and render it to the specified backend format.
 	 * 
@@ -43,7 +22,7 @@ public interface Asciidoctor {
 	 * @param options a Hash of options to control processing (default: {}).
 	 * @return the rendered output String is returned
 	 */
-	String render(String content, Map<Object, Object> options);
+	String render(String content, Map<String, Object> options);
 	
 	/**
 	 *  Parse the AsciiDoc source input into an Document {@link Document} and render it to the specified backend format.
@@ -64,7 +43,7 @@ public interface Asciidoctor {
 	 * @param options a Hash of options to control processing (default: {}).
 	 * @return returns nothing if the rendered output String is written to a file.
 	 */
-	String renderFile(String filename, Map<Object, Object> options);
+	String renderFile(String filename, Map<String, Object> options);
 	
 	/**
 	 * Factory for creating a new instance of Asciidoctor interface.

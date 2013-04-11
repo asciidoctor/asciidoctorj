@@ -4,19 +4,22 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.Document;
 import org.jruby.Ruby;
+import org.jruby.RubyHash;
 import org.jruby.javasupport.JavaEmbedUtils;
 
 public class JRubyAsciidoctor implements Asciidoctor {
 
 	private AsciidoctorModule asciidoctorModule;
+	private Ruby rubyRuntime;
 
-	private JRubyAsciidoctor(AsciidoctorModule asciidoctorModule) {
+	private JRubyAsciidoctor(AsciidoctorModule asciidoctorModule, Ruby rubyRuntime) {
 		super();
 		this.asciidoctorModule = asciidoctorModule;
+		this.rubyRuntime = rubyRuntime;
 	}
 
+	
 	public static Asciidoctor create() {
 		Ruby rubyRuntime = JavaEmbedUtils.initialize(Collections.EMPTY_LIST);
 		
@@ -25,28 +28,25 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
 		AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory.createAsciidoctorModule();
 		
-		JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule);
+		JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
 		return jRubyAsciidoctor;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Document load(String content, Map<Object, Object> options) {
-		return  this.asciidoctorModule.load(content, options);
+	public String render(String content, Map<String, Object> options) {
+		
+		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+		return this.asciidoctorModule.render(content, rubyHash);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Document loadFile(String filename, Map<Object, Object> options) {
-		return  this.asciidoctorModule.load_file(filename, options);
-	}
-
-	@Override
-	public String render(String content, Map<Object, Object> options) {
-		return this.asciidoctorModule.render(content, options);
-	}
-
-	@Override
-	public String renderFile(String filename, Map<Object, Object> options) {
-		return this.asciidoctorModule.render_file(filename, options);
+	public String renderFile(String filename, Map<String, Object> options) {
+		
+		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+		return this.asciidoctorModule.render_file(filename, rubyHash);
+		
 	}
 
 }
