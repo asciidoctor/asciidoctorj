@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,14 +82,11 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	@Test
 	public void docbook_document_should_be_rendered_into_current_directory() throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
 		
-		
-		
 		Map<String, Object> attributes = attributes().backend("docbook").asMap();
 		Map<String, Object> options = options()
 										.inPlace(true)
 										.attributes(attributes)
 									  .asMap();
-		
 		
 		String renderContent = asciidoctor.renderFile("target/test-classes/rendersample.asciidoc", options);
 
@@ -102,12 +100,60 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	}
 	
 	@Test
+	public void string_content_with_custom_date_should_be_rendered() throws IOException, SAXException, ParserConfigurationException {
+		
+		InputStream content = new FileInputStream("target/test-classes/documentwithdate.asciidoc");
+		
+		Calendar customDate = Calendar.getInstance();
+		customDate.set(Calendar.YEAR, 2012);
+		customDate.set(Calendar.MONTH, 11);
+		customDate.set(Calendar.DATE, 5);
+		
+		Map<String, Object> attributes = attributes().localDate(customDate.getTime()).asMap();
+		Map<String, Object> options = options()
+										.attributes(attributes)
+									  .asMap();
+		
+		String render_file = asciidoctor.render(toString(content), options);
+		assertRenderedLocalDateContent(render_file, "2012-12-05.");
+		
+	}
+	
+	@Test
+	public void string_content_with_custom_time_should_be_rendered() throws IOException, SAXException, ParserConfigurationException {
+		
+		InputStream content = new FileInputStream("target/test-classes/documentwithtime.asciidoc");
+		
+		Calendar customTime = Calendar.getInstance();
+		customTime.set(Calendar.HOUR_OF_DAY, 23);
+		customTime.set(Calendar.MINUTE, 15);
+		customTime.set(Calendar.SECOND, 0);
+		
+		Map<String, Object> attributes = attributes().localTime(customTime.getTime()).asMap();
+		Map<String, Object> options = options()
+										.attributes(attributes)
+									  .asMap();
+		
+		String render_file = asciidoctor.render(toString(content), options);
+		
+		assertRenderedLocalDateContent(render_file, "23:15:00 CEST.");
+		
+	}
+	
+	@Test
 	public void string_content_document_should_be_rendered_into_default_backend() throws IOException, SAXException, ParserConfigurationException {
 		
 		InputStream content = new FileInputStream("target/test-classes/rendersample.asciidoc");
 		String render_file = asciidoctor.render(toString(content), new HashMap<String, Object>());
 		
 		assertRenderedFile(render_file);
+	}
+	
+	private void assertRenderedLocalDateContent(String render_content, String contentDateOrTime) throws IOException, SAXException, ParserConfigurationException {
+		Source renderFileSource = new DOMSource(inputStream2Document(new ByteArrayInputStream(render_content.getBytes())));
+		
+		assertThat(renderFileSource, hasXPath("/div/div[@class='sectionbody']/div/p", is(contentDateOrTime)));
+		
 	}
 	
 	private void assertRenderedFile(String render_file) throws IOException, SAXException, ParserConfigurationException {
