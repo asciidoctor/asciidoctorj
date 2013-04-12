@@ -14,6 +14,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -136,7 +138,9 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 		
 		String render_file = asciidoctor.render(toString(content), options);
 		
-		assertRenderedLocalDateContent(render_file, "23:15:00 CEST.");
+		Format TIME_FORMAT = new SimpleDateFormat("HH:mm:ss z"); 
+		
+		assertRenderedLocalDateContent(render_file, TIME_FORMAT.format(customTime.getTime())+".");
 		
 	}
 	
