@@ -52,6 +52,10 @@ public interface Asciidoctor {
 	 */
 	public static class Factory {
 		
+		/**
+		 * Creates a new instance of Asciidoctor.
+		 * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor Ruby calls.
+		 */
 		public static Asciidoctor create() {
 			return JRubyAsciidoctor.create();
 		}
