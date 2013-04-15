@@ -1,5 +1,6 @@
 package org.asciidoctor.internal;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Map;
 
@@ -42,10 +43,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public String renderFile(String filename, Map<String, Object> options) {
+	public String renderFile(File filename, Map<String, Object> options) {
 		
 		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-		return this.asciidoctorModule.render_file(filename, rubyHash);
+		return this.asciidoctorModule.render_file(filename.getAbsolutePath(), rubyHash);
 		
 	}
 

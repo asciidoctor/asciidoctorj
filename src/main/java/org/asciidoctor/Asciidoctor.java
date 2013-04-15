@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import java.io.File;
 import java.util.Map;
 
 import org.asciidoctor.internal.JRubyAsciidoctor;
@@ -43,7 +44,7 @@ public interface Asciidoctor {
 	 * @param options a Hash of options to control processing (default: {}).
 	 * @return returns nothing if the rendered output String is written to a file.
 	 */
-	String renderFile(String filename, Map<String, Object> options);
+	String renderFile(File filename, Map<String, Object> options);
 	
 	/**
 	 * Factory for creating a new instance of Asciidoctor interface.

@@ -43,7 +43,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	@Test
 	public void file_document_should_be_rendered_into_default_backend() throws IOException, SAXException, ParserConfigurationException {
 		
-		String render_file = asciidoctor.renderFile("target/test-classes/rendersample.asciidoc", new HashMap<String, Object>());
+		String render_file = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), new HashMap<String, Object>());
 		assertRenderedFile(render_file);
 		
 	}
@@ -51,7 +51,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	@Test
 	public void file_document_should_be_rendered_into_current_directory() throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
 		
-		String renderContent = asciidoctor.renderFile("target/test-classes/rendersample.asciidoc", options().inPlace(true).asMap());
+		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options().inPlace(true).asMap());
 
 		File expectedFile = new File("target/test-classes/rendersample.html");
 		
@@ -70,7 +70,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 										.safe(SafeMode.UNSAFE)
 										.toDir(testFolder.getRoot())
 									.asMap();
-		String renderContent = asciidoctor.renderFile("target/test-classes/rendersample.asciidoc", options);
+		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
 
 		File expectedFile = new File(testFolder.getRoot(),"rendersample.html");
 		
@@ -90,7 +90,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 										.attributes(attributes)
 									  .asMap();
 		
-		String renderContent = asciidoctor.renderFile("target/test-classes/rendersample.asciidoc", options);
+		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
 
 		File expectedFile = new File("target/test-classes/rendersample.xml");
 		
