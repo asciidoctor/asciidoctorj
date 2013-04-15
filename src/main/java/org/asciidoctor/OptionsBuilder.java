@@ -25,76 +25,149 @@ public class OptionsBuilder {
 		super();
 	}
 	
+	/**
+	 * Creates options builder instance.
+	 * @return options builder instance.
+	 */
 	public static OptionsBuilder options() {
 		return new OptionsBuilder();
 	}
 	
+	/**
+	 * Sets in place attribute. 
+	 * @param inPlace value.
+	 * @return this instance.
+	 */
 	public OptionsBuilder inPlace(boolean inPlace) {
 		this.options.put(IN_PLACE, inPlace);
 		return this;
 	}
 	
+	/**
+	 * Sets header footer attribute.
+	 * @param headerFooter value.
+	 * @return this instance.
+	 */
 	public OptionsBuilder headerFooter(boolean headerFooter) {
 		this.options.put(HEADER_FOOTER, headerFooter);
 		return this;
 	}
 	
+	/**
+	 * Sets template directory.
+	 * @param templateDir directory where templates are stored.
+	 * @return this instance.
+	 */
 	public OptionsBuilder templateDir(String templateDir) {
 		this.options.put(TEMPLATE_DIR, templateDir);
 		return this;
 	}
 	
+	/**
+	 * Sets the template engine.
+	 * @param templateEngine used to render the document.
+	 * @return this instance.
+	 */
 	public OptionsBuilder templateEngine(String templateEngine) {
 		this.options.put(TEMPLATE_ENGINE, templateEngine);
 		return this;
 	}
 	
+	/**
+	 * Sets attributes used for rendering input.
+	 * @param attributes map.
+	 * @return this instance.
+	 */
 	public OptionsBuilder attributes(Map<String, Object> attributes) {
 		this.options.put(ATTRIBUTES, attributes);
 		return this;
 	}
 	
+	/**
+	 * Sets to file value. This is the destination file name.
+	 * @param toFile name of output file.
+	 * @return this instance.
+	 */
 	public OptionsBuilder toFile(String toFile) {
 		this.options.put(TO_FILE, toFile);
 		return this;
 	}
 	
+	/**
+	 * Sets to dir value. This is the destination directory.
+	 * @param directory where output is generated.
+	 * @return this instance.
+	 */
 	public OptionsBuilder toDir(File directory) {
 		this.options.put(TO_DIR, directory.getAbsolutePath());
 		return this;
 	}
 	
+	/**
+	 * Sets if asciidoctor should create output directory if it does not exist or not. 
+	 * @param mkDirs true if directory must be created, false otherwise.
+	 * @return this instance.
+	 */
 	public OptionsBuilder mkDirs(boolean mkDirs) {
 		this.options.put(MKDIRS, mkDirs);
 		return this;
 	}
 	
+	/**
+	 * Sets the safe mode.
+	 * @param safeMode to run asciidoctor.
+	 * @return this instance.
+	 */
 	public OptionsBuilder safe(SafeMode safeMode) {
 		this.options.put(SAFE, safeMode.getLevel());
 		return this;
 	}
 	
+	/**
+	 * Sets eruby implementation.
+	 * @param eruby implementation.
+	 * @return this instance.
+	 */
 	public OptionsBuilder eruby(String eruby) {
 		this.options.put(ERUBY, eruby);
 		return this;
 	}
 	
+	/**
+	 * Compact the output removing blank lines.
+	 * @param compact value.
+	 * @return this instance.
+	 */
 	public OptionsBuilder compact(boolean compact) {
 		this.options.put(COMPACT, compact);
 		return this;
 	}
 	
+	/**
+	 * Destination output directory.
+	 * @param destinationDir destination directory. 
+	 * @return this instance.
+	 */
 	public OptionsBuilder destinationDir(File destinationDir) {
 		this.options.put(DESTINATION_DIR, destinationDir.getAbsolutePath());
 		return this;
 	}
 	
-	
+	/**
+	 * Sets a custom or unlisted option.
+	 * @param option name.
+	 * @param value for given option.
+	 * @return this instance.
+	 */
 	public OptionsBuilder option(String option, Object value) {
 		this.options.put(option, value);
 		return this;
 	}
 	
+	/**
+	 * Gets a map with configured options.
+	 * @return map with all options. By default an empty map is returned.
+	 */
 	public Map<String, Object> asMap() {
 		return this.options;
 	}
