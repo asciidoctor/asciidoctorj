@@ -32,12 +32,12 @@ Since +asciidoctor-java-integration+ is a standard jar file, the only thing you 
 ----
 ...
 dependencies {
-  compile('org.asciidoctor:asciidoctor-java-integration:${asciidoctor.version}') {
+	compile('org.asciidoctor:asciidoctor-java-integration:${asciidoctor.version}') {  <1>
 		transitive = false
-	}
+	}	
 }
 ...
-+----
+----
 
 <1> As this library tracks the version of asciidoctor, you can use which every version of asciidoctor you prefer.
 
