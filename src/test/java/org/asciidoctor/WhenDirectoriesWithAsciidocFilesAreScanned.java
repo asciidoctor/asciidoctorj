@@ -13,7 +13,7 @@ public class WhenDirectoriesWithAsciidocFilesAreScanned {
 	@Test
 	public void only_asciidoc_files_should_be_returned() {
 
-		DirectoryWalker directoryWalker = new AsciidocDirectoryWalker("target/test-classes/src");
+		DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker("target/test-classes/src");
 		List<File> asciidocFiles = directoryWalker.scan();
 
 		assertThat(

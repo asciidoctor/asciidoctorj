@@ -12,13 +12,13 @@ import java.util.regex.Pattern;
  * @author lordofthejars
  *
  */
-public class AsciidocDirectoryWalker extends DirectoryWalker {
+public class AsciiDocDirectoryWalker extends DirectoryWalker {
 
 	private static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$"; 
 	
 	private static final Pattern ASCIIDOC_EXTENSION_PATTERN = Pattern.compile(ASCIIDOC_REG_EXP_EXTENSION); 
 
-	public AsciidocDirectoryWalker(String baseDir) {
+	public AsciiDocDirectoryWalker(String baseDir) {
 		super(baseDir);
 	}
 
