@@ -27,16 +27,6 @@ Since +asciidoctor-java-integration+ is a standard jar file, the only thing you 
 ...
 ----
 
-[source, groovy]
-.Dependency declaration in Gradle
-----
-...
-dependencies {
-	runtime group: 'org.asciidoctor', name: 'asciidoctor-java-integration', version: '${asciidoctor.version}'	<1>
-}
-...
-----
-
 <1> As this library tracks the version of asciidoctor, you can use which every version of asciidoctor you prefer.
 
 == Usage
