@@ -18,6 +18,8 @@ public class OptionsBuilder {
 	private static final String ERUBY = "eruby";
 	private static final String COMPACT = "compact";
 	private static final String DESTINATION_DIR = "destination_dir";
+	private static final String BACKEND = "backend";
+	private static final String DOCTYPE = "doctype";
 
 	private Map<String, Object> options = new HashMap<String, Object>();
 	
@@ -31,6 +33,26 @@ public class OptionsBuilder {
 	 */
 	public static OptionsBuilder options() {
 		return new OptionsBuilder();
+	}
+	
+	/**
+	 * Sets backend option.
+	 * @param backend value.
+	 * @return this instance.
+	 */
+	public OptionsBuilder backend(String backend) {
+		this.options.put(BACKEND, backend);
+		return this;
+	}
+	
+	/**
+	 * Sets doctype option.
+	 * @param docType value.
+	 * @return this instance.
+	 */
+	public OptionsBuilder docType(String docType) {
+		this.options.put(DOCTYPE, docType);
+		return this;
 	}
 	
 	/**
