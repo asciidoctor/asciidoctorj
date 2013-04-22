@@ -1,6 +1,9 @@
 package org.asciidoctor.internal;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.Collections;
 import java.util.Map;
 
@@ -48,6 +51,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 		return this.asciidoctorModule.render_file(filename.getAbsolutePath(), rubyHash);
 		
+	}
+
+	@Override
+	public void render(Reader contentReader, Writer rendererWriter, Map<String, Object> options) throws IOException {
+		String content = IOUtils.readFull(contentReader);
+		String renderedContent = render(content, options);
+		IOUtils.writeFull(rendererWriter, renderedContent);
 	}
 
 }

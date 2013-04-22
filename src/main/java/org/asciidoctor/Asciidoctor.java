@@ -1,6 +1,9 @@
 package org.asciidoctor;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.Map;
 
 import org.asciidoctor.internal.JRubyAsciidoctor;
@@ -24,6 +27,16 @@ public interface Asciidoctor {
 	 * @return the rendered output String is returned
 	 */
 	String render(String content, Map<String, Object> options);
+	
+	/**
+	 * Parse the document read from reader, and rendered result is sent to writer.
+	 * 
+	 * @param contentReader where asciidoc content is read.
+	 * @param rendererWriter where rendered content is written. Writer is flushed, but not closed.
+	 * @param options a Hash of options to control processing (default: {}).
+	 * @throws IOException if an error occurs while writing rendered content, this exception is thrown.
+	 */
+	void render(Reader contentReader, Writer rendererWriter, Map<String, Object> options) throws IOException;
 	
 	/**
 	 *  Parse the AsciiDoc source input into an Document {@link Document} and render it to the specified backend format.

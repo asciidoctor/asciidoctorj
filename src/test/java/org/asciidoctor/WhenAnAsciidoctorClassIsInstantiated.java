@@ -11,9 +11,11 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -41,6 +43,18 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 	
 	@Test
+	public void content_should_be_read_from_reader_and_written_to_writer() throws IOException, SAXException, ParserConfigurationException {
+		
+		FileReader inputAsciidoctorFile = new FileReader(new File("target/test-classes/rendersample.asciidoc"));
+		StringWriter rendererWriter = new StringWriter();
+		asciidoctor.render(inputAsciidoctorFile, rendererWriter, options().asMap());
+		
+		StringBuffer renderedContent = rendererWriter.getBuffer();
+		assertRenderedFile(renderedContent.toString());
+		
+	}
+	
+	@Test
 	public void file_document_should_be_rendered_into_default_backend() throws IOException, SAXException, ParserConfigurationException {
 		
 		String render_file = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), new HashMap<String, Object>());
@@ -55,9 +69,6 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
 		File expectedFile = new File("target/test-classes/rendersample.html");
 		
-		//Bug in asciidoctor that do not close meta tag?¿
-		//String renderedFileContent = toString(new FileInputStream(expectedFile));
-		//assertRenderedFile(renderedFileContent);
 		assertThat(expectedFile.exists(), is(true));
 		assertThat(renderContent, is(nullValue()));
 	}
@@ -74,9 +85,6 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
 		File expectedFile = new File(testFolder.getRoot(),"rendersample.html");
 		
-		//Bug in asciidoctor that do not close meta tag?¿
-		//String renderedFileContent = toString(new FileInputStream(expectedFile));
-		//assertRenderedFile(renderedFileContent);
 		assertThat(expectedFile.exists(), is(true));
 		assertThat(renderContent, is(nullValue()));
 	}
@@ -94,9 +102,6 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
 		File expectedFile = new File("target/test-classes/rendersample.xml");
 		
-		//Bug in asciidoctor that do not close meta tag?¿
-		//String renderedFileContent = toString(new FileInputStream(expectedFile));
-		//assertRenderedFile(renderedFileContent);
 		assertThat(expectedFile.exists(), is(true));
 		assertThat(renderContent, is(nullValue()));
 	}
