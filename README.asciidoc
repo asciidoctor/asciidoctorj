@@ -143,3 +143,55 @@ A utility class for searching all asciidoc files present in a root folder and al
 DirectoryWalker directoryWalker = new AsciidocDirectoryWalker("target/test-classes/src");
 List<File> asciidocFiles = directoryWalker.scan();
 ----
+
+== Optimization
+
+Sometimes +JRuby+ starting time is slower than we would expect if we were using standard C-based, non-optimizing standard Ruby. For improving this time, +JRuby+ offers some flags which can be used to tune +JRuby+ applications. Apart of these flags, or in conjunction with them, we can use some +java+ flags to improve even more the startup time.
+
+For small tasks such as converting an AsciiDoc document, there are two +JRuby+ flags can improve the startup time:
+
+.JRuby flags
+[cols="1,2", options="header"]
+|===
+|Flag
+|Value
+
+|+jruby.compat.version+
+|RUBY1_9
+
+|+jruby.compile.mode+
+|OFF
+|===
+
+Both flags are set by default inside +asciidoctor-java-integration+ project, so we do not have to worry about setting them manually.
+
+As mentioned before, there are some +java+ flags that can also be used for this purpose. These flags depends on version of +JDK+ and also if you are working on 32/64 bits version. These flags can be set by using +JRUBY_OPTS+ environment variable. Let's see a summary of these flags and in which versions can be used.
+
+.java flags
+[cols="1,2" options="header]
+|===
+|Flag
+|JDK
+
+|+-client+
+|32 bits Java
+
+|+-Xverify:none+
+|32/64 bits Java
+
+|+-XX:+TieredCompilation+
+|32/64 bits Java SE 7
+
+|+-XX:TieredStopAtLevel=1+
+|32/64 bits Java SE 7
+|===
+
+[source, bash]
+.Setting flags for Java SE 6
+----
+export JRUBY_OPTS="-J-Xverify:none -J-client"
+----
+
+Note that you should add *-J* before the flag.
+
+You can find a full explanation on how to improve startup time of +JRuby+ applications at {https://github.com/jruby/jruby/wiki/Improving-startup-time}[Improving Startup Time]

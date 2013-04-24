@@ -5,11 +5,15 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.asciidoctor.Asciidoctor;
+import org.jruby.CompatVersion;
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
+import org.jruby.RubyInstanceConfig;
+import org.jruby.RubyInstanceConfig.CompileMode;
 import org.jruby.javasupport.JavaEmbedUtils;
 
 public class JRubyAsciidoctor implements Asciidoctor {
@@ -25,7 +29,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
 	
 	public static Asciidoctor create() {
-		Ruby rubyRuntime = JavaEmbedUtils.initialize(Collections.EMPTY_LIST);
+		
+		RubyInstanceConfig config = createOptimizedConfiguration();
+		
+		Ruby rubyRuntime = JavaEmbedUtils.initialize(Collections.EMPTY_LIST, config);
 		
 		JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(
 				rubyRuntime);
@@ -34,6 +41,15 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		
 		JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
 		return jRubyAsciidoctor;
+	}
+
+
+	private static RubyInstanceConfig createOptimizedConfiguration() {
+		RubyInstanceConfig config = new RubyInstanceConfig();   
+		config.setCompatVersion(CompatVersion.RUBY1_9);
+		config.setCompileMode(CompileMode.OFF);
+
+		return config;
 	}
 
 	@SuppressWarnings("unchecked")
