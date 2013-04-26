@@ -60,6 +60,14 @@ public interface Asciidoctor {
 	String renderFile(File filename, Map<String, Object> options);
 	
 	/**
+	 * Parse all AsciiDoc files found in given directory and all its subfolders. .asc, .asciidoc, .ad or .adoc extensions are valid AsciiDoc files. 
+	 * @param directory where it begins the scan of all AsciiDoc files.
+	 * @param options a Hash of options to control processing (default: {}).
+	 * @return returns an array of 0 positions if the rendered output is written to a file.
+	 */
+	String[] renderDirectory(File directory, Map<String, Object> options);
+	
+	/**
 	 * Factory for creating a new instance of Asciidoctor interface.
 	 * @author lordofthejars
 	 *

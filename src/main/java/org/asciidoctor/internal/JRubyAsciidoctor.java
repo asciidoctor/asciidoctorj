@@ -4,11 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import org.asciidoctor.AsciiDocDirectoryWalker;
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.DirectoryWalker;
 import org.jruby.CompatVersion;
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
@@ -74,6 +79,38 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		String content = IOUtils.readFull(contentReader);
 		String renderedContent = render(content, options);
 		IOUtils.writeFull(rendererWriter, renderedContent);
+	}
+
+	@Override
+	public String[] renderDirectory(File directory, Map<String, Object> options) {
+		
+		final List<File> asciidoctorFiles = scanForAsciiDocFiles(directory);
+		List<String> asciidoctorContent = renderAllFiles(options, asciidoctorFiles);
+		
+		return asciidoctorContent.toArray(new String[asciidoctorContent.size()]);
+	}
+
+
+	private List<String> renderAllFiles(Map<String, Object> options, final List<File> asciidoctorFiles) {
+		List<String> asciidoctorContent = new ArrayList<String>();
+		
+		for (File asciidoctorFile : asciidoctorFiles) {
+			String renderedFile = renderFile(asciidoctorFile, options);
+			
+			if(renderedFile != null) {
+				asciidoctorContent.add(renderedFile);
+			}
+			
+		}
+		
+		return asciidoctorContent;
+	}
+
+
+	private List<File> scanForAsciiDocFiles(File directory) {
+		final DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(directory.getAbsolutePath());
+		final List<File> asciidoctorFiles = directoryWalker.scan();
+		return asciidoctorFiles;
 	}
 
 }

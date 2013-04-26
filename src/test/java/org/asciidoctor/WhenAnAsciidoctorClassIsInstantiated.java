@@ -4,6 +4,8 @@ import static org.asciidoctor.AttributesBuilder.attributes;
 import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.collection.IsArrayWithSize.emptyArray;
+import static org.hamcrest.collection.IsArrayWithSize.arrayWithSize;
 import static org.junit.Assert.assertThat;
 import static org.xmlmatchers.xpath.HasXPath.hasXPath;
 
@@ -156,6 +158,28 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 		String render_file = asciidoctor.render(toString(content), new HashMap<String, Object>());
 		
 		assertRenderedFile(render_file);
+	}
+	
+	@Test
+	public void all_files_from_directory_and_subdirectories_should_be_rendered_into_an_array() {
+		
+		String[] allRenderedFiles = asciidoctor.renderDirectory(new File("target/test-classes/src"), new HashMap<String, Object>());
+		assertThat(allRenderedFiles, is(arrayWithSize(4)));
+		
+	}
+	
+	@Test
+	public void all_files_from_directory_and_subdirectories_should_be_rendered_into_files_and_not_in_array() {
+		
+		Map<String, Object> options = options()
+				.inPlace(false)
+				.safe(SafeMode.UNSAFE)
+				.toDir(testFolder.getRoot())
+			.asMap();
+		
+		String[] allRenderedFiles = asciidoctor.renderDirectory(new File("target/test-classes/src"), options);
+		assertThat(allRenderedFiles, is(arrayWithSize(0)));
+		
 	}
 	
 	private void assertRenderedLocalDateContent(String render_content, String contentDateOrTime) throws IOException, SAXException, ParserConfigurationException {
