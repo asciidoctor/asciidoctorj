@@ -1,31 +1,13 @@
 package org.asciidoctor.internal;
 
+import java.io.InputStream;
+
 import org.jruby.Ruby;
 import org.jruby.RubyRuntimeAdapter;
 import org.jruby.javasupport.JavaEmbedUtils;
 
 class JRubyAsciidoctorModuleFactory {
 
-	
-	private static final String script = 
-			"require 'java'\n" +
-			"require 'asciidoctor'\n"+
-			"class AsciidoctorModule\n" + 
-			"  java_implements Java::Asciidoctor\n" + 
-			"  def render_file(content, options = {})\n" + 
-			"    return Asciidoctor.render_file(content, options)\n" + 
-			"  end\n" + 
-			"  def render(content, options = {})\n" + 
-			"    return Asciidoctor.render(content, options)\n" + 
-			"  end\n"+
-			"  def load_file(content, options = {})\n" + 
-			"    return Asciidoctor.load_file(content, options)\n" + 
-			"  end\n" + 
-			"  def load(content, options = {})\n" + 
-			"    return Asciidoctor.load(content, options)\n" + 
-			"  end\n" + 
-			"end";
-	
 	private RubyRuntimeAdapter evaler;
 	private Ruby runtime;
 	
@@ -35,11 +17,18 @@ class JRubyAsciidoctorModuleFactory {
 	}
 	
 	public AsciidoctorModule createAsciidoctorModule() {
+		//This piece of code will be changed in future when asciidoctor gem implements a class instead of a module.
+		String script = loadAsciidoctorRubyClass();
 		
 		evaler.eval(runtime, script);
 		Object rfj = evaler.eval(runtime, "AsciidoctorModule.new()");
 		return RubyUtils.rubyToJava(runtime, (org.jruby.runtime.builtin.IRubyObject) rfj, AsciidoctorModule.class);
 		
+	}
+	
+	private String loadAsciidoctorRubyClass() {
+		InputStream inputStream = JRubyAsciidoctorModuleFactory.class.getResourceAsStream("asciidoctorclass.rb");
+		return IOUtils.readFull(inputStream);
 	}
 	
 	public Ruby runtime() {
