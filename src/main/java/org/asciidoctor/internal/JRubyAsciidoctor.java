@@ -68,8 +68,25 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	public String renderFile(File filename, Map<String, Object> options) {
 		
 		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-		return this.asciidoctorModule.render_file(filename.getAbsolutePath(), rubyHash);
+		Object object = this.asciidoctorModule.render_file(filename.getAbsolutePath(), rubyHash);
 		
+		return returnExpectedValue(object);
+		
+	}
+
+
+	/**
+	 * This method has been added to deal with the fact that asciidoctor 0.1.2 can return an Asciidoctor::Document or a String depending if content is write to disk or not.
+	 * This may change in the future (https://github.com/asciidoctor/asciidoctor/issues/286) 
+	 * @param object
+	 * @return
+	 */
+	private String returnExpectedValue(Object object) {
+		if(object instanceof String) {
+			return object.toString();		
+		} else {
+			return null;
+		}
 	}
 
 	@Override
