@@ -87,8 +87,40 @@ But also you can render the content of a file.
 .Rendering a File
 ----
 ...
-String rendered = asciidoctor.renderFile("target/test-classes/rendersample.asciidoc", Collections.EMPTY_MAP);
+String rendered = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), Collections.EMPTY_MAP);
 System.out.println(rendered);
+...
+----
+
+Another method provided by +Asciidoctor+ interface is +renderDirectory+. This method renders all AsciiDoc files (+_.asc_+,+ _.asciidoc_+,+ _.ad_+ or +_.adoc_+), that are present inside provided folder or any of its subfolder.
+
+In case rendered content is not written in files, this method returns an array with all documents rendered.
+
+[source, java]
+.Rendering all files of directory
+----
+...
+String[] allRenderedFiles = asciidoctor.renderDirectory(new File("target/test-classes/src"), new HashMap<String, Object>());
+
+for(String renderedFile:allRenderedFiles) {
+	System.out.println(renderedFile);
+}
+...
+----
+
+Another way to render AsciiDoc content is by calling +render+ method but providing a +Reader+ and +Writer+. +Reader+ interface is used as source, and rendered content is written through +Writer+ interface.
+
+[source, java]
+.Rendering content to a Writer
+----
+...
+FileReader inputAsciidoctorFile = new FileReader(new File("target/test-classes/rendersample.asciidoc"));
+StringWriter rendererWriter = new StringWriter();
+
+asciidoctor.render(inputAsciidoctorFile, rendererWriter, options().asMap());
+		
+StringBuffer renderedContent = rendererWriter.getBuffer();
+assertRenderedFile(renderedContent.toString());
 ...
 ----
 
@@ -135,12 +167,12 @@ String render = asciidoctor.renderFile("target/test-classes/rendersample.asciido
 
 === Utilities
 
-A utility class for searching all asciidoc files present in a root folder and all its subfolders is given. In fact it finds all files that end up with _.asc_, _.asciidoc_, _.ad_ or _.adoc_. This class is +AsciidocDirectoryWalker+.
+A utility class for searching all asciidoc files present in a root folder and all its subfolders is given. In fact it finds all files that end up with _.asc_, _.asciidoc_, _.ad_ or _.adoc_. This class is +AsciiDocDirectoryWalker+.
 
 .Example of finding all asciidoc
 [source, java]
 ----
-DirectoryWalker directoryWalker = new AsciidocDirectoryWalker("target/test-classes/src");
+DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker("target/test-classes/src");
 List<File> asciidocFiles = directoryWalker.scan();
 ----
 
