@@ -90,12 +90,14 @@
 			<artifactId>haml</artifactId>
 			<version>${haml.version}</version>
 			<type>gem</type>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>rubygems</groupId>
 			<artifactId>asciidoctor</artifactId>
 			<version>${asciidoctor.version}</version>
 			<type>gem</type>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>rubygems</groupId>
@@ -108,18 +110,21 @@
 			<artifactId>tilt</artifactId>
 			<version>${tilt.version}</version>
 			<type>gem</type>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>rubygems</groupId>
 			<artifactId>erubis</artifactId>
 			<version>${erubis.version}</version>
 			<type>gem</type>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>rubygems</groupId>
 			<artifactId>slim</artifactId>
 			<version>${slim.version}</version>
 			<type>gem</type>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
