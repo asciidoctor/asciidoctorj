@@ -12,6 +12,7 @@ import java.util.Map;
 import org.asciidoctor.AsciiDocDirectoryWalker;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.DirectoryWalker;
+import org.asciidoctor.Options;
 import org.jruby.CompatVersion;
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
@@ -126,6 +127,30 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		final DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(directory.getAbsolutePath());
 		final List<File> asciidoctorFiles = directoryWalker.scan();
 		return asciidoctorFiles;
+	}
+
+
+	@Override
+	public String render(String content, Options options) {
+		return this.render(content, options.map());
+	}
+
+
+	@Override
+	public void render(Reader contentReader, Writer rendererWriter, Options options) throws IOException {
+		this.render(contentReader, rendererWriter, options.map());
+	}
+
+
+	@Override
+	public String renderFile(File filename, Options options) {
+		return this.renderFile(filename, options.map());
+	}
+
+
+	@Override
+	public String[] renderDirectory(File directory, Options options) {
+		return this.renderDirectory(directory, options.map());
 	}
 
 }

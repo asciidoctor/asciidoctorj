@@ -104,6 +104,7 @@
 			<artifactId>coderay</artifactId>
 			<version>${coderay.version}</version>
 			<type>gem</type>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>rubygems</groupId>

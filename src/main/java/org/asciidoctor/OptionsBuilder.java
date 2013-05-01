@@ -1,27 +1,11 @@
 package org.asciidoctor;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 
 public class OptionsBuilder {
 
-	private static final String IN_PLACE = "in_place";
-	private static final String ATTRIBUTES = "attributes";
-	private static final String HEADER_FOOTER = "header_footer";
-	private static final String TEMPLATE_DIR = "template_dir";
-	private static final String TEMPLATE_ENGINE = "template_engine";
-	private static final String TO_FILE = "to_file";
-	private static final String TO_DIR = "to_dir";
-	private static final String MKDIRS = "mkdirs";
-	private static final String SAFE = "safe";
-	private static final String ERUBY = "eruby";
-	private static final String COMPACT = "compact";
-	private static final String DESTINATION_DIR = "destination_dir";
-	private static final String BACKEND = "backend";
-	private static final String DOCTYPE = "doctype";
-
-	private Map<String, Object> options = new HashMap<String, Object>();
+	private Options options = new Options();
 	
 	private OptionsBuilder() {
 		super();
@@ -41,7 +25,7 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder backend(String backend) {
-		this.options.put(BACKEND, backend);
+		this.options.setBackend(backend);
 		return this;
 	}
 	
@@ -51,7 +35,7 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder docType(String docType) {
-		this.options.put(DOCTYPE, docType);
+		this.options.setDocType(docType);
 		return this;
 	}
 	
@@ -61,7 +45,7 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder inPlace(boolean inPlace) {
-		this.options.put(IN_PLACE, inPlace);
+		this.options.setInPlace(inPlace);
 		return this;
 	}
 	
@@ -71,7 +55,7 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder headerFooter(boolean headerFooter) {
-		this.options.put(HEADER_FOOTER, headerFooter);
+		this.options.setHeaderFooter(headerFooter);
 		return this;
 	}
 	
@@ -80,8 +64,8 @@ public class OptionsBuilder {
 	 * @param templateDir directory where templates are stored.
 	 * @return this instance.
 	 */
-	public OptionsBuilder templateDir(String templateDir) {
-		this.options.put(TEMPLATE_DIR, templateDir);
+	public OptionsBuilder templateDir(File templateDir) {
+		this.options.setTemplateDir(templateDir.getAbsolutePath());
 		return this;
 	}
 	
@@ -91,7 +75,7 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder templateEngine(String templateEngine) {
-		this.options.put(TEMPLATE_ENGINE, templateEngine);
+		this.options.setTemplateEngine(templateEngine);
 		return this;
 	}
 	
@@ -101,7 +85,17 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder attributes(Map<String, Object> attributes) {
-		this.options.put(ATTRIBUTES, attributes);
+		this.options.setAttributes(attributes);
+		return this;
+	}
+	
+	/**
+	 * Sets attributes used for rendering input.
+	 * @param attributes map.
+	 * @return this instance.
+	 */
+	public OptionsBuilder attributes(Attributes attributes) {
+		this.options.setAttributes(attributes.map());
 		return this;
 	}
 	
@@ -110,8 +104,8 @@ public class OptionsBuilder {
 	 * @param toFile name of output file.
 	 * @return this instance.
 	 */
-	public OptionsBuilder toFile(String toFile) {
-		this.options.put(TO_FILE, toFile);
+	public OptionsBuilder toFile(File toFile) {
+		this.options.setToFile(toFile.getAbsolutePath());
 		return this;
 	}
 	
@@ -121,7 +115,7 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder toDir(File directory) {
-		this.options.put(TO_DIR, directory.getAbsolutePath());
+		this.options.setToDir(directory.getAbsolutePath());
 		return this;
 	}
 	
@@ -131,7 +125,7 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder mkDirs(boolean mkDirs) {
-		this.options.put(MKDIRS, mkDirs);
+		this.options.setMkDirs(mkDirs);
 		return this;
 	}
 	
@@ -141,7 +135,7 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder safe(SafeMode safeMode) {
-		this.options.put(SAFE, safeMode.getLevel());
+		this.options.setSafe(safeMode);
 		return this;
 	}
 	
@@ -151,7 +145,7 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder eruby(String eruby) {
-		this.options.put(ERUBY, eruby);
+		this.options.setEruby(eruby);
 		return this;
 	}
 	
@@ -161,7 +155,7 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder compact(boolean compact) {
-		this.options.put(COMPACT, compact);
+		this.options.setCompact(compact);
 		return this;
 	}
 	
@@ -171,7 +165,7 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder destinationDir(File destinationDir) {
-		this.options.put(DESTINATION_DIR, destinationDir.getAbsolutePath());
+		this.options.setDestinationDir(destinationDir.getAbsolutePath());
 		return this;
 	}
 	
@@ -182,7 +176,7 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder option(String option, Object value) {
-		this.options.put(option, value);
+		this.options.setOption(option, value);
 		return this;
 	}
 	
@@ -191,6 +185,10 @@ public class OptionsBuilder {
 	 * @return map with all options. By default an empty map is returned.
 	 */
 	public Map<String, Object> asMap() {
+		return this.options.map();
+	}
+	
+	public Options get() {
 		return this.options;
 	}
 	

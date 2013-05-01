@@ -64,6 +64,18 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	}
 	
 	@Test
+	public void file_document_should_be_rendered_into_current_directory_using_options_class() throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
+		
+		Options options = options().inPlace(true).get();
+		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+
+		File expectedFile = new File("target/test-classes/rendersample.html");
+		
+		assertThat(expectedFile.exists(), is(true));
+		assertThat(renderContent, is(nullValue()));
+	}
+	
+	@Test
 	public void file_document_should_be_rendered_into_current_directory() throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
 		
 		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options().inPlace(true).asMap());
@@ -91,6 +103,23 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	}
 	
 	@Test
+	public void file_document_should_be_rendered_into_foreign_directory_using_options_class() throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
+		
+		Options options = options()
+								.inPlace(false)
+								.safe(SafeMode.UNSAFE)
+								.toDir(testFolder.getRoot())
+							.get();
+		
+		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+
+		File expectedFile = new File(testFolder.getRoot(),"rendersample.html");
+		
+		assertThat(expectedFile.exists(), is(true));
+		assertThat(renderContent, is(nullValue()));
+	}
+	
+	@Test
 	public void docbook_document_should_be_rendered_into_current_directory() throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
 		
 		Map<String, Object> attributes = attributes().backend("docbook").asMap();
@@ -98,6 +127,39 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 										.inPlace(true)
 										.attributes(attributes)
 									  .asMap();
+		
+		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+
+		File expectedFile = new File("target/test-classes/rendersample.xml");
+		
+		assertThat(expectedFile.exists(), is(true));
+		assertThat(renderContent, is(nullValue()));
+	}
+	
+	@Test
+	public void docbook_document_should_be_rendered_into_current_directory_using_options_class() throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
+		
+		Attributes attributes = attributes().backend("docbook").get();
+		Options options = options()
+								.inPlace(true)
+								.attributes(attributes)
+							.get();
+		
+		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+
+		File expectedFile = new File("target/test-classes/rendersample.xml");
+		
+		assertThat(expectedFile.exists(), is(true));
+		assertThat(renderContent, is(nullValue()));
+	}
+	
+	@Test
+	public void docbook_document_should_be_rendered_into_current_directory_using_options_backend_attribute() throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
+		
+		Options options = options()
+									.inPlace(true)
+									.backend("docbook")
+								.get();
 		
 		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
 
