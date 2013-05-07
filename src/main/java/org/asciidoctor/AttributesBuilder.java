@@ -55,8 +55,8 @@ public class AttributesBuilder {
 	 * @param imagesDir location.
 	 * @return this instance.
 	 */
-	public AttributesBuilder imagesDir(File imagesDir) {
-		this.attributes.setImagesDir(imagesDir.getAbsolutePath());
+	public AttributesBuilder imagesDir(String imagesDir) {
+		this.attributes.setImagesDir(imagesDir);
 		return this;
 	}
 	
