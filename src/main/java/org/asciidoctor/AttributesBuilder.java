@@ -120,6 +120,35 @@ public class AttributesBuilder {
 	}
 	
 	/**
+	 * Sets stylesheet name.
+	 * @param styleSheetName of css file.
+	 * @return this instance.
+	 */
+	public AttributesBuilder styleSheetName(String styleSheetName) {
+		this.attributes.setStyleSheetName(styleSheetName);
+		return this;
+	}
+	
+	/**
+	 * Unsets stylesheet name so document will be generated without style.
+	 * @return this instance.
+	 */
+	public AttributesBuilder unsetStyleSheet() {
+		this.attributes.unsetStyleSheet();
+		return this;
+	}
+	
+	/**
+	 * Sets the styles dir.
+	 * @param stylesDir directory.
+	 * @return this instance.
+	 */
+	public AttributesBuilder stylesDir(String stylesDir) {
+		this.attributes.setStylesDir(stylesDir);
+		return this;
+	}
+	
+	/**
 	 * Sets custom or unlisted attribute 
 	 * @param attributeName 
 	 * @param attributeValue

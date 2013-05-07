@@ -21,6 +21,8 @@ public class Attributes {
 	protected static final String DOCDATE = "docdate";
 	protected static final String DOCTIME = "doctime";
 	protected static final String TOC = "toc";
+	protected static final String STYLESHEET_NAME = "stylesheet";
+	protected static final String STYLES_DIR = "stylesdir";
 
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -92,6 +94,28 @@ public class Attributes {
 		this.attributes.put(DOCTIME, toTime(docTime));
 	}
 	
+	/**
+	 * Sets stylesheet name.
+	 * @param styleSheetName of css file.
+	 */
+	public void setStyleSheetName(String styleSheetName) {
+		this.attributes.put(STYLESHEET_NAME, styleSheetName);
+	}
+	
+	/**
+	 * Unsets stylesheet name so document will be generated without style.
+	 */
+	public void unsetStyleSheet() {
+		this.attributes.put(STYLESHEET_NAME, toAsciidoctorFlag(false));
+	}
+	
+	/**
+	 * Sets the styles dir.
+	 * @param stylesDir directory.
+	 */
+	public void setStylesDir(String stylesDir) {
+		this.attributes.put(STYLES_DIR, stylesDir);
+	}
 	
 	public void setAttribute(String attributeName, Object attributeValue) {
 		this.attributes.put(attributeName, attributeValue);
