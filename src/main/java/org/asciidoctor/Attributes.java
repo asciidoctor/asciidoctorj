@@ -20,6 +20,7 @@ public class Attributes {
 	protected static final String LOCALTIME = "localtime";
 	protected static final String DOCDATE = "docdate";
 	protected static final String DOCTIME = "doctime";
+	protected static final String TOC = "toc";
 
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -49,6 +50,14 @@ public class Attributes {
 	
 	public void setSourceHighlighter(String sourceHighlighter) {
 		this.attributes.put(SOURCE_HIGHLIGHTER, sourceHighlighter);
+	}
+	
+	/**
+	 * Sets if a table of contents should be rendered or not.
+	 * @param toc value.
+	 */
+	public void setTableOfContents(boolean toc) {
+		this.attributes.put(TOC, toAsciidoctorFlag(toc));
 	}
 	
 	/**
@@ -83,12 +92,17 @@ public class Attributes {
 		this.attributes.put(DOCTIME, toTime(docTime));
 	}
 	
+	
 	public void setAttribute(String attributeName, Object attributeValue) {
 		this.attributes.put(attributeName, attributeValue);
 	}
 	
 	public Map<String, Object> map() {
 		return this.attributes;
+	}
+
+	private String toAsciidoctorFlag(boolean flag) {
+		return flag ? "":null;
 	}
 	
 	private static String toDate(Date date) {

@@ -111,6 +111,16 @@ public class AttributesBuilder {
 	}
 	
 	/**
+	 * Sets if table of contents should be rendered or not
+	 * @param toc value
+	 * @return this instance.
+	 */
+	public AttributesBuilder tableOfContents(boolean toc) {
+		this.attributes.setTableOfContents(toc);
+		return this;
+	}
+	
+	/**
 	 * Sets custom or unlisted attribute 
 	 * @param attributeName 
 	 * @param attributeValue
