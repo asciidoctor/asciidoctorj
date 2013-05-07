@@ -1,6 +1,5 @@
 package org.asciidoctor;
 
-import java.io.File;
 import java.util.Date;
 import java.util.Map;
 

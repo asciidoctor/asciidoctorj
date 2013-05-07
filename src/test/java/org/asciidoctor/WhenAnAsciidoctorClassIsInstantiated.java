@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -219,6 +220,28 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 		String render_file = asciidoctor.render(toString(content), new HashMap<String, Object>());
 		
 		assertRenderedFile(render_file);
+	}
+	
+	@Test
+	public void all_files_from_a_collection_should_be_rendered_into_an_array() {
+		
+		String[] allRenderedFiles = asciidoctor.renderFiles(Arrays.asList(new File("target/test-classes/rendersample.asciidoc")), new HashMap<String, Object>());
+		assertThat(allRenderedFiles, is(arrayWithSize(1)));
+		
+	}
+	
+	@Test
+	public void all_files_from_a_collection_should_be_rendered_into_files_and_not_in_array() {
+		
+		Map<String, Object> options = options()
+				.inPlace(false)
+				.safe(SafeMode.UNSAFE)
+				.toDir(testFolder.getRoot())
+			.asMap();
+		
+		String[] allRenderedFiles = asciidoctor.renderFiles(Arrays.asList(new File("target/test-classes/rendersample.asciidoc")), options);
+		assertThat(allRenderedFiles, is(arrayWithSize(0)));
+		
 	}
 	
 	@Test

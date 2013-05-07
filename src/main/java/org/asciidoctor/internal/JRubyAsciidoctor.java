@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -97,6 +98,21 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		IOUtils.writeFull(rendererWriter, renderedContent);
 	}
 
+	
+	
+	@Override
+	public String[] renderFiles(Collection<File> asciidoctorFiles, Map<String, Object> options) {
+		List<String> asciidoctorContent = renderAllFiles(options, asciidoctorFiles);
+		return asciidoctorContent.toArray(new String[asciidoctorContent.size()]);
+	}
+
+
+	@Override
+	public String[] renderFiles(Collection<File> asciidoctorFiles, Options options) {
+		return this.renderFiles(asciidoctorFiles, options.map());
+	}
+
+
 	@Override
 	public String[] renderDirectory(File directory, Map<String, Object> options) {
 		
@@ -107,7 +123,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	}
 
 
-	private List<String> renderAllFiles(Map<String, Object> options, final List<File> asciidoctorFiles) {
+	private List<String> renderAllFiles(Map<String, Object> options, final Collection<File> asciidoctorFiles) {
 		List<String> asciidoctorContent = new ArrayList<String>();
 		
 		for (File asciidoctorFile : asciidoctorFiles) {

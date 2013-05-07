@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Collection;
 import java.util.Map;
 
 import org.asciidoctor.internal.JRubyAsciidoctor;
@@ -117,6 +118,22 @@ public interface Asciidoctor {
 	 * @return returns an array of 0 positions if the rendered output is written to a file.
 	 */
 	String[] renderDirectory(File directory, Options options);
+	
+	/**
+	 * Parses all files added inside a collection.
+	 * @param asciidoctorFiles to be rendered.
+	 * @param options a Hash of options to control processing (default: {}).
+	 * @return returns an array of 0 positions if the rendered output is written to a file.
+	 */
+	String[] renderFiles(Collection<File> asciidoctorFiles, Map<String, Object> options);
+	
+	/**
+	 * Parses all files added inside a collection.
+	 * @param asciidoctorFiles to be rendered.
+	 * @param options a Hash of options to control processing (default: {}).
+	 * @return returns an array of 0 positions if the rendered output is written to a file.
+	 */
+	String[] renderFiles(Collection<File> asciidoctorFiles, Options options);
 	
 	/**
 	 * Factory for creating a new instance of Asciidoctor interface.
