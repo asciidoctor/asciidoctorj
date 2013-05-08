@@ -149,6 +149,17 @@ public class AttributesBuilder {
 	}
 	
 	/**
+	 * Sets link css attribute.
+	 * @param linkCss true if css is linked, false if css is embedded.
+	 * 
+	 * @return this instance.
+	 */
+	public AttributesBuilder linkCss(boolean linkCss) {
+		this.attributes.setLinkCss(linkCss);
+		return this;
+	}
+	
+	/**
 	 * Sets custom or unlisted attribute 
 	 * @param attributeName 
 	 * @param attributeValue

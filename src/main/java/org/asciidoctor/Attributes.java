@@ -23,6 +23,8 @@ public class Attributes {
 	protected static final String TOC = "toc";
 	protected static final String STYLESHEET_NAME = "stylesheet";
 	protected static final String STYLES_DIR = "stylesdir";
+	protected static final String NOT_STYLESHEET_NAME = STYLESHEET_NAME+"!";
+	protected static final String LINK_CSS = "linkcss";
 
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -106,7 +108,7 @@ public class Attributes {
 	 * Unsets stylesheet name so document will be generated without style.
 	 */
 	public void unsetStyleSheet() {
-		this.attributes.put(STYLESHEET_NAME, toAsciidoctorFlag(false));
+		this.attributes.put(NOT_STYLESHEET_NAME, toAsciidoctorFlag(true));
 	}
 	
 	/**
@@ -115,6 +117,14 @@ public class Attributes {
 	 */
 	public void setStylesDir(String stylesDir) {
 		this.attributes.put(STYLES_DIR, stylesDir);
+	}
+	
+	/**
+	 * Sets link css attribute.
+	 * @param linkCss true if css is linked, false if css is embedded.
+	 */
+	public void setLinkCss(boolean linkCss) {
+		this.attributes.put(LINK_CSS, toAsciidoctorFlag(linkCss));
 	}
 	
 	public void setAttribute(String attributeName, Object attributeValue) {

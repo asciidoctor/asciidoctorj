@@ -3,6 +3,7 @@ package org.asciidoctor;
 import static org.asciidoctor.AttributesBuilder.attributes;
 import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -78,7 +79,6 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		
 		asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
 		
-		//String readFull = IOUtils.readFull(new FileInputStream(new File(testFolder.getRoot(), "rendersample.html")));
 		Document doc = Jsoup.parse(new File(testFolder.getRoot(), "rendersample.html"), "UTF-8");
 		Elements link = doc.select("link[href]");
 		String attr = link.attr("href");
@@ -98,6 +98,40 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		Elements link = doc.select("link[href]");
 		String attr = link.attr("href");
 		assertThat(attr, is("./styles/mycustom.css"));
+		
+	}
+	
+	@Test
+	public void unsetting_linkcss_should_embed_css_file() throws IOException {
+		
+		Attributes attributes = attributes().linkCss(false).get();
+		Options options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot()).attributes(attributes).get();
+		
+		asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+		
+		//String readFull = IOUtils.readFull(new FileInputStream(new File(testFolder.getRoot(), "rendersample.html")));
+		
+		Document doc = Jsoup.parse(new File(testFolder.getRoot(), "rendersample.html"), "UTF-8");
+		Elements cssStyle = doc.select("style");
+		assertThat(cssStyle.html(), is(not("")));
+		
+		Elements link = doc.select("link");
+		assertThat(link.html(), is("".trim()));
+		
+	}
+	
+	@Test
+	public void linkcss_should_not_embed_css_file() throws IOException {
+		
+		Attributes attributes = attributes().linkCss(true).get();
+		Options options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot()).attributes(attributes).get();
+		
+		asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+		
+		Document doc = Jsoup.parse(new File(testFolder.getRoot(), "rendersample.html"), "UTF-8");
+		Elements link = doc.select("link[href]");
+		String attr = link.attr("href");
+		assertThat(attr, is("./asciidoctor.css"));
 		
 	}
 	
