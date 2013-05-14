@@ -42,4 +42,14 @@ public class WhenDirectoriesWithAsciidocFilesAreScanned {
 		
 	}
 	
+	@Test
+	public void none_existing_directories_should_return_no_documents() {
+		
+		DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker("my_udirectory");
+		List<File> asciidocFiles = directoryWalker.scan();
+		
+		assertThat(asciidocFiles, is(empty()));
+		
+	}
+	
 }
