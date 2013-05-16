@@ -11,20 +11,21 @@ public class Attributes {
 	private static Format DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	private static Format TIME_FORMAT = new SimpleDateFormat("HH:mm:ss z"); 
 	
-	protected static final String BACKEND = Options.BACKEND;
-	protected static final String TITLE = "title";
-	protected static final String DOCTYPE = Options.DOCTYPE;
-	protected static final String IMAGESDIR = "imagesdir";
-	protected static final String SOURCE_HIGHLIGHTER = "source-highlighter";
-	protected static final String LOCALDATE = "localdate";
-	protected static final String LOCALTIME = "localtime";
-	protected static final String DOCDATE = "docdate";
-	protected static final String DOCTIME = "doctime";
-	protected static final String TOC = "toc";
-	protected static final String STYLESHEET_NAME = "stylesheet";
-	protected static final String STYLES_DIR = "stylesdir";
-	protected static final String NOT_STYLESHEET_NAME = STYLESHEET_NAME+"!";
-	protected static final String LINK_CSS = "linkcss";
+	public static final String BACKEND = Options.BACKEND;
+	public static final String TITLE = "title";
+	public static final String DOCTYPE = Options.DOCTYPE;
+	public static final String IMAGESDIR = "imagesdir";
+	public static final String SOURCE_HIGHLIGHTER = "source-highlighter";
+	public static final String LOCALDATE = "localdate";
+	public static final String LOCALTIME = "localtime";
+	public static final String DOCDATE = "docdate";
+	public static final String DOCTIME = "doctime";
+	public static final String TOC = "toc";
+	public static final String STYLESHEET_NAME = "stylesheet";
+	public static final String STYLES_DIR = "stylesdir";
+	public static final String NOT_STYLESHEET_NAME = STYLESHEET_NAME+"!";
+	public static final String LINK_CSS = "linkcss";
+	public static final String COPY_CSS = "copycss";
 
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -127,6 +128,14 @@ public class Attributes {
 		this.attributes.put(LINK_CSS, toAsciidoctorFlag(linkCss));
 	}
 	
+	/**
+	 * Sets copy css attribute.
+	 * @param copyCss true if css should be copied to the output location, false otherwise.
+	 */
+	public void setCopyCss(boolean copyCss) {
+		this.attributes.put(COPY_CSS, toAsciidoctorFlag(copyCss));
+	}
+	
 	public void setAttribute(String attributeName, Object attributeValue) {
 		this.attributes.put(attributeName, attributeValue);
 	}
@@ -135,7 +144,7 @@ public class Attributes {
 		return this.attributes;
 	}
 
-	private String toAsciidoctorFlag(boolean flag) {
+	public static String toAsciidoctorFlag(boolean flag) {
 		return flag ? "":null;
 	}
 	

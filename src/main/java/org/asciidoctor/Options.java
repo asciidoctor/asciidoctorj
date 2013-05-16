@@ -5,20 +5,20 @@ import java.util.Map;
 
 public class Options {
 
-	protected static final String IN_PLACE = "in_place";
-	protected static final String ATTRIBUTES = "attributes";
-	protected static final String HEADER_FOOTER = "header_footer";
-	protected static final String TEMPLATE_DIR = "template_dir";
-	protected static final String TEMPLATE_ENGINE = "template_engine";
-	protected static final String TO_FILE = "to_file";
-	protected static final String TO_DIR = "to_dir";
-	protected static final String MKDIRS = "mkdirs";
-	protected static final String SAFE = "safe";
-	protected static final String ERUBY = "eruby";
-	protected static final String COMPACT = "compact";
-	protected static final String DESTINATION_DIR = "destination_dir";
-	protected static final String BACKEND = "backend";
-	protected static final String DOCTYPE = "doctype";
+	public static final String IN_PLACE = "in_place";
+	public static final String ATTRIBUTES = "attributes";
+	public static final String HEADER_FOOTER = "header_footer";
+	public static final String TEMPLATE_DIR = "template_dir";
+	public static final String TEMPLATE_ENGINE = "template_engine";
+	public static final String TO_FILE = "to_file";
+	public static final String TO_DIR = "to_dir";
+	public static final String MKDIRS = "mkdirs";
+	public static final String SAFE = "safe";
+	public static final String ERUBY = "eruby";
+	public static final String COMPACT = "compact";
+	public static final String DESTINATION_DIR = "destination_dir";
+	public static final String BACKEND = "backend";
+	public static final String DOCTYPE = "doctype";
 	
 	private Map<String, Object> options = new HashMap<String, Object>();
 	

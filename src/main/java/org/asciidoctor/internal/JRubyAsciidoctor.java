@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.asciidoctor.AsciiDocDirectoryWalker;
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Attributes;
 import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.Options;
 import org.jruby.CompatVersion;
@@ -26,31 +27,34 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	private AsciidoctorModule asciidoctorModule;
 	private Ruby rubyRuntime;
 
+	// hack: to fix problem with copycss this should change in future.
+	private static DefaultCssResolver defaultCssResolver;
+
 	private JRubyAsciidoctor(AsciidoctorModule asciidoctorModule, Ruby rubyRuntime) {
 		super();
 		this.asciidoctorModule = asciidoctorModule;
 		this.rubyRuntime = rubyRuntime;
 	}
 
-	
 	public static Asciidoctor create() {
-		
+
 		RubyInstanceConfig config = createOptimizedConfiguration();
-		
+
 		Ruby rubyRuntime = JavaEmbedUtils.initialize(Collections.EMPTY_LIST, config);
-		
-		JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(
-				rubyRuntime);
+
+		JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(rubyRuntime);
 
 		AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory.createAsciidoctorModule();
-		
+
+		// hack: to fix problem with copycss this should change in future.
+		defaultCssResolver = new DefaultCssResolver(rubyRuntime, jRubyAsciidoctorModuleFactory.evaler);
+
 		JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
 		return jRubyAsciidoctor;
 	}
 
-
 	private static RubyInstanceConfig createOptimizedConfiguration() {
-		RubyInstanceConfig config = new RubyInstanceConfig();   
+		RubyInstanceConfig config = new RubyInstanceConfig();
 		config.setCompatVersion(CompatVersion.RUBY1_9);
 		config.setCompileMode(CompileMode.OFF);
 
@@ -60,32 +64,69 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	@SuppressWarnings("unchecked")
 	@Override
 	public String render(String content, Map<String, Object> options) {
-		
-		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-		return this.asciidoctorModule.render(content, rubyHash);
+
+		// hack: to fix problem with copycss this should change in future.
+		if (defaultCssResolver.isCopyCssActionRequired(options)) {
+
+			Map<String, Object> attributes = (Map<String, Object>) options.get(Options.ATTRIBUTES);
+			options.put(Options.ATTRIBUTES, removeCopyCssAttribute(attributes));
+
+			RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+			Object object = this.asciidoctorModule.render(content, rubyHash);
+
+			defaultCssResolver.treatCopyCssAttribute(new File("."), options);
+			return returnExpectedValue(object);
+
+		} else {
+			RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+			Object object = this.asciidoctorModule.render(content, rubyHash);
+			return returnExpectedValue(object);
+		}
+
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public String renderFile(File filename, Map<String, Object> options) {
-		
-		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-		Object object = this.asciidoctorModule.render_file(filename.getAbsolutePath(), rubyHash);
-		
-		return returnExpectedValue(object);
-		
+
+		// hack: to fix problem with copycss this should change in future.
+		if (defaultCssResolver.isCopyCssActionRequired(options)) {
+
+			Map<String, Object> attributes = (Map<String, Object>) options.get(Options.ATTRIBUTES);
+			options.put(Options.ATTRIBUTES, removeCopyCssAttribute(attributes));
+
+			RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+			Object object = this.asciidoctorModule.render_file(filename.getAbsolutePath(), rubyHash);
+
+			defaultCssResolver.treatCopyCssAttribute(filename.getAbsoluteFile().getParentFile(), options);
+			return returnExpectedValue(object);
+
+		} else {
+
+			RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+			Object object = this.asciidoctorModule.render_file(filename.getAbsolutePath(), rubyHash);
+			return returnExpectedValue(object);
+		}
+
 	}
 
+	private Map<String, Object> removeCopyCssAttribute(Map<String, Object> attributes) {
+		attributes.remove(Attributes.COPY_CSS);
+		return attributes;
+	}
 
 	/**
-	 * This method has been added to deal with the fact that asciidoctor 0.1.2 can return an Asciidoctor::Document or a String depending if content is write to disk or not.
-	 * This may change in the future (https://github.com/asciidoctor/asciidoctor/issues/286) 
+	 * This method has been added to deal with the fact that asciidoctor 0.1.2
+	 * can return an Asciidoctor::Document or a String depending if content is
+	 * write to disk or not. This may change in the future
+	 * (https://github.com/asciidoctor/asciidoctor/issues/286)
+	 * 
 	 * @param object
 	 * @return
 	 */
 	private String returnExpectedValue(Object object) {
-		if(object instanceof String) {
-			return object.toString();		
+		if (object instanceof String) {
+			return object.toString();
 		} else {
 			return null;
 		}
@@ -98,46 +139,40 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		IOUtils.writeFull(rendererWriter, renderedContent);
 	}
 
-	
-	
 	@Override
 	public String[] renderFiles(Collection<File> asciidoctorFiles, Map<String, Object> options) {
 		List<String> asciidoctorContent = renderAllFiles(options, asciidoctorFiles);
 		return asciidoctorContent.toArray(new String[asciidoctorContent.size()]);
 	}
 
-
 	@Override
 	public String[] renderFiles(Collection<File> asciidoctorFiles, Options options) {
 		return this.renderFiles(asciidoctorFiles, options.map());
 	}
 
-
 	@Override
 	public String[] renderDirectory(File directory, Map<String, Object> options) {
-		
+
 		final List<File> asciidoctorFiles = scanForAsciiDocFiles(directory);
 		List<String> asciidoctorContent = renderAllFiles(options, asciidoctorFiles);
-		
+
 		return asciidoctorContent.toArray(new String[asciidoctorContent.size()]);
 	}
 
-
 	private List<String> renderAllFiles(Map<String, Object> options, final Collection<File> asciidoctorFiles) {
 		List<String> asciidoctorContent = new ArrayList<String>();
-		
+
 		for (File asciidoctorFile : asciidoctorFiles) {
 			String renderedFile = renderFile(asciidoctorFile, options);
-			
-			if(renderedFile != null) {
+
+			if (renderedFile != null) {
 				asciidoctorContent.add(renderedFile);
 			}
-			
+
 		}
-		
+
 		return asciidoctorContent;
 	}
-
 
 	private List<File> scanForAsciiDocFiles(File directory) {
 		final DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(directory.getAbsolutePath());
@@ -145,24 +180,20 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		return asciidoctorFiles;
 	}
 
-
 	@Override
 	public String render(String content, Options options) {
 		return this.render(content, options.map());
 	}
-
 
 	@Override
 	public void render(Reader contentReader, Writer rendererWriter, Options options) throws IOException {
 		this.render(contentReader, rendererWriter, options.map());
 	}
 
-
 	@Override
 	public String renderFile(File filename, Options options) {
 		return this.renderFile(filename, options.map());
 	}
-
 
 	@Override
 	public String[] renderDirectory(File directory, Options options) {

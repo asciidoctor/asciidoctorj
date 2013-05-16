@@ -8,7 +8,8 @@ import org.jruby.javasupport.JavaEmbedUtils;
 
 class JRubyAsciidoctorModuleFactory {
 
-	private RubyRuntimeAdapter evaler;
+	//hack: to fix problem with copycss this should change in future.
+	protected RubyRuntimeAdapter evaler;
 	private Ruby runtime;
 	
 	public JRubyAsciidoctorModuleFactory(Ruby runtime) {
@@ -22,9 +23,12 @@ class JRubyAsciidoctorModuleFactory {
 		
 		evaler.eval(runtime, script);
 		Object rfj = evaler.eval(runtime, "AsciidoctorModule.new()");
+		
 		return RubyUtils.rubyToJava(runtime, (org.jruby.runtime.builtin.IRubyObject) rfj, AsciidoctorModule.class);
 		
 	}
+	
+	
 	
 	private String loadAsciidoctorRubyClass() {
 		InputStream inputStream = JRubyAsciidoctorModuleFactory.class.getResourceAsStream("asciidoctorclass.rb");

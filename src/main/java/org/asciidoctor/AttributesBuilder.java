@@ -151,11 +151,20 @@ public class AttributesBuilder {
 	/**
 	 * Sets link css attribute.
 	 * @param linkCss true if css is linked, false if css is embedded.
-	 * 
 	 * @return this instance.
 	 */
 	public AttributesBuilder linkCss(boolean linkCss) {
 		this.attributes.setLinkCss(linkCss);
+		return this;
+	}
+	
+	/**
+	 * Sets copy css attribute.
+	 * @param copyCss true if css should be copied to the output location, false otherwise.
+	 * @return this instance.
+	 */
+	public AttributesBuilder copyCss(boolean copyCss) {
+		this.attributes.setCopyCss(copyCss);
 		return this;
 	}
 	

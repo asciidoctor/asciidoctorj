@@ -7,16 +7,12 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.asciidoctor.internal.IOUtils;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -132,6 +128,99 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		Elements link = doc.select("link[href]");
 		String attr = link.attr("href");
 		assertThat(attr, is("./asciidoctor.css"));
+		
+	}
+	
+	@Test
+	public void copycss_with_in_place_should_copy_css_to_rendered_directory() {
+		Attributes attributes = attributes().copyCss(true).get();
+		Options options = options().inPlace(true).safe(SafeMode.UNSAFE).attributes(attributes).get();
+		
+		asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+		
+		File cssFile = new File("target/test-classes/asciidoctor.css");
+		assertThat(cssFile.exists(), is(true));
+		cssFile.delete();
+		
+	}
+	
+	@Test
+	public void copycss_negated_with_in_place_should_not_copy_css_to_rendered_directory() {
+		Attributes attributes = attributes().copyCss(false).get();
+		Options options = options().inPlace(true).safe(SafeMode.UNSAFE).attributes(attributes).get();
+		
+		asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+		
+		File cssFile = new File("target/test-classes/asciidoctor.css");
+		assertThat(cssFile.exists(), is(false));
+		
+	}
+	
+	@Test
+	public void copycss_and_linkcss_negated_should_not_copy_css_to_rendered_file() {
+		
+		Attributes attributes = attributes().copyCss(true).linkCss(false).get();
+		Options options = options().inPlace(true).safe(SafeMode.UNSAFE).attributes(attributes).get();
+		
+		asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+		
+		File cssFile = new File("target/test-classes/asciidoctor.css");
+		assertThat(cssFile.exists(), is(false));
+		
+	}
+	
+	@Test
+	public void copycss_with_to_file_should_copy_css_to_to_file_directory() {
+	
+		Attributes attributes = attributes().copyCss(true).get();
+		Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "output.html")).safe(SafeMode.UNSAFE).attributes(attributes).get();
+		
+		asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+		
+		File cssFile = new File(testFolder.getRoot(), "asciidoctor.css");
+		assertThat(cssFile.exists(), is(true));
+		
+	}
+	
+	@Test
+	public void copycss_with_to_dir_should_copy_css_to_to_dir_directory() {
+	
+		Attributes attributes = attributes().copyCss(true).get();
+		Options options = options().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).get();
+		
+		asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+		
+		File cssFile = new File(testFolder.getRoot(), "asciidoctor.css");
+		assertThat(cssFile.exists(), is(true));
+		
+	}
+	
+	//**
+
+	
+	@Test
+	public void copycss_with_render_to_file_should_copy_css_to_to_file_directory() {
+	
+		Attributes attributes = attributes().copyCss(true).get();
+		Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "output.html")).safe(SafeMode.UNSAFE).attributes(attributes).get();
+		
+		asciidoctor.render("This is Asciidoctor", options);
+		
+		File cssFile = new File(testFolder.getRoot(), "asciidoctor.css");
+		assertThat(cssFile.exists(), is(true));
+		
+	}
+	
+	@Test
+	public void copycss_with_render_to_dir_should_copy_css_to_to_dir_directory() {
+	
+		Attributes attributes = attributes().copyCss(true).get();
+		Options options = options().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).get();
+		
+		asciidoctor.render("This is Asciidoctor", options);
+		
+		File cssFile = new File(testFolder.getRoot(), "asciidoctor.css");
+		assertThat(cssFile.exists(), is(true));
 		
 	}
 	
