@@ -7,6 +7,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,10 +25,12 @@ import org.jruby.javasupport.JavaEmbedUtils;
 
 public class JRubyAsciidoctor implements Asciidoctor {
 
+	private static final String GEM_PATH = "GEM_PATH";
+	
 	private AsciidoctorModule asciidoctorModule;
-	private Ruby rubyRuntime;
+	protected Ruby rubyRuntime;
 
-	// hack: to fix problem with copycss this should change in future.
+	// hack: to fix problem with copycss this should change in future (0.1.3).
 	private static DefaultCssResolver defaultCssResolver;
 
 	private JRubyAsciidoctor(AsciidoctorModule asciidoctorModule, Ruby rubyRuntime) {
@@ -37,11 +40,25 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	}
 
 	public static Asciidoctor create() {
+		return createJRubyAsciidoctorInstance(new HashMap<String, Object>());
+	}
 
+	public static Asciidoctor create(String gemPath) {
+		Map<String, Object> gemPathVar = new HashMap<String, Object>();
+		gemPathVar.put(GEM_PATH, gemPath);
+		
+		Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(gemPathVar);
+		return asciidoctor;
+	}
+	
+	private static Asciidoctor createJRubyAsciidoctorInstance(Map<String, Object> environmentVars) {
+		
 		RubyInstanceConfig config = createOptimizedConfiguration();
-
+		
 		Ruby rubyRuntime = JavaEmbedUtils.initialize(Collections.EMPTY_LIST, config);
 
+		injectEnvironmentVariables(rubyRuntime, environmentVars);
+		
 		JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(rubyRuntime);
 
 		AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory.createAsciidoctorModule();
@@ -52,7 +69,12 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
 		return jRubyAsciidoctor;
 	}
-
+	
+	private static void injectEnvironmentVariables(Ruby runtime, Map<String, Object> environmentVars) {
+		EnvironmentInjector environmentInjector = new EnvironmentInjector(runtime);
+		environmentInjector.inject(environmentVars);
+	}
+	
 	private static RubyInstanceConfig createOptimizedConfiguration() {
 		RubyInstanceConfig config = new RubyInstanceConfig();
 		config.setCompatVersion(CompatVersion.RUBY1_9);
@@ -60,7 +82,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
 		return config;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public String render(String content, Map<String, Object> options) {

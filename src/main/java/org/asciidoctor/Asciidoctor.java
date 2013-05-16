@@ -149,6 +149,18 @@ public interface Asciidoctor {
 		public static Asciidoctor create() {
 			return JRubyAsciidoctor.create();
 		}
+		
+		/**
+		 * Creates a new instance of Asciidoctor and sets GEM_PATH environment variable to provided gemPath.
+		 * This method is mostly used in OSGi environments. 
+		 * 
+		 * @param gemPath where gems are located.
+		 * 
+		 * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor Ruby calls.
+		 */
+		public static Asciidoctor create(String gemPath) {
+			return JRubyAsciidoctor.create(gemPath);
+		}
 	}
 	
 }
