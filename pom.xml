@@ -40,7 +40,7 @@
 	</developers>
 	
 	<properties>
-		<jruby.version>1.7.3</jruby.version>
+		<jruby.version>1.7.4</jruby.version>
 		<junit.version>4.11</junit.version>
 		<jsoup.version>1.7.2</jsoup.version>
 		<xmlmatchers.version>1.0-RC1</xmlmatchers.version>
