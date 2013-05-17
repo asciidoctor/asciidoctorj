@@ -39,7 +39,7 @@ dependencies {
 ...
 ----
 
-<1> As this library tracks the version of asciidoctor, you can use which every version of asciidoctor you prefer.
+<1> As this library tracks the version of asciidoctor, you can use whichever version of asciidoctor you prefer.
 
 == Usage
 
@@ -272,4 +272,4 @@ export JRUBY_OPTS="-J-Xverify:none -J-client"
 
 Note that you should add *-J* before the flag.
 
-You can find a full explanation on how to improve startup time of +JRuby+ applications at {https://github.com/jruby/jruby/wiki/Improving-startup-time}[Improving Startup Time]
+You can find a full explanation on how to improve startup time of +JRuby+ applications at https://github.com/jruby/jruby/wiki/Improving-startup-time[Improving Startup Time]
