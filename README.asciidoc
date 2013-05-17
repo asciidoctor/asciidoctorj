@@ -128,7 +128,7 @@ assertRenderedFile(renderedContent.toString());
 
 {asciidoctor-url}[Asciidoctor] supports different kind of options, like +in_place+ which renders the output inside a file, +template_dir+ used to provide a directory of Tilt-compatible templates to be used instead of the default built-in templates, or for example +attributes+ option where we can set key-value pairs of attributes that will be used within asciidoc document.
 
-The second parameter of +render+ methods are a +java.util.Map+ where we can set all these options.
+The second parameter of +render+ methods are a +java.util.Map+ where all these options can be set.
 
 .Example of using in_place Option and backend Attribute
 [source, java]
@@ -145,11 +145,31 @@ String render = asciidoctor.renderFile("target/test-classes/rendersample.asciido
 
 See that in previous example we have created a Map, where we have put the options and attributes (creating a Map too) required to render input as docbook and generate an output file.
 
-But +asciidoctor-java-integration+ also provides two builder classes to create these maps in a more readable form. 
+Another way for setting options is by using +org.asciidoctor.Options+ class. +Options+ is a simple Java class which contains methods for setting required options. Note that related with +org.asciidoctor.Options+ class, there is +org.asciidoctor.Attributes+ class, which can be used for setting attributes.
 
-+AttributesBuilder+ is provided for creating a map with required attributes set, and +OptionsBuilder+ can be used for options. Previous example but using these classes looks like:
++render+ methods are overloaded, so we can pass +org.asciidoctor.Options+ as parameter instead of +java.util.Map+. 
 
-.Example setting attributes and options
+.Example of using Options and Attributes class instead of Map.
+[source, java]
+----
+ 
+Attributes attributes = new Attributes();
+attributes.setBackend("docbook");
+		
+Options options = new Options();
+options.setInPlace(true);
+options.setAttributes(attributes);
+
+String render = asciidoctor.renderFile("target/test-classes/rendersample.asciidoc", options);
+
+...
+----
+
+But +asciidoctor-java-integration+ also provides two fluent interfaces to create these maps and classes in a more readable form. 
+
++org.asciidoctor.AttributesBuilder+ is provided for creating required attributes set, and +org.asciidoctor.OptionsBuilder+ can be used for options. Previous example but using these classes looks like:
+
+.Example setting attributes and options with map
 [source, java]
 ----
 import static org.asciidoctor.AttributesBuilder.attributes;
@@ -159,6 +179,22 @@ import static org.asciidoctor.OptionsBuilder.options;
 
 Map<String, Object> attributes = attributes().backend("docbook").asMap();
 Map<String, Object> options = options().inPlace(true).attributes(attributes).asMap();
+
+String render = asciidoctor.renderFile("target/test-classes/rendersample.asciidoc", options);
+
+...
+----
+
+.Example setting attributes and options with classes
+[source, java]
+----
+import static org.asciidoctor.AttributesBuilder.attributes;
+import static org.asciidoctor.OptionsBuilder.options;
+
+...
+
+Attributes attributes = attributes().backend("docbook").get();
+Options options = options().inPlace(true).attributes(attributes).get();
 
 String render = asciidoctor.renderFile("target/test-classes/rendersample.asciidoc", options);
 
@@ -175,6 +211,16 @@ A utility class for searching all asciidoc files present in a root folder and al
 DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker("target/test-classes/src");
 List<File> asciidocFiles = directoryWalker.scan();
 ----
+
+=== GEM_PATH
+
+By default +asciidoctor-java-integration+ comes with all required gems bundled within the jar. But in some circumstances like +OSGi+ environments you may require that gems are stored in external directory and be loaded by +asciidoctor-java-integration+. To accomplish this scenario, +create+ method provides a parameter to set it.
+
+.Example of setting GEM_PATH
+[source, java]
+----
+Asciidoctor asciidoctor = create("my/gem/path");
+---- 
 
 == Optimization
 
