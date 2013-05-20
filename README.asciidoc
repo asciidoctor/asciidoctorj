@@ -92,6 +92,18 @@ System.out.println(rendered);
 ...
 ----
 
+Or a list of Asciidoc files:
+
+[source, java]
+.Rendering a list of files.
+----
+...
+String[] allRenderedFiles = asciidoctor.renderFiles(Arrays.asList(new File("target/test-classes/rendersample.asciidoc")), options);
+...
+----
+
+If the rendered content is not written into files, +renderDirectory+ will return an array listing all the documents rendered.
+
 Another method provided by +Asciidoctor+ interface is +renderDirectory+. This method renders all AsciiDoc files (+_.asc_+,+ _.asciidoc_+,+ _.ad_+ or +_.adoc_+), that are present inside provided folder or any of its subfolder.
 
 In case rendered content is not written in files, this method returns an array with all documents rendered.
@@ -214,7 +226,7 @@ List<File> asciidocFiles = directoryWalker.scan();
 
 === GEM_PATH
 
-By default +asciidoctor-java-integration+ comes with all required gems bundled within the jar. But in some circumstances like +OSGi+ environments you may require that gems are stored in external directory and be loaded by +asciidoctor-java-integration+. To accomplish this scenario, +create+ method provides a parameter to set it.
+By default +asciidoctor-java-integration+ comes with all required gems bundled within the jar. But in some circumstances like +OSGi+ environments you may require to store gems in an external directory and be loaded by +asciidoctor-java-integration+. To accomplish this scenario, +create+ method provides a parameter to set it.
 
 .Example of setting GEM_PATH
 [source, java]
