@@ -178,6 +178,16 @@ public class AttributesBuilder {
 		this.attributes.setAttribute(attributeName, attributeValue);
 		return this;
 	}
+
+	/**
+	 * Sets custom or unlisted attribute to the default value, empty string.
+	 * @param attributeName A flag-only attribute, such as "icons"
+	 * @return this instance.
+	 */
+	public AttributesBuilder attribute(String attributeName) {
+		this.attributes.put(attributeName, "");
+		return this;
+	}
 	
 	/**
 	 * Gets a map with configured options.
