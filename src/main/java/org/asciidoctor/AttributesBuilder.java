@@ -169,6 +169,36 @@ public class AttributesBuilder {
 	}
 	
 	/**
+	 * Sets icons attribute.
+	 * @param icons true if icons are rendered, false otherwise.
+	 * @return this instance.
+	 */
+	public AttributesBuilder icons(boolean icons) {
+		this.attributes.setIcons(icons);
+		return this;
+	}
+	
+	/**
+	 * Sets icons directory location.
+	 * @param iconsDir location.
+	 * @return this instance.
+	 */
+	public AttributesBuilder iconsDir(String iconsDir) {
+		this.attributes.setIconsDir(iconsDir);
+		return this;
+	}
+	
+	/**
+	 * Sets custom or unlisted attribute to the default value, empty string.
+	 * @param attributeName A flag-only attribute, such as "icons"
+	 * @return this instance.
+	 */
+	public AttributesBuilder attribute(String attributeName) {
+		this.attributes.setAttribute(attributeName, "");
+		return this;
+	}
+	
+	/**
 	 * Sets custom or unlisted attribute 
 	 * @param attributeName 
 	 * @param attributeValue
@@ -179,15 +209,6 @@ public class AttributesBuilder {
 		return this;
 	}
 
-	/**
-	 * Sets custom or unlisted attribute to the default value, empty string.
-	 * @param attributeName A flag-only attribute, such as "icons"
-	 * @return this instance.
-	 */
-	public AttributesBuilder attribute(String attributeName) {
-		this.attributes.put(attributeName, "");
-		return this;
-	}
 	
 	/**
 	 * Gets a map with configured options.

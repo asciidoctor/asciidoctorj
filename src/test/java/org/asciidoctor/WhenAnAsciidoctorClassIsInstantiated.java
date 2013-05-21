@@ -137,21 +137,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 		assertThat(renderContent, is(nullValue()));
 	}
 
-	@Test
-	public void string_content_with_icons_enabled_should_be_rendered() throws IOException, SAXException, ParserConfigurationException {
-		
-		InputStream content = new FileInputStream("target/test-classes/documentwithnote.asciidoc");
-		
-		Map<String, Object> attributes = attributes().attribute("icons").asMap();
-		Map<String, Object> options = options()
-										.attributes(attributes)
-									  .asMap();
-		
-		String result = asciidoctor.render(toString(content), options);
-        result = result.replaceAll("<img(.*?)>", "<img$1/>");
-		assertRenderedAdmonitionIcon(result);
-		
-	}
+	
 	
 	@Test
 	public void docbook_document_should_be_rendered_into_current_directory_using_options_class() throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
@@ -298,11 +284,6 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 		assertThat(renderFileSource, hasXPath("/div/div[@class='sectionbody']"));
 	}
 
-	private void assertRenderedAdmonitionIcon(String render_content) throws IOException, SAXException, ParserConfigurationException {
-		Source renderFileSource = new DOMSource(inputStream2Document(new ByteArrayInputStream(render_content.getBytes())));
-		
-		assertThat(renderFileSource, hasXPath("//img[@alt='Note']"));
-	}
 	
 	private static String toString(InputStream inputStream) throws IOException {
 		return CharStreams.toString( new InputStreamReader( inputStream ));

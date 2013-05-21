@@ -5,9 +5,20 @@ import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
+import static org.xmlmatchers.xpath.HasXPath.hasXPath;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
 
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.jsoup.Jsoup;
@@ -16,6 +27,9 @@ import org.jsoup.select.Elements;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.xml.sax.SAXException;
+
+import com.google.common.io.CharStreams;
 
 public class WhenAttributesAreUsedInAsciidoctor {
 
@@ -222,6 +236,58 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		File cssFile = new File(testFolder.getRoot(), "asciidoctor.css");
 		assertThat(cssFile.exists(), is(true));
 		
+	}
+	
+	@Test
+	public void string_content_with_icons_enabled_should_be_rendered() throws IOException, SAXException, ParserConfigurationException {
+		
+		InputStream content = new FileInputStream("target/test-classes/documentwithnote.asciidoc");
+		
+		Map<String, Object> attributes = attributes().icons(true).asMap();
+		Map<String, Object> options = options()
+										.attributes(attributes)
+									  .asMap();
+		
+		String result = asciidoctor.render(toString(content), options);
+        result = result.replaceAll("<img(.*?)>", "<img$1/>");
+		assertRenderedAdmonitionIcon(result);
+		
+	}
+	
+	@Test
+	public void string_content_with_icons_enabled_and_iconsdir_set_should_be_rendered_with_iconsdir() throws IOException, SAXException, ParserConfigurationException {
+		
+		InputStream content = new FileInputStream("target/test-classes/documentwithnote.asciidoc");
+		
+		Map<String, Object> attributes = attributes().icons(true).iconsDir("icons").asMap();
+		Map<String, Object> options = options()
+										.attributes(attributes)
+									  .asMap();
+		
+		String renderContent = asciidoctor.render(toString(content), options);
+		
+		Document doc = Jsoup.parse(renderContent, "UTF-8");
+		Elements image = doc.select("img[src]");
+		String srcValue = image.attr("src");
+		assertThat(srcValue, is("icons/note.png"));
+		
+	}
+	
+	private void assertRenderedAdmonitionIcon(String render_content) throws IOException, SAXException, ParserConfigurationException {
+		Source renderFileSource = new DOMSource(inputStream2Document(new ByteArrayInputStream(render_content.getBytes())));
+		
+		assertThat(renderFileSource, hasXPath("//img[@alt='Note']"));
+	}
+	
+	private static String toString(InputStream inputStream) throws IOException {
+		return CharStreams.toString( new InputStreamReader( inputStream ));
+	}
+	
+	private static org.w3c.dom.Document inputStream2Document(InputStream inputStream) throws IOException, SAXException, ParserConfigurationException {
+	    DocumentBuilderFactory newInstance = DocumentBuilderFactory.newInstance();
+	    newInstance.setNamespaceAware(true);
+	    org.w3c.dom.Document parse = newInstance.newDocumentBuilder().parse(inputStream);
+	    return parse;
 	}
 	
 }
