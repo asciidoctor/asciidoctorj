@@ -181,6 +181,16 @@ public class OptionsBuilder {
 	}
 	
 	/**
+	 * Sets base dir for working directory.
+	 * @param baseDir working directory.
+	 * @return this instance.
+	 */
+	public OptionsBuilder baseDir(String baseDir) {
+		this.options.setBaseDir(baseDir);
+		return this;
+	}
+	
+	/**
 	 * Gets a map with configured options.
 	 * @return map with all options. By default an empty map is returned.
 	 */

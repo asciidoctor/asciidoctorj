@@ -19,6 +19,7 @@ public class Options {
 	public static final String DESTINATION_DIR = "destination_dir";
 	public static final String BACKEND = "backend";
 	public static final String DOCTYPE = "doctype";
+	public static final String BASEDIR = "base_dir";
 	
 	private Map<String, Object> options = new HashMap<String, Object>();
 	
@@ -92,6 +93,10 @@ public class Options {
 	
 	public void setDocType(String docType) {
 		this.options.put(DOCTYPE, docType);
+	}
+	
+	public void setBaseDir(String baseDir) {
+		this.options.put(BASEDIR, baseDir);
 	}
 	
 	public void setOption(String optionName, Object optionValue) {
