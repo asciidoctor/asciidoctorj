@@ -16,6 +16,7 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.Options;
+import org.asciidoctor.OptionsBuilder;
 import org.jruby.CompatVersion;
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
@@ -222,4 +223,28 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		return this.renderDirectory(directory, options.map());
 	}
 
+	@Override
+	public String render(String content, OptionsBuilder options) {
+		return this.render(content, options.asMap());
+	}
+
+	@Override
+	public void render(Reader contentReader, Writer rendererWriter, OptionsBuilder options) throws IOException {
+		this.render(contentReader, rendererWriter, options.asMap());
+	}
+
+	@Override
+	public String renderFile(File filename, OptionsBuilder options) {
+		return this.renderFile(filename, options.asMap());
+	}
+
+	@Override
+	public String[] renderDirectory(File directory, OptionsBuilder options) {
+		return this.renderDirectory(directory, options.asMap());
+	}
+
+	@Override
+	public String[] renderFiles(Collection<File> asciidoctorFiles, OptionsBuilder options) {
+		return this.renderFiles(asciidoctorFiles, options.asMap());
+	}
 }
