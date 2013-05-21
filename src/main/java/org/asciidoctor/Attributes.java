@@ -26,6 +26,8 @@ public class Attributes {
 	public static final String NOT_STYLESHEET_NAME = STYLESHEET_NAME+"!";
 	public static final String LINK_CSS = "linkcss";
 	public static final String COPY_CSS = "copycss";
+	
+	public static final String ICONS_DIR = "iconsdir";
 
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -134,6 +136,14 @@ public class Attributes {
 	 */
 	public void setCopyCss(boolean copyCss) {
 		this.attributes.put(COPY_CSS, toAsciidoctorFlag(copyCss));
+	}
+	
+	/**
+	 * Sets icons directory.
+	 * @param iconsDir
+	 */
+	public void setIconsDir(String iconsDir) {
+		this.attributes.put(ICONS_DIR, iconsDir);
 	}
 	
 	public void setAttribute(String attributeName, Object attributeValue) {
