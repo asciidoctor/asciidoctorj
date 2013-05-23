@@ -7,6 +7,7 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.Map;
 
+import org.asciidoctor.internal.Document;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 
 /**
@@ -195,6 +196,13 @@ public interface Asciidoctor {
 	String[] renderFiles(Collection<File> asciidoctorFiles, OptionsBuilder options);
 	
 	/**
+	 * Reads only header parameters instead of all document.
+	 * @param filename to read the attributes.
+	 * @return header.
+	 */
+	DocumentHeader readHeader(File filename);
+	
+	/**
 	 * Factory for creating a new instance of Asciidoctor interface.
 	 * @author lordofthejars
 	 *
@@ -221,5 +229,5 @@ public interface Asciidoctor {
 			return JRubyAsciidoctor.create(gemPath);
 		}
 	}
-	
+
 }

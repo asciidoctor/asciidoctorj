@@ -104,6 +104,17 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	}
 	
 	@Test
+	public void file_document_should_be_rendered_from_base_dir() throws IOException {
+		
+		
+		Options options = options().inPlace(false).baseDir(testFolder.getRoot()).toFile(new File("target/test-classes/rendersample.html")).get();
+		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+		System.out.println(Arrays.toString(testFolder.getRoot().list()));
+		File renderedFile = new File("target/test-classes/rendersample.html");
+		assertThat(renderedFile.exists(), is(true));
+	}
+
+	@Test
 	public void file_document_should_be_rendered_into_foreign_directory_using_options_class() throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
 		
 		Options options = options()

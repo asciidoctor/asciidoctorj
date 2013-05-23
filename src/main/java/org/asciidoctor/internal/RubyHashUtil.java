@@ -1,10 +1,13 @@
 package org.asciidoctor.internal;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
+import org.jruby.RubyObject;
 import org.jruby.RubySymbol;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
@@ -36,6 +39,10 @@ public class RubyHashUtil {
 		
 	}
 
+	private static Object toJavaObject(IRubyObject rubyObject) {
+		return JavaEmbedUtils.rubyToJava(rubyObject);
+	}
+	
 	private static RubySymbol toSymbol(Ruby rubyRuntime, String key) {
 		RubySymbol newSymbol = RubySymbol.newSymbol(rubyRuntime, key);
 		return newSymbol;

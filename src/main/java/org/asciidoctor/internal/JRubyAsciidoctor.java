@@ -15,6 +15,7 @@ import org.asciidoctor.AsciiDocDirectoryWalker;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.DirectoryWalker;
+import org.asciidoctor.DocumentHeader;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.jruby.CompatVersion;
@@ -82,6 +83,21 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		config.setCompileMode(CompileMode.OFF);
 
 		return config;
+	}
+	
+	private static DocumentHeader toDocumentHeader(Document document) {
+		return DocumentHeader.createDocumentHeader(document.doctitle(), document.size(), document.getAttributes());
+	}
+	
+	@Override
+	public DocumentHeader readHeader(File filename) {
+		
+		Map<String, Object> options = new HashMap<String, Object>();
+		options.put("parse_header_only", true);
+		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+		
+		Document document = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
+		return toDocumentHeader(document);
 	}
 	
 	@SuppressWarnings("unchecked")

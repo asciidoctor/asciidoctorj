@@ -1,0 +1,6 @@
+= Sample Document
+Doc Writer <doc.writer@example.com>
+v1.0, 2013-05-20: First draft
+:tags: [document, example]
+
+Preamble...
