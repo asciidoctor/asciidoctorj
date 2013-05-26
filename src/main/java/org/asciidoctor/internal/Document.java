@@ -11,11 +11,12 @@ public interface Document {
 	 * @return document title.
 	 */
 	String doctitle();
+	
 	/**
 	 * 
-	 * @return the number of blocks.
+	 * @return page title
 	 */
-	int size();
+	String title();
 	
 	/**
 	 * 

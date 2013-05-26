@@ -9,4 +9,5 @@ public interface AsciidoctorModule {
 	Object render_file(String filename, Map<String, Object> options);
 	
 	Document load_file(String filename, Map<String, Object> options);
+	Document load(String content, Map<String, Object> options);
 }

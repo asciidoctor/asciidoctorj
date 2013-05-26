@@ -200,7 +200,21 @@ public interface Asciidoctor {
 	 * @param filename to read the attributes.
 	 * @return header.
 	 */
-	DocumentHeader readHeader(File filename);
+	DocumentHeader readDocumentHeader(File filename);
+	
+	/**
+	 * Reads only header parameters instead of all document.
+	 * @param content where rendered content is written. Writer is flushed, but not closed.
+	 * @return header.
+	 */
+	DocumentHeader readDocumentHeader(String content);
+	
+	/**
+	 * Reads only header parameters instead of all document.
+	 * @param contentReader where asciidoc content is read.
+	 * @return header.
+	 */
+	DocumentHeader readDocumentHeader(Reader contentReader);
 	
 	/**
 	 * Factory for creating a new instance of Asciidoctor interface.

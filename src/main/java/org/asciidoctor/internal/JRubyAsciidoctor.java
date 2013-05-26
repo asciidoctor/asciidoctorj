@@ -86,18 +86,40 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	}
 	
 	private static DocumentHeader toDocumentHeader(Document document) {
-		return DocumentHeader.createDocumentHeader(document.doctitle(), document.size(), document.getAttributes());
+		return DocumentHeader.createDocumentHeader(document.doctitle(), document.title(), document.getAttributes());
 	}
 	
 	@Override
-	public DocumentHeader readHeader(File filename) {
+	public DocumentHeader readDocumentHeader(File filename) {
 		
-		Map<String, Object> options = new HashMap<String, Object>();
-		options.put("parse_header_only", true);
-		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+		RubyHash rubyHash = getParseHeaderOnlyOption();
 		
 		Document document = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
 		return toDocumentHeader(document);
+	}
+
+	
+	
+	@Override
+	public DocumentHeader readDocumentHeader(String content) {
+
+		RubyHash rubyHash = getParseHeaderOnlyOption();
+		
+		Document document = this.asciidoctorModule.load(content, rubyHash);
+		return toDocumentHeader(document);
+	}
+
+	@Override
+	public DocumentHeader readDocumentHeader(Reader contentReader) {
+		String content = IOUtils.readFull(contentReader);
+		return this.readDocumentHeader(content);
+	}
+
+	private RubyHash getParseHeaderOnlyOption() {
+		Map<String, Object> options = new HashMap<String, Object>();
+		options.put("parse_header_only", true);
+		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+		return rubyHash;
 	}
 	
 	@SuppressWarnings("unchecked")
