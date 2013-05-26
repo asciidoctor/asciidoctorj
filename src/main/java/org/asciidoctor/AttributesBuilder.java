@@ -189,6 +189,15 @@ public class AttributesBuilder {
 	}
 	
 	/**
+	 * Sets data-uri attribute.
+	 * @param dataUri true if images should be embedded, false otherwise.
+	 */
+	public AttributesBuilder dataUri(boolean dataUri) {
+		this.attributes.setDataUri(dataUri);
+		return this;
+	}
+	
+	/**
 	 * Sets custom or unlisted attribute to the default value, empty string.
 	 * @param attributeName A flag-only attribute, such as "icons"
 	 * @return this instance.

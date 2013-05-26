@@ -30,6 +30,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	private static final String GEM_PATH = "GEM_PATH";
 	
 	private AsciidoctorModule asciidoctorModule;
+	protected RubyGemsPreloader rubyGemsPreloader;
 	protected Ruby rubyRuntime;
 
 	// hack: to fix problem with copycss this should change in future (0.1.3).
@@ -39,6 +40,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		super();
 		this.asciidoctorModule = asciidoctorModule;
 		this.rubyRuntime = rubyRuntime;
+		this.rubyGemsPreloader = new RubyGemsPreloader(this.rubyRuntime);
 	}
 
 	public static Asciidoctor create() {
@@ -126,6 +128,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	@Override
 	public String render(String content, Map<String, Object> options) {
 
+		this.rubyGemsPreloader.preloadRequiredLibraries(options);
+		
 		// hack: to fix problem with copycss this should change in future.
 		if (defaultCssResolver.isCopyCssActionRequired(options)) {
 
@@ -150,6 +154,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	@Override
 	public String renderFile(File filename, Map<String, Object> options) {
 
+		this.rubyGemsPreloader.preloadRequiredLibraries(options);
+		
 		// hack: to fix problem with copycss this should change in future.
 		if (defaultCssResolver.isCopyCssActionRequired(options)) {
 

@@ -28,6 +28,7 @@ public class Attributes {
 	public static final String COPY_CSS = "copycss";
 	public static final String ICONS = "icons";
 	public static final String ICONS_DIR = "iconsdir";
+	public static final String DATA_URI = "data-uri";
 
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -144,6 +145,14 @@ public class Attributes {
 	 */
 	public void setIcons(boolean icons) {
 		this.attributes.put(ICONS, toAsciidoctorFlag(icons));
+	}
+	
+	/**
+	 * Sets data-uri attribute.
+	 * @param dataUri true if images should be embedded, false otherwise.
+	 */
+	public void setDataUri(boolean dataUri) {
+		this.attributes.put(DATA_URI, toAsciidoctorFlag(dataUri));
 	}
 	
 	/**
