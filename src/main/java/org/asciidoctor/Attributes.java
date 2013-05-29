@@ -29,6 +29,7 @@ public class Attributes {
 	public static final String ICONS = "icons";
 	public static final String ICONS_DIR = "iconsdir";
 	public static final String DATA_URI = "data-uri";
+	public static final String SECTION_NUMBERS = "numbered";
 
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -162,9 +163,25 @@ public class Attributes {
 	public void setIconsDir(String iconsDir) {
 		this.attributes.put(ICONS_DIR, iconsDir);
 	}
+
+	/**
+	 * auto-number section titles in the HTML backend 
+	 * @param sectionNumbers
+	 */
+	public void setSectionNumbers(boolean sectionNumbers) {
+		this.attributes.put(SECTION_NUMBERS, toAsciidoctorFlag(sectionNumbers));
+	}
 	
 	public void setAttribute(String attributeName, Object attributeValue) {
 		this.attributes.put(attributeName, attributeValue);
+	}
+	
+	/**
+	 * Adds all attributes.
+	 * @param attributes to add.
+	 */
+	public void setAttributes(Map<String, Object> attributes) {
+		this.attributes.putAll(attributes);
 	}
 	
 	public Map<String, Object> map() {

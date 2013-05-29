@@ -206,6 +206,16 @@ public class AttributesBuilder {
 		this.attributes.setAttribute(attributeName, "");
 		return this;
 	}
+
+	/**
+	 * Auto-number section titles in the HTML backend.
+	 * @param sectionNumbers true if numbers should be autonumbered, false otherwise. 
+	 * @return this instance.
+	 */
+	public AttributesBuilder sectionNumbers(boolean sectionNumbers) {
+		this.attributes.setSectionNumbers(sectionNumbers);
+		return this;
+	}
 	
 	/**
 	 * Sets custom or unlisted attribute 
@@ -218,6 +228,15 @@ public class AttributesBuilder {
 		return this;
 	}
 
+	/**
+	 * Adds all attributes.
+	 * @param attributes map.
+	 * @return this instance.
+	 */
+	public AttributesBuilder attributes(Map<String, Object> attributes) {
+		this.attributes.setAttributes(attributes);
+		return this;
+	}
 	
 	/**
 	 * Gets a map with configured options.
