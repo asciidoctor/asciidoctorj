@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
-import org.jruby.RubyObject;
 import org.jruby.RubySymbol;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
@@ -39,8 +38,31 @@ public class RubyHashUtil {
 		
 	}
 
-	private static Object toJavaObject(IRubyObject rubyObject) {
-		return JavaEmbedUtils.rubyToJava(rubyObject);
+	public static Map<String, Object> convertRubyHashMapToMap(Map<RubySymbol, Object> rubyHashMap) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		Set<Entry<RubySymbol, Object>> elements = rubyHashMap.entrySet();
+		
+		for (Entry<RubySymbol, Object> element : elements) {
+			map.put(toJavaString(element), toJavaObject(element.getValue()));
+		}
+		
+		return map;
+		
+	}
+
+	private static String toJavaString(Entry<RubySymbol, Object> element) {
+		return element.getKey().asJavaString();
+	}
+	
+	private static Object toJavaObject(Object rubyObject) {
+		if (rubyObject instanceof IRubyObject) {
+			IRubyObject iRubyObject = (IRubyObject) rubyObject;
+			return JavaEmbedUtils.rubyToJava(iRubyObject);
+		}
+		
+		return rubyObject;
 	}
 	
 	private static RubySymbol toSymbol(Ruby rubyRuntime, String key) {

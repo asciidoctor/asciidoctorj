@@ -52,6 +52,7 @@
 		<asciidoctor.version>0.1.2</asciidoctor.version>
 		<erubis.version>2.7.0</erubis.version>
 		<slim.version>1.3.6</slim.version>
+		<jcommander.version>1.30</jcommander.version>
 		<gem.home.directory>classes</gem.home.directory>
 	</properties>
 
@@ -133,6 +134,13 @@
 			<version>${slim.version}</version>
 			<type>gem</type>
 			<scope>provided</scope>
+		</dependency>
+		
+		<!-- Dependencies for running AJI as standalone application -->
+		<dependency>
+  			<groupId>com.beust</groupId>
+    		<artifactId>jcommander</artifactId>
+    		<version>${jcommander.version}</version>
 		</dependency>
 	</dependencies>
 
