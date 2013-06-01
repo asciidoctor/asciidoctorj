@@ -105,7 +105,7 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder toFile(File toFile) {
-		this.options.setToFile(toFile.getAbsolutePath());
+		this.options.setToFile(toFile.getPath());
 		return this;
 	}
 	
@@ -185,8 +185,8 @@ public class OptionsBuilder {
 	 * @param baseDir working directory.
 	 * @return this instance.
 	 */
-	public OptionsBuilder baseDir(String baseDir) {
-		this.options.setBaseDir(baseDir);
+	public OptionsBuilder baseDir(File baseDir) {
+		this.options.setBaseDir(baseDir.getAbsolutePath());
 		return this;
 	}
 	
