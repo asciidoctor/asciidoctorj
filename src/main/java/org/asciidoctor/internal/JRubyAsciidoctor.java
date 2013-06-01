@@ -28,13 +28,10 @@ import org.jruby.javasupport.JavaEmbedUtils;
 public class JRubyAsciidoctor implements Asciidoctor {
 
 	private static final String GEM_PATH = "GEM_PATH";
-	
+
 	private AsciidoctorModule asciidoctorModule;
 	protected RubyGemsPreloader rubyGemsPreloader;
 	protected Ruby rubyRuntime;
-
-	// hack: to fix problem with copycss this should change in future (0.1.3).
-	private static DefaultCssResolver defaultCssResolver;
 
 	private JRubyAsciidoctor(AsciidoctorModule asciidoctorModule, Ruby rubyRuntime) {
 		super();
@@ -50,35 +47,32 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	public static Asciidoctor create(String gemPath) {
 		Map<String, Object> gemPathVar = new HashMap<String, Object>();
 		gemPathVar.put(GEM_PATH, gemPath);
-		
+
 		Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(gemPathVar);
 		return asciidoctor;
 	}
-	
+
 	private static Asciidoctor createJRubyAsciidoctorInstance(Map<String, Object> environmentVars) {
-		
+
 		RubyInstanceConfig config = createOptimizedConfiguration();
-		
+
 		Ruby rubyRuntime = JavaEmbedUtils.initialize(Collections.EMPTY_LIST, config);
 
 		injectEnvironmentVariables(rubyRuntime, environmentVars);
-		
+
 		JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(rubyRuntime);
 
 		AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory.createAsciidoctorModule();
 
-		// hack: to fix problem with copycss this should change in future.
-		defaultCssResolver = new DefaultCssResolver(rubyRuntime, jRubyAsciidoctorModuleFactory.evaler);
-
 		JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
 		return jRubyAsciidoctor;
 	}
-	
+
 	private static void injectEnvironmentVariables(Ruby runtime, Map<String, Object> environmentVars) {
 		EnvironmentInjector environmentInjector = new EnvironmentInjector(runtime);
 		environmentInjector.inject(environmentVars);
 	}
-	
+
 	private static RubyInstanceConfig createOptimizedConfiguration() {
 		RubyInstanceConfig config = new RubyInstanceConfig();
 		config.setCompatVersion(CompatVersion.RUBY1_9);
@@ -86,27 +80,25 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
 		return config;
 	}
-	
+
 	private static DocumentHeader toDocumentHeader(Document document) {
 		return DocumentHeader.createDocumentHeader(document.doctitle(), document.title(), document.getAttributes());
 	}
-	
+
 	@Override
 	public DocumentHeader readDocumentHeader(File filename) {
-		
+
 		RubyHash rubyHash = getParseHeaderOnlyOption();
-		
+
 		Document document = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
 		return toDocumentHeader(document);
 	}
 
-	
-	
 	@Override
 	public DocumentHeader readDocumentHeader(String content) {
 
 		RubyHash rubyHash = getParseHeaderOnlyOption();
-		
+
 		Document document = this.asciidoctorModule.load(content, rubyHash);
 		return toDocumentHeader(document);
 	}
@@ -123,32 +115,17 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 		return rubyHash;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public String render(String content, Map<String, Object> options) {
 
 		this.rubyGemsPreloader.preloadRequiredLibraries(options);
-		
-		// hack: to fix problem with copycss this should change in future.
-		if (defaultCssResolver.isCopyCssActionRequired(options)) {
 
-			Map<String, Object> attributes = (Map<String, Object>) options.get(Options.ATTRIBUTES);
-			options.put(Options.ATTRIBUTES, removeCopyCssAttribute(attributes));
+		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
-			RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-			Object object = this.asciidoctorModule.render(content, rubyHash);
-
-			defaultCssResolver.treatCopyCssAttribute(new File("."), options);
-			return returnExpectedValue(object);
-
-		} else {
-			
-			RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-			
-			Object object = this.asciidoctorModule.render(content, rubyHash);
-			return returnExpectedValue(object);
-		}
+		Object object = this.asciidoctorModule.render(content, rubyHash);
+		return returnExpectedValue(object);
 
 	}
 
@@ -157,25 +134,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	public String renderFile(File filename, Map<String, Object> options) {
 
 		this.rubyGemsPreloader.preloadRequiredLibraries(options);
-		
-		// hack: to fix problem with copycss this should change in future.
-		if (defaultCssResolver.isCopyCssActionRequired(options)) {
 
-			Map<String, Object> attributes = (Map<String, Object>) options.get(Options.ATTRIBUTES);
-			options.put(Options.ATTRIBUTES, removeCopyCssAttribute(attributes));
-
-			RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-			Object object = this.asciidoctorModule.render_file(filename.getAbsolutePath(), rubyHash);
-
-			defaultCssResolver.treatCopyCssAttribute(filename.getAbsoluteFile().getParentFile(), options);
-			return returnExpectedValue(object);
-
-		} else {
-
-			RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-			Object object = this.asciidoctorModule.render_file(filename.getAbsolutePath(), rubyHash);
-			return returnExpectedValue(object);
-		}
+		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+		Object object = this.asciidoctorModule.render_file(filename.getAbsolutePath(), rubyHash);
+		return returnExpectedValue(object);
 
 	}
 
