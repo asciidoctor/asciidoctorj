@@ -21,11 +21,12 @@ public class RubyHashUtil {
 		
 		RubyHash rubyHash = new RubyHash(rubyRuntime);
 		
-		Set<String> keySet = options.keySet();
+		Set<Entry<String, Object>> optionsSet = options.entrySet();
 		
-		for (String key : keySet) {
+		for (Entry<String, Object> entry : optionsSet) {
 			
-			Object value = options.get(key);
+			String key = entry.getKey();
+			Object value = entry.getValue();
 			
 			RubySymbol newSymbol = toSymbol(rubyRuntime, key);
 			IRubyObject iRubyValue = toRubyObject(rubyRuntime, value);
@@ -71,7 +72,27 @@ public class RubyHashUtil {
 	}
 
 	private static IRubyObject toRubyObject(Ruby rubyRuntime, Object value) {
-		return JavaEmbedUtils.javaToRuby(rubyRuntime, value);
+		
+		if (value instanceof Map) {
+			return toNoneSymbolsRubyHash(rubyRuntime, (Map<String, Object>) value);
+		} else {
+			IRubyObject iRubyObject = JavaEmbedUtils.javaToRuby(rubyRuntime, value);
+			return iRubyObject;
+		}
+	}
+	
+	public static RubyHash toNoneSymbolsRubyHash(Ruby rubyRuntime, Map<String, Object> map) {
+		
+		RubyHash rubyHash = new RubyHash(rubyRuntime);
+		
+		Set<Entry<String, Object>> entrySet = map.entrySet();
+		
+		for (Entry<String, Object> entry : entrySet) {
+			rubyHash.put(toJavaObject(entry.getKey()), toJavaObject(entry.getValue()));
+		}
+		
+		return rubyHash;
+		
 	}
 	
 }

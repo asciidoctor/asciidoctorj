@@ -143,7 +143,9 @@ public class JRubyAsciidoctor implements Asciidoctor {
 			return returnExpectedValue(object);
 
 		} else {
+			
 			RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+			
 			Object object = this.asciidoctorModule.render(content, rubyHash);
 			return returnExpectedValue(object);
 		}

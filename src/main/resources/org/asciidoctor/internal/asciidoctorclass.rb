@@ -4,7 +4,7 @@ require 'asciidoctor'
 class AsciidoctorModule
 	java_implements Java::Asciidoctor
 
-	def render_file(content, options = {}) 
+	def render_file(content, options = {})
 		return Asciidoctor.render_file(content, options)
 	end
 
