@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Attributes {
 
+	private static final char ATTRIBUTE_SEPARATOR = '=';
 	private static Format DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	private static Format TIME_FORMAT = new SimpleDateFormat("HH:mm:ss z"); 
 	
@@ -173,6 +174,54 @@ public class Attributes {
 	}
 	
 	public void setAttribute(String attributeName, Object attributeValue) {
+		this.attributes.put(attributeName, attributeValue);
+	}
+	
+	/**
+	 * Sets attributes in string form.
+	 * An example of a valid string would be:
+	 * 
+	 * 'toc numbered source-highlighter=coderay'
+	 * 
+	 * where you are adding three attributes: toc, numbered and source-highlighter with value coderay. 
+	 * 
+	 * @param attributes in string format.
+	 */
+	public void setAttributes(String attributes) {
+		
+		String[] allAttributes = attributes.split(" ");
+		addAttributes(allAttributes);
+	}
+
+	/**
+	 * Sets attributes in array form.
+	 * An example of a valid array would be:
+	 * 
+	 * '['toc', 'numbered']'
+	 * 
+	 * where you are adding three attributes: toc and numbered. 
+	 * 
+	 * @param attributes in array format.
+	 */
+	public void setAttributes(String... attributes) {
+		addAttributes(attributes);
+	}
+	
+	private void addAttributes(String[] allAttributes) {
+		for (String attribute : allAttributes) {
+			int equalsIndex = -1;
+			if((equalsIndex = attribute.indexOf(ATTRIBUTE_SEPARATOR)) > -1) {
+				extractAttributeNameAndValue(attribute, equalsIndex);
+			} else {
+				this.attributes.put(attribute, "");
+			}			
+		}
+	}
+	
+	private void extractAttributeNameAndValue(String attribute, int equalsIndex) {
+		String attributeName = attribute.substring(0, equalsIndex);
+		String attributeValue = attribute.substring(equalsIndex+1, attribute.length());
+		
 		this.attributes.put(attributeName, attributeValue);
 	}
 	

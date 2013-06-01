@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.asciidoctor.AttributesBuilder.attributes;
 import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.is;
@@ -23,6 +24,7 @@ import javax.xml.transform.dom.DOMSource;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Rule;
 import org.junit.Test;
@@ -52,6 +54,38 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		
 	}
 
+	@Test
+	public void setting_toc_attribute_and_numbered_in_string_form_table_of_contents_should_be_generated() {
+		
+		Attributes attributes = attributes().attributes("toc numbered").get();
+		Options options = options().attributes(attributes).get();
+		
+		String renderContent = asciidoctor.renderFile(new File("target/test-classes/tocsample.asciidoc"), options);
+		
+		Document doc = Jsoup.parse(renderContent, "UTF-8");
+		Elements tocElement = doc.select("div.toc");
+		assertThat(tocElement.hasClass("toc"), is(true));
+		
+		Element tocParagraph = doc.select("a[href=#paragraphs]").first();
+		assertThat(tocParagraph.text(), startsWith("1."));
+	}
+	
+	@Test
+	public void setting_toc_attribute_and_numbered_in_array_form_table_of_contents_should_be_generated() {
+		
+		Attributes attributes = attributes().attributes(new String[] {"toc", "numbered"}).get();
+		Options options = options().attributes(attributes).get();
+		
+		String renderContent = asciidoctor.renderFile(new File("target/test-classes/tocsample.asciidoc"), options);
+		
+		Document doc = Jsoup.parse(renderContent, "UTF-8");
+		Elements tocElement = doc.select("div.toc");
+		assertThat(tocElement.hasClass("toc"), is(true));
+		
+		Element tocParagraph = doc.select("a[href=#paragraphs]").first();
+		assertThat(tocParagraph.text(), startsWith("1."));
+	}
+	
 	@Test
 	public void unsetting_toc_attribute_table_of_contents_should_not_be_generated() {
 		

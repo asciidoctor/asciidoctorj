@@ -239,6 +239,40 @@ public class AttributesBuilder {
 	}
 	
 	/**
+	 * Sets attributes in string form.
+	 * An example of a valid string would be:
+	 * 
+	 * 'toc numbered source-highlighter=coderay'
+	 * 
+	 * where you are adding three attributes: toc, numbered and source-highlighter with value coderay. 
+	 * 
+	 * @param attributes in string format.
+	 * 
+	 * @return this instance.
+	 */
+	public AttributesBuilder attributes(String attributes) {
+		this.attributes.setAttributes(attributes);
+		return this;
+	}
+	
+	/**
+	 * Sets attributes in array form.
+	 * An example of a valid array would be:
+	 * 
+	 * '['toc', 'numbered']'
+	 * 
+	 * where you are adding three attributes: toc and numbered. 
+	 * 
+	 * @param attributes in array format.
+	 * 
+	 * @return this instance.
+	 */
+	public AttributesBuilder attributes(String... attributes) {
+		this.attributes.setAttributes(attributes);
+		return this;
+	}
+	
+	/**
 	 * Gets a map with configured options.
 	 * @return map with all options. By default an empty map is returned.
 	 */
