@@ -243,8 +243,6 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		
 	}
 	
-	//**
-
 	
 	@Test
 	public void copycss_with_render_to_file_should_copy_css_to_to_file_directory() {
@@ -277,7 +275,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		
 		InputStream content = new FileInputStream("target/test-classes/documentwithnote.asciidoc");
 		
-		Map<String, Object> attributes = attributes().icons(true).asMap();
+		Map<String, Object> attributes = attributes().icons(Attributes.ORIGINAL_ADMONITION_ICONS_WITH_IMG).asMap();
 		Map<String, Object> options = options()
 										.attributes(attributes)
 									  .asMap();
@@ -289,11 +287,26 @@ public class WhenAttributesAreUsedInAsciidoctor {
 	}
 	
 	@Test
+	public void string_content_with_fontawesome_icons_enabled_should_be_rendered() throws IOException, SAXException, ParserConfigurationException {
+		
+		InputStream content = new FileInputStream("target/test-classes/documentwithnote.asciidoc");
+		
+		Map<String, Object> attributes = attributes().icons(Attributes.FONTAWESOME_ADMONITION_ICONS).asMap();
+		Map<String, Object> options = options()
+										.attributes(attributes)
+									  .asMap();
+		
+		String result = asciidoctor.render(toString(content), options);
+		assertRenderedFontAwesomeAdmonitionIcon(result);
+		
+	}
+	
+	@Test
 	public void string_content_with_icons_enabled_and_iconsdir_set_should_be_rendered_with_iconsdir() throws IOException, SAXException, ParserConfigurationException {
 		
 		InputStream content = new FileInputStream("target/test-classes/documentwithnote.asciidoc");
 		
-		Map<String, Object> attributes = attributes().icons(true).iconsDir("icons").asMap();
+		Map<String, Object> attributes = attributes().icons(Attributes.ORIGINAL_ADMONITION_ICONS_WITH_IMG).iconsDir("icons").asMap();
 		Map<String, Object> options = options()
 										.attributes(attributes)
 									  .asMap();
@@ -305,6 +318,12 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		String srcValue = image.attr("src");
 		assertThat(srcValue, is("icons/note.png"));
 		
+	}
+	
+	private void assertRenderedFontAwesomeAdmonitionIcon(String renderContent) throws IOException, SAXException, ParserConfigurationException {
+		
+		Source renderFileSource = new DOMSource(inputStream2Document(new ByteArrayInputStream(renderContent.getBytes())));
+		assertThat(renderFileSource, hasXPath("//i[@class='icon-note']"));
 	}
 	
 	private void assertRenderedAdmonitionIcon(String render_content) throws IOException, SAXException, ParserConfigurationException {

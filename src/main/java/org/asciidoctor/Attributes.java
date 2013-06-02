@@ -31,7 +31,9 @@ public class Attributes {
 	public static final String ICONS_DIR = "iconsdir";
 	public static final String DATA_URI = "data-uri";
 	public static final String SECTION_NUMBERS = "numbered";
-
+	public static final String ORIGINAL_ADMONITION_ICONS_WITH_IMG = "";
+	public static final String FONTAWESOME_ADMONITION_ICONS = "font";
+	
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
 	public Attributes() {
@@ -142,11 +144,11 @@ public class Attributes {
 	}
 	
 	/**
-	 * Sets icons attribute.
-	 * @param icons true if icons are rendered, false otherwise.
+	 * Sets which admonition icons to use. Attributes.ORIGINAL_ADMONITION_ICONS_WITH_IMG constant can be used to use the original icons with images.
+	 * @param iconsName value.
 	 */
-	public void setIcons(boolean icons) {
-		this.attributes.put(ICONS, toAsciidoctorFlag(icons));
+	public void setIcons(String iconsName) {
+		this.attributes.put(ICONS, iconsName);
 	}
 	
 	/**
