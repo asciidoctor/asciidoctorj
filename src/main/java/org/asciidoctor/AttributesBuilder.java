@@ -257,6 +257,17 @@ public class AttributesBuilder {
 	}
 
 	/**
+	 * Sets linkattrs attribute.
+	 * @param linkAttrs true if Asciidoctor should parse link macro attributes, false otherwise.
+	 * 
+	 * @return this instance.
+	 */
+	public AttributesBuilder linkAttrs(boolean linkAttrs) {
+		this.attributes.setLinkAttrs(linkAttrs);
+		return this;
+	}
+	
+	/**
 	 * Sets custom or unlisted attribute
 	 * 
 	 * @param attributeName

@@ -33,6 +33,7 @@ public class Attributes {
 	public static final String SECTION_NUMBERS = "numbered";
 	public static final String ORIGINAL_ADMONITION_ICONS_WITH_IMG = "";
 	public static final String FONTAWESOME_ADMONITION_ICONS = "font";
+	public static final String LINK_ATTRS = "linkattrs";
 	
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -173,6 +174,14 @@ public class Attributes {
 	 */
 	public void setSectionNumbers(boolean sectionNumbers) {
 		this.attributes.put(SECTION_NUMBERS, toAsciidoctorFlag(sectionNumbers));
+	}
+
+	/**
+	 * Sets linkattrs attribute.
+	 * @param linkAttrs true if Asciidoctor should parse link macro attributes, false otherwise.
+	 */
+	public void setLinkAttrs(boolean linkAttrs) {
+		this.attributes.put(LINK_ATTRS, toAsciidoctorFlag(linkAttrs));
 	}
 	
 	public void setAttribute(String attributeName, Object attributeValue) {

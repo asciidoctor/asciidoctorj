@@ -320,6 +320,22 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		
 	}
 	
+	@Test
+	public void linkattrs_should_make_asciidoctor_render_link_macro_attributes() {
+		
+		Attributes attributes = attributes().linkAttrs(true).get();
+		Options options = options().attributes(attributes).get();
+		
+		String content = asciidoctor.render("http://google.com[Google, window=\"_blank\"]", options);
+		
+		Document doc = Jsoup.parse(content);
+		Elements image = doc.select("a[target]");
+		
+		String targetValue = image.attr("target");
+		assertThat(targetValue, is("_blank"));
+		
+	}
+	
 	private void assertRenderedFontAwesomeAdmonitionIcon(String renderContent) throws IOException, SAXException, ParserConfigurationException {
 		
 		Source renderFileSource = new DOMSource(inputStream2Document(new ByteArrayInputStream(renderContent.getBytes())));
