@@ -34,6 +34,7 @@ public class Attributes {
 	public static final String ORIGINAL_ADMONITION_ICONS_WITH_IMG = "";
 	public static final String FONTAWESOME_ADMONITION_ICONS = "font";
 	public static final String LINK_ATTRS = "linkattrs";
+	public static final String EXPERIMENTAL = "experimental";
 	
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -182,6 +183,14 @@ public class Attributes {
 	 */
 	public void setLinkAttrs(boolean linkAttrs) {
 		this.attributes.put(LINK_ATTRS, toAsciidoctorFlag(linkAttrs));
+	}
+	
+	/**
+	 * Sets experimental attribute.
+	 * @param experimental true if experimental features should be enabled, false otherwise.
+	 */
+	public void setExperimental(boolean experimental) {
+		this.attributes.put(EXPERIMENTAL, experimental);
 	}
 	
 	public void setAttribute(String attributeName, Object attributeValue) {

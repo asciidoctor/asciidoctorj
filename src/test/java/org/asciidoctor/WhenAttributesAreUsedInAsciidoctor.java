@@ -336,6 +336,20 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		
 	}
 	
+	@Test
+	public void experimental_flag_should_enable_experimental_features_like_keyboard_shortcuts() {
+		
+		Attributes attributes = attributes().experimental(true).get();
+		Options options = options().attributes(attributes).get();
+		
+		String content = asciidoctor.render("kbd:[F11]", options);
+		
+		Document doc = Jsoup.parse(content);
+		Elements image = doc.select("kbd");
+		
+		assertThat(image.text(), is("F11"));
+	}
+	
 	private void assertRenderedFontAwesomeAdmonitionIcon(String renderContent) throws IOException, SAXException, ParserConfigurationException {
 		
 		Source renderFileSource = new DOMSource(inputStream2Document(new ByteArrayInputStream(renderContent.getBytes())));

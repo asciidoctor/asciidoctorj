@@ -268,6 +268,15 @@ public class AttributesBuilder {
 	}
 	
 	/**
+	 * Sets experimental attribute.
+	 * @param experimental true if experimental features should be enabled, false otherwise.
+	 */
+	public AttributesBuilder experimental(boolean experimental) {
+		this.attributes.setExperimental(experimental);
+		return this;
+	}
+	
+	/**
 	 * Sets custom or unlisted attribute
 	 * 
 	 * @param attributeName
