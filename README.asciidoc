@@ -213,6 +213,48 @@ String render = asciidoctor.renderFile("target/test-classes/rendersample.asciido
 ...
 ----
 
++readDocumentHeader+ retrieve information from the header of an AsciiDoc document without parsing or rendering the entire document.
+This method returns an instance of +org.asciidoctor.DocumentHeader+ with all information from the header filled.
+
+[source]
+.AsciiDoc document with header information
+----
+= Sample Document
+Doc Writer <doc.writer@asciidoc.org>; John Smith <john.smith@asciidoc.org>
+v1.0, 2013-05-20: First draft
+:title: Sample Document
+:tags: [document, example]
+
+Preamble...
+----
+
+[source]
+.Retrieving some of header information
+----
+//...
+DocumentHeader header = asciidoctor.readDocumentHeader(new File("target/test-classes/documentheaders.asciidoc"));
+
+System.out.println(header.getDocumentTitle()); 		<1>
+
+Author author = header.getAuthor();					<2>
+System.out.println(author.getEmail()); 				<3>
+System.out.println(author.getFullName());  			<4>
+
+RevisionInfo revisionInfo = header.getRevisionInfo();
+		
+System.out.println(revisionInfo.getDate()); 		<5>
+System.out.println(revisionInfo.getNumber()); 		<6>
+System.out.println(revisionInfo.getRemark()); 		<7>
+---- 
+
+<1> prints "Sample Document"
+<2> prints "Doc Writer"
+<3> prints "doc.writer@asciidoc.org"
+<4> prints "Doc Writer"
+<5> prints "2013-05-20"
+<6> prints "1.0"
+<7> prints "First draft"
+
 === Utilities
 
 A utility class for searching all asciidoc files present in a root folder and all its subfolders is given. In fact it finds all files that end up with _.asc_, _.asciidoc_, _.ad_ or _.adoc_. This class is +AsciiDocDirectoryWalker+.
