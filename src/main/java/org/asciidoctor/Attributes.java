@@ -31,8 +31,8 @@ public class Attributes {
 	public static final String ICONS_DIR = "iconsdir";
 	public static final String DATA_URI = "data-uri";
 	public static final String SECTION_NUMBERS = "numbered";
-	public static final String ORIGINAL_ADMONITION_ICONS_WITH_IMG = "";
-	public static final String FONTAWESOME_ADMONITION_ICONS = "font";
+	public static final String IMAGE_ICONS = "";
+	public static final String FONT_ICONS = "font";
 	public static final String LINK_ATTRS = "linkattrs";
 	public static final String EXPERIMENTAL = "experimental";
 	

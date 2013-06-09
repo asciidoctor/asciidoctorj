@@ -275,7 +275,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		
 		InputStream content = new FileInputStream("target/test-classes/documentwithnote.asciidoc");
 		
-		Map<String, Object> attributes = attributes().icons(Attributes.ORIGINAL_ADMONITION_ICONS_WITH_IMG).asMap();
+		Map<String, Object> attributes = attributes().icons(Attributes.IMAGE_ICONS).asMap();
 		Map<String, Object> options = options()
 										.attributes(attributes)
 									  .asMap();
@@ -291,7 +291,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		
 		InputStream content = new FileInputStream("target/test-classes/documentwithnote.asciidoc");
 		
-		Map<String, Object> attributes = attributes().icons(Attributes.FONTAWESOME_ADMONITION_ICONS).asMap();
+		Map<String, Object> attributes = attributes().icons(Attributes.FONT_ICONS).asMap();
 		Map<String, Object> options = options()
 										.attributes(attributes)
 									  .asMap();
@@ -306,7 +306,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		
 		InputStream content = new FileInputStream("target/test-classes/documentwithnote.asciidoc");
 		
-		Map<String, Object> attributes = attributes().icons(Attributes.ORIGINAL_ADMONITION_ICONS_WITH_IMG).iconsDir("icons").asMap();
+		Map<String, Object> attributes = attributes().icons(Attributes.IMAGE_ICONS).iconsDir("icons").asMap();
 		Map<String, Object> options = options()
 										.attributes(attributes)
 									  .asMap();
