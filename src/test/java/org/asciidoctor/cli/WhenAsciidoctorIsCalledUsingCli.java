@@ -111,6 +111,17 @@ public class WhenAsciidoctorIsCalledUsingCli {
 	}
 	
 	@Test
+    public void no_parameters_should_show_usage_information() {
+        ByteArrayOutputStream output = redirectStdout();
+        
+        new AsciidoctorInvoker().invoke();
+        
+        String helpMessage = output.toString();
+        assertThat(helpMessage, startsWith("Usage: asciidoctor [options] input file"));
+        
+    }
+	
+	@Test
 	public void output_file_hyphen_symbol_should_render_output_to_stdout() {
 		
 		ByteArrayOutputStream output = redirectStdout();

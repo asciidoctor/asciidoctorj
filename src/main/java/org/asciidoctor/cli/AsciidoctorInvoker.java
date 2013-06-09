@@ -20,7 +20,7 @@ public class AsciidoctorInvoker {
 		AsciidoctorCliOptions asciidoctorCliOptions = new AsciidoctorCliOptions();
 		JCommander jCommander = new JCommander(asciidoctorCliOptions, parameters);
 
-		if (asciidoctorCliOptions.isHelp()) {
+		if (asciidoctorCliOptions.isHelp() || parameters.length == 0) {
 			jCommander.setProgramName("asciidoctor");
 			jCommander.usage();
 		} else {
