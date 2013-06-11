@@ -57,7 +57,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 	@Test
 	public void setting_toc_attribute_and_numbered_in_string_form_table_of_contents_should_be_generated() {
 		
-		Attributes attributes = attributes().attributes("toc numbered").get();
+		Attributes attributes = attributes("toc numbered").get();
 		Options options = options().attributes(attributes).get();
 		
 		String renderContent = asciidoctor.renderFile(new File("target/test-classes/tocsample.asciidoc"), options);
@@ -73,7 +73,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 	@Test
 	public void setting_toc_attribute_and_numbered_in_array_form_table_of_contents_should_be_generated() {
 		
-		Attributes attributes = attributes().attributes(new String[] {"toc", "numbered"}).get();
+		Attributes attributes = attributes(new String[] {"toc", "numbered"}).get();
 		Options options = options().attributes(attributes).get();
 		
 		String renderContent = asciidoctor.renderFile(new File("target/test-classes/tocsample.asciidoc"), options);

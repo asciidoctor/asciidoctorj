@@ -46,6 +46,14 @@ public class Attributes {
 		this.attributes = attributes;
 	}
 
+	public Attributes(String[] attributes) {
+	    this.setAttributes(attributes);
+	}
+	
+	public Attributes(String attributes) {
+	    this.setAttributes(attributes);
+	}
+	
 	public void setBackend(String backend) {
 		this.attributes.put(BACKEND, backend);
 	}

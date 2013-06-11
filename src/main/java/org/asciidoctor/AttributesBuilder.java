@@ -21,6 +21,28 @@ public class AttributesBuilder {
 	}
 
 	/**
+     * Creates attributes builder.
+     * 
+     * @return atributes builder.
+     */
+    public static AttributesBuilder attributes(String[] arguments) {
+        AttributesBuilder attributesBuilder = new AttributesBuilder();
+        attributesBuilder.arguments(arguments);
+        return attributesBuilder;
+    }
+
+    /**
+     * Creates attributes builder.
+     * 
+     * @return atributes builder.
+     */
+    public static AttributesBuilder attributes(String arguments) {
+        AttributesBuilder attributesBuilder = new AttributesBuilder();
+        attributesBuilder.arguments(arguments);
+        return attributesBuilder;
+    }
+	
+	/**
 	 * Sets backend attribue.
 	 * 
 	 * @param backend
@@ -313,7 +335,7 @@ public class AttributesBuilder {
 	 * 
 	 * @return this instance.
 	 */
-	public AttributesBuilder attributes(String attributes) {
+	public AttributesBuilder arguments(String attributes) {
 		this.attributes.setAttributes(attributes);
 		return this;
 	}
@@ -330,7 +352,7 @@ public class AttributesBuilder {
 	 * 
 	 * @return this instance.
 	 */
-	public AttributesBuilder attributes(String... attributes) {
+	public AttributesBuilder arguments(String... attributes) {
 		this.attributes.setAttributes(attributes);
 		return this;
 	}
