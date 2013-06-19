@@ -42,6 +42,7 @@
 
 	<properties>
 		<project.build.scriptSourceDirectory>src/main/scripts/</project.build.scriptSourceDirectory>
+		<project.buildDirectory>src/main/build</project.buildDirectory>
 		<jruby.version>1.7.4</jruby.version>
 		<junit.version>4.11</junit.version>
 		<jsoup.version>1.7.2</jsoup.version>
@@ -182,7 +183,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.12</version>
 				<configuration>
-					<skip>true</skip>
+					<skip>false</skip>
 				</configuration>
 				<executions>
 					<execution>
@@ -192,7 +193,7 @@
 							<goal>test</goal>
 						</goals>
 						<configuration>
-<!-- 							<skip>false</skip> -->
+							<!-- <skip>false</skip> -->
 							<includes>
 								<include>**/*Test.java</include>
 								<include>**/Test*.java</include>
@@ -234,7 +235,7 @@
 				</configuration>
 				<executions>
 					<execution>
-						<phase>process-resources</phase>
+						<phase>generate-sources</phase>
 						<goals>
 							<goal>initialize</goal>
 						</goals>
@@ -243,6 +244,118 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>current-asciidoctor</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.gmaven</groupId>
+						<artifactId>gmaven-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<!-- Executed after gem-maven-plugin so  -->
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>execute</goal>
+								</goals>
+								<configuration>
+									<scriptpath>
+										<element>${basedir}/${project.buildDirectory}</element>
+									</scriptpath>
+									<source>
+									<![CDATA[
+										
+										class FileBinaryOperatorOverload {
+
+    										def static leftShift(File file, URL url){
+        										url.withInputStream {is->
+            										file.withOutputStream {os->
+                										def bs = new BufferedOutputStream( os )
+                										bs << is
+            											}
+        											}
+    											}
+										}
+										
+										class GemInstaller {
+											
+											def project;
+											def ant;
+										
+											def installGem(def downloadUrl, def gemName, def gemVersion) {
+												def downloadedProjectArtifact = downloadGem(downloadUrl, gemName)
+												def destinationDirectory = unzipGem(downloadedProjectArtifact)
+												def currentGemDirectory = installGemToGemHome(destinationDirectory, gemName, gemVersion)
+												moveSpecificationFile(destinationDirectory, currentGemDirectory, gemName, gemVersion)
+												clean(downloadedProjectArtifact)
+											}
+										
+											def downloadGem(def downloadUrl, def gemName) {
+												
+												final def outputDirectory = project.build.directory
+
+    											def downloadedProjectArtifact = new File(outputDirectory, gemName+".zip")
+
+									    		use (FileBinaryOperatorOverload)
+									    		{
+									        		downloadedProjectArtifact << downloadUrl.toURL()
+									    		}
+											
+												return downloadedProjectArtifact;
+											}
+											
+											def unzipGem(def downloadedProjectArtifact) {
+												final def outputDirectory = project.build.directory
+												
+												File destinationDirectory = new File(outputDirectory)
+									    		ant.unzip(src: downloadedProjectArtifact, dest: destinationDirectory)
+									    		
+									    		return destinationDirectory
+											}
+											
+											def installGemToGemHome(def destinationDirectory, def gemName, def gemVersion) {
+												
+												File extractedDirectory = new File(destinationDirectory, gemName+"-master");
+									    
+									    		//we delete previous gem and we overwrite them with same version (no snapshot version information is provided in gem)
+									    		File currentGemDirectory = new File(destinationDirectory, "classes/gems/"+gemName+"-"+ gemVersion)
+									   			ant.delete(dir: currentGemDirectory)
+										
+												ant.move(file: extractedDirectory, tofile: currentGemDirectory)
+											
+												return currentGemDirectory
+											}
+											
+											def moveSpecificationFile(def destinationDirectory, def currentGemDirectory, def gemName, def gemVersion) {
+												File specificationDirectory = new File(destinationDirectory, "classes/specifications");
+												File specificationFile = new File(specificationDirectory, gemName+"-"+ gemVersion+".gemspec")
+												ant.delete(file: specificationFile)
+										
+												File extractedGemSpec = new File(currentGemDirectory, gemName+".gemspec")
+												ant.copy(file: extractedGemSpec, tofile: specificationFile)
+											}
+											
+											def clean(def downloadedProjectArtifact) {
+												ant.delete(file: downloadedProjectArtifact)
+											}
+										}
+										
+										GemInstaller gemInstaller = new GemInstaller(project: project, ant:ant)
+										gemInstaller.installGem("https://github.com/asciidoctor/asciidoctor/archive/master.zip", "asciidoctor", project.properties["asciidoctor.version"])
+										
+									    ]]>
+									</source>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<repositories>
 		<repository>
