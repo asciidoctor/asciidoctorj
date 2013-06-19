@@ -103,7 +103,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 	@Test
 	public void styleSheetName_is_set_custom_stylesheet_should_be_used_() throws IOException {
 		
-		Attributes attributes = attributes().styleSheetName("mycustom.css").get();
+		Attributes attributes = attributes().linkCss(true).styleSheetName("mycustom.css").get();
 		Options options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot()).attributes(attributes).get();
 		
 		asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
@@ -133,7 +133,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 	@Test
 	public void styles_dir_is_set_css_routes_should_use_it() throws IOException {
 		
-		Attributes attributes = attributes().stylesDir("./styles").styleSheetName("mycustom.css").get();
+		Attributes attributes = attributes().stylesDir("./styles").linkCss(true).styleSheetName("mycustom.css").get();
 		Options options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot()).attributes(attributes).get();
 		
 		asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
@@ -181,7 +181,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 	
 	@Test
 	public void copycss_with_in_place_should_copy_css_to_rendered_directory() {
-		Attributes attributes = attributes().copyCss(true).get();
+		Attributes attributes = attributes().linkCss(true).copyCss(true).get();
 		Options options = options().inPlace(true).safe(SafeMode.UNSAFE).attributes(attributes).get();
 		
 		asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
@@ -220,7 +220,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 	@Test
 	public void copycss_with_to_file_should_copy_css_to_to_file_directory() {
 	
-		Attributes attributes = attributes().copyCss(true).get();
+		Attributes attributes = attributes().linkCss(true).copyCss(true).get();
 		Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "output.html")).safe(SafeMode.UNSAFE).attributes(attributes).get();
 		
 		asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
@@ -233,7 +233,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 	@Test
 	public void copycss_with_to_dir_should_copy_css_to_to_dir_directory() {
 	
-		Attributes attributes = attributes().copyCss(true).get();
+		Attributes attributes = attributes().linkCss(true).copyCss(true).get();
 		Options options = options().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).get();
 		
 		asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
@@ -247,7 +247,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 	@Test
 	public void copycss_with_render_to_file_should_copy_css_to_to_file_directory() {
 	
-		Attributes attributes = attributes().copyCss(true).get();
+		Attributes attributes = attributes().linkCss(true).copyCss(true).get();
 		Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "output.html")).safe(SafeMode.UNSAFE).attributes(attributes).get();
 		
 		asciidoctor.render("This is Asciidoctor", options);
@@ -260,7 +260,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 	@Test
 	public void copycss_with_render_to_dir_should_copy_css_to_to_dir_directory() {
 	
-		Attributes attributes = attributes().copyCss(true).get();
+		Attributes attributes = attributes().linkCss(true).copyCss(true).get();
 		Options options = options().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).get();
 		
 		asciidoctor.render("This is Asciidoctor", options);
