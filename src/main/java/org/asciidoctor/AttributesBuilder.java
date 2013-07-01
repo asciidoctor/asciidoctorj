@@ -55,6 +55,17 @@ public class AttributesBuilder {
 	}
 
 	/**
+     * Sets showtitle value as an alias for notitle!
+     * 
+     * @param showTitle value.
+     * @return this instance
+     */
+	public AttributesBuilder showTitle(boolean showTitle) {
+	    this.attributes.setShowTitle(showTitle);
+	    return this;
+	}
+	
+	/**
 	 * Sets title of document.
 	 * 
 	 * @param title

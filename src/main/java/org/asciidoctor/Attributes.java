@@ -35,6 +35,7 @@ public class Attributes {
 	public static final String FONT_ICONS = "font";
 	public static final String LINK_ATTRS = "linkattrs";
 	public static final String EXPERIMENTAL = "experimental";
+	public static final String SHOW_TITLE ="showtitle";
 	
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -72,6 +73,14 @@ public class Attributes {
 	
 	public void setSourceHighlighter(String sourceHighlighter) {
 		this.attributes.put(SOURCE_HIGHLIGHTER, sourceHighlighter);
+	}
+	
+	/**
+	 * Sets showtitle value as an alias for notitle!
+	 * @param showTitle value.
+	 */
+	public void setShowTitle(boolean showTitle) {
+	    this.attributes.put(SHOW_TITLE, showTitle);
 	}
 	
 	/**
