@@ -48,6 +48,9 @@ public class AsciidoctorCliOptions {
 	@Parameter(names = {"-C", "--compact"}, description = "compact the output by removing blank lines (default: false)")
 	private boolean compact = false;
 	
+	@Parameter(names = {"-E","--template-engine"}, description = "template engine to use for the custom render templates (loads gem on demand)")
+	private String templateEngine;
+	
 	@Parameter(names = {"-T", "--template-dir"}, description = "directory containing custom render templates the override the built-in set")
 	private String templateDir;
 	
@@ -141,6 +144,10 @@ public class AsciidoctorCliOptions {
 		return destinationDir != null;
 	}
 	
+	public boolean isTemplateEngineOption() {
+	    return templateEngine != null;
+	}
+	
 	public boolean isTrace() {
 		return trace;
 	}
@@ -185,6 +192,10 @@ public class AsciidoctorCliOptions {
 		
 		if(isBaseDirOption()) {
 			optionsBuilder.baseDir(new File(this.baseDir));
+		}
+		
+		if(isTemplateEngineOption()) {
+		    optionsBuilder.templateEngine(this.templateEngine);
 		}
 		
 		if(isTemplateDirOption()) {
