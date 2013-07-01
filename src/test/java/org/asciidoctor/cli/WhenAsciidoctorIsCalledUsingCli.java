@@ -62,7 +62,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
 	@Test
 	public void composed_attributes_should_be_built_as_attributes_map() throws IOException {
 		
-		new AsciidoctorInvoker().invoke("-a", "stylesheet=mystyles.css", "target/test-classes/rendersample.asciidoc");
+		new AsciidoctorInvoker().invoke("-a", "stylesheet=mystyles.css", "-a", "linkcss", "target/test-classes/rendersample.asciidoc");
 		File expectedFile = new File("target/test-classes/rendersample.html");
 		
 		Document doc = Jsoup.parse(expectedFile, "UTF-8");
