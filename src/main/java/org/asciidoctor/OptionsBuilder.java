@@ -80,6 +80,16 @@ public class OptionsBuilder {
 	}
 	
 	/**
+	 * Sets if Asciidoctor should use template cache or not.
+	 * @param templateCache true if template cache is required, false otherwise.
+	 * @return this instance.
+	 */
+	public OptionsBuilder templateCache(boolean templateCache) {
+	    this.options.setTemplateCache(templateCache);
+	    return this;
+	}
+	
+	/**
 	 * Sets attributes used for rendering input.
 	 * @param attributes map.
 	 * @return this instance.
