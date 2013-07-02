@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * @author lordofthejars
  *
  */
-public class AsciiDocDirectoryWalker extends DirectoryWalker {
+public class AsciiDocDirectoryWalker extends AbstractDirectoryWalker {
 
 	private static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$"; 
 	

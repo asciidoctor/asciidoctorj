@@ -206,8 +206,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	}
 
 	private List<File> scanForAsciiDocFiles(File directory) {
-		final DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(directory.getAbsolutePath());
-		final List<File> asciidoctorFiles = directoryWalker.scan();
+		final DirectoryWalker abstractDirectoryWalker = new AsciiDocDirectoryWalker(directory.getAbsolutePath());
+		final List<File> asciidoctorFiles = abstractDirectoryWalker.scan();
 		return asciidoctorFiles;
 	}
 

@@ -1,11 +1,14 @@
 package org.asciidoctor.cli;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.DirectoryWalker;
+import org.asciidoctor.GlobDirectoryWalker;
 import org.asciidoctor.Options;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.internal.RubyHashUtil;
@@ -25,9 +28,9 @@ public class AsciidoctorInvoker {
 			jCommander.usage();
 		} else {
 			
-			String inputFile = getInputFile(asciidoctorCliOptions);
+			List<File> inputFiles = getInputFiles(asciidoctorCliOptions);
 			Options options = asciidoctorCliOptions.parse();
-			String output = renderInput(options, inputFile);
+			String output = renderInput(options, inputFiles);
 			
 			if(asciidoctorCliOptions.isVerbose()) {
 				
@@ -46,7 +49,7 @@ public class AsciidoctorInvoker {
 		}
 	}
 
-	private String renderInput(Options options, String inputFile) {
+	private String renderInput(Options options, List<File> inputFiles) {
 		Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
 		//jcommander bug makes this code not working.
@@ -54,7 +57,13 @@ public class AsciidoctorInvoker {
 //			return asciidoctor.render(readInputFromStdIn(), options);
 //		}
 		
-		return asciidoctor.renderFile(new File(inputFile), options);
+		StringBuilder output = new StringBuilder(); 
+		
+		for (File inputFile : inputFiles) {
+		    output.append(asciidoctor.renderFile(inputFile, options)).append(System.getProperty("line.separator"));            
+        }
+		
+		return output.toString();
 	}
 
 	private String readInputFromStdIn() {
@@ -65,7 +74,7 @@ public class AsciidoctorInvoker {
 	     return content;
 	}
 	
-	private String getInputFile(AsciidoctorCliOptions asciidoctorCliOptions) {
+	private List<File> getInputFiles(AsciidoctorCliOptions asciidoctorCliOptions) {
 
 		List<String> parameters = asciidoctorCliOptions.getParameters();
 
@@ -73,18 +82,20 @@ public class AsciidoctorInvoker {
 			throw new IllegalArgumentException("asciidoctor: FAILED: input file missing");
 		}
 
-		if (parameters.size() > 1) {
-			throw new IllegalArgumentException("asciidoctor: FAILED: extra arguments detected (unparsed arguments: "
-					+ parameters);
-		}
-
-		String inputFile = parameters.get(0);
-
-		if (inputFile.startsWith("-")) {
+		if (parameters.contains("-")) {
 			throw new IllegalArgumentException("asciidoctor:  FAILED: input file is required instead of an argument.");
 		}
 
-		return inputFile;
+		
+		List<File> filesToBeRendered = new ArrayList<File>();
+		
+		for (String globExpression : parameters) {
+		    DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(".", globExpression);
+            filesToBeRendered.addAll(globDirectoryWalker.scan());
+        }
+		
+		
+		return filesToBeRendered;
 
 	}
 

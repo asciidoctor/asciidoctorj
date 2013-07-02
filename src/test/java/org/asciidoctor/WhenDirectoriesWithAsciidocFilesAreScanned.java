@@ -20,8 +20,8 @@ public class WhenDirectoriesWithAsciidocFilesAreScanned {
 	@Test
 	public void only_asciidoc_files_should_be_returned() {
 
-		DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker("target/test-classes/src");
-		List<File> asciidocFiles = directoryWalker.scan();
+		DirectoryWalker abstractDirectoryWalker = new AsciiDocDirectoryWalker("target/test-classes/src");
+		List<File> asciidocFiles = abstractDirectoryWalker.scan();
 
 		assertThat(
 				asciidocFiles,
@@ -35,8 +35,8 @@ public class WhenDirectoriesWithAsciidocFilesAreScanned {
 	@Test
 	public void empty_directory_should_return_no_documents() {
 		
-		DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(temporaryFolder.getRoot().getAbsolutePath());
-		List<File> asciidocFiles = directoryWalker.scan();
+		DirectoryWalker abstractDirectoryWalker = new AsciiDocDirectoryWalker(temporaryFolder.getRoot().getAbsolutePath());
+		List<File> asciidocFiles = abstractDirectoryWalker.scan();
 		
 		assertThat(asciidocFiles, is(empty()));
 		
@@ -45,8 +45,8 @@ public class WhenDirectoriesWithAsciidocFilesAreScanned {
 	@Test
 	public void none_existing_directories_should_return_no_documents() {
 		
-		DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker("my_udirectory");
-		List<File> asciidocFiles = directoryWalker.scan();
+		DirectoryWalker abstractDirectoryWalker = new AsciiDocDirectoryWalker("my_udirectory");
+		List<File> asciidocFiles = abstractDirectoryWalker.scan();
 		
 		assertThat(asciidocFiles, is(empty()));
 		
