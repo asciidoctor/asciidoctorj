@@ -92,11 +92,33 @@ public class WhenAsciidoctorIsCalledUsingCli {
 		
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void more_than_one_input_file_should_throw_an_exception() {
 		
-		new AsciidoctorInvoker().invoke("target/test-classes/rendersample.asciidoc", "target/test-classes/rendersample.asciidoc");
+		new AsciidoctorInvoker().invoke("target/test-classes/rendersample.asciidoc", "target/test-classes/tocsample.asciidoc");
 		
+		File expectedRenderFile = new File("target/test-classes/rendersample.html");
+        
+        assertThat(expectedRenderFile.exists(), is(true));
+        expectedRenderFile.delete();
+		
+        File expectedTocFile = new File("target/test-classes/tocsample.html");
+        
+        assertThat(expectedTocFile.exists(), is(true));
+        expectedTocFile.delete();
+        
+	}
+	
+	@Test
+	public void glob_expression_can_be_used_to_render_AsciiDoc_files() {
+	    
+	    new AsciidoctorInvoker().invoke("**/toc*.asciidoc");
+        
+        File expectedTocFile = new File("target/test-classes/tocsample.html");
+        
+        assertThat(expectedTocFile.exists(), is(true));
+        expectedTocFile.delete();
+	    
 	}
 	
 	@Test

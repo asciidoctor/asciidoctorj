@@ -43,7 +43,7 @@ public class AsciidoctorInvoker {
 		        
 			}
 			
-			if(output != null) {
+			if(!"".equals(output.trim())) {
 				System.out.println(output);
 			}
 		}
@@ -60,7 +60,10 @@ public class AsciidoctorInvoker {
 		StringBuilder output = new StringBuilder(); 
 		
 		for (File inputFile : inputFiles) {
-		    output.append(asciidoctor.renderFile(inputFile, options)).append(System.getProperty("line.separator"));            
+		    String renderedFile = asciidoctor.renderFile(inputFile, options);
+            if(renderedFile != null) {
+                output.append(renderedFile).append(System.getProperty("line.separator"));
+            }
         }
 		
 		return output.toString();
