@@ -5,4 +5,9 @@ jdk:
   - openjdk6
 notifications:
   irc: "irc.freenode.org#asciidoctor"
-script: bash test-asciidoctor-master.sh
+script:
+  - bash test-asciidoctor-master.sh
+  - mvn test
+matrix:
+  allow_failures:
+    - script: mvn test #current release could fail because of backward incompatibility
