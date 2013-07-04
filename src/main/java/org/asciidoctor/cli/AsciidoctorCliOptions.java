@@ -69,7 +69,7 @@ public class AsciidoctorCliOptions {
 	@Parameter(names = {"-a", "--attribute"}, description = "a list of attributes, in the form key or key=value pair, to set on the document")
 	private List<String> attributes = new ArrayList<String>();
 	
-	@Parameter(description = "input file")
+	@Parameter(description = "input files")
 	private List<String> parameters = new ArrayList<String>();
 
 	public List<String> getParameters() {

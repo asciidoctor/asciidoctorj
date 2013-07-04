@@ -92,6 +92,13 @@ public class WhenAsciidoctorIsCalledUsingCli {
 		
 	}
 
+	@Test(expected=IllegalArgumentException.class)
+    public void invalid_input_file_should_throw_an_exception() {
+        
+        new AsciidoctorInvoker().invoke("myunknown.adoc");
+        
+    }
+	
 	@Test
 	public void more_than_one_input_file_should_throw_an_exception() {
 		

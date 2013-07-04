@@ -18,92 +18,130 @@ import com.beust.jcommander.JCommander;
 
 public class AsciidoctorInvoker {
 
-	public void invoke(String... parameters) {
+    public void invoke(String... parameters) {
 
-		AsciidoctorCliOptions asciidoctorCliOptions = new AsciidoctorCliOptions();
-		JCommander jCommander = new JCommander(asciidoctorCliOptions, parameters);
+        AsciidoctorCliOptions asciidoctorCliOptions = new AsciidoctorCliOptions();
+        JCommander jCommander = new JCommander(asciidoctorCliOptions,
+                parameters);
 
-		if (asciidoctorCliOptions.isHelp() || parameters.length == 0) {
-			jCommander.setProgramName("asciidoctor");
-			jCommander.usage();
-		} else {
-			
-			List<File> inputFiles = getInputFiles(asciidoctorCliOptions);
-			Options options = asciidoctorCliOptions.parse();
-			String output = renderInput(options, inputFiles);
-			
-			if(asciidoctorCliOptions.isVerbose()) {
-				
-				Map<String, Object> optionsMap = options.map();
-				Map<String, Object> monitor = RubyHashUtil.convertRubyHashMapToMap((Map<RubySymbol, Object>) optionsMap.get(AsciidoctorCliOptions.MONITOR_OPTION_NAME));
-				
-				System.out.println(String.format("Time to read and parse source: %05.5f", monitor.get("parse")));
-		        System.out.println(String.format("Time to render document: %05.5f", monitor.get("render"))); 
-		        System.out.println(String.format("Total time to read, parse and render: %05.5f", monitor.get("load_render")));
-		        
-			}
-			
-			if(!"".equals(output.trim())) {
-				System.out.println(output);
-			}
-		}
-	}
+        if (asciidoctorCliOptions.isHelp() || parameters.length == 0) {
+            jCommander.setProgramName("asciidoctor");
+            jCommander.usage();
+        } else {
 
-	private String renderInput(Options options, List<File> inputFiles) {
-		Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+            List<File> inputFiles = getInputFiles(asciidoctorCliOptions);
 
-		//jcommander bug makes this code not working.
-//		if("-".equals(inputFile)) {
-//			return asciidoctor.render(readInputFromStdIn(), options);
-//		}
-		
-		StringBuilder output = new StringBuilder(); 
-		
-		for (File inputFile : inputFiles) {
-		    String renderedFile = asciidoctor.renderFile(inputFile, options);
-            if(renderedFile != null) {
-                output.append(renderedFile).append(System.getProperty("line.separator"));
+            if (inputFiles.isEmpty()) {
+                System.err.println("asciidoctor: FAILED: input file(s) '"
+                        + asciidoctorCliOptions.getParameters()
+                        + "' missing or cannot be read");
+                throw new IllegalArgumentException(
+                        "asciidoctor: FAILED: input file(s) '"
+                                + asciidoctorCliOptions.getParameters()
+                                + "' missing or cannot be read");
+            }
+
+            Options options = asciidoctorCliOptions.parse();
+            String output = renderInput(options, inputFiles);
+
+            if (asciidoctorCliOptions.isVerbose()) {
+
+                Map<String, Object> optionsMap = options.map();
+                Map<String, Object> monitor = RubyHashUtil
+                        .convertRubyHashMapToMap((Map<RubySymbol, Object>) optionsMap
+                                .get(AsciidoctorCliOptions.MONITOR_OPTION_NAME));
+
+                System.out.println(String.format(
+                        "Time to read and parse source: %05.5f",
+                        monitor.get("parse")));
+                System.out.println(String.format(
+                        "Time to render document: %05.5f",
+                        monitor.get("render")));
+                System.out.println(String.format(
+                        "Total time to read, parse and render: %05.5f",
+                        monitor.get("load_render")));
+
+            }
+
+            if (!"".equals(output.trim())) {
+                System.out.println(output);
             }
         }
-		
-		return output.toString();
-	}
+    }
 
-	private String readInputFromStdIn() {
-		 Scanner in = new Scanner(System.in);
-		 String content = in.nextLine();
-	     in.close();
-	     
-	     return content;
-	}
-	
-	private List<File> getInputFiles(AsciidoctorCliOptions asciidoctorCliOptions) {
+    private String renderInput(Options options, List<File> inputFiles) {
+        Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
-		List<String> parameters = asciidoctorCliOptions.getParameters();
+        // jcommander bug makes this code not working.
+        // if("-".equals(inputFile)) {
+        // return asciidoctor.render(readInputFromStdIn(), options);
+        // }
 
-		if (parameters.isEmpty()) {
-			throw new IllegalArgumentException("asciidoctor: FAILED: input file missing");
-		}
+        StringBuilder output = new StringBuilder();
 
-		if (parameters.contains("-")) {
-			throw new IllegalArgumentException("asciidoctor:  FAILED: input file is required instead of an argument.");
-		}
+        for (File inputFile : inputFiles) {
 
-		
-		List<File> filesToBeRendered = new ArrayList<File>();
-		
-		for (String globExpression : parameters) {
-		    DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(".", globExpression);
+            if (inputFile.canRead()) {
+
+                String renderedFile = asciidoctor
+                        .renderFile(inputFile, options);
+                if (renderedFile != null) {
+                    output.append(renderedFile).append(
+                            System.getProperty("line.separator"));
+                }
+            } else {
+                System.err.println("asciidoctor: FAILED: input file(s) '"
+                        + inputFile.getAbsolutePath()
+                        + "' missing or cannot be read");
+                throw new IllegalArgumentException(
+                        "asciidoctor: FAILED: input file(s) '"
+                                + inputFile.getAbsolutePath()
+                                + "' missing or cannot be read");
+            }
+        }
+
+        return output.toString();
+    }
+
+    private String readInputFromStdIn() {
+        Scanner in = new Scanner(System.in);
+        String content = in.nextLine();
+        in.close();
+
+        return content;
+    }
+
+    private List<File> getInputFiles(AsciidoctorCliOptions asciidoctorCliOptions) {
+
+        List<String> parameters = asciidoctorCliOptions.getParameters();
+
+        if (parameters.isEmpty()) {
+            System.err.println("asciidoctor: FAILED: input file missing");
+            throw new IllegalArgumentException(
+                    "asciidoctor: FAILED: input file missing");
+        }
+
+        if (parameters.contains("-")) {
+            System.err
+                    .println("asciidoctor:  FAILED: input file is required instead of an argument.");
+            throw new IllegalArgumentException(
+                    "asciidoctor:  FAILED: input file is required instead of an argument.");
+        }
+
+        List<File> filesToBeRendered = new ArrayList<File>();
+
+        for (String globExpression : parameters) {
+            DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(".",
+                    globExpression);
             filesToBeRendered.addAll(globDirectoryWalker.scan());
         }
-		
-		
-		return filesToBeRendered;
 
-	}
+        return filesToBeRendered;
 
-	public static void main(String args[]) {
-		new AsciidoctorInvoker().invoke(args);
-	}
+    }
+
+    public static void main(String args[]) {
+        new AsciidoctorInvoker().invoke(args);
+    }
 
 }
