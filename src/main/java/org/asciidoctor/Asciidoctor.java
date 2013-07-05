@@ -11,18 +11,31 @@ import org.asciidoctor.internal.Document;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 
 /**
- * 
+ * The main entry point for Asciidoctor.
+ *
+ * [source,java]
+ * .*Example usage*
+ * --
+ * import org.asciidoctor.Asciidoctor;
+ * import java.util.Collections;
+ * import java.util.Map;
+ *
+ * //...
+ *
+ * Asciidoctor processor = Asciidoctor.Factory.create();
+ * Map<String, Object> options = Collections.<String, Object>emptyMap();
+ * String output = processor.render("AsciiDoc in *Java*!", options);
+ * System.out.println(output);
+ * --
  * 
  * @author lordofthejars
- *
  */
 public interface Asciidoctor {
 
 	/**
-	 * Parse the AsciiDoc source input into an Document {@link Document} and render it to the specified backend format.
+	 * Parse the AsciiDoc source input into a {@link Document} and render it to the specified backend format.
 	 * 
 	 * Accepts input as String object.
-	 * 
 	 * 
 	 * @param content the AsciiDoc source as String.
 	 * @param options a Hash of options to control processing (default: {}).
@@ -84,20 +97,26 @@ public interface Asciidoctor {
 	 */
 	void render(Reader contentReader, Writer rendererWriter, OptionsBuilder options) throws IOException;
 	
-	/**
-	 *  Parse the AsciiDoc source input into an Document {@link Document} and render it to the specified backend format.
-	 *  
-	 *  Accepts input as File path.
-	 *  
-	 * 	If the :in_place option is true, and the input is a File, the output is
-	 *  written to a file adjacent to the input file, having an extension that
-	 *  corresponds to the backend format. Otherwise, if the :to_file option is
-	 *  specified, the file is written to that file. If :to_file is not an absolute
-	 *  path, it is resolved relative to :to_dir, if given, otherwise the
-	 *  Document#base_dir. If the target directory does not exist, it will not be
-	 *  created unless the :mkdirs option is set to true. If the file cannot be
-	 *  written because the target directory does not exist, or because it falls
-	 *  outside of the Document#base_dir in safe mode, an IOError is raised.
+	/*
+	 * Parse the AsciiDoc source input into a {@link Document} and render it to the specified backend format.
+	 * 
+	 * Accepts input as File path.
+	 * 
+	 * Here are the two possible paths this operation follows:
+	 *
+	 * . If the +:in_place+ option is true, and the input is a File, the output
+	 * is written to a file adjacent to the input file with an extension that
+	 * corresponds to the backend format.
+	 *
+	 * . Otherwise, if the +:to_file+ option is specified, the file is written
+	 * to that file. If :to_file is not an absolute path, it is resolved
+	 * relative to :to_dir, if given, otherwise the Document#base_dir.
+	 *
+	 * IMPORTANT: In the second case, if the target directory does not exist,
+	 * it will not be created unless the +:mkdirs+ option is true. If the file
+	 * cannot be written because the target directory does not exist, or
+	 * because it falls outside of the Document#base_dir in safe mode, an
+	 * IOError is raised.
 	 * 
 	 * @param filename an input Asciidoctor file.
 	 * @param options a Hash of options to control processing (default: {}).
