@@ -36,6 +36,7 @@ public class Attributes {
 	public static final String LINK_ATTRS = "linkattrs";
 	public static final String EXPERIMENTAL = "experimental";
 	public static final String SHOW_TITLE ="showtitle";
+	public static final String ALLOW_URI_READ = "allow-uri-read";
 	
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -53,6 +54,10 @@ public class Attributes {
 	
 	public Attributes(String attributes) {
 	    this.setAttributes(attributes);
+	}
+	
+	public void setAllowUriRead(boolean allowUriRead) {
+	    this.attributes.put(ALLOW_URI_READ, toAsciidoctorFlag(allowUriRead));
 	}
 	
 	public void setBackend(String backend) {

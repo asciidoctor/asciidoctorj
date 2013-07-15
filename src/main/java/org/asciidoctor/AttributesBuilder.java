@@ -42,6 +42,16 @@ public class AttributesBuilder {
         return attributesBuilder;
     }
 	
+    /**
+     * Sets allow uri read attribute.
+     * @param allowUriRead value.
+     * @return this instance.
+     */
+    public AttributesBuilder allowUriRead(boolean allowUriRead) {
+        this.attributes.setAllowUriRead(allowUriRead);
+        return this;
+    }
+    
 	/**
 	 * Sets backend attribue.
 	 * 
