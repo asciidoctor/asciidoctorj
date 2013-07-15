@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.asciidoctor.AttributesBuilder.attributes;
 import static org.asciidoctor.OptionsBuilder.options;
@@ -54,6 +55,25 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		
 	}
 
+	@Test
+    public void table_of_content_2_should_be_placeable() throws IOException {
+        
+        Attributes attributes = attributes().tableOfContents2(Placement.RIGHT).get();
+        Options options = options().inPlace(true).attributes(attributes).get();
+        
+        asciidoctor.renderFile(new File("target/test-classes/toc2sample.asciidoc"), options);
+       
+        File renderedFile = new File("target/test-classes/toc2sample.html");
+        Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        Elements body = doc.select("body");
+        String classAttribute = body.attr("class");
+        String[] classAttributes = classAttribute.split(" ");
+        assertThat(classAttributes, hasItemInArray("toc2"));
+        assertThat(classAttributes, hasItemInArray("toc-right"));
+        
+        renderedFile.delete();
+    }
+	
 	@Test
 	public void setting_toc_attribute_and_numbered_in_string_form_table_of_contents_should_be_generated() {
 		
@@ -349,6 +369,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		
 		assertThat(image.text(), is("F11"));
 	}
+	
 	
 	private void assertRenderedFontAwesomeAdmonitionIcon(String renderContent) throws IOException, SAXException, ParserConfigurationException {
 		

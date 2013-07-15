@@ -43,6 +43,15 @@ public class AttributesBuilder {
     }
 	
     /**
+     * Sets table of contents 2 attribute.
+     * @param placement where toc is rendered.
+     */
+    public AttributesBuilder tableOfContents2(Placement placement) {
+        this.attributes.setTableOfContents2(placement);
+        return this;
+    }
+    
+    /**
      * Sets allow uri read attribute.
      * @param allowUriRead value.
      * @return this instance.

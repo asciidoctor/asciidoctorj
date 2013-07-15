@@ -38,6 +38,7 @@ public class Attributes {
 	public static final String SHOW_TITLE ="showtitle";
 	public static final String ALLOW_URI_READ = "allow-uri-read";
 	public static final String TOC_POSITION = "toc-position";
+    public static final String TOC_2 = "toc2";
 	
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -79,6 +80,15 @@ public class Attributes {
 	
 	public void setSourceHighlighter(String sourceHighlighter) {
 		this.attributes.put(SOURCE_HIGHLIGHTER, sourceHighlighter);
+	}
+	
+	/**
+	 * Sets table of contents 2 attribute.
+	 * @param placement where toc is rendered.
+	 */
+	public void setTableOfContents2(Placement placement) {
+	    this.attributes.put(TOC_2, toAsciidoctorFlag(true));
+	    this.attributes.put(TOC_POSITION, placement.getPosition());
 	}
 	
 	/**
