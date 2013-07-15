@@ -37,6 +37,7 @@ public class Attributes {
 	public static final String EXPERIMENTAL = "experimental";
 	public static final String SHOW_TITLE ="showtitle";
 	public static final String ALLOW_URI_READ = "allow-uri-read";
+	public static final String TOC_POSITION = "toc-position";
 	
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -168,7 +169,7 @@ public class Attributes {
 	}
 	
 	/**
-	 * Sets which admonition icons to use. Attributes.ORIGINAL_ADMONITION_ICONS_WITH_IMG constant can be used to use the original icons with images.
+	 * Sets which admonition icons to use. Attributes.IMAGE_ICONS constant can be used to use the original icons with images or Attributes.FONT_ICONS for font icons (font-awesome).
 	 * @param iconsName value.
 	 */
 	public void setIcons(String iconsName) {

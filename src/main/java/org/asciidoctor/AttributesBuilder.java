@@ -239,9 +239,7 @@ public class AttributesBuilder {
 	}
 
 	/**
-	 * Sets which admonition icons to use.
-	 * Attributes.ORIGINAL_ADMONITION_ICONS_WITH_IMG constant can be used to use
-	 * the original icons with images.
+	 * Sets which admonition icons to use. Attributes.IMAGE_ICONS constant can be used to use the original icons with images or Attributes.FONT_ICONS for font icons (font-awesome).
 	 * 
 	 * @param icons
 	 *            value.
