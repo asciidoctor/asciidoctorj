@@ -65,9 +65,21 @@ public class OptionsBuilder {
 	 * @return this instance.
 	 */
 	public OptionsBuilder templateDir(File templateDir) {
-		this.options.setTemplateDir(templateDir.getAbsolutePath());
+		this.options.setTemplateDirs(templateDir.getAbsolutePath());
 		return this;
 	}
+	
+	/**
+     * Sets template directories.
+     * @param templateDir directories where templates are stored.
+     * @return this instance.
+     */
+    public OptionsBuilder templateDirs(File... templateDirs) {
+        for (File templateDir : templateDirs) {
+            this.options.setTemplateDirs(templateDir.getAbsolutePath());
+        }
+        return this;
+    }
 	
 	/**
 	 * Sets the template engine.

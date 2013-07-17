@@ -30,7 +30,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
 
 import org.asciidoctor.internal.JRubyAsciidoctor;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;

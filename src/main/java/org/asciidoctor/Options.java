@@ -1,6 +1,9 @@
 package org.asciidoctor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Options {
@@ -8,7 +11,7 @@ public class Options {
 	public static final String IN_PLACE = "in_place";
 	public static final String ATTRIBUTES = "attributes";
 	public static final String HEADER_FOOTER = "header_footer";
-	public static final String TEMPLATE_DIR = "template_dir";
+	public static final String TEMPLATE_DIRS = "template_dirs";
 	public static final String TEMPLATE_ENGINE = "template_engine";
 	public static final String TO_FILE = "to_file";
 	public static final String TO_DIR = "to_dir";
@@ -48,8 +51,14 @@ public class Options {
 		this.options.put(HEADER_FOOTER, headerFooter);
 	}
 	
-	public void setTemplateDir(String templateDir) {
-		this.options.put(TEMPLATE_DIR, templateDir);
+	public void setTemplateDirs(String... templateDirs) {
+	    
+	    if(!this.options.containsKey(TEMPLATE_DIRS)) {
+	        this.options.put(TEMPLATE_DIRS, new ArrayList<Object>());
+	    }
+	    
+		List<Object> allTemplateDirs = (List<Object>) this.options.get(TEMPLATE_DIRS);
+		allTemplateDirs.addAll(Arrays.asList(templateDirs));
 	}
 	
 	public void setTemplateEngine(String templateEngine) {

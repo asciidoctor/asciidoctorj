@@ -16,7 +16,7 @@ public class RubyGemsPreloader {
 		{
 			put(Attributes.SOURCE_HIGHLIGHTER, "require 'coderay'");
 			put(Options.ERUBY, "require 'erubis'");
-			put(Options.TEMPLATE_DIR, "require 'tilt'");
+			put(Options.TEMPLATE_DIRS, "require 'tilt'");
 			put(Attributes.DATA_URI, "require 'base64'");
 		}
 	};
@@ -46,8 +46,8 @@ public class RubyGemsPreloader {
 			preloadLibrary(Options.ERUBY);
 		}
 
-		if (isOptionSet(options, Options.TEMPLATE_DIR)) {
-			preloadLibrary(Options.TEMPLATE_DIR);
+		if (isOptionSet(options, Options.TEMPLATE_DIRS)) {
+			preloadLibrary(Options.TEMPLATE_DIRS);
 		}
 
 	}

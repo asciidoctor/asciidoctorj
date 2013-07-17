@@ -52,7 +52,7 @@ public class AsciidoctorCliOptions {
 	private String templateEngine;
 	
 	@Parameter(names = {"-T", "--template-dir"}, description = "directory containing custom render templates the override the built-in set")
-	private String templateDir;
+	private List<String> templateDir;
 	
 	@Parameter(names = {"-B", "--base-dir"}, description = "base directory containing the document and resources (default: directory of source file)")
 	private String baseDir;
@@ -120,7 +120,7 @@ public class AsciidoctorCliOptions {
 		return compact;
 	}
 
-	public String getTemplateDir() {
+	public List<String> getTemplateDir() {
 		return templateDir;
 	}
 
@@ -199,7 +199,9 @@ public class AsciidoctorCliOptions {
 		}
 		
 		if(isTemplateDirOption()) {
-			optionsBuilder.templateDir(new File(this.templateDir));
+		    for (String templateDir : this.templateDir) {
+		        optionsBuilder.templateDir(new File(templateDir));                
+            }
 		}
 		
 		if(isDestinationDirOption() && !isOutputStdout()) {

@@ -1,11 +1,13 @@
 package org.asciidoctor.internal;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jruby.Ruby;
+import org.jruby.RubyArray;
 import org.jruby.RubyHash;
 import org.jruby.RubySymbol;
 import org.jruby.javasupport.JavaEmbedUtils;
@@ -76,12 +78,28 @@ public class RubyHashUtil {
 		if (value instanceof Map) {
 			return toNoneSymbolsRubyHash(rubyRuntime, (Map<String, Object>) value);
 		} else {
-			IRubyObject iRubyObject = JavaEmbedUtils.javaToRuby(rubyRuntime, value);
-			return iRubyObject;
+		    if(value instanceof List) {
+		        return toRubyArray(rubyRuntime, (List<Object>) value);
+		    } else {
+		        IRubyObject iRubyObject = JavaEmbedUtils.javaToRuby(rubyRuntime, value);
+		        return iRubyObject;
+		    }
 		}
 	}
 	
-	public static RubyHash toNoneSymbolsRubyHash(Ruby rubyRuntime, Map<String, Object> map) {
+	private static IRubyObject toRubyArray(Ruby rubyRuntime, List<Object> values) {
+
+	    RubyArray rubyArray = RubyArray.newArray(rubyRuntime, values.size());
+	    
+	    for (Object value : values) {
+            rubyArray.add(toRubyObject(rubyRuntime, value));
+        }
+	    
+	    
+	    return rubyArray;
+    }
+
+    public static RubyHash toNoneSymbolsRubyHash(Ruby rubyRuntime, Map<String, Object> map) {
 		
 		RubyHash rubyHash = new RubyHash(rubyRuntime);
 		
