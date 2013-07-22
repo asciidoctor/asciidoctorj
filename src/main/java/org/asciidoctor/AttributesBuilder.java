@@ -53,8 +53,19 @@ public class AttributesBuilder {
     }
     
     /**
+     * Sets the untitled label value.
+     * @param untitledLabel value.
+     * @return this instance.
+     */
+    public AttributesBuilder setUntitledLabel(String untitledLabel) {
+        this.attributes.setUntitledLabel(untitledLabel);
+        return this;
+    }
+    
+    /**
      * Sets table of contents 2 attribute.
      * @param placement where toc is rendered.
+     * @return this instance.
      */
     public AttributesBuilder tableOfContents2(Placement placement) {
         this.attributes.setTableOfContents2(placement);

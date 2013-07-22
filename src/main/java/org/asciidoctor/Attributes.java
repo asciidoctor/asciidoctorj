@@ -40,6 +40,7 @@ public class Attributes {
 	public static final String TOC_POSITION = "toc-position";
     public static final String TOC_2 = "toc2";
     public static final String IGNORE_UNDEFINED = "ignore-undefined";
+    public static final String UNTITLED_LABEL = "untitled-label";
 	
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -81,6 +82,14 @@ public class Attributes {
 	
 	public void setSourceHighlighter(String sourceHighlighter) {
 		this.attributes.put(SOURCE_HIGHLIGHTER, sourceHighlighter);
+	}
+	
+	/**
+	 * Sets the untitled label value.
+	 * @param untitledLabel value.
+	 */
+	public void setUntitledLabel(String untitledLabel) {
+	    this.attributes.put(UNTITLED_LABEL, untitledLabel);
 	}
 	
 	/**
