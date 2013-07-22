@@ -1,11 +1,12 @@
 package org.asciidoctor;
 
-import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
-import static org.hamcrest.CoreMatchers.startsWith;
 import static org.asciidoctor.AttributesBuilder.attributes;
 import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
 import static org.junit.Assert.assertThat;
 import static org.xmlmatchers.xpath.HasXPath.hasXPath;
 
@@ -41,6 +42,16 @@ public class WhenAttributesAreUsedInAsciidoctor {
 	
 	private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
+	@Test
+	public void ignore_undefined_attributes_should_keep_lines_with_undefined_attributes() {
+	    
+	    Attributes attributes = attributes().ignoreUndefinedAttributes(true).get();
+        Options options = options().attributes(attributes).get();
+        
+        String renderContent = asciidoctor.renderFile(new File("target/test-classes/documentwithundefinedattribute.asciidoc"), options);
+	    assertThat(renderContent, containsString("{bogus-attribute}"));
+	}
+	
 	@Test
 	public void setting_toc_attribute_table_of_contents_should_be_generated() {
 		

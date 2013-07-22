@@ -39,6 +39,7 @@ public class Attributes {
 	public static final String ALLOW_URI_READ = "allow-uri-read";
 	public static final String TOC_POSITION = "toc-position";
     public static final String TOC_2 = "toc2";
+    public static final String IGNORE_UNDEFINED = "ignore-undefined";
 	
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -80,6 +81,14 @@ public class Attributes {
 	
 	public void setSourceHighlighter(String sourceHighlighter) {
 		this.attributes.put(SOURCE_HIGHLIGHTER, sourceHighlighter);
+	}
+	
+	/**
+	 * Sets ignore undefined flag so lines are kept when they contain a reference to a missing attribute.
+	 * @param ignoreUndefinedAttributes value.
+	 */
+	public void setIgnoreUndefinedAttributes(boolean ignoreUndefinedAttributes) {
+	    this.attributes.put(IGNORE_UNDEFINED, toAsciidoctorFlag(ignoreUndefinedAttributes));
 	}
 	
 	/**

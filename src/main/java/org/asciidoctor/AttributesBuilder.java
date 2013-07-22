@@ -34,7 +34,7 @@ public class AttributesBuilder {
     /**
      * Creates attributes builder.
      * 
-     * @return atributes builder.
+     * @return attributes builder.
      */
     public static AttributesBuilder attributes(String arguments) {
         AttributesBuilder attributesBuilder = new AttributesBuilder();
@@ -42,6 +42,16 @@ public class AttributesBuilder {
         return attributesBuilder;
     }
 	
+    /**
+     * Sets ignore undefined flag so lines are kept when they contain a reference to a missing attribute.
+     * @param ignoreUndefinedAttributes value.
+     * @return this instance.
+     */
+    public AttributesBuilder ignoreUndefinedAttributes(boolean ignoreUndefinedAttributes) {
+        this.attributes.setIgnoreUndefinedAttributes(ignoreUndefinedAttributes);
+        return this;
+    }
+    
     /**
      * Sets table of contents 2 attribute.
      * @param placement where toc is rendered.
