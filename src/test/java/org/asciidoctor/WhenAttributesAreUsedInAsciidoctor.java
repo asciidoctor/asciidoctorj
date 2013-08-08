@@ -2,10 +2,10 @@ package org.asciidoctor;
 
 import static org.asciidoctor.AttributesBuilder.attributes;
 import static org.asciidoctor.OptionsBuilder.options;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
 import static org.junit.Assert.assertThat;
 import static org.xmlmatchers.xpath.HasXPath.hasXPath;
@@ -13,9 +13,12 @@ import static org.xmlmatchers.xpath.HasXPath.hasXPath;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -381,6 +384,23 @@ public class WhenAttributesAreUsedInAsciidoctor {
 		assertThat(image.text(), is("F11"));
 	}
 	
+	@Test
+	public void iconfont_attributes_should_be_used_for_using_custom_font_css_icons() throws URISyntaxException, IOException {
+	    
+	    Attributes attributes = attributes().icons(Attributes.FONT_ICONS).iconFontRemote(true).iconFontCdn(new URI("http://mycdn")).iconFontName("myfont").get();
+        Options options = options().inPlace(true).attributes(attributes).get();
+	    
+        asciidoctor.renderFile( new File("target/test-classes/documentwithnote.asciidoc"), options);
+
+        File expectedFile = new File("target/test-classes/documentwithnote.html");
+        Document doc = Jsoup.parse(expectedFile, "UTF-8");
+       
+        Elements stylesheetLinks = doc.select("link[href$=http://mycdn/myfont.min.css]");
+        assertThat(stylesheetLinks.size(), is(1));
+        
+        expectedFile.delete();
+        
+	}
 	
 	private void assertRenderedFontAwesomeAdmonitionIcon(String renderContent) throws IOException, SAXException, ParserConfigurationException {
 		

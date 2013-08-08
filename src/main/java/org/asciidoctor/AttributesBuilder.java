@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.Map;
 
@@ -279,7 +280,37 @@ public class AttributesBuilder {
 		this.attributes.setIcons(icons);
 		return this;
 	}
-
+    
+    /**
+     * Enable icon font remote attribute. If enabled, will use the iconfont-cdn value to load the icon font URI; if disabled, will use the iconfont-name value to locate the icon font CSS file
+     * @param iconFontRemote true if attribute enabled false otherwise.
+     * @return this instance.
+     */
+    public AttributesBuilder iconFontRemote(boolean iconFontRemote) {
+        this.attributes.setIconFontRemote(iconFontRemote);
+        return this;
+    }
+    
+    /**
+     * The URI prefix of the icon font; looks for minified CSS file based on iconfont-name value; used when iconfont-remote is set
+     * @param cdnUri uri where css is stored.
+     * @return this instance.
+     */
+    public AttributesBuilder iconFontCdn(URI cdnUri) {
+        this.attributes.setIconFontCdn(cdnUri);
+        return this;
+    }
+    
+    /**
+     * The name of the stylesheet in the stylesdir to load (.css extension added automatically)
+     * @param iconFontName stylesheet name without .css extension.
+     * @return this instance.
+     */
+    public AttributesBuilder iconFontName(String iconFontName) {
+        this.attributes.setIconFontName(iconFontName);
+        return this;
+    }
+	
 	/**
 	 * Sets icons directory location.
 	 * 

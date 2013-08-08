@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import java.net.URI;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,6 +29,9 @@ public class Attributes {
 	public static final String LINK_CSS = "linkcss";
 	public static final String COPY_CSS = "copycss";
 	public static final String ICONS = "icons";
+	public static final String ICONFONT_REMOTE = "iconfont-remote";
+	public static final String ICONFONT_CDN = "iconfont-cdn";
+	public static final String ICONFONT_NAME = "iconfont-name";
 	public static final String ICONS_DIR = "iconsdir";
 	public static final String DATA_URI = "data-uri";
 	public static final String SECTION_NUMBERS = "numbered";
@@ -202,6 +206,30 @@ public class Attributes {
 	 */
 	public void setIcons(String iconsName) {
 		this.attributes.put(ICONS, iconsName);
+	}
+	
+	/**
+	 * Enable icon font remote attribute. If enabled, will use the iconfont-cdn value to load the icon font URI; if disabled, will use the iconfont-name value to locate the icon font CSS file
+	 * @param iconFontRemote true if attribute enabled false otherwise.
+	 */
+	public void setIconFontRemote(boolean iconFontRemote) {
+	    this.attributes.put(ICONFONT_REMOTE, toAsciidoctorFlag(iconFontRemote));
+	}
+	
+	/**
+	 * The URI prefix of the icon font; looks for minified CSS file based on iconfont-name value; used when iconfont-remote is set
+	 * @param cdnUri uri where css is stored.
+	 */
+	public void setIconFontCdn(URI cdnUri) {
+	    this.attributes.put(ICONFONT_CDN, cdnUri.toASCIIString());
+	}
+	
+	/**
+	 * The name of the stylesheet in the stylesdir to load (.css extension added automatically)
+	 * @param iconFontName stylesheet name without .css extension.
+	 */
+	public void setIconFontName(String iconFontName) {
+	    this.attributes.put(ICONFONT_NAME, iconFontName);
 	}
 	
 	/**
