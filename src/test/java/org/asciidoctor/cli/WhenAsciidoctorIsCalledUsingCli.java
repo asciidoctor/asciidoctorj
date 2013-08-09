@@ -119,7 +119,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
 	@Test
 	public void glob_expression_can_be_used_to_render_AsciiDoc_files() {
 	    
-	    new AsciidoctorInvoker().invoke("**/toc*.asciidoc");
+	    new AsciidoctorInvoker().invoke("-D", "target/test-classes", "**/toc*.asciidoc");
         
         File expectedTocFile = new File("target/test-classes/tocsample.html");
         
