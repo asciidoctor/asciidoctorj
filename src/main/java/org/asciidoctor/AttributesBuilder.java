@@ -54,11 +54,21 @@ public class AttributesBuilder {
     }
     
     /**
+     * Sets setanchor flag.
+     * @param setAnchors value.
+     * @return this instance.
+     */
+    public AttributesBuilder setAnchors(boolean setAnchors) {
+        this.attributes.setAnchors(setAnchors);
+        return this;
+    }
+    
+    /**
      * Sets the untitled label value.
      * @param untitledLabel value.
      * @return this instance.
      */
-    public AttributesBuilder setUntitledLabel(String untitledLabel) {
+    public AttributesBuilder untitledLabel(String untitledLabel) {
         this.attributes.setUntitledLabel(untitledLabel);
         return this;
     }

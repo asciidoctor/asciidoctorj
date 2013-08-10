@@ -47,6 +47,21 @@ public class WhenAttributesAreUsedInAsciidoctor {
 	private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
 	@Test
+	public void set_anchors_attribute_should_add_anchor_to_sections() {
+	    
+	    Attributes attributes = attributes().setAnchors(true).get();
+        Options options = options().inPlace(false).attributes(attributes).get();
+        
+        String content = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+	    
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element anchorElement = doc.select("a[class=anchor]").first();
+        
+        assertThat(anchorElement.attr("href"), is("#_section_a"));
+        
+	}
+	
+	@Test
 	public void ignore_undefined_attributes_should_keep_lines_with_undefined_attributes() {
 	    
 	    Attributes attributes = attributes().ignoreUndefinedAttributes(true).get();

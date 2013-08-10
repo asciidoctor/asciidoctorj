@@ -45,6 +45,7 @@ public class Attributes {
     public static final String TOC_2 = "toc2";
     public static final String IGNORE_UNDEFINED = "ignore-undefined";
     public static final String UNTITLED_LABEL = "untitled-label";
+    public static final String SET_ANCHORS = "sectanchors";
 	
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -86,6 +87,14 @@ public class Attributes {
 	
 	public void setSourceHighlighter(String sourceHighlighter) {
 		this.attributes.put(SOURCE_HIGHLIGHTER, sourceHighlighter);
+	}
+	
+	/**
+	 * Sets setanchor flag.
+	 * @param setAnchors value.
+	 */
+	public void setAnchors(boolean setAnchors) {
+	    this.attributes.put(SET_ANCHORS, setAnchors);
 	}
 	
 	/**
