@@ -46,6 +46,7 @@ public class Attributes {
     public static final String IGNORE_UNDEFINED = "ignore-undefined";
     public static final String UNTITLED_LABEL = "untitled-label";
     public static final String SET_ANCHORS = "sectanchors";
+    public static final String SKIP_FRONT_MATTER = "skip-front-matter";
 	
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -87,6 +88,14 @@ public class Attributes {
 	
 	public void setSourceHighlighter(String sourceHighlighter) {
 		this.attributes.put(SOURCE_HIGHLIGHTER, sourceHighlighter);
+	}
+	
+	/**
+	 * Skips front matter.
+	 * @param skipFrontMatter value.
+	 */
+	public void setSkipFrontMatter(boolean skipFrontMatter) {
+	    this.attributes.put(SKIP_FRONT_MATTER, toAsciidoctorFlag(skipFrontMatter));
 	}
 	
 	/**

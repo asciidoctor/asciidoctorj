@@ -47,6 +47,20 @@ public class WhenAttributesAreUsedInAsciidoctor {
 	private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
 	@Test
+	public void should_skip_front_matter_if_specified_by_skip_front_matter_attribute() throws IOException {
+	    
+	    Attributes attributes = attributes().skipFrontMatter(true).get();
+        Options options = options().inPlace(false).attributes(attributes).get();
+        
+        String content = asciidoctor.renderFile(new File("target/test-classes/renderwithfrontmatter.adoc"), options);
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Elements hrElements = doc.getElementsByTag("hr");
+        
+        assertThat(hrElements.size(), is(0));
+        
+	}
+	
+	@Test
 	public void set_anchors_attribute_should_add_anchor_to_sections() {
 	    
 	    Attributes attributes = attributes().setAnchors(true).get();

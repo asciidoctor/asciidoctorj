@@ -44,6 +44,16 @@ public class AttributesBuilder {
     }
 	
     /**
+     * Skips front matter.
+     * @param skipFrontMatter value.
+     * @return this instance.
+     */
+    public AttributesBuilder skipFrontMatter(boolean skipFrontMatter) {
+        this.attributes.setSkipFrontMatter(skipFrontMatter);
+        return this;
+    }
+    
+    /**
      * Sets ignore undefined flag so lines are kept when they contain a reference to a missing attribute.
      * @param ignoreUndefinedAttributes value.
      * @return this instance.
