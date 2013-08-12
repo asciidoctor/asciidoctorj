@@ -265,7 +265,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	@Test
 	public void all_files_from_directory_and_subdirectories_should_be_rendered_into_an_array() {
 
-		String[] allRenderedFiles = asciidoctor.renderDirectory(new File("target/test-classes/src"),
+		String[] allRenderedFiles = asciidoctor.renderDirectory(new AsciiDocDirectoryWalker("target/test-classes/src"),
 				new HashMap<String, Object>());
 		assertThat(allRenderedFiles, is(arrayWithSize(4)));
 
@@ -277,7 +277,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 		Map<String, Object> options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot())
 				.asMap();
 
-		String[] allRenderedFiles = asciidoctor.renderDirectory(new File("target/test-classes/src"), options);
+		String[] allRenderedFiles = asciidoctor.renderDirectory(new AsciiDocDirectoryWalker("target/test-classes/src"), options);
 		assertThat(allRenderedFiles, is(arrayWithSize(0)));
 
 	}

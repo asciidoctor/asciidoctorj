@@ -148,28 +148,28 @@ public interface Asciidoctor {
 	String renderFile(File filename, OptionsBuilder options);
 	
 	/**
-	 * Parse all AsciiDoc files found in given directory and all its subfolders. .asc, .asciidoc, .ad or .adoc extensions are valid AsciiDoc files. 
-	 * @param directory where it begins the scan of all AsciiDoc files.
+	 * Parse all AsciiDoc files found using DirectoryWalker instance.  
+	 * @param directoryWalker strategy used to retrieve all files to be rendered.
 	 * @param options a Hash of options to control processing (default: {}).
 	 * @return returns an array of 0 positions if the rendered output is written to a file.
 	 */
-	String[] renderDirectory(File directory, Map<String, Object> options);
+	String[] renderDirectory(DirectoryWalker directoryWalker, Map<String, Object> options);
 	
 	/**
-	 * Parse all AsciiDoc files found in given directory and all its subfolders. .asc, .asciidoc, .ad or .adoc extensions are valid AsciiDoc files. 
-	 * @param directory where it begins the scan of all AsciiDoc files.
+	 * Parse all AsciiDoc files found using DirectoryWalker instance.  
+	 * @param directoryWalker strategy used to retrieve all files to be rendered.
 	 * @param options a Hash of options to control processing (default: {}).
 	 * @return returns an array of 0 positions if the rendered output is written to a file.
 	 */
-	String[] renderDirectory(File directory, Options options);
+	String[] renderDirectory(DirectoryWalker directoryWalker, Options options);
 	
 	/**
-	 * Parse all AsciiDoc files found in given directory and all its subfolders. .asc, .asciidoc, .ad or .adoc extensions are valid AsciiDoc files. 
-	 * @param directory where it begins the scan of all AsciiDoc files.
+	 * Parse all AsciiDoc files found using DirectoryWalker instance. 
+	 * @param directoryWalker strategy used to retrieve all files to be rendered.
 	 * @param options a Hash of options to control processing (default: {}).
 	 * @return returns an array of 0 positions if the rendered output is written to a file.
 	 */
-	String[] renderDirectory(File directory, OptionsBuilder options);
+	String[] renderDirectory(DirectoryWalker directoryWalker, OptionsBuilder options);
 	
 	/**
 	 * Parses all files added inside a collection.

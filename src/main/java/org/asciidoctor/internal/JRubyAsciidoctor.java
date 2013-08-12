@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.AsciiDocDirectoryWalker;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.DirectoryWalker;
@@ -182,9 +181,9 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	}
 
 	@Override
-	public String[] renderDirectory(File directory, Map<String, Object> options) {
+	public String[] renderDirectory(DirectoryWalker directoryWalker, Map<String, Object> options) {
 
-		final List<File> asciidoctorFiles = scanForAsciiDocFiles(directory);
+		final List<File> asciidoctorFiles = scanForAsciiDocFiles(directoryWalker);
 		List<String> asciidoctorContent = renderAllFiles(options, asciidoctorFiles);
 
 		return asciidoctorContent.toArray(new String[asciidoctorContent.size()]);
@@ -205,9 +204,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		return asciidoctorContent;
 	}
 
-	private List<File> scanForAsciiDocFiles(File directory) {
-		final DirectoryWalker abstractDirectoryWalker = new AsciiDocDirectoryWalker(directory.getAbsolutePath());
-		final List<File> asciidoctorFiles = abstractDirectoryWalker.scan();
+	private List<File> scanForAsciiDocFiles(DirectoryWalker directoryWalker) {
+		final List<File> asciidoctorFiles = directoryWalker.scan();
 		return asciidoctorFiles;
 	}
 
@@ -227,8 +225,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	}
 
 	@Override
-	public String[] renderDirectory(File directory, Options options) {
-		return this.renderDirectory(directory, options.map());
+	public String[] renderDirectory(DirectoryWalker directoryWalker, Options options) {
+		return this.renderDirectory(directoryWalker, options.map());
 	}
 
 	@Override
@@ -247,8 +245,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	}
 
 	@Override
-	public String[] renderDirectory(File directory, OptionsBuilder options) {
-		return this.renderDirectory(directory, options.asMap());
+	public String[] renderDirectory(DirectoryWalker directoryWalker, OptionsBuilder options) {
+		return this.renderDirectory(directoryWalker, options.asMap());
 	}
 
 	@Override
