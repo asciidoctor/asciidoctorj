@@ -47,6 +47,7 @@ public class Attributes {
     public static final String UNTITLED_LABEL = "untitled-label";
     public static final String SET_ANCHORS = "sectanchors";
     public static final String SKIP_FRONT_MATTER = "skip-front-matter";
+    public static final String MAX_INCLUDE_DEPTH = "max-include-depth";
 	
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -88,6 +89,10 @@ public class Attributes {
 	
 	public void setSourceHighlighter(String sourceHighlighter) {
 		this.attributes.put(SOURCE_HIGHLIGHTER, sourceHighlighter);
+	}
+	
+	public void setMaxIncludeDepth(int maxIncludeDepth) {
+	    this.attributes.put(MAX_INCLUDE_DEPTH, maxIncludeDepth);
 	}
 	
 	/**

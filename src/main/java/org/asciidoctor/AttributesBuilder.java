@@ -64,6 +64,16 @@ public class AttributesBuilder {
     }
     
     /**
+     * Sets max include depth attribute.
+     * @param maxIncludeDepth value.
+     * @return this instance.
+     */
+    public AttributesBuilder maxIncludeDepth(int maxIncludeDepth) {
+        this.attributes.setMaxIncludeDepth(maxIncludeDepth);
+        return this;
+    }
+    
+    /**
      * Sets setanchor flag.
      * @param setAnchors value.
      * @return this instance.
