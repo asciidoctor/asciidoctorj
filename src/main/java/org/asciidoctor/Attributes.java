@@ -48,6 +48,8 @@ public class Attributes {
     public static final String SET_ANCHORS = "sectanchors";
     public static final String SKIP_FRONT_MATTER = "skip-front-matter";
     public static final String MAX_INCLUDE_DEPTH = "max-include-depth";
+    public static final String ATTRIBUTE_MISSING = "attribute-missing";
+    public static final String ATTRIBUTE_UNDEFINED = "attribute-undefined";
 	
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -69,6 +71,14 @@ public class Attributes {
 	
 	public void setAllowUriRead(boolean allowUriRead) {
 	    this.attributes.put(ALLOW_URI_READ, toAsciidoctorFlag(allowUriRead));
+	}
+	
+	public void setAttributeMissing(String attributeMissing) {
+	    this.attributes.put(ATTRIBUTE_MISSING, attributeMissing);
+	}
+	
+	public void setAttributeUndefined(String attributeUndefined) {
+	    this.attributes.put(ATTRIBUTE_UNDEFINED, attributeUndefined);
 	}
 	
 	public void setBackend(String backend) {

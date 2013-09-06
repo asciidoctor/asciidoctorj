@@ -74,6 +74,26 @@ public class AttributesBuilder {
     }
     
     /**
+     * Sets attribute missing attribute. (Possible values skip, drop, drop-line)
+     * @param attributeMissing value.
+     * @return this instance.
+     */
+    public AttributesBuilder attributeMissing(String attributeMissing) {
+        this.attributes.setAttributeMissing(attributeMissing);
+        return this;
+    }
+    
+    /**
+     * Sets attribute undefined attribute. (Possible values skip, drop, drop-line)
+     * @param attributeUndefined value.
+     * @return this instance.
+     */
+    public AttributesBuilder attributeUndefined(String attributeUndefined) {
+        this.attributes.setAttributeUndefined(attributeUndefined);
+        return this;
+    }
+    
+    /**
      * Sets setanchor flag.
      * @param setAnchors value.
      * @return this instance.
