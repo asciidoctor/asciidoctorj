@@ -100,10 +100,28 @@ public class WhenAttributesAreUsedInAsciidoctor {
 	}
 
 	@Test
+    public void table_of_content_should_be_placeable() throws IOException {
+        
+        Attributes attributes = attributes().tableOfContents(Placement.RIGHT).get();
+        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "toc2sample.html")).safe(SafeMode.UNSAFE).attributes(attributes).get();
+        
+        asciidoctor.renderFile(new File("target/test-classes/toc2sample.asciidoc"), options);
+       
+        File renderedFile = new File(testFolder.getRoot(), "toc2sample.html");
+        Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        Elements body = doc.select("body");
+        String classAttribute = body.attr("class");
+        String[] classAttributes = classAttribute.split(" ");
+        assertThat(classAttributes, hasItemInArray("toc2"));
+        assertThat(classAttributes, hasItemInArray("toc-right"));
+        
+        renderedFile.delete();
+    }
+	
+	@Test
     public void table_of_content_2_should_be_placeable() throws IOException {
         
         Attributes attributes = attributes().tableOfContents2(Placement.RIGHT).get();
-        System.out.println(testFolder.getRoot());
         Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "toc2sample.html")).safe(SafeMode.UNSAFE).attributes(attributes).get();
         
         asciidoctor.renderFile(new File("target/test-classes/toc2sample.asciidoc"), options);

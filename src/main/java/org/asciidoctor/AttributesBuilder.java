@@ -84,6 +84,16 @@ public class AttributesBuilder {
     }
     
     /**
+     * Sets table of contents attribute.
+     * @param placement where toc is rendered.
+     * @return this instance.
+     */
+    public AttributesBuilder tableOfContents(Placement placement) {
+        this.attributes.setTableOfContents(placement);
+        return this;
+    }
+    
+    /**
      * Sets table of contents 2 attribute.
      * @param placement where toc is rendered.
      * @return this instance.

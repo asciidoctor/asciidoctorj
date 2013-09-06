@@ -132,12 +132,22 @@ public class Attributes {
 	}
 	
 	/**
+     * Sets if a table of contents should be rendered or not.
+     * @param toc value.
+     */
+    public void setTableOfContents(Placement placement) {
+        this.attributes.put(TOC, toAsciidoctorFlag(true));
+        this.attributes.put(TOC_POSITION, placement.getPosition());
+    }
+	
+	/**
 	 * Sets showtitle value as an alias for notitle!
 	 * @param showTitle value.
 	 */
 	public void setShowTitle(boolean showTitle) {
 	    this.attributes.put(SHOW_TITLE, showTitle);
 	}
+	
 	
 	/**
 	 * Sets if a table of contents should be rendered or not.
