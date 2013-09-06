@@ -52,7 +52,7 @@
 		<haml.version>4.0.3</haml.version>
 		<tilt.version>1.3.4</tilt.version>
 		<coderay.version>1.0.8</coderay.version>
-		<asciidoctor.version>0.1.3</asciidoctor.version>
+		<asciidoctor.version>0.1.4</asciidoctor.version>
 		<erubis.version>2.7.0</erubis.version>
 		<slim.version>1.3.6</slim.version>
 		<jcommander.version>1.30</jcommander.version>
