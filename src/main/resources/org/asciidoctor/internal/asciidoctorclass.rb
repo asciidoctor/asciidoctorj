@@ -2,6 +2,8 @@ require 'java'
 require 'asciidoctor'
 require 'asciidoctor/extensions'
 
+java_import org.asciidoctor.extension.MyPreprocessorExtension
+
 class FrontMatterPreprocessor < Asciidoctor::Extensions::Preprocessor
   def process reader, lines
     return reader if lines.empty?

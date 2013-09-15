@@ -11,13 +11,14 @@ import org.junit.Test;
 public class ExtensionTest {
 
     private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
-    
+
     @Test
     public void render() {
-        String render_file = asciidoctor.renderFileExtension(new File("target/test-classes/render-with-front-matter.adoc"), "FrontMatterPreprocessor",
-                new Options());
-        
+        String render_file = asciidoctor.renderFileExtension(new File(
+                "target/test-classes/render-with-front-matter.adoc"),
+                "MyPreprocessorExtension", new Options());
+
         System.out.println(render_file);
     }
-    
+
 }
