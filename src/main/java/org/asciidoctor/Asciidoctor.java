@@ -126,6 +126,8 @@ public interface Asciidoctor {
 	 */
 	String renderFile(File filename, Options options);
 	
+	String renderFileExtension(File filename, String extensionName, Options options);
+	
 	/**
 	 *  Parse the AsciiDoc source input into an Document {@link Document} and render it to the specified backend format.
 	 *  

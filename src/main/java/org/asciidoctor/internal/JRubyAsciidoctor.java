@@ -128,7 +128,20 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
 	}
 
-	@SuppressWarnings("unchecked")
+	
+	
+	@Override
+    public String renderFileExtension(File filename, String extensionName,
+            Options options) {
+	    
+	    this.rubyGemsPreloader.preloadRequiredLibraries(options.map());
+
+        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options.map());
+        Object object = this.asciidoctorModule.render_file_extension(filename.getAbsolutePath(), extensionName, rubyHash);
+        return returnExpectedValue(object);
+    }
+
+    @SuppressWarnings("unchecked")
 	@Override
 	public String renderFile(File filename, Map<String, Object> options) {
 
