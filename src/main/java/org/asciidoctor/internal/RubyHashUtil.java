@@ -31,7 +31,7 @@ public class RubyHashUtil {
             String key = entry.getKey();
             Object value = entry.getValue();
 
-            RubySymbol newSymbol = toSymbol(rubyRuntime, key);
+            RubySymbol newSymbol = RubyUtils.toSymbol(rubyRuntime, key);
             IRubyObject iRubyValue = toRubyObject(rubyRuntime, value);
 
             rubyHash.put(newSymbol, iRubyValue);
@@ -70,16 +70,21 @@ public class RubyHashUtil {
         return rubyObject;
     }
 
-    private static RubySymbol toSymbol(Ruby rubyRuntime, String key) {
-        RubySymbol newSymbol = RubySymbol.newSymbol(rubyRuntime, key);
-        return newSymbol;
-    }
 
     private static IRubyObject toRubyObject(Ruby rubyRuntime, Object value) {
 
         if (value instanceof List) {
             return toRubyArray(rubyRuntime, (List<Object>) value);
         } else {
+
+            if(value instanceof String) {
+                String stringValue = ((String)value);
+                
+                if(stringValue.startsWith(":")) {
+                    return RubyUtils.toSymbol(rubyRuntime, stringValue.substring(1));                    
+                }
+            }
+            
             IRubyObject iRubyObject = JavaEmbedUtils.javaToRuby(rubyRuntime,
                     value);
             return iRubyObject;

@@ -1,8 +1,51 @@
 require 'java'
 require 'asciidoctor'
+require 'asciidoctor/extensions'
 
 class AsciidoctorModule
 	java_implements Java::Asciidoctor
+
+    def treeprocessor(extensionName)
+        Asciidoctor::Extensions.register do |document|
+            treeprocessor extensionName
+        end
+    end
+    
+    def include_processor(extensionName)
+        Asciidoctor::Extensions.register do |document|
+            include_processor extensionName
+        end
+    end
+
+    def preprocessor(extensionName)
+        Asciidoctor::Extensions.register do |document|
+            preprocessor extensionName
+        end
+    end
+    
+    def postprocessor(extensionName)
+        Asciidoctor::Extensions.register do |document|
+            postprocessor extensionName
+        end
+    end
+
+    def block_processor(blockSymbol, extensionName)
+        Asciidoctor::Extensions.register do |document|
+            block blockSymbol, extensionName
+        end
+    end
+
+    def block_macro(blockSymbol, extensionName)
+        Asciidoctor::Extensions.register do |document|
+            block_macro blockSymbol, extensionName
+        end
+    end
+
+    def inline_macro(blockSymbol, extensionName)
+        Asciidoctor::Extensions.register do |document|
+            inline_macro blockSymbol, extensionName
+        end
+    end
 
 	def render_file(content, options = {})
 		return Asciidoctor.render_file(content, options)
