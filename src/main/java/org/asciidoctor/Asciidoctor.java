@@ -7,6 +7,7 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.Map;
 
+import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.internal.Document;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 
@@ -126,8 +127,6 @@ public interface Asciidoctor {
 	 */
 	String renderFile(File filename, Options options);
 	
-	String renderFileExtension(File filename, String extensionName, Options options);
-	
 	/**
 	 *  Parse the AsciiDoc source input into an Document {@link Document} and render it to the specified backend format.
 	 *  
@@ -245,5 +244,7 @@ public interface Asciidoctor {
 			return JRubyAsciidoctor.create(gemPath);
 		}
 	}
+
+    void preprocessor(Class<? extends Preprocessor> preprocessor);
 
 }

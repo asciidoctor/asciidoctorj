@@ -17,6 +17,7 @@ import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.DocumentHeader;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.extension.Preprocessor;
 import org.jruby.CompatVersion;
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
@@ -127,19 +128,6 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		return returnExpectedValue(object);
 
 	}
-
-	
-	
-	@Override
-    public String renderFileExtension(File filename, String extensionName,
-            Options options) {
-	    
-	    this.rubyGemsPreloader.preloadRequiredLibraries(options.map());
-
-        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options.map());
-        Object object = this.asciidoctorModule.render_file_extension(filename.getAbsolutePath(), extensionName, rubyHash);
-        return returnExpectedValue(object);
-    }
 
     @SuppressWarnings("unchecked")
 	@Override
@@ -265,5 +253,12 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	@Override
 	public String[] renderFiles(Collection<File> asciidoctorFiles, OptionsBuilder options) {
 		return this.renderFiles(asciidoctorFiles, options.asMap());
+	}
+	
+	@Override
+	public void preprocessor(Class<? extends Preprocessor> preprocessor) {
+	    //this may change in future to external class to deal with dynamic imports
+	    this.rubyRuntime.evalScriptlet("java_import "+ preprocessor.getName());
+	    this.asciidoctorModule.preprocessor(preprocessor.getSimpleName());
 	}
 }
