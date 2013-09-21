@@ -7,6 +7,7 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.Map;
 
+import org.asciidoctor.extension.Postprocessor;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.internal.Document;
 import org.asciidoctor.internal.JRubyAsciidoctor;
@@ -247,4 +248,6 @@ public interface Asciidoctor {
 
     void preprocessor(Class<? extends Preprocessor> preprocessor);
 
+    void postprocessor(Class<? extends Postprocessor> postprocesor);
+    
 }

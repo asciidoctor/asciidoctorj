@@ -24,4 +24,10 @@ public interface Document {
 	 */
 	Map<String, Object> getAttributes();
 	
+	/**
+	 * 
+	 * @return basebackend attribute value
+	 */
+	boolean basebackend(String backend);
+	
 }

@@ -10,6 +10,12 @@ class AsciidoctorModule
             preprocessor extensionName
         end
     end
+    
+    def postprocessor(extensionName)
+        Asciidoctor::Extensions.register do |document|
+            postprocessor extensionName
+        end
+    end
 
 	def render_file(content, options = {})
 		return Asciidoctor.render_file(content, options)

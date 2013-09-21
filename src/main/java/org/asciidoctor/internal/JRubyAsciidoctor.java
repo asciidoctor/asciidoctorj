@@ -17,6 +17,7 @@ import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.DocumentHeader;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.extension.Postprocessor;
 import org.asciidoctor.extension.Preprocessor;
 import org.jruby.CompatVersion;
 import org.jruby.Ruby;
@@ -261,4 +262,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	    this.rubyRuntime.evalScriptlet("java_import "+ preprocessor.getName());
 	    this.asciidoctorModule.preprocessor(preprocessor.getSimpleName());
 	}
+
+    @Override
+    public void postprocessor(Class<? extends Postprocessor> postprocesor) {
+        //this may change in future to external class to deal with dynamic imports
+        this.rubyRuntime.evalScriptlet("java_import "+ postprocesor.getName());
+        this.asciidoctorModule.postprocessor(postprocesor.getSimpleName());
+    }
+	
+	
 }
