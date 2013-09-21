@@ -5,6 +5,12 @@ require 'asciidoctor/extensions'
 class AsciidoctorModule
 	java_implements Java::Asciidoctor
 
+    def include_processor(extensionName)
+        Asciidoctor::Extensions.register do |document|
+            include_processor extensionName
+        end
+    end
+
     def preprocessor(extensionName)
         Asciidoctor::Extensions.register do |document|
             preprocessor extensionName
@@ -14,6 +20,12 @@ class AsciidoctorModule
     def postprocessor(extensionName)
         Asciidoctor::Extensions.register do |document|
             postprocessor extensionName
+        end
+    end
+
+    def block(blockSymbol, extensionName)
+        Asciidoctor::Extensions.register do |document|
+            block blockSymbol, extensionName
         end
     end
 

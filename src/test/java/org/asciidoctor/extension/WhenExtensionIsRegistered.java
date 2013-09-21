@@ -46,7 +46,7 @@ public class WhenExtensionIsRegistered {
     }
     
     @Test
-    public void a_postprocessor_should_be_executed_before_document_is_rendered() throws IOException {
+    public void a_postprocessor_should_be_executed_after_document_is_rendered() throws IOException {
         asciidoctor.postprocessor(CustomFooterPostProcessor.class);
 
         Options options = options().inPlace(false)
@@ -65,4 +65,32 @@ public class WhenExtensionIsRegistered {
         		"Copyright Acme, Inc."));
     }
 
+    @Test
+    public void a_include_processor_should_be_executed_when_include_macro_is_found() {
+        asciidoctor.includeProcessor(UriIncludeProcessor.class);
+
+        String content = asciidoctor.renderFile(new File(
+                "target/test-classes/sample-with-uri-include.ad"),
+                new Options());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+
+        Element contentElement = doc.getElementsByAttributeValue("class",
+                "ruby language-ruby").first();
+
+        assertThat(contentElement.text(), is("source 'https://rubygems.org'gemspec# enable this group to use Guard for continuous testing# after removing comments, run `bundle install` then `guard` #group :guardtest do#  gem 'guard'#  gem 'guard-test'#  gem 'libnotify'#  gem 'listen', :github => 'guard/listen'#end"));
+
+    }
+    
+    //@Test
+    public void a_block_processor_should_be_executed_when_registered_block_is_found_in_document() throws IOException {
+        asciidoctor.block("yell", YellBlock.class);
+
+        String content = asciidoctor.renderFile(new File(
+                "target/test-classes/sample-with-yell-block.ad"),
+                new Options());
+        
+        System.out.println(content);
+    }
+    
 }

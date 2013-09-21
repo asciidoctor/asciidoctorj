@@ -7,6 +7,8 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.Map;
 
+import org.asciidoctor.extension.BlockProcessor;
+import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.Postprocessor;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.internal.Document;
@@ -249,5 +251,9 @@ public interface Asciidoctor {
     void preprocessor(Class<? extends Preprocessor> preprocessor);
 
     void postprocessor(Class<? extends Postprocessor> postprocesor);
+
+    void block(String blockName, Class<? extends BlockProcessor> blockProcessor);
+
+    void includeProcessor(Class<? extends IncludeProcessor> includeProcessor);
     
 }
