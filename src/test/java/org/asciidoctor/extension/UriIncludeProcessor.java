@@ -8,13 +8,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-import org.asciidoctor.internal.Document;
+import org.asciidoctor.internal.DocumentRuby;
 import org.asciidoctor.internal.PreprocessorReader;
 
 public class UriIncludeProcessor extends IncludeProcessor {
 
-    public UriIncludeProcessor(Document document) {
-        super(document);
+    public UriIncludeProcessor(DocumentRuby documentRuby) {
+        super(documentRuby);
     }
 
     @Override

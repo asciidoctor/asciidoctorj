@@ -5,6 +5,12 @@ require 'asciidoctor/extensions'
 class AsciidoctorModule
 	java_implements Java::Asciidoctor
 
+    def treeprocessor(extensionName)
+        Asciidoctor::Extensions.register do |document|
+            treeprocessor extensionName
+        end
+    end
+    
     def include_processor(extensionName)
         Asciidoctor::Extensions.register do |document|
             include_processor extensionName

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.asciidoctor.internal.Document;
+import org.asciidoctor.internal.DocumentRuby;
 import org.asciidoctor.internal.PreprocessorReader;
 
 public class FrontMatterPreprocessorExtension extends Preprocessor {
 
-    public FrontMatterPreprocessorExtension(Document document) {
-        super(document);
+    public FrontMatterPreprocessorExtension(DocumentRuby documentRuby) {
+        super(documentRuby);
     }
 
     @Override

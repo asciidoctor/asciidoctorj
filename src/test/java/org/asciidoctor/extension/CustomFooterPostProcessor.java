@@ -1,13 +1,13 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.internal.Document;
+import org.asciidoctor.internal.DocumentRuby;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 public class CustomFooterPostProcessor extends Postprocessor {
 
-    public CustomFooterPostProcessor(Document document) {
-        super(document);
+    public CustomFooterPostProcessor(DocumentRuby documentRuby) {
+        super(documentRuby);
     }
 
     @Override

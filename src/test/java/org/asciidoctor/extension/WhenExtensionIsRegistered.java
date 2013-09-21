@@ -1,17 +1,14 @@
 package org.asciidoctor.extension;
 
-import static org.junit.Assert.assertThat;
-import static org.asciidoctor.AttributesBuilder.attributes;
 import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
-import org.asciidoctor.Placement;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.jsoup.Jsoup;
@@ -79,6 +76,26 @@ public class WhenExtensionIsRegistered {
                 "ruby language-ruby").first();
 
         assertThat(contentElement.text(), is("source 'https://rubygems.org'gemspec# enable this group to use Guard for continuous testing# after removing comments, run `bundle install` then `guard` #group :guardtest do#  gem 'guard'#  gem 'guard-test'#  gem 'libnotify'#  gem 'listen', :github => 'guard/listen'#end"));
+
+    }
+    
+    @Test
+    public void a_treeprocessor_should_be_executed_in_document() {
+        asciidoctor.treeprocessor(TerminalCommandTreeprocessor.class);
+
+        String content = asciidoctor.renderFile(new File(
+                "target/test-classes/sample-with-terminal-command.ad"),
+                new Options());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+
+        Element contentElement = doc.getElementsByAttributeValue("class",
+                "command").first();
+        assertThat(contentElement.text(), is("echo \"Hello, World!\""));
+        
+        contentElement = doc.getElementsByAttributeValue("class",
+                "command").last();
+        assertThat(contentElement.text(), is("gem install asciidoctor"));
 
     }
     

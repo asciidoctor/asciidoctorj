@@ -21,6 +21,7 @@ import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.Postprocessor;
 import org.asciidoctor.extension.Preprocessor;
+import org.asciidoctor.extension.Treeprocessor;
 import org.jruby.CompatVersion;
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
@@ -84,8 +85,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		return config;
 	}
 
-	private static DocumentHeader toDocumentHeader(Document document) {
-		return DocumentHeader.createDocumentHeader(document.doctitle(), document.title(), document.getAttributes());
+	private static DocumentHeader toDocumentHeader(DocumentRuby documentRuby) {
+		return DocumentHeader.createDocumentHeader(documentRuby.doctitle(), documentRuby.title(), documentRuby.getAttributes());
 	}
 
 	@Override
@@ -93,8 +94,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
 		RubyHash rubyHash = getParseHeaderOnlyOption();
 
-		Document document = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
-		return toDocumentHeader(document);
+		DocumentRuby documentRuby = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
+		return toDocumentHeader(documentRuby);
 	}
 
 	@Override
@@ -102,8 +103,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
 		RubyHash rubyHash = getParseHeaderOnlyOption();
 
-		Document document = this.asciidoctorModule.load(content, rubyHash);
-		return toDocumentHeader(document);
+		DocumentRuby documentRuby = this.asciidoctorModule.load(content, rubyHash);
+		return toDocumentHeader(documentRuby);
 	}
 
 	@Override
@@ -124,7 +125,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	public String render(String content, Map<String, Object> options) {
 
 		this.rubyGemsPreloader.preloadRequiredLibraries(options);
-
+		addRubyRuntimeAsAttribute(options);
 		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
 		Object object = this.asciidoctorModule.render(content, rubyHash);
@@ -138,11 +139,26 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
 		this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
+		addRubyRuntimeAsAttribute(options);
+		
 		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+		
 		Object object = this.asciidoctorModule.render_file(filename.getAbsolutePath(), rubyHash);
 		return returnExpectedValue(object);
 
 	}
+
+    private void addRubyRuntimeAsAttribute(Map<String, Object> options) {
+        if(options.containsKey(Options.ATTRIBUTES)) {
+		    ((Map<String, Object>)options.get(Options.ATTRIBUTES)).put(Attributes.JRUBY, rubyRuntime);
+		} else {
+		    options.put(Options.ATTRIBUTES, new HashMap<String, Object>(){
+		        {
+		            put(Attributes.JRUBY, rubyRuntime);
+		        }
+		        });
+		}
+    }
 
 	private Map<String, Object> removeCopyCssAttribute(Map<String, Object> attributes) {
 		attributes.remove(Attributes.COPY_CSS);
@@ -279,6 +295,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
         this.asciidoctorModule.include_processor(includeProcessor.getSimpleName());
     }
 	
+    @Override
+    public void treeprocessor(Class<? extends Treeprocessor> treeProcessor) {
+      //this may change in future to external class to deal with dynamic imports
+        this.rubyRuntime.evalScriptlet("java_import "+ treeProcessor.getName());
+        this.asciidoctorModule.treeprocessor(treeProcessor.getSimpleName());
+    }
+    
 	@Override
 	public void block(String blockName, Class<? extends BlockProcessor> blockProcessor) {
 	  //this may change in future to external class to deal with dynamic imports

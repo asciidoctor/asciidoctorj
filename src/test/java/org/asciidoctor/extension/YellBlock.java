@@ -1,11 +1,11 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.internal.Document;
+import org.asciidoctor.internal.DocumentRuby;
 
 public class YellBlock extends BlockProcessor {
 
-    public YellBlock(Document document) {
-        super(document);
+    public YellBlock(DocumentRuby documentRuby) {
+        super(documentRuby);
     }
 
     @Override

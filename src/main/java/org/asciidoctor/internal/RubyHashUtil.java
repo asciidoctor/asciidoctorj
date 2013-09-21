@@ -76,6 +76,15 @@ public class RubyHashUtil {
         if (value instanceof List) {
             return toRubyArray(rubyRuntime, (List<Object>) value);
         } else {
+
+            if(value instanceof String) {
+                String stringValue = ((String)value);
+                
+                if(stringValue.startsWith(":")) {
+                    return RubyUtils.toSymbol(rubyRuntime, stringValue);                    
+                }
+            }
+            
             IRubyObject iRubyObject = JavaEmbedUtils.javaToRuby(rubyRuntime,
                     value);
             return iRubyObject;

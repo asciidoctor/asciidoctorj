@@ -24,6 +24,7 @@ public class Options {
 	public static final String DOCTYPE = "doctype";
 	public static final String BASEDIR = "base_dir";
 	public static final String TEMPLATE_CACHE ="template_cache";
+	public static final String SOURCE = "source";
 	
 	private Map<String, Object> options = new HashMap<String, Object>();
 	

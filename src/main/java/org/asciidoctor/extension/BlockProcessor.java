@@ -1,11 +1,11 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.internal.Document;
+import org.asciidoctor.internal.DocumentRuby;
 
 public abstract class BlockProcessor extends Processor {
 
-    public BlockProcessor(Document document) {
-        super(document);
+    public BlockProcessor(DocumentRuby documentRuby) {
+        super(documentRuby);
     }
 
     public void config() {
