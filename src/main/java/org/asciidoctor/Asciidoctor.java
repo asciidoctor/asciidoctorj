@@ -10,6 +10,7 @@ import java.util.Map;
 import org.asciidoctor.extension.BlockMacroProcessor;
 import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.extension.IncludeProcessor;
+import org.asciidoctor.extension.InlineMacroProcessor;
 import org.asciidoctor.extension.Postprocessor;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.extension.Treeprocessor;
@@ -350,7 +351,10 @@ public interface Asciidoctor {
 
     void treeprocessor(Class<? extends Treeprocessor> treeProcessor);
 
-    void block_macro(String blockName,
+    void blockMacro(String blockName,
             Class<? extends BlockMacroProcessor> blockMacroProcessor);
+
+    void inlineMacro(String blockName,
+            Class<? extends InlineMacroProcessor> inlineMacroProcessor);
 
 }

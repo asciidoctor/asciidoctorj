@@ -101,7 +101,7 @@ public class WhenExtensionIsRegistered {
     
     @Test
     public void a_block_macro_extension_should_be_executed_when_macro_is_detected() {
-        asciidoctor.block_macro("gist", GistMacro.class);
+        asciidoctor.blockMacro("gist", GistMacro.class);
         
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-gist-macro.ad"),
@@ -113,7 +113,18 @@ public class WhenExtensionIsRegistered {
         assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
     }
     
-    //@Test
+    @Test
+    public void an_inline_macro_extension_should_be_executed_when_an_inline_macro_is_detected() {
+        asciidoctor.inlineMacro("man", ManpageMacro.class);
+        
+        String content = asciidoctor.renderFile(new File(
+                "target/test-classes/sample-with-man-link.ad"),
+                new Options());
+        
+        System.out.println(content);
+    }
+    
+    @Test
     public void a_block_processor_should_be_executed_when_registered_block_is_found_in_document() throws IOException {
         asciidoctor.block("yell", YellBlock.class);
 

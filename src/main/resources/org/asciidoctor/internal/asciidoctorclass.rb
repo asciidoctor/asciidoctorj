@@ -29,7 +29,7 @@ class AsciidoctorModule
         end
     end
 
-    def block(blockSymbol, extensionName)
+    def block_processor(blockSymbol, extensionName)
         Asciidoctor::Extensions.register do |document|
             block blockSymbol, extensionName
         end
@@ -38,6 +38,12 @@ class AsciidoctorModule
     def block_macro(blockSymbol, extensionName)
         Asciidoctor::Extensions.register do |document|
             block_macro blockSymbol, extensionName
+        end
+    end
+
+    def inline_macro(blockSymbol, extensionName)
+        Asciidoctor::Extensions.register do |document|
+            inline_macro blockSymbol, extensionName
         end
     end
 

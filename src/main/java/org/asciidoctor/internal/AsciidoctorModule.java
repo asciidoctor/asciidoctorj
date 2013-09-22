@@ -7,8 +7,9 @@ public interface AsciidoctorModule {
 
     void preprocessor(String preprocessorClassName);
     void postprocessor(String postprocessorClassName);
-    void block(Object blockSymbol, String blockClassName);
+    void block_processor(Object blockSymbol, String blockClassName);
     void block_macro(Object blockSymbol, String blockClassName);
+    void inline_macro(Object blockSymbol, String blockClassName);
     void include_processor(String includeProcessorClassName);
     void treeprocessor(String treeprocessor);
     
