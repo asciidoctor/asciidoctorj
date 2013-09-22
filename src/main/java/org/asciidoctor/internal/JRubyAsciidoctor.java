@@ -17,6 +17,7 @@ import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.DocumentHeader;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.extension.BlockMacroProcessor;
 import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.Postprocessor;
@@ -307,5 +308,12 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	  //this may change in future to external class to deal with dynamic imports
         this.rubyRuntime.evalScriptlet("java_import "+ blockProcessor.getName());
         this.asciidoctorModule.block(RubyUtils.toSymbol(rubyRuntime, blockName), blockProcessor.getSimpleName());
+	}
+	
+	@Override
+	public void block_macro(String blockName, Class<? extends BlockMacroProcessor> blockMacroProcessor) {
+	  //this may change in future to external class to deal with dynamic imports
+        this.rubyRuntime.evalScriptlet("java_import "+ blockMacroProcessor.getName());
+        this.asciidoctorModule.block_macro(RubyUtils.toSymbol(rubyRuntime, blockName), blockMacroProcessor.getSimpleName());
 	}
 }

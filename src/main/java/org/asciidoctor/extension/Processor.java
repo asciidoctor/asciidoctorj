@@ -34,8 +34,6 @@ public class Processor {
         IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Block");
         RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime,
                 options);
-        //convertMapToRubyHashWithSymbols.put(RubyUtils.toSymbol(rubyRuntime, "content_model"), RubyUtils.toSymbol(rubyRuntime, "verbatim"));
-        //convertMapToRubyHashWithSymbols.put(RubyUtils.toSymbol(rubyRuntime, "subs"), new Object[] {});
         Object[] parameters = {
                 parent.getDocumentRuby(),
                 RubyUtils.toSymbol(rubyRuntime, context),

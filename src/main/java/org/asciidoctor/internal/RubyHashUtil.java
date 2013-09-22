@@ -81,7 +81,7 @@ public class RubyHashUtil {
                 String stringValue = ((String)value);
                 
                 if(stringValue.startsWith(":")) {
-                    return RubyUtils.toSymbol(rubyRuntime, stringValue);                    
+                    return RubyUtils.toSymbol(rubyRuntime, stringValue.substring(1));                    
                 }
             }
             

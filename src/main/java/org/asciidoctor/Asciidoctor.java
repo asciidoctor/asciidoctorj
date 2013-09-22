@@ -7,6 +7,7 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.Map;
 
+import org.asciidoctor.extension.BlockMacroProcessor;
 import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.Postprocessor;
@@ -348,5 +349,8 @@ public interface Asciidoctor {
     void includeProcessor(Class<? extends IncludeProcessor> includeProcessor);
 
     void treeprocessor(Class<? extends Treeprocessor> treeProcessor);
+
+    void block_macro(String blockName,
+            Class<? extends BlockMacroProcessor> blockMacroProcessor);
 
 }
