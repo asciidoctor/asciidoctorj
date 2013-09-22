@@ -12,7 +12,7 @@ public class GistMacro extends BlockMacroProcessor {
     public GistMacro(String target, DocumentRuby documentRuby) {
         super(documentRuby, target);
     }
-
+    
     @Override
     public Block process(Document parent, String target,
             Map<String, Object> attributes) {

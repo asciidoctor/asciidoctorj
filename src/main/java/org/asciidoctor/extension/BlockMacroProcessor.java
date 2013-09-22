@@ -24,6 +24,6 @@ public abstract class BlockMacroProcessor extends MacroProcessor {
         return process(new Document(parent, rubyRuntime), target, attributes);
     }
     
-    public abstract Block process(Document parent, String target, Map<String, Object> attributes);
+    protected abstract Block process(Document parent, String target, Map<String, Object> attributes);
     
 }
