@@ -9,11 +9,8 @@ import org.asciidoctor.internal.DocumentRuby;
 
 public abstract class BlockMacroProcessor extends MacroProcessor {
 
-    protected String macroName;
-    
     public BlockMacroProcessor(DocumentRuby documentRuby, String macroName) {
-        super(documentRuby);
-        this.macroName = macroName;
+        super(documentRuby, macroName);
     }
 
     public Map<Object, Object> options() {

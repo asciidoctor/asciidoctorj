@@ -4,8 +4,11 @@ import org.asciidoctor.internal.DocumentRuby;
 
 public class MacroProcessor extends Processor {
 
-    public MacroProcessor(DocumentRuby documentRuby) {
+    protected String macroName;
+    
+    public MacroProcessor(DocumentRuby documentRuby, String macroName) {
         super(documentRuby);
+        this.macroName = macroName;
     }
 
 }
