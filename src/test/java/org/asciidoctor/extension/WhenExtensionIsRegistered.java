@@ -2,6 +2,7 @@ package org.asciidoctor.extension;
 
 import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -27,7 +28,10 @@ public class WhenExtensionIsRegistered {
 
     @Test
     public void a_preprocessor_should_be_executed_before_document_is_rendered() {
-        asciidoctor.preprocessor(FrontMatterPreprocessorExtension.class);
+        
+        ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
+        
+        extensionRegistry.preprocessor(FrontMatterPreprocessorExtension.class);
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/render-with-front-matter.adoc"),
@@ -44,7 +48,10 @@ public class WhenExtensionIsRegistered {
     
     @Test
     public void a_postprocessor_should_be_executed_after_document_is_rendered() throws IOException {
-        asciidoctor.postprocessor(CustomFooterPostProcessor.class);
+       
+        ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
+        
+        extensionRegistry.postprocessor(CustomFooterPostProcessor.class);
 
         Options options = options().inPlace(false)
                 .toFile(new File(testFolder.getRoot(), "rendersample.html"))
@@ -58,13 +65,15 @@ public class WhenExtensionIsRegistered {
         Document doc = Jsoup.parse(renderedFile, "UTF-8");
         
         Element footer = doc.getElementById("footer-text");
-        assertThat(footer.text(), is("Last updated 2013-09-21 09:25:45 CEST " + 
-        		"Copyright Acme, Inc."));
+        assertThat(footer.text(), containsString("Copyright Acme, Inc."));
     }
 
     @Test
     public void a_include_processor_should_be_executed_when_include_macro_is_found() {
-        asciidoctor.includeProcessor(UriIncludeProcessor.class);
+        
+        ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
+        
+        extensionRegistry.includeProcessor(UriIncludeProcessor.class);
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-uri-include.ad"),
@@ -81,7 +90,10 @@ public class WhenExtensionIsRegistered {
     
     @Test
     public void a_treeprocessor_should_be_executed_in_document() {
-        asciidoctor.treeprocessor(TerminalCommandTreeprocessor.class);
+        
+        ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
+        
+        extensionRegistry.treeprocessor(TerminalCommandTreeprocessor.class);
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-terminal-command.ad"),
@@ -101,7 +113,10 @@ public class WhenExtensionIsRegistered {
     
     @Test
     public void a_block_macro_extension_should_be_executed_when_macro_is_detected() {
-        asciidoctor.blockMacro("gist", GistMacro.class);
+        
+        ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
+        
+        extensionRegistry.blockMacro("gist", GistMacro.class);
         
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-gist-macro.ad"),
@@ -115,7 +130,10 @@ public class WhenExtensionIsRegistered {
     
     @Test
     public void an_inline_macro_extension_should_be_executed_when_an_inline_macro_is_detected() {
-        asciidoctor.inlineMacro("man", ManpageMacro.class);
+        
+        ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
+        
+        extensionRegistry.inlineMacro("man", ManpageMacro.class);
         
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-man-link.ad"),
@@ -126,7 +144,10 @@ public class WhenExtensionIsRegistered {
     
     @Test
     public void a_block_processor_should_be_executed_when_registered_block_is_found_in_document() throws IOException {
-        asciidoctor.block("yell", YellBlock.class);
+        
+        ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
+        
+        extensionRegistry.block("yell", YellBlock.class);
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-yell-block.ad"),

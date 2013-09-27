@@ -19,6 +19,7 @@ import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.extension.BlockMacroProcessor;
 import org.asciidoctor.extension.BlockProcessor;
+import org.asciidoctor.extension.ExtensionRegistry;
 import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.InlineMacroProcessor;
 import org.asciidoctor.extension.Postprocessor;
@@ -308,74 +309,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     @Override
-    public void preprocessor(Class<? extends Preprocessor> preprocessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        this.rubyRuntime.evalScriptlet("java_import " + preprocessor.getName());
-        this.asciidoctorModule.preprocessor(preprocessor.getSimpleName());
+    public ExtensionRegistry extensionRegistry() {
+        return new ExtensionRegistry(asciidoctorModule, rubyRuntime);
     }
 
-    @Override
-    public void postprocessor(Class<? extends Postprocessor> postprocesor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        this.rubyRuntime.evalScriptlet("java_import " + postprocesor.getName());
-        this.asciidoctorModule.postprocessor(postprocesor.getSimpleName());
-    }
-
-    @Override
-    public void includeProcessor(
-            Class<? extends IncludeProcessor> includeProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        this.rubyRuntime.evalScriptlet("java_import "
-                + includeProcessor.getName());
-        this.asciidoctorModule.include_processor(includeProcessor
-                .getSimpleName());
-    }
-
-    @Override
-    public void treeprocessor(Class<? extends Treeprocessor> treeProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        this.rubyRuntime
-                .evalScriptlet("java_import " + treeProcessor.getName());
-        this.asciidoctorModule.treeprocessor(treeProcessor.getSimpleName());
-    }
-
-    @Override
-    public void block(String blockName,
-            Class<? extends BlockProcessor> blockProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        this.rubyRuntime.evalScriptlet("java_import "
-                + blockProcessor.getName());
-        this.asciidoctorModule.block_processor(
-                RubyUtils.toSymbol(rubyRuntime, blockName),
-                blockProcessor.getSimpleName());
-    }
-
-    @Override
-    public void blockMacro(String blockName,
-            Class<? extends BlockMacroProcessor> blockMacroProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        this.rubyRuntime.evalScriptlet("java_import "
-                + blockMacroProcessor.getName());
-        this.asciidoctorModule.block_macro(
-                RubyUtils.toSymbol(rubyRuntime, blockName),
-                blockMacroProcessor.getSimpleName());
-    }
-
-    @Override
-    public void inlineMacro(String blockName,
-            Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        this.rubyRuntime.evalScriptlet("java_import "
-                + inlineMacroProcessor.getName());
-        this.asciidoctorModule.inline_macro(
-                RubyUtils.toSymbol(rubyRuntime, blockName),
-                inlineMacroProcessor.getSimpleName());
-    }
+    
+    
 }

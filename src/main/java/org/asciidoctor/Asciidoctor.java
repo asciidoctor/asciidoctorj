@@ -7,14 +7,7 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.Map;
 
-import org.asciidoctor.extension.BlockMacroProcessor;
-import org.asciidoctor.extension.BlockProcessor;
-import org.asciidoctor.extension.IncludeProcessor;
-import org.asciidoctor.extension.InlineMacroProcessor;
-import org.asciidoctor.extension.Postprocessor;
-import org.asciidoctor.extension.Preprocessor;
-import org.asciidoctor.extension.Treeprocessor;
-import org.asciidoctor.internal.Block;
+import org.asciidoctor.extension.ExtensionRegistry;
 import org.asciidoctor.internal.DocumentRuby;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 
@@ -308,6 +301,12 @@ public interface Asciidoctor {
     DocumentHeader readDocumentHeader(Reader contentReader);
 
     /**
+     * Creates an extension registry ready to be used for registering all processors
+     * @return Extension Registry object.
+     */
+    ExtensionRegistry extensionRegistry();
+    
+    /**
      * Factory for creating a new instance of Asciidoctor interface.
      * 
      * @author lordofthejars
@@ -340,21 +339,5 @@ public interface Asciidoctor {
             return JRubyAsciidoctor.create(gemPath);
         }
     }
-
-    void preprocessor(Class<? extends Preprocessor> preprocessor);
-
-    void postprocessor(Class<? extends Postprocessor> postprocesor);
-
-    void block(String blockName, Class<? extends BlockProcessor> blockProcessor);
-
-    void includeProcessor(Class<? extends IncludeProcessor> includeProcessor);
-
-    void treeprocessor(Class<? extends Treeprocessor> treeProcessor);
-
-    void blockMacro(String blockName,
-            Class<? extends BlockMacroProcessor> blockMacroProcessor);
-
-    void inlineMacro(String blockName,
-            Class<? extends InlineMacroProcessor> inlineMacroProcessor);
 
 }
