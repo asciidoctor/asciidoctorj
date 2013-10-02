@@ -122,7 +122,7 @@ public class WhenExtensionIsRegistered {
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-gist-macro.ad"),
                 new Options());
-        
+
         Document doc = Jsoup.parse(content, "UTF-8");
         Element script = doc.getElementsByTag("script").first();
         
