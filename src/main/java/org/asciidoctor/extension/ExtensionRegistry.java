@@ -53,6 +53,13 @@ public class ExtensionRegistry {
         // imports
         this.rubyRuntime.evalScriptlet("java_import "
                 + blockProcessor.getName());
+        try {
+            // invoke setup(Ruby) method to convert config Map to RubyHash with symbols
+            blockProcessor.getMethod("setup", Ruby.class).invoke(null, this.rubyRuntime);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to invoke setup method on block processor class: " + blockProcessor, e);
+        }
+        
         this.asciidoctorModule.block_processor(
                 RubyUtils.toSymbol(rubyRuntime, blockName),
                 blockProcessor.getSimpleName());

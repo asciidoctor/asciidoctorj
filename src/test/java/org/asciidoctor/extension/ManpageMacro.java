@@ -8,17 +8,15 @@ import org.asciidoctor.internal.DocumentRuby;
 
 public class ManpageMacro extends InlineMacroProcessor {
 
-    public ManpageMacro(DocumentRuby documentRuby, String macroName) {
-        super(documentRuby, macroName);
+    public ManpageMacro(String macroName, DocumentRuby documentRuby) {
+        super(macroName, documentRuby);
     }
 
     @Override
-    protected Block process(Document parent, String target,
+    protected String process(Document parent, String target,
             Map<String, Object> attributes) {
         
-        System.out.println("Hello");
-        
-        return null;
+        return "<a href=\"" + target + ".html\">" + target + "</a>";
     }
 
 }

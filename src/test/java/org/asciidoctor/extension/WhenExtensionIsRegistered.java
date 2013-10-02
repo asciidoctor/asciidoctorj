@@ -15,6 +15,7 @@ import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -121,7 +122,7 @@ public class WhenExtensionIsRegistered {
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-gist-macro.ad"),
                 new Options());
-        
+
         Document doc = Jsoup.parse(content, "UTF-8");
         Element script = doc.getElementsByTag("script").first();
         
@@ -146,14 +147,16 @@ public class WhenExtensionIsRegistered {
     public void a_block_processor_should_be_executed_when_registered_block_is_found_in_document() throws IOException {
         
         ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
-        
         extensionRegistry.block("yell", YellBlock.class);
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-yell-block.ad"),
                 new Options());
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Elements elements = doc.getElementsByClass("paragraph");
+        assertThat(elements.size(), is(2));
+        assertThat(elements.get(1).text(), is("THE TIME IS NOW. GET A MOVE ON."));
         
-        System.out.println(content);
     }
     
 }

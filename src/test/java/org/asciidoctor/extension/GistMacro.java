@@ -9,8 +9,8 @@ import org.asciidoctor.internal.DocumentRuby;
 
 public class GistMacro extends BlockMacroProcessor {
 
-    public GistMacro(String target, DocumentRuby documentRuby) {
-        super(documentRuby, target);
+    public GistMacro(String macroName, DocumentRuby documentRuby) {
+        super(macroName, documentRuby);
     }
     
     @Override
