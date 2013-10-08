@@ -46,6 +46,28 @@ public class WhenAttributesAreUsedInAsciidoctor {
     private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
     @Test
+    public void render_content_without_attributes_should_embed_css_by_default() throws IOException {
+        
+        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
+                .toDir(testFolder.getRoot()).get();
+
+        asciidoctor.renderFile(new File(
+                "target/test-classes/rendersample.asciidoc"), options);
+
+        // String readFull = IOUtils.readFull(new FileInputStream(new
+        // File(testFolder.getRoot(), "rendersample.html")));
+
+        Document doc = Jsoup.parse(new File(testFolder.getRoot(),
+                "rendersample.html"), "UTF-8");
+        Elements cssStyle = doc.select("style");
+        assertThat(cssStyle.html(), is(not("")));
+
+        Elements link = doc.select("link");
+        assertThat(link.html(), is("".trim()));
+        
+    }
+    
+    @Test
     public void should_skip_front_matter_if_specified_by_skip_front_matter_attribute()
             throws IOException {
 
