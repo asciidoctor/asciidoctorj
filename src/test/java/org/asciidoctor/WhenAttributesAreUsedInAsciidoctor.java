@@ -46,7 +46,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
     private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
     @Test
-    public void source_highlight_attribute_should_add_required_javascript_libraries_as_highlighter() throws IOException {
+    public void source_highlighter_attribute_should_add_required_javascript_libraries_as_highlighter() throws IOException {
         
         Attributes attributes = attributes().sourceHighlighter("prettify").get();
         
