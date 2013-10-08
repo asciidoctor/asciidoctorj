@@ -46,6 +46,25 @@ public class WhenAttributesAreUsedInAsciidoctor {
     private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
     @Test
+    public void source_highlight_attribute_should_add_required_javascript_libraries_as_highlighter() throws IOException {
+        
+        Attributes attributes = attributes().sourceHighlighter("prettify").get();
+        
+        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
+                .toDir(testFolder.getRoot()).attributes(attributes).get();
+
+        asciidoctor.renderFile(new File(
+                "target/test-classes/rendersample.asciidoc"), options);
+
+        Document doc = Jsoup.parse(new File(testFolder.getRoot(),
+                "rendersample.html"), "UTF-8");
+        
+        Elements link = doc.select("link");
+        assertThat(link.attr("href"), containsString("prettify.min.css"));
+        
+    }
+    
+    @Test
     public void render_content_without_attributes_should_embed_css_by_default() throws IOException {
         
         Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
@@ -53,9 +72,6 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         asciidoctor.renderFile(new File(
                 "target/test-classes/rendersample.asciidoc"), options);
-
-        // String readFull = IOUtils.readFull(new FileInputStream(new
-        // File(testFolder.getRoot(), "rendersample.html")));
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(),
                 "rendersample.html"), "UTF-8");
