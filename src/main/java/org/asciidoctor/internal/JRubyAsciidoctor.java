@@ -142,7 +142,6 @@ public class JRubyAsciidoctor implements Asciidoctor {
     public String render(String content, Map<String, Object> options) {
 
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
-        addRubyRuntimeAsAttribute(options);
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
                 rubyRuntime, options);
 
@@ -157,8 +156,6 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
-        addRubyRuntimeAsAttribute(options);
-
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
                 rubyRuntime, options);
 
@@ -168,24 +165,6 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
     }
 
-    private void addRubyRuntimeAsAttribute(Map<String, Object> options) {
-        if (options.containsKey(Options.ATTRIBUTES)) {
-            ((Map<String, Object>) options.get(Options.ATTRIBUTES)).put(
-                    Attributes.JRUBY, rubyRuntime);
-        } else {
-            options.put(Options.ATTRIBUTES, new HashMap<String, Object>() {
-                {
-                    put(Attributes.JRUBY, rubyRuntime);
-                }
-            });
-        }
-    }
-
-    private Map<String, Object> removeCopyCssAttribute(
-            Map<String, Object> attributes) {
-        attributes.remove(Attributes.COPY_CSS);
-        return attributes;
-    }
 
     /**
      * This method has been added to deal with the fact that asciidoctor 0.1.2

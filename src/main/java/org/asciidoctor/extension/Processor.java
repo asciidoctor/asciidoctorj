@@ -2,11 +2,11 @@ package org.asciidoctor.extension;
 
 import java.util.Map;
 
-import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.asciidoctor.internal.Block;
 import org.asciidoctor.internal.Document;
 import org.asciidoctor.internal.DocumentRuby;
+import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
@@ -20,8 +20,7 @@ public class Processor {
     protected Ruby rubyRuntime;
 
     public Processor(DocumentRuby documentRuby) {
-        this.rubyRuntime = (Ruby) documentRuby.getAttributes()
-                .get(Attributes.JRUBY);
+        this.rubyRuntime = JRubyRuntimeContext.get();
         this.document = new Document(documentRuby, rubyRuntime);
     }
 

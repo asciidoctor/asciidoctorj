@@ -51,8 +51,6 @@ public class Attributes {
     public static final String ATTRIBUTE_MISSING = "attribute-missing";
     public static final String ATTRIBUTE_UNDEFINED = "attribute-undefined";
     
-    public static final String JRUBY = "jruby";
-	
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
 	public Attributes() {
