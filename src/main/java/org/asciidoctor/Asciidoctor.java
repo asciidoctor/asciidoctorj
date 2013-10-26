@@ -7,7 +7,8 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.Map;
 
-import org.asciidoctor.extension.ExtensionRegistry;
+import org.asciidoctor.extension.JavaExtensionRegistry;
+import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.internal.DocumentRuby;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 
@@ -304,7 +305,13 @@ public interface Asciidoctor {
      * Creates an extension registry ready to be used for registering all processors
      * @return Extension Registry object.
      */
-    ExtensionRegistry extensionRegistry();
+    JavaExtensionRegistry javaExtensionRegistry();
+    
+    /**
+     * Creates an Ruby extension registry ready to be used for registering all processors
+     * @return Extension Registry object.
+     */
+    RubyExtensionRegistry rubyExtensionRegistry();
     
     /**
      * Factory for creating a new instance of Asciidoctor interface.
@@ -339,5 +346,6 @@ public interface Asciidoctor {
             return JRubyAsciidoctor.create(gemPath);
         }
     }
+
 
 }

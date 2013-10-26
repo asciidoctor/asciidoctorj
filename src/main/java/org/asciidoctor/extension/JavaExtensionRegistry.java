@@ -4,12 +4,12 @@ import org.asciidoctor.internal.AsciidoctorModule;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 
-public class ExtensionRegistry {
+public class JavaExtensionRegistry {
 
     private AsciidoctorModule asciidoctorModule;
     private Ruby rubyRuntime;
     
-    public ExtensionRegistry(AsciidoctorModule asciidoctorModule, Ruby rubyRuntime) {
+    public JavaExtensionRegistry(AsciidoctorModule asciidoctorModule, Ruby rubyRuntime) {
         super();
         this.asciidoctorModule = asciidoctorModule;
         this.rubyRuntime = rubyRuntime;

@@ -2,6 +2,7 @@ package org.asciidoctor.extension;
 
 import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 
@@ -20,7 +21,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-public class WhenExtensionIsRegistered {
+public class WhenJavaExtensionIsRegistered {
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -30,9 +31,9 @@ public class WhenExtensionIsRegistered {
     @Test
     public void a_preprocessor_should_be_executed_before_document_is_rendered() {
         
-        ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
         
-        extensionRegistry.preprocessor(FrontMatterPreprocessorExtension.class);
+        javaExtensionRegistry.preprocessor(FrontMatterPreprocessorExtension.class);
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/render-with-front-matter.adoc"),
@@ -50,9 +51,9 @@ public class WhenExtensionIsRegistered {
     @Test
     public void a_postprocessor_should_be_executed_after_document_is_rendered() throws IOException {
        
-        ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
         
-        extensionRegistry.postprocessor(CustomFooterPostProcessor.class);
+        javaExtensionRegistry.postprocessor(CustomFooterPostProcessor.class);
 
         Options options = options().inPlace(false)
                 .toFile(new File(testFolder.getRoot(), "rendersample.html"))
@@ -72,9 +73,9 @@ public class WhenExtensionIsRegistered {
     @Test
     public void a_include_processor_should_be_executed_when_include_macro_is_found() {
         
-        ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
         
-        extensionRegistry.includeProcessor(UriIncludeProcessor.class);
+        javaExtensionRegistry.includeProcessor(UriIncludeProcessor.class);
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-uri-include.ad"),
@@ -85,16 +86,16 @@ public class WhenExtensionIsRegistered {
         Element contentElement = doc.getElementsByAttributeValue("class",
                 "ruby language-ruby").first();
 
-        assertThat(contentElement.text(), is("source 'https://rubygems.org'gemspec# enable this group to use Guard for continuous testing# after removing comments, run `bundle install` then `guard` #group :guardtest do#  gem 'guard'#  gem 'guard-test'#  gem 'libnotify'#  gem 'listen', :github => 'guard/listen'#end"));
+        assertThat(contentElement.text(), startsWith("source 'https://rubygems.org"));
 
     }
     
     @Test
     public void a_treeprocessor_should_be_executed_in_document() {
         
-        ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
         
-        extensionRegistry.treeprocessor(TerminalCommandTreeprocessor.class);
+        javaExtensionRegistry.treeprocessor(TerminalCommandTreeprocessor.class);
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-terminal-command.ad"),
@@ -115,9 +116,9 @@ public class WhenExtensionIsRegistered {
     @Test
     public void a_block_macro_extension_should_be_executed_when_macro_is_detected() {
         
-        ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
         
-        extensionRegistry.blockMacro("gist", GistMacro.class);
+        javaExtensionRegistry.blockMacro("gist", GistMacro.class);
         
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-gist-macro.ad"),
@@ -132,9 +133,9 @@ public class WhenExtensionIsRegistered {
     @Test
     public void an_inline_macro_extension_should_be_executed_when_an_inline_macro_is_detected() {
         
-        ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
         
-        extensionRegistry.inlineMacro("man", ManpageMacro.class);
+        javaExtensionRegistry.inlineMacro("man", ManpageMacro.class);
         
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-man-link.ad"),
@@ -149,8 +150,8 @@ public class WhenExtensionIsRegistered {
     @Test
     public void a_block_processor_should_be_executed_when_registered_block_is_found_in_document() throws IOException {
         
-        ExtensionRegistry extensionRegistry = this.asciidoctor.extensionRegistry();
-        extensionRegistry.block("yell", YellBlock.class);
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+        javaExtensionRegistry.block("yell", YellBlock.class);
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-yell-block.ad"),

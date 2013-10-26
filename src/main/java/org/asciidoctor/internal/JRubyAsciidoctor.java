@@ -12,19 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.Attributes;
 import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.DocumentHeader;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.extension.BlockMacroProcessor;
-import org.asciidoctor.extension.BlockProcessor;
-import org.asciidoctor.extension.ExtensionRegistry;
-import org.asciidoctor.extension.IncludeProcessor;
-import org.asciidoctor.extension.InlineMacroProcessor;
-import org.asciidoctor.extension.Postprocessor;
-import org.asciidoctor.extension.Preprocessor;
-import org.asciidoctor.extension.Treeprocessor;
+import org.asciidoctor.extension.JavaExtensionRegistry;
+import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.jruby.CompatVersion;
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
@@ -290,10 +283,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     @Override
-    public ExtensionRegistry extensionRegistry() {
-        return new ExtensionRegistry(asciidoctorModule, rubyRuntime);
+    public JavaExtensionRegistry javaExtensionRegistry() {
+        return new JavaExtensionRegistry(asciidoctorModule, rubyRuntime);
     }
 
-    
+    @Override
+    public RubyExtensionRegistry rubyExtensionRegistry() {
+        return new RubyExtensionRegistry(asciidoctorModule, rubyRuntime);
+    }
     
 }
