@@ -70,6 +70,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         injectEnvironmentVariables(rubyRuntime, environmentVars);
 
+        JRubyRuntimeContext.set(rubyRuntime);
+        
         JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(
                 rubyRuntime);
 
