@@ -16,6 +16,7 @@ import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.DocumentHeader;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.extension.ExtensionRegistryExecutor;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.jruby.CompatVersion;
@@ -42,7 +43,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     public static Asciidoctor create() {
-        return createJRubyAsciidoctorInstance(new HashMap<String, Object>());
+        Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(new HashMap<String, Object>());
+        registerExtensions(asciidoctor);  
+        
+        return asciidoctor;
     }
 
     public static Asciidoctor create(String gemPath) {
@@ -50,7 +54,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
         gemPathVar.put(GEM_PATH, gemPath);
 
         Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(gemPathVar);
+        registerExtensions(asciidoctor);        
+        
         return asciidoctor;
+    }
+
+    private static void registerExtensions(Asciidoctor asciidoctor) {
+        new ExtensionRegistryExecutor(asciidoctor).registerAllExtensions();
     }
 
     private static Asciidoctor createJRubyAsciidoctorInstance(
