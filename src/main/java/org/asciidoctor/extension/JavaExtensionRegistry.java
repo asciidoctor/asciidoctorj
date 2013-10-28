@@ -18,14 +18,14 @@ public class JavaExtensionRegistry {
     public void preprocessor(Class<? extends Preprocessor> preprocessor) {
         // this may change in future to external class to deal with dynamic
         // imports
-        this.rubyRuntime.evalScriptlet("java_import " + preprocessor.getName());
+        this.rubyRuntime.evalScriptlet("java_import " + getImportLine(preprocessor));
         this.asciidoctorModule.preprocessor(preprocessor.getSimpleName());
     }
 
     public void postprocessor(Class<? extends Postprocessor> postprocesor) {
         // this may change in future to external class to deal with dynamic
         // imports
-        this.rubyRuntime.evalScriptlet("java_import " + postprocesor.getName());
+        this.rubyRuntime.evalScriptlet("java_import " + getImportLine(postprocesor));
         this.asciidoctorModule.postprocessor(postprocesor.getSimpleName());
     }
 
@@ -34,7 +34,7 @@ public class JavaExtensionRegistry {
         // this may change in future to external class to deal with dynamic
         // imports
         this.rubyRuntime.evalScriptlet("java_import "
-                + includeProcessor.getName());
+                + getImportLine(includeProcessor));
         this.asciidoctorModule.include_processor(includeProcessor
                 .getSimpleName());
     }
@@ -43,7 +43,7 @@ public class JavaExtensionRegistry {
         // this may change in future to external class to deal with dynamic
         // imports
         this.rubyRuntime
-                .evalScriptlet("java_import " + treeProcessor.getName());
+                .evalScriptlet("java_import " + getImportLine(treeProcessor));
         this.asciidoctorModule.treeprocessor(treeProcessor.getSimpleName());
     }
 
@@ -52,7 +52,7 @@ public class JavaExtensionRegistry {
         // this may change in future to external class to deal with dynamic
         // imports
         this.rubyRuntime.evalScriptlet("java_import "
-                + blockProcessor.getName());
+                + getImportLine(blockProcessor));
         try {
             // invoke setup(Ruby) method to convert config Map to RubyHash with symbols
             blockProcessor.getMethod("setup", Ruby.class).invoke(null, this.rubyRuntime);
@@ -70,7 +70,7 @@ public class JavaExtensionRegistry {
         // this may change in future to external class to deal with dynamic
         // imports
         this.rubyRuntime.evalScriptlet("java_import "
-                + blockMacroProcessor.getName());
+                + getImportLine(blockMacroProcessor));
         this.asciidoctorModule.block_macro(
                 RubyUtils.toSymbol(rubyRuntime, blockName),
                 blockMacroProcessor.getSimpleName());
@@ -81,11 +81,14 @@ public class JavaExtensionRegistry {
         // this may change in future to external class to deal with dynamic
         // imports
         this.rubyRuntime.evalScriptlet("java_import "
-                + inlineMacroProcessor.getName());
+                + getImportLine(inlineMacroProcessor));
         this.asciidoctorModule.inline_macro(
                 RubyUtils.toSymbol(rubyRuntime, blockName),
                 inlineMacroProcessor.getSimpleName());
     }
     
+    private String getImportLine(Class<?> extensionClass) {
+        return extensionClass.getName().replace("$", "::");
+    }
     
 }
