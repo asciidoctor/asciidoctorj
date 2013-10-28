@@ -2,6 +2,7 @@ package org.asciidoctor.extension;
 
 import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
@@ -111,6 +112,33 @@ public class WhenJavaExtensionIsRegistered {
                 "command").last();
         assertThat(contentElement.text(), is("gem install asciidoctor"));
 
+    }
+    
+    @Test
+    public void extensions_should_be_correctly_added_using_extension_registry() throws IOException {
+
+        //To avoid registering the same extension over and over for all tests, service is instantiated manually.
+        new ArrowsAndBoxesExtension().register(asciidoctor);
+        
+        Options options = options().inPlace(false)
+                .toFile(new File(testFolder.getRoot(), "rendersample.html"))
+                .safe(SafeMode.UNSAFE).get();
+
+        asciidoctor.renderFile(new File(
+                "target/test-classes/arrows-and-boxes-example.ad"), options);
+
+        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
+        Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        
+        Element arrowsJs = doc.select("script[src=http://www.headjump.de/javascripts/arrowsandboxes.js").first();
+        assertThat(arrowsJs, is(notNullValue()));
+        
+        Element arrowsCss = doc.select("link[href=http://www.headjump.de/stylesheets/arrowsandboxes.css").first();
+        assertThat(arrowsCss, is(notNullValue()));
+        
+        Element arrowsAndBoxes = doc.select("pre[class=arrows-and-boxes").first();
+        assertThat(arrowsAndBoxes, is(notNullValue()));
+        
     }
     
     @Test
