@@ -20,6 +20,8 @@ import org.asciidoctor.internal.JRubyAsciidoctor;
  */
 public interface Asciidoctor {
 
+	public static final String STRUCTURE_MAX_LEVEL = "STRUCTURE_MAX_LEVEL";
+	
     /**
      * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
      * render it to the specified backend format.
@@ -273,6 +275,47 @@ public interface Asciidoctor {
     String[] renderFiles(Collection<File> asciidoctorFiles,
             OptionsBuilder options);
 
+    /**
+     * Reads and creates structured document containing header and content chunks.
+     * By default it dig only one level down but it can be tweak by setting STRUCTURE_MAX_LEVEL
+     * option.
+     * 
+     * @param filename
+     *            to read the attributes.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return structured document.
+     */
+    StructuredDocument readDocumentStructure(File filename,Map<String,Object> options);
+    
+    /**
+     * Reads and creates structured document containing header and content chunks.
+     * By default it dig only one level down but it can be tweak by setting STRUCTURE_MAX_LEVEL
+     * option.
+     * 
+     * @param content
+     *            where rendered content is written. Writer is flushed, but not
+     *            closed.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return structured document.
+     */
+    StructuredDocument readDocumentStructure(String content,Map<String,Object> options);
+
+    /**
+     * Reads and creates structured document containing header and content chunks.
+     * By default it dig only one level down but it can be tweak by setting STRUCTURE_MAX_LEVEL
+     * option.
+     * 
+     * @param contentReader
+     *            where asciidoc content is read.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return structured document.
+     */
+    StructuredDocument readDocumentStructure(Reader contentReader,Map<String,Object> options);
+
+    
     /**
      * Reads only header parameters instead of all document.
      * 

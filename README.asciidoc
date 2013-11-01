@@ -211,7 +211,9 @@ Options options = options().inPlace(true).attributes(attributes).get();
 String render = asciidoctor.renderFile("target/test-classes/rendersample.asciidoc", options);
 
 ...
-----
+---- 
+
+=== Document Header
 
 +readDocumentHeader+ retrieve information from the header of an AsciiDoc document without parsing or rendering the entire document.
 This method returns an instance of +org.asciidoctor.DocumentHeader+ with all information from the header filled.
@@ -255,6 +257,174 @@ System.out.println(revisionInfo.getRemark()); 		<7>
 <6> prints "1.0"
 <7> prints "First draft"
 
+=== Document structure
+
++readDocumentStructure+ provides easy and useful way of parsing asciidoc file into 
+the structured object. First of all it gathers exactly the same information as 
++readDocumentHeader+ and puts it in +header+ filed of +StructuredDocument+ object. 
+Actual content of the file is split into separate ContentParts based on blocks of
+the content.
+
+There are few possible use cases of using this feature, please consider 
+following examples:
+
+[source]
+.AsciiDoc document with two blocks defined by section titles
+----
+= Sample Document
+
+== Section one
+This is content of section one
+
+== Section two
+And content of section two
+
+...
+----
+
+Each section defines new content part. List of all parts can be get by +getParts+ method
+on +StructuredDocument+. Each part will than contain of title (ie. "Section one") and 
+rendered text content as html.
+
+[source]
+.Print content of each part
+----
+for (ContentPart part : document.getParts()){
+	System.out.println(part.getTitle());
+	System.out.println("----");
+	System.out.println(part.getContent);
+	System.out.println("----");
+}
+----
+
+[source]
+.AsciiDoc document with two blocks defined by styles
+----
+= Sample Document
+
+[style one]
+This is content of first content part
+
+[[partId]]
+[style two,role="partRole"]
+--
+And content of second content part
+
+This block can be as long as you want.
+--
+----
+
+This way you can then use methods like getPartByStyle to retrieve particular content parts.
+[source]
+.Retrieve content part by style
+----
+ContentPart style_two = document.getPartByStyle("style two");
+// other possible way of retrieving parts:
+ContentPart style_two = document.getPartById("partId")
+ContentPart style_two = document.getPartByRole("partRole")
+
+//and also for lists
+List<ContentPart> parts = document.getPartsByStyle("style two");
+List<ContentPart> parts = document.getPartsByRole("partRole");
+List<ContentPart> parts = document.getPartsByContext("open");
+
+----
+
+Really nice thing about it is possibility to parse images to Image object that you can use 
+later to embed in html page directly from your java code or manipulate in any other way. 
+
+[source]
+.Define images
+----
+[Images]
+image::src/some{sp}image{sp}1.JPG[TODO title1,link="link1.html"]
+image::src/some{sp}image{sp}2.JPG[TODO title2,link="link2.html"]
+----
+ 
+to get a list of images defined in the document and then to process images: 
+
+[source]
+.Retrieve image information
+----
+List<ContentPart> images = document.getPartsByContext("image");
+for (ContentPart image : images){
+	String src = (String) image.getAttributes().get("target"); 
+	String alt = (String) image.getAttributes().get("alt"); 
+	String link = (String) image.getAttributes().get("link");
+} 
+----
+
+As of final example consider following complete use case:
+
+[source]
+.AsciiDoc document with product definition
+----
+= Sample product
+v1.0, 2013-10-12
+:hardbreaks:
+
+:price: 70 pln 
+:smallImage: photos/small/small_image.jpg
+
+[Description]
+short product description
+
+[Images]
+image::photos/image1.jpg[title]
+image::photos/image2.jpg[title]
+
+
+[Detail]
+--
+Detail information about product. Note that you can use all asciidoc features here like:
+.simple list
+* lists
+* images
+* titles
+* further blocks
+
+[role=text-center]
+also you can also add css style by assigning role to the text. 
+--
+----
+
+and the way it can be than transformed to java object:
+[source]
+.Java method for getting product
+----
+Product product = new Product();
+product.setTitle(document.getHeader().getDocumentTitle());
+product.setPrice(new Price((String) document.getHeader().getAttributes().get("price")));
+product.setSmallImage(new Image((String)document.getHeader().getAttributes().get("smallImage"),product.getTitle()));
+
+product.setDescription(document.getPartByStyle("description").getContent());
+		
+List<ContentPart> images = document.getPartsByContext("image");
+for (ContentPart image : images) {
+	Image image = new Image();
+	image.setSrc((String) image.getAttributes().get("target"));
+	image.setAlt((String) image.getAttributes().get("alt"));
+	product.getImages().add(image);
+}
+		
+product.setDetail(document.getPartByStyle("detail").getContent());
+----
+
+Last feature of structure document is possibility to configure how deeply should blocks
+be processed. Default is one level only so if you want to have more nested structure add
+STRUCTURE_MAX_LEVEL parameter to processing options.
+
+[source]
+.Configuration of the structure document processing
+----
+Map<String,Object> parameters = new HashMap<String, Object>();
+parameters.put(Asciidoctor.STRUCTURE_MAX_LEVEL, 2);
+StructuredDocument document = asciidoctor.readDocumentStructure(
+		new File("target/test-classes/documentblocks.asciidoc"),
+		parameters
+	);
+----
+ 
 === Utilities
 
 A utility class for searching all asciidoc files present in a root folder and all its subfolders is given. In fact it finds all files that end up with _.asc_, _.asciidoc_, _.ad_ or _.adoc_. This class is +AsciiDocDirectoryWalker+.

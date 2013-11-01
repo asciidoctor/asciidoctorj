@@ -5,9 +5,16 @@ import java.util.Map;
 
 public interface Block {
 
-    String context();
-    List<String> lines();
+	String id();
+	String title();
+    String role();
+    String style();
+    List<Block> blocks();
     Map<String, Object> attributes();
     
+    Object content();
+    String render();
     
+    String context();
+    List<String> lines();
 }
