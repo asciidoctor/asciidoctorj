@@ -12,11 +12,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.ContentPart;
 import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.DocumentHeader;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.extension.ExtensionRegistryExecutor;
+import org.asciidoctor.StructuredDocument;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.jruby.CompatVersion;
@@ -29,6 +31,8 @@ import org.jruby.javasupport.JavaEmbedUtils;
 public class JRubyAsciidoctor implements Asciidoctor {
 
     private static final String GEM_PATH = "GEM_PATH";
+    
+    private static final int DEFAULT_MAX_LEVEL = 1;
 
     private AsciidoctorModule asciidoctorModule;
     protected RubyGemsPreloader rubyGemsPreloader;
@@ -106,8 +110,87 @@ public class JRubyAsciidoctor implements Asciidoctor {
                 documentRuby.title(), documentRuby.getAttributes());
     }
 
-    @Override
-    public DocumentHeader readDocumentHeader(File filename) {
+	private StructuredDocument toDocument(DocumentRuby documentRuby,
+			Ruby rubyRuntime, int maxDeepLevel) {
+
+		Document document = new Document(documentRuby, rubyRuntime);
+		List<ContentPart> contentParts =  getContents(document.blocks(),1,maxDeepLevel);
+		return StructuredDocument.createStructuredDocument(
+				toDocumentHeader(documentRuby),
+				contentParts);
+	}
+
+
+	private List<ContentPart> getContents(List<Block> blocks, int level, int maxDeepLevel){
+		//finish getting childs if max structure level was riched
+		if (level>maxDeepLevel){
+			return null;
+		}
+		//if document has only one child don't treat as actual contentpart unless 
+		//it has no childs
+		if (blocks.size()==1 && blocks.get(0).blocks().size()>0){
+			return getContents(blocks.get(0).blocks(),0,maxDeepLevel);
+		}
+		//add next level of contentParts
+		List<ContentPart> parts = new ArrayList<ContentPart>();
+		for (Block block : blocks) {
+			parts.add(getContentPartFromBlock(block,level,maxDeepLevel));
+		}
+		return parts;
+	}
+	
+	private ContentPart getContentPartFromBlock(Block child, int level, int maxDeepLevel) {
+		Object content = child.content();
+		String textContent;
+		if (content instanceof String) {
+			textContent = (String) content;
+		} else {
+			textContent = child.render();
+		}
+		ContentPart contentPart =  ContentPart.createContentPart(child.id(), level, child.context(), child.title(),
+				child.style(), child.role(), child.attributes(), textContent);
+		contentPart.setParts(getContents(child.blocks(),level+1,maxDeepLevel));
+		return contentPart;
+	}
+
+	@Override
+	public StructuredDocument readDocumentStructure(File filename,
+			Map<String, Object> options) {
+
+		this.rubyGemsPreloader.preloadRequiredLibraries(options);
+
+		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
+				rubyRuntime, options);
+		DocumentRuby documentRuby = this.asciidoctorModule.load_file(
+				filename.getAbsolutePath(), rubyHash);
+		int maxDeepLevel = options.containsKey(STRUCTURE_MAX_LEVEL)?(Integer) (options.get(STRUCTURE_MAX_LEVEL)):DEFAULT_MAX_LEVEL;
+		return toDocument(documentRuby, rubyRuntime, maxDeepLevel);
+	}
+
+	@Override
+	public StructuredDocument readDocumentStructure(String content,
+			Map<String, Object> options) {
+
+		this.rubyGemsPreloader.preloadRequiredLibraries(options);
+
+		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
+				rubyRuntime, options);
+		
+		DocumentRuby documentRuby = this.asciidoctorModule.load(content,
+				rubyHash);
+		int maxDeepLevel = options.containsKey(STRUCTURE_MAX_LEVEL)?(Integer) (options.get(STRUCTURE_MAX_LEVEL)):DEFAULT_MAX_LEVEL;
+		return toDocument(documentRuby, rubyRuntime, maxDeepLevel);
+	}
+
+	@Override
+	public StructuredDocument readDocumentStructure(Reader contentReader,
+			Map<String, Object> options) {
+		String content = IOUtils.readFull(contentReader);
+		return readDocumentStructure(content, options);
+	}
+
+	@Override
+	public DocumentHeader readDocumentHeader(File filename) {
 
         RubyHash rubyHash = getParseHeaderOnlyOption();
 
