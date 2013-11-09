@@ -31,7 +31,7 @@ import org.jruby.javasupport.JavaEmbedUtils;
 public class JRubyAsciidoctor implements Asciidoctor {
 
     private static final String GEM_PATH = "GEM_PATH";
-    
+
     private static final int DEFAULT_MAX_LEVEL = 1;
 
     private AsciidoctorModule asciidoctorModule;
@@ -48,8 +48,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
     public static Asciidoctor create() {
         Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(new HashMap<String, Object>());
-        registerExtensions(asciidoctor);  
-        
+        registerExtensions(asciidoctor);
+
         return asciidoctor;
     }
 
@@ -58,8 +58,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
         gemPathVar.put(GEM_PATH, gemPath);
 
         Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(gemPathVar);
-        registerExtensions(asciidoctor);        
-        
+        registerExtensions(asciidoctor);
+
         return asciidoctor;
     }
 
@@ -78,7 +78,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         injectEnvironmentVariables(rubyRuntime, environmentVars);
 
         JRubyRuntimeContext.set(rubyRuntime);
-        
+
         JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(
                 rubyRuntime);
 
@@ -110,87 +110,96 @@ public class JRubyAsciidoctor implements Asciidoctor {
                 documentRuby.title(), documentRuby.getAttributes());
     }
 
-	private StructuredDocument toDocument(DocumentRuby documentRuby,
-			Ruby rubyRuntime, int maxDeepLevel) {
+    private StructuredDocument toDocument(DocumentRuby documentRuby,
+            Ruby rubyRuntime, int maxDeepLevel) {
 
-		Document document = new Document(documentRuby, rubyRuntime);
-		List<ContentPart> contentParts =  getContents(document.blocks(),1,maxDeepLevel);
-		return StructuredDocument.createStructuredDocument(
-				toDocumentHeader(documentRuby),
-				contentParts);
-	}
+        Document document = new Document(documentRuby, rubyRuntime);
+        List<ContentPart> contentParts = getContents(document.blocks(), 1,
+                maxDeepLevel);
+        return StructuredDocument.createStructuredDocument(
+                toDocumentHeader(documentRuby), contentParts);
+    }
 
+    private List<ContentPart> getContents(List<Block> blocks, int level,
+            int maxDeepLevel) {
+        // finish getting childs if max structure level was riched
+        if (level > maxDeepLevel) {
+            return null;
+        }
+        // if document has only one child don't treat as actual contentpart
+        // unless
+        // it has no childs
+        if (blocks.size() == 1 && blocks.get(0).blocks().size() > 0) {
+            return getContents(blocks.get(0).blocks(), 0, maxDeepLevel);
+        }
+        // add next level of contentParts
+        List<ContentPart> parts = new ArrayList<ContentPart>();
+        for (Block block : blocks) {
+            parts.add(getContentPartFromBlock(block, level, maxDeepLevel));
+        }
+        return parts;
+    }
 
-	private List<ContentPart> getContents(List<Block> blocks, int level, int maxDeepLevel){
-		//finish getting childs if max structure level was riched
-		if (level>maxDeepLevel){
-			return null;
-		}
-		//if document has only one child don't treat as actual contentpart unless 
-		//it has no childs
-		if (blocks.size()==1 && blocks.get(0).blocks().size()>0){
-			return getContents(blocks.get(0).blocks(),0,maxDeepLevel);
-		}
-		//add next level of contentParts
-		List<ContentPart> parts = new ArrayList<ContentPart>();
-		for (Block block : blocks) {
-			parts.add(getContentPartFromBlock(block,level,maxDeepLevel));
-		}
-		return parts;
-	}
-	
-	private ContentPart getContentPartFromBlock(Block child, int level, int maxDeepLevel) {
-		Object content = child.content();
-		String textContent;
-		if (content instanceof String) {
-			textContent = (String) content;
-		} else {
-			textContent = child.render();
-		}
-		ContentPart contentPart =  ContentPart.createContentPart(child.id(), level, child.context(), child.title(),
-				child.style(), child.role(), child.attributes(), textContent);
-		contentPart.setParts(getContents(child.blocks(),level+1,maxDeepLevel));
-		return contentPart;
-	}
+    private ContentPart getContentPartFromBlock(Block child, int level,
+            int maxDeepLevel) {
+        Object content = child.content();
+        String textContent;
+        if (content instanceof String) {
+            textContent = (String) content;
+        } else {
+            textContent = child.render();
+        }
+        ContentPart contentPart = ContentPart.createContentPart(child.id(),
+                level, child.context(), child.title(), child.style(),
+                child.role(), child.attributes(), textContent);
+        contentPart.setParts(getContents(child.blocks(), level + 1,
+                maxDeepLevel));
+        return contentPart;
+    }
 
-	@Override
-	public StructuredDocument readDocumentStructure(File filename,
-			Map<String, Object> options) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public StructuredDocument readDocumentStructure(File filename,
+            Map<String, Object> options) {
 
-		this.rubyGemsPreloader.preloadRequiredLibraries(options);
+        this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
-		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
-				rubyRuntime, options);
-		DocumentRuby documentRuby = this.asciidoctorModule.load_file(
-				filename.getAbsolutePath(), rubyHash);
-		int maxDeepLevel = options.containsKey(STRUCTURE_MAX_LEVEL)?(Integer) (options.get(STRUCTURE_MAX_LEVEL)):DEFAULT_MAX_LEVEL;
-		return toDocument(documentRuby, rubyRuntime, maxDeepLevel);
-	}
+        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
+                rubyRuntime, options);
+        DocumentRuby documentRuby = this.asciidoctorModule.load_file(
+                filename.getAbsolutePath(), rubyHash);
+        int maxDeepLevel = options.containsKey(STRUCTURE_MAX_LEVEL) ? (Integer) (options
+                .get(STRUCTURE_MAX_LEVEL)) : DEFAULT_MAX_LEVEL;
+        return toDocument(documentRuby, rubyRuntime, maxDeepLevel);
+    }
 
-	@Override
-	public StructuredDocument readDocumentStructure(String content,
-			Map<String, Object> options) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public StructuredDocument readDocumentStructure(String content,
+            Map<String, Object> options) {
 
-		this.rubyGemsPreloader.preloadRequiredLibraries(options);
+        this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
-		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
-				rubyRuntime, options);
-		
-		DocumentRuby documentRuby = this.asciidoctorModule.load(content,
-				rubyHash);
-		int maxDeepLevel = options.containsKey(STRUCTURE_MAX_LEVEL)?(Integer) (options.get(STRUCTURE_MAX_LEVEL)):DEFAULT_MAX_LEVEL;
-		return toDocument(documentRuby, rubyRuntime, maxDeepLevel);
-	}
+        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
+                rubyRuntime, options);
 
-	@Override
-	public StructuredDocument readDocumentStructure(Reader contentReader,
-			Map<String, Object> options) {
-		String content = IOUtils.readFull(contentReader);
-		return readDocumentStructure(content, options);
-	}
+        DocumentRuby documentRuby = this.asciidoctorModule.load(content,
+                rubyHash);
+        int maxDeepLevel = options.containsKey(STRUCTURE_MAX_LEVEL) ? (Integer) (options
+                .get(STRUCTURE_MAX_LEVEL)) : DEFAULT_MAX_LEVEL;
+        return toDocument(documentRuby, rubyRuntime, maxDeepLevel);
+    }
 
-	@Override
-	public DocumentHeader readDocumentHeader(File filename) {
+    @Override
+    public StructuredDocument readDocumentStructure(Reader contentReader,
+            Map<String, Object> options) {
+        String content = IOUtils.readFull(contentReader);
+        return readDocumentStructure(content, options);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public DocumentHeader readDocumentHeader(File filename) {
 
         RubyHash rubyHash = getParseHeaderOnlyOption();
 
@@ -199,6 +208,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return toDocumentHeader(documentRuby);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DocumentHeader readDocumentHeader(String content) {
 
@@ -250,7 +260,6 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return returnExpectedValue(object);
 
     }
-
 
     /**
      * This method has been added to deal with the fact that asciidoctor 0.1.2
@@ -384,5 +393,5 @@ public class JRubyAsciidoctor implements Asciidoctor {
     public RubyExtensionRegistry rubyExtensionRegistry() {
         return new RubyExtensionRegistry(asciidoctorModule, rubyRuntime);
     }
-    
+
 }

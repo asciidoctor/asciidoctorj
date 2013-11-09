@@ -3,14 +3,14 @@ v1.0, 2013-10-12
 
 :type: object.type
 
-[Description]
+[literal]
 TODO: This is description
 
 [Images]
 image::src/some{sp}image{sp}1.JPG[TODO title1,link="link1.html"]
 image::src/some{sp}image{sp}2.JPG[TODO title2,link="link2.html"]
 
-[Text]
+[Open]
 --
 [role=text-center]
 some text with attributes

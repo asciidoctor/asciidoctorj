@@ -18,6 +18,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -176,6 +177,7 @@ public class WhenJavaExtensionIsRegistered {
     }
     
     @Test
+    @Ignore("Ignored because of bug http://discuss.asciidoctor.org/Problem-registering-two-times-block-extension-AsciidoctorJ-td898.html")
     public void a_block_processor_should_be_executed_when_registered_block_is_found_in_document() throws IOException {
         
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();

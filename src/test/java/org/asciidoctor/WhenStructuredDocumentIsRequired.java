@@ -1,6 +1,9 @@
 package org.asciidoctor;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -9,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.internal.JRubyAsciidoctor;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -46,34 +48,33 @@ public class WhenStructuredDocumentIsRequired {
 
 		List<ContentPart> parts = document.getParts();
 
-		Assert.assertNotNull(parts);
-		Assert.assertEquals(3, parts.size());
+		assertThat(parts, notNullValue());
+		assertThat(parts, hasSize(3));
 
-		Assert.assertEquals("section", parts.get(0).getContext());
-		Assert.assertEquals("Abstract", parts.get(0).getTitle());
+		assertThat(parts.get(0).getContext(), is("section"));
+		assertThat(parts.get(0).getTitle(), is("Abstract"));
 		
-		Assert.assertEquals(1, parts.get(0).getParts().size());
-		Assert.assertEquals("abstract", parts.get(0).getParts().get(0).getStyle());
-		Assert.assertEquals("open", parts.get(0).getParts().get(0).getContext());
+		assertThat(parts.get(0).getParts(), hasSize(1));
+		assertThat(parts.get(0).getParts().get(0).getStyle(), is("abstract"));
+		assertThat(parts.get(0).getParts().get(0).getContext(), is("open"));
 		
-		Assert.assertEquals("First Section", parts.get(1).getTitle());
-		Assert.assertEquals("_first_section", parts.get(1).getId());
-		Assert.assertEquals("section", parts.get(1).getContext());
-		Assert.assertEquals(5, parts.get(1).getParts().size());
+		assertThat(parts.get(1).getTitle(), is("First Section"));
+		assertThat(parts.get(1).getId(), is("_first_section"));
+		assertThat(parts.get(1).getContext(), is("section"));
+		assertThat(parts.get(1).getParts(), hasSize(5));
 
 		
-		Assert.assertEquals("blockid", parts.get(1).getParts().get(1).getId());
-		Assert.assertEquals("blockStyle", parts.get(1).getParts().get(1).getStyle());
-		Assert.assertEquals("Abraham Lincoln", parts.get(1).getParts().get(1).getAttributes()
-				.get("attribution"));
+		assertThat(parts.get(1).getParts().get(1).getId(), is("blockid"));
+		assertThat(parts.get(1).getParts().get(1).getStyle(), is("quote"));
+		assertThat((String)parts.get(1).getParts().get(1).getAttributes().get("attribution"), is("Abraham Lincoln"));
 
-		Assert.assertEquals("feature-list", parts.get(1).getParts().get(2).getRole());
+		assertThat(parts.get(1).getParts().get(2).getRole(), is("feature-list"));
 
-		Assert.assertEquals("Second Section", parts.get(2).getTitle());
-		Assert.assertEquals(2, parts.get(2).getParts().size());
+		assertThat(parts.get(2).getTitle(), is("Second Section"));
+		assertThat(parts.get(2).getParts(), hasSize(2));
 		
-		Assert.assertEquals("image", parts.get(2).getParts().get(0).getContext());
-		Assert.assertEquals("image", parts.get(2).getParts().get(1).getContext());
+		assertThat(parts.get(2).getParts().get(0).getContext(), is("image"));
+		assertThat(parts.get(2).getParts().get(1).getContext(), is("image"));
 	}
 	
 	@Test
@@ -91,22 +92,21 @@ public class WhenStructuredDocumentIsRequired {
 
 		List<ContentPart> parts = document.getParts();
 
-		Assert.assertNotNull(parts);
-		Assert.assertEquals(4, parts.size());
+		assertThat(parts, notNullValue());
+		assertThat(parts, hasSize(4));
 
 		
 		
-		Assert.assertEquals("TODO: This is description", document.getPartByStyle("Description").getContent());
+		assertThat(document.getPartByStyle("literal").getContent(), is("TODO: This is description"));
 		
 		List<ContentPart> images = document.getPartsByContext("image");
-		int imageCount = 2;
-		Assert.assertEquals(imageCount, images.size());
-		for (int i = 1; i<=imageCount; i++) {
-			Assert.assertEquals("src/some image "+i+".JPG",(String) images.get(i-1).getAttributes().get("target"));
-			Assert.assertEquals("TODO title"+i,(String) images.get(i-1).getAttributes().get("alt"));
-			Assert.assertEquals("link"+i+".html",(String) images.get(i-1).getAttributes().get("link"));
+		assertThat(images, hasSize(2));
+		for (int i = 0; i<2; i++) {
+			assertThat((String) images.get(i).getAttributes().get("target"), is("src/some image "+(i+1)+".JPG"));
+			assertThat((String) images.get(i).getAttributes().get("alt"), is("TODO title"+(i+1)));
+			assertThat((String) images.get(i).getAttributes().get("link"), is("link"+(i+1)+".html"));
 		}
-		Assert.assertTrue(document.getPartByStyle("Text").getContent().startsWith("<div class=\"paragraph text-center\">"));
+		assertThat(document.getPartByStyle("Open").getContent(), startsWith("<div class=\"paragraph text-center\">"));
 	}
 
 	@Test
@@ -121,8 +121,8 @@ public class WhenStructuredDocumentIsRequired {
 
 		List<ContentPart> parts = document.getParts();
 
-		Assert.assertNotNull(parts);
-		Assert.assertEquals(0, parts.size());
+		assertThat(parts, notNullValue());
+		assertThat(parts, hasSize(0));
 
 	}
 
@@ -134,14 +134,14 @@ public class WhenStructuredDocumentIsRequired {
 
 		DocumentHeader header = document.getHeader();
 
-		Assert.assertNotNull(header);
+		assertThat(header, notNullValue());
 
 		List<ContentPart> parts = document.getParts();
 
-		Assert.assertNotNull(parts);
-		Assert.assertEquals(1, parts.size());
-		Assert.assertEquals("Simple single paragraph", parts.get(0)
-				.getContent());
+		assertThat(parts, notNullValue());
+		assertThat(parts, hasSize(1));
+		assertThat(parts.get(0)
+				.getContent(), is("Simple single paragraph"));
 
 	}
 	
@@ -153,20 +153,12 @@ public class WhenStructuredDocumentIsRequired {
 
 		DocumentHeader header = document.getHeader();
 
-		Assert.assertNotNull(header);
+		assertThat(header, notNullValue());
 
 		List<ContentPart> parts = document.getParts();
 
-		Assert.assertNotNull(parts);
-		Assert.assertEquals(0, parts.size());
+		assertThat(parts, notNullValue());
+		assertThat(parts, hasSize(0));
 	}
 	
-	@Test
-	public void test_problematic_document() {
-		StructuredDocument document = asciidoctor.readDocumentStructure(
-				new File("target/test-classes/document-with-arrays.adoc"),
-				new HashMap<String, Object>());
-	}
-	
-
 }

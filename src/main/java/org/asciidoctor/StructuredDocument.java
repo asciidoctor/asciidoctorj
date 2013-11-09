@@ -94,7 +94,7 @@ public class StructuredDocument {
 			}
 			return filteredParts;
 		}
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 	
 	/**
@@ -113,7 +113,7 @@ public class StructuredDocument {
 			}
 			return filteredParts;
 		}
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class StructuredDocument {
 			}
 			return filteredParts;
 		}
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 
 	public static StructuredDocument createStructuredDocument(

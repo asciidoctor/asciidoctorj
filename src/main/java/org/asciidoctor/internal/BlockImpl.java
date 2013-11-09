@@ -38,7 +38,7 @@ public class BlockImpl implements Block{
 
 	@Override
 	public List<Block> blocks() {
-		List rubyBlocks = this.blockRuby.blocks();
+		List<Block> rubyBlocks = this.blockRuby.blocks();
 
 		for (int i = 0; i < rubyBlocks.size(); i++) {
 			if (!(rubyBlocks.get(i) instanceof RubyArray) && !(rubyBlocks.get(i) instanceof Block)) {

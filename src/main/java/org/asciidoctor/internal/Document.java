@@ -43,7 +43,7 @@ public class Document implements DocumentRuby {
 
 	@Override
 	public List<Block> blocks() {
-		List rubyBlocks = this.documentRuby.blocks();
+		List<Block> rubyBlocks = this.documentRuby.blocks();
 
 		for (int i = 0; i < rubyBlocks.size(); i++) {
 			if (!(rubyBlocks.get(i) instanceof RubyArray) && !(rubyBlocks.get(i) instanceof Block)) {
