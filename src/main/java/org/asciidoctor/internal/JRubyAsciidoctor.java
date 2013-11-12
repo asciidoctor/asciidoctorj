@@ -63,10 +63,37 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return asciidoctor;
     }
 
+    public static Asciidoctor create(List<String> loadPaths) {
+        Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(loadPaths);
+        registerExtensions(asciidoctor);
+
+        return asciidoctor;
+    }
+    
     private static void registerExtensions(Asciidoctor asciidoctor) {
         new ExtensionRegistryExecutor(asciidoctor).registerAllExtensions();
     }
 
+    private static Asciidoctor createJRubyAsciidoctorInstance(List<String> loadPaths) {
+       
+        RubyInstanceConfig config = createOptimizedConfiguration();
+        
+        Ruby rubyRuntime = JavaEmbedUtils.initialize(loadPaths, config);
+        JRubyRuntimeContext.set(rubyRuntime);
+        
+        
+        JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(
+                rubyRuntime);
+        
+        AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory
+                .createAsciidoctorModule();
+        JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(
+                asciidoctorModule, rubyRuntime);
+        
+        return jRubyAsciidoctor;
+    }
+    
+    
     private static Asciidoctor createJRubyAsciidoctorInstance(
             Map<String, Object> environmentVars) {
 
