@@ -3,7 +3,7 @@ package org.asciidoctor.extension;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.internal.Block;
+import org.asciidoctor.internal.AbstractBlock;
 import org.asciidoctor.internal.DocumentRuby;
 import org.asciidoctor.internal.Reader;
 import org.asciidoctor.internal.RubyHashUtil;
@@ -37,5 +37,5 @@ public abstract class BlockProcessor extends Processor {
         return new HashMap<String, Object>();
     }
     
-    public abstract Object process(Block parent, Reader reader, Map<String, Object> attributes);
+    public abstract Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes);
 }

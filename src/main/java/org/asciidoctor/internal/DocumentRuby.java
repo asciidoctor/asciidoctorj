@@ -5,7 +5,7 @@ import java.util.Map;
 
 
 
-public interface DocumentRuby {
+public interface DocumentRuby extends AbstractBlock {
 	
 	/**
 	 * 

@@ -1,59 +1,35 @@
 package org.asciidoctor.internal;
 
-import java.util.List;
 import java.util.Map;
 
 import org.jruby.Ruby;
-import org.jruby.RubyArray;
-import org.jruby.RubyObject;
 
-public class Document implements DocumentRuby {
+public class Document extends AbstractBlockImpl implements DocumentRuby {
 
-	private DocumentRuby documentRuby;
-	private Ruby rubyRuntime;
-
-	public Document(DocumentRuby documentRuby, Ruby rubyRuntime) {
-		this.documentRuby = documentRuby;
-		this.rubyRuntime = rubyRuntime;
+	private DocumentRuby documentDelegate;
+	
+	public Document(DocumentRuby documentRuby, Ruby runtime) {
+		super(documentRuby, runtime);
+		this.documentDelegate = documentRuby;
 	}
 
 	public DocumentRuby getDocumentRuby() {
-		return documentRuby;
+		return documentDelegate;
 	}
 
 	@Override
 	public String doctitle() {
-		return this.documentRuby.doctitle();
-	}
-
-	@Override
-	public String title() {
-		return this.documentRuby.title();
+		return documentDelegate.doctitle();
 	}
 
 	@Override
 	public Map<String, Object> getAttributes() {
-		return this.documentRuby.getAttributes();
+		return attributes();
 	}
 
 	@Override
 	public boolean basebackend(String backend) {
-		return this.documentRuby.basebackend(backend);
-	}
-
-	@Override
-	public List<Block> blocks() {
-		List<Block> rubyBlocks = this.documentRuby.blocks();
-
-		for (int i = 0; i < rubyBlocks.size(); i++) {
-			if (!(rubyBlocks.get(i) instanceof RubyArray) && !(rubyBlocks.get(i) instanceof Block)) {
-				Block blockRuby = RubyUtils.rubyToJava(rubyRuntime,
-						(RubyObject) rubyBlocks.get(i), Block.class);
-				rubyBlocks.set(i, new BlockImpl(blockRuby, rubyRuntime));
-			}
-		}
-
-		return rubyBlocks;
+		return documentDelegate.basebackend(backend);
 	}
 
 }
