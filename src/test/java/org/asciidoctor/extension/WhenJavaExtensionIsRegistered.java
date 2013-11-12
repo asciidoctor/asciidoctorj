@@ -188,8 +188,8 @@ public class WhenJavaExtensionIsRegistered {
                 new Options());
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
-        assertThat(elements.size(), is(2));
-        assertThat(elements.get(1).text(), is("THE TIME IS NOW. GET A MOVE ON."));
+        assertThat(elements.size(), is(1));
+        assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
         
     }
     

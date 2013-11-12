@@ -4,7 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.asciidoctor.internal.Block;
+
+import org.asciidoctor.internal.AbstractBlock;
 import org.asciidoctor.internal.DocumentRuby;
 import org.asciidoctor.internal.Reader;
 
@@ -26,7 +27,7 @@ public class YellBlock extends BlockProcessor {
     }
 
     @Override
-    public Object process(Block parent, Reader reader, Map<String, Object> attributes) {
+    public Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes) {
         List<String> lines = reader.lines();
         String upperLines = null;
         for (String line : lines) {

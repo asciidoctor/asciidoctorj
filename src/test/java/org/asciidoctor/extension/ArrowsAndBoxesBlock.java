@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.internal.Block;
+import org.asciidoctor.internal.AbstractBlock;
 import org.asciidoctor.internal.DocumentRuby;
 import org.asciidoctor.internal.Reader;
 
@@ -21,7 +21,7 @@ public class ArrowsAndBoxesBlock extends BlockProcessor {
     }
 
     @Override
-    public Object process(Block parent, Reader reader,
+    public Object process(AbstractBlock parent, Reader reader,
             Map<String, Object> attributes) {
 
         List<String> lines = reader.lines();
