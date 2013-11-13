@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.asciidoctor.internal.CaseInsensitiveMap;
+
 public class DocumentHeader {
 
 	private String documentTitle;
@@ -49,7 +51,7 @@ public class DocumentHeader {
 		
 		documentHeader.documentTitle = documentTitle;
 		documentHeader.pageTitle = pageTitle;
-		documentHeader.attributes = attributes;
+		documentHeader.attributes = new CaseInsensitiveMap<String, Object>(attributes);
 		
 		documentHeader.author = getAuthor(attributes);
 		documentHeader.revisionInfo = geRevisionInfo(attributes);

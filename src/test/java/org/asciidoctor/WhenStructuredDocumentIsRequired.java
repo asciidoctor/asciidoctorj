@@ -41,7 +41,9 @@ public class WhenStructuredDocumentIsRequired {
 		assertThat((String) attributes.get("revdate"), is("2013-05-20"));
 		assertThat((String) attributes.get("revnumber"), is("1.0"));
 		assertThat((String) attributes.get("revremark"), is("First draft"));
+		//attributes should be incasesensitive
 		assertThat((String) attributes.get("tags"), is("[document, example]"));
+		assertThat((String) attributes.get("Tags"), is("[document, example]"));
 		assertThat((String) attributes.get("author"), is("Doc Writer"));
 		assertThat((String) attributes.get("email"),
 				is("doc.writer@asciidoc.org"));
@@ -67,6 +69,7 @@ public class WhenStructuredDocumentIsRequired {
 		assertThat(parts.get(1).getParts().get(1).getId(), is("blockid"));
 		assertThat(parts.get(1).getParts().get(1).getStyle(), is("quote"));
 		assertThat((String)parts.get(1).getParts().get(1).getAttributes().get("attribution"), is("Abraham Lincoln"));
+
 
 		assertThat(parts.get(1).getParts().get(2).getRole(), is("feature-list"));
 
