@@ -72,4 +72,9 @@ public class AbstractBlockImpl implements AbstractBlock {
 		return delegate.context();
 	}
 
+    @Override
+    public AbstractBlock delegate() {
+        return delegate;
+    }
+
 }

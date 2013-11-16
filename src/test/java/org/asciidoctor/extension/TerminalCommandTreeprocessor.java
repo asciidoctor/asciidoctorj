@@ -1,5 +1,6 @@
 package org.asciidoctor.extension;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
             }
         }
 
-        return createBlock(document, "listing", resultLines.toString(), attributes,
+        return createBlock(document, "listing", Arrays.asList(resultLines.toString()), attributes,
                 new HashMap<String, Object>());
     }
 

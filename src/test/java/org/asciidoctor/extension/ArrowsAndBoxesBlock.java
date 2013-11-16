@@ -36,7 +36,7 @@ public class ArrowsAndBoxesBlock extends BlockProcessor {
         outputLines.append("</pre>");
         attributes.put("!subs", "");
 
-        return createBlock(document, "pass", outputLines.toString(),
+        return createBlock(document, "pass", Arrays.asList(outputLines.toString()),
                 attributes, new HashMap<String, Object>() {
                     {
                         put("content_model", ":raw");

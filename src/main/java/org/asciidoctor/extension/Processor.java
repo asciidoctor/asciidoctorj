@@ -1,8 +1,10 @@
 package org.asciidoctor.extension;
 
+import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.Options;
+import org.asciidoctor.internal.AbstractBlock;
 import org.asciidoctor.internal.Block;
 import org.asciidoctor.internal.Document;
 import org.asciidoctor.internal.DocumentRuby;
@@ -24,7 +26,7 @@ public class Processor {
         this.document = new Document(documentRuby, rubyRuntime);
     }
 
-    public Block createBlock(Document parent, String context, String content, Map<String, Object> attributes,
+    public Block createBlock(AbstractBlock parent, String context, List<String> content, Map<String, Object> attributes,
             Map<String, Object> options) {
 
         options.put(Options.SOURCE, content);
@@ -34,7 +36,7 @@ public class Processor {
         RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime,
                 options);
         Object[] parameters = {
-                parent.getDocumentRuby(),
+                parent.delegate(),
                 RubyUtils.toSymbol(rubyRuntime, context),
                 convertMapToRubyHashWithSymbols };
         return (Block) JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass,

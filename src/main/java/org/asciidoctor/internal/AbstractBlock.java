@@ -16,4 +16,6 @@ public interface AbstractBlock {
     String render();
     
     String context();
+    
+    AbstractBlock delegate();
 }

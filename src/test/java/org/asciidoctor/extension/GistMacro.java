@@ -1,5 +1,6 @@
 package org.asciidoctor.extension;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class GistMacro extends BlockMacroProcessor {
        }
        };
        
-       return createBlock(parent, "pass", content, attributes, options);
+       return createBlock(parent, "pass", Arrays.asList(content), attributes, options);
     }
 
 }

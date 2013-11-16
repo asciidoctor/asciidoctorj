@@ -39,7 +39,7 @@ public class YellBlock extends BlockProcessor {
             }
         }
         
-        return createBlock(document, "paragraph", upperLines, attributes, new HashMap<String, Object>());
+        return createBlock(document, "paragraph", Arrays.asList(upperLines), attributes, new HashMap<String, Object>());
     }
 
 }
