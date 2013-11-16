@@ -29,6 +29,12 @@ public class AsciidoctorInvoker {
             jCommander.usage();
         } else {
 
+            Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+            
+            if(asciidoctorCliOptions.isVersion()) {
+                System.out.println("Asciidoctor "+asciidoctor.asciidoctorVersion()+" [http://asciidoctor.org]");
+            }
+            
             List<File> inputFiles = getInputFiles(asciidoctorCliOptions);
 
             if (inputFiles.isEmpty()) {
@@ -42,7 +48,7 @@ public class AsciidoctorInvoker {
             }
 
             Options options = asciidoctorCliOptions.parse();
-            String output = renderInput(options, inputFiles);
+            String output = renderInput(asciidoctor, options, inputFiles);
 
             if (asciidoctorCliOptions.isVerbose()) {
 
@@ -69,8 +75,8 @@ public class AsciidoctorInvoker {
         }
     }
 
-    private String renderInput(Options options, List<File> inputFiles) {
-        Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+    private String renderInput(Asciidoctor asciidoctor, Options options, List<File> inputFiles) {
+        
 
         // jcommander bug makes this code not working.
         // if("-".equals(inputFile)) {

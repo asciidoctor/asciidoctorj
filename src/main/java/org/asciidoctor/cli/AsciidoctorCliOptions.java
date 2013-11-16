@@ -21,6 +21,9 @@ public class AsciidoctorCliOptions {
 	@Parameter(names = { "-v", "--verbose" }, description = "enable verbose mode (default: false)")
 	private boolean verbose = false;
 	
+	@Parameter(names = {"-V", "--version"}, description ="display the version and runtime environment")
+	private boolean version = false;
+	
 	@Parameter(names = {"-b", "--backend"}, description = "set output format backend (default: html5)")
 	private String backend = "html5";
 	
@@ -156,6 +159,10 @@ public class AsciidoctorCliOptions {
 		return help;
 	}
 
+	public boolean isVersion() {
+        return version;
+    }
+	
 	private boolean isOutputStdout() {
 		return "-".equals(getOutFile());
 	}
