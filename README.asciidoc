@@ -4,7 +4,7 @@ asciidoctor-java-integration
 :asciidoctor-url: http://asciidoctor.org
 :issues-url: https://github.com/asciidoctor/asciidoctor-java-integration/issues
 
-image:https://travis-ci.org/asciidoctor/asciidoctor-java-integration.png?branch=master["Build Status", link="https://travis-ci.org/asciidoctor/asciidoctor-java-integration"]
+image:https://travis-ci.org/asciidoctor/asciidoctorj.png?branch=master["Build Status", link="https://travis-ci.org/asciidoctor/asciidoctor-java-integration"]
 
 The +asciidoctor-java-integration+ is the official means of using {asciidoctor-url}[Asciidoctor] to render all your {asciidoc-url}[AsciiDoc] documentation using Java instead of Ruby.
 
