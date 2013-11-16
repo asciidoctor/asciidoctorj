@@ -421,4 +421,9 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return new RubyExtensionRegistry(asciidoctorModule, rubyRuntime);
     }
 
+    @Override
+    public void shutdown() {
+        this.rubyRuntime.tearDown();
+    }
+
 }

@@ -357,6 +357,11 @@ public interface Asciidoctor {
     RubyExtensionRegistry rubyExtensionRegistry();
     
     /**
+     * This method frees all resources consumed by asciidoctorJ module. Keep in mind that if this method is called, instance becomes unusable and you should create another instance.
+     */
+    void shutdown();
+    
+    /**
      * Factory for creating a new instance of Asciidoctor interface.
      * 
      * @author lordofthejars
