@@ -426,4 +426,9 @@ public class JRubyAsciidoctor implements Asciidoctor {
         this.rubyRuntime.tearDown();
     }
 
+    @Override
+    public String asciidoctorVersion() {
+        return this.asciidoctorModule.asciidoctorRuntimeEnvironmentVersion();
+    }
+
 }

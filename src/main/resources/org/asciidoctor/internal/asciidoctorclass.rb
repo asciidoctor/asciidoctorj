@@ -62,4 +62,8 @@ class AsciidoctorModule
 	def load(content, options = {})
 		return Asciidoctor.load(content, options)
 	end
+	
+	def asciidoctorRuntimeEnvironmentVersion()
+	    return Asciidoctor::VERSION
+	end
 end

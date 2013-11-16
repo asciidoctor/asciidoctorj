@@ -19,4 +19,6 @@ public interface AsciidoctorModule {
 	DocumentRuby load_file(String filename, Map<String, Object> options);
 	DocumentRuby load(String content, Map<String, Object> options);
 
+	String asciidoctorRuntimeEnvironmentVersion();
+	
 }

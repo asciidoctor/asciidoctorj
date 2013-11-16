@@ -362,6 +362,12 @@ public interface Asciidoctor {
     void shutdown();
     
     /**
+     * Method that gets the asciidoctor version which is being used.. 
+     * @return Version number.
+     */
+    String asciidoctorVersion();
+    
+    /**
      * Factory for creating a new instance of Asciidoctor interface.
      * 
      * @author lordofthejars
