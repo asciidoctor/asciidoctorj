@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.extension.JavaExtensionRegistry;
@@ -399,6 +400,21 @@ public interface Asciidoctor {
         public static Asciidoctor create(String gemPath) {
             return JRubyAsciidoctor.create(gemPath);
         }
+        
+        /**
+         * Creates a new instance of Asciidoctor and sets loadPath to provided paths. This method is mostly used in OSGi
+         * environments.
+         * 
+         * @param gemPath
+         *            where gems are located.
+         * 
+         * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
+         *         Ruby calls.
+         */
+        public static Asciidoctor create(List<String> loadPaths) {
+            return JRubyAsciidoctor.create(loadPaths);
+        }
+        
     }
 
 
