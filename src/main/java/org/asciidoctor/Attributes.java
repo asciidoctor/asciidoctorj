@@ -50,6 +50,7 @@ public class Attributes {
 	public static final String MAX_INCLUDE_DEPTH = "max-include-depth";
 	public static final String ATTRIBUTE_MISSING = "attribute-missing";
 	public static final String ATTRIBUTE_UNDEFINED = "attribute-undefined";
+	public static final String NO_FOOTER = "nofooter";
 
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -314,7 +315,15 @@ public class Attributes {
 	public void setExperimental(boolean experimental) {
 		this.attributes.put(EXPERIMENTAL, experimental);
 	}
-	
+
+	/**
+	 * Sets nofooter attribute.
+	 * @param noFooter true if the footer block should not be shown, false otherwise.
+	 */
+	public void setNoFooter(boolean noFooter) {
+		this.attributes.put(NO_FOOTER, toAsciidoctorFlag(noFooter));
+	}
+
 	public void setAttribute(String attributeName, Object attributeValue) {
 		this.attributes.put(attributeName, attributeValue);
 	}
