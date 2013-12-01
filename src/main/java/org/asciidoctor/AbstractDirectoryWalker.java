@@ -44,8 +44,10 @@ public abstract class AbstractDirectoryWalker implements DirectoryWalker {
 			for (File currentFile : listOfCurrentFiles) {
 				if (currentFile.isDirectory()) {
 
-					List<File> asciidocFiles = walkDirectory(currentFile);
-					includedAsciidocFiles.addAll(asciidocFiles);
+				    if(!currentFile.getName().startsWith(".") && !currentFile.getName().startsWith("_")) {
+				        List<File> asciidocFiles = walkDirectory(currentFile);
+					    includedAsciidocFiles.addAll(asciidocFiles);
+				    }
 
 				} else {
 

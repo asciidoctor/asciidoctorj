@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  */
 public class AsciiDocDirectoryWalker extends AbstractDirectoryWalker {
 
-	private static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$"; 
+	private static final String ASCIIDOC_REG_EXP_EXTENSION = "^[^_.].*\\.a((sc(iidoc)?)|d(oc)?)$"; 
 	
 	private static final Pattern ASCIIDOC_EXTENSION_PATTERN = Pattern.compile(ASCIIDOC_REG_EXP_EXTENSION); 
 

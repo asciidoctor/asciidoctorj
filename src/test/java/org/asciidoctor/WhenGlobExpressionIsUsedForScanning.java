@@ -20,7 +20,7 @@ public class WhenGlobExpressionIsUsedForScanning {
         
         assertThat(
                 asciidocFiles,
-                containsInAnyOrder(new File(
+                containsInAnyOrder(new File("target/test-classes/src/documents/_sample.adoc"), new File(
                         "target/test-classes/src/documents/sample.adoc")));
     }
     
@@ -32,7 +32,7 @@ public class WhenGlobExpressionIsUsedForScanning {
         
         assertThat(
                 asciidocFiles,
-                containsInAnyOrder(new File(
+                containsInAnyOrder(new File("target/test-classes/src/documents/_sample.adoc"), new File(
                         "target/test-classes/src/documents/sample.adoc")));
     }
     
