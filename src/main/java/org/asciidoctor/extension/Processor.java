@@ -26,12 +26,26 @@ public class Processor {
         this.document = new Document(documentRuby, rubyRuntime);
     }
 
+    public Block createBlock(AbstractBlock parent, String context, String content, Map<String, Object> attributes,
+            Map<String, Object> options) {
+
+        options.put(Options.SOURCE, content);
+        options.put(Options.ATTRIBUTES, attributes);        
+        
+        return createBlock(parent, context, options);
+    }
+    
     public Block createBlock(AbstractBlock parent, String context, List<String> content, Map<String, Object> attributes,
             Map<String, Object> options) {
 
         options.put(Options.SOURCE, content);
         options.put(Options.ATTRIBUTES, attributes);        
         
+        return createBlock(parent, context, options);
+    }
+
+    private Block createBlock(AbstractBlock parent, String context,
+            Map<String, Object> options) {
         IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Block");
         RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime,
                 options);
