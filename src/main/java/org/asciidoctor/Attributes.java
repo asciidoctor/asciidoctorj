@@ -42,15 +42,15 @@ public class Attributes {
 	public static final String SHOW_TITLE ="showtitle";
 	public static final String ALLOW_URI_READ = "allow-uri-read";
 	public static final String TOC_POSITION = "toc-position";
-    public static final String TOC_2 = "toc2";
-    public static final String IGNORE_UNDEFINED = "ignore-undefined";
-    public static final String UNTITLED_LABEL = "untitled-label";
-    public static final String SET_ANCHORS = "sectanchors";
-    public static final String SKIP_FRONT_MATTER = "skip-front-matter";
-    public static final String MAX_INCLUDE_DEPTH = "max-include-depth";
-    public static final String ATTRIBUTE_MISSING = "attribute-missing";
-    public static final String ATTRIBUTE_UNDEFINED = "attribute-undefined";
-    
+	public static final String TOC_2 = "toc2";
+	public static final String IGNORE_UNDEFINED = "ignore-undefined";
+	public static final String UNTITLED_LABEL = "untitled-label";
+	public static final String SET_ANCHORS = "sectanchors";
+	public static final String SKIP_FRONT_MATTER = "skip-front-matter";
+	public static final String MAX_INCLUDE_DEPTH = "max-include-depth";
+	public static final String ATTRIBUTE_MISSING = "attribute-missing";
+	public static final String ATTRIBUTE_UNDEFINED = "attribute-undefined";
+
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
 	public Attributes() {
