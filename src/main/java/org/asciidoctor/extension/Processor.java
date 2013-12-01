@@ -8,6 +8,7 @@ import org.asciidoctor.internal.AbstractBlock;
 import org.asciidoctor.internal.Block;
 import org.asciidoctor.internal.Document;
 import org.asciidoctor.internal.DocumentRuby;
+import org.asciidoctor.internal.Inline;
 import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
@@ -44,6 +45,38 @@ public class Processor {
         return createBlock(parent, context, options);
     }
 
+    public Inline createInline(AbstractBlock parent, String context, List<String> text, Map<String, Object> attributes, Map<String, Object> options) {
+        
+        options.put(Options.ATTRIBUTES, attributes);
+        
+        IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Inline");
+        RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime,
+                options);
+        Object[] parameters = {
+                parent.delegate(),
+                RubyUtils.toSymbol(rubyRuntime, context),
+                text,
+                convertMapToRubyHashWithSymbols };
+        return (Inline) JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass,
+                "new", parameters, Inline.class);
+    }
+    
+    public Inline createInline(AbstractBlock parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {
+        
+        options.put(Options.ATTRIBUTES, attributes);
+        
+        IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Inline");
+        RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime,
+                options);
+        Object[] parameters = {
+                parent.delegate(),
+                RubyUtils.toSymbol(rubyRuntime, context),
+                text,
+                convertMapToRubyHashWithSymbols };
+        return (Inline) JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass,
+                "new", parameters, Inline.class);
+    }
+    
     private Block createBlock(AbstractBlock parent, String context,
             Map<String, Object> options) {
         IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Block");
