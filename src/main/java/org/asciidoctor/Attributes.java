@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class Attributes {
 
+    private static final String MATH = "math";
     private static final String APPENDIX_CAPTION = "appendix-caption";
     private static final char ATTRIBUTE_SEPARATOR = '=';
 	private static Format DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -120,6 +121,10 @@ public class Attributes {
 	public void setAppendixCaption(String appendixCaption) {
         this.attributes.put(APPENDIX_CAPTION, appendixCaption);
     }
+	
+	public void setMath(String math) {
+	    this.attributes.put(MATH, math);
+	}
 	
 	/**
 	 * Skips front matter.

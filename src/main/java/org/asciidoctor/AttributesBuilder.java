@@ -441,10 +441,10 @@ public class AttributesBuilder {
     }
     
     /**
-     * Sets appendix-caption at the end of each line.
+     * Sets appendix-caption label.
      * 
-     * @param hardbreaks
-     *            true if each line should be added a hardbreak, false otherwise.
+     * @param appendixCaption
+     *            value.
      * @return this instance.
      */
     public AttributesBuilder appendixCaption(String appendixCaption) {
@@ -452,6 +452,18 @@ public class AttributesBuilder {
         return this;
     }
 
+    /**
+     * Sets math default engine.
+     * 
+     * @param math
+     *            value.
+     * @return this instance.
+     */
+    public AttributesBuilder math(String math) {
+        this.attributes.setMath(math);
+        return this;
+    }
+    
 	/**
 	 * Sets linkattrs attribute.
 	 * @param linkAttrs true if Asciidoctor should parse link macro attributes, false otherwise.

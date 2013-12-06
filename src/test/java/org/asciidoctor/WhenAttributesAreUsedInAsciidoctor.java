@@ -47,6 +47,23 @@ public class WhenAttributesAreUsedInAsciidoctor {
     private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
     @Test
+    public void should_add_AsciiMath_delimiters_around_math_block_content_if_math_attribute_not_latexmath() throws IOException {
+        
+        Attributes attributes = attributes().math("asciimath").get();
+        
+        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
+                .toDir(testFolder.getRoot()).attributes(attributes).get();
+
+        asciidoctor.renderFile(new File(
+                "target/test-classes/math.asciidoc"), options);
+
+        Document doc = Jsoup.parse(new File(testFolder.getRoot(),
+                "math.html"), "UTF-8");
+        
+        assertThat(doc.getElementsByAttributeValue("type", "text/x-mathjax-config").size(), is(1));
+    }
+    
+    @Test
     public void should_use_custom_appendix_caption_if_specified() throws IOException {
         
         Attributes attributes = attributes().appendixCaption("App").get();
