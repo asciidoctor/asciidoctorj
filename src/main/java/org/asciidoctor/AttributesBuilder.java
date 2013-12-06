@@ -453,6 +453,18 @@ public class AttributesBuilder {
     }
     
     /**
+     * Sets hide-uri-scheme flag.
+     * 
+     * @param hiddenUriScheme
+     *            true if URI is hidden, false otherwise.
+     * @return this instance.
+     */
+    public AttributesBuilder hiddenUriScheme(boolean hiddenUriScheme) {
+        this.attributes.setHideUriScheme(hiddenUriScheme);
+        return this;
+    }
+    
+    /**
      * Sets appendix-caption label.
      * 
      * @param appendixCaption

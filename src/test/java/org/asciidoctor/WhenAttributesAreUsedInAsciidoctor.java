@@ -48,6 +48,20 @@ public class WhenAttributesAreUsedInAsciidoctor {
     private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
     @Test
+    public void qualified_http_url_inline_with_hide_uri_scheme_set() throws IOException {
+        
+        Attributes attributes = attributes().hiddenUriScheme(true).get();
+        
+        String content = asciidoctor.render("The AsciiDoc project is located at http://asciidoc.org.", OptionsBuilder.options().attributes(attributes));
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+        
+        Element link = doc.getElementsByTag("a").first();
+        assertThat(link.text(), is("asciidoc.org"));
+        
+    }
+    
+    @Test
     public void should_preload_open_cache_uri_gem() throws IOException {
         
         Attributes attributes = attributes().cacheUri(true).get();

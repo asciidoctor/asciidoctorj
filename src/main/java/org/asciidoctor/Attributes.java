@@ -56,6 +56,7 @@ public class Attributes {
     public static final String CACHE_URI = "cache-uri";
     public static final String MATH = "math";
     public static final String APPENDIX_CAPTION = "appendix-caption";
+    public static final String HIDE_URI_SCHEME = "hide-uri-scheme";
 
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -121,6 +122,10 @@ public class Attributes {
 	
 	public void setCacheUri(boolean hardbreaks) {
         this.attributes.put(CACHE_URI, toAsciidoctorFlag(hardbreaks));
+    }
+	
+	public void setHideUriScheme(boolean hideUriScheme) {
+        this.attributes.put(HIDE_URI_SCHEME, toAsciidoctorFlag(hideUriScheme));
     }
 	
 	public void setAppendixCaption(String appendixCaption) {
