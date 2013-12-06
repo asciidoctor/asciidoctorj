@@ -439,6 +439,18 @@ public class AttributesBuilder {
         this.attributes.setHardbreaks(hardbreaks);
         return this;
     }
+    
+    /**
+     * Sets appendix-caption at the end of each line.
+     * 
+     * @param hardbreaks
+     *            true if each line should be added a hardbreak, false otherwise.
+     * @return this instance.
+     */
+    public AttributesBuilder appendixCaption(String appendixCaption) {
+        this.attributes.setAppendixCaption(appendixCaption);
+        return this;
+    }
 
 	/**
 	 * Sets linkattrs attribute.

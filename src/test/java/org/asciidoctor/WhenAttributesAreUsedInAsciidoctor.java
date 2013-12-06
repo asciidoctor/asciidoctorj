@@ -47,13 +47,28 @@ public class WhenAttributesAreUsedInAsciidoctor {
     private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
     @Test
+    public void should_use_custom_appendix_caption_if_specified() throws IOException {
+        
+        Attributes attributes = attributes().appendixCaption("App").get();
+        
+        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
+                .toDir(testFolder.getRoot()).attributes(attributes).get();
+
+        asciidoctor.renderFile(new File(
+                "target/test-classes/appendix.asciidoc"), options);
+
+        Document doc = Jsoup.parse(new File(testFolder.getRoot(),
+                "appendix.html"), "UTF-8");
+        
+        Element attributeElement = doc.getElementById("_attribute_options");
+        assertThat(attributeElement.text(), startsWith("App"));
+    }
+    
+    @Test
     public void should_add_a_hardbreak_at_end_of_each_line_when_hardbreaks_option_is_set() throws IOException {
         
         Attributes attributes = attributes().hardbreaks(true).get();
         
-        /*Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
-                .toDir(testFolder.getRoot()).attributes(attributes).get();*/
-
         String content = asciidoctor.render("read\nmy\nlips", OptionsBuilder.options().attributes(attributes));
 
         Document doc = Jsoup.parse(content, "UTF-8");

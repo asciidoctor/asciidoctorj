@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class Attributes {
 
+    private static final String APPENDIX_CAPTION = "appendix-caption";
     private static final char ATTRIBUTE_SEPARATOR = '=';
 	private static Format DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	private static Format TIME_FORMAT = new SimpleDateFormat("HH:mm:ss z"); 
@@ -116,6 +117,10 @@ public class Attributes {
 	    this.attributes.put(HARDBREAKS, toAsciidoctorFlag(hardbreaks));
 	}
 	
+	public void setAppendixCaption(String appendixCaption) {
+        this.attributes.put(APPENDIX_CAPTION, appendixCaption);
+    }
+	
 	/**
 	 * Skips front matter.
 	 * @param skipFrontMatter value.
@@ -139,6 +144,7 @@ public class Attributes {
 	public void setUntitledLabel(String untitledLabel) {
 	    this.attributes.put(UNTITLED_LABEL, untitledLabel);
 	}
+	
 	
 	/**
 	 * Sets ignore undefined flag so lines are kept when they contain a reference to a missing attribute.
