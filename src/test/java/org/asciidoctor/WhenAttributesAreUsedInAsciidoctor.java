@@ -5,6 +5,7 @@ import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
 import static org.junit.Assert.assertThat;
@@ -45,6 +46,24 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
     private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
+    @Test
+    public void no_footer_attribute_should_not_show_footer_info() throws IOException {
+        
+        Attributes attributes = attributes().noFooter(true).get();
+        
+        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
+                .toDir(testFolder.getRoot()).attributes(attributes).get();
+
+        asciidoctor.renderFile(new File(
+                "target/test-classes/rendersample.asciidoc"), options);
+
+        Document doc = Jsoup.parse(new File(testFolder.getRoot(),
+                "rendersample.html"), "UTF-8");
+        
+        assertThat(doc.getElementById("footer"), is(nullValue()));
+        
+    }
+    
     @Test
     public void source_highlighter_attribute_should_add_required_javascript_libraries_as_highlighter() throws IOException {
         

@@ -444,7 +444,7 @@ public class AttributesBuilder {
 	 * @return this instance.
 	 */
 	public AttributesBuilder noFooter(boolean noFooter) {
-		this.attributes.setSectionNumbers(noFooter);
+		this.attributes.setNoFooter(noFooter);
 		return this;
 	}
 
