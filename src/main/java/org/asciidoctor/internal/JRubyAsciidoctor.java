@@ -27,9 +27,13 @@ import org.jruby.RubyHash;
 import org.jruby.RubyInstanceConfig;
 import org.jruby.RubyInstanceConfig.CompileMode;
 import org.jruby.javasupport.JavaEmbedUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JRubyAsciidoctor implements Asciidoctor {
 
+    private static final Logger log = LoggerFactory.getLogger(JRubyAsciidoctor.class.getName());
+    
     private static final String GEM_PATH = "GEM_PATH";
 
     private static final int DEFAULT_MAX_LEVEL = 1;
@@ -265,6 +269,11 @@ public class JRubyAsciidoctor implements Asciidoctor {
     public String render(String content, Map<String, Object> options) {
 
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
+        
+        if(log.isDebugEnabled()) {
+            log.debug(AsciidoctorUtils.toAsciidoctorComamnd(options, "-"));
+        }
+        
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
                 rubyRuntime, options);
 
@@ -279,6 +288,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
+        if(log.isDebugEnabled()) {
+            log.debug(AsciidoctorUtils.toAsciidoctorComamnd(options, filename.getAbsolutePath()));
+        }
+        
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
                 rubyRuntime, options);
 

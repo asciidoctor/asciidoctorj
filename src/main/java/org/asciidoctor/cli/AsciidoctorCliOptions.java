@@ -15,52 +15,66 @@ import com.beust.jcommander.Parameter;
 
 public class AsciidoctorCliOptions {
 
-	private static final char ATTRIBUTE_SEPARATOR = '=';
+	public static final String DESTINATION_DIR = "-D";
+	public static final String BASE_DIR = "-B";
+	public static final String TEMPLATE_DIR = "-T";
+	public static final String TEMPLATE_ENGINE = "-E";
+	public static final String COMPACT = "-C";
+	public static final String ERUBY = "-e";
+    public static final String SECTION_NUMBERS = "-n";
+    public static final String NO_HEADER_FOOTER = "-s";
+    public static final String SAFE = "-S";
+    public static final String OUTFILE = "-o";
+    public static final String DOCTYPE = "-d";
+    public static final String BACKEND = "-b";
+    public static final String VERSION = "-V";
+    public static final String VERBOSE = "-v";
+    public static final char ATTRIBUTE_SEPARATOR = '=';
 	public static final String MONITOR_OPTION_NAME = "monitor";	
 	
-	@Parameter(names = { "-v", "--verbose" }, description = "enable verbose mode (default: false)")
+	@Parameter(names = { VERBOSE, "--verbose" }, description = "enable verbose mode (default: false)")
 	private boolean verbose = false;
 	
-	@Parameter(names = {"-V", "--version"}, description ="display the version and runtime environment")
+	@Parameter(names = {VERSION, "--version"}, description ="display the version and runtime environment")
 	private boolean version = false;
 	
-	@Parameter(names = {"-b", "--backend"}, description = "set output format backend (default: html5)")
+	@Parameter(names = {BACKEND, "--backend"}, description = "set output format backend (default: html5)")
 	private String backend = "html5";
 	
-	@Parameter(names = {"-d", "--doctype"},  description = "document type to use when rendering output: [article, book, inline] (default: article)")
+	@Parameter(names = {DOCTYPE, "--doctype"},  description = "document type to use when rendering output: [article, book, inline] (default: article)")
 	private String doctype = "article";
 	
-	@Parameter(names = {"-o", "--out-file"}, description = "output file (default: based on input file path); use - to output to STDOUT")
+	@Parameter(names = {OUTFILE, "--out-file"}, description = "output file (default: based on input file path); use - to output to STDOUT")
 	private String outFile;
 	
 	@Parameter(names = {"--safe"}, description = "set safe mode level to safe (default: unsafe)")
 	private boolean safe = false;
 	
-	@Parameter(names = {"-S", "--safe-mode"}, converter = SafeModeConverter.class, description = "set safe mode level explicitly: [unsafe, safe, server, secure] (default: unsafe)")
+	@Parameter(names = {SAFE, "--safe-mode"}, converter = SafeModeConverter.class, description = "set safe mode level explicitly: [unsafe, safe, server, secure] (default: unsafe)")
 	private SafeMode safeMode = SafeMode.UNSAFE;
 	
-	@Parameter(names = {"-s", "--no-header-footer"}, description = "suppress output of header and footer (default: false)")
+	@Parameter(names = {NO_HEADER_FOOTER, "--no-header-footer"}, description = "suppress output of header and footer (default: false)")
 	private boolean noHeaderFooter = false;
 	
-	@Parameter(names = {"-n", "--section-numbers"}, description = "auto-number section titles in the HTML backend; disabled by default")
+	@Parameter(names = {SECTION_NUMBERS, "--section-numbers"}, description = "auto-number section titles in the HTML backend; disabled by default")
 	private boolean sectionNumbers = false;
 	
-	@Parameter(names = {"-e", "--eruby"}, description = "specify eRuby implementation to render built-in templates: [erb, erubis] (default: erb)")
+	@Parameter(names = {ERUBY, "--eruby"}, description = "specify eRuby implementation to render built-in templates: [erb, erubis] (default: erb)")
 	private String eruby = "erb";
 	
-	@Parameter(names = {"-C", "--compact"}, description = "compact the output by removing blank lines (default: false)")
+	@Parameter(names = {COMPACT, "--compact"}, description = "compact the output by removing blank lines (default: false)")
 	private boolean compact = false;
 	
-	@Parameter(names = {"-E","--template-engine"}, description = "template engine to use for the custom render templates (loads gem on demand)")
+	@Parameter(names = {TEMPLATE_ENGINE,"--template-engine"}, description = "template engine to use for the custom render templates (loads gem on demand)")
 	private String templateEngine;
 	
-	@Parameter(names = {"-T", "--template-dir"}, description = "directory containing custom render templates the override the built-in set")
+	@Parameter(names = {TEMPLATE_DIR, "--template-dir"}, description = "directory containing custom render templates the override the built-in set")
 	private List<String> templateDir;
 	
-	@Parameter(names = {"-B", "--base-dir"}, description = "base directory containing the document and resources (default: directory of source file)")
+	@Parameter(names = {BASE_DIR, "--base-dir"}, description = "base directory containing the document and resources (default: directory of source file)")
 	private String baseDir;
 	
-	@Parameter(names = {"-D", "--destination-dir"}, description = "destination output directory (default: directory of source file)")
+	@Parameter(names = {DESTINATION_DIR, "--destination-dir"}, description = "destination output directory (default: directory of source file)")
 	private String destinationDir;
 	
 	@Parameter(names = {"--trace"}, description = "include backtrace information on errors (default: false)")
