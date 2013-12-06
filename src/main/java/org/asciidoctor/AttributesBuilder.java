@@ -441,6 +441,18 @@ public class AttributesBuilder {
     }
     
     /**
+     * Sets cache-uri flag.
+     * 
+     * @param cacheUri
+     *            true if URI content should be cached, false otherwise.
+     * @return this instance.
+     */
+    public AttributesBuilder cacheUri(boolean cacheUri) {
+        this.attributes.setCacheUri(cacheUri);
+        return this;
+    }
+    
+    /**
      * Sets appendix-caption label.
      * 
      * @param appendixCaption

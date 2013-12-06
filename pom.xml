@@ -52,6 +52,7 @@
 		<haml.version>4.0.3</haml.version>
 		<tilt.version>1.3.4</tilt.version>
 		<coderay.version>1.1.0</coderay.version>
+		<cacheUri.version>0.0.5</cacheUri.version>
 		<asciidoctor.version>1.5.0.preview.1</asciidoctor.version>
 		<erubis.version>2.7.0</erubis.version>
 		<slim.version>1.3.6</slim.version>
@@ -109,6 +110,13 @@
 			<type>gem</type>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+            <groupId>rubygems</groupId>
+            <artifactId>open-uri-cached</artifactId>
+            <version>${cacheUri.version}</version>
+            <type>gem</type>
+            <scope>provided</scope>
+        </dependency>
 		<dependency>
 			<groupId>rubygems</groupId>
 			<artifactId>asciidoctor</artifactId>

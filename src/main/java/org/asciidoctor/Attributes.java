@@ -9,8 +9,6 @@ import java.util.Map;
 
 public class Attributes {
 
-    private static final String MATH = "math";
-    private static final String APPENDIX_CAPTION = "appendix-caption";
     private static final char ATTRIBUTE_SEPARATOR = '=';
 	private static Format DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	private static Format TIME_FORMAT = new SimpleDateFormat("HH:mm:ss z"); 
@@ -55,6 +53,9 @@ public class Attributes {
 	public static final String NO_FOOTER = "nofooter";
 	public static final String HARDBREAKS = "hardbreaks";
     public static final String SECT_NUM_LEVELS = "sectnumlevels";
+    public static final String CACHE_URI = "cache-uri";
+    public static final String MATH = "math";
+    public static final String APPENDIX_CAPTION = "appendix-caption";
 
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -117,6 +118,10 @@ public class Attributes {
 	public void setHardbreaks(boolean hardbreaks) {
 	    this.attributes.put(HARDBREAKS, toAsciidoctorFlag(hardbreaks));
 	}
+	
+	public void setCacheUri(boolean hardbreaks) {
+        this.attributes.put(CACHE_URI, toAsciidoctorFlag(hardbreaks));
+    }
 	
 	public void setAppendixCaption(String appendixCaption) {
         this.attributes.put(APPENDIX_CAPTION, appendixCaption);

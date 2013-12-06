@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
 import static org.junit.Assert.assertThat;
@@ -46,6 +47,17 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
     private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
+    @Test
+    public void should_preload_open_cache_uri_gem() throws IOException {
+        
+        Attributes attributes = attributes().cacheUri(true).get();
+        
+        String content = asciidoctor.render("read my lips", OptionsBuilder.options().attributes(attributes));
+
+        assertThat(content, is(notNullValue()));
+        
+    }
+    
     @Test
     public void should_add_AsciiMath_delimiters_around_math_block_content_if_math_attribute_not_latexmath() throws IOException {
         

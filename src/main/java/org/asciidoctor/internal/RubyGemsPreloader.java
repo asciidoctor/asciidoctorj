@@ -18,6 +18,7 @@ public class RubyGemsPreloader {
 			put(Options.ERUBY, "require 'erubis'");
 			put(Options.TEMPLATE_DIRS, "require 'tilt'");
 			put(Attributes.DATA_URI, "require 'base64'");
+			put(Attributes.CACHE_URI, "require 'open-uri/cached'");
 		}
 	};
 
@@ -37,6 +38,10 @@ public class RubyGemsPreloader {
 				preloadLibrary(Attributes.SOURCE_HIGHLIGHTER);
 			}
 
+			if(isOptionSet(attributes, Attributes.CACHE_URI)) {
+			    preloadLibrary(Attributes.CACHE_URI);
+			}
+			
 			if (isOptionSet(attributes, Attributes.DATA_URI)) {
 				preloadLibrary(Attributes.DATA_URI);
 			}
