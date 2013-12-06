@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Attributes;
 import org.asciidoctor.ContentPart;
 import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.DocumentHeader;
@@ -32,8 +33,9 @@ import org.slf4j.LoggerFactory;
 
 public class JRubyAsciidoctor implements Asciidoctor {
 
-    private static final Logger log = LoggerFactory.getLogger(JRubyAsciidoctor.class.getName());
-    
+    private static final Logger log = LoggerFactory
+            .getLogger(JRubyAsciidoctor.class.getName());
+
     private static final String GEM_PATH = "GEM_PATH";
 
     private static final int DEFAULT_MAX_LEVEL = 1;
@@ -73,31 +75,30 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         return asciidoctor;
     }
-    
+
     private static void registerExtensions(Asciidoctor asciidoctor) {
         new ExtensionRegistryExecutor(asciidoctor).registerAllExtensions();
     }
 
-    private static Asciidoctor createJRubyAsciidoctorInstance(List<String> loadPaths) {
-       
+    private static Asciidoctor createJRubyAsciidoctorInstance(
+            List<String> loadPaths) {
+
         RubyInstanceConfig config = createOptimizedConfiguration();
-        
+
         Ruby rubyRuntime = JavaEmbedUtils.initialize(loadPaths, config);
         JRubyRuntimeContext.set(rubyRuntime);
-        
-        
+
         JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(
                 rubyRuntime);
-        
+
         AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory
                 .createAsciidoctorModule();
         JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(
                 asciidoctorModule, rubyRuntime);
-        
+
         return jRubyAsciidoctor;
     }
-    
-    
+
     private static Asciidoctor createJRubyAsciidoctorInstance(
             Map<String, Object> environmentVars) {
 
@@ -269,11 +270,16 @@ public class JRubyAsciidoctor implements Asciidoctor {
     public String render(String content, Map<String, Object> options) {
 
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
-        
-        if(log.isDebugEnabled()) {
+
+        if (log.isDebugEnabled()) {
             log.debug(AsciidoctorUtils.toAsciidoctorComamnd(options, "-"));
+
+            if (AsciidoctorUtils.isOptionWithAttribute(options,
+                    Attributes.SOURCE_HIGHLIGHTER, "pygments")) {
+                log.debug("In order to use Pygments with Asciidoctor, you need to install Pygments (and Python, if you don’t have it yet). Read http://asciidoctor.org/news/#syntax-highlighting-with-pygments.");
+            }
         }
-        
+
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
                 rubyRuntime, options);
 
@@ -288,10 +294,11 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
-        if(log.isDebugEnabled()) {
-            log.debug(AsciidoctorUtils.toAsciidoctorComamnd(options, filename.getAbsolutePath()));
+        if (log.isDebugEnabled()) {
+            log.debug(AsciidoctorUtils.toAsciidoctorComamnd(options,
+                    filename.getAbsolutePath()));
         }
-        
+
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
                 rubyRuntime, options);
 

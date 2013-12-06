@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.cli.AsciidoctorCliOptions;
@@ -15,6 +16,25 @@ public class AsciidoctorUtils {
 
     private AsciidoctorUtils() {
         super();
+    }
+    
+    public static boolean isOptionWithAttribute(Map<String, Object> options, String attributeName, String attributeValue) {
+        
+        if(options.containsKey(Options.ATTRIBUTES)) {
+            Map<String, Object> attributes = (Map<String, Object>) options.get(Options.ATTRIBUTES);
+            
+            if(attributes.containsKey(attributeName)) {
+                String configuredAttributeValue = (String) attributes.get(attributeName);
+                
+                if(configuredAttributeValue.equals(attributeValue)) {
+                    return true;
+                }
+                
+            }
+            
+        }
+        
+        return false;
     }
     
     public static String toAsciidoctorComamnd(Map<String, Object> options,
