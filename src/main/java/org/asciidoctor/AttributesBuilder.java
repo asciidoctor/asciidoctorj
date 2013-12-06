@@ -437,7 +437,17 @@ public class AttributesBuilder {
 		this.attributes.setExperimental(experimental);
 		return this;
 	}
-	
+
+	/**
+	 * Sets nofooter attribute.
+	 * @param noFooter true if footer block should not be shown, false otherwise.
+	 * @return this instance.
+	 */
+	public AttributesBuilder noFooter(boolean noFooter) {
+		this.attributes.setSectionNumbers(noFooter);
+		return this;
+	}
+
 	/**
 	 * Sets custom or unlisted attribute
 	 * 
