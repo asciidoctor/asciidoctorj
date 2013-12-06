@@ -47,6 +47,22 @@ public class WhenAttributesAreUsedInAsciidoctor {
     private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
     @Test
+    public void should_add_a_hardbreak_at_end_of_each_line_when_hardbreaks_option_is_set() throws IOException {
+        
+        Attributes attributes = attributes().hardbreaks(true).get();
+        
+        /*Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
+                .toDir(testFolder.getRoot()).attributes(attributes).get();*/
+
+        String content = asciidoctor.render("read\nmy\nlips", OptionsBuilder.options().attributes(attributes));
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element paragraph = doc.getElementsByAttributeValue("class","paragraph").first();
+        assertThat(paragraph.getElementsByTag("br").size(), is(2));
+        
+    }
+    
+    @Test
     public void sect_num_levels_attribute_should_only_number_levels_up_to_value_defined_by_sectnumlevels_attribute() throws IOException {
         
         Attributes attributes = attributes().sectionNumbers(true).sectNumLevels(2).get();

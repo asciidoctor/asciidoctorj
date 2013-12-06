@@ -427,6 +427,18 @@ public class AttributesBuilder {
 		this.attributes.setSectionNumbers(sectionNumbers);
 		return this;
 	}
+	
+	/**
+     * Sets hardbreaks at the end of each line.
+     * 
+     * @param hardbreaks
+     *            true if each line should be added a hardbreak, false otherwise.
+     * @return this instance.
+     */
+    public AttributesBuilder hardbreaks(boolean hardbreaks) {
+        this.attributes.setHardbreaks(hardbreaks);
+        return this;
+    }
 
 	/**
 	 * Sets linkattrs attribute.

@@ -9,7 +9,6 @@ import java.util.Map;
 
 public class Attributes {
 
-	private static final String SECT_NUM_LEVELS = "sectnumlevels";
     private static final char ATTRIBUTE_SEPARATOR = '=';
 	private static Format DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	private static Format TIME_FORMAT = new SimpleDateFormat("HH:mm:ss z"); 
@@ -52,6 +51,8 @@ public class Attributes {
 	public static final String ATTRIBUTE_MISSING = "attribute-missing";
 	public static final String ATTRIBUTE_UNDEFINED = "attribute-undefined";
 	public static final String NO_FOOTER = "nofooter";
+	public static final String HARDBREAKS = "hardbreaks";
+    public static final String SECT_NUM_LEVELS = "sectnumlevels";
 
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
@@ -110,6 +111,10 @@ public class Attributes {
 	public void setSectNumLevels(int sectNumLevels) {
         this.attributes.put(SECT_NUM_LEVELS, sectNumLevels);
     }
+	
+	public void setHardbreaks(boolean hardbreaks) {
+	    this.attributes.put(HARDBREAKS, toAsciidoctorFlag(hardbreaks));
+	}
 	
 	/**
 	 * Skips front matter.
