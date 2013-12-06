@@ -47,6 +47,26 @@ public class WhenAttributesAreUsedInAsciidoctor {
     private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
     @Test
+    public void sect_num_levels_attribute_should_only_number_levels_up_to_value_defined_by_sectnumlevels_attribute() throws IOException {
+        
+        Attributes attributes = attributes().sectionNumbers(true).sectNumLevels(2).get();
+        
+        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
+                .toDir(testFolder.getRoot()).attributes(attributes).get();
+
+        asciidoctor.renderFile(new File(
+                "target/test-classes/multiple_levels.asciidoc"), options);
+
+        Document doc = Jsoup.parse(new File(testFolder.getRoot(),
+                "multiple_levels.html"), "UTF-8");
+        
+        assertThat(doc.getElementById("_level_1").text(), startsWith("1."));
+        assertThat(doc.getElementById("_level_2").text(), startsWith("1.1."));
+        assertThat(doc.getElementById("_level_3").text(), not(startsWith("1.1.1.")));
+        assertThat(doc.getElementById("_level_4").text(), not(startsWith("1.1.1.1.")));
+    }
+    
+    @Test
     public void no_footer_attribute_should_not_show_footer_info() throws IOException {
         
         Attributes attributes = attributes().noFooter(true).get();

@@ -74,6 +74,16 @@ public class AttributesBuilder {
     }
     
     /**
+     * Sets sect num levels attribute.
+     * @param sectnumlevels value.
+     * @return this instance.
+     */
+    public AttributesBuilder sectNumLevels(int sectnumlevels) {
+        this.attributes.setSectNumLevels(sectnumlevels);
+        return this;
+    }
+    
+    /**
      * Sets attribute missing attribute. (Possible values skip, drop, drop-line)
      * @param attributeMissing value.
      * @return this instance.
