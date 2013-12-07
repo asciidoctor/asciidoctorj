@@ -358,6 +358,11 @@ public interface Asciidoctor {
     RubyExtensionRegistry rubyExtensionRegistry();
     
     /**
+     * Unregister all registered extensions.
+     */
+    void unregisterAllExtensions();
+    
+    /**
      * This method frees all resources consumed by asciidoctorJ module. Keep in mind that if this method is called, instance becomes unusable and you should create another instance.
      */
     void shutdown();

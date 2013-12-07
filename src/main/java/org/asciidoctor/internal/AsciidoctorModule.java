@@ -12,6 +12,7 @@ public interface AsciidoctorModule {
     void inline_macro(Object blockSymbol, String blockClassName);
     void include_processor(String includeProcessorClassName);
     void treeprocessor(String treeprocessor);
+    void unregister_all_extensions();
     
 	Object render(String content, Map<String, Object> options);
 	Object render_file(String filename, Map<String, Object> options);

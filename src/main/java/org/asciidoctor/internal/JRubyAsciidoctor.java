@@ -442,6 +442,11 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     @Override
+    public void unregisterAllExtensions() {
+        this.asciidoctorModule.unregister_all_extensions();
+    }
+
+    @Override
     public void shutdown() {
         this.rubyRuntime.tearDown();
     }
@@ -450,5 +455,5 @@ public class JRubyAsciidoctor implements Asciidoctor {
     public String asciidoctorVersion() {
         return this.asciidoctorModule.asciidoctorRuntimeEnvironmentVersion();
     }
-
+    
 }

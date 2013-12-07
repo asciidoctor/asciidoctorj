@@ -5,6 +5,10 @@ require 'asciidoctor/extensions'
 class AsciidoctorModule
 	java_implements Java::Asciidoctor
 
+    def unregister_all_extensions()
+        Asciidoctor::Extensions.unregister_all
+    end
+
     def treeprocessor(extensionName)
         Asciidoctor::Extensions.register do |document|
             treeprocessor extensionName
