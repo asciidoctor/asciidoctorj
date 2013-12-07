@@ -27,9 +27,13 @@ public class WhenAsciidocotrAPICallIsCalled {
         String command = AsciidoctorUtils.toAsciidoctorComamnd(
                 optionsBuilder.asMap(), "file.adoc");
 
+        String currentDirectory = new File( "" ).getAbsolutePath() + "/";
+
         assertThat(
                 command,
-                is("asciidoctor -T /home/alex/git/asciidoctor-java-integration/a -T /home/alex/git/asciidoctor-java-integration/b -S UNSAFE -b docbook -a numbered -a copycss! -a myAtribute=myValue file.adoc"));
+                is( "asciidoctor -T "
+                    + currentDirectory + "a -T "
+                    + currentDirectory + "b -S UNSAFE -b docbook -a numbered -a copycss! -a myAtribute=myValue file.adoc" ) );
 
     }
 
