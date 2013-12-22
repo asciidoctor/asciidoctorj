@@ -1,6 +1,7 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.extension.spi.ExtensionRegistry;
 
 public class ArrowsAndBoxesExtension implements ExtensionRegistry {
 

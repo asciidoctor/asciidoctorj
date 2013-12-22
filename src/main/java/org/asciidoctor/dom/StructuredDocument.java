@@ -1,8 +1,9 @@
-package org.asciidoctor;
+package org.asciidoctor.dom;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 
 /**
  * Structure document containing header and content chunks

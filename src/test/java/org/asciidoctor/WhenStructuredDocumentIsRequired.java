@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.asciidoctor.dom.ContentPart;
+import org.asciidoctor.dom.DocumentHeader;
+import org.asciidoctor.dom.StructuredDocument;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.junit.Rule;
 import org.junit.Test;

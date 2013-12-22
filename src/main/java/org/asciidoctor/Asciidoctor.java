@@ -8,9 +8,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.asciidoctor.dom.DocumentHeader;
+import org.asciidoctor.dom.DocumentRuby;
+import org.asciidoctor.dom.StructuredDocument;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
-import org.asciidoctor.internal.DocumentRuby;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 
 /**

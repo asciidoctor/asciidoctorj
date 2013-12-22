@@ -1,4 +1,4 @@
-package org.asciidoctor.extension;
+package org.asciidoctor.extension.spi;
 
 import org.asciidoctor.Asciidoctor;
 

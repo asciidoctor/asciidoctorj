@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.asciidoctor.internal.DocumentRuby;
-import org.asciidoctor.internal.PreprocessorReader;
+import org.asciidoctor.dom.DocumentRuby;
 
 public class FrontMatterPreprocessorExtension extends Preprocessor {
 

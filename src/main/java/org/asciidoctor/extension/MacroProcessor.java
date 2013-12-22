@@ -3,8 +3,8 @@ package org.asciidoctor.extension;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.internal.Document;
-import org.asciidoctor.internal.DocumentRuby;
+import org.asciidoctor.dom.Document;
+import org.asciidoctor.dom.DocumentRuby;
 
 public abstract class MacroProcessor extends Processor {
 

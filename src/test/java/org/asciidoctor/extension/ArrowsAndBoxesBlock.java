@@ -5,9 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.internal.AbstractBlock;
-import org.asciidoctor.internal.DocumentRuby;
-import org.asciidoctor.internal.Reader;
+import org.asciidoctor.dom.AbstractBlock;
+import org.asciidoctor.dom.DocumentRuby;
 
 public class ArrowsAndBoxesBlock extends BlockProcessor {
 

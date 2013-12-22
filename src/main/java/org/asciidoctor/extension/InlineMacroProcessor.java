@@ -1,6 +1,6 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.internal.DocumentRuby;
+import org.asciidoctor.dom.DocumentRuby;
 import org.jruby.RubyRegexp;
 import org.jruby.util.ByteList;
 

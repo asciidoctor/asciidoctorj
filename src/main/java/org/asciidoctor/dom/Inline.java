@@ -1,4 +1,4 @@
-package org.asciidoctor.internal;
+package org.asciidoctor.dom;
 
 public interface Inline {
 

@@ -2,8 +2,7 @@ package org.asciidoctor.extension;
 
 import java.util.Map;
 
-import org.asciidoctor.internal.DocumentRuby;
-import org.asciidoctor.internal.PreprocessorReader;
+import org.asciidoctor.dom.DocumentRuby;
 
 public abstract class IncludeProcessor extends Processor {
 

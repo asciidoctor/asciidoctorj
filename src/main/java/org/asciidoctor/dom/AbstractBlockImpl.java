@@ -1,8 +1,9 @@
-package org.asciidoctor.internal;
+package org.asciidoctor.dom;
 
 import java.util.List;
 import java.util.Map;
 
+import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyObject;
