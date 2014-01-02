@@ -11,7 +11,7 @@ import org.asciidoctor.SafeMode;
 import org.asciidoctor.internal.AsciidoctorUtils;
 import org.junit.Test;
 
-public class WhenAsciidocotrAPICallIsCalled {
+public class WhenAsciidoctorAPICallIsCalled {
 
     @Test
     public void api_parameters_should_be_transformed_to_cli_command() {
