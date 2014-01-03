@@ -24,7 +24,7 @@ public class WhenAsciidocotrAPICallIsCalled {
                 .backend("docbook").templateDirs(new File("a"), new File("b"))
                 .safe(SafeMode.UNSAFE).attributes(attributesBuilder.get());
 
-        String command = AsciidoctorUtils.toAsciidoctorComamnd(
+        String command = AsciidoctorUtils.toAsciidoctorCommand(
                 optionsBuilder.asMap(), "file.adoc");
 
         String currentDirectory = new File( "" ).getAbsolutePath() + "/";

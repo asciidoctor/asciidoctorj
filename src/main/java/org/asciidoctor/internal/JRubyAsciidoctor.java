@@ -275,7 +275,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
         if (log.isDebugEnabled()) {
-            log.debug(AsciidoctorUtils.toAsciidoctorComamnd(options, "-"));
+            log.debug(AsciidoctorUtils.toAsciidoctorCommand(options, "-"));
 
             if (AsciidoctorUtils.isOptionWithAttribute(options,
                     Attributes.SOURCE_HIGHLIGHTER, "pygments")) {
@@ -298,7 +298,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
         if (log.isDebugEnabled()) {
-            log.debug(AsciidoctorUtils.toAsciidoctorComamnd(options,
+            log.debug(AsciidoctorUtils.toAsciidoctorCommand(options,
                     filename.getAbsolutePath()));
         }
 

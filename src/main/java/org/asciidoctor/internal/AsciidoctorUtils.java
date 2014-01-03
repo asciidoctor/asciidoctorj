@@ -36,7 +36,7 @@ public class AsciidoctorUtils {
         return false;
     }
     
-    public static String toAsciidoctorComamnd(Map<String, Object> options,
+    public static String toAsciidoctorCommand(Map<String, Object> options,
             String inputPath) {
 
         String command = RUNNER +" "+ getOptions(options) + inputPath;
