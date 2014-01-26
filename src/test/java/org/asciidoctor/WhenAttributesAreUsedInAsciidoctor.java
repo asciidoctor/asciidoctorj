@@ -331,6 +331,29 @@ public class WhenAttributesAreUsedInAsciidoctor {
     }
 
     @Test
+    public void setting_linkcss_as_false_in_string_should_embed_css_file() throws IOException {
+
+    	Attributes attributes = attributes("linkcss!").get();
+        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
+                .toDir(testFolder.getRoot()).attributes(attributes).get();
+
+        asciidoctor.renderFile(new File(
+                "target/test-classes/rendersample.asciidoc"), options);
+
+        // String readFull = IOUtils.readFull(new FileInputStream(new
+        // File(testFolder.getRoot(), "rendersample.html")));
+
+        Document doc = Jsoup.parse(new File(testFolder.getRoot(),
+                "rendersample.html"), "UTF-8");
+        Elements cssStyle = doc.select("style");
+        assertThat(cssStyle.html(), is(not("")));
+
+        Elements link = doc.select("link");
+        assertThat(link.html(), is("".trim()));
+
+    }
+    
+    @Test
     public void setting_toc_attribute_and_numbered_in_string_form_table_of_contents_should_be_generated() {
 
         Attributes attributes = attributes("toc numbered").get();
