@@ -3,8 +3,8 @@ package org.asciidoctor.extension;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.dom.AbstractBlock;
-import org.asciidoctor.dom.DocumentRuby;
+import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.jruby.Ruby;
 

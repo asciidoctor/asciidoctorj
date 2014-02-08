@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.dom.AbstractBlock;
-import org.asciidoctor.dom.DocumentRuby;
+import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.DocumentRuby;
 
 public class YellBlock extends BlockProcessor {
 

@@ -8,9 +8,9 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.dom.Author;
-import org.asciidoctor.dom.DocumentHeader;
-import org.asciidoctor.dom.RevisionInfo;
+import org.asciidoctor.ast.Author;
+import org.asciidoctor.ast.DocumentHeader;
+import org.asciidoctor.ast.RevisionInfo;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.junit.Rule;
 import org.junit.Test;

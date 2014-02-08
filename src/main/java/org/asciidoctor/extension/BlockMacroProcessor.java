@@ -1,6 +1,6 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.dom.DocumentRuby;
+import org.asciidoctor.ast.DocumentRuby;
 
 public abstract class BlockMacroProcessor extends MacroProcessor {
 

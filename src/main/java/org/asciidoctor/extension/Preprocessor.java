@@ -2,7 +2,7 @@ package org.asciidoctor.extension;
 
 import java.util.List;
 
-import org.asciidoctor.dom.DocumentRuby;
+import org.asciidoctor.ast.DocumentRuby;
 
 public abstract class Preprocessor extends Processor {
 

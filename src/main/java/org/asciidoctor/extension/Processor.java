@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.Options;
-import org.asciidoctor.dom.AbstractBlock;
-import org.asciidoctor.dom.Block;
-import org.asciidoctor.dom.Document;
-import org.asciidoctor.dom.DocumentRuby;
-import org.asciidoctor.dom.Inline;
+import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.Inline;
 import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;

@@ -2,7 +2,7 @@ package org.asciidoctor.internal;
 
 import java.util.Map;
 
-import org.asciidoctor.dom.DocumentRuby;
+import org.asciidoctor.ast.DocumentRuby;
 
 
 public interface AsciidoctorModule {

@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.dom.Document;
-import org.asciidoctor.dom.DocumentRuby;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.DocumentRuby;
 
 public class ManpageMacro extends InlineMacroProcessor {
 

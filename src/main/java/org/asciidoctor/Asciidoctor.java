@@ -8,9 +8,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.dom.DocumentHeader;
-import org.asciidoctor.dom.DocumentRuby;
-import org.asciidoctor.dom.StructuredDocument;
+import org.asciidoctor.ast.DocumentHeader;
+import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.internal.JRubyAsciidoctor;

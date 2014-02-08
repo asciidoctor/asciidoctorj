@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.dom.Block;
-import org.asciidoctor.dom.DocumentRuby;
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.DocumentRuby;
 
 public class TerminalCommandTreeprocessor extends Treeprocessor {
 

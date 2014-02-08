@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.dom.Block;
-import org.asciidoctor.dom.Document;
-import org.asciidoctor.dom.DocumentRuby;
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.DocumentRuby;
 
 public class GistMacro extends BlockMacroProcessor {
 
