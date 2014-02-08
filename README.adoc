@@ -496,3 +496,73 @@ export JRUBY_OPTS="-J-Xverify:none -J-client"
 Note that you should add *-J* before the flag.
 
 You can find a full explanation on how to improve startup time of +JRuby+ applications at https://github.com/jruby/jruby/wiki/Improving-startup-time[Improving Startup Time].
+
+== Running on WildFly AS
+If you want to use +Asciidoctor-java-integration+ in your application deployed on +WilFly AS+, you have to follow the instruction below :
+
+* Create a *Asciidoctor module* for WildFly AS
+** create the following folder tree : +$JBOSS_HOME/modules/org/asciidoctor/main+
+** create the module descriptor file +module.xml+ like this :
+
+[source, xml]
+.Asciidoctor module descriptor for WildFly AS
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.0" name="org.asciidoctor">
+  <resources>
+    <resource-root path="asciidoctor-java-integration-0.1.4.jar"/>
+    <resource-root path="jcommander-1.30.jar"/>
+    <resource-root path="jruby-complete-1.7.4.jar"/>
+  </resources>
+
+  <dependencies>
+    <module name="javax.management.j2ee.api"/>
+    <module name="javax.api"/>
+  </dependencies>  
+</module>
+----
+
+* Add a *dependency* on your Java archive to this WildFly module choosing between 2 options :
+** you can either add the dependency just into the +MANIFEST.MF+ file
+
+[source, text]
+.MANIFEST.MF file example with dependency to Asciidoctor module
+----
+Manifest-Version: 1.0
+Dependencies: org.asciidoctor
+...
+----
+
+ ** +OR+ you can configure the dependency into the +pom.xml+ thanks to the Maven JAR/WAR plugin
+
+[source, xml]
+.pom.xml file example with Maven WAR plugin configuration to add a dependency
+...
+<dependencies>
+  <dependency>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-java-integration</artifactId>
+    <version>${asciidoctor.version}</version>     
+    <scope>provided</scope>                               <1>
+    ...
+  </dependency>
+</dependencies>
+...
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-war-plugin</artifactId>
+    <version>${maven.war.plugin.version}</version>
+    <configuration>
+      <archive>
+        <manifestEntries>
+          <Dependencies>org.asciidoctor</Dependencies>   <2>
+        </manifestEntries>
+      </archive>
+    </configuration>
+</plugin>
+...
+----
+
+<1> asciidoctor-java-version dependency and all these transitives dependencies don't need to be added to the final WAR since all JARs are available through the module
+<2> the module dependency will be added to the MANIFEST.MF file
+
