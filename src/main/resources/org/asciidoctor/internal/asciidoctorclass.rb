@@ -1,3 +1,10 @@
+module AsciidoctorJ
+    include_package 'org.asciidoctor'
+    module Extensions
+        include_package 'org.asciidoctor.extension'
+    end
+end
+
 require 'java'
 require 'asciidoctor'
 require 'asciidoctor/extensions'
