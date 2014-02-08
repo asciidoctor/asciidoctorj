@@ -1,44 +1,48 @@
-asciidoctor-java-integration
-============================
-:asciidoc-url: http://asciidoc.org
-:asciidoctor-url: http://asciidoctor.org
-:issues-url: https://github.com/asciidoctor/asciidoctor-java-integration/issues
+= AsciidoctorJ: Asciidoctor Java integration & API
+Alex Soto
+:asciidoc-uri: http://asciidoc.org
+:asciidoctor-uri: http://asciidoctor.org
+:source-language: java
+:language: {source-language}
+:icons: font
 
-image:https://travis-ci.org/asciidoctor/asciidoctorj.png?branch=master["Build Status", link="https://travis-ci.org/asciidoctor/asciidoctorj"]
+ifdef::env-github[]
+[link=https://travis-ci.org/asciidoctor/asciidoctorj]
+image::https://travis-ci.org/asciidoctor/asciidoctorj.png?branch=master[Build Status,70,18]
+endif::[]
 
-The +asciidoctor-java-integration+ is the official means of using {asciidoctor-url}[Asciidoctor] to render all your {asciidoc-url}[AsciiDoc] documentation using Java instead of Ruby.
+The +asciidoctor-java-integration+ is the official means of using {asciidoctor-uri}[Asciidoctor] to render all your {asciidoc-uri}[AsciiDoc] documentation using Java instead of Ruby.
 
 == Installation
 
 Since +asciidoctor-java-integration+ is a standard jar file, the only thing you should do is add library into classpath.
 
-[source, xml]
 .Dependency declaration in Maven
+[source,xml]
 ----
 ...
 <dependencies>
   <dependency>
     <groupId>org.asciidoctor</groupId>
     <artifactId>asciidoctor-java-integration</artifactId>
-    <version>${asciidoctor.version}</version>                   <1>
+    <version>${asciidoctor.version}</version>  <!--1-->
     ...
   </dependency>
 </dependencies>
 ...
 ----
 
-[source, groovy]
 .Dependency declaration in Gradle
+[source,groovy]
 ----
 ...
 dependencies {
-	compile('org.asciidoctor:asciidoctor-java-integration:${asciidoctor.version}') {  <1>
-		transitive = false
-	}	
+    compile('org.asciidoctor:asciidoctor-java-integration:${asciidoctor.version}') {  //<1>
+        transitive = false
+    }
 }
 ...
 ----
-
 <1> As this library tracks the version of asciidoctor, you can use whichever version of asciidoctor you prefer.
 
 == Usage
@@ -46,22 +50,21 @@ dependencies {
 The core interface of +asciidoctor-java-integration+ is +Asciidoctor+ interface. It provides two methods for rendering asciidoc content, +render+ and +renderFile+. Both of them returns a string with rendered content.
 
 .Method description
-[cols="1,2" options="header"]
+[cols="1m,2"]
 |===
-|Name
-|Description
+|Name |Description
 
-|+render+
+|render
 |Parse the AsciiDoc content into a Document and render it to the specified backend format.
 
-|+renderFile+
+|renderFile
 |Parse the content of AsciiDoc file into a Document and render it to the specified backend format.
 |===
 
 Also a factory method is provided to create an instance of +Asciidoctor+ interface.
 
-[source, java]
 .Creation of Asciidoctor interface
+[source]
 ----
 import static org.asciidoctor.Asciidoctor.Factory.create;
 import org.asciidoctor.Asciidoctor;
@@ -72,19 +75,19 @@ Asciidoctor asciidoctor = create();
 
 And then we can call +render+ methods depending on our requirements.
 
-[source, java]
 .Rendering a String
+[source]
 ----
 ...
 String rendered = asciidoctor.render("*This* is it.", Collections.EMPTY_MAP);
 System.out.println(rendered);
 ...
----- 
+----
 
 But also you can render the content of a file.
 
-[source, java]
 .Rendering a File
+[source]
 ----
 ...
 String rendered = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), Collections.EMPTY_MAP);
@@ -94,8 +97,8 @@ System.out.println(rendered);
 
 Or a list of Asciidoc files:
 
-[source, java]
 .Rendering a list of files.
+[source]
 ----
 ...
 String[] allRenderedFiles = asciidoctor.renderFiles(Arrays.asList(new File("target/test-classes/rendersample.asciidoc")), options);
@@ -104,33 +107,33 @@ String[] allRenderedFiles = asciidoctor.renderFiles(Arrays.asList(new File("targ
 
 If the rendered content is not written into files, +renderDirectory+ will return an array listing all the documents rendered.
 
-Another method provided by +Asciidoctor+ interface is +renderDirectory+. This method renders all AsciiDoc files (+_.asc_+,+ _.asciidoc_+,+ _.ad_+ or +_.adoc_+), that are present inside provided folder or any of its subfolder.
+Another method provided by +Asciidoctor+ interface is +renderDirectory+. This method renders all AsciiDoc files (+_.asc_+, +_.asciidoc_+, +_.ad_+ or +_.adoc_+), that are present inside provided folder or any of its subfolder.
 
 In case rendered content is not written in files, this method returns an array with all documents rendered.
 
-[source, java]
 .Rendering all files of directory
+[source]
 ----
 ...
 String[] allRenderedFiles = asciidoctor.renderDirectory(new File("target/test-classes/src"), new HashMap<String, Object>());
 
 for(String renderedFile:allRenderedFiles) {
-	System.out.println(renderedFile);
+    System.out.println(renderedFile);
 }
 ...
 ----
 
 Another way to render AsciiDoc content is by calling +render+ method but providing a +Reader+ and +Writer+. +Reader+ interface is used as source, and rendered content is written through +Writer+ interface.
 
-[source, java]
 .Rendering content to a Writer
+[source]
 ----
 ...
 FileReader inputAsciidoctorFile = new FileReader(new File("target/test-classes/rendersample.asciidoc"));
 StringWriter rendererWriter = new StringWriter();
 
 asciidoctor.render(inputAsciidoctorFile, rendererWriter, options().asMap());
-		
+
 StringBuffer renderedContent = rendererWriter.getBuffer();
 assertRenderedFile(renderedContent.toString());
 ...
@@ -138,12 +141,12 @@ assertRenderedFile(renderedContent.toString());
 
 === Options
 
-{asciidoctor-url}[Asciidoctor] supports different kind of options, like +in_place+ which renders the output inside a file, +template_dir+ used to provide a directory of Tilt-compatible templates to be used instead of the default built-in templates, or for example +attributes+ option where we can set key-value pairs of attributes that will be used within asciidoc document.
+{asciidoctor-uri}[Asciidoctor] supports different kind of options, like +in_place+ which renders the output inside a file, +template_dir+ used to provide a directory of Tilt-compatible templates to be used instead of the default built-in templates, or for example +attributes+ option where we can set key-value pairs of attributes that will be used within asciidoc document.
 
 The second parameter of +render+ methods are a +java.util.Map+ where all these options can be set.
 
 .Example of using in_place Option and backend Attribute
-[source, java]
+[source]
 ----
 Map<String, Object> attributes = new HashMap<String, Object>();
 attributes.put("backend", "docbook");
@@ -159,15 +162,14 @@ See that in previous example we have created a Map, where we have put the option
 
 Another way for setting options is by using +org.asciidoctor.Options+ class. +Options+ is a simple Java class which contains methods for setting required options. Note that related with +org.asciidoctor.Options+ class, there is +org.asciidoctor.Attributes+ class, which can be used for setting attributes.
 
-+render+ methods are overloaded, so we can pass +org.asciidoctor.Options+ as parameter instead of +java.util.Map+. 
++render+ methods are overloaded, so we can pass +org.asciidoctor.Options+ as parameter instead of +java.util.Map+.
 
 .Example of using Options and Attributes class instead of Map.
-[source, java]
+[source]
 ----
- 
 Attributes attributes = new Attributes();
 attributes.setBackend("docbook");
-		
+
 Options options = new Options();
 options.setInPlace(true);
 options.setAttributes(attributes);
@@ -177,12 +179,12 @@ String render = asciidoctor.renderFile("target/test-classes/rendersample.asciido
 ...
 ----
 
-But +asciidoctor-java-integration+ also provides two fluent interfaces to create these maps and classes in a more readable form. 
+But +asciidoctor-java-integration+ also provides two fluent interfaces to create these maps and classes in a more readable form.
 
 +org.asciidoctor.AttributesBuilder+ is provided for creating required attributes set, and +org.asciidoctor.OptionsBuilder+ can be used for options. Previous example but using these classes looks like:
 
 .Example setting attributes and options with map
-[source, java]
+[source]
 ----
 import static org.asciidoctor.AttributesBuilder.attributes;
 import static org.asciidoctor.OptionsBuilder.options;
@@ -198,7 +200,7 @@ String render = asciidoctor.renderFile("target/test-classes/rendersample.asciido
 ----
 
 .Example setting attributes and options with classes
-[source, java]
+[source]
 ----
 import static org.asciidoctor.AttributesBuilder.attributes;
 import static org.asciidoctor.OptionsBuilder.options;
@@ -211,15 +213,15 @@ Options options = options().inPlace(true).attributes(attributes).get();
 String render = asciidoctor.renderFile("target/test-classes/rendersample.asciidoc", options);
 
 ...
----- 
+----
 
 === Document Header
 
 +readDocumentHeader+ retrieve information from the header of an AsciiDoc document without parsing or rendering the entire document.
 This method returns an instance of +org.asciidoctor.DocumentHeader+ with all information from the header filled.
 
-[source]
 .AsciiDoc document with header information
+[source]
 ----
 = Sample Document
 Doc Writer <doc.writer@asciidoc.org>; John Smith <john.smith@asciidoc.org>
@@ -230,46 +232,45 @@ v1.0, 2013-05-20: First draft
 Preamble...
 ----
 
-[source]
 .Retrieving some of header information
+[source]
 ----
 //...
 DocumentHeader header = asciidoctor.readDocumentHeader(new File("target/test-classes/documentheaders.asciidoc"));
 
-System.out.println(header.getDocumentTitle()); 		<1>
+System.out.println(header.getDocumentTitle()); //<1>
 
-Author author = header.getAuthor();					<2>
-System.out.println(author.getEmail()); 				<3>
-System.out.println(author.getFullName());  			<4>
+Author author = header.getAuthor();            //<2>
+System.out.println(author.getEmail());         //<3>
+System.out.println(author.getFullName());      //<4>
 
 RevisionInfo revisionInfo = header.getRevisionInfo();
-		
-System.out.println(revisionInfo.getDate()); 		<5>
-System.out.println(revisionInfo.getNumber()); 		<6>
-System.out.println(revisionInfo.getRemark()); 		<7>
----- 
 
-<1> prints "Sample Document"
-<2> prints "Doc Writer"
-<3> prints "doc.writer@asciidoc.org"
-<4> prints "Doc Writer"
-<5> prints "2013-05-20"
-<6> prints "1.0"
-<7> prints "First draft"
+System.out.println(revisionInfo.getDate());    //<5>
+System.out.println(revisionInfo.getNumber());  //<6>
+System.out.println(revisionInfo.getRemark());  //<7>
+----
+<1> prints +Sample Document+
+<2> prints +Doc Writer+
+<3> prints `doc.writer@asciidoc.org`
+<4> prints +Doc Writer+
+<5> prints +2013-05-20+
+<6> prints +1.0+
+<7> prints +First draft+
 
 === Document structure
 
-+readDocumentStructure+ provides easy and useful way of parsing asciidoc file into 
-the structured object. First of all it gathers exactly the same information as 
-+readDocumentHeader+ and puts it in +header+ filed of +StructuredDocument+ object. 
++readDocumentStructure+ provides easy and useful way of parsing asciidoc file into
+the structured object. First of all it gathers exactly the same information as
++readDocumentHeader+ and puts it in +header+ filed of +StructuredDocument+ object.
 Actual content of the file is split into separate ContentParts based on blocks of
 the content.
 
-There are few possible use cases of using this feature, please consider 
+There are few possible use cases of using this feature, please consider
 following examples:
 
-[source]
 .AsciiDoc document with two blocks defined by section titles
+[source]
 ----
 = Sample Document
 
@@ -283,22 +284,22 @@ And content of section two
 ----
 
 Each section defines new content part. List of all parts can be get by +getParts+ method
-on +StructuredDocument+. Each part will than contain of title (ie. "Section one") and 
+on +StructuredDocument+. Each part will than contain of title (ie. "Section one") and
 rendered text content as html.
 
-[source]
 .Print content of each part
+[source]
 ----
 for (ContentPart part : document.getParts()){
-	System.out.println(part.getTitle());
-	System.out.println("----");
-	System.out.println(part.getContent);
-	System.out.println("----");
+    System.out.println(part.getTitle());
+    System.out.println("----");
+    System.out.println(part.getContent);
+    System.out.println("----");
 }
 ----
 
-[source]
 .AsciiDoc document with two blocks defined by styles
+[source]
 ----
 = Sample Document
 
@@ -306,7 +307,7 @@ for (ContentPart part : document.getParts()){
 This is content of first content part
 
 [[partId]]
-[style two,role="partRole"]
+[style two,role=partRole]
 --
 And content of second content part
 
@@ -315,8 +316,9 @@ This block can be as long as you want.
 ----
 
 This way you can then use methods like getPartByStyle to retrieve particular content parts.
-[source]
+
 .Retrieve content part by style
+[source]
 ----
 ContentPart style_two = document.getPartByStyle("style two");
 // other possible way of retrieving parts:
@@ -327,43 +329,42 @@ ContentPart style_two = document.getPartByRole("partRole")
 List<ContentPart> parts = document.getPartsByStyle("style two");
 List<ContentPart> parts = document.getPartsByRole("partRole");
 List<ContentPart> parts = document.getPartsByContext("open");
-
 ----
 
-Really nice thing about it is possibility to parse images to Image object that you can use 
-later to embed in html page directly from your java code or manipulate in any other way. 
+Really nice thing about it is possibility to parse images to Image object that you can use
+later to embed in html page directly from your java code or manipulate in any other way.
 
-[source]
 .Define images
+[source]
 ----
 [Images]
 image::src/some{sp}image{sp}1.JPG[TODO title1,link="link1.html"]
 image::src/some{sp}image{sp}2.JPG[TODO title2,link="link2.html"]
 ----
- 
-to get a list of images defined in the document and then to process images: 
 
-[source]
+to get a list of images defined in the document and then to process images:
+
 .Retrieve image information
+[source]
 ----
 List<ContentPart> images = document.getPartsByContext("image");
 for (ContentPart image : images){
-	String src = (String) image.getAttributes().get("target"); 
-	String alt = (String) image.getAttributes().get("alt"); 
-	String link = (String) image.getAttributes().get("link");
-} 
+    String src = (String) image.getAttributes().get("target");
+    String alt = (String) image.getAttributes().get("alt");
+    String link = (String) image.getAttributes().get("link");
+}
 ----
 
 As of final example consider following complete use case:
 
-[source]
 .AsciiDoc document with product definition
+[source,asciidoc]
 ----
 = Sample product
 v1.0, 2013-10-12
 :hardbreaks:
 
-:price: 70 pln 
+:price: 70 pln
 :smallImage: photos/small/small_image.jpg
 
 [Description]
@@ -384,13 +385,14 @@ Detail information about product. Note that you can use all asciidoc features he
 * further blocks
 
 [role=text-center]
-also you can also add css style by assigning role to the text. 
+also you can also add css style by assigning role to the text.
 --
 ----
 
 and the way it can be than transformed to java object:
-[source]
+
 .Java method for getting product
+[source]
 ----
 Product product = new Product();
 product.setTitle(document.getHeader().getDocumentTitle());
@@ -398,15 +400,15 @@ product.setPrice(new Price((String) document.getHeader().getAttributes().get("pr
 product.setSmallImage(new Image((String)document.getHeader().getAttributes().get("smallImage"),product.getTitle()));
 
 product.setDescription(document.getPartByStyle("description").getContent());
-		
+
 List<ContentPart> images = document.getPartsByContext("image");
 for (ContentPart image : images) {
-	Image image = new Image();
-	image.setSrc((String) image.getAttributes().get("target"));
-	image.setAlt((String) image.getAttributes().get("alt"));
-	product.getImages().add(image);
+    Image image = new Image();
+    image.setSrc((String) image.getAttributes().get("target"));
+    image.setAlt((String) image.getAttributes().get("alt"));
+    product.getImages().add(image);
 }
-		
+
 product.setDetail(document.getPartByStyle("detail").getContent());
 ----
 
@@ -414,23 +416,22 @@ Last feature of structure document is possibility to configure how deeply should
 be processed. Default is one level only so if you want to have more nested structure add
 STRUCTURE_MAX_LEVEL parameter to processing options.
 
-[source]
 .Configuration of the structure document processing
+[source]
 ----
 Map<String,Object> parameters = new HashMap<String, Object>();
 parameters.put(Asciidoctor.STRUCTURE_MAX_LEVEL, 2);
 StructuredDocument document = asciidoctor.readDocumentStructure(
-		new File("target/test-classes/documentblocks.asciidoc"),
-		parameters
-	);
+    new File("target/test-classes/documentblocks.asciidoc"),
+    parameters);
 ----
- 
+
 === Utilities
 
 A utility class for searching all asciidoc files present in a root folder and all its subfolders is given. In fact it finds all files that end up with _.asc_, _.asciidoc_, _.ad_ or _.adoc_. This class is +AsciiDocDirectoryWalker+.
 
 .Example of finding all asciidoc
-[source, java]
+[source]
 ----
 DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker("target/test-classes/src");
 List<File> asciidocFiles = directoryWalker.scan();
@@ -441,10 +442,10 @@ List<File> asciidocFiles = directoryWalker.scan();
 By default +asciidoctor-java-integration+ comes with all required gems bundled within the jar. But in some circumstances like +OSGi+ environments you may require to store gems in an external directory and be loaded by +asciidoctor-java-integration+. To accomplish this scenario, +create+ method provides a parameter to set it.
 
 .Example of setting GEM_PATH
-[source, java]
+[source]
 ----
 Asciidoctor asciidoctor = create("my/gem/path");
----- 
+----
 
 == Optimization
 
@@ -453,42 +454,40 @@ Sometimes +JRuby+ starting time is slower than we would expect if we were using 
 For small tasks such as converting an AsciiDoc document, there are two +JRuby+ flags can improve the startup time:
 
 .JRuby flags
-[cols="1,2", options="header"]
+[cols="1m,2"]
 |===
-|Flag
-|Value
+|Flag |Value
 
-|+jruby.compat.version+
+|jruby.compat.version
 |RUBY1_9
 
-|+jruby.compile.mode+
+|jruby.compile.mode
 |OFF
 |===
 
 Both flags are set by default inside +asciidoctor-java-integration+ project, so we do not have to worry about setting them manually.
 
-As mentioned before, there are some +java+ flags that can also be used for this purpose. These flags depends on version of +JDK+ and also if you are working on 32/64 bits version. These flags can be set by using +JRUBY_OPTS+ environment variable. Let's see a summary of these flags and in which versions can be used.
+As mentioned before, there are some Java flags that can also be used for this purpose. These flags depends on version of +JDK+ and also if you are working on 32/64 bits version. These flags can be set by using +JRUBY_OPTS+ environment variable. Let's see a summary of these flags and in which versions can be used.
 
-.java flags
-[cols="1,2" options="header]
+.Java flags
+[cols="1m,2"]
 |===
-|Flag
-|JDK
+|Flag |JDK
 
-|+-client+
+|-client
 |32 bits Java
 
-|+-Xverify:none+
+|-Xverify:none
 |32/64 bits Java
 
-|+-XX:+TieredCompilation+
+|-XX:+TieredCompilation
 |32/64 bits Java SE 7
 
-|+-XX:TieredStopAtLevel=1+
+|-XX:TieredStopAtLevel=1
 |32/64 bits Java SE 7
 |===
 
-[source, bash]
+[source,bash]
 .Setting flags for Java SE 6
 ----
 export JRUBY_OPTS="-J-Xverify:none -J-client"
@@ -496,4 +495,4 @@ export JRUBY_OPTS="-J-Xverify:none -J-client"
 
 Note that you should add *-J* before the flag.
 
-You can find a full explanation on how to improve startup time of +JRuby+ applications at https://github.com/jruby/jruby/wiki/Improving-startup-time[Improving Startup Time]
+You can find a full explanation on how to improve startup time of +JRuby+ applications at https://github.com/jruby/jruby/wiki/Improving-startup-time[Improving Startup Time].
