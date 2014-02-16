@@ -11,10 +11,10 @@ public interface AbstractBlock {
     String style();
     List<Block> blocks();
     Map<String, Object> attributes();
-    
     Object content();
     String render();
     
+    DocumentRuby document();
     String context();
     
     AbstractBlock delegate();

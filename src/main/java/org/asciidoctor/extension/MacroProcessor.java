@@ -10,8 +10,8 @@ public abstract class MacroProcessor extends Processor {
 
     protected String macroName;
     
-    public MacroProcessor(String macroName, DocumentRuby documentRuby) {
-        super(documentRuby);
+    public MacroProcessor(String macroName, Map<String, Object> config) {
+        super(config);
         this.macroName = macroName;
     }
 
@@ -21,7 +21,7 @@ public abstract class MacroProcessor extends Processor {
     }
     
     public Object process(DocumentRuby parent, String target, Map<String, Object> attributes) {
-        return process(new Document(parent, rubyRuntime), target, attributes);
+        return process(document(parent), target, attributes);
     }
     
     protected abstract Object process(Document parent, String target, Map<String, Object> attributes);

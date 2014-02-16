@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.Document;
 
 public class YellBlock extends BlockProcessor {
 
@@ -16,13 +16,13 @@ public class YellBlock extends BlockProcessor {
      * option :contexts, [:paragraph]
      * option :content_model, :simple
      */
-    static {
+    /*static {
         config.put("contexts", Arrays.asList(":paragraph"));
         config.put("content_model", ":simple");
-    }
+    }*/
   
-    public YellBlock(String context, DocumentRuby documentRuby) {
-        super(context, documentRuby);
+    public YellBlock(String name, Map<String, Object> config) {
+        super(name, config);
     }
 
     @Override
@@ -38,7 +38,8 @@ public class YellBlock extends BlockProcessor {
             }
         }
         
-        return createBlock(document, "paragraph", Arrays.asList(upperLines), attributes, new HashMap<String, Object>());
+        Document document = document(parent.document());
+		return createBlock(document,"paragraph", Arrays.asList(upperLines), attributes, new HashMap<String, Object>());
     }
 
 }

@@ -1,11 +1,11 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.DocumentRuby;
+import java.util.Map;
 
 public abstract class BlockMacroProcessor extends MacroProcessor {
 
-    public BlockMacroProcessor(String macroName, DocumentRuby documentRuby) {
-        super(macroName, documentRuby);
+    public BlockMacroProcessor(String macroName, Map<String, Object> config) {
+        super(macroName, config);
     }
     
 }

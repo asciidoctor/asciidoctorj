@@ -1,15 +1,18 @@
 package org.asciidoctor.extension;
 
 import static org.asciidoctor.OptionsBuilder.options;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
@@ -19,7 +22,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -39,6 +41,28 @@ public class WhenJavaExtensionIsRegistered {
 
         javaExtensionRegistry
                 .preprocessor(FrontMatterPreprocessorExtension.class);
+
+        String content = asciidoctor.renderFile(new File(
+                "target/test-classes/render-with-front-matter.adoc"),
+                new Options());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+
+        Element contentElement = doc.getElementsByAttributeValue("class",
+                "content").first();
+        assertThat(contentElement.text(), is("---\n"
+                + "[tags: [announcement, website]]\n" + "---"));
+
+    }
+    
+    @Test
+    public void a_preprocessor_instance_should_be_executed_before_document_is_rendered() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
+                .javaExtensionRegistry();
+
+        javaExtensionRegistry
+                .preprocessor(new FrontMatterPreprocessorExtension(new HashMap<String, Object>()));
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/render-with-front-matter.adoc"),
@@ -77,12 +101,57 @@ public class WhenJavaExtensionIsRegistered {
     }
 
     @Test
+    public void a_postprocessor_instance_should_be_executed_after_document_is_rendered()
+            throws IOException {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
+                .javaExtensionRegistry();
+
+        javaExtensionRegistry.postprocessor(new CustomFooterPostProcessor(new HashMap<String, Object>()));
+
+        Options options = options().inPlace(false)
+                .toFile(new File(testFolder.getRoot(), "rendersample.html"))
+                .safe(SafeMode.UNSAFE).get();
+
+        asciidoctor.renderFile(new File(
+                "target/test-classes/rendersample.asciidoc"), options);
+
+        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
+        Document doc = Jsoup.parse(renderedFile, "UTF-8");
+
+        Element footer = doc.getElementById("footer-text");
+        assertThat(footer.text(), containsString("Copyright Acme, Inc."));
+    }
+    
+    @Test
     public void a_include_processor_should_be_executed_when_include_macro_is_found() {
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
                 .javaExtensionRegistry();
 
         javaExtensionRegistry.includeProcessor(UriIncludeProcessor.class);
+
+        String content = asciidoctor.renderFile(new File(
+                "target/test-classes/sample-with-uri-include.ad"),
+                new Options());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+
+        Element contentElement = doc.getElementsByAttributeValue("class",
+                "ruby language-ruby").first();
+
+        assertThat(contentElement.text(),
+                startsWith("source 'https://rubygems.org"));
+
+    }
+    
+    @Test
+    public void a_include_instance_processor_should_be_executed_when_include_macro_is_found() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
+                .javaExtensionRegistry();
+
+        javaExtensionRegistry.includeProcessor(new UriIncludeProcessor(new HashMap<String, Object>()));
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-uri-include.ad"),
@@ -105,6 +174,30 @@ public class WhenJavaExtensionIsRegistered {
                 .javaExtensionRegistry();
 
         javaExtensionRegistry.treeprocessor(TerminalCommandTreeprocessor.class);
+
+        String content = asciidoctor.renderFile(new File(
+                "target/test-classes/sample-with-terminal-command.ad"),
+                new Options());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+
+        Element contentElement = doc.getElementsByAttributeValue("class",
+                "command").first();
+        assertThat(contentElement.text(), is("echo \"Hello, World!\""));
+
+        contentElement = doc.getElementsByAttributeValue("class", "command")
+                .last();
+        assertThat(contentElement.text(), is("gem install asciidoctor"));
+
+    }
+    
+    @Test
+    public void a_treeprocessor_instance_should_be_executed_in_document() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
+                .javaExtensionRegistry();
+
+        javaExtensionRegistry.treeprocessor(new TerminalCommandTreeprocessor(new HashMap<String, Object>()));
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-terminal-command.ad"),
@@ -217,13 +310,17 @@ public class WhenJavaExtensionIsRegistered {
     }
 
     @Test
-    @Ignore("Ignored because of bug http://discuss.asciidoctor.org/Problem-registering-two-times-block-extension-AsciidoctorJ-td898.html")
+    //@Ignore("Ignored because of bug http://discuss.asciidoctor.org/Problem-registering-two-times-block-extension-AsciidoctorJ-td898.html")
     public void a_block_processor_should_be_executed_when_registered_block_is_found_in_document()
             throws IOException {
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
                 .javaExtensionRegistry();
-        javaExtensionRegistry.block("yell", YellBlock.class);
+        Map<String, Object> config = new HashMap<String, Object>();
+        config.put("contexts", Arrays.asList(":paragraph"));
+        config.put("content_model", ":simple");
+        YellBlock yellBlock = new YellBlock("yell", config);
+        javaExtensionRegistry.block("yell", yellBlock);
 
         String content = asciidoctor
                 .renderFile(new File(

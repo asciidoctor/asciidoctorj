@@ -6,18 +6,22 @@ import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.Document;
 
 public class TerminalCommandTreeprocessor extends Treeprocessor {
 
-    public TerminalCommandTreeprocessor(DocumentRuby documentRuby) {
-        super(documentRuby);
+	private Document document;
+	
+    public TerminalCommandTreeprocessor(Map<String, Object> config) {
+        super(config);
     }
 
     @Override
-    public void process() {
+    public void process(Document document) {
 
-        final List<Block> blocks = document.blocks();
+    	this.document = document;
+    	
+        final List<Block> blocks = this.document.blocks();
 
         for (int i = 0; i < blocks.size(); i++) {
             final Block currentBlock = blocks.get(i);
@@ -49,7 +53,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
             }
         }
 
-        return createBlock(document, "listing", Arrays.asList(resultLines.toString()), attributes,
+        return createBlock(this.document, "listing", Arrays.asList(resultLines.toString()), attributes,
                 new HashMap<String, Object>());
     }
 

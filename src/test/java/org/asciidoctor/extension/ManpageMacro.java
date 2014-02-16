@@ -5,12 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.DocumentRuby;
 
 public class ManpageMacro extends InlineMacroProcessor {
 
-    public ManpageMacro(String macroName, DocumentRuby documentRuby) {
-        super(macroName, documentRuby);
+    public ManpageMacro(String macroName, Map<String, Object> config) {
+        super(macroName, config);
     }
 
     @Override

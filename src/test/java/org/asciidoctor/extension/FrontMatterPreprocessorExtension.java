@@ -3,13 +3,12 @@ package org.asciidoctor.extension;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.asciidoctor.ast.DocumentRuby;
+import java.util.Map;
 
 public class FrontMatterPreprocessorExtension extends Preprocessor {
 
-    public FrontMatterPreprocessorExtension(DocumentRuby documentRuby) {
-        super(documentRuby);
+    public FrontMatterPreprocessorExtension(Map<String, Object> config) {
+        super(config);
     }
 
     @Override
@@ -45,8 +44,8 @@ public class FrontMatterPreprocessorExtension extends Preprocessor {
                 lines.addAll(originalLines);
             } else {
                 lines.remove(0);
-                document.getAttributes().put("front-matter",
-                        frontMatter.toString());
+                /*document.getAttributes().put("front-matter",
+                        frontMatter.toString());*/
             }
 
             for (int i = 0; i < frontMatter.size() + 2; i++) {

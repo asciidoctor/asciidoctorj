@@ -19,14 +19,22 @@ import org.jruby.runtime.builtin.IRubyObject;
 
 public class Processor {
 
-    protected Document document;
+	protected RubyHash config;
     protected Ruby rubyRuntime;
 
-    public Processor(DocumentRuby documentRuby) {
+    public Processor(Map<String, Object> config) {
         this.rubyRuntime = JRubyRuntimeContext.get();
-        this.document = new Document(documentRuby, rubyRuntime);
+        this.config = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, config);
     }
 
+    public void update_config(Map<Object, Object> config) {
+    	this.config.putAll(config);
+    }
+    
+    public RubyHash config() {
+    	return this.config;
+    }
+    
     public Block createBlock(AbstractBlock parent, String context, String content, Map<String, Object> attributes,
             Map<String, Object> options) {
 
@@ -75,6 +83,10 @@ public class Processor {
                 convertMapToRubyHashWithSymbols };
         return (Inline) JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass,
                 "new", parameters, Inline.class);
+    }
+    
+    protected Document document(DocumentRuby documentRuby) {
+    	return new Document(documentRuby, rubyRuntime);
     }
     
     private Block createBlock(AbstractBlock parent, String context,
