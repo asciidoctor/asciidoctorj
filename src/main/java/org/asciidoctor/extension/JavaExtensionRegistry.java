@@ -84,8 +84,12 @@ public class JavaExtensionRegistry {
         }*/
         
         this.asciidoctorModule.block_processor(
-                RubyUtils.toSymbol(rubyRuntime, blockName),
-                blockProcessor.getSimpleName());
+                blockProcessor.getSimpleName(),
+                RubyUtils.toSymbol(rubyRuntime, blockName));
+    }
+
+    public void block(BlockProcessor blockProcessor) {
+        block(blockProcessor.getName(), blockProcessor);
     }
     
     public void block(String blockName,
@@ -101,8 +105,8 @@ public class JavaExtensionRegistry {
         }*/
         
         this.asciidoctorModule.block_processor(
-                RubyUtils.toSymbol(rubyRuntime, blockName),
-                blockProcessor);
+                blockProcessor,
+                RubyUtils.toSymbol(rubyRuntime, blockName));
     }
 
     public void blockMacro(String blockName,
@@ -112,8 +116,19 @@ public class JavaExtensionRegistry {
         this.rubyRuntime.evalScriptlet("java_import "
                 + getImportLine(blockMacroProcessor));
         this.asciidoctorModule.block_macro(
-                RubyUtils.toSymbol(rubyRuntime, blockName),
-                blockMacroProcessor.getSimpleName());
+                blockMacroProcessor.getSimpleName(),
+                RubyUtils.toSymbol(rubyRuntime, blockName));
+    }
+
+    public void blockMacro(String blockName,
+                           BlockMacroProcessor blockMacroProcessor) {
+        // this may change in future to external class to deal with dynamic
+        // imports
+        this.rubyRuntime.evalScriptlet("java_import "
+                + getImportLine(blockMacroProcessor.getClass()));
+        this.asciidoctorModule.block_macro(
+                blockMacroProcessor,
+                RubyUtils.toSymbol(rubyRuntime, blockName));
     }
 
     public void inlineMacro(String blockName,

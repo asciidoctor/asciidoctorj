@@ -31,7 +31,7 @@ public class Processor {
     	this.config.putAll(config);
     }
     
-    public RubyHash config() {
+    public RubyHash getConfig() {
     	return this.config;
     }
     
@@ -94,8 +94,13 @@ public class Processor {
         IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Block");
         RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime,
                 options);
+        // FIXME hack to ensure we have the underlying Ruby instance
+        try {
+            parent = parent.delegate();
+        } catch (Exception e) {}
+
         Object[] parameters = {
-                parent.delegate(),
+                parent,
                 RubyUtils.toSymbol(rubyRuntime, context),
                 convertMapToRubyHashWithSymbols };
         return (Block) JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass,

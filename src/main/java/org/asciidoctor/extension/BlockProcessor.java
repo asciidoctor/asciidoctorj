@@ -12,6 +12,14 @@ public abstract class BlockProcessor extends Processor {
         super(config);
         this.name = name;
     }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
     
     public abstract Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes);
 }
