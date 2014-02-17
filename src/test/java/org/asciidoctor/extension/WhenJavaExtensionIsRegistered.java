@@ -320,8 +320,7 @@ public class WhenJavaExtensionIsRegistered {
         config.put("contexts", Arrays.asList(":paragraph"));
         config.put("content_model", ":simple");
         YellBlock yellBlock = new YellBlock("yell", config);
-        javaExtensionRegistry.block("yell", yellBlock);
-
+        javaExtensionRegistry.block(yellBlock);
         String content = asciidoctor
                 .renderFile(new File(
                         "target/test-classes/sample-with-yell-block.ad"),

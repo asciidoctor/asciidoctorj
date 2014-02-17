@@ -8,11 +8,12 @@ import org.jsoup.nodes.Element;
 public class ArrowsAndBoxesIncludesPostProcessor extends Postprocessor {
 
     public ArrowsAndBoxesIncludesPostProcessor(DocumentRuby documentRuby) {
-        super(documentRuby);
+        //super(documentRuby);
+        super(null);
     }
 
-    @Override
-    public String process(String output) {
+    //@Override
+    public String process(Document doc, String output) {
     
         Document document = Jsoup.parse(output);
         Element head = document.getElementsByTag("head").first();
@@ -23,5 +24,9 @@ public class ArrowsAndBoxesIncludesPostProcessor extends Postprocessor {
         
         return document.html();
     }
-    
+
+    @Override
+    public String process(org.asciidoctor.ast.Document document, String output) {
+        return null;
+    }
 }

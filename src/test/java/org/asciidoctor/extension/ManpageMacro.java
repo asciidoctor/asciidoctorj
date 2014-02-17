@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.asciidoctor.ast.AbstractBlock;
 import org.asciidoctor.ast.Document;
 
 public class ManpageMacro extends InlineMacroProcessor {
@@ -13,7 +14,7 @@ public class ManpageMacro extends InlineMacroProcessor {
     }
 
     @Override
-    protected String process(Document parent, String target,
+    protected String process(AbstractBlock parent, String target,
             Map<String, Object> attributes) {
         
         Map<String, Object> options = new HashMap<String, Object>();

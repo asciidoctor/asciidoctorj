@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.Document;
 
 public class YellBlock extends BlockProcessor {
 
@@ -27,6 +26,7 @@ public class YellBlock extends BlockProcessor {
 
     @Override
     public Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes) {
+        // FIXME this should be reader.read_lines()
         List<String> lines = reader.lines();
         String upperLines = null;
         for (String line : lines) {
@@ -37,9 +37,8 @@ public class YellBlock extends BlockProcessor {
                 upperLines = upperLines + "\n" + line.toUpperCase();
             }
         }
-        
-        Document document = document(parent.document());
-		return createBlock(document,"paragraph", Arrays.asList(upperLines), attributes, new HashMap<String, Object>());
+
+		return createBlock(parent, "paragraph", Arrays.asList(upperLines), attributes, new HashMap<String, Object>());
     }
 
 }

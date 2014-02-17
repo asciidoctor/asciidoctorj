@@ -34,14 +34,13 @@ public class RubyExtensionRegistry {
 
     public void block(String blockName, String blockProcessor) {
         this.asciidoctorModule.block_processor(
-                RubyUtils.toSymbol(rubyRuntime, blockName), blockProcessor);
+                blockProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
     }
 
     public void blockMacro(String blockName, String blockMacroProcessor) {
 
-        this.asciidoctorModule
-                .block_macro(RubyUtils.toSymbol(rubyRuntime, blockName),
-                        blockMacroProcessor);
+        this.asciidoctorModule.block_macro(
+                blockMacroProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
     }
 
     public void inlineMacro(String blockName, String inlineMacroProcessor) {
