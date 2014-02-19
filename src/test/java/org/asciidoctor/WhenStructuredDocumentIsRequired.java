@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -114,6 +115,22 @@ public class WhenStructuredDocumentIsRequired {
 		}
 		assertThat(document.getPartByStyle("Open").getContent(), startsWith("<div class=\"paragraph text-center\">"));
 	}
+
+	@Test
+	public void title_in_short_doc(){
+		Asciidoctor doctor = Asciidoctor.Factory.create();
+
+		String s = "= My page\n" +
+				"\n" +
+				"== Totally ignored header\n" +
+				"\n" +
+				"What does it mean?\n";
+
+		String title = doctor.readDocumentStructure(s, new HashMap()).getParts().get(0).getTitle();
+
+		assertEquals(title, "Totally ignored header"); // fails with null
+	}
+
 
 	@Test
 	public void title_should_be_retrieved_from_simple_string() {

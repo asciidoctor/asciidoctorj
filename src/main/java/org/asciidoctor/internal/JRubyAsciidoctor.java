@@ -164,9 +164,9 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		// if document has only one child don't treat as actual contentpart
 		// unless
 		// it has no childs
-		if (blocks.size() == 1 && blocks.get(0).blocks().size() > 0) {
-			return getContents(blocks.get(0).blocks(), 0, maxDeepLevel);
-		}
+//		if (blocks.size() == 1 && blocks.get(0).blocks().size() > 0) {
+//			return getContents(blocks.get(0).blocks(), 0, maxDeepLevel);
+//		}
 		// add next level of contentParts
 		List<ContentPart> parts = new ArrayList<ContentPart>();
 		for (Block block : blocks) {
