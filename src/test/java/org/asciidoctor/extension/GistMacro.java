@@ -1,12 +1,10 @@
 package org.asciidoctor.extension;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.asciidoctor.ast.AbstractBlock;
 import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.Document;
 
 public class GistMacro extends BlockMacroProcessor {
 
@@ -21,12 +19,7 @@ public class GistMacro extends BlockMacroProcessor {
        		"<script src=\"https://gist.github.com/"+target+".js\"></script>\n" + 
        		"</div>"; 
        
-       Map<String, Object> options = new HashMap<String, Object>() {{
-           put("content_model", ":raw");
-       }
-       };
-       
-       return createBlock(parent, "pass", Arrays.asList(content), attributes, options);
+       return createBlock(parent, "pass", Arrays.asList(content), attributes, this.getConfig());
     }
 
 }

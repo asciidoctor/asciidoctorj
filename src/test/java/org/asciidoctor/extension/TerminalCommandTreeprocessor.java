@@ -54,7 +54,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
         }
 
         return createBlock(this.document, "listing", Arrays.asList(resultLines.toString()), attributes,
-                new HashMap<String, Object>());
+                new HashMap<Object, Object>());
     }
 
 }

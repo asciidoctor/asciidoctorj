@@ -40,21 +40,21 @@ class AsciidoctorModule
         end
     end
 
-    def block_processor(blockSymbol, extensionName)
+    def block_processor(extensionName, blockSymbol)
         Asciidoctor::Extensions.register do
-            block blockSymbol, extensionName
+            block extensionName, blockSymbol
         end
     end
 
-    def block_macro(blockSymbol, extensionName)
+    def block_macro(extensionName, blockSymbol)
         Asciidoctor::Extensions.register do
-            block_macro blockSymbol, extensionName
+            block_macro extensionName, blockSymbol
         end
     end
 
-    def inline_macro(blockSymbol, extensionName)
+    def inline_macro(extensionName, blockSymbol)
         Asciidoctor::Extensions.register do
-            inline_macro blockSymbol, extensionName
+            inline_macro extensionName, blockSymbol
         end
     end
 

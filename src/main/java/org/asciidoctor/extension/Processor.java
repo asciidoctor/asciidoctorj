@@ -27,16 +27,16 @@ public class Processor {
         this.config = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, config);
     }
 
-    public void update_config(Map<Object, Object> config) {
+    public void update_config(Map<String, Object> config) {
     	this.config.putAll(config);
     }
     
-    public RubyHash getConfig() {
+    public Map<Object, Object> getConfig() {
     	return this.config;
     }
     
     public Block createBlock(AbstractBlock parent, String context, String content, Map<String, Object> attributes,
-            Map<String, Object> options) {
+            Map<Object, Object> options) {
 
         options.put(Options.SOURCE, content);
         options.put(Options.ATTRIBUTES, attributes);        
@@ -45,7 +45,7 @@ public class Processor {
     }
     
     public Block createBlock(AbstractBlock parent, String context, List<String> content, Map<String, Object> attributes,
-            Map<String, Object> options) {
+            Map<Object, Object> options) {
 
         options.put(Options.SOURCE, content);
         options.put(Options.ATTRIBUTES, attributes);        
@@ -53,12 +53,12 @@ public class Processor {
         return createBlock(parent, context, options);
     }
 
-    public Inline createInline(AbstractBlock parent, String context, List<String> text, Map<String, Object> attributes, Map<String, Object> options) {
+    public Inline createInline(AbstractBlock parent, String context, List<String> text, Map<String, Object> attributes, Map<Object, Object> options) {
         
         options.put(Options.ATTRIBUTES, attributes);
         
         IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Inline");
-        RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime,
+        RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime,
                 options);
         Object[] parameters = {
                 parent.delegate(),
@@ -90,9 +90,9 @@ public class Processor {
     }
     
     private Block createBlock(AbstractBlock parent, String context,
-            Map<String, Object> options) {
+            Map<Object, Object> options) {
         IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Block");
-        RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime,
+        RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime,
                 options);
         // FIXME hack to ensure we have the underlying Ruby instance
         try {

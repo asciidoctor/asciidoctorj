@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.DocumentRuby;
 
 public abstract class MacroProcessor extends Processor {
 

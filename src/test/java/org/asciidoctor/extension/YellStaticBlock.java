@@ -7,10 +7,15 @@ import java.util.Map;
 
 import org.asciidoctor.ast.AbstractBlock;
 
-public class YellBlock extends BlockProcessor {
+public class YellStaticBlock extends BlockProcessor {
 
-    public YellBlock(String name, Map<String, Object> config) {
-        super(name, config);
+	private static Map<String, Object> configs = new HashMap<String, Object>() {{
+		put("contexts", Arrays.asList(":paragraph"));
+        put("content_model", ":simple");
+	}};
+	
+    public YellStaticBlock(String name, Map<String, Object> config) {
+        super(name, configs);
     }
 
     @Override

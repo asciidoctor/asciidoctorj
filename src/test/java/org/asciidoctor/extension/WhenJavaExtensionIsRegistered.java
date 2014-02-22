@@ -22,6 +22,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -78,6 +79,29 @@ public class WhenJavaExtensionIsRegistered {
     }
 
     @Test
+    public void a_postprocessor_as_string_should_be_executed_after_document_is_rendered()
+            throws IOException {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
+                .javaExtensionRegistry();
+
+        javaExtensionRegistry.postprocessor("org.asciidoctor.extension.CustomFooterPostProcessor");
+
+        Options options = options().inPlace(false)
+                .toFile(new File(testFolder.getRoot(), "rendersample.html"))
+                .safe(SafeMode.UNSAFE).get();
+
+        asciidoctor.renderFile(new File(
+                "target/test-classes/rendersample.asciidoc"), options);
+
+        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
+        Document doc = Jsoup.parse(renderedFile, "UTF-8");
+
+        Element footer = doc.getElementById("footer-text");
+        assertThat(footer.text(), containsString("Copyright Acme, Inc."));
+    }
+    
+    @Test
     public void a_postprocessor_should_be_executed_after_document_is_rendered()
             throws IOException {
 
@@ -121,6 +145,28 @@ public class WhenJavaExtensionIsRegistered {
 
         Element footer = doc.getElementById("footer-text");
         assertThat(footer.text(), containsString("Copyright Acme, Inc."));
+    }
+    
+    @Test
+    public void a_include_processor_as_string_should_be_executed_when_include_macro_is_found() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
+                .javaExtensionRegistry();
+
+        javaExtensionRegistry.includeProcessor("org.asciidoctor.extension.UriIncludeProcessor");
+
+        String content = asciidoctor.renderFile(new File(
+                "target/test-classes/sample-with-uri-include.ad"),
+                new Options());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+
+        Element contentElement = doc.getElementsByAttributeValue("class",
+                "ruby language-ruby").first();
+
+        assertThat(contentElement.text(),
+                startsWith("source 'https://rubygems.org"));
+
     }
     
     @Test
@@ -192,6 +238,30 @@ public class WhenJavaExtensionIsRegistered {
     }
     
     @Test
+    public void a_treeprocessor_as_string_should_be_executed_in_document() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
+                .javaExtensionRegistry();
+
+        javaExtensionRegistry.treeprocessor("org.asciidoctor.extension.TerminalCommandTreeprocessor");
+
+        String content = asciidoctor.renderFile(new File(
+                "target/test-classes/sample-with-terminal-command.ad"),
+                new Options());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+
+        Element contentElement = doc.getElementsByAttributeValue("class",
+                "command").first();
+        assertThat(contentElement.text(), is("echo \"Hello, World!\""));
+
+        contentElement = doc.getElementsByAttributeValue("class", "command")
+                .last();
+        assertThat(contentElement.text(), is("gem install asciidoctor"));
+
+    }
+    
+    @Test
     public void a_treeprocessor_instance_should_be_executed_in_document() {
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
@@ -216,6 +286,7 @@ public class WhenJavaExtensionIsRegistered {
     }
 
     @Test
+    @Ignore
     public void extensions_should_be_correctly_added_using_extension_registry()
             throws IOException {
 
@@ -267,14 +338,100 @@ public class WhenJavaExtensionIsRegistered {
 
         assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
     }
+    
 
+    
+    @Test
+    public void a_block_macro_as_string_extension_should_be_executed_when_macro_is_detected() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
+                .javaExtensionRegistry();
+
+        javaExtensionRegistry.blockMacro("gist", "org.asciidoctor.extension.GistMacro");
+
+        String content = asciidoctor
+                .renderFile(new File(
+                        "target/test-classes/sample-with-gist-macro.ad"),
+                        new Options());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element script = doc.getElementsByTag("script").first();
+
+        assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
+    }
+    
+    @Test
+    public void a_block_macro_as_instance_extension_should_be_executed_when_macro_is_detected() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
+                .javaExtensionRegistry();
+
+        Map<String, Object> options = new HashMap<String, Object>() {{
+            put("content_model", ":raw");
+        }
+        };
+        
+        javaExtensionRegistry.blockMacro(new GistMacro("gist", options));
+
+        String content = asciidoctor
+                .renderFile(new File(
+                        "target/test-classes/sample-with-gist-macro.ad"),
+                        new Options());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element script = doc.getElementsByTag("script").first();
+
+        assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
+    }
+
+    @Test
+    public void an_inline_macro_as_string_extension_should_be_executed_when_an_inline_macro_is_detected() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
+                .javaExtensionRegistry();
+
+        
+        
+        javaExtensionRegistry.inlineMacro("man", "org.asciidoctor.extension.ManpageMacro");
+
+        String content = asciidoctor.renderFile(new File(
+                "target/test-classes/sample-with-man-link.ad"), new Options());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element link = doc.getElementsByTag("a").first();
+        assertThat(link.attr("href"), is("gittutorial.html"));
+
+    }
+    
     @Test
     public void an_inline_macro_extension_should_be_executed_when_an_inline_macro_is_detected() {
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
                 .javaExtensionRegistry();
 
+        
+        
         javaExtensionRegistry.inlineMacro("man", ManpageMacro.class);
+
+        String content = asciidoctor.renderFile(new File(
+                "target/test-classes/sample-with-man-link.ad"), new Options());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element link = doc.getElementsByTag("a").first();
+        assertThat(link.attr("href"), is("gittutorial.html"));
+
+    }
+    
+    @Test
+    public void an_inline_macro_as_instance_extension_should_be_executed_when_an_inline_macro_is_detected() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
+                .javaExtensionRegistry();
+
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("type", ":link");
+        
+        javaExtensionRegistry.inlineMacro(new ManpageMacro("man", options));
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-man-link.ad"), new Options());
@@ -310,8 +467,47 @@ public class WhenJavaExtensionIsRegistered {
     }
 
     @Test
-    //@Ignore("Ignored because of bug http://discuss.asciidoctor.org/Problem-registering-two-times-block-extension-AsciidoctorJ-td898.html")
+    public void a_block_processor_as_string_should_be_executed_when_registered_block_is_found_in_document()
+            throws IOException {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
+                .javaExtensionRegistry();
+       
+        javaExtensionRegistry.block("yell", "org.asciidoctor.extension.YellStaticBlock");
+        String content = asciidoctor
+                .renderFile(new File(
+                        "target/test-classes/sample-with-yell-block.ad"),
+                        new Options());
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Elements elements = doc.getElementsByClass("paragraph");
+        assertThat(elements.size(), is(1));
+        assertThat(elements.get(0).text(),
+                is("THE TIME IS NOW. GET A MOVE ON."));
+
+    }
+    
+    @Test
     public void a_block_processor_should_be_executed_when_registered_block_is_found_in_document()
+            throws IOException {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
+                .javaExtensionRegistry();
+       
+        javaExtensionRegistry.block("yell", YellStaticBlock.class);
+        String content = asciidoctor
+                .renderFile(new File(
+                        "target/test-classes/sample-with-yell-block.ad"),
+                        new Options());
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Elements elements = doc.getElementsByClass("paragraph");
+        assertThat(elements.size(), is(1));
+        assertThat(elements.get(0).text(),
+                is("THE TIME IS NOW. GET A MOVE ON."));
+
+    }
+    
+    @Test
+    public void a_block_processor_instance_should_be_executed_when_registered_block_is_found_in_document()
             throws IOException {
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor

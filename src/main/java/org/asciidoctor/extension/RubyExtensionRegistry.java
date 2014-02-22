@@ -46,8 +46,7 @@ public class RubyExtensionRegistry {
     public void inlineMacro(String blockName, String inlineMacroProcessor) {
 
         this.asciidoctorModule.inline_macro(
-                RubyUtils.toSymbol(rubyRuntime, blockName),
-                inlineMacroProcessor);
+        		inlineMacroProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
     }
 
 }

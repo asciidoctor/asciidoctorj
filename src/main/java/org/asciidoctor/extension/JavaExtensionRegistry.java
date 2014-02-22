@@ -29,11 +29,18 @@ public class JavaExtensionRegistry {
         this.asciidoctorModule.preprocessor(preprocessor);
     }
     
-    public void postprocessor(Class<? extends Postprocessor> postprocesor) {
+    public void postprocessor(String postprocessor) {
         // this may change in future to external class to deal with dynamic
         // imports
-        this.rubyRuntime.evalScriptlet("java_import " + getImportLine(postprocesor));
-        this.asciidoctorModule.postprocessor(postprocesor.getSimpleName());
+        this.rubyRuntime.evalScriptlet("java_import " + postprocessor);
+        this.asciidoctorModule.postprocessor(getClassName(postprocessor));
+    }
+    
+    public void postprocessor(Class<? extends Postprocessor> postprocessor) {
+        // this may change in future to external class to deal with dynamic
+        // imports
+        this.rubyRuntime.evalScriptlet("java_import " + getImportLine(postprocessor));
+        this.asciidoctorModule.postprocessor(RubyUtils.toRubyClass(rubyRuntime, postprocessor));
     }
     
     public void postprocessor(Postprocessor postprocesor) {
@@ -44,13 +51,21 @@ public class JavaExtensionRegistry {
     }
 
     public void includeProcessor(
+            String includeProcessor) {
+        // this may change in future to external class to deal with dynamic
+        // imports
+        this.rubyRuntime.evalScriptlet("java_import "
+                + includeProcessor);
+        this.asciidoctorModule.include_processor(getClassName(includeProcessor));
+    }
+    
+    public void includeProcessor(
             Class<? extends IncludeProcessor> includeProcessor) {
         // this may change in future to external class to deal with dynamic
         // imports
         this.rubyRuntime.evalScriptlet("java_import "
                 + getImportLine(includeProcessor));
-        this.asciidoctorModule.include_processor(includeProcessor
-                .getSimpleName());
+        this.asciidoctorModule.include_processor(RubyUtils.toRubyClass(rubyRuntime, includeProcessor));
     }
 
     public void includeProcessor(IncludeProcessor includeProcessor) {
@@ -68,23 +83,38 @@ public class JavaExtensionRegistry {
         // imports
         this.rubyRuntime
                 .evalScriptlet("java_import " + getImportLine(treeProcessor));
-        this.asciidoctorModule.treeprocessor(treeProcessor.getSimpleName());
+        this.asciidoctorModule.treeprocessor(RubyUtils.toRubyClass(rubyRuntime, treeProcessor));
+    }
+    
+    public void treeprocessor(String treeProcessor) {
+        // this may change in future to external class to deal with dynamic
+        // imports
+        this.rubyRuntime
+                .evalScriptlet("java_import " + treeProcessor);
+        this.asciidoctorModule.treeprocessor(getClassName(treeProcessor));
     }
 
+    public void block(String blockName,
+           String blockProcessor) {
+        // this may change in future to external class to deal with dynamic
+        // imports
+        this.rubyRuntime.evalScriptlet("java_import "
+               + blockProcessor);
+        
+        this.asciidoctorModule.block_processor(
+                getClassName(blockProcessor),
+                RubyUtils.toSymbol(rubyRuntime, blockName));
+    }
+    
     public void block(String blockName,
             Class<? extends BlockProcessor> blockProcessor) {
         // this may change in future to external class to deal with dynamic
         // imports
         this.rubyRuntime.evalScriptlet("java_import "
                 + getImportLine(blockProcessor));
-        /*try {
-            blockProcessor.getMethod("setup", Ruby.class).invoke(null, this.rubyRuntime);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to invoke setup method on block processor class: " + blockProcessor, e);
-        }*/
         
         this.asciidoctorModule.block_processor(
-                blockProcessor.getSimpleName(),
+                RubyUtils.toRubyClass(rubyRuntime, blockProcessor),
                 RubyUtils.toSymbol(rubyRuntime, blockName));
     }
 
@@ -98,11 +128,6 @@ public class JavaExtensionRegistry {
         // imports
         this.rubyRuntime.evalScriptlet("java_import "
                 + getImportLine(blockProcessor.getClass()));
-        /*try {
-            blockProcessor.getMethod("setup", Ruby.class).invoke(null, this.rubyRuntime);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to invoke setup method on block processor class: " + blockProcessor, e);
-        }*/
         
         this.asciidoctorModule.block_processor(
                 blockProcessor,
@@ -121,6 +146,17 @@ public class JavaExtensionRegistry {
     }
 
     public void blockMacro(String blockName,
+            String blockMacroProcessor) {
+        // this may change in future to external class to deal with dynamic
+        // imports
+        this.rubyRuntime.evalScriptlet("java_import "
+                + blockMacroProcessor);
+        this.asciidoctorModule.block_macro(
+                getClassName(blockMacroProcessor),
+                RubyUtils.toSymbol(rubyRuntime, blockName));
+    }
+    
+    public void blockMacro(
                            BlockMacroProcessor blockMacroProcessor) {
         // this may change in future to external class to deal with dynamic
         // imports
@@ -128,22 +164,51 @@ public class JavaExtensionRegistry {
                 + getImportLine(blockMacroProcessor.getClass()));
         this.asciidoctorModule.block_macro(
                 blockMacroProcessor,
-                RubyUtils.toSymbol(rubyRuntime, blockName));
+                RubyUtils.toSymbol(rubyRuntime, blockMacroProcessor.getName()));
     }
 
+    public void inlineMacro(
+           InlineMacroProcessor inlineMacroProcessor) {
+        // this may change in future to external class to deal with dynamic
+        // imports
+        this.rubyRuntime.evalScriptlet("java_import "
+                + getImportLine(inlineMacroProcessor.getClass()));
+        
+        this.asciidoctorModule.inline_macro(
+        		inlineMacroProcessor,
+                RubyUtils.toSymbol(rubyRuntime, inlineMacroProcessor.getName()));
+    }
+    
     public void inlineMacro(String blockName,
             Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
         // this may change in future to external class to deal with dynamic
         // imports
         this.rubyRuntime.evalScriptlet("java_import "
                 + getImportLine(inlineMacroProcessor));
+        
         this.asciidoctorModule.inline_macro(
-                RubyUtils.toSymbol(rubyRuntime, blockName),
-                inlineMacroProcessor.getSimpleName());
+        		RubyUtils.toRubyClass(rubyRuntime, inlineMacroProcessor),
+                RubyUtils.toSymbol(rubyRuntime, blockName));
+    }
+    
+    public void inlineMacro(String blockName,
+            String inlineMacroProcessor) {
+        // this may change in future to external class to deal with dynamic
+        // imports
+        this.rubyRuntime.evalScriptlet("java_import "
+                + inlineMacroProcessor);
+        
+        this.asciidoctorModule.inline_macro(
+        		getClassName(inlineMacroProcessor),
+                RubyUtils.toSymbol(rubyRuntime, blockName));
     }
     
     private String getImportLine(Class<?> extensionClass) {
         return extensionClass.getName().replace("$", "::");
+    }
+    
+    private String getClassName(String clazz) {
+    	return clazz.substring(clazz.lastIndexOf(".")+1);
     }
     
 }
