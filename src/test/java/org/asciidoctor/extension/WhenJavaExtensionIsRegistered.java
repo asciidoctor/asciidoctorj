@@ -18,6 +18,9 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.internal.JRubyRuntimeContext;
+import org.jruby.RubyRegexp;
+import org.jruby.util.ByteList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -431,7 +434,12 @@ public class WhenJavaExtensionIsRegistered {
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("type", ":link");
         
-        javaExtensionRegistry.inlineMacro(new ManpageMacro("man", options));
+        ByteList pattern = ByteList.create("man" + ":(\\S+?)\\[.*?\\]");
+       
+        options.put(":regexp", RubyRegexp.newRegexp(JRubyRuntimeContext.get(), pattern));
+        
+        ManpageMacro inlineMacroProcessor = new ManpageMacro("man", options);
+		javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-man-link.ad"), new Options());

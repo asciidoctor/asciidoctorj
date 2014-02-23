@@ -11,8 +11,15 @@ public abstract class InlineMacroProcessor extends MacroProcessor {
     
     public InlineMacroProcessor(String macroName, Map<String, Object> config) {
         super(macroName, config);
-        ByteList pattern = ByteList.create(macroName + ":(\\S+?)\\[.*?\\]");
-        regexp = RubyRegexp.newRegexp(rubyRuntime, pattern);
+        //config.put(":regexp", resolve_regexp(macroName, null));
+        
+    }
+    
+    public RubyRegexp resolve_regexp(String macroName, String format) {
+    	 ByteList pattern = ByteList.create(macroName + ":(\\S+?)\\[.*?\\]");
+         regexp = RubyRegexp.newRegexp(rubyRuntime, pattern);
+         
+         return regexp;
     }
     
     public RubyRegexp regexp() {
