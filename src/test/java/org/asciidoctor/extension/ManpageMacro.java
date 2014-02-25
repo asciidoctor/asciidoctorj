@@ -1,9 +1,9 @@
 package org.asciidoctor.extension;
 
-import java.util.Arrays;
-import java.util.Map;
-
 import org.asciidoctor.ast.AbstractBlock;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ManpageMacro extends InlineMacroProcessor {
 
@@ -14,8 +14,10 @@ public class ManpageMacro extends InlineMacroProcessor {
     @Override
     protected String process(AbstractBlock parent, String target,
             Map<String, Object> attributes) {
-        
-        return createInline(parent, "anchor", Arrays.asList(target), attributes, getConfig()).render();
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("type", ":link");
+        options.put("target", target + ".html");
+        return createInline(parent, "anchor", target, attributes, options).render();
     }
 
 }

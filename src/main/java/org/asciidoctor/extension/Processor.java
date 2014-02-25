@@ -1,14 +1,7 @@
 package org.asciidoctor.extension;
 
-import java.util.List;
-import java.util.Map;
-
 import org.asciidoctor.Options;
-import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.DocumentRuby;
-import org.asciidoctor.ast.Inline;
+import org.asciidoctor.ast.*;
 import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
@@ -16,6 +9,9 @@ import org.jruby.Ruby;
 import org.jruby.RubyHash;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
+
+import java.util.List;
+import java.util.Map;
 
 public class Processor {
 
@@ -74,13 +70,17 @@ public class Processor {
         options.put(Options.ATTRIBUTES, attributes);
         
         IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Inline");
-        RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime,
-                options);
+        RubyHash convertedOptions = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+        // FIXME hack to ensure we have the underlying Ruby instance
+        try {
+            parent = parent.delegate();
+        } catch (Exception e) {}
+
         Object[] parameters = {
-                parent.delegate(),
+                parent,
                 RubyUtils.toSymbol(rubyRuntime, context),
                 text,
-                convertMapToRubyHashWithSymbols };
+                convertedOptions };
         return (Inline) JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass,
                 "new", parameters, Inline.class);
     }
