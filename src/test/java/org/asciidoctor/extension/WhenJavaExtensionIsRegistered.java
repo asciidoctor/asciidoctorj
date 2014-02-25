@@ -1,26 +1,9 @@
 package org.asciidoctor.extension;
 
-import static org.asciidoctor.OptionsBuilder.options;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.junit.Assert.assertThat;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.internal.JRubyAsciidoctor;
-import org.asciidoctor.internal.JRubyRuntimeContext;
-import org.jruby.RubyRegexp;
-import org.jruby.util.ByteList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -29,6 +12,18 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.asciidoctor.OptionsBuilder.options;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class WhenJavaExtensionIsRegistered {
 
@@ -393,8 +388,7 @@ public class WhenJavaExtensionIsRegistered {
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
                 .javaExtensionRegistry();
 
-        
-        
+
         javaExtensionRegistry.inlineMacro("man", "org.asciidoctor.extension.ManpageMacro");
 
         String content = asciidoctor.renderFile(new File(
@@ -403,7 +397,6 @@ public class WhenJavaExtensionIsRegistered {
         Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
         assertThat(link.attr("href"), is("gittutorial.html"));
-
     }
     
     @Test
@@ -412,8 +405,6 @@ public class WhenJavaExtensionIsRegistered {
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
                 .javaExtensionRegistry();
 
-        
-        
         javaExtensionRegistry.inlineMacro("man", ManpageMacro.class);
 
         String content = asciidoctor.renderFile(new File(
@@ -432,13 +423,10 @@ public class WhenJavaExtensionIsRegistered {
                 .javaExtensionRegistry();
 
         Map<String, Object> options = new HashMap<String, Object>();
-        options.put("type", ":link");
-        
-        ByteList pattern = ByteList.create("man" + ":(\\S+?)\\[.*?\\]");
-       
-        options.put(":regexp", RubyRegexp.newRegexp(JRubyRuntimeContext.get(), pattern));
-        
+        options.put("regexp", "man(?:page)?:(\\S+?)\\[(.*?)\\]");
+
         ManpageMacro inlineMacroProcessor = new ManpageMacro("man", options);
+        assertTrue(inlineMacroProcessor.getRegexp().toString().contains("(?:page)?"));
 		javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
 
         String content = asciidoctor.renderFile(new File(
@@ -446,6 +434,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
+        assertNotNull(link);
         assertThat(link.attr("href"), is("gittutorial.html"));
 
     }
