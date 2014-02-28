@@ -2,12 +2,10 @@ package org.asciidoctor.extension;
 
 import java.util.Map;
 
-import org.asciidoctor.ast.DocumentRuby;
-
 public abstract class IncludeProcessor extends Processor {
 
-    public IncludeProcessor(DocumentRuby documentRuby) {
-        super(documentRuby);
+    public IncludeProcessor(Map<String, Object> config) {
+        super(config);
     }
 
     public abstract boolean handles(String target);

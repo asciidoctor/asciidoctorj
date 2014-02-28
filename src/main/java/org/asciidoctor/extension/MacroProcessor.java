@@ -3,27 +3,29 @@ package org.asciidoctor.extension;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.AbstractBlock;
 
 public abstract class MacroProcessor extends Processor {
 
-    protected String macroName;
+    protected String name;
     
-    public MacroProcessor(String macroName, DocumentRuby documentRuby) {
-        super(documentRuby);
-        this.macroName = macroName;
+    public MacroProcessor(String name, Map<String, Object> config) {
+        super(config);
+        this.name = name;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Map<Object, Object> options() {
         return new HashMap<Object, Object>();
     }
     
-    public Object process(DocumentRuby parent, String target, Map<String, Object> attributes) {
-        return process(new Document(parent, rubyRuntime), target, attributes);
-    }
-    
-    protected abstract Object process(Document parent, String target, Map<String, Object> attributes);
+    protected abstract Object process(AbstractBlock parent, String target, Map<String, Object> attributes);
     
 }

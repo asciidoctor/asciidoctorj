@@ -17,44 +17,44 @@ class AsciidoctorModule
     end
 
     def treeprocessor(extensionName)
-        Asciidoctor::Extensions.register do |document|
+        Asciidoctor::Extensions.register do 
             treeprocessor extensionName
         end
     end
     
     def include_processor(extensionName)
-        Asciidoctor::Extensions.register do |document|
+        Asciidoctor::Extensions.register do
             include_processor extensionName
         end
     end
 
     def preprocessor(extensionName)
-        Asciidoctor::Extensions.register do |document|
+        Asciidoctor::Extensions.register do
             preprocessor extensionName
         end
     end
     
     def postprocessor(extensionName)
-        Asciidoctor::Extensions.register do |document|
+        Asciidoctor::Extensions.register do
             postprocessor extensionName
         end
     end
 
-    def block_processor(blockSymbol, extensionName)
-        Asciidoctor::Extensions.register do |document|
-            block blockSymbol, extensionName
+    def block_processor(extensionName, blockSymbol)
+        Asciidoctor::Extensions.register do
+            block extensionName, blockSymbol
         end
     end
 
-    def block_macro(blockSymbol, extensionName)
-        Asciidoctor::Extensions.register do |document|
-            block_macro blockSymbol, extensionName
+    def block_macro(extensionName, blockSymbol)
+        Asciidoctor::Extensions.register do
+            block_macro extensionName, blockSymbol
         end
     end
 
-    def inline_macro(blockSymbol, extensionName)
-        Asciidoctor::Extensions.register do |document|
-            inline_macro blockSymbol, extensionName
+    def inline_macro(extensionName, blockSymbol)
+        Asciidoctor::Extensions.register do
+            inline_macro extensionName, blockSymbol
         end
     end
 

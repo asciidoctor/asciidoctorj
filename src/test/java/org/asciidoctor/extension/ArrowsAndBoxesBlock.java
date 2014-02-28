@@ -10,13 +10,14 @@ import org.asciidoctor.ast.DocumentRuby;
 
 public class ArrowsAndBoxesBlock extends BlockProcessor {
 
-    static {
-        config.put("contexts", Arrays.asList(":paragraph"));
-        config.put("content_model", ":simple");
-    }
+//    static {
+//        config.put("contexts", Arrays.asList(":paragraph"));
+//        config.put("content_model", ":simple");
+//    }
 
     public ArrowsAndBoxesBlock(String context, DocumentRuby documentRuby) {
-        super(context, documentRuby);
+        //super(context, documentRuby);
+        super(null, null);
     }
 
     @Override
@@ -35,12 +36,13 @@ public class ArrowsAndBoxesBlock extends BlockProcessor {
         outputLines.append("</pre>");
         attributes.put("!subs", "");
 
-        return createBlock(document, "pass", Arrays.asList(outputLines.toString()),
-                attributes, new HashMap<String, Object>() {
-                    {
-                        put("content_model", ":raw");
-                    }
-                });
+        return null;
+//        return createBlock(document, "pass", Arrays.asList(outputLines.toString()),
+//                attributes, new HashMap<String, Object>() {
+//                    {
+//                        put("content_model", ":raw");
+//                    }
+//                });
 
     }
 }

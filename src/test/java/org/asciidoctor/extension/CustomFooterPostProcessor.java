@@ -1,21 +1,23 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.DocumentRuby;
+import java.util.Map;
+
+import org.asciidoctor.ast.Document;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 public class CustomFooterPostProcessor extends Postprocessor {
 
-    public CustomFooterPostProcessor(DocumentRuby documentRuby) {
-        super(documentRuby);
+    public CustomFooterPostProcessor(Map<String, Object> config) {
+        super(config);
     }
 
     @Override
-    public String process(String output) {
+    public String process(Document document, String output) {
         
         String copyright  = "Copyright Acme, Inc.";
         
-        if(this.document.basebackend("html")) {
+        if(document.basebackend("html")) {
             org.jsoup.nodes.Document doc = Jsoup.parse(output, "UTF-8");
 
             Element contentElement = doc.getElementById("footer-text");

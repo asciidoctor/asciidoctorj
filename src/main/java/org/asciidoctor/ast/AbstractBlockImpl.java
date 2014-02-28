@@ -78,4 +78,9 @@ public class AbstractBlockImpl implements AbstractBlock {
         return delegate;
     }
 
+	@Override
+	public DocumentRuby document() {
+		return delegate.document();
+	}
+
 }

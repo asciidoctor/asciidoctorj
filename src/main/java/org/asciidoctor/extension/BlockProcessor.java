@@ -1,39 +1,24 @@
 package org.asciidoctor.extension;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.DocumentRuby;
-import org.asciidoctor.internal.RubyHashUtil;
-import org.jruby.Ruby;
 
 public abstract class BlockProcessor extends Processor {
 
-    protected static final Map<String, Object> config = new HashMap<String, Object>();
+    protected String name;
     
-    public static Map<String, Object> config() {
-        return config;
+    public BlockProcessor(String name, Map<String, Object> config) {
+        super(config);
+        this.name = name;
     }
-    
-    // Glue code to convert the config object to proper Ruby types using Ruby runtime
-    public static void setup(Ruby rubyRuntime) {
-        Map<String, Object> raw = config();
-        Map<String, Object> converted = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, raw);
-        raw.clear();
-        raw.putAll(converted);
+
+    public String getName() {
+        return this.name;
     }
-    
-    protected String context;
-    protected Map<String, Object> options;
-    
-    public BlockProcessor(String context, DocumentRuby documentRuby) {
-        super(documentRuby);
-        this.context = context;
-    }
-    
-    protected Map<String, Object> options() {
-        return new HashMap<String, Object>();
+
+    public void setName(String name) {
+        this.name = name;
     }
     
     public abstract Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes);
