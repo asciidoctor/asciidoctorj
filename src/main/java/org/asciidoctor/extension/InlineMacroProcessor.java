@@ -35,7 +35,7 @@ public abstract class InlineMacroProcessor extends MacroProcessor {
         String esc_close_bracket = lit_backslash + close_bracket;
         String not_close_bracket = "^" + close_bracket;
         String not_whitespace = "\\S+?";
-        if (format == "short") {
+        if ("short".equals(format)) {
             return convertRegexp(
                     lit_backslash + maybe +
                     macroName + ":" +

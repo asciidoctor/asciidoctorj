@@ -417,16 +417,36 @@ public class WhenJavaExtensionIsRegistered {
     }
     
     @Test
-    public void an_inline_macro_as_instance_extension_should_be_executed_when_an_inline_macro_is_detected() {
+    public void an_inline_macro_as_instance_extension_should_be_executed_when_regexp_is_set_as_option_inline_macro_is_detected() {
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
                 .javaExtensionRegistry();
 
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("regexp", "man(?:page)?:(\\S+?)\\[(.*?)\\]");
+        
+        ManpageMacro inlineMacroProcessor = new ManpageMacro("man", options);
+		javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
+
+        String content = asciidoctor.renderFile(new File(
+                "target/test-classes/sample-with-man-link.ad"), new Options());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element link = doc.getElementsByTag("a").first();
+        assertNotNull(link);
+        assertThat(link.attr("href"), is("gittutorial.html"));
+
+    }
+    
+    @Test
+    public void an_inline_macro_as_instance_extension_should_be_executed_when_an_inline_macro_is_detected() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
+                .javaExtensionRegistry();
+
+        Map<String, Object> options = new HashMap<String, Object>();
 
         ManpageMacro inlineMacroProcessor = new ManpageMacro("man", options);
-        assertTrue(inlineMacroProcessor.getRegexp().toString().contains("(?:page)?"));
 		javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
 
         String content = asciidoctor.renderFile(new File(
