@@ -10,6 +10,7 @@ import org.jruby.RubyClass;
 public interface AsciidoctorModule {
 
     void preprocessor(String preprocessorClassName);
+    void preprocessor(RubyClass preprocessorClassName);
 	void preprocessor(Preprocessor preprocessor);
 	
     void postprocessor(String postprocessorClassName);

@@ -19,7 +19,7 @@ public class JavaExtensionRegistry {
         // this may change in future to external class to deal with dynamic
         // imports
         this.rubyRuntime.evalScriptlet("java_import " + getImportLine(preprocessor));
-        this.asciidoctorModule.preprocessor(preprocessor.getSimpleName());
+        this.asciidoctorModule.preprocessor(RubyUtils.toRubyClass(rubyRuntime, preprocessor));
     }
 
     public void preprocessor(Preprocessor preprocessor) {
@@ -27,6 +27,13 @@ public class JavaExtensionRegistry {
         // imports
         this.rubyRuntime.evalScriptlet("java_import " + getImportLine(preprocessor.getClass()));
         this.asciidoctorModule.preprocessor(preprocessor);
+    }
+    
+    public void preprocessor(String preprocessor) {
+        // this may change in future to external class to deal with dynamic
+        // imports
+        this.rubyRuntime.evalScriptlet("java_import " + preprocessor);
+        this.asciidoctorModule.preprocessor(getClassName(preprocessor));
     }
     
     public void postprocessor(String postprocessor) {
