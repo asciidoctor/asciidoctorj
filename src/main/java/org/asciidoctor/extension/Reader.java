@@ -56,7 +56,7 @@ public interface Reader {
     
     /**
      * 
-  # Public: Advance to the end of the reader, consuming all remaining lines
+	 * Public: Advance to the end of the reader, consuming all remaining lines
      */
     void terminate();
 }
