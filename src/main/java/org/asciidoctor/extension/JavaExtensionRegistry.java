@@ -76,7 +76,8 @@ public class JavaExtensionRegistry {
     }
 
     public void includeProcessor(IncludeProcessor includeProcessor) {
-    	this.rubyRuntime.evalScriptlet("java_import " + getImportLine(includeProcessor.getClass()));
+    	String importLine = getImportLine(includeProcessor.getClass());
+		this.rubyRuntime.evalScriptlet("java_import " + importLine);
     	this.asciidoctorModule.include_processor(includeProcessor);
     }
     
@@ -211,7 +212,14 @@ public class JavaExtensionRegistry {
     }
     
     private String getImportLine(Class<?> extensionClass) {
-        return extensionClass.getName().replace("$", "::");
+    	
+    	int dollarPosition = -1;
+    	String className = extensionClass.getName();
+    	if((dollarPosition = className.indexOf("$")) != -1) {
+    		className = className.substring(0, dollarPosition);
+    	}
+    	
+        return className;
     }
     
     private String getClassName(String clazz) {
