@@ -1,5 +1,5 @@
-Document Title
-==============
+= Document Title
+
 
 == Section A
 
