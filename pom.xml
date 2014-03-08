@@ -286,6 +286,13 @@
 					</plugin>
 				</plugins>
 			</build>
+			<distributionManagement>
+				<repository>
+					<id>bintray-lordofthejars-maven-asciidoctorj</id>
+					<name>lordofthejars-maven-asciidoctorj</name>
+					<url>https://api.bintray.com/maven/lordofthejars/maven/asciidoctorj</url>
+				</repository>
+			</distributionManagement>
 		</profile>
 
 		<profile>
@@ -315,14 +322,6 @@
 			</build>
 		</profile>
 	</profiles>
-
-	<distributionManagement>
-		<repository>
-			<id>bintray-lordofthejars-maven-asciidoctorj</id>
-			<name>lordofthejars-maven-asciidoctorj</name>
-			<url>https://api.bintray.com/maven/lordofthejars/maven/asciidoctorj</url>
-		</repository>
-	</distributionManagement>
 
 	<repositories>
 		<repository>
