@@ -9,6 +9,10 @@ public abstract class MacroProcessor extends Processor {
 
     protected String name;
     
+    public MacroProcessor(String name) {
+        this(name, new HashMap<String, Object>());
+    }
+    
     public MacroProcessor(String name, Map<String, Object> config) {
         super(config);
         this.name = name;

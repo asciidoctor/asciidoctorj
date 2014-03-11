@@ -1,9 +1,14 @@
 package org.asciidoctor.extension;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class IncludeProcessor extends Processor {
 
+    public IncludeProcessor() {
+        this(new HashMap<String, Object>());
+    }
+    
     public IncludeProcessor(Map<String, Object> config) {
         super(config);
     }

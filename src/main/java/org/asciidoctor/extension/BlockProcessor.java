@@ -1,5 +1,6 @@
 package org.asciidoctor.extension;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.asciidoctor.ast.AbstractBlock;
@@ -7,6 +8,10 @@ import org.asciidoctor.ast.AbstractBlock;
 public abstract class BlockProcessor extends Processor {
 
     protected String name;
+    
+    public BlockProcessor(String name) {
+        this(name, new HashMap<String, Object>());
+    }
     
     public BlockProcessor(String name, Map<String, Object> config) {
         super(config);
