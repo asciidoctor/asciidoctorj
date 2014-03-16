@@ -99,7 +99,7 @@ public class WhenJavaExtensionIsRegistered {
 
 		String content = asciidoctor.renderFile(new File(
 				"target/test-classes/sample-with-uri-include.ad"),
-				new Options());
+				options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -163,7 +163,7 @@ public class WhenJavaExtensionIsRegistered {
 
 		String content = asciidoctor.renderFile(new File(
 				"target/test-classes/sample-with-uri-include.ad"),
-				new Options());
+				options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -185,7 +185,7 @@ public class WhenJavaExtensionIsRegistered {
 				.preprocessor(ChangeAttributeValuePreprocessor.class);
 
 		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/changeattribute.adoc"), new Options());
+				"target/test-classes/changeattribute.adoc"), options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -203,7 +203,7 @@ public class WhenJavaExtensionIsRegistered {
 				.preprocessor("org.asciidoctor.extension.ChangeAttributeValuePreprocessor");
 
 		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/changeattribute.adoc"), new Options());
+				"target/test-classes/changeattribute.adoc"), options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -222,7 +222,7 @@ public class WhenJavaExtensionIsRegistered {
 						new HashMap<String, Object>()));
 
 		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/changeattribute.adoc"), new Options());
+				"target/test-classes/changeattribute.adoc"), options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -312,7 +312,7 @@ public class WhenJavaExtensionIsRegistered {
 
 		String content = asciidoctor.renderFile(new File(
 				"target/test-classes/sample-with-uri-include.ad"),
-				new Options());
+				options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -334,7 +334,7 @@ public class WhenJavaExtensionIsRegistered {
 
 		String content = asciidoctor.renderFile(new File(
 				"target/test-classes/sample-with-uri-include.ad"),
-				new Options());
+				options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -357,7 +357,7 @@ public class WhenJavaExtensionIsRegistered {
 
 		String content = asciidoctor.renderFile(new File(
 				"target/test-classes/sample-with-uri-include.ad"),
-				new Options());
+				options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -379,7 +379,7 @@ public class WhenJavaExtensionIsRegistered {
 
 		String content = asciidoctor.renderFile(new File(
 				"target/test-classes/sample-with-terminal-command.ad"),
-				new Options());
+				options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -404,7 +404,7 @@ public class WhenJavaExtensionIsRegistered {
 
 		String content = asciidoctor.renderFile(new File(
 				"target/test-classes/sample-with-terminal-command.ad"),
-				new Options());
+				options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -429,7 +429,7 @@ public class WhenJavaExtensionIsRegistered {
 
 		String content = asciidoctor.renderFile(new File(
 				"target/test-classes/sample-with-terminal-command.ad"),
-				new Options());
+				options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -489,7 +489,7 @@ public class WhenJavaExtensionIsRegistered {
 		String content = asciidoctor
 				.renderFile(new File(
 						"target/test-classes/sample-with-gist-macro.ad"),
-						new Options());
+						options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 		Element script = doc.getElementsByTag("script").first();
@@ -509,7 +509,7 @@ public class WhenJavaExtensionIsRegistered {
 		String content = asciidoctor
 				.renderFile(new File(
 						"target/test-classes/sample-with-gist-macro.ad"),
-						new Options());
+						options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 		Element script = doc.getElementsByTag("script").first();
@@ -534,7 +534,7 @@ public class WhenJavaExtensionIsRegistered {
 		String content = asciidoctor
 				.renderFile(new File(
 						"target/test-classes/sample-with-gist-macro.ad"),
-						new Options());
+						options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 		Element script = doc.getElementsByTag("script").first();
@@ -552,7 +552,7 @@ public class WhenJavaExtensionIsRegistered {
 				"org.asciidoctor.extension.ManpageMacro");
 
 		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-man-link.ad"), new Options());
+				"target/test-classes/sample-with-man-link.ad"), options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 		Element link = doc.getElementsByTag("a").first();
@@ -568,7 +568,7 @@ public class WhenJavaExtensionIsRegistered {
 		javaExtensionRegistry.inlineMacro("man", ManpageMacro.class);
 
 		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-man-link.ad"), new Options());
+				"target/test-classes/sample-with-man-link.ad"), options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 		Element link = doc.getElementsByTag("a").first();
@@ -589,7 +589,7 @@ public class WhenJavaExtensionIsRegistered {
 		javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
 
 		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-man-link.ad"), new Options());
+				"target/test-classes/sample-with-man-link.ad"), options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 		Element link = doc.getElementsByTag("a").first();
@@ -610,7 +610,7 @@ public class WhenJavaExtensionIsRegistered {
 		javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
 
 		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-man-link.ad"), new Options());
+				"target/test-classes/sample-with-man-link.ad"), options().toFile(false).get());
 
 		Document doc = Jsoup.parse(content, "UTF-8");
 		Element link = doc.getElementsByTag("a").first();
@@ -655,7 +655,7 @@ public class WhenJavaExtensionIsRegistered {
 		String content = asciidoctor
 				.renderFile(new File(
 						"target/test-classes/sample-with-yell-block.ad"),
-						new Options());
+						options().toFile(false).get());
 		Document doc = Jsoup.parse(content, "UTF-8");
 		Elements elements = doc.getElementsByClass("paragraph");
 		assertThat(elements.size(), is(1));
@@ -675,7 +675,7 @@ public class WhenJavaExtensionIsRegistered {
 		String content = asciidoctor
 				.renderFile(new File(
 						"target/test-classes/sample-with-yell-block.ad"),
-						new Options());
+						options().toFile(false).get());
 		Document doc = Jsoup.parse(content, "UTF-8");
 		Elements elements = doc.getElementsByClass("paragraph");
 		assertThat(elements.size(), is(1));
@@ -698,7 +698,7 @@ public class WhenJavaExtensionIsRegistered {
 		String content = asciidoctor
 				.renderFile(new File(
 						"target/test-classes/sample-with-yell-block.ad"),
-						new Options());
+						options().toFile(false).get());
 		Document doc = Jsoup.parse(content, "UTF-8");
 		Elements elements = doc.getElementsByClass("paragraph");
 		assertThat(elements.size(), is(1));

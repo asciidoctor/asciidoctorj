@@ -201,7 +201,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
             throws IOException {
 
         Attributes attributes = attributes().skipFrontMatter(true).get();
-        Options options = options().inPlace(false).attributes(attributes).get();
+        Options options = options().toFile(false).inPlace(false).attributes(attributes).get();
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/renderwithfrontmatter.adoc"), options);
@@ -216,7 +216,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
     public void set_anchors_attribute_should_add_anchor_to_sections() {
 
         Attributes attributes = attributes().setAnchors(true).get();
-        Options options = options().inPlace(false).attributes(attributes).get();
+        Options options = options().inPlace(false).toFile(false).attributes(attributes).get();
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/rendersample.asciidoc"), options);
@@ -233,7 +233,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Attributes attributes = attributes().ignoreUndefinedAttributes(true)
                 .get();
-        Options options = options().attributes(attributes).get();
+        Options options = options().toFile(false).attributes(attributes).get();
 
         String renderContent = asciidoctor.renderFile(new File(
                 "target/test-classes/documentwithundefinedattribute.asciidoc"),
@@ -245,7 +245,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
     public void setting_toc_attribute_table_of_contents_should_be_generated() {
 
         Attributes attributes = attributes().tableOfContents(true).get();
-        Options options = options().attributes(attributes).get();
+        Options options = options().toFile(false).attributes(attributes).get();
 
         String renderContent = asciidoctor.renderFile(new File(
                 "target/test-classes/tocsample.asciidoc"), options);
@@ -357,7 +357,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
     public void setting_toc_attribute_and_numbered_in_string_form_table_of_contents_should_be_generated() {
 
         Attributes attributes = attributes("toc numbered").get();
-        Options options = options().attributes(attributes).get();
+        Options options = options().toFile(false).attributes(attributes).get();
 
         String renderContent = asciidoctor.renderFile(new File(
                 "target/test-classes/tocsample.asciidoc"), options);
@@ -375,7 +375,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Attributes attributes = attributes(new String[] { "toc", "numbered" })
                 .get();
-        Options options = options().attributes(attributes).get();
+        Options options = options().toFile(false).attributes(attributes).get();
 
         String renderContent = asciidoctor.renderFile(new File(
                 "target/test-classes/tocsample.asciidoc"), options);
@@ -392,7 +392,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
     public void unsetting_toc_attribute_table_of_contents_should_not_be_generated() {
 
         Attributes attributes = attributes().tableOfContents(false).get();
-        Options options = options().attributes(attributes).get();
+        Options options = options().toFile(false).attributes(attributes).get();
 
         String renderContent = asciidoctor.renderFile(new File(
                 "target/test-classes/tocsample.asciidoc"), options);

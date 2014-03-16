@@ -62,7 +62,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 			ParserConfigurationException {
 
 		String render_file = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"),
-				new HashMap<String, Object>());
+		        options().toFile(false).get());
 		assertRenderedFile(render_file);
 
 	}
@@ -245,7 +245,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	public void all_files_from_a_collection_should_be_rendered_into_an_array() {
 
 		String[] allRenderedFiles = asciidoctor.renderFiles(
-				Arrays.asList(new File("target/test-classes/rendersample.asciidoc")), new HashMap<String, Object>());
+				Arrays.asList(new File("target/test-classes/rendersample.asciidoc")), options().toFile(false).get());
 		assertThat(allRenderedFiles, is(arrayWithSize(1)));
 
 	}
@@ -266,7 +266,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	public void all_files_from_directory_and_subdirectories_should_be_rendered_into_an_array() {
 
 		String[] allRenderedFiles = asciidoctor.renderDirectory(new AsciiDocDirectoryWalker("target/test-classes/src"),
-				new HashMap<String, Object>());
+		        options().toFile(false).get());
 		assertThat(allRenderedFiles, is(arrayWithSize(4)));
 
 	}

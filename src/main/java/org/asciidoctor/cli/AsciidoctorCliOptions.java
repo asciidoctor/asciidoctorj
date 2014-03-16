@@ -195,6 +195,10 @@ public class AsciidoctorCliOptions {
 			optionsBuilder.toFile(new File(outFile));
 		}
 		
+	    if(isOutFileOption() && isOutputStdout()) {
+	        optionsBuilder.toFile(false);
+	    }
+		
 		if(this.safe) {
 			optionsBuilder.safe(SafeMode.SAFE);
 		}

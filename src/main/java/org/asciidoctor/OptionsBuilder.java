@@ -122,6 +122,16 @@ public class OptionsBuilder {
 	}
 	
 	/**
+     * Sets to file value. This is the destination file name.
+     * @param toFile name of output file.
+     * @return this instance.
+     */
+    public OptionsBuilder toFile(boolean toFile) {
+        this.options.setToFile(toFile);
+        return this;
+    }
+	
+	/**
 	 * Sets to file value. This is the destination file name.
 	 * @param toFile name of output file.
 	 * @return this instance.

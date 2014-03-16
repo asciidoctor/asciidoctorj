@@ -157,7 +157,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
 		new AsciidoctorInvoker().invoke("-o", "-", "target/test-classes/rendersample.asciidoc");
 		
 		Document doc = Jsoup.parse(output.toString(), "UTF-8");
-		
+
 		Elements link = doc.select("div[class]");
 		
 		String attr = link.attr("class");

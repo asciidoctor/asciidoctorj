@@ -1,5 +1,6 @@
 package org.asciidoctor.extension;
 
+import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -29,7 +30,7 @@ public class WhenRubyExtensionIsRegistered {
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-ruby-yell-block.ad"),
-                new Options());
+                options().toFile(false).get());
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
         assertThat(elements.size(), is(2));

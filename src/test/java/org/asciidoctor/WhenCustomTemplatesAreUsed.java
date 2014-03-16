@@ -19,7 +19,7 @@ public class WhenCustomTemplatesAreUsed {
     @Test
     public void document_should_be_rendered_using_given_template_dir() {
         
-        Options options = options().templateDir(new File("target/test-classes/src/custom-backends/haml/html5-tweaks")).get();
+        Options options = options().templateDir(new File("target/test-classes/src/custom-backends/haml/html5-tweaks")).toFile(false).get();
         String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
         
         Document doc = Jsoup.parse(renderContent, "UTF-8");

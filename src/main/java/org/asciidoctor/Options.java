@@ -70,6 +70,10 @@ public class Options {
 		this.options.put(TO_FILE, toFile);
 	}
 	
+	public void setToFile(boolean toFile) {
+        this.options.put(TO_FILE, toFile);
+    }
+	
 	public void setToDir(String toDir) {
 		this.options.put(TO_DIR, toDir);
 	}
