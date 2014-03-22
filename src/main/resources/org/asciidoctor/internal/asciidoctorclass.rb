@@ -58,12 +58,12 @@ class AsciidoctorModule
         end
     end
 
-	def render_file(content, options = {})
-		return Asciidoctor.render_file(content, options)
+	def convert_file(content, options = {})
+		return Asciidoctor.convert_file(content, options)
 	end
 
-	def render(content, options = {})
-		return Asciidoctor.render(content, options)
+	def convert(content, options = {})
+		return Asciidoctor.convert(content, options)
 	end
 
 	def load_file(content, options = {})

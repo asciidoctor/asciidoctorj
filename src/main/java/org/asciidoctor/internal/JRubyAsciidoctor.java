@@ -270,6 +270,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
 	@SuppressWarnings("unchecked")
 	@Override
+	@Deprecated
 	public String render(String content, Map<String, Object> options) {
 
 		this.rubyGemsPreloader.preloadRequiredLibraries(options);
@@ -293,7 +294,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
 				rubyRuntime, options);
 
-		Object object = this.asciidoctorModule.render(content, rubyHash);
+		Object object = this.asciidoctorModule.convert(content, rubyHash);
 
 		// we restore current directory to its original value.
 		rubyRuntime.setCurrentDirectory(currentDirectory);
@@ -304,6 +305,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
 	@SuppressWarnings("unchecked")
 	@Override
+	@Deprecated
 	public String renderFile(File filename, Map<String, Object> options) {
 
 		this.rubyGemsPreloader.preloadRequiredLibraries(options);
@@ -323,7 +325,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
 				rubyRuntime, options);
 
-		Object object = this.asciidoctorModule.render_file(
+		Object object = this.asciidoctorModule.convertFile(
 				filename.getAbsolutePath(), rubyHash);
 
 		// we restore current directory to its original value.
@@ -351,6 +353,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	}
 
 	@Override
+	@Deprecated
 	public void render(Reader contentReader, Writer rendererWriter,
 			Map<String, Object> options) throws IOException {
 		String content = IOUtils.readFull(contentReader);
@@ -359,6 +362,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	}
 
 	@Override
+	@Deprecated
 	public String[] renderFiles(Collection<File> asciidoctorFiles,
 			Map<String, Object> options) {
 		List<String> asciidoctorContent = renderAllFiles(options,
@@ -368,12 +372,14 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	}
 
 	@Override
+	@Deprecated
 	public String[] renderFiles(Collection<File> asciidoctorFiles,
 			Options options) {
 		return this.renderFiles(asciidoctorFiles, options.map());
 	}
 
 	@Override
+	@Deprecated
 	public String[] renderDirectory(DirectoryWalker directoryWalker,
 			Map<String, Object> options) {
 
@@ -407,50 +413,59 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	}
 
 	@Override
+	@Deprecated
 	public String render(String content, Options options) {
 		return this.render(content, options.map());
 	}
 
 	@Override
+	@Deprecated
 	public void render(Reader contentReader, Writer rendererWriter,
 			Options options) throws IOException {
 		this.render(contentReader, rendererWriter, options.map());
 	}
 
 	@Override
+	@Deprecated
 	public String renderFile(File filename, Options options) {
 		return this.renderFile(filename, options.map());
 	}
 
 	@Override
+	@Deprecated
 	public String[] renderDirectory(DirectoryWalker directoryWalker,
 			Options options) {
 		return this.renderDirectory(directoryWalker, options.map());
 	}
 
 	@Override
+	@Deprecated
 	public String render(String content, OptionsBuilder options) {
 		return this.render(content, options.asMap());
 	}
 
 	@Override
+	@Deprecated
 	public void render(Reader contentReader, Writer rendererWriter,
 			OptionsBuilder options) throws IOException {
 		this.render(contentReader, rendererWriter, options.asMap());
 	}
 
 	@Override
+	@Deprecated
 	public String renderFile(File filename, OptionsBuilder options) {
 		return this.renderFile(filename, options.asMap());
 	}
 
 	@Override
+	@Deprecated
 	public String[] renderDirectory(DirectoryWalker directoryWalker,
 			OptionsBuilder options) {
 		return this.renderDirectory(directoryWalker, options.asMap());
 	}
 
 	@Override
+	@Deprecated
 	public String[] renderFiles(Collection<File> asciidoctorFiles,
 			OptionsBuilder options) {
 		return this.renderFiles(asciidoctorFiles, options.asMap());
@@ -480,5 +495,80 @@ public class JRubyAsciidoctor implements Asciidoctor {
 	public String asciidoctorVersion() {
 		return this.asciidoctorModule.asciidoctorRuntimeEnvironmentVersion();
 	}
+
+    @Override
+    public String convert(String content, Map<String, Object> options) {
+        return render(content, options);
+    }
+
+    @Override
+    public String convert(String content, Options options) {
+        return render(content, options);
+    }
+
+    @Override
+    public String convert(String content, OptionsBuilder options) {
+        return render(content, options);
+    }
+
+    @Override
+    public void convert(Reader contentReader, Writer rendererWriter, Map<String, Object> options) throws IOException {
+        this.render(contentReader, rendererWriter, options);
+    }
+
+    @Override
+    public void convert(Reader contentReader, Writer rendererWriter, Options options) throws IOException {
+       this.render(contentReader, rendererWriter, options);
+    }
+
+    @Override
+    public void convert(Reader contentReader, Writer rendererWriter, OptionsBuilder options) throws IOException {
+        this.render(contentReader, rendererWriter, options);
+    }
+
+    @Override
+    public String convertFile(File filename, Map<String, Object> options) {
+        return renderFile(filename, options);
+    }
+
+    @Override
+    public String convertFile(File filename, Options options) {
+        return renderFile(filename, options);
+    }
+
+    @Override
+    public String convertFile(File filename, OptionsBuilder options) {
+        return renderFile(filename, options);
+    }
+
+    @Override
+    public String[] convertDirectory(DirectoryWalker directoryWalker, Map<String, Object> options) {
+        return renderDirectory(directoryWalker, options);
+    }
+
+    @Override
+    public String[] convertDirectory(DirectoryWalker directoryWalker, Options options) {
+        return renderDirectory(directoryWalker, options);
+    }
+
+    @Override
+    public String[] convertDirectory(DirectoryWalker directoryWalker, OptionsBuilder options) {
+        return renderDirectory(directoryWalker, options);
+    }
+
+    @Override
+    public String[] convertFiles(Collection<File> asciidoctorFiles, Map<String, Object> options) {
+        return renderFiles(asciidoctorFiles, options);
+    }
+
+    @Override
+    public String[] convertFiles(Collection<File> asciidoctorFiles, Options options) {
+        return renderFiles(asciidoctorFiles, options);
+    }
+
+    @Override
+    public String[] convertFiles(Collection<File> asciidoctorFiles, OptionsBuilder options) {
+        return renderFiles(asciidoctorFiles, options);
+    }
 
 }

@@ -277,7 +277,260 @@ public interface Asciidoctor {
      */
     String[] renderFiles(Collection<File> asciidoctorFiles,
             OptionsBuilder options);
+        
+    /**
+     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * render it to the specified backend format.
+     * 
+     * Accepts input as String object.
+     * 
+     * 
+     * @param content
+     *            the AsciiDoc source as String.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return the rendered output String is returned
+     */
+    String convert(String content, Map<String, Object> options);
 
+    /**
+     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * render it to the specified backend format.
+     * 
+     * Accepts input as String object.
+     * 
+     * 
+     * @param content
+     *            the AsciiDoc source as String.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return the rendered output String is returned
+     */
+    String convert(String content, Options options);
+
+    /**
+     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * render it to the specified backend format.
+     * 
+     * Accepts input as String object.
+     * 
+     * 
+     * @param content
+     *            the AsciiDoc source as String.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return the rendered output String is returned
+     */
+    String convert(String content, OptionsBuilder options);
+
+    /**
+     * Parse the document read from reader, and rendered result is sent to
+     * writer.
+     * 
+     * @param contentReader
+     *            where asciidoc content is read.
+     * @param rendererWriter
+     *            where rendered content is written. Writer is flushed, but not
+     *            closed.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @throws IOException
+     *             if an error occurs while writing rendered content, this
+     *             exception is thrown.
+     */
+    void convert(Reader contentReader, Writer rendererWriter,
+            Map<String, Object> options) throws IOException;
+
+    /**
+     * Parse the document read from reader, and rendered result is sent to
+     * writer.
+     * 
+     * @param contentReader
+     *            where asciidoc content is read.
+     * @param rendererWriter
+     *            where rendered content is written. Writer is flushed, but not
+     *            closed.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @throws IOException
+     *             if an error occurs while writing rendered content, this
+     *             exception is thrown.
+     */
+    void convert(Reader contentReader, Writer rendererWriter, Options options)
+            throws IOException;
+
+    /**
+     * Parse the document read from reader, and rendered result is sent to
+     * writer.
+     * 
+     * @param contentReader
+     *            where asciidoc content is read.
+     * @param rendererWriter
+     *            where rendered content is written. Writer is flushed, but not
+     *            closed.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @throws IOException
+     *             if an error occurs while writing rendered content, this
+     *             exception is thrown.
+     */
+    void convert(Reader contentReader, Writer rendererWriter,
+            OptionsBuilder options) throws IOException;
+
+    /**
+     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * render it to the specified backend format.
+     * 
+     * Accepts input as File path.
+     * 
+     * If the :in_place option is true, and the input is a File, the output is
+     * written to a file adjacent to the input file, having an extension that
+     * corresponds to the backend format. Otherwise, if the :to_file option is
+     * specified, the file is written to that file. If :to_file is not an
+     * absolute path, it is resolved relative to :to_dir, if given, otherwise
+     * the Document#base_dir. If the target directory does not exist, it will
+     * not be created unless the :mkdirs option is set to true. If the file
+     * cannot be written because the target directory does not exist, or because
+     * it falls outside of the Document#base_dir in safe mode, an IOError is
+     * raised.
+     * 
+     * @param filename
+     *            an input Asciidoctor file.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return returns nothing if the rendered output String is written to a
+     *         file.
+     */
+    String convertFile(File filename, Map<String, Object> options);
+
+    /**
+     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * render it to the specified backend format.
+     * 
+     * Accepts input as File path.
+     * 
+     * If the :in_place option is true, and the input is a File, the output is
+     * written to a file adjacent to the input file, having an extension that
+     * corresponds to the backend format. Otherwise, if the :to_file option is
+     * specified, the file is written to that file. If :to_file is not an
+     * absolute path, it is resolved relative to :to_dir, if given, otherwise
+     * the Document#base_dir. If the target directory does not exist, it will
+     * not be created unless the :mkdirs option is set to true. If the file
+     * cannot be written because the target directory does not exist, or because
+     * it falls outside of the Document#base_dir in safe mode, an IOError is
+     * raised.
+     * 
+     * @param filename
+     *            an input Asciidoctor file.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return returns nothing if the rendered output String is written to a
+     *         file.
+     */
+    String convertFile(File filename, Options options);
+
+    /**
+     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * render it to the specified backend format.
+     * 
+     * Accepts input as File path.
+     * 
+     * If the :in_place option is true, and the input is a File, the output is
+     * written to a file adjacent to the input file, having an extension that
+     * corresponds to the backend format. Otherwise, if the :to_file option is
+     * specified, the file is written to that file. If :to_file is not an
+     * absolute path, it is resolved relative to :to_dir, if given, otherwise
+     * the Document#base_dir. If the target directory does not exist, it will
+     * not be created unless the :mkdirs option is set to true. If the file
+     * cannot be written because the target directory does not exist, or because
+     * it falls outside of the Document#base_dir in safe mode, an IOError is
+     * raised.
+     * 
+     * @param filename
+     *            an input Asciidoctor file.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return returns nothing if the rendered output String is written to a
+     *         file.
+     */
+    String convertFile(File filename, OptionsBuilder options);
+
+    /**
+     * Parse all AsciiDoc files found using DirectoryWalker instance.
+     * 
+     * @param directoryWalker
+     *            strategy used to retrieve all files to be rendered.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return returns an array of 0 positions if the rendered output is written
+     *         to a file.
+     */
+    String[] convertDirectory(DirectoryWalker directoryWalker,
+            Map<String, Object> options);
+
+    /**
+     * Parse all AsciiDoc files found using DirectoryWalker instance.
+     * 
+     * @param directoryWalker
+     *            strategy used to retrieve all files to be rendered.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return returns an array of 0 positions if the rendered output is written
+     *         to a file.
+     */
+    String[] convertDirectory(DirectoryWalker directoryWalker, Options options);
+
+    /**
+     * Parse all AsciiDoc files found using DirectoryWalker instance.
+     * 
+     * @param directoryWalker
+     *            strategy used to retrieve all files to be rendered.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return returns an array of 0 positions if the rendered output is written
+     *         to a file.
+     */
+    String[] convertDirectory(DirectoryWalker directoryWalker,
+            OptionsBuilder options);
+
+    /**
+     * Parses all files added inside a collection.
+     * 
+     * @param asciidoctorFiles
+     *            to be rendered.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return returns an array of 0 positions if the rendered output is written
+     *         to a file.
+     */
+    String[] convertFiles(Collection<File> asciidoctorFiles,
+            Map<String, Object> options);
+
+    /**
+     * Parses all files added inside a collection.
+     * 
+     * @param asciidoctorFiles
+     *            to be rendered.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return returns an array of 0 positions if the rendered output is written
+     *         to a file.
+     */
+    String[] convertFiles(Collection<File> asciidoctorFiles, Options options);
+
+    /**
+     * Parses all files added inside a collection.
+     * 
+     * @param asciidoctorFiles
+     *            to be rendered.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @return returns an array of 0 positions if the rendered output is written
+     *         to a file.
+     */
+    String[] convertFiles(Collection<File> asciidoctorFiles,
+            OptionsBuilder options);
+    
     /**
      * Reads and creates structured document containing header and content chunks.
      * By default it dig only one level down but it can be tweak by setting STRUCTURE_MAX_LEVEL

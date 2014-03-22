@@ -41,8 +41,8 @@ public interface AsciidoctorModule {
     
     void unregister_all_extensions();
     
-	Object render(String content, Map<String, Object> options);
-	Object render_file(String filename, Map<String, Object> options);
+	Object convert(String content, Map<String, Object> options);
+	Object convertFile(String filename, Map<String, Object> options);
 	
 	DocumentRuby load_file(String filename, Map<String, Object> options);
 	DocumentRuby load(String content, Map<String, Object> options);
