@@ -44,6 +44,16 @@ public class AttributesBuilder {
     }
 	
     /**
+     * Source language attribute.
+     * @param sourceLanguage value.
+     * @return this instance.
+     */
+    public AttributesBuilder sourceLanguage(String sourceLanguage) {
+        this.attributes.setSourceLanguage(sourceLanguage);
+        return this;
+    }
+    
+    /**
      * Skips front matter.
      * @param skipFrontMatter value.
      * @return this instance.

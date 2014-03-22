@@ -18,6 +18,7 @@ public class Attributes {
 	public static final String DOCTYPE = Options.DOCTYPE;
 	public static final String IMAGESDIR = "imagesdir";
 	public static final String SOURCE_HIGHLIGHTER = "source-highlighter";
+	public static final String SOURCE_LANGUAGE = "source-language";
 	public static final String LOCALDATE = "localdate";
 	public static final String LOCALTIME = "localtime";
 	public static final String DOCDATE = "docdate";
@@ -102,6 +103,10 @@ public class Attributes {
 	
 	public void setImagesDir(String imagesDir) {
 		this.attributes.put(IMAGESDIR, imagesDir);
+	}
+	
+	public void setSourceLanguage(String sourceLanguage) {
+	    this.attributes.put(SOURCE_LANGUAGE, sourceLanguage);
 	}
 	
 	public void setSourceHighlighter(String sourceHighlighter) {
