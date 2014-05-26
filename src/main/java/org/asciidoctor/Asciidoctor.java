@@ -674,6 +674,18 @@ public interface Asciidoctor {
         public static Asciidoctor create(List<String> loadPaths) {
             return JRubyAsciidoctor.create(loadPaths);
         }
+
+        /**
+         * Creates a new instance of Asciidoctor and sets a specific classloader for the  JRuby runtime to use. This method is mostly
+         * used in environments where different threads may have different classloaders, like build tools sbt or ANT.
+         *
+         * @param classloader
+         * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
+         *         Ruby calls.
+         */
+        public static Asciidoctor create(ClassLoader classloader) {
+            return JRubyAsciidoctor.create(classloader);
+        }
         
     }
 

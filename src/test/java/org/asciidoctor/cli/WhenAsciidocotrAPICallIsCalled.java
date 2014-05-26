@@ -27,7 +27,7 @@ public class WhenAsciidocotrAPICallIsCalled {
         String command = AsciidoctorUtils.toAsciidoctorCommand(
                 optionsBuilder.asMap(), "file.adoc");
 
-        String currentDirectory = new File( "" ).getAbsolutePath() + "/";
+        String currentDirectory = new File( "" ).getAbsolutePath() + File.separator;
 
         assertThat(
                 command,

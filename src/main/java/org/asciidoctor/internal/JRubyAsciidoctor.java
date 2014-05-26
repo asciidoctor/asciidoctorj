@@ -30,6 +30,7 @@ import org.jruby.Ruby;
 import org.jruby.RubyHash;
 import org.jruby.RubyInstanceConfig;
 import org.jruby.RubyInstanceConfig.CompileMode;
+import org.jruby.embed.ScriptingContainer;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,6 +80,14 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		return asciidoctor;
 	}
 
+    public static Asciidoctor create(ClassLoader classloader) {
+        Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(classloader);
+		registerExtensions(asciidoctor);
+
+		return asciidoctor;
+    }
+
+
 	private static void registerExtensions(Asciidoctor asciidoctor) {
 		new ExtensionRegistryExecutor(asciidoctor).registerAllExtensions();
 	}
@@ -124,6 +133,27 @@ public class JRubyAsciidoctor implements Asciidoctor {
 				asciidoctorModule, rubyRuntime);
 		return jRubyAsciidoctor;
 	}
+
+    private static Asciidoctor createJRubyAsciidoctorInstance(
+            ClassLoader classloader) {
+
+
+        ScriptingContainer container = new ScriptingContainer();
+        container.setClassLoader(classloader)  ;
+        Ruby rubyRuntime = container.getProvider().getRuntime();
+
+        JRubyRuntimeContext.set(rubyRuntime);
+
+        JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(
+                rubyRuntime);
+
+        AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory
+                .createAsciidoctorModule();
+        JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(
+                asciidoctorModule, rubyRuntime);
+
+        return jRubyAsciidoctor;
+    }
 
 	private static void injectEnvironmentVariables(Ruby runtime,
 			Map<String, Object> environmentVars) {
