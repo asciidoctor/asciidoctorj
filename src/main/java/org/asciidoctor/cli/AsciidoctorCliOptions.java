@@ -247,7 +247,7 @@ public class AsciidoctorCliOptions {
 		
 	}
 	
-	private Map<String, Object> getAttributes() {
+	public Map<String, Object> getAttributes() {
 		
 		Map<String, Object> attributeValues = new HashMap<String, Object>();
 		
