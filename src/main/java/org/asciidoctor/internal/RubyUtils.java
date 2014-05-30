@@ -1,5 +1,7 @@
 package org.asciidoctor.internal;
 
+import java.io.InputStream;
+
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubySymbol;
@@ -21,6 +23,19 @@ public class RubyUtils {
 
     public static RubyClass toRubyClass(Ruby rubyRuntime, Class<?> rubyClass) {
     	return JavaClass.get(rubyRuntime, rubyClass).getProxyClass();
+    }
+    
+    public static void requireLibrary(Ruby rubyRuntime, String require) {
+        rubyRuntime.evalScriptlet(String.format("require '%s'", require));
+    }
+    
+    public static void loadRubyClass(Ruby rubyRuntime, InputStream rubyClassDefinition) {
+        String script = IOUtils.readFull(rubyClassDefinition);
+        JRubyRuntimeContext.get().evalScriptlet(script);
+    }
+    
+    public static final void setGlobalVariable(Ruby rubyRuntime, String variableName, Object variableValue) {
+        
     }
     
 }

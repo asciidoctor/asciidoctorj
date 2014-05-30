@@ -7,10 +7,7 @@ import static org.junit.Assert.assertThat;
 import java.io.File;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.Options;
-import org.asciidoctor.internal.IOUtils;
 import org.asciidoctor.internal.JRubyAsciidoctor;
-import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -23,10 +20,8 @@ public class WhenRubyExtensionIsRegistered {
     @Test
     public void ruby_extension_should_be_registered() {
         
-        loadRubyClassExtension();
-        
         RubyExtensionRegistry rubyExtensionRegistry = this.asciidoctor.rubyExtensionRegistry();
-        rubyExtensionRegistry.block("rubyyell", "YellRubyBlock");
+        rubyExtensionRegistry.loadClass(Class.class.getResourceAsStream("/YellRubyBlock.rb")).block("rubyyell", "YellRubyBlock");
 
         String content = asciidoctor.renderFile(new File(
                 "target/test-classes/sample-with-ruby-yell-block.ad"),
@@ -38,9 +33,4 @@ public class WhenRubyExtensionIsRegistered {
         
     }
 
-    private void loadRubyClassExtension() {
-        String script = IOUtils.readFull(Class.class.getResourceAsStream("/YellRubyBlock.rb"));
-        JRubyRuntimeContext.get().evalScriptlet(script);
-    }
-    
 }
