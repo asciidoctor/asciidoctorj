@@ -497,6 +497,26 @@ Note that you should add *-J* before the flag.
 
 You can find a full explanation on how to improve startup time of +JRuby+ applications at https://github.com/jruby/jruby/wiki/Improving-startup-time[Improving Startup Time].
 
+== Preview Versions
+
+Preview versions of +AsciidoctorJ+ are released to _bintray_. You can find them in https://bintray.com/lordofthejars/maven/asciidoctorj/view. Final releases will be released on _central maven repository_ and _bintray_ as well.
+
+In previous link you will be able to find instructions on how to add as dependency an artifact from _bintray_, but basically you need to add as repository next fragment.
+
+[source, xml]
+----
+<repositories>
+    <repository>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        <id>central</id>
+        <name>bintray</name>
+        <url>http://dl.bintray.com/lordofthejars/maven</url>
+    </repository>
+</repositories>
+----
+
 == Running on WildFly AS
 If you want to use +Asciidoctor-java-integration+ in your application deployed on +WilFly AS+, you have to follow the instruction below :
 
