@@ -176,6 +176,17 @@ public class WhenAsciidoctorIsCalledUsingCli {
 		assertThat(outputConsole, startsWith("Time to read and parse source"));
 		
 	}
+	
+	@Test
+	public void quiet_option_should_not_write_to_console() {
+	    
+	    ByteArrayOutputStream output = redirectStdout();
+	    
+	    new AsciidoctorInvoker().invoke("--quiet", "target/test-classes/brokeninclude.asciidoc");
+	    String outputConsole = output.toString();
+	    assertThat(outputConsole.trim(), is(""));
+	    
+	}
 
 	private ByteArrayOutputStream redirectStdout() {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();

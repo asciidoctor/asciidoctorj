@@ -11,7 +11,9 @@ import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.GlobDirectoryWalker;
 import org.asciidoctor.Options;
 import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyHashUtil;
+import org.asciidoctor.internal.RubyUtils;
 import org.jruby.RubySymbol;
 
 import com.beust.jcommander.JCommander;
@@ -29,7 +31,9 @@ public class AsciidoctorInvoker {
             jCommander.usage();
         } else {
 
-            Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+            Asciidoctor asciidoctor = null;
+            
+            asciidoctor = buildAsciidoctorJInstance(asciidoctorCliOptions);
             
             if(asciidoctorCliOptions.isVersion()) {
                 System.out.println("Asciidoctor "+asciidoctor.asciidoctorVersion()+" [http://asciidoctor.org]");
@@ -48,6 +52,13 @@ public class AsciidoctorInvoker {
             }
 
             Options options = asciidoctorCliOptions.parse();
+            
+            if(asciidoctorCliOptions.isRequire()) {
+                RubyUtils.requireLibrary(JRubyRuntimeContext.get(), asciidoctorCliOptions.getRequire());
+            }
+            
+            setVerboseLevel(asciidoctorCliOptions);
+            
             String output = renderInput(asciidoctor, options, inputFiles);
 
             if (asciidoctorCliOptions.isVerbose()) {
@@ -73,6 +84,26 @@ public class AsciidoctorInvoker {
                 System.out.println(output);
             }
         }
+    }
+
+    private void setVerboseLevel(AsciidoctorCliOptions asciidoctorCliOptions) {
+        if(asciidoctorCliOptions.isVerbose()) {
+            RubyUtils.setGlobalVariable(JRubyRuntimeContext.get(), "VERBOSE", "true");
+        } else {
+            if(asciidoctorCliOptions.isQuiet()) {
+                RubyUtils.setGlobalVariable(JRubyRuntimeContext.get(), "VERBOSE", "nil");
+            }
+        }
+    }
+
+    private Asciidoctor buildAsciidoctorJInstance(AsciidoctorCliOptions asciidoctorCliOptions) {
+        Asciidoctor asciidoctor;
+        if(asciidoctorCliOptions.isLoadPaths()) {
+         asciidoctor = JRubyAsciidoctor.create(asciidoctorCliOptions.getLoadPaths());   
+        } else {
+            asciidoctor = JRubyAsciidoctor.create();
+        }
+        return asciidoctor;
     }
 
     private String renderInput(Asciidoctor asciidoctor, Options options, List<File> inputFiles) {

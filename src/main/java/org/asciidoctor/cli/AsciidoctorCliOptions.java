@@ -15,7 +15,12 @@ import com.beust.jcommander.Parameter;
 
 public class AsciidoctorCliOptions {
 
-	public static final String DESTINATION_DIR = "-D";
+	public static final String LOAD_PATHS = "-I";
+    public static final String REQUIRE = "-r";
+    public static final String QUIET = "-q";
+    public static final String ATTRIBUTE = "-a";
+    public static final String HELP = "-h";
+    public static final String DESTINATION_DIR = "-D";
 	public static final String BASE_DIR = "-B";
 	public static final String TEMPLATE_DIR = "-T";
 	public static final String TEMPLATE_ENGINE = "-E";
@@ -80,101 +85,133 @@ public class AsciidoctorCliOptions {
 	@Parameter(names = {"--trace"}, description = "include backtrace information on errors (default: false)")
 	private boolean trace = false;
 	
-	@Parameter(names = {"-h", "--help"}, help = true, description = "show this message")
+	@Parameter(names = {HELP, "--help"}, help = true, description = "show this message")
 	private boolean help = false;
 	
-	@Parameter(names = {"-a", "--attribute"}, description = "a list of attributes, in the form key or key=value pair, to set on the document")
+	@Parameter(names = {ATTRIBUTE, "--attribute"}, description = "a list of attributes, in the form key or key=value pair, to set on the document")
 	private List<String> attributes = new ArrayList<String>();
+	
+	
+	
+	@Parameter(names = {QUIET, "--quiet"}, description = "suppress warnings (default: false)")
+    private boolean quiet = false;
+	
+	@Parameter(names = {REQUIRE, "--require"}, description = "require the specified library before executing the processor (using require)")
+	private String require;
+	
+	@Parameter(names = {LOAD_PATHS, "--load-path"}, description = "add a directory to the $LOAD_PATH may be specified more than once", variableArity=true)
+	private List<String> loadPaths;
 	
 	@Parameter(description = "input files")
 	private List<String> parameters = new ArrayList<String>();
+	
+	
+	public boolean isQuiet() {
+        return quiet;
+    }
+	
+	public boolean isRequire() {
+	    return this.require != null;
+	}
+	
+	public String getRequire() {
+        return require;
+    }
+	
+	public boolean isLoadPaths() {
+	    return this.loadPaths != null && this.loadPaths.size() > 0;
+	}
+	
+	public List<String> getLoadPaths() {
+        return this.loadPaths;
+    }
 
 	public List<String> getParameters() {
-		return parameters;
+		return this.parameters;
 	}
 	
 	public boolean isVerbose() {
-		return verbose;
+		return this.verbose;
 	}
 
 	public String getBackend() {
-		return backend;
+		return this.backend;
 	}
 
 	public String getDoctype() {
-		return doctype;
+		return this.doctype;
 	}
 
 	public String getOutFile() {
-		return outFile;
+		return this.outFile;
 	}
 	
 	public boolean isOutFileOption() {
-		return outFile != null;
+		return this.outFile != null;
 	}
 
 	public boolean isSafe() {
-		return safe;
+		return this.safe;
 	}
 
 	public SafeMode getSafeMode() {
-		return safeMode;
+		return this.safeMode;
 	}
 
 	public boolean isNoHeaderFooter() {
-		return noHeaderFooter;
+		return this.noHeaderFooter;
 	}
 
 	public boolean isSectionNumbers() {
-		return sectionNumbers;
+		return this.sectionNumbers;
 	}
 
 	public String getEruby() {
-		return eruby;
+		return this.eruby;
 	}
 
 	public boolean isCompact() {
-		return compact;
+		return this.compact;
 	}
 
 	public List<String> getTemplateDir() {
-		return templateDir;
+		return this.templateDir;
 	}
 
 	public boolean isTemplateDirOption() {
-		return templateDir != null;
+		return this.templateDir != null;
 	}
 	
 	public String getBaseDir() {
-		return baseDir;
+		return this.baseDir;
 	}
 
 	public boolean isBaseDirOption() {
-		return baseDir != null;
+		return this.baseDir != null;
 	}
 	
 	public String getDestinationDir() {
-		return destinationDir;
+		return this.destinationDir;
 	}
 
 	public boolean isDestinationDirOption() {
-		return destinationDir != null;
+		return this.destinationDir != null;
 	}
 	
 	public boolean isTemplateEngineOption() {
-	    return templateEngine != null;
+	    return this.templateEngine != null;
 	}
 	
 	public boolean isTrace() {
-		return trace;
+		return this.trace;
 	}
 
 	public boolean isHelp() {
-		return help;
+		return this.help;
 	}
 
 	public boolean isVersion() {
-        return version;
+        return this.version;
     }
 	
 	private boolean isOutputStdout() {
@@ -189,10 +226,10 @@ public class AsciidoctorCliOptions {
 		OptionsBuilder optionsBuilder = OptionsBuilder.options();
 		AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
 		
-		optionsBuilder.backend(this.backend).safe(safeMode).docType(doctype).eruby(eruby);
+		optionsBuilder.backend(this.backend).safe(this.safeMode).docType(this.doctype).eruby(this.eruby);
 		
 		if(isOutFileOption() && !isOutputStdout()) {
-			optionsBuilder.toFile(new File(outFile));
+			optionsBuilder.toFile(new File(this.outFile));
 		}
 		
 	    if(isOutFileOption() && isOutputStdout()) {

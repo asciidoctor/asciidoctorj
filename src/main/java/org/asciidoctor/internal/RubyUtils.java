@@ -4,8 +4,12 @@ import java.io.InputStream;
 
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
+import org.jruby.RubyObject;
 import org.jruby.RubySymbol;
+import org.jruby.internal.runtime.GlobalVariable.Scope;
 import org.jruby.javasupport.JavaClass;
+import org.jruby.javasupport.JavaEmbedUtils;
+import org.jruby.runtime.GlobalVariable;
 import org.jruby.runtime.builtin.IRubyObject;
 
 public class RubyUtils {
@@ -31,11 +35,12 @@ public class RubyUtils {
     
     public static void loadRubyClass(Ruby rubyRuntime, InputStream rubyClassDefinition) {
         String script = IOUtils.readFull(rubyClassDefinition);
-        JRubyRuntimeContext.get().evalScriptlet(script);
+        rubyRuntime.evalScriptlet(script);
     }
     
     public static final void setGlobalVariable(Ruby rubyRuntime, String variableName, Object variableValue) {
-        
+        String script = String.format("$%s = %s", variableName, variableValue);
+        rubyRuntime.evalScriptlet(script);
     }
     
 }
