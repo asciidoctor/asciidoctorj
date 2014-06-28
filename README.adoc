@@ -32,6 +32,14 @@ Since +asciidoctor-java-integration+ is a standard jar file, the only thing you 
 ...
 ----
 
+.Dependency declaration in SBT
+[source,scala]
+----
+...
+libraryDependencies += "org.asciidoctor" % "asciidoctor-java-integration" % "${asciidoctor.version}" //<1>
+...
+----
+
 .Dependency declaration in Gradle
 [source,groovy]
 ----
