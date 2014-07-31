@@ -1,6 +1,7 @@
 package org.asciidoctor.internal;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,6 +16,10 @@ import java.util.Set;
 public class CaseInsensitiveMap<K extends String,V> implements Map<K, V> {
 
 	private Map<K, V> map;
+
+	public CaseInsensitiveMap() {
+		this(new HashMap<K,V>());
+	}
 
 	public CaseInsensitiveMap(Map<K, V> map) {
 		this.map = map;
