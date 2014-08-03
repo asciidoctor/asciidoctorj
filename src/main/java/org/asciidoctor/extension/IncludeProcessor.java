@@ -3,6 +3,8 @@ package org.asciidoctor.extension;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.asciidoctor.ast.DocumentRuby;
+
 public abstract class IncludeProcessor extends Processor {
 
     public IncludeProcessor() {
@@ -14,6 +16,6 @@ public abstract class IncludeProcessor extends Processor {
     }
 
     public abstract boolean handles(String target);
-    public abstract void process(PreprocessorReader reader, String target, Map<String, Object> attributes);
+    public abstract void process(DocumentRuby document, PreprocessorReader reader, String target, Map<String, Object> attributes);
     
 }

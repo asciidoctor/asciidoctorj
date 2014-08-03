@@ -23,6 +23,7 @@ import java.util.Map;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
+import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -47,7 +48,7 @@ public class WhenJavaExtensionIsRegistered {
 		}
 
 		@Override
-		public void process(PreprocessorReader reader, String target,
+		public void process(DocumentRuby document, PreprocessorReader reader, String target,
 				Map<String, Object> attributes) {
 			StringBuilder content = readContent(target);
 			reader.push_include(content.toString(), target, target, 1,
@@ -121,7 +122,7 @@ public class WhenJavaExtensionIsRegistered {
 				new HashMap<String, Object>()) {
 
 			@Override
-			public void process(PreprocessorReader reader, String target,
+			public void process(DocumentRuby documentRuby, PreprocessorReader reader, String target,
 					Map<String, Object> attributes) {
 				StringBuilder content = readContent(target);
 				reader.push_include(content.toString(), target, target, 1,
