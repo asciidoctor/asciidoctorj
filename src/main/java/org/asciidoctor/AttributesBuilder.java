@@ -529,6 +529,16 @@ public class AttributesBuilder {
 	}
 
 	/**
+	 * Sets compat mode attribute.
+	 * @param compatMode value.
+	 * @return this instance.
+	 */
+	public AttributesBuilder compatMode(CompatMode compatMode) {
+	    this.attributes.setCompatMode(compatMode);
+	    return this;
+	}
+	
+	/**
 	 * Sets custom or unlisted attribute
 	 * 
 	 * @param attributeName

@@ -62,6 +62,32 @@ public class WhenAttributesAreUsedInAsciidoctor {
     }
     
     @Test
+    public void compat_mode_should_change_how_document_is_rendered_to_legacy_system() {
+        
+        Attributes attributes = attributes().attribute("version", "1.0.0").compatMode(CompatMode.LEGACY).get();
+        
+        String content = asciidoctor.render("The `AsciiDoc {version}` project.", OptionsBuilder.options().attributes(attributes));
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element code = doc.getElementsByTag("code").first();
+        assertThat(code.text(), containsString("{version}"));
+        
+    }
+    
+    @Test
+    public void no_compat_mode_should_change_how_document_is_rendered_to_new_system() {
+        
+        Attributes attributes = attributes().attribute("version", "1.0.0").get();
+        
+        String content = asciidoctor.render("The `AsciiDoc {version}` project.", OptionsBuilder.options().attributes(attributes));
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element code = doc.getElementsByTag("code").first();
+        assertThat(code.text(), containsString("1.0.0"));
+        
+    }
+    
+    @Test
     public void should_preload_open_cache_uri_gem() throws IOException {
         
         Attributes attributes = attributes().cacheUri(true).get();

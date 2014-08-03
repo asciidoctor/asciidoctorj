@@ -58,7 +58,8 @@ public class Attributes {
     public static final String MATH = "math";
     public static final String APPENDIX_CAPTION = "appendix-caption";
     public static final String HIDE_URI_SCHEME = "hide-uri-scheme";
-
+    public static final String COMPAT_MODE = "compat-mode";
+    
 	private Map<String, Object> attributes = new HashMap<String, Object>();
 	
 	public Attributes() {
@@ -360,6 +361,14 @@ public class Attributes {
 		this.attributes.put(NO_FOOTER, toAsciidoctorFlag(noFooter));
 	}
 
+	/**
+	 * Sets compat-mode attribute.
+	 * @param compatMode value.
+	 */
+	public void setCompatMode(CompatMode compatMode) {
+	    this.attributes.put(COMPAT_MODE, compatMode.getMode());
+	}
+	
 	public void setAttribute(String attributeName, Object attributeValue) {
 		this.attributes.put(attributeName, attributeValue);
 	}
