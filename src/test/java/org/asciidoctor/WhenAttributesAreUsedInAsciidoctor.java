@@ -197,9 +197,8 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(),
                 "rendersample.html"), "UTF-8");
-        
         Elements link = doc.select("link");
-        assertThat(link.attr("href"), containsString("prettify.min.css"));
+        assertThat(link.get(1).attr("href"), containsString("prettify.min.css"));
         
     }
     
@@ -268,15 +267,16 @@ public class WhenAttributesAreUsedInAsciidoctor {
     }
 
     @Test
-    public void setting_toc_attribute_table_of_contents_should_be_generated() {
+    public void setting_toc_attribute_table_of_contents_should_be_generated() throws IOException {
 
         Attributes attributes = attributes().tableOfContents(true).get();
-        Options options = options().toFile(false).attributes(attributes).get();
+        Options options = options().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).get();
 
-        String renderContent = asciidoctor.renderFile(new File(
+        asciidoctor.renderFile(new File(
                 "target/test-classes/tocsample.asciidoc"), options);
 
-        Document doc = Jsoup.parse(renderContent, "UTF-8");
+        Document doc = Jsoup.parse(new File(testFolder.getRoot(),
+                "tocsample.html"), "UTF-8");
         Elements tocElement = doc.select("div.toc");
         assertThat(tocElement.hasClass("toc"), is(true));
 
@@ -380,37 +380,39 @@ public class WhenAttributesAreUsedInAsciidoctor {
     }
     
     @Test
-    public void setting_toc_attribute_and_numbered_in_string_form_table_of_contents_should_be_generated() {
+    public void setting_toc_attribute_and_numbered_in_string_form_table_of_contents_should_be_generated() throws IOException {
 
         Attributes attributes = attributes("toc numbered").get();
-        Options options = options().toFile(false).attributes(attributes).get();
+        Options options = options().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).get();
 
-        String renderContent = asciidoctor.renderFile(new File(
+        asciidoctor.renderFile(new File(
                 "target/test-classes/tocsample.asciidoc"), options);
 
-        Document doc = Jsoup.parse(renderContent, "UTF-8");
+        Document doc = Jsoup.parse(new File(testFolder.getRoot(),
+                "tocsample.html"), "UTF-8");
         Elements tocElement = doc.select("div.toc");
         assertThat(tocElement.hasClass("toc"), is(true));
 
-        Element tocParagraph = doc.select("a[href=#paragraphs]").first();
+        Element tocParagraph = doc.select("a[href=#_first_chapter]").first();
         assertThat(tocParagraph.text(), startsWith("1."));
     }
 
     @Test
-    public void setting_toc_attribute_and_numbered_in_array_form_table_of_contents_should_be_generated() {
+    public void setting_toc_attribute_and_numbered_in_array_form_table_of_contents_should_be_generated() throws IOException {
 
         Attributes attributes = attributes(new String[] { "toc", "numbered" })
                 .get();
-        Options options = options().toFile(false).attributes(attributes).get();
+        Options options = options().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).get();
 
-        String renderContent = asciidoctor.renderFile(new File(
+       asciidoctor.renderFile(new File(
                 "target/test-classes/tocsample.asciidoc"), options);
 
-        Document doc = Jsoup.parse(renderContent, "UTF-8");
+        Document doc = Jsoup.parse(new File(testFolder.getRoot(),
+                "tocsample.html"), "UTF-8");
         Elements tocElement = doc.select("div.toc");
         assertThat(tocElement.hasClass("toc"), is(true));
 
-        Element tocParagraph = doc.select("a[href=#paragraphs]").first();
+        Element tocParagraph = doc.select("a[href=#_first_chapter]").first();
         assertThat(tocParagraph.text(), startsWith("1."));
     }
 
@@ -523,7 +525,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Document doc = Jsoup.parse(new File(testFolder.getRoot(),
                 "rendersample.html"), "UTF-8");
         Elements link = doc.select("link[href]");
-        String attr = link.attr("href");
+        String attr = link.get(1).attr("href");
         assertThat(attr, is("./asciidoctor.css"));
 
     }
@@ -748,7 +750,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Source renderFileSource = new DOMSource(
                 inputStream2Document(new ByteArrayInputStream(
                         renderContent.getBytes())));
-        assertThat(renderFileSource, hasXPath("//i[@class='icon-note']"));
+        assertThat(renderFileSource, hasXPath("//i[@class='fa icon-note']"));
     }
 
     private void assertRenderedAdmonitionIcon(String render_content)

@@ -55,7 +55,7 @@ public class Attributes {
 	public static final String HARDBREAKS = "hardbreaks";
     public static final String SECT_NUM_LEVELS = "sectnumlevels";
     public static final String CACHE_URI = "cache-uri";
-    public static final String MATH = "math";
+    public static final String MATH = "stem";
     public static final String APPENDIX_CAPTION = "appendix-caption";
     public static final String HIDE_URI_SCHEME = "hide-uri-scheme";
     public static final String COMPAT_MODE = "compat-mode";
