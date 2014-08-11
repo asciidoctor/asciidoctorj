@@ -16,10 +16,10 @@ public abstract class Treeprocessor extends Processor {
         super(config);
     }
 
-    public abstract void process(Document document);
+    public abstract Document process(Document document);
     
-    public void process(DocumentRuby documentRuby) {
-    	process(document(documentRuby));
+    public DocumentRuby process(DocumentRuby documentRuby) {
+    	return process(document(documentRuby));
     }
     
 }

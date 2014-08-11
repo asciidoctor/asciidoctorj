@@ -17,7 +17,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
     }
 
     @Override
-    public void process(Document document) {
+    public Document process(Document document) {
 
     	this.document = document;
     	
@@ -33,6 +33,8 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
             }
 
         }
+        
+        return this.document;
     }
 
     public Block convertToTerminalListing(Block block) {
