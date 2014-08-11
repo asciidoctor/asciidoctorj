@@ -606,5 +606,20 @@ public class JRubyAsciidoctor implements Asciidoctor {
     public String[] convertFiles(Collection<File> asciidoctorFiles, OptionsBuilder options) {
         return renderFiles(asciidoctorFiles, options);
     }
+    
+    @Override
+    public Document load(String content, Map<String, Object> options) {
+        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
+                rubyRuntime, options);
+        return new Document(this.asciidoctorModule.load(content, rubyHash), this.rubyRuntime);
+    }
 
+    @Override
+    public Document loadFile(File file, Map<String, Object> options) {
+        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(
+                rubyRuntime, options);
+        return new Document(this.asciidoctorModule.load(file.getAbsolutePath(), rubyHash), this.rubyRuntime);
+        
+    }
+    
 }

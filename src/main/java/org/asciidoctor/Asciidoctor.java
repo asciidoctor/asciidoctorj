@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.ast.StructuredDocument;
@@ -688,6 +689,22 @@ public interface Asciidoctor {
         }
         
     }
+
+    /**
+     * Loads AsciiDoc content and returns the Document object.
+     * @param content to be parsed.
+     * @param options 
+     * @return Document of given content.
+     */
+    Document load(String content, Map<String, Object> options);
+
+    /**
+     * Loads AsciiDoc content from file and returns the Document object.
+     * @param file to be loaded.
+     * @param options 
+     * @return Document of given content.
+     */
+    Document loadFile(File file, Map<String, Object> options);
 
 
 }

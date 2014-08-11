@@ -18,4 +18,5 @@ public interface AbstractBlock {
     String context();
     
     AbstractBlock delegate();
+    List<AbstractBlock> findBy(Map<Object, Object> selector);
 }

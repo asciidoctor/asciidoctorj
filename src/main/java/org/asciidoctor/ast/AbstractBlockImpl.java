@@ -1,8 +1,10 @@
 package org.asciidoctor.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
@@ -82,5 +84,22 @@ public class AbstractBlockImpl implements AbstractBlock {
 	public DocumentRuby document() {
 		return delegate.document();
 	}
+
+    @Override
+    public List<AbstractBlock> findBy(Map<Object, Object> selector) {
+        
+        List<AbstractBlock> findBy = delegate.findBy(RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime, selector));
+        
+        List<AbstractBlock> returnBlocks = new ArrayList<AbstractBlock>();
+        for (AbstractBlock abstractBlock : findBy) {
+            
+            if (!(abstractBlock instanceof RubyArray) && !(abstractBlock instanceof AbstractBlock)) {
+                
+            }
+            
+        }
+        
+        return returnBlocks;
+    }
 
 }
