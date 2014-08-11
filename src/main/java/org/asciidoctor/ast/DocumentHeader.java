@@ -8,7 +8,7 @@ import org.asciidoctor.internal.CaseInsensitiveMap;
 
 public class DocumentHeader {
 
-	private String documentTitle;
+	private Title documentTitle;
 	private String pageTitle;
 	private Author author;
 	private List<Author> authors = new ArrayList<Author>();
@@ -25,7 +25,7 @@ public class DocumentHeader {
 		return this.authors;
 	}
 	
-	public String getDocumentTitle() {
+	public Title getDocumentTitle() {
 		return documentTitle;
 	}
 	
@@ -45,7 +45,7 @@ public class DocumentHeader {
 		return attributes;
 	}
 	
-	public static DocumentHeader createDocumentHeader(String documentTitle, String pageTitle, Map<String, Object> attributes) {
+	public static DocumentHeader createDocumentHeader(Title documentTitle, String pageTitle, Map<String, Object> attributes) {
 	
 		DocumentHeader documentHeader = new DocumentHeader();
 		

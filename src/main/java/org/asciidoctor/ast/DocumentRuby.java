@@ -8,10 +8,12 @@ import java.util.Map;
 public interface DocumentRuby extends AbstractBlock {
 	
 	/**
-	 * 
-	 * @return document title.
+	 * Get doc title
+	 * @param options to get the doc title. Key should be Ruby symbols.
+	 * @return String if partition flag is not set to false or not present, Title if partition is set to true.
+	 * @see Title 
 	 */
-	String doctitle();
+	Object doctitle(Map<Object, Object> opts);
 	
 	/**
 	 * 

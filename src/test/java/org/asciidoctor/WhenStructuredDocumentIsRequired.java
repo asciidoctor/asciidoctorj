@@ -50,7 +50,7 @@ public class WhenStructuredDocumentIsRequired {
 
 		DocumentHeader header = document.getHeader();
 
-		assertThat(header.getDocumentTitle(), is("Sample Document"));
+		assertThat(header.getDocumentTitle().getMain(), is("Sample Document"));
 		assertThat(header.getPageTitle(), is("Sample Document"));
 
 		Map<String, Object> attributes = header.getAttributes();
@@ -104,8 +104,9 @@ public class WhenStructuredDocumentIsRequired {
 
 		DocumentHeader header = document.getHeader();
 
-		assertThat(header.getDocumentTitle(), is("TODO: Document Title"));
-
+		assertThat(header.getDocumentTitle().getMain(), is("TODO"));
+		assertThat(header.getDocumentTitle().getSubtitle(), is("Document Title"));
+		
 		Map<String, Object> attributes = header.getAttributes();
 		assertThat((String) attributes.get("type"), is("object.type"));
 
@@ -139,7 +140,7 @@ public class WhenStructuredDocumentIsRequired {
 
 		DocumentHeader header = document.getHeader();
 
-		assertThat(header.getDocumentTitle(), is("Sample Document"));
+		assertThat(header.getDocumentTitle().getMain(), is("Sample Document"));
 
 		List<ContentPart> parts = document.getParts();
 

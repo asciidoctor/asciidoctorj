@@ -29,7 +29,7 @@ public class WhenDocumentHeaderIsRequired {
 		DocumentHeader header = asciidoctor.readDocumentHeader(new File("target/test-classes/documentheaders.asciidoc"));
 		
 		
-		assertThat(header.getDocumentTitle(), is("Sample Document"));
+		assertThat(header.getDocumentTitle().getMain(), is("Sample Document"));
 		assertThat(header.getPageTitle(), is("Sample Document"));
 		
 		Map<String, Object> attributes = header.getAttributes();

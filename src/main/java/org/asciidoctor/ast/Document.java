@@ -1,8 +1,14 @@
 package org.asciidoctor.ast;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import org.asciidoctor.internal.RubyHashUtil;
+import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
+import org.jruby.RubyHash;
+import org.jruby.RubyObject;
+import org.jruby.runtime.builtin.IRubyObject;
 
 public class Document extends AbstractBlockImpl implements DocumentRuby {
 
@@ -18,11 +24,6 @@ public class Document extends AbstractBlockImpl implements DocumentRuby {
 	}
 
 	@Override
-	public String doctitle() {
-		return documentDelegate.doctitle();
-	}
-
-	@Override
 	public Map<String, Object> getAttributes() {
 		return attributes();
 	}
@@ -32,4 +33,21 @@ public class Document extends AbstractBlockImpl implements DocumentRuby {
 		return documentDelegate.basebackend(backend);
 	}
 
+    @Override
+    public Object doctitle(Map<Object, Object> opts) {
+        RubyHash mapWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime, opts);
+        
+        Object doctitle = documentDelegate.doctitle(mapWithSymbols);
+        
+        if(doctitle instanceof IRubyObject){
+            doctitle = RubyUtils.rubyToJava(runtime, (IRubyObject)doctitle, Title.class);
+        }
+        
+        return doctitle;
+    }
+
+    public String doctitle() {
+        return (String)doctitle(new HashMap<Object, Object>());
+    }
+    
 }

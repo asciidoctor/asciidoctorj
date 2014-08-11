@@ -22,6 +22,7 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.ast.StructuredDocument;
+import org.asciidoctor.ast.Title;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.extension.internal.ExtensionRegistryExecutor;
@@ -170,8 +171,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
 		return config;
 	}
 
-	private static DocumentHeader toDocumentHeader(DocumentRuby documentRuby) {
-		return DocumentHeader.createDocumentHeader(documentRuby.doctitle(),
+	private DocumentHeader toDocumentHeader(DocumentRuby documentRuby) {
+	    Map<Object, Object> opts = new HashMap<Object, Object>();
+	    opts.put("partition", true);
+	    
+	    Document document = new Document(documentRuby, rubyRuntime);
+	    
+		return DocumentHeader.createDocumentHeader((Title) document.doctitle(opts),
 				documentRuby.title(), documentRuby.getAttributes());
 	}
 
