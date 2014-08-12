@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.junit.Test;
@@ -38,6 +39,16 @@ public class WhenAsciiDocIsRenderedToDocument {
     
     private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
+    @Test
+    public void should_return_blocks_from_a_document() {
+        
+        Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
+        for (Block block : document.blocks()) {
+            System.out.println(block.role());
+        }
+        
+    }
+    
     @Test
     public void should_return_a_document_object_from_string() {
         

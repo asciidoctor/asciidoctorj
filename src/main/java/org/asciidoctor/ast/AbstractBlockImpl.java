@@ -11,91 +11,91 @@ import org.jruby.RubyArray;
 import org.jruby.RubyObject;
 
 public class AbstractBlockImpl implements AbstractBlock {
-	
-	protected AbstractBlock delegate;
-	protected Ruby runtime;
 
-	public AbstractBlockImpl(AbstractBlock blockDelegate, Ruby runtime) {
+    protected AbstractBlock delegate;
+    protected Ruby runtime;
+
+    public AbstractBlockImpl(AbstractBlock blockDelegate, Ruby runtime) {
         this.delegate = blockDelegate;
         this.runtime = runtime;
     }
-	
-	@Override
-	public String id() {
-		return delegate.id();
-	}
 
-	@Override
-	public String title() {
-		return delegate.title();
-	}
+    @Override
+    public String id() {
+        return delegate.id();
+    }
 
-	@Override
-	public String role() {
-		return delegate.role();
-	}
+    @Override
+    public String title() {
+        return delegate.title();
+    }
 
-	@Override
-	public String style() {
-		return delegate.style();
-	}
+    @Override
+    public String role() {
+        return delegate.role();
+    }
 
-	@Override
-	public List<Block> blocks() {
-		List<Block> rubyBlocks = delegate.blocks();
+    @Override
+    public String style() {
+        return delegate.style();
+    }
 
-		for (int i = 0; i < rubyBlocks.size(); i++) {
-			if (!(rubyBlocks.get(i) instanceof RubyArray) && !(rubyBlocks.get(i) instanceof Block)) {
-				Block blockRuby = RubyUtils.rubyToJava(runtime,
-						(RubyObject) rubyBlocks.get(i), Block.class);
-				rubyBlocks.set(i, new BlockImpl(blockRuby, runtime));
-			}
-		}
+    @Override
+    public List<Block> blocks() {
+        List<Block> rubyBlocks = delegate.blocks();
 
-		return rubyBlocks;
-	}
+        for (int i = 0; i < rubyBlocks.size(); i++) {
+            if (!(rubyBlocks.get(i) instanceof RubyArray) && !(rubyBlocks.get(i) instanceof Block)) {
+                Block blockRuby = RubyUtils.rubyToJava(runtime, (RubyObject) rubyBlocks.get(i), Block.class);
+                rubyBlocks.set(i, new BlockImpl(blockRuby, runtime));
+            }
+        }
 
-	@Override
-	public Map<String, Object> attributes() {
-		return delegate.attributes();
-	}
+        return rubyBlocks;
+    }
 
-	@Override
-	public Object content() {
-		return delegate.content();
-	}
+    @Override
+    public Map<String, Object> attributes() {
+        return delegate.attributes();
+    }
 
-	@Override
-	public String render() {
-		return delegate.render();
-	}
+    @Override
+    public Object content() {
+        return delegate.content();
+    }
 
-	@Override
-	public String context() {
-		return delegate.context();
-	}
+    @Override
+    public String render() {
+        return delegate.render();
+    }
+
+    @Override
+    public String context() {
+        return delegate.context();
+    }
 
     @Override
     public AbstractBlock delegate() {
         return delegate;
     }
 
-	@Override
-	public DocumentRuby document() {
-		return delegate.document();
-	}
+    @Override
+    public DocumentRuby document() {
+        return delegate.document();
+    }
 
     @Override
     public List<AbstractBlock> findBy(Map<Object, Object> selector) {
-        
+
         @SuppressWarnings("unchecked")
-        List<AbstractBlock> findBy = delegate.findBy(RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime, selector));
-        
-        for (int i=0; i<findBy.size(); i++) {
+        List<AbstractBlock> findBy = delegate.findBy(RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime,
+                selector));
+
+        for (int i = 0; i < findBy.size(); i++) {
             Object abstractBlock = findBy.get(i);
             if (!(abstractBlock instanceof RubyArray) && !(abstractBlock instanceof AbstractBlock)) {
-                AbstractBlock abstratBlockRuby = RubyUtils.rubyToJava(runtime,
-                        (RubyObject) abstractBlock, AbstractBlock.class);
+                AbstractBlock abstratBlockRuby = RubyUtils.rubyToJava(runtime, (RubyObject) abstractBlock,
+                        AbstractBlock.class);
                 findBy.set(i, new AbstractBlockImpl(abstratBlockRuby, runtime));
             }
 
