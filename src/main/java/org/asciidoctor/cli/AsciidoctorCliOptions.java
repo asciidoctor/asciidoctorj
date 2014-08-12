@@ -91,16 +91,14 @@ public class AsciidoctorCliOptions {
 	@Parameter(names = {ATTRIBUTE, "--attribute"}, description = "a list of attributes, in the form key or key=value pair, to set on the document")
 	private List<String> attributes = new ArrayList<String>();
 	
-	
-	
 	@Parameter(names = {QUIET, "--quiet"}, description = "suppress warnings (default: false)")
     private boolean quiet = false;
 	
 	@Parameter(names = {REQUIRE, "--require"}, description = "require the specified library before executing the processor (using require)")
-	private String require;
+	private List<String> require;
 	
 	@Parameter(names = {LOAD_PATHS, "--load-path"}, description = "add a directory to the $LOAD_PATH may be specified more than once", variableArity=true)
-	private List<String> loadPaths;
+	private List<String> loadPaths = new ArrayList<String>();
 	
 	@Parameter(description = "input files")
 	private List<String> parameters = new ArrayList<String>();
@@ -111,10 +109,10 @@ public class AsciidoctorCliOptions {
     }
 	
 	public boolean isRequire() {
-	    return this.require != null;
+	    return this.require != null && this.require.size() > 0;
 	}
 	
-	public String getRequire() {
+	public List<String> getRequire() {
         return require;
     }
 	

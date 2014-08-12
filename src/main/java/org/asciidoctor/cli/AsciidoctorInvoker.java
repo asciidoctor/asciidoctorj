@@ -54,7 +54,9 @@ public class AsciidoctorInvoker {
             Options options = asciidoctorCliOptions.parse();
             
             if(asciidoctorCliOptions.isRequire()) {
-                RubyUtils.requireLibrary(JRubyRuntimeContext.get(), asciidoctorCliOptions.getRequire());
+                for (String require : asciidoctorCliOptions.getRequire()) {
+                    RubyUtils.requireLibrary(JRubyRuntimeContext.get(), require);
+                }
             }
             
             setVerboseLevel(asciidoctorCliOptions);
