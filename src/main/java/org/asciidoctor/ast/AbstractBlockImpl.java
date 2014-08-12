@@ -88,18 +88,19 @@ public class AbstractBlockImpl implements AbstractBlock {
     @Override
     public List<AbstractBlock> findBy(Map<Object, Object> selector) {
         
+        @SuppressWarnings("unchecked")
         List<AbstractBlock> findBy = delegate.findBy(RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime, selector));
         
-        List<AbstractBlock> returnBlocks = new ArrayList<AbstractBlock>();
-        for (AbstractBlock abstractBlock : findBy) {
-            
+        for (int i=0; i<findBy.size(); i++) {
+            Object abstractBlock = findBy.get(i);
             if (!(abstractBlock instanceof RubyArray) && !(abstractBlock instanceof AbstractBlock)) {
-                
+                AbstractBlock abstratBlockRuby = RubyUtils.rubyToJava(runtime,
+                        (RubyObject) abstractBlock, AbstractBlock.class);
+                findBy.set(i, new AbstractBlockImpl(abstratBlockRuby, runtime));
             }
-            
+
         }
-        
-        return returnBlocks;
+        return findBy;
     }
 
 }
