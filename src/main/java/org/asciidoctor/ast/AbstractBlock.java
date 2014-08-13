@@ -9,7 +9,7 @@ public interface AbstractBlock {
 	String title();
     String role();
     String style();
-    List<Block> blocks();
+    List<AbstractBlock> blocks();
     Map<String, Object> attributes();
     Object content();
     String render();

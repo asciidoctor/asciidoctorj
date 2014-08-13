@@ -33,6 +33,6 @@ public interface DocumentRuby extends AbstractBlock {
 	 */
 	boolean basebackend(String backend);
 	
-	List<Block> blocks();
+	List<AbstractBlock> blocks();
 	
 }

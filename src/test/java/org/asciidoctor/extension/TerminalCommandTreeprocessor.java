@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.asciidoctor.ast.AbstractBlock;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 
@@ -21,17 +22,19 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
 
     	this.document = document;
     	
-        final List<Block> blocks = this.document.blocks();
+        final List<AbstractBlock> blocks = this.document.blocks();
 
         for (int i = 0; i < blocks.size(); i++) {
-            final Block currentBlock = blocks.get(i);
-            List<String> lines = currentBlock.lines();
-            if (lines.size() > 0 && lines.get(0).startsWith("$")) {
-                blocks.set(
-                        i, convertToTerminalListing(currentBlock));
-                        
+            final AbstractBlock currentBlock = blocks.get(i);
+            if(currentBlock instanceof Block) {
+                Block block = (Block)currentBlock;
+                List<String> lines = block.lines();
+                if (lines.size() > 0 && lines.get(0).startsWith("$")) {
+                    blocks.set(
+                            i, convertToTerminalListing(block));
+                            
+                }
             }
-
         }
         
         return this.document;

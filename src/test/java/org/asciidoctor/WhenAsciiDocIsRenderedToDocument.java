@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.Section;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.junit.Test;
 
@@ -40,12 +40,19 @@ public class WhenAsciiDocIsRenderedToDocument {
     private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
     @Test
+    public void should_return_section_blocks() {
+        Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
+        Section section = (Section) document.blocks().get(1);
+        assertThat(section.index(), is(0));
+        assertThat(section.sectname(), is("sect1"));
+        assertThat(section.special(), is(false));
+    }
+    
+    @Test
     public void should_return_blocks_from_a_document() {
         
         Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
-        for (Block block : document.blocks()) {
-            System.out.println(block.role());
-        }
+        assertThat(document.doctitle(), is("Document Title"));
         
     }
     

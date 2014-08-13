@@ -1,6 +1,5 @@
 package org.asciidoctor.ast;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +11,9 @@ import org.jruby.RubyObject;
 
 public class AbstractBlockImpl implements AbstractBlock {
 
+    private static final String BLOCK_CLASS = "Block";
+    private static final String SECTION_CLASS = "Section";
+    
     protected AbstractBlock delegate;
     protected Ruby runtime;
 
@@ -41,13 +43,30 @@ public class AbstractBlockImpl implements AbstractBlock {
     }
 
     @Override
-    public List<Block> blocks() {
-        List<Block> rubyBlocks = delegate.blocks();
+    public List<AbstractBlock> blocks() {
+        List<AbstractBlock> rubyBlocks = delegate.blocks();
 
         for (int i = 0; i < rubyBlocks.size(); i++) {
             if (!(rubyBlocks.get(i) instanceof RubyArray) && !(rubyBlocks.get(i) instanceof Block)) {
-                Block blockRuby = RubyUtils.rubyToJava(runtime, (RubyObject) rubyBlocks.get(i), Block.class);
-                rubyBlocks.set(i, new BlockImpl(blockRuby, runtime));
+                RubyObject rubyObject = (RubyObject) rubyBlocks.get(i);
+
+                switch(rubyObject.getMetaClass().getBaseName()){
+                    case BLOCK_CLASS: {
+                        Block blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Block.class);
+                        rubyBlocks.set(i, new BlockImpl(blockRuby, runtime));
+                        break;
+                    }
+                    case SECTION_CLASS: {
+                        Section blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Section.class);
+                        rubyBlocks.set(i, new SectionImpl(blockRuby, runtime));
+                        break;
+                    }
+                    default: {
+                        AbstractBlock blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, AbstractBlock.class);
+                        rubyBlocks.set(i, new AbstractBlockImpl(blockRuby, runtime));
+                    }
+
+                }
             }
         }
 
