@@ -8,7 +8,7 @@ Alex Soto
 
 ifdef::env-github[]
 [link=https://travis-ci.org/asciidoctor/asciidoctorj]
-image::https://travis-ci.org/asciidoctor/asciidoctorj.png?branch=master[Build Status,70,18]
+image::http://img.shields.io/travis/asciidoctor/asciidoctorj/master.svg[Build Status, link="https://travis-ci.org/asciidoctor/asciidoctorj"]
 endif::[]
 
 The +asciidoctor-java-integration+ is the official means of using {asciidoctor-uri}[Asciidoctor] to render all your {asciidoc-uri}[AsciiDoc] documentation using Java instead of Ruby.
