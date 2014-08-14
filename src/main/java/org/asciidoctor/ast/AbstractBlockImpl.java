@@ -47,31 +47,16 @@ public class AbstractBlockImpl implements AbstractBlock {
         List<AbstractBlock> rubyBlocks = delegate.blocks();
 
         for (int i = 0; i < rubyBlocks.size(); i++) {
-            if (!(rubyBlocks.get(i) instanceof RubyArray) && !(rubyBlocks.get(i) instanceof Block)) {
-                RubyObject rubyObject = (RubyObject) rubyBlocks.get(i);
-
-                switch(rubyObject.getMetaClass().getBaseName()){
-                    case BLOCK_CLASS: {
-                        Block blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Block.class);
-                        rubyBlocks.set(i, new BlockImpl(blockRuby, runtime));
-                        break;
-                    }
-                    case SECTION_CLASS: {
-                        Section blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Section.class);
-                        rubyBlocks.set(i, new SectionImpl(blockRuby, runtime));
-                        break;
-                    }
-                    default: {
-                        AbstractBlock blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, AbstractBlock.class);
-                        rubyBlocks.set(i, new AbstractBlockImpl(blockRuby, runtime));
-                    }
-
-                }
+            Object abstractBlock = rubyBlocks.get(i);
+            if (!(abstractBlock instanceof RubyArray) && !(abstractBlock instanceof Block)) {
+                RubyObject rubyObject = (RubyObject) abstractBlock;
+                rubyBlocks.set(i, overrideRubyObjectToJavaObject(rubyObject));
             }
         }
 
         return rubyBlocks;
     }
+
 
     @Override
     public Map<String, Object> attributes() {
@@ -113,13 +98,29 @@ public class AbstractBlockImpl implements AbstractBlock {
         for (int i = 0; i < findBy.size(); i++) {
             Object abstractBlock = findBy.get(i);
             if (!(abstractBlock instanceof RubyArray) && !(abstractBlock instanceof AbstractBlock)) {
-                AbstractBlock abstratBlockRuby = RubyUtils.rubyToJava(runtime, (RubyObject) abstractBlock,
-                        AbstractBlock.class);
-                findBy.set(i, new AbstractBlockImpl(abstratBlockRuby, runtime));
+                RubyObject rubyObject = (RubyObject)abstractBlock;
+                findBy.set(i, overrideRubyObjectToJavaObject(rubyObject));
             }
 
         }
         return findBy;
     }
 
+    private AbstractBlock overrideRubyObjectToJavaObject(RubyObject rubyObject) {
+        switch(rubyObject.getMetaClass().getBaseName()){
+            case BLOCK_CLASS: {
+                Block blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Block.class);
+                return new BlockImpl(blockRuby, runtime);
+            }
+            case SECTION_CLASS: {
+                Section blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Section.class);
+                return new SectionImpl(blockRuby, runtime);
+            }
+            default: {
+                AbstractBlock blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, AbstractBlock.class);
+                return new AbstractBlockImpl(blockRuby, runtime);
+            }
+        }
+    }
+    
 }
