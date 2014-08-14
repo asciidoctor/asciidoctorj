@@ -36,676 +36,570 @@ import org.junit.rules.TemporaryFolder;
 
 public class WhenJavaExtensionIsRegistered {
 
-	@Rule
-	public TemporaryFolder testFolder = new TemporaryFolder();
+    @Rule
+    public TemporaryFolder testFolder = new TemporaryFolder();
 
-	private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+    private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
-	class RubyIncludeSource extends IncludeProcessor {
+    class RubyIncludeSource extends IncludeProcessor {
 
-		public RubyIncludeSource(Map<String, Object> config) {
-			super(config);
-		}
+        public RubyIncludeSource(Map<String, Object> config) {
+            super(config);
+        }
 
-		@Override
-		public void process(DocumentRuby document, PreprocessorReader reader, String target,
-				Map<String, Object> attributes) {
-			StringBuilder content = readContent(target);
-			reader.push_include(content.toString(), target, target, 1,
-					attributes);
-		}
+        @Override
+        public void process(DocumentRuby document, PreprocessorReader reader, String target,
+                Map<String, Object> attributes) {
+            StringBuilder content = readContent(target);
+            reader.push_include(content.toString(), target, target, 1, attributes);
+        }
 
-		private StringBuilder readContent(String target) {
-			StringBuilder content = new StringBuilder();
+        private StringBuilder readContent(String target) {
+            StringBuilder content = new StringBuilder();
 
-			try {
+            try {
 
-				URL url = new URL(target);
-				InputStream openStream = url.openStream();
+                URL url = new URL(target);
+                InputStream openStream = url.openStream();
 
-				BufferedReader bufferedReader = new BufferedReader(
-						new InputStreamReader(openStream));
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(openStream));
 
-				String line = null;
-				while ((line = bufferedReader.readLine()) != null) {
-					content.append(line);
-				}
+                String line = null;
+                while ((line = bufferedReader.readLine()) != null) {
+                    content.append(line);
+                }
 
-				bufferedReader.close();
+                bufferedReader.close();
 
-			} catch (MalformedURLException e) {
-				throw new IllegalArgumentException(e);
-			} catch (IOException e) {
-				throw new IllegalArgumentException(e);
-			}
-			return content;
-		}
+            } catch (MalformedURLException e) {
+                throw new IllegalArgumentException(e);
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e);
+            }
+            return content;
+        }
 
-		@Override
-		public boolean handles(String target) {
-			return target.startsWith("http://")
-					|| target.startsWith("https://");
-		}
+        @Override
+        public boolean handles(String target) {
+            return target.startsWith("http://") || target.startsWith("https://");
+        }
 
-	}
+    }
 
-	@Test
-	public void an_inner_class_should_be_registered() {
+    @Test
+    public void an_inner_class_should_be_registered() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.includeProcessor(new RubyIncludeSource(
-				new HashMap<String, Object>()));
+        javaExtensionRegistry.includeProcessor(new RubyIncludeSource(new HashMap<String, Object>()));
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-uri-include.ad"),
-				options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-uri-include.ad"), options()
+                .toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
+        Document doc = Jsoup.parse(content, "UTF-8");
 
-		Element contentElement = doc.getElementsByAttributeValue("class",
-				"ruby language-ruby").first();
+        Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-		assertThat(contentElement.text(),
-				startsWith("source 'https://rubygems.org"));
+        assertThat(contentElement.text(), startsWith("source 'https://rubygems.org"));
 
-	}
+    }
 
-	@Test
-	public void an_inner_anonymous_class_should_be_registered() {
+    @Test
+    public void an_inner_anonymous_class_should_be_registered() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.includeProcessor(new IncludeProcessor(
-				new HashMap<String, Object>()) {
+        javaExtensionRegistry.includeProcessor(new IncludeProcessor(new HashMap<String, Object>()) {
 
-			@Override
-			public void process(DocumentRuby documentRuby, PreprocessorReader reader, String target,
-					Map<String, Object> attributes) {
-				StringBuilder content = readContent(target);
-				reader.push_include(content.toString(), target, target, 1,
-						attributes);
-			}
+            @Override
+            public void process(DocumentRuby documentRuby, PreprocessorReader reader, String target,
+                    Map<String, Object> attributes) {
+                StringBuilder content = readContent(target);
+                reader.push_include(content.toString(), target, target, 1, attributes);
+            }
 
-			private StringBuilder readContent(String target) {
-				StringBuilder content = new StringBuilder();
+            private StringBuilder readContent(String target) {
+                StringBuilder content = new StringBuilder();
 
-				try {
+                try {
 
-					URL url = new URL(target);
-					InputStream openStream = url.openStream();
+                    URL url = new URL(target);
+                    InputStream openStream = url.openStream();
 
-					BufferedReader bufferedReader = new BufferedReader(
-							new InputStreamReader(openStream));
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(openStream));
 
-					String line = null;
-					while ((line = bufferedReader.readLine()) != null) {
-						content.append(line);
-					}
+                    String line = null;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        content.append(line);
+                    }
 
-					bufferedReader.close();
+                    bufferedReader.close();
 
-				} catch (MalformedURLException e) {
-					throw new IllegalArgumentException(e);
-				} catch (IOException e) {
-					throw new IllegalArgumentException(e);
-				}
-				return content;
-			}
+                } catch (MalformedURLException e) {
+                    throw new IllegalArgumentException(e);
+                } catch (IOException e) {
+                    throw new IllegalArgumentException(e);
+                }
+                return content;
+            }
 
-			@Override
-			public boolean handles(String target) {
-				return target.startsWith("http://")
-						|| target.startsWith("https://");
-			}
-		});
+            @Override
+            public boolean handles(String target) {
+                return target.startsWith("http://") || target.startsWith("https://");
+            }
+        });
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-uri-include.ad"),
-				options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-uri-include.ad"), options()
+                .toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
+        Document doc = Jsoup.parse(content, "UTF-8");
 
-		Element contentElement = doc.getElementsByAttributeValue("class",
-				"ruby language-ruby").first();
+        Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-		assertThat(contentElement.text(),
-				startsWith("source 'https://rubygems.org"));
+        assertThat(contentElement.text(), startsWith("source 'https://rubygems.org"));
 
-	}
+    }
 
-	@Test
-	public void a_preprocessor_should_be_executed_before_document_is_rendered() {
+    @Test
+    public void a_preprocessor_should_be_executed_before_document_is_rendered() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry
-				.preprocessor(ChangeAttributeValuePreprocessor.class);
+        javaExtensionRegistry.preprocessor(ChangeAttributeValuePreprocessor.class);
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/changeattribute.adoc"), options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/changeattribute.adoc"),
+                options().toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
+        Document doc = Jsoup.parse(content, "UTF-8");
 
-		assertThat(doc.getElementsByTag("p").first().text(), is("sample Alex"));
+        assertThat(doc.getElementsByTag("p").first().text(), is("sample Alex"));
 
-	}
+    }
 
-	@Test
-	public void a_preprocessor_as_string_should_be_executed_before_document_is_rendered() {
+    @Test
+    public void a_preprocessor_as_string_should_be_executed_before_document_is_rendered() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry
-				.preprocessor("org.asciidoctor.extension.ChangeAttributeValuePreprocessor");
+        javaExtensionRegistry.preprocessor("org.asciidoctor.extension.ChangeAttributeValuePreprocessor");
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/changeattribute.adoc"), options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/changeattribute.adoc"),
+                options().toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
+        Document doc = Jsoup.parse(content, "UTF-8");
 
-		assertThat(doc.getElementsByTag("p").first().text(), is("sample Alex"));
+        assertThat(doc.getElementsByTag("p").first().text(), is("sample Alex"));
 
-	}
+    }
 
-	@Test
-	public void a_preprocessor_instance_should_be_executed_before_document_is_rendered() {
+    @Test
+    public void a_preprocessor_instance_should_be_executed_before_document_is_rendered() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry
-				.preprocessor(new ChangeAttributeValuePreprocessor(
-						new HashMap<String, Object>()));
+        javaExtensionRegistry.preprocessor(new ChangeAttributeValuePreprocessor(new HashMap<String, Object>()));
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/changeattribute.adoc"), options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/changeattribute.adoc"),
+                options().toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
+        Document doc = Jsoup.parse(content, "UTF-8");
 
-		assertThat(doc.getElementsByTag("p").first().text(), is("sample Alex"));
+        assertThat(doc.getElementsByTag("p").first().text(), is("sample Alex"));
 
-	}
+    }
 
-	@Test
-	public void a_postprocessor_as_string_should_be_executed_after_document_is_rendered()
-			throws IOException {
+    @Test
+    public void a_postprocessor_as_string_should_be_executed_after_document_is_rendered() throws IOException {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry
-				.postprocessor("org.asciidoctor.extension.CustomFooterPostProcessor");
+        javaExtensionRegistry.postprocessor("org.asciidoctor.extension.CustomFooterPostProcessor");
 
-		Options options = options().inPlace(false)
-				.toFile(new File(testFolder.getRoot(), "rendersample.html"))
-				.safe(SafeMode.UNSAFE).get();
+        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
+                .safe(SafeMode.UNSAFE).get();
 
-		asciidoctor.renderFile(new File(
-				"target/test-classes/rendersample.asciidoc"), options);
+        asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
 
-		File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
-		Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
+        Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
-		Element footer = doc.getElementById("footer-text");
-		assertThat(footer.text(), containsString("Copyright Acme, Inc."));
-	}
+        Element footer = doc.getElementById("footer-text");
+        assertThat(footer.text(), containsString("Copyright Acme, Inc."));
+    }
 
-	@Test
-	public void a_postprocessor_should_be_executed_after_document_is_rendered()
-			throws IOException {
+    @Test
+    public void a_postprocessor_should_be_executed_after_document_is_rendered() throws IOException {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.postprocessor(CustomFooterPostProcessor.class);
+        javaExtensionRegistry.postprocessor(CustomFooterPostProcessor.class);
 
-		Options options = options().inPlace(false)
-				.toFile(new File(testFolder.getRoot(), "rendersample.html"))
-				.safe(SafeMode.UNSAFE).get();
+        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
+                .safe(SafeMode.UNSAFE).get();
 
-		asciidoctor.renderFile(new File(
-				"target/test-classes/rendersample.asciidoc"), options);
+        asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
 
-		File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
-		Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
+        Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
-		Element footer = doc.getElementById("footer-text");
-		assertThat(footer.text(), containsString("Copyright Acme, Inc."));
-	}
+        Element footer = doc.getElementById("footer-text");
+        assertThat(footer.text(), containsString("Copyright Acme, Inc."));
+    }
 
-	@Test
-	public void a_postprocessor_instance_should_be_executed_after_document_is_rendered()
-			throws IOException {
+    @Test
+    public void a_postprocessor_instance_should_be_executed_after_document_is_rendered() throws IOException {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.postprocessor(new CustomFooterPostProcessor(
-				new HashMap<String, Object>()));
+        javaExtensionRegistry.postprocessor(new CustomFooterPostProcessor(new HashMap<String, Object>()));
 
-		Options options = options().inPlace(false)
-				.toFile(new File(testFolder.getRoot(), "rendersample.html"))
-				.safe(SafeMode.UNSAFE).get();
+        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
+                .safe(SafeMode.UNSAFE).get();
 
-		asciidoctor.renderFile(new File(
-				"target/test-classes/rendersample.asciidoc"), options);
+        asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
 
-		File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
-		Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
+        Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
-		Element footer = doc.getElementById("footer-text");
-		assertThat(footer.text(), containsString("Copyright Acme, Inc."));
-	}
+        Element footer = doc.getElementById("footer-text");
+        assertThat(footer.text(), containsString("Copyright Acme, Inc."));
+    }
 
-	@Test
-	public void a_include_processor_as_string_should_be_executed_when_include_macro_is_found() {
+    @Test
+    public void a_include_processor_as_string_should_be_executed_when_include_macro_is_found() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry
-				.includeProcessor("org.asciidoctor.extension.UriIncludeProcessor");
+        javaExtensionRegistry.includeProcessor("org.asciidoctor.extension.UriIncludeProcessor");
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-uri-include.ad"),
-				options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-uri-include.ad"), options()
+                .toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
+        Document doc = Jsoup.parse(content, "UTF-8");
 
-		Element contentElement = doc.getElementsByAttributeValue("class",
-				"ruby language-ruby").first();
+        Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-		assertThat(contentElement.text(),
-				startsWith("source 'https://rubygems.org"));
+        assertThat(contentElement.text(), startsWith("source 'https://rubygems.org"));
 
-	}
+    }
 
-	@Test
-	public void a_include_processor_should_be_executed_when_include_macro_is_found() {
+    @Test
+    public void a_include_processor_should_be_executed_when_include_macro_is_found() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.includeProcessor(UriIncludeProcessor.class);
+        javaExtensionRegistry.includeProcessor(UriIncludeProcessor.class);
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-uri-include.ad"),
-				options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-uri-include.ad"), options()
+                .toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
+        Document doc = Jsoup.parse(content, "UTF-8");
 
-		Element contentElement = doc.getElementsByAttributeValue("class",
-				"ruby language-ruby").first();
+        Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-		assertThat(contentElement.text(),
-				startsWith("source 'https://rubygems.org"));
+        assertThat(contentElement.text(), startsWith("source 'https://rubygems.org"));
 
-	}
+    }
 
-	@Test
-	public void a_include_instance_processor_should_be_executed_when_include_macro_is_found() {
+    @Test
+    public void a_include_instance_processor_should_be_executed_when_include_macro_is_found() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.includeProcessor(new UriIncludeProcessor(
-				new HashMap<String, Object>()));
+        javaExtensionRegistry.includeProcessor(new UriIncludeProcessor(new HashMap<String, Object>()));
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-uri-include.ad"),
-				options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-uri-include.ad"), options()
+                .toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
+        Document doc = Jsoup.parse(content, "UTF-8");
 
-		Element contentElement = doc.getElementsByAttributeValue("class",
-				"ruby language-ruby").first();
+        Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-		assertThat(contentElement.text(),
-				startsWith("source 'https://rubygems.org"));
+        assertThat(contentElement.text(), startsWith("source 'https://rubygems.org"));
 
-	}
+    }
 
-	@Test
-	public void a_treeprocessor_should_be_executed_in_document() {
+    @Test
+    public void a_treeprocessor_should_be_executed_in_document() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.treeprocessor(TerminalCommandTreeprocessor.class);
+        javaExtensionRegistry.treeprocessor(TerminalCommandTreeprocessor.class);
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-terminal-command.ad"),
-				options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-terminal-command.ad"),
+                options().toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
+        Document doc = Jsoup.parse(content, "UTF-8");
 
-		Element contentElement = doc.getElementsByAttributeValue("class",
-				"command").first();
-		assertThat(contentElement.text(), is("echo \"Hello, World!\""));
+        Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
+        assertThat(contentElement.text(), is("echo \"Hello, World!\""));
 
-		contentElement = doc.getElementsByAttributeValue("class", "command")
-				.last();
-		assertThat(contentElement.text(), is("gem install asciidoctor"));
+        contentElement = doc.getElementsByAttributeValue("class", "command").last();
+        assertThat(contentElement.text(), is("gem install asciidoctor"));
 
-	}
+    }
 
-	@Test
-	public void a_treeprocessor_as_string_should_be_executed_in_document() {
+    @Test
+    public void a_treeprocessor_as_string_should_be_executed_in_document() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry
-				.treeprocessor("org.asciidoctor.extension.TerminalCommandTreeprocessor");
+        javaExtensionRegistry.treeprocessor("org.asciidoctor.extension.TerminalCommandTreeprocessor");
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-terminal-command.ad"),
-				options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-terminal-command.ad"),
+                options().toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
+        Document doc = Jsoup.parse(content, "UTF-8");
 
-		Element contentElement = doc.getElementsByAttributeValue("class",
-				"command").first();
-		assertThat(contentElement.text(), is("echo \"Hello, World!\""));
+        Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
+        assertThat(contentElement.text(), is("echo \"Hello, World!\""));
 
-		contentElement = doc.getElementsByAttributeValue("class", "command")
-				.last();
-		assertThat(contentElement.text(), is("gem install asciidoctor"));
+        contentElement = doc.getElementsByAttributeValue("class", "command").last();
+        assertThat(contentElement.text(), is("gem install asciidoctor"));
 
-	}
+    }
 
-	@Test
-	public void a_treeprocessor_instance_should_be_executed_in_document() {
+    @Test
+    public void a_treeprocessor_instance_should_be_executed_in_document() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.treeprocessor(new TerminalCommandTreeprocessor(
-				new HashMap<String, Object>()));
+        javaExtensionRegistry.treeprocessor(new TerminalCommandTreeprocessor(new HashMap<String, Object>()));
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-terminal-command.ad"),
-				options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-terminal-command.ad"),
+                options().toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
+        Document doc = Jsoup.parse(content, "UTF-8");
 
-		Element contentElement = doc.getElementsByAttributeValue("class",
-				"command").first();
-		assertThat(contentElement.text(), is("echo \"Hello, World!\""));
+        Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
+        assertThat(contentElement.text(), is("echo \"Hello, World!\""));
 
-		contentElement = doc.getElementsByAttributeValue("class", "command")
-				.last();
-		assertThat(contentElement.text(), is("gem install asciidoctor"));
+        contentElement = doc.getElementsByAttributeValue("class", "command").last();
+        assertThat(contentElement.text(), is("gem install asciidoctor"));
 
-	}
+    }
 
-	@Test
-	@Ignore
-	public void extensions_should_be_correctly_added_using_extension_registry()
-			throws IOException {
+    @Test
+    @Ignore
+    public void extensions_should_be_correctly_added_using_extension_registry() throws IOException {
 
-		// To avoid registering the same extension over and over for all tests,
-		// service is instantiated manually.
-		new ArrowsAndBoxesExtension().register(asciidoctor);
+        // To avoid registering the same extension over and over for all tests,
+        // service is instantiated manually.
+        new ArrowsAndBoxesExtension().register(asciidoctor);
 
-		Options options = options().inPlace(false)
-				.toFile(new File(testFolder.getRoot(), "rendersample.html"))
-				.safe(SafeMode.UNSAFE).get();
+        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
+                .safe(SafeMode.UNSAFE).get();
 
-		asciidoctor.renderFile(new File(
-				"target/test-classes/arrows-and-boxes-example.ad"), options);
+        asciidoctor.renderFile(new File("target/test-classes/arrows-and-boxes-example.ad"), options);
 
-		File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
-		Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
+        Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
-		Element arrowsJs = doc
-				.select("script[src=http://www.headjump.de/javascripts/arrowsandboxes.js")
-				.first();
-		assertThat(arrowsJs, is(notNullValue()));
+        Element arrowsJs = doc.select("script[src=http://www.headjump.de/javascripts/arrowsandboxes.js").first();
+        assertThat(arrowsJs, is(notNullValue()));
 
-		Element arrowsCss = doc
-				.select("link[href=http://www.headjump.de/stylesheets/arrowsandboxes.css")
-				.first();
-		assertThat(arrowsCss, is(notNullValue()));
+        Element arrowsCss = doc.select("link[href=http://www.headjump.de/stylesheets/arrowsandboxes.css").first();
+        assertThat(arrowsCss, is(notNullValue()));
 
-		Element arrowsAndBoxes = doc.select("pre[class=arrows-and-boxes")
-				.first();
-		assertThat(arrowsAndBoxes, is(notNullValue()));
+        Element arrowsAndBoxes = doc.select("pre[class=arrows-and-boxes").first();
+        assertThat(arrowsAndBoxes, is(notNullValue()));
 
-	}
+    }
 
-	@Test
-	public void a_block_macro_extension_should_be_executed_when_macro_is_detected() {
+    @Test
+    public void a_block_macro_extension_should_be_executed_when_macro_is_detected() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.blockMacro("gist", GistMacro.class);
+        javaExtensionRegistry.blockMacro("gist", GistMacro.class);
 
-		String content = asciidoctor
-				.renderFile(new File(
-						"target/test-classes/sample-with-gist-macro.ad"),
-						options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-gist-macro.ad"), options()
+                .toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
-		Element script = doc.getElementsByTag("script").first();
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element script = doc.getElementsByTag("script").first();
 
-		assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
-	}
+        assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
+    }
 
-	@Test
-	public void a_block_macro_as_string_extension_should_be_executed_when_macro_is_detected() {
+    @Test
+    public void a_block_macro_as_string_extension_should_be_executed_when_macro_is_detected() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.blockMacro("gist",
-				"org.asciidoctor.extension.GistMacro");
+        javaExtensionRegistry.blockMacro("gist", "org.asciidoctor.extension.GistMacro");
 
-		String content = asciidoctor
-				.renderFile(new File(
-						"target/test-classes/sample-with-gist-macro.ad"),
-						options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-gist-macro.ad"), options()
+                .toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
-		Element script = doc.getElementsByTag("script").first();
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element script = doc.getElementsByTag("script").first();
 
-		assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
-	}
+        assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
+    }
 
-	@Test
-	public void a_block_macro_as_instance_extension_should_be_executed_when_macro_is_detected() {
+    @Test
+    public void a_block_macro_as_instance_extension_should_be_executed_when_macro_is_detected() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		Map<String, Object> options = new HashMap<String, Object>() {
-			{
-				put("content_model", ":raw");
-			}
-		};
+        Map<String, Object> options = new HashMap<String, Object>() {
+            {
+                put("content_model", ":raw");
+            }
+        };
 
-		javaExtensionRegistry.blockMacro(new GistMacro("gist", options));
+        javaExtensionRegistry.blockMacro(new GistMacro("gist", options));
 
-		String content = asciidoctor
-				.renderFile(new File(
-						"target/test-classes/sample-with-gist-macro.ad"),
-						options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-gist-macro.ad"), options()
+                .toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
-		Element script = doc.getElementsByTag("script").first();
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element script = doc.getElementsByTag("script").first();
 
-		assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
-	}
+        assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
+    }
 
-	@Test
-	public void an_inline_macro_as_string_extension_should_be_executed_when_an_inline_macro_is_detected() {
+    @Test
+    public void an_inline_macro_as_string_extension_should_be_executed_when_an_inline_macro_is_detected() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.inlineMacro("man",
-				"org.asciidoctor.extension.ManpageMacro");
+        javaExtensionRegistry.inlineMacro("man", "org.asciidoctor.extension.ManpageMacro");
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-man-link.ad"), options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-man-link.ad"), options()
+                .toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
-		Element link = doc.getElementsByTag("a").first();
-		assertThat(link.attr("href"), is("gittutorial.html"));
-	}
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element link = doc.getElementsByTag("a").first();
+        assertThat(link.attr("href"), is("gittutorial.html"));
+    }
 
-	@Test
-	public void an_inline_macro_extension_should_be_executed_when_an_inline_macro_is_detected() {
+    @Test
+    public void an_inline_macro_extension_should_be_executed_when_an_inline_macro_is_detected() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.inlineMacro("man", ManpageMacro.class);
+        javaExtensionRegistry.inlineMacro("man", ManpageMacro.class);
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-man-link.ad"), options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-man-link.ad"), options()
+                .toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
-		Element link = doc.getElementsByTag("a").first();
-		assertThat(link.attr("href"), is("gittutorial.html"));
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element link = doc.getElementsByTag("a").first();
+        assertThat(link.attr("href"), is("gittutorial.html"));
 
-	}
+    }
 
-	@Test
-	public void an_inline_macro_as_instance_extension_should_be_executed_when_regexp_is_set_as_option_inline_macro_is_detected() {
+    @Test
+    public void an_inline_macro_as_instance_extension_should_be_executed_when_regexp_is_set_as_option_inline_macro_is_detected() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		Map<String, Object> options = new HashMap<String, Object>();
-		options.put("regexp", "man(?:page)?:(\\S+?)\\[(.*?)\\]");
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("regexp", "man(?:page)?:(\\S+?)\\[(.*?)\\]");
 
-		ManpageMacro inlineMacroProcessor = new ManpageMacro("man", options);
-		javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
+        ManpageMacro inlineMacroProcessor = new ManpageMacro("man", options);
+        javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-man-link.ad"), options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-man-link.ad"), options()
+                .toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
-		Element link = doc.getElementsByTag("a").first();
-		assertNotNull(link);
-		assertThat(link.attr("href"), is("gittutorial.html"));
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element link = doc.getElementsByTag("a").first();
+        assertNotNull(link);
+        assertThat(link.attr("href"), is("gittutorial.html"));
 
-	}
+    }
 
-	@Test
-	public void an_inline_macro_as_instance_extension_should_be_executed_when_an_inline_macro_is_detected() {
+    @Test
+    public void an_inline_macro_as_instance_extension_should_be_executed_when_an_inline_macro_is_detected() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		Map<String, Object> options = new HashMap<String, Object>();
+        Map<String, Object> options = new HashMap<String, Object>();
 
-		ManpageMacro inlineMacroProcessor = new ManpageMacro("man", options);
-		javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
+        ManpageMacro inlineMacroProcessor = new ManpageMacro("man", options);
+        javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
 
-		String content = asciidoctor.renderFile(new File(
-				"target/test-classes/sample-with-man-link.ad"), options().toFile(false).get());
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-man-link.ad"), options()
+                .toFile(false).get());
 
-		Document doc = Jsoup.parse(content, "UTF-8");
-		Element link = doc.getElementsByTag("a").first();
-		assertNotNull(link);
-		assertThat(link.attr("href"), is("gittutorial.html"));
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element link = doc.getElementsByTag("a").first();
+        assertNotNull(link);
+        assertThat(link.attr("href"), is("gittutorial.html"));
 
-	}
+    }
 
-	@Test
-	public void should_unregister_all_current_registered_extensions()
-			throws IOException {
+    @Test
+    public void should_unregister_all_current_registered_extensions() throws IOException {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.postprocessor(CustomFooterPostProcessor.class);
+        javaExtensionRegistry.postprocessor(CustomFooterPostProcessor.class);
 
-		Options options = options().inPlace(false)
-				.toFile(new File(testFolder.getRoot(), "rendersample.html"))
-				.safe(SafeMode.UNSAFE).get();
+        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
+                .safe(SafeMode.UNSAFE).get();
 
-		asciidoctor.unregisterAllExtensions();
-		asciidoctor.renderFile(new File(
-				"target/test-classes/rendersample.asciidoc"), options);
+        asciidoctor.unregisterAllExtensions();
+        asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
 
-		File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
-		Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
+        Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
-		Element footer = doc.getElementById("footer-text");
-		assertThat(footer.text(), not(containsString("Copyright Acme, Inc.")));
-	}
+        Element footer = doc.getElementById("footer-text");
+        assertThat(footer.text(), not(containsString("Copyright Acme, Inc.")));
+    }
 
-	@Test
-	public void a_block_processor_as_string_should_be_executed_when_registered_block_is_found_in_document()
-			throws IOException {
+    @Test
+    public void a_block_processor_as_string_should_be_executed_when_registered_block_is_found_in_document()
+            throws IOException {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.block("yell",
-				"org.asciidoctor.extension.YellStaticBlock");
-		String content = asciidoctor
-				.renderFile(new File(
-						"target/test-classes/sample-with-yell-block.ad"),
-						options().toFile(false).get());
-		Document doc = Jsoup.parse(content, "UTF-8");
-		Elements elements = doc.getElementsByClass("paragraph");
-		assertThat(elements.size(), is(1));
-		assertThat(elements.get(0).text(),
-				is("THE TIME IS NOW. GET A MOVE ON."));
+        javaExtensionRegistry.block("yell", "org.asciidoctor.extension.YellStaticBlock");
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-yell-block.ad"), options()
+                .toFile(false).get());
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Elements elements = doc.getElementsByClass("paragraph");
+        assertThat(elements.size(), is(1));
+        assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
 
-	}
+    }
 
-	@Test
-	public void a_block_processor_should_be_executed_when_registered_block_is_found_in_document()
-			throws IOException {
+    @Test
+    public void a_block_processor_should_be_executed_when_registered_block_is_found_in_document() throws IOException {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.block("yell", YellStaticBlock.class);
-		String content = asciidoctor
-				.renderFile(new File(
-						"target/test-classes/sample-with-yell-block.ad"),
-						options().toFile(false).get());
-		Document doc = Jsoup.parse(content, "UTF-8");
-		Elements elements = doc.getElementsByClass("paragraph");
-		assertThat(elements.size(), is(1));
-		assertThat(elements.get(0).text(),
-				is("THE TIME IS NOW. GET A MOVE ON."));
+        javaExtensionRegistry.block("yell", YellStaticBlock.class);
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-yell-block.ad"), options()
+                .toFile(false).get());
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Elements elements = doc.getElementsByClass("paragraph");
+        assertThat(elements.size(), is(1));
+        assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
 
-	}
+    }
 
-	@Test
-	public void a_block_processor_instance_should_be_executed_when_registered_block_is_found_in_document()
-			throws IOException {
+    @Test
+    public void a_block_processor_instance_should_be_executed_when_registered_block_is_found_in_document()
+            throws IOException {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor
-				.javaExtensionRegistry();
-		Map<String, Object> config = new HashMap<String, Object>();
-		config.put("contexts", Arrays.asList(":paragraph"));
-		config.put("content_model", ":simple");
-		YellBlock yellBlock = new YellBlock("yell", config);
-		javaExtensionRegistry.block(yellBlock);
-		String content = asciidoctor
-				.renderFile(new File(
-						"target/test-classes/sample-with-yell-block.ad"),
-						options().toFile(false).get());
-		Document doc = Jsoup.parse(content, "UTF-8");
-		Elements elements = doc.getElementsByClass("paragraph");
-		assertThat(elements.size(), is(1));
-		assertThat(elements.get(0).text(),
-				is("THE TIME IS NOW. GET A MOVE ON."));
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+        Map<String, Object> config = new HashMap<String, Object>();
+        config.put("contexts", Arrays.asList(":paragraph"));
+        config.put("content_model", ":simple");
+        YellBlock yellBlock = new YellBlock("yell", config);
+        javaExtensionRegistry.block(yellBlock);
+        String content = asciidoctor.renderFile(new File("target/test-classes/sample-with-yell-block.ad"), options()
+                .toFile(false).get());
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Elements elements = doc.getElementsByClass("paragraph");
+        assertThat(elements.size(), is(1));
+        assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
 
-	}
+    }
 
 }
