@@ -12,42 +12,42 @@ import org.jruby.runtime.builtin.IRubyObject;
 
 public class Document extends AbstractBlockImpl implements DocumentRuby {
 
-	private DocumentRuby documentDelegate;
-	
-	public Document(DocumentRuby documentRuby, Ruby runtime) {
-		super(documentRuby, runtime);
-		this.documentDelegate = documentRuby;
-	}
+    private DocumentRuby documentDelegate;
 
-	public DocumentRuby getDocumentRuby() {
-		return documentDelegate;
-	}
+    public Document(DocumentRuby documentRuby, Ruby runtime) {
+        super(documentRuby, runtime);
+        this.documentDelegate = documentRuby;
+    }
 
-	@Override
-	public Map<String, Object> getAttributes() {
-		return attributes();
-	}
+    public DocumentRuby getDocumentRuby() {
+        return documentDelegate;
+    }
 
-	@Override
-	public boolean basebackend(String backend) {
-		return documentDelegate.basebackend(backend);
-	}
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes();
+    }
+
+    @Override
+    public boolean basebackend(String backend) {
+        return documentDelegate.basebackend(backend);
+    }
 
     @Override
     public Object doctitle(Map<Object, Object> opts) {
         RubyHash mapWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime, opts);
-        
+
         Object doctitle = documentDelegate.doctitle(mapWithSymbols);
-        
-        if(doctitle instanceof IRubyObject){
-            doctitle = RubyUtils.rubyToJava(runtime, (IRubyObject)doctitle, Title.class);
+
+        if (doctitle instanceof IRubyObject) {
+            doctitle = RubyUtils.rubyToJava(runtime, (IRubyObject) doctitle, Title.class);
         }
-        
+
         return doctitle;
     }
 
     public String doctitle() {
-        return (String)doctitle(new HashMap<Object, Object>());
+        return (String) doctitle(new HashMap<Object, Object>());
     }
-    
+
 }

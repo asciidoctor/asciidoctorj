@@ -6,9 +6,9 @@ import com.beust.jcommander.IStringConverter;
 
 public class SafeModeConverter implements IStringConverter<SafeMode> {
 
-	@Override
-	public SafeMode convert(String argument) {
-		return SafeMode.valueOf(argument.toUpperCase());
-	}
+    @Override
+    public SafeMode convert(String argument) {
+        return SafeMode.valueOf(argument.toUpperCase());
+    }
 
 }
