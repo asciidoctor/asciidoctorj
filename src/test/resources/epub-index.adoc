@@ -1,0 +1,4 @@
+= Book Title
+Author Name
+
+include::content-document.adoc[]

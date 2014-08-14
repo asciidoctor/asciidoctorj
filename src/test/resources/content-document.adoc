@@ -1,0 +1,9 @@
+= Content Title
+Author Name
+
+[abstract]
+This is the actual content.
+
+== First Section
+
+And off we go.
