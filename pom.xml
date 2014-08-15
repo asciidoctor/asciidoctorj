@@ -67,7 +67,7 @@
         <coderay.version>1.1.0</coderay.version>
         <cacheUri.version>0.0.5</cacheUri.version>
         <threadsafe.version>0.3.4</threadsafe.version>
-        <asciidoctor.epub3.version>1.0.0.alpha.1</asciidoctor.epub3.version>
+        <asciidoctor.epub3.version>1.0.0.alpha.2</asciidoctor.epub3.version>
         <asciidoctor.version>1.5.0</asciidoctor.version>
         <erubis.version>2.7.0</erubis.version>
         <slim.version>2.0.2</slim.version>
@@ -97,6 +97,20 @@
             <groupId>org.xmlmatchers</groupId>
             <artifactId>xml-matchers</artifactId>
             <version>${xmlmatchers.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.sf.saxon</groupId>
+                    <artifactId>Saxon-HE</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Use newer version of Saxon than provided by xmlunit
+             The older version causes problems when using Xpath in Nokogiri -->
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>9.5.1-6</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -238,6 +252,9 @@
                         <configuration>
                             <!-- <skip>false</skip> -->
                             <includes>
+                                <!--
+                                <include>**/NameOfTestClass.java</include>
+                                -->
                                 <include>**/*Test.java</include>
                                 <include>**/Test*.java</include>
                                 <include>**/When*.java</include>
