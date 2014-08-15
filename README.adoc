@@ -11,11 +11,11 @@ ifdef::env-github[]
 image::http://img.shields.io/travis/asciidoctor/asciidoctorj/master.svg[Build Status, link="https://travis-ci.org/asciidoctor/asciidoctorj"]
 endif::[]
 
-The +asciidoctor-java-integration+ is the official means of using {asciidoctor-uri}[Asciidoctor] to render all your {asciidoc-uri}[AsciiDoc] documentation using Java instead of Ruby.
+AsciidoctorJ is the official means of using {asciidoctor-uri}[Asciidoctor] to render all your {asciidoc-uri}[AsciiDoc] documentation using Java instead of Ruby.
 
 == Installation
 
-Since +asciidoctor-java-integration+ is a standard jar file, the only thing you should do is add library into classpath.
+Since AsciidoctorJ is a standard jar file, the only thing you should do is add library into classpath.
 
 .Dependency declaration in Maven
 [source,xml]
@@ -24,7 +24,7 @@ Since +asciidoctor-java-integration+ is a standard jar file, the only thing you 
 <dependencies>
   <dependency>
     <groupId>org.asciidoctor</groupId>
-    <artifactId>asciidoctor-java-integration</artifactId>
+    <artifactId>asciidoctorj</artifactId>
     <version>${asciidoctor.version}</version>  <!--1-->
     ...
   </dependency>
@@ -36,7 +36,7 @@ Since +asciidoctor-java-integration+ is a standard jar file, the only thing you 
 [source,scala]
 ----
 ...
-libraryDependencies += "org.asciidoctor" % "asciidoctor-java-integration" % "${asciidoctor.version}" //<1>
+libraryDependencies += "org.asciidoctor" % "asciidoctorj" % "${asciidoctor.version}" //<1>
 ...
 ----
 
@@ -45,7 +45,7 @@ libraryDependencies += "org.asciidoctor" % "asciidoctor-java-integration" % "${a
 ----
 ...
 dependencies {
-    compile('org.asciidoctor:asciidoctor-java-integration:${asciidoctor.version}') {  //<1>
+    compile('org.asciidoctor:asciidoctorj:${asciidoctor.version}') {  //<1>
         transitive = false
     }
 }
@@ -55,7 +55,7 @@ dependencies {
 
 == Usage
 
-The core interface of +asciidoctor-java-integration+ is +Asciidoctor+ interface. It provides two methods for rendering asciidoc content, +render+ and +renderFile+. Both of them returns a string with rendered content.
+The core interface of AsciidoctorJ is the +Asciidoctor+ interface. It provides two methods for rendering asciidoc content, +render+ and +renderFile+. Both of them returns a string with rendered content.
 
 .Method description
 [cols="1m,2"]
@@ -187,7 +187,7 @@ String render = asciidoctor.renderFile("target/test-classes/rendersample.asciido
 ...
 ----
 
-But +asciidoctor-java-integration+ also provides two fluent interfaces to create these maps and classes in a more readable form.
+But AsciidoctorJ also provides two fluent interfaces to create these maps and classes in a more readable form.
 
 +org.asciidoctor.AttributesBuilder+ is provided for creating required attributes set, and +org.asciidoctor.OptionsBuilder+ can be used for options. Previous example but using these classes looks like:
 
@@ -447,7 +447,7 @@ List<File> asciidocFiles = directoryWalker.scan();
 
 === GEM_PATH
 
-By default +asciidoctor-java-integration+ comes with all required gems bundled within the jar. But in some circumstances like +OSGi+ environments you may require to store gems in an external directory and be loaded by +asciidoctor-java-integration+. To accomplish this scenario, +create+ method provides a parameter to set it.
+By default, AsciidoctorJ comes with all required gems bundled within the jar. But in some circumstances like +OSGi+ environments you may require to store gems in an external directory and be loaded by AsciidoctorJ. To accomplish this scenario, +create+ method provides a parameter to set it.
 
 .Example of setting GEM_PATH
 [source]
@@ -473,7 +473,7 @@ For small tasks such as converting an AsciiDoc document, there are two +JRuby+ f
 |OFF
 |===
 
-Both flags are set by default inside +asciidoctor-java-integration+ project, so we do not have to worry about setting them manually.
+Both flags are set by default inside the AsciidoctorJ project, so we do not have to worry about setting them manually.
 
 As mentioned before, there are some Java flags that can also be used for this purpose. These flags depends on version of +JDK+ and also if you are working on 32/64 bits version. These flags can be set by using +JRUBY_OPTS+ environment variable. Let's see a summary of these flags and in which versions can be used.
 
@@ -538,9 +538,9 @@ If you want to use +Asciidoctor-java-integration+ in your application deployed o
 <?xml version="1.0" encoding="UTF-8"?>
 <module xmlns="urn:jboss:module:1.0" name="org.asciidoctor">
   <resources>
-    <resource-root path="asciidoctor-java-integration-0.1.4.jar"/>
-    <resource-root path="jcommander-1.30.jar"/>
-    <resource-root path="jruby-complete-1.7.4.jar"/>
+    <resource-root path="asciidoctorj-1.5.0.jar"/>
+    <resource-root path="jcommander-1.32.jar"/>
+    <resource-root path="jruby-complete-1.7.9.jar"/>
   </resources>
 
   <dependencies>
@@ -569,7 +569,7 @@ Dependencies: org.asciidoctor
 <dependencies>
   <dependency>
     <groupId>org.asciidoctor</groupId>
-    <artifactId>asciidoctor-java-integration</artifactId>
+    <artifactId>asciidoctorj</artifactId>
     <version>${asciidoctor.version}</version>     
     <scope>provided</scope>                               <1>
     ...
@@ -591,6 +591,6 @@ Dependencies: org.asciidoctor
 ...
 ----
 
-<1> asciidoctor-java-version dependency and all these transitives dependencies don't need to be added to the final WAR since all JARs are available through the module
+<1> asciidoctorj dependency and all these transitives dependencies don't need to be added to the final WAR since all JARs are available through the module
 <2> the module dependency will be added to the MANIFEST.MF file
 

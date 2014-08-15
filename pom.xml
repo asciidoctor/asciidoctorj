@@ -13,12 +13,12 @@
     <version>1.5.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>asciidoctor-java-integration</name>
-    <description>asciidoctor-java-integration is a java binding to Asciidoctor gem.</description>
-    <url>https://github.com/asciidoctor/asciidoctor-java-integration</url>
+    <name>AsciidoctorJ</name>
+    <description>AsciidoctorJ provides Java bindings for the Asciidoctor RubyGem using JRuby</description>
+    <url>https://github.com/asciidoctor/asciidoctorj</url>
     <issueManagement>
         <system>github</system>
-        <url>https://github.com/asciidoctor/asciidoctor-java-integration/issues</url>
+        <url>https://github.com/asciidoctor/asciidoctorj/issues</url>
     </issueManagement>
     <licenses>
         <license>
@@ -27,9 +27,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git@github.com:asciidoctor/asciidoctor-java-integration.git</connection>
-        <developerConnection>scm:git:git@github.com:asciidoctor/asciidoctor-java-integration.git</developerConnection>
-        <url>scm:git:git@github.com:asciidoctor/asciidoctor-java-integration.git</url>
+        <connection>scm:git:git@github.com:asciidoctor/asciidoctorj.git</connection>
+        <developerConnection>scm:git:git@github.com:asciidoctor/asciidoctorj.git</developerConnection>
+        <url>scm:git:git@github.com:asciidoctor/asciidoctorj.git</url>
     </scm>
 
     <developers>
@@ -37,6 +37,19 @@
             <id>asotobu</id>
             <name>Alex Soto Bueno</name>
             <email>asotobu@gmail.com</email>
+            <roles>
+                <role>Lead Developer</role>
+            </roles>
+            <timezone>1</timezone>
+        </developer>
+        <developer>
+            <id>mojavelinux</id>
+            <name>Dan Allen</name>
+            <email>dan.j.allen@gmail.com</email>
+            <roles>
+                <role>Contributor</role>
+            </roles>
+            <timezone>-7</timezone>
         </developer>
     </developers>
 
