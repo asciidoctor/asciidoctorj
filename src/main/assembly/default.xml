@@ -25,7 +25,7 @@
             <outputDirectory></outputDirectory>
             <includes>
                 <include>*.jar</include>
-                <include>README.asciidoc</include>
+                <include>README.adoc</include>
             </includes>
         </fileSet>
         <fileSet>
