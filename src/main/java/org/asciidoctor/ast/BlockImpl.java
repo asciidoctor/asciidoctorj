@@ -16,4 +16,9 @@ public class BlockImpl extends AbstractBlockImpl implements Block {
     public List<String> lines() {
         return blockDelegate.lines();
     }
+    
+    @Override
+    public String source() {
+        return blockDelegate.source();
+    }
 }
