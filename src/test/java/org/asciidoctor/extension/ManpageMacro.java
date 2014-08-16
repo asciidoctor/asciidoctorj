@@ -17,7 +17,7 @@ public class ManpageMacro extends InlineMacroProcessor {
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("type", ":link");
         options.put("target", target + ".html");
-        return createInline(parent, "anchor", target, attributes, options).render();
+        return createInline(parent, "anchor", target, attributes, options).convert();
     }
 
 }
