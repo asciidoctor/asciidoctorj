@@ -107,11 +107,11 @@ public class AbstractBlockImpl implements AbstractBlock {
     }
 
     private AbstractBlock overrideRubyObjectToJavaObject(RubyObject rubyObject) {
-        if (BLOCK_CLASS == rubyObject.getMetaClass().getBaseName()) {
+        if (BLOCK_CLASS.equals(rubyObject.getMetaClass().getBaseName())) {
             Block blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Block.class);
             return new BlockImpl(blockRuby, runtime);
         }
-        else if (SECTION_CLASS == rubyObject.getMetaClass().getBaseName()) {
+        else if (SECTION_CLASS.equals(rubyObject.getMetaClass().getBaseName())) {
             Section blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Section.class);
             return new SectionImpl(blockRuby, runtime);
         }
