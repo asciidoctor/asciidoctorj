@@ -20,7 +20,7 @@ class EnvironmentInjector {
             for (Map.Entry<String, Object> envVar : environmentVars.entrySet()) {
                 String key = envVar.getKey();
                 Object val = envVar.getValue();
-                if (val == null) {
+                if (val == null || "".equals(val)) {
                     replacementEnv.remove(envVar.getKey());
                     if ("GEM_PATH".equals(key) && !environmentVars.containsKey("GEM_HOME")) {
                         replacementEnv.remove("GEM_HOME");
