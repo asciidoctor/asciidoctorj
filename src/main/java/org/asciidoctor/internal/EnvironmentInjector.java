@@ -1,27 +1,42 @@
 package org.asciidoctor.internal;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
+import org.jruby.RubyInstanceConfig;
 
-import org.jruby.Ruby;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 class EnvironmentInjector {
 
-    private Ruby runtime;
+    private RubyInstanceConfig config;
 
-    EnvironmentInjector(Ruby runtime) {
-        this.runtime = runtime;
+    EnvironmentInjector(RubyInstanceConfig config) {
+        this.config = config;
     }
 
     void inject(Map<String, Object> environmentVars) {
+        if (!environmentVars.isEmpty()) {
+            Map<String, Object> replacementEnv = new HashMap<String, Object>(System.getenv());
+            for (Map.Entry<String, Object> envVar : environmentVars.entrySet()) {
+                String key = envVar.getKey();
+                Object val = envVar.getValue();
+                if (val == null || "".equals(val)) {
+                    replacementEnv.remove(envVar.getKey());
+                    if ("GEM_PATH".equals(key) && !environmentVars.containsKey("GEM_HOME")) {
+                        replacementEnv.remove("GEM_HOME");
+                    }
+                } else {
+                    replacementEnv.put(key, val);
+                    if ("GEM_PATH".equals(key) && !environmentVars.containsKey("GEM_HOME")) {
+                        String gemHome = val.toString().split(File.pathSeparator)[0];
+                        replacementEnv.put("GEM_HOME", gemHome);
+                    }
 
-        Set<Entry<String, Object>> environmentVariablesAndValues = environmentVars.entrySet();
+                }
 
-        for (Entry<String, Object> entry : environmentVariablesAndValues) {
-            runtime.evalScriptlet(String.format("ENV['%s']=\"%s\"", entry.getKey(), entry.getValue()));
+            }
+
+            config.setEnvironment(replacementEnv);
         }
-
     }
-
 }
