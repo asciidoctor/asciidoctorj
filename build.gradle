@@ -1,0 +1,134 @@
+
+buildscript {
+    repositories {
+        mavenLocal()
+ 
+        jcenter() 
+    }
+
+    dependencies {
+      classpath 'com.github.jruby-gradle:jruby-gradle-plugin:0.1.0-SNAPSHOT'
+      classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
+    }
+}
+
+// We temporarily set buildDir to somewhere else for the sake of this experiment
+buildDir = new File(projectDir,'buildGradle')
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'com.github.jruby-gradle.base'
+apply plugin: 'com.jfrog.bintray'
+
+repositories {
+    maven { 
+        url  'http://rubygems-proxy.torquebox.org/prereleases'
+        name 'rubygems-prerelease'
+    }
+    
+    // WORKAROUND: for broken some POMs on Rubygems
+    ivy {
+        url 'http://rubygems-proxy.torquebox.org/releases'
+        name 'brokenRubyGems'
+        layout('pattern') {
+            artifact 'rubygems/[module]/[revision]/[artifact]-[revision].[ext]'
+            m2compatible = true
+        }
+    }
+}
+
+
+group = 'org.asciidoctor'
+// module = asciidoctorj
+version = '1.5.1-SNAPSHOT'
+ext {
+  jruby_version = '1.7.9'
+  junit_version = '4.11'
+  jsoup_version = '1.7.3'
+  xmlmatchers_version = '1.0-RC1'
+  hamcrest_version = '1.3'
+  guava_version = '15.0'
+  haml_version = '4.0.4'
+  tilt_version = '2.0.0'
+  coderay_version = '1.1.0'
+  cacheUri_version = '0.0.5'
+  threadsafe_version = '0.3.4'
+  asciidoctor_epub3_version = '1.0.0.alpha.3'
+  asciidoctor_version = '1.5.0'
+  erubis_version = '2.7.0'
+  slim_version = '2.0.2'
+  jcommander_version = '1.32'
+  slf4_version = '1.7.5'
+}
+dependencies {
+  compile "org.slf4j:slf4j-api:${slf4_version}"
+  compile "org.jruby:jruby-complete:${jruby_version}"
+  testCompile "junit:junit:${junit_version}"
+  testCompile ("org.xmlmatchers:xml-matchers:${xmlmatchers_version}") {
+    exclude module : 'Saxon-HE'
+  }
+  testCompile "net.sf.saxon:Saxon-HE:9.5.1-6"
+  testCompile "org.hamcrest:hamcrest-library:${hamcrest_version}"
+  testCompile "com.google.guava:guava:${guava_version}"
+  testCompile "org.jsoup:jsoup:${jsoup_version}"
+  gems "rubygems:thread_safe:${threadsafe_version}"
+  gems "rubygems:haml:${haml_version}"
+  gems "rubygems:open-uri-cached:${cacheUri_version}"
+  gems "rubygems:asciidoctor:${asciidoctor_version}"
+  gems "rubygems:coderay:${coderay_version}"
+  gems "rubygems:asciidoctor-epub3:${asciidoctor_epub3_version}-SNAPSHOT"
+  gems "rubygems:tilt:${tilt_version}"
+  // WORKAROUND: for broken some POMs on Rubygems
+  gems "brokenGem:erubis:${erubis_version}@gem"
+  gems "rubygems:slim:${slim_version}"
+  compile "com.beust:jcommander:${jcommander_version}"
+  testRuntime  "org.slf4j:slf4j-simple:${slf4_version}"
+}
+
+if( !hasProperty( 'bintrayUser' ) )
+  ext.bintrayUser = ''
+
+if( !hasProperty( 'bintrayKey' ) )
+  ext.bintrayKey = ''
+
+jar {
+  from (jruby.gemInstallDir) {
+      include 'gems/**'
+  }
+  
+  manifest {
+      attributes 'Implementation-Version' : project.version
+      attributes 'Main-Class': 'org.asciidoctor.cli.AsciidoctorInvoker'    
+  }
+
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+bintray {
+    user = project.bintrayUser
+    key = project.bintrayKey
+    publish = true
+    dryRun = false
+    configurations = ['archives']
+
+    pkg {
+        repo = 'bintray-lordofthejars-maven-asciidoctorj'
+        name = 'lordofthejars-maven-asciidoctorj'
+        labels = ['asciidoctor','asciidoc','asciidoctorj']
+
+        version {
+            name = project.version
+            vcsTag = "v${project.version}"
+            desc = 'AsciidoctorJ provides Java bindings for the Asciidoctor RubyGem using JRuby'
+        }
+    }
+}
+
