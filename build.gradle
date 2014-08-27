@@ -2,8 +2,7 @@
 buildscript {
     repositories {
         mavenLocal()
- 
-        jcenter() 
+        jcenter()
     }
 
     dependencies {
@@ -12,7 +11,7 @@ buildscript {
     }
 }
 
-// We temporarily set buildDir to somewhere else for the sake of this experiment
+// We temporarily set buildDir to somewhere else fo rhte sake of this experiment
 buildDir = new File(projectDir,'buildGradle')
 
 apply plugin: 'java'
@@ -21,11 +20,11 @@ apply plugin: 'com.github.jruby-gradle.base'
 apply plugin: 'com.jfrog.bintray'
 
 repositories {
-    maven { 
+    maven {
         url  'http://rubygems-proxy.torquebox.org/prereleases'
         name 'rubygems-prerelease'
     }
-    
+
     // WORKAROUND: for broken some POMs on Rubygems
     ivy {
         url 'http://rubygems-proxy.torquebox.org/releases'
@@ -85,20 +84,14 @@ dependencies {
   testRuntime  "org.slf4j:slf4j-simple:${slf4_version}"
 }
 
-if( !hasProperty( 'bintrayUser' ) )
-  ext.bintrayUser = ''
-
-if( !hasProperty( 'bintrayKey' ) )
-  ext.bintrayKey = ''
-
 jar {
   from (jruby.gemInstallDir) {
       include 'gems/**'
   }
-  
+
   manifest {
       attributes 'Implementation-Version' : project.version
-      attributes 'Main-Class': 'org.asciidoctor.cli.AsciidoctorInvoker'    
+      attributes 'Main-Class': 'org.asciidoctor.cli.AsciidoctorInvoker'
   }
 
 }
@@ -111,6 +104,15 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 artifacts {
     archives sourcesJar
 }
+
+sourceSets.test.runtimeClasspath = sourceSets.test.runtimeClasspath + files(jruby.gemInstallDir)
+
+
+if( !hasProperty( 'bintrayUser' ) )
+  ext.bintrayUser = ''
+
+if( !hasProperty( 'bintrayKey' ) )
+  ext.bintrayKey = ''
 
 bintray {
     user = project.bintrayUser
@@ -132,3 +134,47 @@ bintray {
     }
 }
 
+
+task compareJars << {
+    Set<String> gjar = []
+    Set<String> mjar = []
+    File report = new File(buildDir,'reports/compareJars.txt')
+
+    zipTree( new File(buildDir,"libs/${project.name}-${version}.jar") ).visit {
+        gjar.add(it.relativePath.toString())
+    }
+    zipTree( new File("target/asciidoctorj-${version}.jar") ).visit {
+        mjar.add(it.relativePath.toString())
+    }
+
+    Set<String> inCommon = gjar.intersect(mjar)
+    Set<String> onlyInGradle = gjar - inCommon
+    Set<String> onlyInMaven = mjar - inCommon
+
+    report.withWriter { writer ->
+        writer << "-------------------------------------------------------------------------\n"
+        writer << "${inCommon.size()} files in common\n"
+        writer << "${onlyInMaven.size()} files unique to Maven\n"
+        writer << "${onlyInGradle.size()} files unique to Gradle\n"
+        writer << "-------------------------------------------------------------------------\n"
+        writer << "Files only found in Maven\n"
+        onlyInMaven.sort().each { writer << it + "\n" }
+        writer << "-------------------------------------------------------------------------\n"
+        writer << "Files only found in Gradle\n"
+        writer << "-------------------------------------------------------------------------\n"
+        onlyInGradle.sort().each { writer << it + "\n" }
+        writer << "-------------------------------------------------------------------------\n"
+        writer << "Files in common\n"
+        writer << "-------------------------------------------------------------------------\n"
+        inCommon.sort().each { writer << it + "\n" }
+        writer << "-------------------------------------------------------------------------\n"
+    }
+    logger.info "${onlyInMaven.size()} files unique to Maven"
+    logger.info "${onlyInGradle.size()} files unique to Gradle"
+    logger.info "A report has been written to ${report.absolutePath}"
+}
+
+compareJars {
+    description 'Compares the built Maven Jar to that of that build Gradle Jar'
+    group 'Migration to Gradle'
+}
