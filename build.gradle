@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-      classpath 'com.github.jruby-gradle:jruby-gradle-plugin:0.1.0-SNAPSHOT'
+      classpath 'com.github.jruby-gradle:jruby-gradle-plugin:0.1.0'
       classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
     }
 }
