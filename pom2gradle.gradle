@@ -48,16 +48,6 @@ repositories {
         url  'http://rubygems-proxy.torquebox.org/prereleases'
         name 'rubygems-prerelease'
     }
-
-    // WORKAROUND: for broken some POMs on Rubygems
-    ivy {
-        url 'http://rubygems-proxy.torquebox.org/releases'
-        name 'brokenRubyGems'
-        layout('pattern') {
-            artifact 'rubygems/[module]/[revision]/[artifact]-[revision].[ext]'
-            m2compatible = true
-        }
-    }
 }
 
 """
@@ -84,10 +74,7 @@ version = '${pom.version}'
             if(d.groupId=='rubygems') { cfg='gems' }
             if(d?.scope == 'test') { cfg='testCompile' }
 
-            if(d.artifactId=='erubis') {
-                w << "  // WORKAROUND: for broken some POMs on Rubygems\n"
-                w << "  ${cfg} \"brokenGem:erubis:\${erubis_version}@gem\"\n"
-            } else if(d.artifactId=='asciidoctor-epub3') {
+            if(d.artifactId=='asciidoctor-epub3') {
                 w << "  ${cfg} \"${d.groupId}:${d.artifactId}:${convert(d.version.toString())}-SNAPSHOT\"\n"
             } else if(d.exclusions.size()) {
                 w << "  ${cfg} (\"${d.groupId}:${d.artifactId}:${convert(d.version.toString())}\") {\n"
@@ -104,7 +91,7 @@ version = '${pom.version}'
         w << """
 jar {
   from (jruby.gemInstallDir) {
-      include 'gems/**'
+      include '**'
   }
 
   manifest {

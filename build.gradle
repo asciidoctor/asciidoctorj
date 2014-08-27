@@ -24,16 +24,6 @@ repositories {
         url  'http://rubygems-proxy.torquebox.org/prereleases'
         name 'rubygems-prerelease'
     }
-
-    // WORKAROUND: for broken some POMs on Rubygems
-    ivy {
-        url 'http://rubygems-proxy.torquebox.org/releases'
-        name 'brokenRubyGems'
-        layout('pattern') {
-            artifact 'rubygems/[module]/[revision]/[artifact]-[revision].[ext]'
-            m2compatible = true
-        }
-    }
 }
 
 
@@ -77,8 +67,7 @@ dependencies {
   gems "rubygems:coderay:${coderay_version}"
   gems "rubygems:asciidoctor-epub3:${asciidoctor_epub3_version}-SNAPSHOT"
   gems "rubygems:tilt:${tilt_version}"
-  // WORKAROUND: for broken some POMs on Rubygems
-  gems "brokenGem:erubis:${erubis_version}@gem"
+  gems "rubygems:erubis:${erubis_version}"
   gems "rubygems:slim:${slim_version}"
   compile "com.beust:jcommander:${jcommander_version}"
   testRuntime  "org.slf4j:slf4j-simple:${slf4_version}"
@@ -86,7 +75,7 @@ dependencies {
 
 jar {
   from (jruby.gemInstallDir) {
-      include 'gems/**'
+      include '**'
   }
 
   manifest {
