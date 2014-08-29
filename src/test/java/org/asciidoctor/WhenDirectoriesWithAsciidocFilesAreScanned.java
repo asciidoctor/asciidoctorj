@@ -1,34 +1,49 @@
 package org.asciidoctor;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.junit.Assert.assertThat;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.asciidoctor.util.ClasspathResources;
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 public class WhenDirectoriesWithAsciidocFilesAreScanned {
+
+    @Rule
+    public ClasspathResources classpath = new ClasspathResources();
 
 	@ClassRule
 	public static TemporaryFolder temporaryFolder = new TemporaryFolder();
 	
 	@Test
 	public void only_asciidoc_files_should_be_returned() {
-
-		DirectoryWalker abstractDirectoryWalker = new AsciiDocDirectoryWalker("target/test-classes/src/documents");
+    
+		DirectoryWalker abstractDirectoryWalker = new AsciiDocDirectoryWalker(classpath.getResource("src/documents").getPath());
 		List<File> asciidocFiles = abstractDirectoryWalker.scan();
 
+		// Converto to absolute paths, otherwise Hamcrest's matchers fails
+		List<String> asciidocFilesPaths = new ArrayList<String>();
+		for (File f: asciidocFiles) {
+		    asciidocFilesPaths.add(f.getAbsolutePath());
+		}
+		
+		assertThat(asciidocFilesPaths, hasSize(4));
 		assertThat(
-				asciidocFiles,
-				containsInAnyOrder(new File("target/test-classes/src/documents/sample.ad"), new File(
-						"target/test-classes/src/documents/sample.adoc"), new File(
-						"target/test-classes/src/documents/sample.asciidoc"), new File(
-						"target/test-classes/src/documents/sample.asc")));
+		        asciidocFilesPaths,
+				containsInAnyOrder(
+				        classpath.getResource("src/documents/sample.ad").getAbsolutePath(),
+				        classpath.getResource("src/documents/sample.adoc").getAbsolutePath(),
+				        classpath.getResource("src/documents/sample.asciidoc").getAbsolutePath(),
+				        classpath.getResource("src/documents/sample.asc").getAbsolutePath()));
 
 	}
 

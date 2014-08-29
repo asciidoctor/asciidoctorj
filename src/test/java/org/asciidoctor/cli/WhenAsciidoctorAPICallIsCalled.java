@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import com.beust.jcommander.JCommander;
 
-public class WhenAsciidocotrAPICallIsCalled {
+public class WhenAsciidoctorAPICallIsCalled {
 
     @Test
     public void api_parameters_should_be_transformed_to_cli_command() {
