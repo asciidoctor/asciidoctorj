@@ -2,11 +2,11 @@ package org.asciidoctor;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,11 +15,15 @@ import org.asciidoctor.ast.ContentPart;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.util.ClasspathResources;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 public class WhenStructuredDocumentIsRequired {
+
+    @Rule
+    public ClasspathResources classpath = new ClasspathResources();
 
 	@Rule
 	public TemporaryFolder testFolder = new TemporaryFolder();
@@ -33,9 +37,15 @@ public class WhenStructuredDocumentIsRequired {
 				+ "What does it mean?\n";
 
 		StructuredDocument structuredDocument = asciidoctor
-				.readDocumentStructure(s, new java.util.HashMap());
+				.readDocumentStructure(s, new java.util.HashMap<String, Object>());
 		
 		List<ContentPart> parts = structuredDocument.getParts();
+		assertThat(parts, hasSize(1));
+
+		DocumentHeader header = structuredDocument.getHeader();
+		assertThat(header.getDocumentTitle().getMain(), is("My page"));
+		assertThat(header.getDocumentTitle().getSubtitle(), nullValue());
+		assertThat(header.getAuthor().getFirstName(), nullValue());
 
 	}
 
@@ -45,7 +55,7 @@ public class WhenStructuredDocumentIsRequired {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put(Asciidoctor.STRUCTURE_MAX_LEVEL, 2);
 		StructuredDocument document = asciidoctor.readDocumentStructure(
-				new File("target/test-classes/documentblocks.asciidoc"),
+		        classpath.getResource("documentblocks.asciidoc"),
 				parameters);
 
 		DocumentHeader header = document.getHeader();
@@ -99,7 +109,7 @@ public class WhenStructuredDocumentIsRequired {
 	@Test
 	public void some_real_content() {
 		StructuredDocument document = asciidoctor.readDocumentStructure(
-				new File("target/test-classes/contentstructure.asciidoc"),
+				classpath.getResource("contentstructure.asciidoc"),
 				new HashMap<String, Object>());
 
 		DocumentHeader header = document.getHeader();

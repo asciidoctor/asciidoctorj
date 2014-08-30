@@ -25,7 +25,7 @@ import org.junit.Test;
     public void run() {
         try{
             if(classloader == null) {
-            asciidoctorfactory.create();
+                asciidoctorfactory.create();
             } else {
                 asciidoctorfactory.create(classloader);
             }

@@ -1,18 +1,23 @@
 package org.asciidoctor.extension;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.io.File;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.ast.Document;
 import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.util.ClasspathResources;
+import org.junit.Rule;
 import org.junit.Test;
 
 public class WhenReaderIsManipulatedInExtension {
 
-	private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+    @Rule
+    public ClasspathResources classpath = new ClasspathResources();
 
+	private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
 	@Test
 	public void currentLineNumberShouldBeReturned() {
@@ -22,10 +27,11 @@ public class WhenReaderIsManipulatedInExtension {
 
 		javaExtensionRegistry.preprocessor(NumberLinesPreprocessor.class);
 
-		asciidoctor.renderFile(new File(
-				"target/test-classes/rendersample.asciidoc"),
-				new HashMap<String, Object>());
-
+		File inputFile = classpath.getResource("rendersample.asciidoc");
+		asciidoctor.renderFile(inputFile, new HashMap<String, Object>());
+		
+		File outpuFile = new File(inputFile.getParent(), "rendersample.asciidoc");
+		assertThat(outpuFile.exists(), is(true));
 	}
 
 	@Test
@@ -36,10 +42,15 @@ public class WhenReaderIsManipulatedInExtension {
 
 		javaExtensionRegistry.preprocessor(HasMoreLinesPreprocessor.class);
 
-		asciidoctor.renderFile(new File(
-				"target/test-classes/rendersample.asciidoc"),
-				new HashMap<String, Object>());
+        asciidoctor.renderFile(
+                classpath.getResource("rendersample.asciidoc"),
+                new HashMap<String, Object>());
 
+        File inputFile = classpath.getResource("rendersample.asciidoc");
+        asciidoctor.renderFile(inputFile, new HashMap<String, Object>());
+
+        File outpuFile = new File(inputFile.getParent(), "rendersample.asciidoc");
+        assertThat(outpuFile.exists(), is(true));
 	}
 	
 	@Test
@@ -50,10 +61,15 @@ public class WhenReaderIsManipulatedInExtension {
 
 		javaExtensionRegistry.preprocessor(NextLineEmptyPreprocessor.class);
 
-		asciidoctor.renderFile(new File(
-				"target/test-classes/rendersample.asciidoc"),
-				new HashMap<String, Object>());
+        asciidoctor.renderFile(
+                classpath.getResource("rendersample.asciidoc"),
+                new HashMap<String, Object>());
+        
+        File inputFile = classpath.getResource("rendersample.asciidoc");
+        asciidoctor.renderFile(inputFile, new HashMap<String, Object>());
 
+        File outpuFile = new File(inputFile.getParent(), "rendersample.asciidoc");
+        assertThat(outpuFile.exists(), is(true));
 	}
 	
 }
