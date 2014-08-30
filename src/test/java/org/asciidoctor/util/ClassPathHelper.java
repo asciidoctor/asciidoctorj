@@ -5,11 +5,16 @@ import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-
+/**
+ * Hels getting files from the classpath.
+ */
 public class ClassPathHelper {
 
     private ClassLoader classloader;
 
+    /**
+     * Gets a resourse in a similar way as {@link File#File(String)} 
+     */
     public File getResource (String pathname) {
         try {
             URL resouce = classloader.getResource(pathname);
@@ -22,6 +27,9 @@ public class ClassPathHelper {
         }
     }
 
+    /**
+     *  Gets a resourse in a similar way as {@link File#File(String, String)} 
+     */
     public File getResource (String parent, String child) {
         return new File (getResource(parent), child);
     }

@@ -4,7 +4,11 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-
+/**
+ * JUnit TestRule to handle classpath files.
+ * 
+ *  Delegates to {@link ClassPathHelper}
+ */
 public class ClasspathResources extends ClassPathHelper implements TestRule {
 
     protected void before(Class<?> clazz) throws Throwable {
