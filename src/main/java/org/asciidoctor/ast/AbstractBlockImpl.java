@@ -69,8 +69,8 @@ public class AbstractBlockImpl implements AbstractBlock {
     }
 
     @Override
-    public String render() {
-        return delegate.render();
+    public String convert() {
+        return delegate.convert();
     }
 
     @Override
