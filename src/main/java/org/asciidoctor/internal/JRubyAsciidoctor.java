@@ -149,7 +149,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
     private static RubyInstanceConfig createOptimizedConfiguration() {
         RubyInstanceConfig config = new RubyInstanceConfig();
-        config.setCompatVersion(CompatVersion.RUBY1_9);
+        config.setCompatVersion(CompatVersion.RUBY2_0);
         config.setCompileMode(CompileMode.OFF);
 
         return config;
@@ -198,7 +198,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         if (content instanceof String) {
             textContent = (String) content;
         } else {
-            textContent = child.render();
+            textContent = child.convert();
         }
         ContentPart contentPart = ContentPart.createContentPart(child.id(), level, child.context(), child.title(),
                 child.style(), child.role(), child.attributes(), textContent);
