@@ -67,7 +67,7 @@
         <cacheUri.version>0.0.5</cacheUri.version>
         <threadsafe.version>0.3.4</threadsafe.version>
         <asciidoctor.epub3.version>1.0.0.alpha.3</asciidoctor.epub3.version>
-        <asciidoctor.version>1.5.0</asciidoctor.version>
+        <asciidoctor.version>1.5.1</asciidoctor.version>
         <erubis.version>2.7.0</erubis.version>
         <slim.version>2.0.2</slim.version>
         <jcommander.version>1.32</jcommander.version>
