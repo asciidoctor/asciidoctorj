@@ -172,6 +172,12 @@
             <version>${asciidoctor.epub3.version}</version>
             <type>gem</type>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>rubygems</groupId>
+                    <artifactId>asciidoctor</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>rubygems</groupId>
