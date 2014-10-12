@@ -12,6 +12,7 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.util.ClasspathResources;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,13 +24,15 @@ import org.junit.rules.TemporaryFolder;
 public class WhenExtensionIsRegisteredAsService {
 
     @Rule
+    public ClasspathResources classpath = new ClasspathResources();
+    
+    @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
 
     @Ignore("Test is ignored because currently it is not possible to register two block extensions in same instance. This may require deep changes on Asciidoctor Extensions API")
     @Test
     public void extensions_should_be_correctly_added() throws IOException {
 
-        
         Asciidoctor asciidoctor = JRubyAsciidoctor.create();
         
         //To avoid registering the same extension over and over for all tests, service is instantiated manually.
@@ -39,8 +42,7 @@ public class WhenExtensionIsRegisteredAsService {
                 .toFile(new File(testFolder.getRoot(), "rendersample.html"))
                 .safe(SafeMode.UNSAFE).get();
 
-        asciidoctor.renderFile(new File(
-                "target/test-classes/arrows-and-boxes-example.ad"), options);
+        asciidoctor.renderFile(classpath.getResource("arrows-and-boxes-example.ad"), options);
 
         File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
         Document doc = Jsoup.parse(renderedFile, "UTF-8");

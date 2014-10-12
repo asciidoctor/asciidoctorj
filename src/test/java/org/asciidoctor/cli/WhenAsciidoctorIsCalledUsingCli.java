@@ -19,14 +19,15 @@ import org.junit.rules.TemporaryFolder;
 
 public class WhenAsciidoctorIsCalledUsingCli {
 
+    private static String FILES_BASE_PATH = "target/test-classes/";
 	@Rule
 	public TemporaryFolder temporaryFolder = new TemporaryFolder();
 	
 	@Test
 	public void with_no_options_file_should_be_rendered_in_place_and_in_html5_format() {
 		
-		new AsciidoctorInvoker().invoke("target/test-classes/rendersample.asciidoc");
-		File expectedFile = new File("target/test-classes/rendersample.html");
+		new AsciidoctorInvoker().invoke(FILES_BASE_PATH + "rendersample.asciidoc");
+		File expectedFile = new File(FILES_BASE_PATH, "rendersample.html");
 		
 		assertThat(expectedFile.exists(), is(true));
 		expectedFile.delete();
@@ -35,8 +36,8 @@ public class WhenAsciidoctorIsCalledUsingCli {
 	@Test
 	public void file_should_be_rendered_to_docbook_with_docbook_backend() {
 		
-		new AsciidoctorInvoker().invoke("-b", "docbook", "target/test-classes/rendersample.asciidoc");
-		File expectedFile = new File("target/test-classes/rendersample.xml");
+		new AsciidoctorInvoker().invoke("-b", "docbook", FILES_BASE_PATH + "rendersample.asciidoc");
+		File expectedFile = new File(FILES_BASE_PATH, "rendersample.xml");
 		
 		assertThat(expectedFile.exists(), is(true));
 		expectedFile.delete();
@@ -45,8 +46,8 @@ public class WhenAsciidoctorIsCalledUsingCli {
 	@Test
 	public void single_attributes_should_be_interpreted_as_boolean() throws IOException {
 		
-		new AsciidoctorInvoker().invoke("-a", "linkcss!", "target/test-classes/rendersample.asciidoc");
-		File expectedFile = new File("target/test-classes/rendersample.html");
+		new AsciidoctorInvoker().invoke("-a", "linkcss!", FILES_BASE_PATH + "rendersample.asciidoc");
+		File expectedFile = new File(FILES_BASE_PATH, "rendersample.html");
 		Document doc = Jsoup.parse(expectedFile, "UTF-8");
 		Elements cssStyle = doc.select("style");
 		assertThat(cssStyle.html(), is(not("")));
@@ -61,8 +62,8 @@ public class WhenAsciidoctorIsCalledUsingCli {
 	@Test
 	public void composed_attributes_should_be_built_as_attributes_map() throws IOException {
 		
-		new AsciidoctorInvoker().invoke("-a", "stylesheet=mystyles.css", "-a", "linkcss", "target/test-classes/rendersample.asciidoc");
-		File expectedFile = new File("target/test-classes/rendersample.html");
+		new AsciidoctorInvoker().invoke("-a", "stylesheet=mystyles.css", "-a", "linkcss", FILES_BASE_PATH + "rendersample.asciidoc");
+		File expectedFile = new File(FILES_BASE_PATH, "rendersample.html");
 		
 		Document doc = Jsoup.parse(expectedFile, "UTF-8");
 		Elements link = doc.select("link[href]");
@@ -77,7 +78,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
 	public void destination_dir_should_render_files_to_ouput_directory() {
 		File outputDirectory = temporaryFolder.getRoot();
 		
-		new AsciidoctorInvoker().invoke("-D", outputDirectory.getAbsolutePath(), "target/test-classes/rendersample.asciidoc");
+		new AsciidoctorInvoker().invoke("-D", outputDirectory.getAbsolutePath(), FILES_BASE_PATH + "rendersample.asciidoc");
 
 		assertThat(new File(outputDirectory, "rendersample.html").exists(), is(true));
 		
@@ -101,14 +102,14 @@ public class WhenAsciidoctorIsCalledUsingCli {
 	@Test
 	public void more_than_one_input_file_should_throw_an_exception() {
 		
-		new AsciidoctorInvoker().invoke("target/test-classes/rendersample.asciidoc", "target/test-classes/tocsample.asciidoc");
+		new AsciidoctorInvoker().invoke(FILES_BASE_PATH + "rendersample.asciidoc", FILES_BASE_PATH + "tocsample.asciidoc");
 		
-		File expectedRenderFile = new File("target/test-classes/rendersample.html");
+		File expectedRenderFile = new File(FILES_BASE_PATH, "rendersample.html");
         
         assertThat(expectedRenderFile.exists(), is(true));
         expectedRenderFile.delete();
 		
-        File expectedTocFile = new File("target/test-classes/tocsample.html");
+        File expectedTocFile = new File(FILES_BASE_PATH, "tocsample.html");
         
         assertThat(expectedTocFile.exists(), is(true));
         expectedTocFile.delete();
@@ -118,9 +119,9 @@ public class WhenAsciidoctorIsCalledUsingCli {
 	@Test
 	public void glob_expression_can_be_used_to_render_AsciiDoc_files() {
 	    
-	    new AsciidoctorInvoker().invoke("-D", "target/test-classes", "**/toc*.asciidoc");
+	    new AsciidoctorInvoker().invoke("-D", FILES_BASE_PATH, "**/toc*.asciidoc");
         
-        File expectedTocFile = new File("target/test-classes/tocsample.html");
+        File expectedTocFile = new File(FILES_BASE_PATH , "tocsample.html");
         
         assertThat(expectedTocFile.exists(), is(true));
         expectedTocFile.delete();
@@ -154,7 +155,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
 		
 		ByteArrayOutputStream output = redirectStdout();
 		
-		new AsciidoctorInvoker().invoke("-o", "-", "target/test-classes/rendersample.asciidoc");
+		new AsciidoctorInvoker().invoke("-o", "-", FILES_BASE_PATH + "rendersample.asciidoc");
 		
 		Document doc = Jsoup.parse(output.toString(), "UTF-8");
 
@@ -170,7 +171,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
 		
 		ByteArrayOutputStream output = redirectStdout();
 		
-		new AsciidoctorInvoker().invoke("--verbose", "target/test-classes/rendersample.asciidoc");
+		new AsciidoctorInvoker().invoke("--verbose", FILES_BASE_PATH + "rendersample.asciidoc");
 		
 		String outputConsole = output.toString();
 		assertThat(outputConsole, startsWith("Time to read and parse source"));
@@ -182,7 +183,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
 	    
 	    ByteArrayOutputStream output = redirectStdout();
 	    
-	    new AsciidoctorInvoker().invoke("--quiet", "target/test-classes/brokeninclude.asciidoc");
+	    new AsciidoctorInvoker().invoke("--quiet", FILES_BASE_PATH + "brokeninclude.asciidoc");
 	    String outputConsole = output.toString();
 	    assertThat(outputConsole.trim(), is(""));
 	    

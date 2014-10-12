@@ -30,6 +30,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
 
 import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.util.ClasspathResources;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -39,6 +40,9 @@ import com.google.common.io.CharStreams;
 
 public class WhenAnAsciidoctorClassIsInstantiated {
 
+    @Rule
+    public ClasspathResources classpath = new ClasspathResources();
+    
 	@Rule
 	public TemporaryFolder testFolder = new TemporaryFolder();
 
@@ -48,7 +52,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	public void content_should_be_read_from_reader_and_written_to_writer() throws IOException, SAXException,
 			ParserConfigurationException {
 
-		FileReader inputAsciidoctorFile = new FileReader(new File("target/test-classes/rendersample.asciidoc"));
+		FileReader inputAsciidoctorFile = new FileReader(classpath.getResource("rendersample.asciidoc"));
 		StringWriter rendererWriter = new StringWriter();
 		asciidoctor.render(inputAsciidoctorFile, rendererWriter, options().asMap());
 
@@ -61,7 +65,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	public void file_document_should_be_rendered_into_default_backend() throws IOException, SAXException,
 			ParserConfigurationException {
 
-		String render_file = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"),
+		String render_file = asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"),
 		        options().toFile(false).get());
 		assertRenderedFile(render_file);
 
@@ -72,9 +76,10 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 			throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
 
 		Options options = options().inPlace(true).get();
-		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+		File inputFile = classpath.getResource("rendersample.asciidoc");
+		String renderContent = asciidoctor.renderFile(inputFile, options);
 
-		File expectedFile = new File("target/test-classes/rendersample.html");
+		File expectedFile = new File(inputFile.getParent(), "rendersample.html");
 
 		assertThat(expectedFile.exists(), is(true));
 		assertThat(renderContent, is(nullValue()));
@@ -86,10 +91,11 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	public void file_document_should_be_rendered_into_current_directory() throws FileNotFoundException, IOException,
 			SAXException, ParserConfigurationException {
 
-		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options()
+	    File inputFile = classpath.getResource("rendersample.asciidoc");
+		String renderContent = asciidoctor.renderFile(inputFile, options()
 				.inPlace(true).asMap());
 
-		File expectedFile = new File("target/test-classes/rendersample.html");
+		File expectedFile = new File(inputFile.getParent(), "rendersample.html");
 
 		assertThat(expectedFile.exists(), is(true));
 		assertThat(renderContent, is(nullValue()));
@@ -103,7 +109,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
 		Map<String, Object> options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot())
 				.asMap();
-		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+		String renderContent = asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
 
 		File expectedFile = new File(testFolder.getRoot(), "rendersample.html");
 
@@ -116,14 +122,15 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	@Test
 	public void file_document_should_be_rendered_from_base_dir() throws IOException {
 
-		
-		File output = testFolder.newFolder("target","test-classes");
+		File output = testFolder.newFolder("asciidoc","docs");
 		Options options = options().inPlace(false).baseDir(testFolder.getRoot())
-				.toFile(new File("target/test-classes/rendersample.html")).get();
-		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+				.toFile(new File("asciidoc/docs/rendersample.html")).get();
+		String renderContent = asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
 		
 		File renderedFile = new File(output, "rendersample.html");
+
 		assertThat(renderedFile.exists(), is(true));
+		assertThat(renderContent, is(nullValue()));
 	}
 
 	@Test
@@ -132,7 +139,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
 		Options options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot()).get();
 
-		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+		String renderContent = asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
 
 		File expectedFile = new File(testFolder.getRoot(), "rendersample.html");
 
@@ -147,9 +154,10 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 		Map<String, Object> attributes = attributes().backend("docbook").asMap();
 		Map<String, Object> options = options().inPlace(true).attributes(attributes).asMap();
 
-		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+		File inputFile = classpath.getResource("rendersample.asciidoc");
+		String renderContent = asciidoctor.renderFile(inputFile, options);
 
-		File expectedFile = new File("target/test-classes/rendersample.xml");
+		File expectedFile = new File(inputFile.getParent(), "rendersample.xml");
 
 		assertThat(expectedFile.exists(), is(true));
 		assertThat(renderContent, is(nullValue()));
@@ -164,9 +172,10 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 		Attributes attributes = attributes().backend("docbook").get();
 		Options options = options().inPlace(true).attributes(attributes).get();
 
-		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+		File inputFile = classpath.getResource("rendersample.asciidoc");
+		String renderContent = asciidoctor.renderFile(inputFile, options);
 
-		File expectedFile = new File("target/test-classes/rendersample.xml");
+		File expectedFile = new File(inputFile.getParent(), "rendersample.xml");
 
 		assertThat(expectedFile.exists(), is(true));
 		assertThat(renderContent, is(nullValue()));
@@ -180,9 +189,10 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
 		Options options = options().inPlace(true).backend("docbook").get();
 
-		String renderContent = asciidoctor.renderFile(new File("target/test-classes/rendersample.asciidoc"), options);
+		File inputFile = classpath.getResource("rendersample.asciidoc");
+		String renderContent = asciidoctor.renderFile(inputFile, options);
 
-		File expectedFile = new File("target/test-classes/rendersample.xml");
+		File expectedFile = new File(inputFile.getParent(), "rendersample.xml");
 
 		assertThat(expectedFile.exists(), is(true));
 		assertThat(renderContent, is(nullValue()));
@@ -194,7 +204,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	public void string_content_with_custom_date_should_be_rendered() throws IOException, SAXException,
 			ParserConfigurationException {
 
-		InputStream content = new FileInputStream("target/test-classes/documentwithdate.asciidoc");
+		InputStream content = new FileInputStream(classpath.getResource("documentwithdate.asciidoc"));
 
 		Calendar customDate = Calendar.getInstance();
 		customDate.set(Calendar.YEAR, 2012);
@@ -213,7 +223,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	public void string_content_with_custom_time_should_be_rendered() throws IOException, SAXException,
 			ParserConfigurationException {
 
-		InputStream content = new FileInputStream("target/test-classes/documentwithtime.asciidoc");
+		InputStream content = new FileInputStream(classpath.getResource("documentwithtime.asciidoc"));
 
 		Calendar customTime = Calendar.getInstance();
 		customTime.set(Calendar.HOUR_OF_DAY, 23);
@@ -235,7 +245,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	public void string_content_document_should_be_rendered_into_default_backend() throws IOException, SAXException,
 			ParserConfigurationException {
 
-		InputStream content = new FileInputStream("target/test-classes/rendersample.asciidoc");
+		InputStream content = new FileInputStream(classpath.getResource("rendersample.asciidoc"));
 		String render_file = asciidoctor.render(toString(content), new HashMap<String, Object>());
 
 		assertRenderedFile(render_file);
@@ -245,7 +255,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	public void all_files_from_a_collection_should_be_rendered_into_an_array() {
 
 		String[] allRenderedFiles = asciidoctor.renderFiles(
-				Arrays.asList(new File("target/test-classes/rendersample.asciidoc")), options().toFile(false).get());
+				Arrays.asList(classpath.getResource("rendersample.asciidoc")), options().toFile(false).get());
 		assertThat(allRenderedFiles, is(arrayWithSize(1)));
 
 	}
@@ -257,7 +267,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 				.asMap();
 
 		String[] allRenderedFiles = asciidoctor.renderFiles(
-				Arrays.asList(new File("target/test-classes/rendersample.asciidoc")), options);
+				Arrays.asList(classpath.getResource("rendersample.asciidoc")), options);
 		assertThat(allRenderedFiles, is(arrayWithSize(0)));
 
 	}
@@ -265,7 +275,10 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	@Test
 	public void all_files_from_directory_and_subdirectories_should_be_rendered_into_an_array() {
 
-		String[] allRenderedFiles = asciidoctor.renderDirectory(new AsciiDocDirectoryWalker("target/test-classes/src"),
+	    File pathToWalk = classpath.getResource("src");
+
+		String[] allRenderedFiles = asciidoctor.renderDirectory(new AsciiDocDirectoryWalker(
+		        pathToWalk.getPath()),
 		        options().toFile(false).get());
 		assertThat(allRenderedFiles, is(arrayWithSize(4)));
 
@@ -274,10 +287,13 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 	@Test
 	public void all_files_from_directory_and_subdirectories_should_be_rendered_into_files_and_not_in_array() {
 
+	    File pathToWalk = classpath.getResource("src");
 		Map<String, Object> options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot())
 				.asMap();
 
-		String[] allRenderedFiles = asciidoctor.renderDirectory(new AsciiDocDirectoryWalker("target/test-classes/src"), options);
+		String[] allRenderedFiles = asciidoctor.renderDirectory(
+		        new AsciiDocDirectoryWalker(pathToWalk.getAbsolutePath()),
+		        options);
 		assertThat(allRenderedFiles, is(arrayWithSize(0)));
 
 	}
