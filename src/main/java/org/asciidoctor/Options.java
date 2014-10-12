@@ -25,6 +25,7 @@ public class Options {
     public static final String BASEDIR = "base_dir";
     public static final String TEMPLATE_CACHE = "template_cache";
     public static final String SOURCE = "source";
+    public static final String PARSE_HEADER_ONLY = "parse_header_only";
 
     private Map<String, Object> options = new HashMap<String, Object>();
 
@@ -120,10 +121,15 @@ public class Options {
         this.options.put(TEMPLATE_CACHE, templateCache);
     }
 
+    public void setParseHeaderOnly(boolean parseHeaderOnly) {
+        this.options.put(PARSE_HEADER_ONLY, parseHeaderOnly);
+    }
+    
     public void setOption(String optionName, Object optionValue) {
         this.options.put(optionName, optionValue);
     }
 
+    
     public Map<String, Object> map() {
         return this.options;
     }
