@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <version>9</version>
     </parent>
 
     <groupId>org.asciidoctor</groupId>
@@ -55,24 +55,24 @@
     <properties>
         <project.build.scriptSourceDirectory>src/main/scripts/</project.build.scriptSourceDirectory>
         <project.buildDirectory>src/main/build</project.buildDirectory>
-        <jruby.version>1.7.9</jruby.version>
+        <jruby.version>1.7.16.1</jruby.version>
         <junit.version>4.11</junit.version>
-        <jsoup.version>1.7.3</jsoup.version>
+        <jsoup.version>1.8.1</jsoup.version>
         <xmlmatchers.version>1.0-RC1</xmlmatchers.version>
         <hamcrest.version>1.3</hamcrest.version>
-        <guava.version>15.0</guava.version>
-        <haml.version>4.0.4</haml.version>
-        <tilt.version>2.0.0</tilt.version>
+        <guava.version>18.0</guava.version>
+        <haml.version>4.0.5</haml.version>
+        <tilt.version>2.0.1</tilt.version>
         <coderay.version>1.1.0</coderay.version>
         <cacheUri.version>0.0.5</cacheUri.version>
         <threadsafe.version>0.3.4</threadsafe.version>
         <asciidoctor.epub3.version>1.0.0.alpha.3</asciidoctor.epub3.version>
         <asciidoctor.version>1.5.1</asciidoctor.version>
         <erubis.version>2.7.0</erubis.version>
-        <slim.version>2.0.2</slim.version>
-        <jcommander.version>1.32</jcommander.version>
+        <slim.version>2.0.3</slim.version>
+        <jcommander.version>1.35</jcommander.version>
         <gem.home.directory>classes</gem.home.directory>
-        <slf4.version>1.7.5</slf4.version>
+        <slf4.version>1.7.7</slf4.version>
     </properties>
 
     <dependencies>
@@ -215,7 +215,7 @@
 
             <plugin>
               <artifactId>maven-compiler-plugin</artifactId>
-              <version>3.1</version>
+              <version>3.2</version>
               <configuration>
                 <source>1.6</source>
                 <target>1.6</target>
@@ -225,7 +225,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
+                <version>2.5</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -243,9 +243,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.16</version>
+                <version>2.18</version>
                 <configuration>
                     <skip>false</skip>
+                    <!--
+                    <forkMode>always</forkMode>
+                    -->
+                    <configuration>
+                        <argLine>${argLine} -Xms512m -Xmx1g -XX:MaxPermSize=512m -XX:-UseGCOverheadLimit</argLine>
+                    </configuration>
                 </configuration>
                 <executions>
                     <execution>
@@ -272,7 +278,7 @@
             <plugin>
                 <groupId>de.saumya.mojo</groupId>
                 <artifactId>gem-maven-plugin</artifactId>
-                <version>1.0.0-rc4</version>
+                <version>1.0.6</version>
                 <configuration>
                     <jrubyVersion>${jruby.version}</jrubyVersion>
                     <gemHome>${project.build.directory}/${gem.home.directory}</gemHome>
@@ -298,7 +304,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>2.1.2</version>
+                        <version>2.4</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -315,7 +321,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.1</version>
+                        <version>1.5</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -344,7 +350,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <version>2.4</version>
+                        <version>2.5.2</version>
                         <configuration>
                             <descriptors>
                                 <descriptor>src/main/assembly/default.xml</descriptor>
