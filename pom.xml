@@ -250,7 +250,7 @@
                     <forkMode>always</forkMode>
                     -->
                     <configuration>
-                        <argLine>${argLine} -Xms512m -Xmx1g -XX:MaxPermSize=512m -XX:-UseGCOverheadLimit</argLine>
+                        <argLine>${argLine} -Xms128m -Xmx512m -XX:MaxPermSize=256m -XX:-UseGCOverheadLimit</argLine>
                     </configuration>
                 </configuration>
                 <executions>

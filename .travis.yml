@@ -2,12 +2,13 @@ language: java
 before_script:
   - unset GEM_PATH GEM_HOME JRUBY_OPTS
 jdk:
+  - oraclejdk8
   - oraclejdk7
   - openjdk7
   - openjdk6
 #env:
 #  global:
-#    - JAVA_OPTS="-Xms512m -Xmx1g --XX:MaxPermSize=512m -XX:-UseGCOverheadLimit"
+#    - JAVA_OPTS="-Xms128m -Xmx512m --XX:MaxPermSize=256m -XX:-UseGCOverheadLimit"
 notifications:
   irc:
     channels:
