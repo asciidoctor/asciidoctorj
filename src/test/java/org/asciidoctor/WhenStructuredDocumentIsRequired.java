@@ -15,6 +15,7 @@ import org.asciidoctor.ast.ContentPart;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -167,7 +168,7 @@ public class WhenStructuredDocumentIsRequired {
 
 	}
 
-	@Test
+	@Test //@Ignore("failing on Travis for unknown reason")
 	public void no_parts_should_be_retrieved_from_empty_string() {
 
 		StructuredDocument document = asciidoctor.readDocumentStructure("",
