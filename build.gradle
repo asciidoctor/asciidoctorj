@@ -1,0 +1,169 @@
+
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+
+    dependencies {
+      classpath 'com.github.jruby-gradle:jruby-gradle-plugin:0.1.0'
+      classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
+    }
+}
+
+// We temporarily set buildDir to somewhere else fo rhte sake of this experiment
+buildDir = new File(projectDir,'buildGradle')
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'com.github.jruby-gradle.base'
+apply plugin: 'com.jfrog.bintray'
+
+repositories {
+    maven {
+        url  'http://rubygems-proxy.torquebox.org/prereleases'
+        name 'rubygems-prerelease'
+    }
+}
+
+
+group = 'org.asciidoctor'
+// module = asciidoctorj
+version = '1.5.1-SNAPSHOT'
+ext {
+  jruby_version = '1.7.9'
+  junit_version = '4.11'
+  jsoup_version = '1.7.3'
+  xmlmatchers_version = '1.0-RC1'
+  hamcrest_version = '1.3'
+  guava_version = '15.0'
+  haml_version = '4.0.4'
+  tilt_version = '2.0.0'
+  coderay_version = '1.1.0'
+  cacheUri_version = '0.0.5'
+  threadsafe_version = '0.3.4'
+  asciidoctor_epub3_version = '1.0.0.alpha.3'
+  asciidoctor_version = '1.5.0'
+  erubis_version = '2.7.0'
+  slim_version = '2.0.2'
+  jcommander_version = '1.32'
+  slf4_version = '1.7.5'
+}
+dependencies {
+  compile "org.slf4j:slf4j-api:${slf4_version}"
+  compile "org.jruby:jruby-complete:${jruby_version}"
+  testCompile "junit:junit:${junit_version}"
+  testCompile ("org.xmlmatchers:xml-matchers:${xmlmatchers_version}") {
+    exclude module : 'Saxon-HE'
+  }
+  testCompile "net.sf.saxon:Saxon-HE:9.5.1-6"
+  testCompile "org.hamcrest:hamcrest-library:${hamcrest_version}"
+  testCompile "com.google.guava:guava:${guava_version}"
+  testCompile "org.jsoup:jsoup:${jsoup_version}"
+  gems "rubygems:thread_safe:${threadsafe_version}"
+  gems "rubygems:haml:${haml_version}"
+  gems "rubygems:open-uri-cached:${cacheUri_version}"
+  gems "rubygems:asciidoctor:${asciidoctor_version}"
+  gems "rubygems:coderay:${coderay_version}"
+  gems "rubygems:asciidoctor-epub3:${asciidoctor_epub3_version}-SNAPSHOT"
+  gems "rubygems:tilt:${tilt_version}"
+  gems "rubygems:erubis:${erubis_version}"
+  gems "rubygems:slim:${slim_version}"
+  compile "com.beust:jcommander:${jcommander_version}"
+  testRuntime  "org.slf4j:slf4j-simple:${slf4_version}"
+}
+
+jar {
+  from (jruby.gemInstallDir) {
+      include '**'
+  }
+
+  manifest {
+      attributes 'Implementation-Version' : project.version
+      attributes 'Main-Class': 'org.asciidoctor.cli.AsciidoctorInvoker'
+  }
+
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+sourceSets.test.runtimeClasspath = sourceSets.test.runtimeClasspath + files(jruby.gemInstallDir)
+
+
+if( !hasProperty( 'bintrayUser' ) )
+  ext.bintrayUser = ''
+
+if( !hasProperty( 'bintrayKey' ) )
+  ext.bintrayKey = ''
+
+bintray {
+    user = project.bintrayUser
+    key = project.bintrayKey
+    publish = true
+    dryRun = false
+    configurations = ['archives']
+
+    pkg {
+        repo = 'bintray-lordofthejars-maven-asciidoctorj'
+        name = 'lordofthejars-maven-asciidoctorj'
+        labels = ['asciidoctor','asciidoc','asciidoctorj']
+
+        version {
+            name = project.version
+            vcsTag = "v${project.version}"
+            desc = 'AsciidoctorJ provides Java bindings for the Asciidoctor RubyGem using JRuby'
+        }
+    }
+}
+
+
+task compareJars << {
+    Set<String> gjar = []
+    Set<String> mjar = []
+    File report = new File(buildDir,'reports/compareJars.txt')
+
+    zipTree( new File(buildDir,"libs/${project.name}-${version}.jar") ).visit {
+        gjar.add(it.relativePath.toString())
+    }
+    zipTree( new File("target/asciidoctorj-${version}.jar") ).visit {
+        mjar.add(it.relativePath.toString())
+    }
+
+    Set<String> inCommon = gjar.intersect(mjar)
+    Set<String> onlyInGradle = gjar - inCommon
+    Set<String> onlyInMaven = mjar - inCommon
+
+    report.withWriter { writer ->
+        writer << "-------------------------------------------------------------------------\n"
+        writer << "${inCommon.size()} files in common\n"
+        writer << "${onlyInMaven.size()} files unique to Maven\n"
+        writer << "${onlyInGradle.size()} files unique to Gradle\n"
+        writer << "-------------------------------------------------------------------------\n"
+        writer << "Files only found in Maven\n"
+        onlyInMaven.sort().each { writer << it + "\n" }
+        writer << "-------------------------------------------------------------------------\n"
+        writer << "Files only found in Gradle\n"
+        writer << "-------------------------------------------------------------------------\n"
+        onlyInGradle.sort().each { writer << it + "\n" }
+        writer << "-------------------------------------------------------------------------\n"
+        writer << "Files in common\n"
+        writer << "-------------------------------------------------------------------------\n"
+        inCommon.sort().each { writer << it + "\n" }
+        writer << "-------------------------------------------------------------------------\n"
+    }
+    logger.info "${onlyInMaven.size()} files unique to Maven"
+    logger.info "${onlyInGradle.size()} files unique to Gradle"
+    logger.info "A report has been written to ${report.absolutePath}"
+}
+
+compareJars {
+    description 'Compares the built Maven Jar to that of that build Gradle Jar'
+    group 'Migration to Gradle'
+}

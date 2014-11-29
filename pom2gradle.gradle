@@ -1,0 +1,200 @@
+// ============================================================================
+// This file is used to bootstrap build.gradle from pom.xml
+// Usage: ./gradlew -n pom2gradle
+//
+// At this early point in the migration lifecycle don't edit build.gradle,
+// rather edit this file and re-run it to create build.gradle
+// ============================================================================
+
+ext {
+    jrubyPluginVersion = '0.1.0'
+    includeMavenLocal = true
+}
+
+task pom2gradle << {
+    def pom = new XmlSlurper().parse(new File('pom.xml' ))
+
+    def convert = { String s ->
+        s.contains('.version') ? s.replaceAll('\\.','_') : s
+    }
+
+    File buildGradle = new File(projectDir,'build.gradle')
+
+
+    buildGradle.withWriter { w->
+        w << """
+buildscript {
+    repositories {
+        ${includeMavenLocal?'mavenLocal()':''}
+        jcenter()
+    }
+
+    dependencies {
+      classpath 'com.github.jruby-gradle:jruby-gradle-plugin:${jrubyPluginVersion}'
+      classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
+    }
+}
+
+// We temporarily set buildDir to somewhere else fo rhte sake of this experiment
+buildDir = new File(projectDir,'buildGradle')
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'com.github.jruby-gradle.base'
+apply plugin: 'com.jfrog.bintray'
+
+repositories {
+    maven {
+        url  'http://rubygems-proxy.torquebox.org/prereleases'
+        name 'rubygems-prerelease'
+    }
+}
+
+"""
+
+        w << """
+group = '${pom.groupId}'
+// module = ${pom.artifactId}
+version = '${pom.version}'
+"""
+
+        w << "ext {\n"
+        pom.properties.children().each { p ->
+            String s = p.name()
+            if(!s.startsWith('project.') && !s.startsWith('gem.') ) {
+                w << "  ${convert(s)} = '${p}'\n"
+            }
+        }
+        w << "}\n"
+
+        w << "dependencies {\n"
+        pom.dependencies.children().each { d ->
+
+            String cfg='compile'
+            if(d.groupId=='rubygems') { cfg='gems' }
+            if(d?.scope == 'test') { cfg='testCompile' }
+
+            if(d.artifactId=='asciidoctor-epub3') {
+                w << "  ${cfg} \"${d.groupId}:${d.artifactId}:${convert(d.version.toString())}-SNAPSHOT\"\n"
+            } else if(d.exclusions.size()) {
+                w << "  ${cfg} (\"${d.groupId}:${d.artifactId}:${convert(d.version.toString())}\") {\n"
+                w << "    exclude module : '${d.exclusions.exclusion.artifactId}'\n"
+                w << "  }\n"
+            } else {
+                w << "  ${cfg} \"${d.groupId}:${d.artifactId}:${convert(d.version.toString())}\"\n"
+            }
+        }
+
+        w << "  testRuntime  \"org.slf4j:slf4j-simple:\${slf4_version}\"\n"
+        w << "}\n"
+
+        w << """
+jar {
+  from (jruby.gemInstallDir) {
+      include '**'
+  }
+
+  manifest {
+      attributes 'Implementation-Version' : project.version
+      attributes 'Main-Class': 'org.asciidoctor.cli.AsciidoctorInvoker'
+  }
+
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+sourceSets.test.runtimeClasspath = sourceSets.test.runtimeClasspath + files(jruby.gemInstallDir)
+
+"""
+        pom.profiles.children().each { p ->
+            if (p.id == 'bintray-release' ) {
+                w << """
+if( !hasProperty( 'bintrayUser' ) )
+  ext.bintrayUser = ''
+
+if( !hasProperty( 'bintrayKey' ) )
+  ext.bintrayKey = ''
+
+bintray {
+    user = project.bintrayUser
+    key = project.bintrayKey
+    publish = true
+    dryRun = false
+    configurations = ['archives']
+
+    pkg {
+        repo = '${p.distributionManagement.repository.id}'
+        name = '${p.distributionManagement.repository.name}'
+        labels = ['asciidoctor','asciidoc','asciidoctorj']
+
+        version {
+            name = project.version
+            vcsTag = "v\${project.version}"
+            desc = '${pom.description}'
+        }
+    }
+}
+
+"""
+            }
+
+        }
+
+        w << """
+task compareJars << {
+    Set<String> gjar = []
+    Set<String> mjar = []
+    File report = new File(buildDir,'reports/compareJars.txt')
+
+    zipTree( new File(buildDir,"libs/\${project.name}-\${version}.jar") ).visit {
+        gjar.add(it.relativePath.toString())
+    }
+    zipTree( new File(\"target/asciidoctorj-\${version}.jar\") ).visit {
+        mjar.add(it.relativePath.toString())
+    }
+
+    Set<String> inCommon = gjar.intersect(mjar)
+    Set<String> onlyInGradle = gjar - inCommon
+    Set<String> onlyInMaven = mjar - inCommon
+
+    report.withWriter { writer ->
+        writer << "-------------------------------------------------------------------------\\n"
+        writer << "\${inCommon.size()} files in common\\n"
+        writer << "\${onlyInMaven.size()} files unique to Maven\\n"
+        writer << "\${onlyInGradle.size()} files unique to Gradle\\n"
+        writer << "-------------------------------------------------------------------------\\n"
+        writer << "Files only found in Maven\\n"
+        onlyInMaven.sort().each { writer << it + "\\n" }
+        writer << "-------------------------------------------------------------------------\\n"
+        writer << "Files only found in Gradle\\n"
+        writer << "-------------------------------------------------------------------------\\n"
+        onlyInGradle.sort().each { writer << it + "\\n" }
+        writer << "-------------------------------------------------------------------------\\n"
+        writer << "Files in common\\n"
+        writer << "-------------------------------------------------------------------------\\n"
+        inCommon.sort().each { writer << it + "\\n" }
+        writer << "-------------------------------------------------------------------------\\n"
+    }
+    logger.info "\${onlyInMaven.size()} files unique to Maven"
+    logger.info "\${onlyInGradle.size()} files unique to Gradle"
+    logger.info "A report has been written to \${report.absolutePath}"
+}
+
+compareJars {
+    description 'Compares the built Maven Jar to that of that build Gradle Jar'
+    group 'Migration to Gradle'
+}
+"""
+    }
+}
+
+project.defaultTasks 'pom2gradle'
+
+
