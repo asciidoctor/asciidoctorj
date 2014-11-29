@@ -14,7 +14,7 @@ notifications:
     channels:
       - "irc.freenode.org#asciidoctor"
 script:
-  - mvn clean test -DforkMode=always
+  - mvn clean test -DforkCount=1 -DreuseForks=false
   - bash test-asciidoctor-upstream.sh
 #matrix:
 #  allow_failures:

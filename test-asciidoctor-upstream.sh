@@ -23,5 +23,5 @@ sed -i "s;<version></version>;<version>$ASCIIDOCTOR_VERSION</version>;" pom.xml
 sed -i "s;^ *s\.files \+.*$;s.files = Dir['*.gemspec', '*.adoc', '{bin,data,lib}/*', '{bin,data,lib}/**/*'];" asciidoctor.gemspec
 mvn install -Dgemspec=asciidoctor.gemspec
 cd ../..
-mvn test -Dasciidoctor.version=$ASCIIDOCTOR_VERSION -DforkMode=always
+mvn test -Dasciidoctor.version=$ASCIIDOCTOR_VERSION -DforkCount=1 -DreuseForks=false
 exit $?
