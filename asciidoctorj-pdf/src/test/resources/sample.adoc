@@ -1,0 +1,9 @@
+= Document Title
+:source-highlighter: coderay
+
+Content.
+
+[source,java]
+----
+puts "Hello, World!"
+----

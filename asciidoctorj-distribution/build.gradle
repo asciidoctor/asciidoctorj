@@ -1,0 +1,29 @@
+dependencies {
+  compile project(':asciidoctorj')
+  compile project(':asciidoctorj-epub3')
+  compile project(':asciidoctorj-pdf')
+  runtime "org.slf4j:slf4j-simple:$slf4Version"
+}
+
+apply plugin: 'application'
+
+tasks.withType(AbstractArchiveTask) {
+  baseName 'asciidoctorj'
+  classifier 'bin' // use classifier for identification in repository list
+  eachFile { it.path = it.path.replaceFirst('-bin(?=/)', '') }
+  //destinationDir = ...
+}
+
+startScripts {
+  applicationName = 'asciidoctorj'
+  mainClassName = 'org.asciidoctor.cli.AsciidoctorInvoker'
+  defaultJvmOpts = [
+    '-client', '-Xmn128m', '-Xms256m', '-Xmx256m',
+    '-Xverify:none', '-XX:+UseFastAccessorMethods', '-XX:+TieredCompilation', '-XX:TieredStopAtLevel=1', '-XX:+DisableExplicitGC',
+    '-Djruby.compile.mode=OFF', '-Djruby.compat.version=RUBY2_0'
+  ]
+}
+
+artifacts {
+  dists distZip
+}

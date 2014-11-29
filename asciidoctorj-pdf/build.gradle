@@ -1,0 +1,34 @@
+dependencies {
+  compile project(':asciidoctorj')
+  gems("rubygems:asciidoctor-pdf:$asciidoctorPdfGemVersion") {
+    // Exclude gems provided by AsciidoctorJ core
+    exclude module: 'asciidoctor'
+    exclude module: 'thread_safe'
+    // FIXME The prawn and ttfunk gems are not resolving correctly, so we have to do it manually for now
+    exclude module: 'prawn'
+    exclude module: 'ttfunk'
+  }
+  gems "rubygems:prawn:$prawnGemVersion"
+  gems "rubygems:ttfunk:$ttfunkGemVersion"
+}
+
+def gemFiles = fileTree(jruby.gemInstallDir) {
+  include 'specifications/*.gemspec'
+  include 'gems/*/lib/**'
+  include "gems/*/data/fonts/*"
+  include "gems/asciidoctor-pdf-${asciidoctorPdfGemVersion}/data/**"
+  // Accomodate Prawn's non-conforming packaging
+  include "gems/prawn-$prawnGemVersion/VERSION"
+  include "gems/prawn-$prawnGemVersion/data/*.txt"
+  include "gems/prawn-$prawnGemVersion/data/encodings/*"
+}
+
+jrubyPrepareGems << {
+  copy { // bundles the gems inside this artifact
+    from gemFiles
+    into sourceSets.main.output.resourcesDir
+  }
+}
+
+// explicitly package if we aren't copying gem sources
+//jar.from gemFiles

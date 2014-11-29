@@ -1,0 +1,101 @@
+// NOTE replace deficient built-in publishing plugin with nebula-publishing,
+// which does a better job generating the POM and properly aggregates signature files for upload to Bintray
+apply plugin: 'nebula-publishing'
+
+def projectMeta = {
+  url 'https://github.com/asciidoctor/asciidoctorj'
+  inceptionYear '2013'
+  licenses {
+    license([:]) {
+      name 'The Apache Software License, Version 2.0'
+      url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+      distribution 'repo'
+    }
+  }
+  issueManagement {
+    system 'github'
+    url 'https://github.com/asciidoctor/asciidoctorj/issues'
+  }
+  scm {
+    url 'https://github.com/asciidoctor/asciidoctorj'
+  }
+  developers {
+    developer {
+      id 'asotobu'
+      name 'Alex Soto Bueno'
+      email 'asotobu@gmail.com'
+      timezone '1'
+      roles {
+        role 'Project Lead'
+      }
+    }
+    developer {
+      id 'mojavelinux'
+      name 'Dan Allen'
+      email 'dan.j.allen@gmail.com'
+      timezone '-7'
+      roles {
+        role 'Contributor'
+      }
+    }
+    developer {
+      id 'abelsromero'
+      name 'Abel Salgado Romero'
+      email 'abelromero@gmail.com'
+      timezone '1'
+      roles {
+        role 'Contributor'
+      }
+    }
+  }
+}
+
+// FIXME we have to do afterEvaluate or the pom.xml changes don't take
+afterEvaluate {
+  publishing.publications.withType(MavenPublication) {
+    // FIXME need to clear artifacts or else we get "multiple artifacts with the identical extension and classifier ('jar', 'null')" 
+    // ...but perhaps we don't need this anyway
+    //artifacts.clear()
+    //from components.java
+
+    // NOTE only build sources and javadoc jars when releasing
+    if (project.statusIsRelease) {
+      if (project.name == 'asciidoctorj') {
+        artifact sourcesJar
+        artifact javadocJar
+      }
+    }
+
+    pom.withXml {
+      def rootNode = asNode()
+      // NOTE Gradle sets the scope of all dependencies to runtime.
+      //      jruby-core should be added with scope provided, but otherwise we're okay with runtime scopes.
+      //def depsNode = rootNode.dependencies[0]
+      //depsNode.dependency.each {
+      //  if (it.scope.text() == 'runtime') {
+      //    it.remove(it.scope)
+      //  }
+      //}
+      rootNode.name[0].setValue(project.properName)
+      // FIXME I'm slightly annoyed that the dependencies node comes before name and description
+      rootNode.children().last() + projectMeta
+    }
+  }
+}
+
+// QUESTION should we move manifest creation to general Java plugin config?
+jar {
+  manifest {
+    attributes \
+      'Built-By': System.properties['user.name'],
+      'Created-By': "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})".toString(),
+      'Build-Date': buildDateOnly,
+      //'Build-Time': buildTimeOnly,
+      //'Specification-Title': project.name,
+      //'Specification-Version': project.version,
+      //'Specification-Vendor': 'asciidoctor.org',
+      'Implementation-Title': project.name,
+      'Implementation-Version': project.version,
+      'Implementation-Vendor': 'asciidoctor.org'
+  }
+}
