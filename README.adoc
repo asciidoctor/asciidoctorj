@@ -1644,7 +1644,7 @@ To clone the project, compile the source and build the artifacts (i.e., jars) lo
    cd asciidoctorj
    ./gradlew assemble
 
-You can find the built artifacts in the [path]_asciidoctorj-*/build/libs_ folders and in your local Maven repository.
+You can find the built artifacts in the [path]_asciidoctorj-*/build/libs_ folders.
 
 To execute tests when running the build, use:
 
