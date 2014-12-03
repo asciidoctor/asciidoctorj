@@ -1671,8 +1671,12 @@ You can find the distribution in the [path]_asciidoctorj-distribution/build/dist
 
 === Develop in an IDE
 
+==== IntelliJ IDEA
+
 To import the project into IntelliJ IDEA 14, simply import the project using the import wizard.
 For more information, see the https://www.jetbrains.com/idea/help/gradle.html[Gradle page] in the IntelliJ IDEA Web Help.
+
+==== Eclipse
 
 To open the project in Eclipse, first generate the Eclipse project files:
 
