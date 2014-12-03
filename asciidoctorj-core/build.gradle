@@ -1,0 +1,38 @@
+dependencies {
+  compile "org.jruby:jruby-complete:$jrubyVersion"
+  compile "org.slf4j:slf4j-api:$slf4Version"
+  compile "com.beust:jcommander:$jcommanderVersion"
+  gems "rubygems:asciidoctor:$asciidoctorGemVersion"
+  gems "rubygems:coderay:$coderayGemVersion"
+  gems "rubygems:erubis:$erubisGemVersion"
+  gems "rubygems:haml:$hamlGemVersion"
+  gems "rubygems:open-uri-cached:$openUriCachedGemVersion"
+  gems "rubygems:slim:$slimGemVersion"
+  gems "rubygems:thread_safe:$threadSafeGemVersion"
+  gems "rubygems:tilt:$tiltGemVersion"
+  testCompile("org.xmlmatchers:xml-matchers:$xmlmatchersVersion") { exclude module: 'Saxon-HE' }
+  testCompile "net.sf.saxon:Saxon-HE:$saxonVersion"
+  testCompile "com.google.guava:guava:$guavaVersion"
+  testCompile "org.jsoup:jsoup:$jsoupVersion"
+}
+
+def gemFiles = fileTree(jruby.gemInstallDir) {
+  include 'specifications/*.gemspec'
+  include 'gems/*/lib/**'
+  include "gems/asciidoctor-${asciidoctorGemVersion}/data/**"
+}
+
+jrubyPrepareGems << {
+  copy { // bundles the gems inside this artifact
+    from gemFiles
+    into sourceSets.main.output.resourcesDir
+  }
+}
+
+// explicitly package if we aren't copying gem sources
+//jar.from gemFiles
+
+// NOTE sources & javadoc jars only needed for AsciidoctorJ core since it's the only module that has sources
+artifacts {
+  archives sourcesJar, javadocJar
+}

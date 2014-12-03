@@ -1,0 +1,18 @@
+apply plugin: 'eclipse'
+
+tasks.eclipse.dependsOn jrubyPrepareGems
+eclipse {
+  classpath {
+    defaultOutputDir = file('build/eclipse')
+    file {
+      beforeMerged { classpath ->
+        // remove old output entries, if present
+        classpath.entries.removeAll { it.kind == 'output' }
+      }
+      withXml {
+        // add gems to classpath
+        asNode().appendNode('classpathentry', [kind: 'lib', path: 'build/vendor'])
+      }
+    }
+  }
+}

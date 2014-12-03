@@ -1,0 +1,9 @@
+rootProject.name = 'asciidoctorj'
+
+include \
+  'asciidoctorj',
+  'asciidoctorj-pdf',
+  'asciidoctorj-epub3',
+  'asciidoctorj-distribution'
+
+project(':asciidoctorj').projectDir = file('asciidoctorj-core')

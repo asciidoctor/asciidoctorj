@@ -1,0 +1,11 @@
+// NOTE nebula-sign is a replacement for signing; provides gpg signing integration with nebula-publishing
+// NOTE nebula-sign automatically (and cleanly) enables signing for configuration.archives, so configuration isn't necessary
+apply plugin: 'nebula-sign'
+
+// TIP use -Psigning.skip=false to force signing of snapshots
+if (project.hasProperty('signing.skip')) {
+  ext['signing-skip'] = project.property('signing.skip')
+}
+else {
+  ext['signing.skip'] = ext['signing-skip'] = (!project.statusIsRelease).toString()
+}

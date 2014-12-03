@@ -1,21 +1,16 @@
 language: java
-before_script:
-  - unset GEM_PATH GEM_HOME JRUBY_OPTS
 jdk:
   - oraclejdk8
   - oraclejdk7
   - openjdk7
-  - openjdk6
-#env:
-#  global:
-#    - JAVA_OPTS="-Xms128m -Xmx512m --XX:MaxPermSize=256m -XX:-UseGCOverheadLimit"
+  # the JRuby Gradle plugin doesn't support Java 6, so we can't run the build on openjdk6
+  # technically, AsciidoctorJ should work against Java 6, but there's no CI warranty in place ;)
+  #- openjdk6
+before_script: unset GEM_PATH GEM_HOME JRUBY_OPTS
+install: ./gradlew assemble
+script: ./gradlew -S check && bash test-asciidoctor-upstream.sh
 notifications:
+  email: false
   irc:
     channels:
       - "irc.freenode.org#asciidoctor"
-script:
-  - mvn clean test -DforkCount=1 -DreuseForks=false
-  - bash test-asciidoctor-upstream.sh
-#matrix:
-#  allow_failures:
-#    - script: mvn test #current release could fail because of backward incompatibility
