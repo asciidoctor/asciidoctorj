@@ -55,7 +55,8 @@ subprojects {
   // Applying the Java plugin changes the status; restore the value
   status = _tmp_status
 
-  // FIXME getting warning: [options] bootstrap class path not set in conjunction with -source 1.6
+  // NOTE ignore the following warning when you are not using jdk6; it's harmless
+  // "warning: [options] bootstrap class path not set in conjunction with -source 1.6"
   sourceCompatibility = 1.6
   targetCompatibility = 1.6
 
