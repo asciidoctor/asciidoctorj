@@ -8,7 +8,9 @@ import static org.junit.Assert.assertThat;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.StringWriter;
 
 import org.asciidoctor.util.ClasspathResources;
 import org.jsoup.Jsoup;
@@ -103,9 +105,20 @@ public class WhenAsciidoctorIsCalledUsingCli {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void no_input_file_should_throw_an_exception() {
-		
 		new AsciidoctorInvoker().invoke("");
-		
+	}
+	
+	@Test
+	public void version_flag_should_print_version_and_exit() {
+		PrintStream oldOs = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(os));
+		try {
+		  new AsciidoctorInvoker().invoke("-V");
+		} finally {
+		  System.setOut(oldOs);
+		}
+		assertThat(os.toString(), startsWith("Asciidoctor"));
 	}
 
 	@Test(expected=IllegalArgumentException.class)
