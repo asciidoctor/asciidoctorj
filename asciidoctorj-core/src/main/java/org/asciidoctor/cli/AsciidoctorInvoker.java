@@ -35,8 +35,9 @@ public class AsciidoctorInvoker {
             
             asciidoctor = buildAsciidoctorJInstance(asciidoctorCliOptions);
             
-            if(asciidoctorCliOptions.isVersion()) {
-                System.out.println("Asciidoctor "+asciidoctor.asciidoctorVersion()+" [http://asciidoctor.org]");
+            if (asciidoctorCliOptions.isVersion()) {
+                System.out.println("Asciidoctor " + asciidoctor.asciidoctorVersion() + " [http://asciidoctor.org]");
+                return;
             }
             
             List<File> inputFiles = getInputFiles(asciidoctorCliOptions);
