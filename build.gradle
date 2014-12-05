@@ -28,7 +28,7 @@ subprojects {
     jcommanderVersion = '1.35'
     jrubyVersion = '1.7.16.1'
     jsoupVersion = '1.8.1'
-    junitVersion = '4.11'
+    junitVersion = '4.12'
     saxonVersion = '9.5.1-6'
     slf4Version = '1.7.7'
     xmlmatchersVersion = '1.0-RC1'
