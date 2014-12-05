@@ -52,7 +52,7 @@ public interface Reader {
      * 
      * @return a Boolean indicating whether there was a line to discard.
      */
-    void advance();
+    boolean advance();
 
     /**
      * 

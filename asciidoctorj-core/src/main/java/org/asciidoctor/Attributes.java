@@ -196,8 +196,8 @@ public class Attributes {
     /**
      * Sets if a table of contents should be rendered or not.
      * 
-     * @param toc
-     *            value.
+     * @param placement
+     *            position of toc.
      */
     public void setTableOfContents(Placement placement) {
         this.attributes.put(TOC, toAsciidoctorFlag(true));

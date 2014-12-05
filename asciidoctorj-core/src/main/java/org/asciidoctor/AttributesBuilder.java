@@ -225,8 +225,8 @@ public class AttributesBuilder {
 	/**
 	 * Sets source highlighter processor. It should be supported by asciidoctor.
 	 * 
-	 * @param sourcehighlighter
-	 *            processor.
+	 * @param sourceHighlighter
+	 *            name of the source highlighting library (e.g., coderay).
 	 * @return this instance.
 	 */
 	public AttributesBuilder sourceHighlighter(String sourceHighlighter) {
