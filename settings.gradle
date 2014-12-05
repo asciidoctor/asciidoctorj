@@ -2,8 +2,8 @@ rootProject.name = 'asciidoctorj'
 
 include \
   'asciidoctorj',
-  'asciidoctorj-pdf',
   'asciidoctorj-epub3',
+  'asciidoctorj-pdf',
   'asciidoctorj-distribution'
 
 project(':asciidoctorj').projectDir = file('asciidoctorj-core')
