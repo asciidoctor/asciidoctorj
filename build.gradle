@@ -87,15 +87,19 @@ subprojects {
   }
 
   test {
-    forkEvery = 3
+    forkEvery = 10
     minHeapSize = '128m'
-    maxHeapSize = '512m'
+    maxHeapSize = '1024m'
     if (JavaVersion.current().isJava8Compatible()) {
       jvmArgs '-XX:-UseGCOverheadLimit'
     }
     else {
       jvmArgs '-XX:MaxPermSize=256m', '-XX:-UseGCOverheadLimit'
     }
+
+    //testLogging {
+    //  events 'standard_out', 'standard_error'
+    //}
   }
 
   if (JavaVersion.current().isJava8Compatible()) {
