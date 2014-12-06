@@ -150,3 +150,6 @@ subprojects {
 }
 
 apply from: 'gradle/idea.gradle'
+
+// disable bintrayUpload on root project to prevent build from failing
+bintrayUpload.enabled = false

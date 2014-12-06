@@ -9,11 +9,14 @@ bintray {
     // FIXME asc for distribution zip doesn't get added by nebula-sign
     // NOTE it is added by normal signing plugin, but .asc extension replaces the archive extension instead of being appended to it
     filesSpec {
-      //from project.tasks.signJars.getSignatureFiles()
+      def distsDir = "${project.buildDir}/${project.distsDirName}"
+      // ideally, this is: from project.tasks.signJars.getSignatureFiles()
       // FIXME WTF??? <flips table>
-      from 'build/distributions'
+      // NOTE we have to plant a placeholder so filesSpec resolves the location of the signature file during the initialization phase
+      file(distsDir).mkdirs()
+      file("$distsDir/${project(':asciidoctorj').name}-${project.version}-bin.zip.asc").createNewFile()
+      from(distsDir) { include '*.asc' }
       into "${project.group.replace('.', '/')}/${project(':asciidoctorj').name}/${project.version}"
-      include '*.asc'
     }
   }
   else {
