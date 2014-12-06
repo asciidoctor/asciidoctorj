@@ -125,9 +125,10 @@ subprojects {
     apply plugin: 'com.github.jruby-gradle.base'
     //apply plugin: 'com.github.jruby-gradle.jar'
 
-    // TODO I'd like to be able to customize the name of the gemInstallDir
     jruby {
       defaultRepositories = false
+      defaultVersion = jrubyVersion
+      // TODO I'd like to be able to customize the name of the gemInstallDir
     }
 
     // QUESTION is this the right place to insert this task dependency in the lifecycle?
