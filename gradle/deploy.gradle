@@ -1,10 +1,9 @@
 apply plugin: 'com.jfrog.bintray'
 
 bintray {
-  // TODO read bintray settings from environment variables to allow publishing via CI
-  user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : ''
-  key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : ''
-  if (project.name == 'asciidoctorj-distribution') {
+  user = System.env['BINTRAY_USER'] ?: (project.hasProperty('bintrayUsername') ? project.bintrayUsername : '')
+  key = System.env['BINTRAY_KEY'] ?: (project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : '')
+  if (project.name.endsWith('-distribution')) {
     // NOTE ignore warning that install task does not exist; the plugin is looking for the wrong task!!
     configurations = ['archives']
     // FIXME asc for distribution zip doesn't get added by nebula-sign
@@ -21,31 +20,19 @@ bintray {
     publications = ['mavenNebula']
   }
   dryRun = project.hasProperty('dryRun') && project.dryRun.toBoolean()
-  if (project.statusIsRelease) {
-    publish = true
-    // QUESTION should we make this task dependency permanent?
-    bintrayUpload.dependsOn preparePublish
-  }
-  else {
-    publish = false
-  }
+  publish = project.statusIsRelease
 
   pkg {
-    repo = project.hasProperty('bintrayRepo') ? project.bintrayRepo : 'maven'
+    repo = System.env['BINTRAY_REPO'] ?: (project.hasProperty('bintrayRepo') ? project.bintrayRepo : 'maven')
     //userOrg = 'asciidoctor' // only use if repository is owned by organization
 
-    if (project.name == 'asciidoctorj-distribution') {
+    if (project.name.endsWith('-distribution')) {
       name = project(':asciidoctorj').name
       desc = project(':asciidoctorj').description
     }
     else {
-      // if we want artifacts in dedicated packages
       name = project.name
       desc = project.description
-
-      // if we want all artifacts under one package
-      //name = project(':asciidoctorj').name
-      //desc = project(':asciidoctorj').description
     }
 
     licenses = ['Apache-2.0']
@@ -64,3 +51,5 @@ bintray {
     }
   }
 }
+
+bintrayUpload.dependsOn preparePublish
