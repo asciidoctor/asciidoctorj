@@ -3,7 +3,7 @@ plugins {
   // TODO enable com.github.jruby-grade.jar plugin once we can match current functionality
   //id 'com.github.jruby-gradle.jar' version '0.1.3'
   id 'nebula.nebula-publishing' version '2.0.0'
-  id 'com.jfrog.bintray' version '0.6'
+  id 'com.jfrog.bintray' version '1.0'
 }
 
 status = project.hasProperty('publishRelease') && project.publishRelease.toBoolean() ?
@@ -146,6 +146,3 @@ subprojects {
 }
 
 apply from: 'gradle/idea.gradle'
-
-// NOTE skip bintrayUpload in the root project
-bintrayUpload.enabled = false
