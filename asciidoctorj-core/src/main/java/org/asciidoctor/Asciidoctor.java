@@ -666,8 +666,8 @@ public interface Asciidoctor {
          * Creates a new instance of Asciidoctor and sets loadPath to provided paths. This method is mostly used in OSGi
          * environments.
          * 
-         * @param gemPath
-         *            where gems are located.
+         * @param loadPaths
+         *            where Ruby libraries are located.
          * 
          * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
          *         Ruby calls.

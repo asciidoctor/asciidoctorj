@@ -83,7 +83,7 @@ public class OptionsBuilder {
     /**
      * Sets template directories.
      * 
-     * @param templateDir
+     * @param templateDirs
      *            directories where templates are stored.
      * @return this instance.
      */
