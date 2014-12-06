@@ -1,6 +1,6 @@
 dependencies {
   compile "org.jruby:jruby-complete:$jrubyVersion"
-  compile "org.slf4j:slf4j-api:$slf4Version"
+  compile "org.slf4j:slf4j-api:$slf4jVersion"
   compile "com.beust:jcommander:$jcommanderVersion"
   gems "rubygems:asciidoctor:$asciidoctorGemVersion"
   gems "rubygems:coderay:$coderayGemVersion"
@@ -10,7 +10,8 @@ dependencies {
   gems "rubygems:slim:$slimGemVersion"
   gems "rubygems:thread_safe:$threadSafeGemVersion"
   gems "rubygems:tilt:$tiltGemVersion"
-  testCompile("org.xmlmatchers:xml-matchers:$xmlmatchersVersion") { exclude module: 'Saxon-HE' }
+  // TODO could use dependency replacement feature to fix version of Saxon-HE
+  testCompile("org.xmlmatchers:xml-matchers:$xmlMatchersVersion") { exclude module: 'Saxon-HE' }
   testCompile "net.sf.saxon:Saxon-HE:$saxonVersion"
   testCompile "com.google.guava:guava:$guavaVersion"
   testCompile "org.jsoup:jsoup:$jsoupVersion"
