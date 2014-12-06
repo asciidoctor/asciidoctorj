@@ -15,6 +15,7 @@ tasks.withType(AbstractArchiveTask) {
 }
 
 startScripts {
+  // QUESTION should we make the application name asciidoctor instead of asciidoctorj?
   applicationName = 'asciidoctorj'
   mainClassName = 'org.asciidoctor.cli.AsciidoctorInvoker'
   defaultJvmOpts = [

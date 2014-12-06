@@ -57,11 +57,10 @@ subprojects {
 
   // NOTE ignore the following warning when you are not using jdk6; it's harmless
   // "warning: [options] bootstrap class path not set in conjunction with -source 1.6"
-  sourceCompatibility = 1.6
-  targetCompatibility = 1.6
+  sourceCompatibility = targetCompatibility = 1.6
 
   repositories {
-    if (project.hasProperty('useMavenLocal') && useMavenLocal.toBoolean()) {
+    if (project.hasProperty('useMavenLocal') && project.useMavenLocal.toBoolean()) {
       mavenLocal()
     }
     // QUESTION can we switch to jcenter() only?
@@ -81,9 +80,9 @@ subprojects {
   }
 
   dependencies {
-    testCompile "org.hamcrest:hamcrest-library:$hamcrestVersion"
     testCompile "junit:junit:$junitVersion"
-    testRuntime "org.slf4j:slf4j-simple:$slf4Version"
+    testCompile "org.hamcrest:hamcrest-library:$hamcrestVersion"
+    testRuntime "org.slf4j:slf4j-simple:$slf4jVersion"
   }
 
   test {
