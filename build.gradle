@@ -1,7 +1,5 @@
 plugins {
   id 'com.github.jruby-gradle.base' version '0.1.9'
-  // TODO enable com.github.jruby-grade.jar plugin once we can match current functionality
-  //id 'com.github.jruby-gradle.jar' version '0.1.3'
   id 'nebula.nebula-publishing' version '2.0.0'
   id 'com.jfrog.bintray' version '1.0'
 }
@@ -126,7 +124,6 @@ subprojects {
   // skip the JRuby stuff for the distribution build
   else {
     apply plugin: 'com.github.jruby-gradle.base'
-    //apply plugin: 'com.github.jruby-gradle.jar'
 
     jruby {
       defaultRepositories = false
