@@ -34,6 +34,12 @@ public class Document extends AbstractBlockImpl implements DocumentRuby {
     }
 
     @Override
+    public Map<Object, Object> getOptions() {
+        Map<Object, Object> options = (Map<Object, Object>)documentDelegate.getOptions();
+        return RubyHashUtil.convertRubyHashMapToMap(options);
+    }
+
+    @Override
     public Object doctitle(Map<Object, Object> opts) {
         RubyHash mapWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime, opts);
 

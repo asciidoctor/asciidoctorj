@@ -71,22 +71,26 @@ public class RubyHashUtil {
         return keyType instanceof String;
     }
 
-    public static Map<String, Object> convertRubyHashMapToMap(Map<RubySymbol, Object> rubyHashMap) {
+    public static Map<Object, Object> convertRubyHashMapToMap(Map<Object, Object> rubyHashMap) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<Object, Object> map = new HashMap<Object, Object>();
 
-        Set<Entry<RubySymbol, Object>> elements = rubyHashMap.entrySet();
+        Set<Entry<Object, Object>> elements = rubyHashMap.entrySet();
 
-        for (Entry<RubySymbol, Object> element : elements) {
-            map.put(toJavaString(element), toJavaObject(element.getValue()));
+        for (Entry<Object, Object> element : elements) {
+            if(element.getKey() instanceof RubySymbol) {
+                map.put(toJavaString((RubySymbol)element.getKey()), toJavaObject(element.getValue()));
+            } else {
+                map.put(toJavaObject(element.getKey()).toString(), toJavaObject(element.getValue()));
+            }
         }
 
         return map;
 
     }
 
-    private static String toJavaString(Entry<RubySymbol, Object> element) {
-        return element.getKey().asJavaString();
+    private static String toJavaString(RubySymbol element) {
+        return element.asJavaString();
     }
 
     private static Object toJavaObject(Object rubyObject) {

@@ -67,8 +67,8 @@ public class AsciidoctorInvoker {
             if (asciidoctorCliOptions.isVerbose()) {
 
                 Map<String, Object> optionsMap = options.map();
-                Map<String, Object> monitor = RubyHashUtil
-                        .convertRubyHashMapToMap((Map<RubySymbol, Object>) optionsMap
+                Map<Object, Object> monitor = RubyHashUtil
+                        .convertRubyHashMapToMap((Map<Object, Object>) optionsMap
                                 .get(AsciidoctorCliOptions.MONITOR_OPTION_NAME));
 
                 System.out.println(String.format(

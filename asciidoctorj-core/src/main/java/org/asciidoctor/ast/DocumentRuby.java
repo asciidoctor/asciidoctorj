@@ -1,5 +1,7 @@
 package org.asciidoctor.ast;
 
+import org.jruby.RubySymbol;
+
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,15 @@ public interface DocumentRuby extends AbstractBlock {
      */
     boolean basebackend(String backend);
 
+    /**
+     *
+     * @return blocks contained within current Document.
+     */
     List<AbstractBlock> blocks();
 
+    /**
+     *
+     * @return options defined in document.
+     */
+    Map<Object, Object> getOptions();
 }

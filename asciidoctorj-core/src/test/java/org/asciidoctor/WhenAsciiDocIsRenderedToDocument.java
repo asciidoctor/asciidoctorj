@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.asciidoctor.ast.AbstractBlock;
 import org.asciidoctor.ast.Document;
@@ -74,6 +75,16 @@ public class WhenAsciiDocIsRenderedToDocument {
         
         assertThat((String)findBy.get(0).attributes().get("target"), is("tiger.png"));
         
+    }
+
+    @Test
+    public void should_return_options_from_document() {
+        Map<String, Object> options = OptionsBuilder.options().compact(true).asMap();
+        Document document = asciidoctor.load(DOCUMENT, options);
+
+        Map<Object, Object> documentOptions = document.getOptions();
+
+        assertThat((Boolean) documentOptions.get("compact"), is(true));
     }
     
 }
