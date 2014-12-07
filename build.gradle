@@ -73,10 +73,6 @@ subprojects {
     }
   }
 
-  configurations {
-    dists
-  }
-
   dependencies {
     testCompile "junit:junit:$junitVersion"
     testCompile "org.hamcrest:hamcrest-library:$hamcrestVersion"
@@ -116,7 +112,7 @@ subprojects {
     classifier 'javadoc'
   }
 
-  if (project.name == 'asciidoctorj-distribution') {
+  if (project.name.endsWith('-distribution')) {
     // we're creating a dist, not a jar, silly Gradle
     jar.enabled = false
     configurations.all { artifacts.clear() }
@@ -135,9 +131,6 @@ subprojects {
     processResources.dependsOn jrubyPrepareGems
 
     apply from: rootProject.file('gradle/eclipse.gradle')
-  }
-
-  if (project.name != 'asciidoctorj-distribution') {
     apply from: rootProject.file('gradle/publish.gradle')
   }
  

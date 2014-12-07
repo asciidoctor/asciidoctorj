@@ -8,7 +8,7 @@ dependencies {
 apply plugin: 'application'
 
 tasks.withType(AbstractArchiveTask) {
-  baseName 'asciidoctorj'
+  baseName rootProject.name
   classifier 'bin' // use classifier for identification in repository list
   eachFile { it.path = it.path.replaceFirst('-bin(?=/)', '') }
   //destinationDir = ...
@@ -16,7 +16,7 @@ tasks.withType(AbstractArchiveTask) {
 
 startScripts {
   // QUESTION should we make the application name asciidoctor instead of asciidoctorj?
-  applicationName = 'asciidoctorj'
+  applicationName = rootProject.name
   mainClassName = 'org.asciidoctor.cli.AsciidoctorInvoker'
   defaultJvmOpts = [
     '-client', '-Xmn128m', '-Xms256m', '-Xmx256m',
@@ -26,5 +26,5 @@ startScripts {
 }
 
 artifacts {
-  dists distZip
+  archives distZip
 }
