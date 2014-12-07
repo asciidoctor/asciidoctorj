@@ -27,7 +27,7 @@ bintray {
 
   pkg {
     repo = System.env['BINTRAY_REPO'] ?: (project.hasProperty('bintrayRepo') ? project.bintrayRepo : 'maven')
-    //userOrg = 'asciidoctor' // only use if repository is owned by organization
+    //userOrg = 'asciidoctor' // only use if repository is owned by an organization
 
     if (project.name.endsWith('-distribution')) {
       name = project(':asciidoctorj').name
@@ -38,10 +38,13 @@ bintray {
       desc = project.description
     }
 
+    // NOTE use this instead if we want to list all artifacts under the same package
+    //name = project(':asciidoctorj').name
+    //desc = project(':asciidoctorj').description
+
     licenses = ['Apache-2.0']
-    labels = ['asciidoctor','asciidoctorj','asciidoc']
-    //websiteUrl = 'http://asciidoctor.org'
-    websiteUrl = 'https://github.com/asciidoctor/asciidoctorj'
+    labels = ['asciidoctor', 'asciidoctorj', 'asciidoc']
+    websiteUrl = 'http://asciidoctor.org/docs/asciidoctorj'
     issueTrackerUrl = 'https://github.com/asciidoctor/asciidoctorj/issues'
     vcsUrl = 'https://github.com/asciidoctor/asciidoctorj'
     publicDownloadNumbers = true
