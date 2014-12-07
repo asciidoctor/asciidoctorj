@@ -1717,7 +1717,8 @@ To build, assemble (but not sign) and install the archives (jars and distributio
 
 To build, assemble, sign and publish the archives (jars and distribution zip) to Bintray, run:
 
- $ ./gradlew clean && ./gradlew -i -x pMNPTML bintrayUpload
+ $ ./gradlew clean
+   ./gradlew -i -x pMNPTML bintrayUpload
 
 CAUTION: Don't run the `clean` task in the same execution as the `bintrayUpload` because it will not upload one of the signatures.
 
