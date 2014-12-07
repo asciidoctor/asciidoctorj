@@ -19,13 +19,13 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-repo: http://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-discuss: http://discuss.asciidoctor.org
-:artifact-version: 1.5.1
+:artifact-version: 1.5.2
 :uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
 :uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
-:uri-bintray-artifact-query: https://bintray.com/lordofthejars/maven/asciidoctorj/view/general
-:uri-bintray-artifact-detail: https://bintray.com/lordofthejars/maven/asciidoctorj/{artifact-version}/view
-:uri-bintray-artifact-file: http://dl.bintray.com/lordofthejars/maven/org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
+:uri-bintray-artifact-query: https://bintray.com/asciidoctor/maven/asciidoctorj/view/general
+:uri-bintray-artifact-detail: https://bintray.com/asciidoctor/maven/asciidoctorj/{artifact-version}/view
+:uri-bintray-artifact-file: http://dl.bintray.com/asciidoctor/maven/org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
 :uri-jruby-startup: http://github.com/jruby/jruby/wiki/Improving-startup-time
 :uri-maven-guide: {uri-docs}/install-and-use-asciidoctor-maven-plugin
 :uri-gradle-guide: {uri-docs}/install-and-use-asciidoctor-gradle-plugin
@@ -1563,7 +1563,7 @@ Dependencies: org.asciidoctor
 == Using a pre-release version
 
 Pre-release versions of `AsciidoctorJ` are published to Bintray.
-You can find them in https://bintray.com/lordofthejars/maven/asciidoctorj/view.
+You can find them in https://bintray.com/asciidoctor/maven/asciidoctorj/view.
 Final releases are released to both Maven Central and Bintray.
 
 Here's how to use a pre-release version in Maven:
@@ -1574,7 +1574,7 @@ Here's how to use a pre-release version in Maven:
   <repository>
     <id>central</id>
     <name>bintray</name>
-    <url>http://dl.bintray.com/lordofthejars/maven</url>
+    <url>http://dl.bintray.com/asciidoctor/maven</url>
     <snapshots>
       <enabled>false</enabled>
     </snapshots>
