@@ -27,7 +27,9 @@ bintray {
 
   pkg {
     repo = System.env['BINTRAY_REPO'] ?: (project.hasProperty('bintrayRepo') ? project.bintrayRepo : 'maven')
-    //userOrg = 'asciidoctor' // only use if repository is owned by an organization
+    if (!project.hasProperty('bintrayPersonal') || !project.bintrayPrivate.toBoolean()) {
+      userOrg = 'asciidoctor'
+    }
 
     if (project.name.endsWith('-distribution')) {
       name = project(':asciidoctorj').name
@@ -51,7 +53,8 @@ bintray {
 
     version {
       name = project.version
-      vcsTag = "v${rootProject.version}"
+      // NOTE customize the vcsTag if you're only releasing a subproject
+      vcsTag = "${rootProject.name}-${rootProject.version}"
       released = "$buildDateTime"
       // desc = ...
     }
