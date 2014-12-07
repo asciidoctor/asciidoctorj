@@ -60,8 +60,10 @@ afterEvaluate {
 
     // NOTE only build sources and javadoc jars when releasing
     if (project.statusIsRelease) {
-      if (project.name == 'asciidoctorj') {
+      if (project.tasks.withType(Jar).findByName('sourcesJar')) {
         artifact sourcesJar
+      }
+      if (project.tasks.withType(Jar).findByName('javadocJar')) {
         artifact javadocJar
       }
     }

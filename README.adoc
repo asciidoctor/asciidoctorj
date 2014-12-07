@@ -19,13 +19,13 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-repo: http://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-discuss: http://discuss.asciidoctor.org
-:artifact-version: 1.5.1
+:artifact-version: 1.5.2
 :uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
 :uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
-:uri-bintray-artifact-query: https://bintray.com/lordofthejars/maven/asciidoctorj/view/general
-:uri-bintray-artifact-detail: https://bintray.com/lordofthejars/maven/asciidoctorj/{artifact-version}/view
-:uri-bintray-artifact-file: http://dl.bintray.com/lordofthejars/maven/org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
+:uri-bintray-artifact-query: https://bintray.com/asciidoctor/maven/asciidoctorj/view/general
+:uri-bintray-artifact-detail: https://bintray.com/asciidoctor/maven/asciidoctorj/{artifact-version}/view
+:uri-bintray-artifact-file: http://dl.bintray.com/asciidoctor/maven/org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
 :uri-jruby-startup: http://github.com/jruby/jruby/wiki/Improving-startup-time
 :uri-maven-guide: {uri-docs}/install-and-use-asciidoctor-maven-plugin
 :uri-gradle-guide: {uri-docs}/install-and-use-asciidoctor-gradle-plugin
@@ -50,7 +50,7 @@ The version of AsciidoctorJ matches the version of Asciidoctor RubyGem it bundle
 AsciidoctorJ is published to Maven Central and Bintray.
 The artifact information can be found in the tables below.
 
-[cols="2,4,^1,5"]
+[cols="2,2,^2,4"]
 .Artifact information for AsciidoctorJ in jCenter (Bintray)
 |===
 |Group Id |Artifact Id |Version |Download
@@ -59,9 +59,19 @@ The artifact information can be found in the tables below.
 |{uri-bintray-artifact-query}[asciidoctorj]
 |{uri-bintray-artifact-detail}[{artifact-version}]
 |{uri-bintray-artifact-file}.pom[pom] {uri-bintray-artifact-file}.jar[jar] {uri-bintray-artifact-file}-javadoc.jar[javadoc (jar)] {uri-bintray-artifact-file}-sources.jar[sources (jar)]
+
+|org.asciidoctor
+|asciidoctorj-epub3
+|1.5.0-alpha.4
+|{empty}
+
+|org.asciidoctor
+|asciidoctorj-pdf
+|1.5.0-alpha.6
+|{empty}
 |===
 
-[cols="2,4,^1,5"]
+[cols="2,2,^2,4"]
 .Artifact information for AsciidoctorJ in Maven Central
 |===
 |Group Id |Artifact Id |Version |Download
@@ -70,9 +80,19 @@ The artifact information can be found in the tables below.
 |{uri-maven-artifact-query}[asciidoctorj]
 |{uri-maven-artifact-detail}[{artifact-version}]
 |{uri-maven-artifact-file}.pom[pom] {uri-maven-artifact-file}.jar[jar] {uri-maven-artifact-file}-javadoc.jar[javadoc (jar)] {uri-maven-artifact-file}-sources.jar[sources (jar)]
+
+|org.asciidoctor
+|asciidoctorj-epub3
+|1.5.0-alpha.4
+|{empty}
+
+|org.asciidoctor
+|asciidoctorj-pdf
+|1.5.0-alpha.6
+|{empty}
 |===
 
-CAUTION: The artifactId changed from `asciidoctor-java-integration` to `asciidoctorj` starting in 1.5.0.
+CAUTION: The artifactId changed to `asciidoctorj` starting in 1.5.0.
 
 == Installation
 
@@ -996,6 +1016,69 @@ String content = asciidoctor.convertFile(new File(
 <2> `Postprocessor` extension is registered using an already created instance approach.
 <3> We can call any `convert` method as usually, no extra parameters are required.
 
+=== DocinfoProcessor
+
+This extension inserts custom content on header or footer of the document. 
+For example can be used for adding `meta` tags on `<head>` tags.
+
+[source]
+.DocinfoProcessor example
+----
+public class MetaRobotsDocinfoProcessor extends DocinfoProcessor { //<1>
+
+    public MetaRobotsDocinfoProcessor() {
+        super();
+    }
+
+    public MetaRobotsDocinfoProcessor(Map<String, Object> config) {
+        super(config);
+    }
+
+    @Override
+    public String process(Document document) {
+        return "<meta name=\"robots\" content=\"index,follow\">"; //<2>
+    }
+}
+----
+<1> Class must extend from `DocinfoProcessor`.
+<2> In this case a meta tag is returned. By default _docinfo_ is placed on header.
+
+To register the DocinfoProcessor extension just use the `JavaExtensionRegistry`.
+
+[source]
+.Register a DocinfoProcessor
+----
+JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry(); // <1>
+
+javaExtensionRegistry.docinfoProcessor(MetaRobotsDocinfoProcessor.class); // <2>
+
+String content = asciidoctor.renderFile(
+                classpath.getResource("simple.adoc"),
+                options().headerFooter(true).safe(SafeMode.SERVER).toFile(false).get());
+
+----
+<1> `JavaExtensionRegistry` class is created.
+<2> `DocinfoProcessor` extension is registered using an already created instance approach.
+
+If you want to place _docinfo_ on footer you need to set `location` option to `footer`.
+
+[source]
+.Register a DocinfoProcessor
+----
+JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+Map<String, Object> options = new HashMap<String, Object>();
+options.put("location", ":footer"); // <1>
+MetaRobotsDocinfoProcessor metaRobotsDocinfoProcessor = new MetaRobotsDocinfoProcessor(options);
+
+javaExtensionRegistry.docinfoProcessor(metaRobotsDocinfoProcessor);
+
+String content = asciidoctor.renderFile(
+                classpath.getResource("simple.adoc"),
+                options().headerFooter(true).safe(SafeMode.SERVER).toFile(false).get());
+----
+<1> Sets the location option to footer. Note that a colon (:) is placed before _footer_.
+
 === Block processor
 
 This extension registers a custom block style named _yell_ that uppercases all the words.
@@ -1563,7 +1646,7 @@ Dependencies: org.asciidoctor
 == Using a pre-release version
 
 Pre-release versions of `AsciidoctorJ` are published to Bintray.
-You can find them in https://bintray.com/lordofthejars/maven/asciidoctorj/view.
+You can find them in https://bintray.com/asciidoctor/maven/asciidoctorj/view.
 Final releases are released to both Maven Central and Bintray.
 
 Here's how to use a pre-release version in Maven:
@@ -1574,7 +1657,7 @@ Here's how to use a pre-release version in Maven:
   <repository>
     <id>central</id>
     <name>bintray</name>
-    <url>http://dl.bintray.com/lordofthejars/maven</url>
+    <url>http://dl.bintray.com/asciidoctor/maven</url>
     <snapshots>
       <enabled>false</enabled>
     </snapshots>
@@ -1717,7 +1800,10 @@ To build, assemble (but not sign) and install the archives (jars and distributio
 
 To build, assemble, sign and publish the archives (jars and distribution zip) to Bintray, run:
 
- $ ./gradlew -i -x pMNPTML clean bintrayUpload
+ $ ./gradlew clean
+   ./gradlew -i -x pMNPTML bintrayUpload
+
+CAUTION: Don't run the `clean` task in the same execution as the `bintrayUpload` because it will not upload one of the signatures.
 
 If you want to first perform a dry run of the upload, add the `dryRun=true` property.
 
