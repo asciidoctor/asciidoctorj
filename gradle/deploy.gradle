@@ -55,7 +55,7 @@ bintray {
       name = project.version
       // NOTE customize the vcsTag if you're only releasing a subproject
       vcsTag = "${rootProject.name}-${rootProject.version}"
-      released = "$buildDateTime"
+      //released = "$buildDateOnly"
       // desc = ...
     }
   }
