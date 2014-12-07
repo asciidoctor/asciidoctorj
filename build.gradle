@@ -4,6 +4,7 @@ plugins {
   id 'com.jfrog.bintray' version '1.0'
 }
 
+// TIP use -PpublishRelease=true to active release behavior regardless of the version
 status = project.hasProperty('publishRelease') && project.publishRelease.toBoolean() ?
     'release' : ((version == 'unspecified' || version.endsWith('-SNAPSHOT')) ? 'snapshot' : 'release')
 
@@ -73,10 +74,6 @@ subprojects {
     }
   }
 
-  configurations {
-    dists
-  }
-
   dependencies {
     testCompile "junit:junit:$junitVersion"
     testCompile "org.hamcrest:hamcrest-library:$hamcrestVersion"
@@ -116,7 +113,7 @@ subprojects {
     classifier 'javadoc'
   }
 
-  if (project.name == 'asciidoctorj-distribution') {
+  if (project.name.endsWith('-distribution')) {
     // we're creating a dist, not a jar, silly Gradle
     jar.enabled = false
     configurations.all { artifacts.clear() }
@@ -135,13 +132,9 @@ subprojects {
     processResources.dependsOn jrubyPrepareGems
 
     apply from: rootProject.file('gradle/eclipse.gradle')
-    apply from: rootProject.file('gradle/idea.gradle')
-  }
- 
-  if (project.name != 'asciidoctorj-distribution') {
     apply from: rootProject.file('gradle/publish.gradle')
   }
-
+ 
   apply from: rootProject.file('gradle/sign.gradle')
   apply from: rootProject.file('gradle/deploy.gradle')
 }

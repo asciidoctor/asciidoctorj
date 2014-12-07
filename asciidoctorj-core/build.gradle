@@ -30,10 +30,7 @@ jrubyPrepareGems << {
   }
 }
 
-// explicitly package if we aren't copying gem sources
-//jar.from gemFiles
-
-// NOTE sources & javadoc jars only needed for AsciidoctorJ core since it's the only module that has sources
+// NOTE sources & javadoc jars only needed for asciidoctorj-core since it's the only module that has sources right now
 artifacts {
   archives sourcesJar, javadocJar
 }

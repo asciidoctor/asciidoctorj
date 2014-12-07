@@ -29,6 +29,3 @@ jrubyPrepareGems << {
     into sourceSets.main.output.resourcesDir
   }
 }
-
-// explicitly package if we aren't copying gem sources
-//jar.from gemFiles
