@@ -4,6 +4,7 @@ plugins {
   id 'com.jfrog.bintray' version '1.0'
 }
 
+// TIP use -PpublishRelease=true to active release behavior regardless of the version
 status = project.hasProperty('publishRelease') && project.publishRelease.toBoolean() ?
     'release' : ((version == 'unspecified' || version.endsWith('-SNAPSHOT')) ? 'snapshot' : 'release')
 
