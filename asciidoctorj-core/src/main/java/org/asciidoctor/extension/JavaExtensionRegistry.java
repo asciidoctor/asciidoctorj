@@ -14,7 +14,28 @@ public class JavaExtensionRegistry {
         this.asciidoctorModule = asciidoctorModule;
         this.rubyRuntime = rubyRuntime;
     }
-    
+
+    public void docinfoProcessor(Class<? extends DocinfoProcessor> docInfoProcessor) {
+        // this may change in future to external class to deal with dynamic
+        // imports
+        this.rubyRuntime.evalScriptlet("java_import " + getImportLine(docInfoProcessor));
+        this.asciidoctorModule.docinfo_processor(RubyUtils.toRubyClass(rubyRuntime, docInfoProcessor));
+    }
+
+    public void docinfoProcessor(DocinfoProcessor docInfoProcessor) {
+        // this may change in future to external class to deal with dynamic
+        // imports
+        this.rubyRuntime.evalScriptlet("java_import " + getImportLine(docInfoProcessor.getClass()));
+        this.asciidoctorModule.docinfo_processor(docInfoProcessor);
+    }
+
+    public void docinfoProcessor(String docInfoProcessor) {
+        // this may change in future to external class to deal with dynamic
+        // imports
+        this.rubyRuntime.evalScriptlet("java_import " + docInfoProcessor);
+        this.asciidoctorModule.docinfo_processor(getClassName(docInfoProcessor));
+    }
+
     public void preprocessor(Class<? extends Preprocessor> preprocessor) {
         // this may change in future to external class to deal with dynamic
         // imports

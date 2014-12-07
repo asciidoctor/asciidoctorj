@@ -167,6 +167,43 @@ public class WhenJavaExtensionIsRegistered {
     }
 
     @Test
+    public void a_docinfoprocessor_should_be_executed_and_add_meta_in_header_by_default() {
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+        javaExtensionRegistry.docinfoProcessor(MetaRobotsDocinfoProcessor.class.getCanonicalName());
+
+        String content = asciidoctor.renderFile(
+                classpath.getResource("simple.adoc"),
+                options().headerFooter(true).safe(SafeMode.SERVER).toFile(false).get());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+
+        Element metaRobots = doc.getElementsByAttributeValueContaining("name", "robots").first();
+        assertThat(metaRobots, is(notNullValue()));
+    }
+
+    @Test
+    public void a_docinfoprocessor_should_be_executed_and_add_meta_in_footer() {
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("location", ":footer");
+        MetaRobotsDocinfoProcessor metaRobotsDocinfoProcessor = new MetaRobotsDocinfoProcessor(options);
+
+        javaExtensionRegistry.docinfoProcessor(metaRobotsDocinfoProcessor);
+
+        String content = asciidoctor.renderFile(
+                classpath.getResource("simple.adoc"),
+                options().headerFooter(true).safe(SafeMode.SERVER).toFile(false).get());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+
+        Element footer = doc.getElementById("footer");
+        Element metaRobots = footer.getElementsByAttributeValueContaining("name", "robots").first();
+        assertThat(metaRobots, is(notNullValue()));
+    }
+
+    @Test
     public void a_preprocessor_should_be_executed_before_document_is_rendered() {
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();

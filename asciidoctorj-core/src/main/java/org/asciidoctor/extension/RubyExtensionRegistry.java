@@ -38,6 +38,11 @@ public class RubyExtensionRegistry {
         return this;
     }
 
+    public RubyExtensionRegistry docinfoProcessor(String docinfoProcessor) {
+        this.asciidoctorModule.docinfo_processor(docinfoProcessor);
+        return this;
+    }
+
     public RubyExtensionRegistry includeProcessor(String includeProcessor) {
         this.asciidoctorModule.include_processor(includeProcessor);
         return this;
@@ -64,7 +69,7 @@ public class RubyExtensionRegistry {
     public RubyExtensionRegistry inlineMacro(String blockName, String inlineMacroProcessor) {
 
         this.asciidoctorModule.inline_macro(
-        		inlineMacroProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
+                inlineMacroProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
         return this;
     }
 

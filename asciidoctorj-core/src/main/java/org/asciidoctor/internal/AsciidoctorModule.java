@@ -37,7 +37,9 @@ public interface AsciidoctorModule {
     void inline_macro(RubyClass blockClassName, Object blockSymbol);
     void inline_macro(InlineMacroProcessor blockClassName, Object blockSymbol);
     
-    
+    void docinfo_processor(String docInfoClassName);
+    void docinfo_processor(RubyClass docInfoClassName);
+    void docinfo_processor(DocinfoProcessor docInfoClassName);
     
     void unregister_all_extensions();
     

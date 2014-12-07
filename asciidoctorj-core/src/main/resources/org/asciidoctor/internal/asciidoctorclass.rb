@@ -16,6 +16,12 @@ class AsciidoctorModule
         Asciidoctor::Extensions.unregister_all
     end
 
+    def docinfo_processor(extensionName)
+        Asciidoctor::Extensions.register do
+            docinfo_processor extensionName
+        end
+    end
+
     def treeprocessor(extensionName)
         Asciidoctor::Extensions.register do 
             treeprocessor extensionName
