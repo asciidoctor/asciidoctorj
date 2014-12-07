@@ -1016,6 +1016,69 @@ String content = asciidoctor.convertFile(new File(
 <2> `Postprocessor` extension is registered using an already created instance approach.
 <3> We can call any `convert` method as usually, no extra parameters are required.
 
+=== DocinfoProcessor
+
+This extension inserts custom content on header or footer of the document. 
+For example can be used for adding `meta` tags on `<head>` tags.
+
+[source]
+.DocinfoProcessor example
+----
+public class MetaRobotsDocinfoProcessor extends DocinfoProcessor { //<1>
+
+    public MetaRobotsDocinfoProcessor() {
+        super();
+    }
+
+    public MetaRobotsDocinfoProcessor(Map<String, Object> config) {
+        super(config);
+    }
+
+    @Override
+    public String process(Document document) {
+        return "<meta name=\"robots\" content=\"index,follow\">"; //<2>
+    }
+}
+----
+<1> Class must extend from `DocinfoProcessor`.
+<2> In this case a meta tag is returned. By default _docinfo_ is placed on header.
+
+To register the DocinfoProcessor extension just use the `JavaExtensionRegistry`.
+
+[source]
+.Register a DocinfoProcessor
+----
+JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry(); // <1>
+
+javaExtensionRegistry.docinfoProcessor(MetaRobotsDocinfoProcessor.class); // <2>
+
+String content = asciidoctor.renderFile(
+                classpath.getResource("simple.adoc"),
+                options().headerFooter(true).safe(SafeMode.SERVER).toFile(false).get());
+
+----
+<1> `JavaExtensionRegistry` class is created.
+<2> `DocinfoProcessor` extension is registered using an already created instance approach.
+
+If you want to place _docinfo_ on footer you need to set `location` option to `footer`.
+
+[source]
+.Register a DocinfoProcessor
+----
+JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+Map<String, Object> options = new HashMap<String, Object>();
+options.put("location", ":footer"); // <1>
+MetaRobotsDocinfoProcessor metaRobotsDocinfoProcessor = new MetaRobotsDocinfoProcessor(options);
+
+javaExtensionRegistry.docinfoProcessor(metaRobotsDocinfoProcessor);
+
+String content = asciidoctor.renderFile(
+                classpath.getResource("simple.adoc"),
+                options().headerFooter(true).safe(SafeMode.SERVER).toFile(false).get());
+----
+<1> Sets the location option to footer. Note that a colon (:) is placed before _footer_.
+
 === Block processor
 
 This extension registers a custom block style named _yell_ that uppercases all the words.
