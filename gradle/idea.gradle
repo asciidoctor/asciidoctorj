@@ -1,3 +1,6 @@
-apply plugin: 'idea'
-
-tasks.idea.dependsOn jrubyPrepareGems
+task idea << {
+  println '''IntelliJ IDEA has native support for Gradle.
+Use the provided import wizard to open the project.
+See https://www.jetbrains.com/idea/help/gradle.html for details.
+'''
+}
