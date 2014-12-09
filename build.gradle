@@ -118,8 +118,13 @@ subprojects {
     jar.enabled = false
     configurations.all { artifacts.clear() }
   }
-  // skip the JRuby stuff for the distribution build
+  // skip the Java and JRuby stuff for the distribution build
   else {
+    // jcenter & Maven Central requires sources & javadoc jars (even if empty), so give 'em what they want
+    artifacts {
+      archives sourcesJar, javadocJar
+    }
+
     apply plugin: 'com.github.jruby-gradle.base'
 
     jruby {
