@@ -103,12 +103,14 @@ subprojects {
     }
   }
 
-  task sourcesJar(type: Jar, dependsOn: classes) {
+  task sourcesJar(type: Jar, dependsOn: classes, group: 'Release') {
+    description 'Assembles a jar archive containing the main source code.'
     from sourceSets.main.allSource
     classifier 'sources'
   }
 
-  task javadocJar(type: Jar, dependsOn: javadoc) {
+  task javadocJar(type: Jar, dependsOn: javadoc, group: 'Release') {
+    description 'Assembles a jar archive containing the Javadoc API documentation for the main source code.'
     from javadoc.destinationDir
     classifier 'javadoc'
   }
