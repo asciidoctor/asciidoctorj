@@ -29,8 +29,3 @@ jrubyPrepareGems << {
     into sourceSets.main.output.resourcesDir
   }
 }
-
-// NOTE jcenter & Maven Central require a sources jar, even if it's empty
-artifacts {
-  archives sourcesJar
-}

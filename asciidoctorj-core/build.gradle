@@ -29,8 +29,3 @@ jrubyPrepareGems << {
     into sourceSets.main.output.resourcesDir
   }
 }
-
-// NOTE sources & javadoc jars only needed for asciidoctorj-core since it's the only module that has sources right now
-artifacts {
-  archives sourcesJar, javadocJar
-}

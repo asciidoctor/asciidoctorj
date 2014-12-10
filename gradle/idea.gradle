@@ -1,4 +1,4 @@
-task idea << {
+task idea(group: 'IDE', description: 'Displays information about how to import the project into IntelliJ IDEA.') << {
   println '''IntelliJ IDEA has native support for Gradle.
 Use the provided import wizard to open the project.
 See https://www.jetbrains.com/idea/help/gradle.html for details.

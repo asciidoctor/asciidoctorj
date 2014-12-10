@@ -103,12 +103,14 @@ subprojects {
     }
   }
 
-  task sourcesJar(type: Jar, dependsOn: classes) {
+  task sourcesJar(type: Jar, dependsOn: classes, group: 'Release') {
+    description 'Assembles a jar archive containing the main source code.'
     from sourceSets.main.allSource
     classifier 'sources'
   }
 
-  task javadocJar(type: Jar, dependsOn: javadoc) {
+  task javadocJar(type: Jar, dependsOn: javadoc, group: 'Release') {
+    description 'Assembles a jar archive containing the Javadoc API documentation for the main source code.'
     from javadoc.destinationDir
     classifier 'javadoc'
   }
@@ -118,8 +120,13 @@ subprojects {
     jar.enabled = false
     configurations.all { artifacts.clear() }
   }
-  // skip the JRuby stuff for the distribution build
+  // skip the Java and JRuby stuff for the distribution build
   else {
+    // jcenter & Maven Central requires sources & javadoc jars (even if empty), so give 'em what they want
+    artifacts {
+      archives sourcesJar, javadocJar
+    }
+
     apply plugin: 'com.github.jruby-gradle.base'
 
     jruby {
