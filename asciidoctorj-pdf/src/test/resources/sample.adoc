@@ -5,5 +5,5 @@ Content.
 
 [source,java]
 ----
-puts "Hello, World!"
+System.out.println("Hello, World!");
 ----
