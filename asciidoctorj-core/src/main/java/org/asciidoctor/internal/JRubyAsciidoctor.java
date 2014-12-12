@@ -22,23 +22,41 @@ import org.jruby.RubyInstanceConfig;
 import org.jruby.RubyInstanceConfig.CompileMode;
 import org.jruby.embed.ScriptingContainer;
 import org.jruby.javasupport.JavaEmbedUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JRubyAsciidoctor implements Asciidoctor {
 
-    private static final Logger log = LoggerFactory.getLogger(JRubyAsciidoctor.class.getName());
+    static {
+
+        final Logger logger = Logger.getLogger("Asciidoctor");
+        final LoggerOutputStream out = new LoggerOutputStream(logger);
+        System.setOut(new PrintStream(out));
+        System.setErr(new PrintStream(out));
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                try { // can log or not something depending logger is already closed or not, best is to call it manually at the end of main if possible
+                    out.flush();
+                } catch (final IOException e) {
+                    // no-op
+                }
+            }
+        });
+
+    }
+
+
+    private static final Logger logger = Logger.getLogger(JRubyAsciidoctor.class.getName());
 
     private static final String GEM_PATH = "GEM_PATH";
 
@@ -279,12 +297,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
-        if (log.isDebugEnabled()) {
-            log.debug(AsciidoctorUtils.toAsciidoctorCommand(options, "-"));
+        logger.fine(AsciidoctorUtils.toAsciidoctorCommand(options, "-"));
 
-            if (AsciidoctorUtils.isOptionWithAttribute(options, Attributes.SOURCE_HIGHLIGHTER, "pygments")) {
-                log.debug("In order to use Pygments with Asciidoctor, you need to install Pygments (and Python, if you don’t have it yet). Read http://asciidoctor.org/news/#syntax-highlighting-with-pygments.");
-            }
+        if (AsciidoctorUtils.isOptionWithAttribute(options, Attributes.SOURCE_HIGHLIGHTER, "pygments")) {
+            logger.fine("In order to use Pygments with Asciidoctor, you need to install Pygments (and Python, if you don’t have it yet). Read http://asciidoctor.org/news/#syntax-highlighting-with-pygments.");
         }
 
         String currentDirectory = rubyRuntime.getCurrentDirectory();
@@ -311,9 +327,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
-        if (log.isDebugEnabled()) {
-            log.debug(AsciidoctorUtils.toAsciidoctorCommand(options, filename.getAbsolutePath()));
-        }
+        logger.fine(AsciidoctorUtils.toAsciidoctorCommand(options, filename.getAbsolutePath()));
 
         String currentDirectory = rubyRuntime.getCurrentDirectory();
 
@@ -565,5 +579,55 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return new Document(this.asciidoctorModule.load(file.getAbsolutePath(), rubyHash), this.rubyRuntime);
 
     }
+
+    static class LoggerOutputStream extends OutputStream {
+        private final StringBuilder builder = new StringBuilder();
+        private Logger logger;
+
+        public LoggerOutputStream(Logger logger) {
+            this.logger = logger;
+        }
+
+        private boolean doLog() {
+            synchronized(this) {
+                if (builder.length() > 0) {
+                    String msg = builder.toString();
+                    if(msg.contains("WARNING")) {
+                        logger.logp(Level.WARNING, "", "", msg);
+                    } else {
+                        if(msg.contains("FAILED")) {
+                            logger.logp(Level.SEVERE, "", "", msg);
+                        } else {
+                            logger.logp(Level.FINE, "", "", msg);
+                        }
+                    }
+                    builder.setLength(0);
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            if (b == '\n') {
+                if (!doLog()) {
+                    logger.info("");
+                }
+            } else {
+                builder.append((char) b);
+            }
+        }
+
+        @Override
+        public void flush() throws IOException {
+            doLog();
+        }
+
+        @Override
+        public void close() throws IOException {
+            doLog();
+        }
+    };
 
 }

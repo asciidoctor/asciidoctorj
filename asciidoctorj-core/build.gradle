@@ -1,6 +1,5 @@
 dependencies {
   compile "org.jruby:jruby-complete:$jrubyVersion"
-  compile "org.slf4j:slf4j-api:$slf4jVersion"
   compile "com.beust:jcommander:$jcommanderVersion"
   gems "rubygems:asciidoctor:$asciidoctorGemVersion"
   gems "rubygems:coderay:$coderayGemVersion"

@@ -92,7 +92,8 @@ public class AsciidoctorUtils {
         }
 
         if (options.containsKey(Options.SAFE)) {
-            SafeMode getSafeMode = SafeMode.values()[(Integer) options.get(Options.SAFE)];
+            Integer level = (Integer) options.get(Options.SAFE);
+            SafeMode getSafeMode = SafeMode.safeMode(level);
             optionsAndAttributes.append(AsciidoctorCliOptions.SAFE)
             .append(" ").append(getSafeMode)
             .append(" ");

@@ -2,7 +2,6 @@ dependencies {
   compile project(':asciidoctorj')
   compile project(':asciidoctorj-epub3')
   compile project(':asciidoctorj-pdf')
-  runtime "org.slf4j:slf4j-simple:$slf4jVersion"
 }
 
 apply plugin: 'application'

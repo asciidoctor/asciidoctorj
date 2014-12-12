@@ -29,7 +29,6 @@ subprojects {
     jsoupVersion = '1.8.1'
     junitVersion = '4.12'
     saxonVersion = '9.5.1-6'
-    slf4jVersion = '1.7.7'
     xmlMatchersVersion = '1.0-RC1'
 
     // gem versions
@@ -77,7 +76,6 @@ subprojects {
   dependencies {
     testCompile "junit:junit:$junitVersion"
     testCompile "org.hamcrest:hamcrest-library:$hamcrestVersion"
-    testRuntime "org.slf4j:slf4j-simple:$slf4jVersion"
   }
 
   test {

@@ -46,4 +46,13 @@ public enum SafeMode {
         return level;
     }
 
+    public static final SafeMode safeMode(int level) {
+        switch(level) {
+            case 0: return UNSAFE;
+            case 1: return SAFE;
+            case 10: return SERVER;
+            default: return SECURE;
+        }
+    }
+
 }
