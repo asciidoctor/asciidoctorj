@@ -32,7 +32,7 @@ public class WhenConverterIsRegistered {
 
         String result = asciidoctor.render("== Hello\n\nWorld!", OptionsBuilder.options().backend("test"));
 
-        assertThat(result, is("!!!Hello\n\nWorld!\n"));
+        assertThat(result, is("== Hello ==\n\nWorld!\n"));
     }
 
 }

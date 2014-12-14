@@ -21,7 +21,7 @@ public class ConverterRegistry {
         this.rubyRuntime = rubyRuntime;
     }
 
-    public void register(Class<? extends ConverterBuiltIn> converterClass, String... backends) {
+    public void register(Class<? extends Converter> converterClass, String... backends) {
         // this may change in future to external class to deal with dynamic
         // imports
         String className = getImportLine(converterClass);

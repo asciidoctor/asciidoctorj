@@ -3,7 +3,7 @@ package org.asciidoctor.internal;
 import java.util.Map;
 
 import org.asciidoctor.ast.DocumentRuby;
-import org.asciidoctor.converter.ConverterBuiltIn;
+import org.asciidoctor.converter.Converter;
 import org.asciidoctor.extension.*;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
