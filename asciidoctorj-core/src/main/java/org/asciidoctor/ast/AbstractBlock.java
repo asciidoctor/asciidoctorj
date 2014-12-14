@@ -12,6 +12,7 @@ public interface AbstractBlock {
     List<AbstractBlock> blocks();
     Map<String, Object> attributes();
     Object content();
+    String nodeName();
     String convert();
     DocumentRuby document();
     String context();

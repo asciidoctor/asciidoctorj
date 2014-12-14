@@ -64,23 +64,39 @@ class AsciidoctorModule
         end
     end
 
-	def convert_file(content, options = {})
-		return Asciidoctor.convert_file(content, options)
-	end
+    def convert_file(content, options = {})
+        return Asciidoctor.convert_file(content, options)
+    end
 
-	def convert(content, options = {})
-		return Asciidoctor.convert(content, options)
-	end
+    def convert(content, options = {})
+        return Asciidoctor.convert(content, options)
+    end
 
-	def load_file(content, options = {})
-		return Asciidoctor.load_file(content, options)
-	end
+    def load_file(content, options = {})
+        return Asciidoctor.load_file(content, options)
+    end
 
-	def load(content, options = {})
-		return Asciidoctor.load(content, options)
-	end
-	
-	def asciidoctorRuntimeEnvironmentVersion()
-	    return Asciidoctor::VERSION
-	end
+    def load(content, options = {})
+        return Asciidoctor.load(content, options)
+    end
+
+    def register_converter(converter, backends = ['*'])
+        Asciidoctor::Converter::Factory.register converter, backends
+    end
+
+    def resolve_converter(backend)
+        return Asciidoctor::Converter::Factory.resolve backend
+    end
+
+    def converters()
+        return Asciidoctor::Converter::Factory.converters.keys
+    end
+
+    def unregister_all_converters
+        Asciidoctor::Converter::Factory.unregister_all
+    end
+
+    def asciidoctorRuntimeEnvironmentVersion()
+        return Asciidoctor::VERSION
+    end
 end

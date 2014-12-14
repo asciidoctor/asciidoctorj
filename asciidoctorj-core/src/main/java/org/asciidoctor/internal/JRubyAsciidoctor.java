@@ -12,6 +12,7 @@ import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.ast.Title;
+import org.asciidoctor.converter.ConverterRegistry;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.extension.internal.ExtensionRegistryExecutor;
@@ -484,6 +485,11 @@ public class JRubyAsciidoctor implements Asciidoctor {
     @Override
     public RubyExtensionRegistry rubyExtensionRegistry() {
         return new RubyExtensionRegistry(asciidoctorModule, rubyRuntime);
+    }
+
+    @Override
+    public ConverterRegistry converterRegistry() {
+        return new ConverterRegistry(asciidoctorModule, rubyRuntime);
     }
 
     @Override

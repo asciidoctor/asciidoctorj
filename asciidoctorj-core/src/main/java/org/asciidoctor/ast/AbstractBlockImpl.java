@@ -57,7 +57,6 @@ public class AbstractBlockImpl implements AbstractBlock {
         return rubyBlocks;
     }
 
-
     @Override
     public Map<String, Object> attributes() {
         return delegate.attributes();
@@ -66,6 +65,11 @@ public class AbstractBlockImpl implements AbstractBlock {
     @Override
     public Object content() {
         return delegate.content();
+    }
+
+    @Override
+    public String nodeName() {
+        return delegate.nodeName();
     }
 
     @Override

@@ -3,8 +3,11 @@ package org.asciidoctor.internal;
 import java.util.Map;
 
 import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.converter.ConverterBuiltIn;
 import org.asciidoctor.extension.*;
+import org.jruby.RubyArray;
 import org.jruby.RubyClass;
+import org.jruby.RubyHash;
 
 
 public interface AsciidoctorModule {
@@ -42,12 +45,18 @@ public interface AsciidoctorModule {
     void docinfo_processor(DocinfoProcessor docInfoClassName);
     
     void unregister_all_extensions();
-    
-	Object convert(String content, Map<String, Object> options);
-	Object convertFile(String filename, Map<String, Object> options);
-	
-	DocumentRuby load_file(String filename, Map<String, Object> options);
-	DocumentRuby load(String content, Map<String, Object> options);
+
+    Object convert(String content, Map<String, Object> options);
+    Object convertFile(String filename, Map<String, Object> options);
+
+    DocumentRuby load_file(String filename, Map<String, Object> options);
+    DocumentRuby load(String content, Map<String, Object> options);
+
+    void register_converter(RubyClass converter);
+    void register_converter(RubyClass converter, String[] backends);
+    RubyClass resolve_converter(String backend);
+    RubyArray converters();
+    void unregister_all_converters();
 
 	String asciidoctorRuntimeEnvironmentVersion();
 	
