@@ -4,6 +4,10 @@ dependencies {
   compile project(':asciidoctorj-pdf')
 }
 
+// we're creating a dist, not a jar, silly Gradle
+jar.enabled = false
+configurations.all { artifacts.clear() }
+
 apply plugin: 'application'
 
 tasks.withType(AbstractArchiveTask) {
