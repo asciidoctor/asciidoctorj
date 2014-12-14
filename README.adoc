@@ -180,7 +180,7 @@ AsciidoctorJ continues to support the old method names for backwards compatibili
 
 // What is the 'provided strategy', need a link
 
-NOTE: All the methods listed in Table 3 are overloaded to accomodate various input types and options.
+NOTE: All the methods listed in Table 3 are overloaded to accommodate various input types and options.
 
 You retrieve an instance of the `Asciidoctor` interface from the factory method provided.
 
@@ -577,7 +577,7 @@ The `readDocumentStructure` method provides a useful way of parsing an AsciiDoc 
 First, it gathers the same information as `readDocumentHeader` and puts it in the `header` field of the `StructuredDocument` object.
 The actual content of the file is split into separate ContentParts based on blocks of the content.
 
-This feature provides several usecases.
+This feature provides several use cases.
 
 .AsciiDoc document with two blocks defined by section titles
 [source,asciidoc]
@@ -595,7 +595,7 @@ And content of section two
 
 Each section defines new content part.
 List of all parts can be get by `getParts` method on `StructuredDocument`.
-Each part will than contain of title (ie. "Section one") and converted text content as html.
+Each part will than contain of title (i.e. "Section one") and converted text content as html.
 
 .Print content of each part
 [source]
@@ -837,7 +837,7 @@ An extension can be registered by:
 * Passing an instance of the extension object.
 
 NOTE: In the first two cases, the lifecycle of the instance is managed by JRuby.
-In the last case, the caller is the owner of the lifeycle of the object.
+In the last case, the caller is the owner of the lifecycle of the object.
 
 TIP: Using an already created instance as an extension is useful when using CDI.
 For example, you can inject any extension inside the code and then register that instance as an extension.
@@ -946,7 +946,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor { // <1>
 ----
 <1> Class must extend from `Treeprocessor`.
 <2> The `document` instance can be used to retrieve all blocks of the current document.
-<3> All of the selcect block's lines are retrieved.
+<3> All of the select block's lines are retrieved.
 <4> To create a new block, you must use the `createBlock` method. Set the parent document, the context (_listing_), the text content, attributes and options.
 
 [source]
