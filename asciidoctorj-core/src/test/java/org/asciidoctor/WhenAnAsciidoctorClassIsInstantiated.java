@@ -29,6 +29,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
 
+import org.asciidoctor.internal.AsciidoctorCoreException;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
 import org.junit.Rule;
@@ -42,290 +43,298 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
     @Rule
     public ClasspathResources classpath = new ClasspathResources();
-    
-	@Rule
-	public TemporaryFolder testFolder = new TemporaryFolder();
 
-	private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+    @Rule
+    public TemporaryFolder testFolder = new TemporaryFolder();
 
-	@Test
-	public void content_should_be_read_from_reader_and_written_to_writer() throws IOException, SAXException,
-			ParserConfigurationException {
+    private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
-		FileReader inputAsciidoctorFile = new FileReader(classpath.getResource("rendersample.asciidoc"));
-		StringWriter rendererWriter = new StringWriter();
-		asciidoctor.render(inputAsciidoctorFile, rendererWriter, options().asMap());
+    @Test
+    public void content_should_be_read_from_reader_and_written_to_writer() throws IOException, SAXException,
+            ParserConfigurationException {
 
-		StringBuffer renderedContent = rendererWriter.getBuffer();
-		assertRenderedFile(renderedContent.toString());
+        FileReader inputAsciidoctorFile = new FileReader(classpath.getResource("rendersample.asciidoc"));
+        StringWriter rendererWriter = new StringWriter();
+        asciidoctor.render(inputAsciidoctorFile, rendererWriter, options().asMap());
 
-	}
+        StringBuffer renderedContent = rendererWriter.getBuffer();
+        assertRenderedFile(renderedContent.toString());
 
-	@Test
-	public void file_document_should_be_rendered_into_default_backend() throws IOException, SAXException,
-			ParserConfigurationException {
+    }
 
-		String render_file = asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"),
-		        options().toFile(false).get());
-		assertRenderedFile(render_file);
+    @Test
+    public void file_document_should_be_rendered_into_default_backend() throws IOException, SAXException,
+            ParserConfigurationException {
 
-	}
+        String render_file = asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"),
+                options().toFile(false).get());
+        assertRenderedFile(render_file);
 
-	@Test
-	public void file_document_should_be_rendered_into_current_directory_using_options_class()
-			throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
+    }
 
-		Options options = options().inPlace(true).get();
-		File inputFile = classpath.getResource("rendersample.asciidoc");
-		String renderContent = asciidoctor.renderFile(inputFile, options);
+    @Test
+    public void file_document_should_be_rendered_into_current_directory_using_options_class()
+            throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
 
-		File expectedFile = new File(inputFile.getParent(), "rendersample.html");
+        Options options = options().inPlace(true).get();
+        File inputFile = classpath.getResource("rendersample.asciidoc");
+        String renderContent = asciidoctor.renderFile(inputFile, options);
 
-		assertThat(expectedFile.exists(), is(true));
-		assertThat(renderContent, is(nullValue()));
+        File expectedFile = new File(inputFile.getParent(), "rendersample.html");
 
-		expectedFile.delete();
-	}
+        assertThat(expectedFile.exists(), is(true));
+        assertThat(renderContent, is(nullValue()));
 
-	@Test
-	public void file_document_should_be_rendered_into_current_directory() throws FileNotFoundException, IOException,
-			SAXException, ParserConfigurationException {
+        expectedFile.delete();
+    }
 
-	    File inputFile = classpath.getResource("rendersample.asciidoc");
-		String renderContent = asciidoctor.renderFile(inputFile, options()
-				.inPlace(true).asMap());
+    @Test
+    public void file_document_should_be_rendered_into_current_directory() throws FileNotFoundException, IOException,
+            SAXException, ParserConfigurationException {
 
-		File expectedFile = new File(inputFile.getParent(), "rendersample.html");
+        File inputFile = classpath.getResource("rendersample.asciidoc");
+        String renderContent = asciidoctor.renderFile(inputFile, options()
+                .inPlace(true).asMap());
 
-		assertThat(expectedFile.exists(), is(true));
-		assertThat(renderContent, is(nullValue()));
+        File expectedFile = new File(inputFile.getParent(), "rendersample.html");
 
-		expectedFile.delete();
-	}
+        assertThat(expectedFile.exists(), is(true));
+        assertThat(renderContent, is(nullValue()));
 
-	@Test
-	public void file_document_should_be_rendered_into_foreign_directory() throws FileNotFoundException, IOException,
-			SAXException, ParserConfigurationException {
+        expectedFile.delete();
+    }
 
-		Map<String, Object> options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot())
-				.asMap();
-		String renderContent = asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+    @Test
+    public void file_document_should_be_rendered_into_foreign_directory() throws FileNotFoundException, IOException,
+            SAXException, ParserConfigurationException {
 
-		File expectedFile = new File(testFolder.getRoot(), "rendersample.html");
+        Map<String, Object> options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot())
+                .asMap();
+        String renderContent = asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
 
-		assertThat(expectedFile.exists(), is(true));
-		assertThat(renderContent, is(nullValue()));
+        File expectedFile = new File(testFolder.getRoot(), "rendersample.html");
 
-		expectedFile.delete();
-	}
+        assertThat(expectedFile.exists(), is(true));
+        assertThat(renderContent, is(nullValue()));
 
-	@Test
-	public void file_document_should_be_rendered_from_base_dir() throws IOException {
+        expectedFile.delete();
+    }
 
-		File output = testFolder.newFolder("asciidoc","docs");
-		Options options = options().inPlace(false).baseDir(testFolder.getRoot())
-				.toFile(new File("asciidoc/docs/rendersample.html")).get();
-		String renderContent = asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
-		
-		File renderedFile = new File(output, "rendersample.html");
+    @Test
+    public void file_document_should_be_rendered_from_base_dir() throws IOException {
 
-		assertThat(renderedFile.exists(), is(true));
-		assertThat(renderContent, is(nullValue()));
-	}
+        File output = testFolder.newFolder("asciidoc", "docs");
+        Options options = options().inPlace(false).baseDir(testFolder.getRoot())
+                .toFile(new File("asciidoc/docs/rendersample.html")).get();
+        String renderContent = asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
 
-	@Test
-	public void file_document_should_be_rendered_into_foreign_directory_using_options_class()
-			throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
+        File renderedFile = new File(output, "rendersample.html");
 
-		Options options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot()).get();
+        assertThat(renderedFile.exists(), is(true));
+        assertThat(renderContent, is(nullValue()));
+    }
 
-		String renderContent = asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+    @Test
+    public void file_document_should_be_rendered_into_foreign_directory_using_options_class()
+            throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
 
-		File expectedFile = new File(testFolder.getRoot(), "rendersample.html");
+        Options options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot()).get();
 
-		assertThat(expectedFile.exists(), is(true));
-		assertThat(renderContent, is(nullValue()));
-	}
+        String renderContent = asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
 
-	@Test
-	public void docbook_document_should_be_rendered_into_current_directory() throws FileNotFoundException, IOException,
-			SAXException, ParserConfigurationException {
+        File expectedFile = new File(testFolder.getRoot(), "rendersample.html");
 
-		Map<String, Object> attributes = attributes().backend("docbook").asMap();
-		Map<String, Object> options = options().inPlace(true).attributes(attributes).asMap();
+        assertThat(expectedFile.exists(), is(true));
+        assertThat(renderContent, is(nullValue()));
+    }
 
-		File inputFile = classpath.getResource("rendersample.asciidoc");
-		String renderContent = asciidoctor.renderFile(inputFile, options);
+    @Test
+    public void docbook_document_should_be_rendered_into_current_directory() throws FileNotFoundException, IOException,
+            SAXException, ParserConfigurationException {
 
-		File expectedFile = new File(inputFile.getParent(), "rendersample.xml");
+        Map<String, Object> attributes = attributes().backend("docbook").asMap();
+        Map<String, Object> options = options().inPlace(true).attributes(attributes).asMap();
 
-		assertThat(expectedFile.exists(), is(true));
-		assertThat(renderContent, is(nullValue()));
+        File inputFile = classpath.getResource("rendersample.asciidoc");
+        String renderContent = asciidoctor.renderFile(inputFile, options);
 
-		expectedFile.delete();
-	}
+        File expectedFile = new File(inputFile.getParent(), "rendersample.xml");
 
-	@Test
-	public void docbook_document_should_be_rendered_into_current_directory_using_options_class()
-			throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
+        assertThat(expectedFile.exists(), is(true));
+        assertThat(renderContent, is(nullValue()));
 
-		Attributes attributes = attributes().backend("docbook").get();
-		Options options = options().inPlace(true).attributes(attributes).get();
+        expectedFile.delete();
+    }
 
-		File inputFile = classpath.getResource("rendersample.asciidoc");
-		String renderContent = asciidoctor.renderFile(inputFile, options);
+    @Test
+    public void docbook_document_should_be_rendered_into_current_directory_using_options_class()
+            throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
 
-		File expectedFile = new File(inputFile.getParent(), "rendersample.xml");
+        Attributes attributes = attributes().backend("docbook").get();
+        Options options = options().inPlace(true).attributes(attributes).get();
 
-		assertThat(expectedFile.exists(), is(true));
-		assertThat(renderContent, is(nullValue()));
+        File inputFile = classpath.getResource("rendersample.asciidoc");
+        String renderContent = asciidoctor.renderFile(inputFile, options);
 
-		expectedFile.delete();
-	}
+        File expectedFile = new File(inputFile.getParent(), "rendersample.xml");
 
-	@Test
-	public void docbook_document_should_be_rendered_into_current_directory_using_options_backend_attribute()
-			throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
+        assertThat(expectedFile.exists(), is(true));
+        assertThat(renderContent, is(nullValue()));
 
-		Options options = options().inPlace(true).backend("docbook").get();
+        expectedFile.delete();
+    }
 
-		File inputFile = classpath.getResource("rendersample.asciidoc");
-		String renderContent = asciidoctor.renderFile(inputFile, options);
+    @Test
+    public void docbook_document_should_be_rendered_into_current_directory_using_options_backend_attribute()
+            throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
 
-		File expectedFile = new File(inputFile.getParent(), "rendersample.xml");
+        Options options = options().inPlace(true).backend("docbook").get();
 
-		assertThat(expectedFile.exists(), is(true));
-		assertThat(renderContent, is(nullValue()));
+        File inputFile = classpath.getResource("rendersample.asciidoc");
+        String renderContent = asciidoctor.renderFile(inputFile, options);
 
-		expectedFile.delete();
-	}
+        File expectedFile = new File(inputFile.getParent(), "rendersample.xml");
 
-	@Test
-	public void string_content_with_custom_date_should_be_rendered() throws IOException, SAXException,
-			ParserConfigurationException {
+        assertThat(expectedFile.exists(), is(true));
+        assertThat(renderContent, is(nullValue()));
 
-		InputStream content = new FileInputStream(classpath.getResource("documentwithdate.asciidoc"));
+        expectedFile.delete();
+    }
 
-		Calendar customDate = Calendar.getInstance();
-		customDate.set(Calendar.YEAR, 2012);
-		customDate.set(Calendar.MONTH, 11);
-		customDate.set(Calendar.DATE, 5);
+    @Test
+    public void string_content_with_custom_date_should_be_rendered() throws IOException, SAXException,
+            ParserConfigurationException {
 
-		Map<String, Object> attributes = attributes().localDate(customDate.getTime()).asMap();
-		Map<String, Object> options = options().attributes(attributes).asMap();
+        InputStream content = new FileInputStream(classpath.getResource("documentwithdate.asciidoc"));
 
-		String render_file = asciidoctor.render(toString(content), options);
-		assertRenderedLocalDateContent(render_file, "2012-12-05.");
+        Calendar customDate = Calendar.getInstance();
+        customDate.set(Calendar.YEAR, 2012);
+        customDate.set(Calendar.MONTH, 11);
+        customDate.set(Calendar.DATE, 5);
 
-	}
+        Map<String, Object> attributes = attributes().localDate(customDate.getTime()).asMap();
+        Map<String, Object> options = options().attributes(attributes).asMap();
 
-	@Test
-	public void string_content_with_custom_time_should_be_rendered() throws IOException, SAXException,
-			ParserConfigurationException {
+        String render_file = asciidoctor.render(toString(content), options);
+        assertRenderedLocalDateContent(render_file, "2012-12-05.");
 
-		InputStream content = new FileInputStream(classpath.getResource("documentwithtime.asciidoc"));
+    }
 
-		Calendar customTime = Calendar.getInstance();
-		customTime.set(Calendar.HOUR_OF_DAY, 23);
-		customTime.set(Calendar.MINUTE, 15);
-		customTime.set(Calendar.SECOND, 0);
+    @Test
+    public void string_content_with_custom_time_should_be_rendered() throws IOException, SAXException,
+            ParserConfigurationException {
 
-		Map<String, Object> attributes = attributes().localTime(customTime.getTime()).asMap();
-		Map<String, Object> options = options().attributes(attributes).asMap();
+        InputStream content = new FileInputStream(classpath.getResource("documentwithtime.asciidoc"));
 
-		String render_file = asciidoctor.render(toString(content), options);
+        Calendar customTime = Calendar.getInstance();
+        customTime.set(Calendar.HOUR_OF_DAY, 23);
+        customTime.set(Calendar.MINUTE, 15);
+        customTime.set(Calendar.SECOND, 0);
 
-		Format TIME_FORMAT = new SimpleDateFormat("HH:mm:ss z");
+        Map<String, Object> attributes = attributes().localTime(customTime.getTime()).asMap();
+        Map<String, Object> options = options().attributes(attributes).asMap();
 
-		assertRenderedLocalDateContent(render_file, TIME_FORMAT.format(customTime.getTime()) + ".");
+        String render_file = asciidoctor.render(toString(content), options);
 
-	}
+        Format TIME_FORMAT = new SimpleDateFormat("HH:mm:ss z");
 
-	@Test
-	public void string_content_document_should_be_rendered_into_default_backend() throws IOException, SAXException,
-			ParserConfigurationException {
+        assertRenderedLocalDateContent(render_file, TIME_FORMAT.format(customTime.getTime()) + ".");
 
-		InputStream content = new FileInputStream(classpath.getResource("rendersample.asciidoc"));
-		String render_file = asciidoctor.render(toString(content), new HashMap<String, Object>());
+    }
 
-		assertRenderedFile(render_file);
-	}
+    @Test
+    public void string_content_document_should_be_rendered_into_default_backend() throws IOException, SAXException,
+            ParserConfigurationException {
 
-	@Test
-	public void all_files_from_a_collection_should_be_rendered_into_an_array() {
+        InputStream content = new FileInputStream(classpath.getResource("rendersample.asciidoc"));
+        String render_file = asciidoctor.render(toString(content), new HashMap<String, Object>());
 
-		String[] allRenderedFiles = asciidoctor.renderFiles(
-				Arrays.asList(classpath.getResource("rendersample.asciidoc")), options().toFile(false).get());
-		assertThat(allRenderedFiles, is(arrayWithSize(1)));
+        assertRenderedFile(render_file);
+    }
 
-	}
+    @Test
+    public void all_files_from_a_collection_should_be_rendered_into_an_array() {
 
-	@Test
-	public void all_files_from_a_collection_should_be_rendered_into_files_and_not_in_array() {
+        String[] allRenderedFiles = asciidoctor.renderFiles(
+                Arrays.asList(classpath.getResource("rendersample.asciidoc")), options().toFile(false).get());
+        assertThat(allRenderedFiles, is(arrayWithSize(1)));
 
-		Map<String, Object> options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot())
-				.asMap();
+    }
 
-		String[] allRenderedFiles = asciidoctor.renderFiles(
-				Arrays.asList(classpath.getResource("rendersample.asciidoc")), options);
-		assertThat(allRenderedFiles, is(arrayWithSize(0)));
+    @Test
+    public void all_files_from_a_collection_should_be_rendered_into_files_and_not_in_array() {
 
-	}
+        Map<String, Object> options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot())
+                .asMap();
 
-	@Test
-	public void all_files_from_directory_and_subdirectories_should_be_rendered_into_an_array() {
+        String[] allRenderedFiles = asciidoctor.renderFiles(
+                Arrays.asList(classpath.getResource("rendersample.asciidoc")), options);
+        assertThat(allRenderedFiles, is(arrayWithSize(0)));
 
-	    File pathToWalk = classpath.getResource("src");
+    }
 
-		String[] allRenderedFiles = asciidoctor.renderDirectory(new AsciiDocDirectoryWalker(
-		        pathToWalk.getPath()),
-		        options().toFile(false).get());
-		assertThat(allRenderedFiles, is(arrayWithSize(4)));
+    @Test
+    public void all_files_from_directory_and_subdirectories_should_be_rendered_into_an_array() {
 
-	}
+        File pathToWalk = classpath.getResource("src");
 
-	@Test
-	public void all_files_from_directory_and_subdirectories_should_be_rendered_into_files_and_not_in_array() {
+        String[] allRenderedFiles = asciidoctor.renderDirectory(new AsciiDocDirectoryWalker(
+                        pathToWalk.getPath()),
+                options().toFile(false).get());
+        assertThat(allRenderedFiles, is(arrayWithSize(4)));
 
-	    File pathToWalk = classpath.getResource("src");
-		Map<String, Object> options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot())
-				.asMap();
+    }
 
-		String[] allRenderedFiles = asciidoctor.renderDirectory(
-		        new AsciiDocDirectoryWalker(pathToWalk.getAbsolutePath()),
-		        options);
-		assertThat(allRenderedFiles, is(arrayWithSize(0)));
+    @Test
+    public void all_files_from_directory_and_subdirectories_should_be_rendered_into_files_and_not_in_array() {
 
-	}
+        File pathToWalk = classpath.getResource("src");
+        Map<String, Object> options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot())
+                .asMap();
 
-	private void assertRenderedLocalDateContent(String render_content, String contentDateOrTime) throws IOException,
-			SAXException, ParserConfigurationException {
-		Source renderFileSource = new DOMSource(
-				inputStream2Document(new ByteArrayInputStream(render_content.getBytes())));
+        String[] allRenderedFiles = asciidoctor.renderDirectory(
+                new AsciiDocDirectoryWalker(pathToWalk.getAbsolutePath()),
+                options);
+        assertThat(allRenderedFiles, is(arrayWithSize(0)));
 
-		assertThat(renderFileSource, hasXPath("/div/div[@class='sectionbody']/div/p", is(contentDateOrTime)));
+    }
 
-	}
+    @Test(expected = AsciidoctorCoreException.class)
+    public void an_exception_should_be_thrown_if_backend_cannot_be_resolved() {
+        Options options = options().inPlace(true).backend("mybackend").get();
 
-	private void assertRenderedFile(String render_file) throws IOException, SAXException, ParserConfigurationException {
-		Source renderFileSource = new DOMSource(inputStream2Document(new ByteArrayInputStream(render_file.getBytes())));
+        File inputFile = classpath.getResource("rendersample.asciidoc");
+        asciidoctor.renderFile(inputFile, options);
+    }
 
-		assertThat(renderFileSource, hasXPath("/div[@class='sect1']"));
-		assertThat(renderFileSource, hasXPath("/div/h2[@id='_section_a']"));
-		assertThat(renderFileSource, hasXPath("/div/h2", is("Section A")));
-		assertThat(renderFileSource, hasXPath("/div/div[@class='sectionbody']"));
-	}
+    private void assertRenderedLocalDateContent(String render_content, String contentDateOrTime) throws IOException,
+            SAXException, ParserConfigurationException {
+        Source renderFileSource = new DOMSource(
+                inputStream2Document(new ByteArrayInputStream(render_content.getBytes())));
 
-	private static String toString(InputStream inputStream) throws IOException {
-		return CharStreams.toString(new InputStreamReader(inputStream));
-	}
+        assertThat(renderFileSource, hasXPath("/div/div[@class='sectionbody']/div/p", is(contentDateOrTime)));
 
-	private static org.w3c.dom.Document inputStream2Document(InputStream inputStream) throws IOException, SAXException,
-			ParserConfigurationException {
-		DocumentBuilderFactory newInstance = DocumentBuilderFactory.newInstance();
-		newInstance.setNamespaceAware(true);
-		org.w3c.dom.Document parse = newInstance.newDocumentBuilder().parse(inputStream);
-		return parse;
-	}
+    }
+
+    private void assertRenderedFile(String render_file) throws IOException, SAXException, ParserConfigurationException {
+        Source renderFileSource = new DOMSource(inputStream2Document(new ByteArrayInputStream(render_file.getBytes())));
+
+        assertThat(renderFileSource, hasXPath("/div[@class='sect1']"));
+        assertThat(renderFileSource, hasXPath("/div/h2[@id='_section_a']"));
+        assertThat(renderFileSource, hasXPath("/div/h2", is("Section A")));
+        assertThat(renderFileSource, hasXPath("/div/div[@class='sectionbody']"));
+    }
+
+    private static String toString(InputStream inputStream) throws IOException {
+        return CharStreams.toString(new InputStreamReader(inputStream));
+    }
+
+    private static org.w3c.dom.Document inputStream2Document(InputStream inputStream) throws IOException, SAXException,
+            ParserConfigurationException {
+        DocumentBuilderFactory newInstance = DocumentBuilderFactory.newInstance();
+        newInstance.setNamespaceAware(true);
+        org.w3c.dom.Document parse = newInstance.newDocumentBuilder().parse(inputStream);
+        return parse;
+    }
 
 }

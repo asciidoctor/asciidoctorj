@@ -21,6 +21,7 @@ import org.jruby.RubyHash;
 import org.jruby.RubyInstanceConfig;
 import org.jruby.RubyInstanceConfig.CompileMode;
 import org.jruby.embed.ScriptingContainer;
+import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
 
 import java.io.*;
@@ -311,12 +312,16 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
-        Object object = this.asciidoctorModule.convert(content, rubyHash);
-
-        // we restore current directory to its original value.
-        rubyRuntime.setCurrentDirectory(currentDirectory);
-
-        return returnExpectedValue(object);
+        try {
+            Object object = this.asciidoctorModule.convert(content, rubyHash);
+            return returnExpectedValue(object);
+        } catch(RaiseException e) {
+            logger.severe(e.getException().getClass().getCanonicalName());
+            throw new AsciidoctorCoreException(e);
+        } finally {
+            // we restore current directory to its original value.
+            rubyRuntime.setCurrentDirectory(currentDirectory);
+        }
 
     }
 
@@ -337,13 +342,17 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
-        Object object = this.asciidoctorModule.convertFile(filename.getAbsolutePath(), rubyHash);
+        try {
+            Object object = this.asciidoctorModule.convertFile(filename.getAbsolutePath(), rubyHash);
+            return returnExpectedValue(object);
+        } catch(RaiseException e) {
+            logger.severe(e.getMessage());
 
-        // we restore current directory to its original value.
-        rubyRuntime.setCurrentDirectory(currentDirectory);
-
-        return returnExpectedValue(object);
-
+            throw new AsciidoctorCoreException(e);
+        } finally {
+            // we restore current directory to its original value.
+            rubyRuntime.setCurrentDirectory(currentDirectory);
+        }
     }
 
     /**
@@ -592,6 +601,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
             synchronized(this) {
                 if (builder.length() > 0) {
                     String msg = builder.toString();
+                    logger.info("My message: "+msg);
                     if(msg.contains("WARNING")) {
                         logger.logp(Level.WARNING, "", "", msg);
                     } else {
