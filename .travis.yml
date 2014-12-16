@@ -3,9 +3,7 @@ jdk:
   - oraclejdk8
   - oraclejdk7
   - openjdk7
-  # the JRuby Gradle plugin doesn't support Java 6, so we can't run the build on openjdk6
-  # technically, AsciidoctorJ should work against Java 6, but there's no CI warranty in place ;)
-  #- openjdk6
+  - openjdk6
 before_script: unset GEM_PATH GEM_HOME JRUBY_OPTS
 install: ./gradlew assemble
 script: ./gradlew -S check && bash test-asciidoctor-upstream.sh
