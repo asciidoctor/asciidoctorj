@@ -1,13 +1,19 @@
 package org.asciidoctor.converter;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.asciidoctor.ast.AbstractBlock;
 
-public class TextConverter implements Converter {
+public class TextConverter extends AbstractConverter {
+
     private String LINE_SEPARATOR = "\n";
 
+    private String backend;
+    private Map<Object, Object> opts;
+
     public TextConverter(String backend, Map<Object, Object> opts) {
+        super(backend, opts);
     }
     
     @Override
