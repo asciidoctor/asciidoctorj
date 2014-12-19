@@ -24,7 +24,7 @@ public class TextConverter extends AbstractConverter {
     @Override
     public Object convert(AbstractBlock node, String transform) {
         if (transform == null) {
-            transform = node.nodeName();
+            transform = node.getNodeName();
         }
  
         if (transform.equals("document")) {

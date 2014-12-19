@@ -9,17 +9,17 @@ import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyObject;
 
-public class AbstractBlockImpl implements AbstractBlock {
+public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock {
 
     private static final String BLOCK_CLASS = "Block";
     private static final String SECTION_CLASS = "Section";
     
     protected AbstractBlock delegate;
-    protected Ruby runtime;
+
 
     public AbstractBlockImpl(AbstractBlock blockDelegate, Ruby runtime) {
+        super(blockDelegate, runtime);
         this.delegate = blockDelegate;
-        this.runtime = runtime;
     }
 
     @Override
@@ -58,18 +58,13 @@ public class AbstractBlockImpl implements AbstractBlock {
     }
 
     @Override
-    public Map<String, Object> attributes() {
-        return delegate.attributes();
-    }
-
-    @Override
     public Object content() {
         return delegate.content();
     }
 
     @Override
-    public String nodeName() {
-        return delegate.nodeName();
+    public String getNodeName() {
+        return delegate.getNodeName();
     }
 
     @Override

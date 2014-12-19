@@ -221,7 +221,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
             textContent = child.convert();
         }
         ContentPart contentPart = ContentPart.createContentPart(child.id(), level, child.context(), child.title(),
-                child.style(), child.role(), child.attributes(), textContent);
+                child.style(), child.role(), child.getAttributes(), textContent);
         contentPart.setParts(getContents(child.blocks(), level + 1, maxDeepLevel));
         return contentPart;
     }

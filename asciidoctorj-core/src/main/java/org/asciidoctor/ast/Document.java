@@ -24,11 +24,6 @@ public class Document extends AbstractBlockImpl implements DocumentRuby {
     }
 
     @Override
-    public Map<String, Object> getAttributes() {
-        return attributes();
-    }
-
-    @Override
     public boolean basebackend(String backend) {
         return documentDelegate.basebackend(backend);
     }
