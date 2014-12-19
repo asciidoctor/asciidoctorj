@@ -3,16 +3,14 @@ package org.asciidoctor.ast;
 import java.util.List;
 import java.util.Map;
 
-public interface AbstractBlock {
+public interface AbstractBlock extends AbstractNode {
 
     String id();
     String title();
     String role();
     String style();
     List<AbstractBlock> blocks();
-    Map<String, Object> attributes();
     Object content();
-    String nodeName();
     String convert();
     DocumentRuby document();
     String context();
