@@ -16,7 +16,7 @@ ifdef::awestruct[:toclevels: 1]
 ifdef::awestruct[:uri-docs: link:/docs]
 ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-asciidoctor: {uri-docs}/what-is-asciidoctor
-:uri-repo: http://github.com/asciidoctor/asciidoctorj
+:uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-discuss: http://discuss.asciidoctor.org
 :artifact-version: 1.5.2
@@ -37,7 +37,8 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of a parsed AsciiDoc document from Java and other JVM languages.
 
 ifdef::env-github[]
-image::http://img.shields.io/travis/asciidoctor/asciidoctorj/master.svg[Build Status,90,18,link=https://travis-ci.org/asciidoctor/asciidoctorj]
+image:https://img.shields.io/travis/asciidoctor/asciidoctorj/master.svg[Build Status (Travis CI), link=https://travis-ci.org/asciidoctor/asciidoctorj]
+image:https://ci.appveyor.com/api/projects/status/syxrlv047esal4n0/branch/master?svg=true[Build Status (AppVeyor), link=https://ci.appveyor.com/project/asciidoctor/asciidoctorj]
 endif::[]
 
 ifdef::awestruct,env-browser[]
