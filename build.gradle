@@ -144,6 +144,7 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
   }
 
   // QUESTION is this the right place to insert this task dependency in the lifecycle?
+  // IMPORTANT The TMP or TEMP environment variable must be set for the gem install command to work on Windows
   processResources.dependsOn jrubyPrepareGems
 
   apply from: rootProject.file('gradle/eclipse.gradle')
