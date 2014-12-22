@@ -14,6 +14,7 @@ install:
   - SET PATH=%PATH:C:\Ruby193\bin;=%
   - echo %PATH%
   - java -version
+  - gradlew.bat --version
 build_script:
   - gradlew.bat -u -i assemble
 test_script:
