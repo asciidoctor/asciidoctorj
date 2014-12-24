@@ -142,7 +142,7 @@ public class WhenAsciiDocIsRenderedToDocument {
         AbstractBlock abstractBlock = document.blocks().get(0);
         assertThat(abstractBlock.getRole(), is("famous"));
         assertThat(abstractBlock.hasRole("famous"), is(true));
-        assertThat(abstractBlock.isRole(), is(true));
+        //assertThat(abstractBlock.isRole(), is(true));
         assertThat(abstractBlock.getRoles(), contains("famous"));
     }
 
@@ -186,6 +186,12 @@ public class WhenAsciiDocIsRenderedToDocument {
         Document document = asciidoctor.load(DOCUMENT, options);
         assertThat(document.imageUri("target.jpg"), is("target.jpg"));
         assertThat(document.imageUri("target.jpg", "imagesdir"), is("target.jpg"));
+    }
+
+    @Test
+    public void should_be_able_to_normalize_web_path() {
+        Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
+        assertThat(document.normalizeWebPath("target", null, true), is("target"));
     }
 
     @Test

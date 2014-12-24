@@ -111,4 +111,9 @@ public abstract class AbstractNodeImpl implements AbstractNode {
     public String readAsset(String path, Map<Object, Object> opts) {
         return this.abstractNode.readAsset(path, RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime, opts));
     }
+
+    @Override
+    public String normalizeWebPath(String path, String start, boolean preserveUriTarget) {
+        return this.abstractNode.normalizeWebPath(path, start, preserveUriTarget);
+    }
 }

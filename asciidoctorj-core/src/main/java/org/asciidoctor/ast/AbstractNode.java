@@ -25,5 +25,6 @@ public interface AbstractNode {
     String imageUri(String targetImage);
     String imageUri(String targetImage, String assetDirKey);
     String readAsset(String path, Map<Object, Object> opts);
+    String normalizeWebPath(String path, String start, boolean preserveUriTarget);
 
 }
