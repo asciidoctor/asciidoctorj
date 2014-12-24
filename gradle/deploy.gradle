@@ -14,6 +14,7 @@ bintray {
       // FIXME WTF??? <flips table>
       // NOTE we have to plant a placeholder so filesSpec resolves the location of the signature file during the initialization phase
       file(distsDir).mkdirs()
+      // QUESTION can we use the archivePath property of the distPath to get this location?
       file("$distsDir/${project(':asciidoctorj').name}-${project.version}-bin.zip.asc").createNewFile()
       from(distsDir) { include '*.asc' }
       into "${project.group.replace('.', '/')}/${project(':asciidoctorj').name}/${project.version}"

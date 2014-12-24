@@ -1,6 +1,20 @@
+// legacy plugins config; necessary to accomodate Java 6
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    if (JavaVersion.current().isJava7Compatible()) {
+      classpath 'com.netflix.nebula:nebula-publishing-plugin:2.0.0'
+    }
+  }
+}
+
+// modern plugins config
 plugins {
-  id 'com.github.jruby-gradle.base' version '0.1.9'
-  id 'nebula.nebula-publishing' version '2.0.0'
+  id 'com.github.jruby-gradle.base' version '0.1.10'
+  // Adding the nebula-publishing plugin when using JDK6 causes the build to abort
+  //id 'nebula.nebula-publishing' version '2.0.0'
   id 'com.jfrog.bintray' version '1.0'
 }
 
@@ -12,6 +26,30 @@ ext {
   buildDateTime = new Date()
   (buildDateOnly, buildTimeOnly) = new java.text.SimpleDateFormat('yyyy-MM-dd HH:mm:ss.SSSZ').format(buildDateTime).split(' ')
   statusIsRelease = (status == 'release')
+
+  // jar versions
+  guavaVersion = '18.0'
+  hamcrestVersion = '1.3'
+  jcommanderVersion = '1.35'
+  jrubyVersion = '1.7.17'
+  jsoupVersion = '1.8.1'
+  junitVersion = '4.12'
+  saxonVersion = '9.5.1-6'
+  xmlMatchersVersion = '1.0-RC1'
+
+  // gem versions
+  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.2'
+  asciidoctorEpub3GemVersion = project(':asciidoctorj-epub3').version.replace('-', '.')
+  asciidoctorPdfGemVersion = project(':asciidoctorj-pdf').version.replace('-', '.')
+  coderayGemVersion = '1.1.0'
+  erubisGemVersion = '2.7.0'
+  hamlGemVersion = '4.0.5'
+  openUriCachedGemVersion = '0.0.5'
+  prawnGemVersion = '1.2.1'
+  slimGemVersion = '2.0.3'
+  threadSafeGemVersion = '0.3.4'
+  tiltGemVersion = '2.0.1'
+  ttfunkGemVersion = '1.2.2'
 }
 
 allprojects {
@@ -20,42 +58,12 @@ allprojects {
 }
 
 subprojects {
-  ext {
-    // jar versions
-    guavaVersion = '18.0'
-    hamcrestVersion = '1.3'
-    jcommanderVersion = '1.35'
-    jrubyVersion = '1.7.16.1'
-    jsoupVersion = '1.8.1'
-    junitVersion = '4.12'
-    saxonVersion = '9.5.1-6'
-    xmlMatchersVersion = '1.0-RC1'
-
-    // gem versions
-    asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.2'
-    asciidoctorEpub3GemVersion = project(':asciidoctorj-epub3').version.replace('-', '.')
-    asciidoctorPdfGemVersion = project(':asciidoctorj-pdf').version.replace('-', '.')
-    coderayGemVersion = '1.1.0'
-    erubisGemVersion = '2.7.0'
-    hamlGemVersion = '4.0.5'
-    openUriCachedGemVersion = '0.0.5'
-    prawnGemVersion = '1.2.1'
-    slimGemVersion = '2.0.3'
-    threadSafeGemVersion = '0.3.4'
-    tiltGemVersion = '2.0.1'
-    ttfunkGemVersion = '1.2.2'
-  }
-
-  //apply plugin: 'project-reports'
-
   // NOTE applying Java plugin changes the status; take steps to preserve value
   def _status = status
   apply plugin: 'java'
   status = _status
 
-  // NOTE ignore the following warning when you are not using jdk6; it's harmless
-  // "warning: [options] bootstrap class path not set in conjunction with -source 1.6"
-  sourceCompatibility = targetCompatibility = 1.6
+  // NOTE sourceCompatibility & targetCompatibility are set in gradle.properties to meet requirements of Gradle
 
   repositories {
     if (project.hasProperty('useMavenLocal') && project.useMavenLocal.toBoolean()) {
@@ -72,7 +80,10 @@ subprojects {
       url 'http://rubygems-proxy.torquebox.org/prereleases'
     }
   }
+}
 
+// apply Java and JRuby stuff for all subprojects except the distribution
+configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
   dependencies {
     testCompile "junit:junit:$junitVersion"
     testCompile "org.hamcrest:hamcrest-library:$hamcrestVersion"
@@ -89,9 +100,15 @@ subprojects {
       jvmArgs '-XX:MaxPermSize=256m', '-XX:-UseGCOverheadLimit'
     }
 
-    //testLogging {
-    //  events 'standard_out', 'standard_error'
-    //}
+    testLogging {
+      // events 'passed', 'failed', 'skipped', 'standard_out', 'standard_error'
+      // events 'standard_out', 'standard_error'
+      afterSuite { desc, result ->
+        if (!desc.parent && logger.infoEnabled) {
+          logger.info "Test results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)"
+        }
+      }
+    }
   }
 
   if (JavaVersion.current().isJava8Compatible()) {
@@ -113,38 +130,40 @@ subprojects {
     classifier 'javadoc'
   }
 
-  if (project.name.endsWith('-distribution')) {
-    // we're creating a dist, not a jar, silly Gradle
-    jar.enabled = false
-    configurations.all { artifacts.clear() }
+  // jcenter & Maven Central requires sources & javadoc jars (even if empty), so give 'em what they want
+  artifacts {
+    archives sourcesJar, javadocJar
   }
-  // skip the Java and JRuby stuff for the distribution build
-  else {
-    // jcenter & Maven Central requires sources & javadoc jars (even if empty), so give 'em what they want
-    artifacts {
-      archives sourcesJar, javadocJar
-    }
 
-    apply plugin: 'com.github.jruby-gradle.base'
+  apply plugin: 'com.github.jruby-gradle.base'
 
-    jruby {
-      defaultRepositories = false
-      defaultVersion = jrubyVersion
-      // TODO I'd like to be able to customize the name of the gemInstallDir
-    }
+  jruby {
+    defaultRepositories = false
+    defaultVersion = jrubyVersion
+    // TODO I'd like to be able to customize the name of the gemInstallDir
+  }
 
-    // QUESTION is this the right place to insert this task dependency in the lifecycle?
-    processResources.dependsOn jrubyPrepareGems
+  // QUESTION is this the right place to insert this task dependency in the lifecycle?
+  // IMPORTANT The TMP or TEMP environment variable must be set for the gem install command to work on Windows
+  processResources.dependsOn jrubyPrepareGems
 
-    apply from: rootProject.file('gradle/eclipse.gradle')
+  apply from: rootProject.file('gradle/eclipse.gradle')
+  if (JavaVersion.current().isJava7Compatible()) {
     apply from: rootProject.file('gradle/publish.gradle')
   }
- 
-  apply from: rootProject.file('gradle/sign.gradle')
-  apply from: rootProject.file('gradle/deploy.gradle')
+}
+
+subprojects {
+  if (JavaVersion.current().isJava7Compatible()) {
+    apply from: rootProject.file('gradle/sign.gradle')
+    apply from: rootProject.file('gradle/deploy.gradle')
+  }
 }
 
 apply from: 'gradle/idea.gradle'
 
 // disable bintrayUpload on root project to prevent build from failing
-bintrayUpload.enabled = false
+// NOTE seems to only get added when we use the modern plugin syntax
+if (tasks.findByName(':bintrayUpload')) {
+  bintrayUpload.enabled = false
+}
