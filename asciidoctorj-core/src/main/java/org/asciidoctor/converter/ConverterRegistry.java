@@ -1,11 +1,13 @@
 package org.asciidoctor.converter;
 
 import org.asciidoctor.internal.AsciidoctorModule;
-import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
+import org.jruby.RubyModule;
 import org.jruby.RubyString;
+import org.jruby.runtime.ObjectAllocator;
+import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,17 +23,30 @@ public class ConverterRegistry {
         this.rubyRuntime = rubyRuntime;
     }
 
-    public void register(Class<? extends Converter> converterClass, String... backends) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        String className = getImportLine(converterClass);
-        this.rubyRuntime.evalScriptlet("java_import " + className);
-
+    public void register(final Class<? extends Converter> converterClass, String... backends) {
+        RubyModule module = rubyRuntime.defineModule(getModuleName(converterClass));
+        RubyClass clazz = module.defineClassUnder(converterClass.getSimpleName(), rubyRuntime.getObject(), new ObjectAllocator() {
+            @Override
+            public IRubyObject allocate(Ruby runtime, RubyClass rubyClass) {
+            return new ConverterProxy(runtime, rubyClass, converterClass);
+            }
+        });
+        clazz.defineAnnotatedMethods(ConverterProxy.class);
         if (backends.length > 0) {
-            this.asciidoctorModule.register_converter(RubyUtils.toRubyClass(rubyRuntime, converterClass), backends);
+            this.asciidoctorModule.register_converter(clazz, backends);
         } else {
-            this.asciidoctorModule.register_converter(RubyUtils.toRubyClass(rubyRuntime, converterClass));
+            this.asciidoctorModule.register_converter(clazz);
         }
+    }
+
+    private String getModuleName(Class<?> converterClass) {
+        StringBuilder sb = new StringBuilder();
+        for (String s: converterClass.getPackage().getName().split("\\.")) {
+            sb
+                    .append(s.substring(0, 1).toUpperCase())
+                    .append(s.substring(1).toLowerCase());
+        }
+        return sb.toString();
     }
 
     public Class<?> resolve(String backend) {
