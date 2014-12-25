@@ -603,6 +603,20 @@ public interface Asciidoctor {
     DocumentHeader readDocumentHeader(Reader contentReader);
 
     /**
+     * Require the given Ruby libraries by name when rendering.
+     * 
+     * @param requiredLibraries
+     */
+    void requireLibrary(String... requiredLibraries);
+
+    /**
+     * Require the given Ruby libraries by name when rendering.
+     *
+     * @param requriedLibraries
+     */
+    void requireLibraries(Collection<String> requriedLibraries);
+
+    /**
      * Creates an extension registry ready to be used for registering all processors
      * @return Extension Registry object.
      */
