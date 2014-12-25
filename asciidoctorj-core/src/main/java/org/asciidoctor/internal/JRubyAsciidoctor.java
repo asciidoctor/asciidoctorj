@@ -473,16 +473,15 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     @Override
-    public void requireLibrary(String... requiredLibraries) {
-        requireLibraries(Arrays.asList(requiredLibraries));
+    public void requireLibrary(String... library) {
+        requireLibraries(Arrays.asList(library));
     }
 
     @Override
-    public void requireLibraries(Collection<String> requiredLibraries) {
-        if (requiredLibraries != null) {
-            RubyExtensionRegistry registry = rubyExtensionRegistry();
-            for (String requiredLibrary : requiredLibraries) {
-                registry.requireLibrary(requiredLibrary);
+    public void requireLibraries(Collection<String> libraries) {
+        if (libraries != null) {
+            for (String library : libraries) {
+                RubyUtils.requireLibrary(rubyRuntime, library);
             }
         }
     }
