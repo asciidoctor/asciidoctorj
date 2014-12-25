@@ -26,12 +26,7 @@ import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -475,6 +470,21 @@ public class JRubyAsciidoctor implements Asciidoctor {
     @Deprecated
     public String[] renderFiles(Collection<File> asciidoctorFiles, OptionsBuilder options) {
         return this.renderFiles(asciidoctorFiles, options.asMap());
+    }
+
+    @Override
+    public void requireLibrary(String... requiredLibraries) {
+        requireLibraries(Arrays.asList(requiredLibraries));
+    }
+
+    @Override
+    public void requireLibraries(Collection<String> requiredLibraries) {
+        if (requiredLibraries != null) {
+            RubyExtensionRegistry registry = rubyExtensionRegistry();
+            for (String requiredLibrary : requiredLibraries) {
+                registry.requireLibrary(requiredLibrary);
+            }
+        }
     }
 
     @Override
