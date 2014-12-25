@@ -14,7 +14,6 @@ import org.jruby.runtime.builtin.IRubyObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 public class ConverterProxy extends RubyObject {
@@ -78,7 +77,7 @@ public class ConverterProxy extends RubyObject {
         return JavaEmbedUtils.javaToRuby(getRuntime(), ret);
     }
 
-    private AbstractBlock overrideRubyObjectToJavaObject(IRubyObject rubyObject) {
+    private AbstractNode overrideRubyObjectToJavaObject(IRubyObject rubyObject) {
         // TODO: This is duplicated code. Move to a central location. It is the central logic of AsciidoctorJ!
         if (BLOCK_CLASS.equals(rubyObject.getMetaClass().getBaseName())) {
             Block blockRuby = RubyUtils.rubyToJava(getRuntime(), rubyObject, Block.class);
@@ -92,6 +91,7 @@ public class ConverterProxy extends RubyObject {
             DocumentRuby blockRuby = RubyUtils.rubyToJava(getRuntime(), rubyObject, DocumentRuby.class);
             return new Document(blockRuby, getRuntime());
         }
+        // TODO: This should not happen, the mapping should catch all possible types.
         AbstractBlock blockRuby = RubyUtils.rubyToJava(getRuntime(), rubyObject, AbstractBlock.class);
         return new AbstractBlockImpl(blockRuby, getRuntime());
     }

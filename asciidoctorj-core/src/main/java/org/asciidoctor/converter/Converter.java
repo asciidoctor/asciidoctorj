@@ -1,9 +1,9 @@
 package org.asciidoctor.converter;
 
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.AbstractNode;
 
 import java.util.Map;
 
 public interface Converter {
-    Object convert(AbstractBlock abstractBlock, String s, Map<Object, Object> o);
+    Object convert(AbstractNode abstractBlock, String s, Map<Object, Object> o);
 }

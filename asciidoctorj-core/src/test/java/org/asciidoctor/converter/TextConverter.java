@@ -1,6 +1,7 @@
 package org.asciidoctor.converter;
 
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.AbstractNode;
+import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
 
@@ -18,7 +19,7 @@ public class TextConverter extends AbstractConverter {
     }
     
     @Override
-    public Object convert(AbstractBlock node, String transform, Map<Object, Object> o) {
+    public Object convert(AbstractNode node, String transform, Map<Object, Object> o) {
 
         assertThat(node.getClass().getPackage().getName(), is("org.asciidoctor.ast"));
 
@@ -27,15 +28,23 @@ public class TextConverter extends AbstractConverter {
         }
  
         if (node instanceof Document) {
-            return node.content();
+            Document document = (Document) node;
+            return document.content();
         } else if (node instanceof Section) {
-            return new StringBuilder().append("== ").append(node.title()).append(" ==").append(LINE_SEPARATOR).append(LINE_SEPARATOR).append(node.content()).toString();
+            Section section = (Section) node;
+            return new StringBuilder()
+                    .append("== ").append(section.title()).append(" ==")
+                    .append(LINE_SEPARATOR).append(LINE_SEPARATOR)
+                    .append(section.content()).toString();
         } else if (transform.equals("paragraph")) {
-            String content = (String) node.content();
+            Block block = (Block) node;
+            String content = (String) block.content();
             return new StringBuilder(content.replaceAll(LINE_SEPARATOR, " ")).append('\n');
-        } else {
-            return node.content();
+        } else if (node instanceof Block) {
+            Block block = (Block) node;
+            return block.content();
         }
+        return null;
     }
 
 }
