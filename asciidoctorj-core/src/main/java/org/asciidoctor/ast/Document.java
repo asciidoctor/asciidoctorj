@@ -7,7 +7,6 @@ import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
-import org.jruby.RubyObject;
 import org.jruby.runtime.builtin.IRubyObject;
 
 public class Document extends AbstractBlockImpl implements DocumentRuby {

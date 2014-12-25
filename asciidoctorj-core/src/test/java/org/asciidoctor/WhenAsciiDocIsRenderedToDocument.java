@@ -122,7 +122,7 @@ public class WhenAsciiDocIsRenderedToDocument {
     @Test
     public void should_return_if_it_is_block() {
         Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
-        assertThat(document.isBlock(), is(false));
+        assertThat(document.isBlock(), is(true));
     }
 
     @Test
@@ -132,8 +132,8 @@ public class WhenAsciiDocIsRenderedToDocument {
                                                     .compact(true).asMap();
         Document document = asciidoctor.load(DOCUMENT, options);
         assertThat(document.getAttributes(), hasKey("encoding"));
-        assertThat(document.isAttr("encoding", "UTF-8", true), is(true));
-        assertThat(document.getAttr("encoding", "", true).toString(), is("UTF-8"));
+        assertThat(document.isAttr("encoding", "UTF-8", false), is(true));
+        assertThat(document.getAttr("encoding", "", false).toString(), is("UTF-8"));
     }
 
     @Test

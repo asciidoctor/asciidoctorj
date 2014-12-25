@@ -13,9 +13,6 @@ public class TextConverter extends AbstractConverter {
 
     private String LINE_SEPARATOR = "\n";
 
-    private String backend;
-    private Map<Object, Object> opts;
-
     public TextConverter(String backend, Map<Object, Object> opts) {
         super(backend, opts);
     }
