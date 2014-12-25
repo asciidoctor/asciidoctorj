@@ -1,41 +1,50 @@
 package org.asciidoctor.converter;
 
-import java.util.Map;
-import java.util.Set;
+import org.asciidoctor.ast.AbstractNode;
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.Section;
 
-import org.asciidoctor.ast.AbstractBlock;
+import java.util.Map;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class TextConverter extends AbstractConverter {
 
     private String LINE_SEPARATOR = "\n";
-
-    private String backend;
-    private Map<Object, Object> opts;
 
     public TextConverter(String backend, Map<Object, Object> opts) {
         super(backend, opts);
     }
     
     @Override
-    public Object convert(AbstractBlock node) {
-        return convert(node, null);
-    }
+    public Object convert(AbstractNode node, String transform, Map<Object, Object> o) {
 
-    @Override
-    public Object convert(AbstractBlock node, String transform) {
+        assertThat(node.getClass().getPackage().getName(), is("org.asciidoctor.ast"));
+
         if (transform == null) {
             transform = node.getNodeName();
         }
  
-        if (transform.equals("document")) {
-            return node.content();
-        } else if (transform.equals("section")) {
-            return new StringBuilder().append("== ").append(node.title()).append(" ==").append(LINE_SEPARATOR).append(LINE_SEPARATOR).append(node.content()).toString();
+        if (node instanceof Document) {
+            Document document = (Document) node;
+            return document.content();
+        } else if (node instanceof Section) {
+            Section section = (Section) node;
+            return new StringBuilder()
+                    .append("== ").append(section.title()).append(" ==")
+                    .append(LINE_SEPARATOR).append(LINE_SEPARATOR)
+                    .append(section.content()).toString();
         } else if (transform.equals("paragraph")) {
-            String content = (String) node.content();
+            Block block = (Block) node;
+            String content = (String) block.content();
             return new StringBuilder(content.replaceAll(LINE_SEPARATOR, " ")).append('\n');
-        } else {
-            return node.content();
+        } else if (node instanceof Block) {
+            Block block = (Block) node;
+            return block.content();
         }
+        return null;
     }
+
 }

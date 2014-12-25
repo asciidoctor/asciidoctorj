@@ -1,11 +1,10 @@
 package org.asciidoctor.ast;
 
-import org.asciidoctor.internal.RubyHashUtil;
-import org.jruby.Ruby;
-import org.jruby.RubyString;
-
 import java.util.List;
 import java.util.Map;
+
+import org.asciidoctor.internal.RubyHashUtil;
+import org.jruby.Ruby;
 
 public abstract class AbstractNodeImpl implements AbstractNode {
 
