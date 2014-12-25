@@ -64,6 +64,8 @@ subprojects {
   status = _status
 
   // NOTE sourceCompatibility & targetCompatibility are set in gradle.properties to meet requirements of Gradle
+  // Must redefine here to work around a bug in the Eclipse plugin
+  sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_6
 
   repositories {
     if (project.hasProperty('useMavenLocal') && project.useMavenLocal.toBoolean()) {
