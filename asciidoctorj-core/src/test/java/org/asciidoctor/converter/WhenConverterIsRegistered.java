@@ -6,9 +6,10 @@ import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.junit.After;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.empty;
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.empty;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class WhenConverterIsRegistered {
 
@@ -33,6 +34,14 @@ public class WhenConverterIsRegistered {
         String result = asciidoctor.render("== Hello\n\nWorld!", OptionsBuilder.options().backend("test"));
 
         assertThat(result, is("== Hello ==\n\nWorld!\n"));
+    }
+
+    @Test
+    public void shouldReturnRegisteredConverter() {
+        asciidoctor.converterRegistry().register(TextConverter.class, "test2");
+
+        System.out.println(asciidoctor.converterRegistry().converters());
+        assertEquals(TextConverter.class, asciidoctor.converterRegistry().converters().get("test2"));
     }
 
 }

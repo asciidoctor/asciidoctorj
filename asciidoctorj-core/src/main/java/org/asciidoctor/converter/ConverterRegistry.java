@@ -25,12 +25,10 @@ public class ConverterRegistry {
 
     public void register(final Class<? extends Converter> converterClass, String... backends) {
         RubyModule module = rubyRuntime.defineModule(getModuleName(converterClass));
-        RubyClass clazz = module.defineClassUnder(converterClass.getSimpleName(), rubyRuntime.getObject(), new ObjectAllocator() {
-            @Override
-            public IRubyObject allocate(Ruby runtime, RubyClass rubyClass) {
-            return new ConverterProxy(runtime, rubyClass, converterClass);
-            }
-        });
+        RubyClass clazz = module.defineClassUnder(
+                converterClass.getSimpleName(),
+                rubyRuntime.getObject(),
+                new ConverterProxy.Allocator(converterClass));
         clazz.defineAnnotatedMethods(ConverterProxy.class);
         if (backends.length > 0) {
             this.asciidoctorModule.register_converter(clazz, backends);
@@ -51,7 +49,14 @@ public class ConverterRegistry {
 
     public Class<?> resolve(String backend) {
         RubyClass rubyClass = this.asciidoctorModule.resolve_converter(backend);
-        return rubyClass.getReifiedClass();
+        Class<?> clazz = rubyClass.getReifiedClass();
+        if (clazz != null) {
+            return clazz;
+        } else if (rubyClass.getAllocator() instanceof ConverterProxy.Allocator) {
+            ConverterProxy.Allocator allocator = (ConverterProxy.Allocator) rubyClass.getAllocator();
+            return allocator.getConverterClass();
+        }
+        return null;
     }
 
     public void unregisterAll() {
@@ -68,17 +73,4 @@ public class ConverterRegistry {
         }
         return converters;
     }
-
-    private String getImportLine(Class<?> extensionClass) {
-
-        int dollarPosition = -1;
-        String className = extensionClass.getName();
-        if ((dollarPosition = className.indexOf("$")) != -1) {
-            className = className.substring(0, dollarPosition);
-        }
-
-        return className;
-    }
-
-
 }
