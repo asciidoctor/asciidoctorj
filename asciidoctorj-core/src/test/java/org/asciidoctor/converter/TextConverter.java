@@ -10,6 +10,9 @@ public class TextConverter implements ConverterBuiltIn {
 
     private String LINE_SEPARATOR = System.getProperty("line.separator");
 
+    public TextConverter(String backend, Map<Object, Object> opts) {
+    }
+
     @Override
     public Object convert(AbstractBlock node) {
         return convert(node, null);
