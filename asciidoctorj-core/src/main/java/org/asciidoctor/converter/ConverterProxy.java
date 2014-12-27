@@ -1,13 +1,21 @@
 package org.asciidoctor.converter;
 
-import org.asciidoctor.ast.*;
+import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.AbstractBlockImpl;
+import org.asciidoctor.ast.AbstractNode;
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.BlockImpl;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.Section;
+import org.asciidoctor.ast.SectionImpl;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyObject;
-import org.jruby.RubyString;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
+import org.jruby.runtime.ObjectAllocator;
 import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 
@@ -17,6 +25,22 @@ import java.util.Collections;
 import java.util.Map;
 
 public class ConverterProxy extends RubyObject {
+
+    public static class Allocator implements ObjectAllocator {
+        private final Class<? extends Converter> converterClass;
+
+        public Allocator(Class<? extends Converter> converterClass) {
+            this.converterClass = converterClass;
+        }
+        @Override
+        public IRubyObject allocate(Ruby runtime, RubyClass rubyClass) {
+            return new ConverterProxy(runtime, rubyClass, converterClass);
+        }
+
+        public Class<? extends Converter> getConverterClass() {
+            return converterClass;
+        }
+    }
 
     private static final String BLOCK_CLASS = "Block";
 
@@ -33,13 +57,13 @@ public class ConverterProxy extends RubyObject {
         this.converterClass = converterClass;
     }
 
-    @JRubyMethod(required = 2)
-    public IRubyObject initialize(ThreadContext context, IRubyObject arg0, IRubyObject arg1) {
+    @JRubyMethod(required = 1, optional = 1)
+    public IRubyObject initialize(ThreadContext context, IRubyObject[] args) {
         try {
             Constructor<? extends Converter> constructor = converterClass.getConstructor(String.class, Map.class);
             this.delegate = constructor.newInstance(
-                    RubyString.objAsString(context, arg0).asJavaString(),
-                    JavaEmbedUtils.rubyToJava(getRuntime(), arg1, Map.class)
+                    JavaEmbedUtils.rubyToJava(getRuntime(), args[0], String.class),
+                    args.length < 2  ? Collections.emptyMap() : JavaEmbedUtils.rubyToJava(getRuntime(), args[1], Map.class)
             );
             return null;
         } catch (InstantiationException e) {
