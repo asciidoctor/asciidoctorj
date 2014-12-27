@@ -8,7 +8,7 @@ import java.util.Map;
 public class TextConverter implements ConverterBuiltIn {
 
 
-    private String LINE_SEPARATOR = System.getProperty("line.separator");
+    private String LINE_SEPARATOR = "\n";
 
     public TextConverter(String backend, Map<Object, Object> opts) {
     }
