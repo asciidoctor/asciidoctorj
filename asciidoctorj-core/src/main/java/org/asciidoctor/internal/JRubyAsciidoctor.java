@@ -99,7 +99,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     public static Asciidoctor create(ClassLoader classloader) {
-        Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(classloader);
+        Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(classloader, null);
+        registerExtensions(asciidoctor);
+
+        return asciidoctor;
+    }
+    public static Asciidoctor create(ClassLoader classloader, String gemPath) {
+        Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(classloader, gemPath);
         registerExtensions(asciidoctor);
 
         return asciidoctor;
@@ -141,9 +147,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return jRubyAsciidoctor;
     }
 
-    private static Asciidoctor createJRubyAsciidoctorInstance(ClassLoader classloader) {
+    private static Asciidoctor createJRubyAsciidoctorInstance(ClassLoader classloader, String gemPath) {
 
         ScriptingContainer container = new ScriptingContainer();
+        setsGemPath(gemPath, container);
         container.setClassLoader(classloader);
         Ruby rubyRuntime = container.getProvider().getRuntime();
 
@@ -155,6 +162,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
         JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
 
         return jRubyAsciidoctor;
+    }
+
+    private static void setsGemPath(String gemPath, ScriptingContainer container) {
+        Map environment = container.getEnvironment();
+        Map newEnvironment = new HashMap(environment);
+        newEnvironment.put(GEM_PATH, gemPath);
+        container.setEnvironment(newEnvironment);
     }
 
     private static void injectEnvironmentVariables(RubyInstanceConfig config, Map<String, Object> environmentVars) {
