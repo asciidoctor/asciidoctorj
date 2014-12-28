@@ -12,7 +12,7 @@ buildscript {
 
 // modern plugins config
 plugins {
-  id 'com.github.jruby-gradle.base' version '0.1.10'
+  id 'com.github.jruby-gradle.base' version '0.1.11'
   // Adding the nebula-publishing plugin when using JDK6 causes the build to abort
   //id 'nebula.nebula-publishing' version '2.0.0'
   id 'com.jfrog.bintray' version '1.0'
@@ -31,7 +31,7 @@ ext {
   guavaVersion = '18.0'
   hamcrestVersion = '1.3'
   jcommanderVersion = '1.35'
-  jrubyVersion = '1.7.17'
+  jrubyVersion = '1.7.18'
   jsoupVersion = '1.8.1'
   junitVersion = '4.12'
   saxonVersion = '9.5.1-6'
