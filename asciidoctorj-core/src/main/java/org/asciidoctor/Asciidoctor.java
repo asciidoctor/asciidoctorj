@@ -708,7 +708,17 @@ public interface Asciidoctor {
         public static Asciidoctor create(ClassLoader classloader) {
             return JRubyAsciidoctor.create(classloader);
         }
-        
+
+        /**
+         * Cerates a new instance of Asciidoctor and sets a specific classloader and gempath for the JRuby runtime to use.
+         * @param classloader
+         * @param gemPath
+         * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
+         */
+        public static Asciidoctor create(ClassLoader classloader, String gemPath) {
+            return JRubyAsciidoctor.create(classloader, gemPath);
+        }
+
     }
 
     /**
