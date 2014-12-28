@@ -31,7 +31,6 @@ import org.junit.Test;
             }
             loadingsucceeded = true;
         } catch(org.jruby.exceptions.RaiseException exp) {
-            exp.printStackTrace();
             loadingsucceeded = false;
         }
     }
