@@ -310,7 +310,8 @@ Asciidoctor provides security levels that control the read and write access of a
 When Asciidoctor (and AsciidoctorJ) is used as _API_, it uses `SECURE` safe mode by default.
 This mode is the most restrictive one and in summary it disallows the document from attempting to read files from the file system and including their contents into the document.
 
-We recommend you to set `SAFE` safe mode when rendering AsciiDoc documents using AsciidoctorJ to have almost all Asciidoctor features such as _icons_, _include directive_ or retrieving content from _URIs_.
+We recommend you to set `SAFE` safe mode when rendering AsciiDoc documents using AsciidoctorJ to have almost all Asciidoctor features such as _icons_, _include directive_ or retrieving content from _URIs_ enabled.
+
 Safe mode is set as option when a document is rendered.
 For example:
 
