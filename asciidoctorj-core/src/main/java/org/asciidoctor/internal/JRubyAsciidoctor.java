@@ -149,8 +149,11 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
     private static Asciidoctor createJRubyAsciidoctorInstance(ClassLoader classloader, String gemPath) {
 
+        Map<String, Object> env = new HashMap<String, Object>();
+        env.put(GEM_PATH, gemPath);
+
         ScriptingContainer container = new ScriptingContainer();
-        setsGemPath(gemPath, container);
+        injectEnvironmentVariables(container.getProvider().getRubyInstanceConfig(), env);
         container.setClassLoader(classloader);
         Ruby rubyRuntime = container.getProvider().getRuntime();
 
@@ -162,13 +165,6 @@ public class JRubyAsciidoctor implements Asciidoctor {
         JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
 
         return jRubyAsciidoctor;
-    }
-
-    private static void setsGemPath(String gemPath, ScriptingContainer container) {
-        Map environment = container.getEnvironment();
-        Map newEnvironment = new HashMap(environment);
-        newEnvironment.put(GEM_PATH, gemPath);
-        container.setEnvironment(newEnvironment);
     }
 
     private static void injectEnvironmentVariables(RubyInstanceConfig config, Map<String, Object> environmentVars) {
