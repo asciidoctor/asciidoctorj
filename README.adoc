@@ -324,7 +324,7 @@ Map<String, Object> options = options().safe(SafeMode.SAFE)
 String outfile = asciidoctor.convertFile(new File("sample.adoc"), options);
 ----
 
-We are going to explain in more detail options in <<Conversion options, next section>>.
+We are going to explain in more detail options in <<conversion-options, next section>>.
 
 
 You can read more about safe modes in http://asciidoctor.org/docs/user-manual/#running-asciidoctor-securely
