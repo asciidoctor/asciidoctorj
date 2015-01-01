@@ -23,18 +23,8 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     }
 
     @Override
-    public String id() {
-        return delegate.id();
-    }
-
-    @Override
     public String title() {
         return delegate.title();
-    }
-
-    @Override
-    public String role() {
-        return delegate.role();
     }
 
     @Override
@@ -73,8 +63,8 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     }
 
     @Override
-    public String context() {
-        return delegate.context();
+    public int level() {
+        return delegate.level();
     }
 
     @Override
