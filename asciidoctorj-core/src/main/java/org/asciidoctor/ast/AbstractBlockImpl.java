@@ -63,8 +63,8 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     }
 
     @Override
-    public int level() {
-        return delegate.level();
+    public int getLevel() {
+        return delegate.getLevel();
     }
 
     @Override
