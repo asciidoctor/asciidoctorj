@@ -73,11 +73,6 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     }
 
     @Override
-    public DocumentRuby document() {
-        return delegate.document();
-    }
-
-    @Override
     public List<AbstractBlock> findBy(Map<Object, Object> selector) {
 
         @SuppressWarnings("unchecked")

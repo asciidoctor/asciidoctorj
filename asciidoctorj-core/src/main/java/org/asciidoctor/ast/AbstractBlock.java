@@ -10,7 +10,6 @@ public interface AbstractBlock extends AbstractNode {
     List<AbstractBlock> blocks();
     Object content();
     String convert();
-    DocumentRuby document();
     AbstractBlock delegate();
     List<AbstractBlock> findBy(Map<Object, Object> selector);
     int level();

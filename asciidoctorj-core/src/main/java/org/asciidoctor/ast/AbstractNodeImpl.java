@@ -23,12 +23,32 @@ public abstract class AbstractNodeImpl implements AbstractNode {
 
     @Override
     public String context() {
-        return this.abstractNode.context();
+        return getContext();
+    }
+
+    @Override
+    public String getContext() {
+        return this.abstractNode.getContext();
     }
 
     @Override
     public AbstractNode parent() {
-        return this.abstractNode.parent();
+        return getParent();
+    }
+
+    @Override
+    public AbstractNode getParent() {
+        return this.abstractNode.getParent();
+    }
+
+    @Override
+    public DocumentRuby document() {
+        return getDocument();
+    }
+
+    @Override
+    public DocumentRuby getDocument() {
+        return this.abstractNode.getDocument();
     }
 
     @Override

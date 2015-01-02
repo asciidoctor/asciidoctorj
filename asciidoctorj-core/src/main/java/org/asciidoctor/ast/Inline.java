@@ -7,7 +7,7 @@ public interface Inline extends AbstractNode {
     
     public String convert();
 
-    public String type();
+    public String getType();
 
-    public String text();
+    public String getText();
 }
