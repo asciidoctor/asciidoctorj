@@ -18,6 +18,14 @@ public interface DocumentRuby extends AbstractBlock {
     Object doctitle(Map<Object, Object> opts);
 
     /**
+     * Get doc title
+     *
+     * @return String if partition flag is not set to false or not present, Title if partition is set to true.
+     * @see Title
+     */
+    Object doctitle();
+
+    /**
      * 
      * @return page title
      */

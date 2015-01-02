@@ -17,6 +17,41 @@ public abstract class AbstractNodeImpl implements AbstractNode {
     }
 
     @Override
+    public String id() {
+        return this.abstractNode.id();
+    }
+
+    @Override
+    public String context() {
+        return getContext();
+    }
+
+    @Override
+    public String getContext() {
+        return this.abstractNode.getContext();
+    }
+
+    @Override
+    public AbstractNode parent() {
+        return getParent();
+    }
+
+    @Override
+    public AbstractNode getParent() {
+        return this.abstractNode.getParent();
+    }
+
+    @Override
+    public DocumentRuby document() {
+        return getDocument();
+    }
+
+    @Override
+    public DocumentRuby getDocument() {
+        return this.abstractNode.getDocument();
+    }
+
+    @Override
     public String getNodeName() {
         return this.abstractNode.getNodeName();
     }
@@ -42,8 +77,23 @@ public abstract class AbstractNodeImpl implements AbstractNode {
     }
 
     @Override
+    public Object getAttr(Object name, Object defaultValue) {
+        return this.abstractNode.getAttr(name, defaultValue, true);
+    }
+
+    @Override
+    public Object getAttr(Object name) {
+        return this.abstractNode.getAttr(name, null, true);
+    }
+
+    @Override
     public boolean isAttr(Object name, Object expected, boolean inherit) {
         return this.abstractNode.isAttr(name, expected, inherit);
+    }
+
+    @Override
+    public boolean isAttr(Object name, Object expected) {
+        return this.abstractNode.isAttr(name, expected, true);
     }
 
     @Override
@@ -64,6 +114,11 @@ public abstract class AbstractNodeImpl implements AbstractNode {
     @Override
     public String getRole() {
         return this.abstractNode.getRole();
+    }
+
+    @Override
+    public String role() {
+        return this.abstractNode.role();
     }
 
     @Override
