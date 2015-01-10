@@ -4,7 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.internal.RubyHashUtil;
+import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
+import org.jruby.java.proxies.RubyObjectHolderProxy;
+import org.jruby.javasupport.JavaEmbedUtils;
+import org.jruby.runtime.Helpers;
+import org.jruby.runtime.builtin.IRubyObject;
+import org.jruby.runtime.builtin.InstanceVariables;
+import org.jruby.runtime.builtin.Variable;
 
 public abstract class AbstractNodeImpl implements AbstractNode {
 
@@ -169,5 +176,29 @@ public abstract class AbstractNodeImpl implements AbstractNode {
     @Override
     public String normalizeWebPath(String path, String start, boolean preserveUriTarget) {
         return this.abstractNode.normalizeWebPath(path, start, preserveUriTarget);
+    }
+
+    @Override
+    public String getStyle() {
+
+        IRubyObject style = ((RubyObjectHolderProxy) this.abstractNode).__ruby_object()
+                .getInstanceVariables()
+                .getInstanceVariable("@style");
+
+        if (style == null) {
+            return null;
+        } else {
+            return RubyUtils.rubyToJava(runtime, style, String.class);
+        }
+    }
+
+    @Override
+    public String listMarkerKeyword() {
+        return abstractNode.listMarkerKeyword();
+    }
+
+    @Override
+    public String listMarkerKeyword(String listType) {
+        return abstractNode.listMarkerKeyword(listType);
     }
 }
