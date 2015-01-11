@@ -12,12 +12,12 @@ import org.jruby.runtime.builtin.IRubyObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConverterRegistry {
+public class JavaConverterRegistry {
 
     private AsciidoctorModule asciidoctorModule;
     private Ruby rubyRuntime;
 
-    public ConverterRegistry(AsciidoctorModule asciidoctorModule, Ruby rubyRuntime) {
+    public JavaConverterRegistry(AsciidoctorModule asciidoctorModule, Ruby rubyRuntime) {
         super();
         this.asciidoctorModule = asciidoctorModule;
         this.rubyRuntime = rubyRuntime;

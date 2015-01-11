@@ -17,19 +17,19 @@ public class WhenConverterIsRegistered {
 
     @After
     public void cleanUp() {
-        asciidoctor.converterRegistry().unregisterAll();
+        asciidoctor.javaConverterRegistry().unregisterAll();
     }
 
     @Test
     public void shouldCleanUpRegistry() {
-        asciidoctor.converterRegistry().unregisterAll();
+        asciidoctor.javaConverterRegistry().unregisterAll();
 
-        assertThat(asciidoctor.converterRegistry().converters().keySet(), empty());
+        assertThat(asciidoctor.javaConverterRegistry().converters().keySet(), empty());
     }
 
     @Test
     public void shouldRegisterAndExecuteGivenConverter() {
-        asciidoctor.converterRegistry().register(TextConverter.class, "test");
+        asciidoctor.javaConverterRegistry().register(TextConverter.class, "test");
 
         String result = asciidoctor.render("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend("test"));
 
@@ -38,10 +38,8 @@ public class WhenConverterIsRegistered {
 
     @Test
     public void shouldReturnRegisteredConverter() {
-        asciidoctor.converterRegistry().register(TextConverter.class, "test2");
-
-        System.out.println(asciidoctor.converterRegistry().converters());
-        assertEquals(TextConverter.class, asciidoctor.converterRegistry().converters().get("test2"));
+        asciidoctor.javaConverterRegistry().register(TextConverter.class, "test2");
+        assertEquals(TextConverter.class, asciidoctor.javaConverterRegistry().converters().get("test2"));
     }
 
 }
