@@ -31,9 +31,9 @@ public class WhenConverterIsRegistered {
     public void shouldRegisterAndExecuteGivenConverter() {
         asciidoctor.converterRegistry().register(TextConverter.class, "test");
 
-        String result = asciidoctor.render("== Hello\n\nWorld!", OptionsBuilder.options().backend("test"));
+        String result = asciidoctor.render("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend("test"));
 
-        assertThat(result, is("== Hello ==\n\nWorld!\n"));
+        assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
     }
 
     @Test

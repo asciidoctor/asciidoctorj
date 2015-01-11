@@ -50,4 +50,8 @@ public interface AbstractNode {
     String readAsset(String path, Map<Object, Object> opts);
     String normalizeWebPath(String path, String start, boolean preserveUriTarget);
 
+    String getStyle();
+
+    String listMarkerKeyword();
+    String listMarkerKeyword(String listType);
 }
