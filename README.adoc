@@ -1614,14 +1614,20 @@ If you want to use AsciidoctorJ in an application deployed on [app]_WildFly AS_,
 <?xml version="1.0" encoding="UTF-8"?>
 <module xmlns="urn:jboss:module:1.0" name="org.asciidoctor">
   <resources>
-    <resource-root path="asciidoctorj-1.5.0.jar"/>
-    <resource-root path="jcommander-1.32.jar"/>
-    <resource-root path="jruby-complete-1.7.9.jar"/>
+    <resource-root path="asciidoctorj-1.5.2.jar"/>
+    <resource-root path="jcommander-1.35.jar"/>
+    <resource-root path="jruby-complete-1.7.16.1.jar"/>
   </resources>
 
   <dependencies>
+    <module name="sun.jdk" export="true" >
+      <imports>
+        <include path="sun/misc/Unsafe" />
+      </imports>
+    </module>
     <module name="javax.management.j2ee.api"/>
     <module name="javax.api"/>
+    <module name="org.slf4j"/>
   </dependencies>
 </module>
 ----
