@@ -12,7 +12,7 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.ast.StructuredDocument;
-import org.asciidoctor.converter.ConverterRegistry;
+import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.internal.JRubyAsciidoctor;
@@ -632,7 +632,7 @@ public interface Asciidoctor {
      * Creates a registry for registering converters.
      * @return Converter Registry object.
      */
-    ConverterRegistry converterRegistry();
+    JavaConverterRegistry javaConverterRegistry();
     
     /**
      * Unregister all registered extensions.

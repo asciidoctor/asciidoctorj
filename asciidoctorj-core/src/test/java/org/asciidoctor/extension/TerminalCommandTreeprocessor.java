@@ -42,7 +42,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
 
     public Block convertToTerminalListing(Block block) {
 
-        Map<String, Object> attributes = block.attributes();
+        Map<String, Object> attributes = block.getAttributes();
         attributes.put("role", "terminal");
         StringBuilder resultLines = new StringBuilder();
 

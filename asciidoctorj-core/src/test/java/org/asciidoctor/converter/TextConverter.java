@@ -1,48 +1,55 @@
 package org.asciidoctor.converter;
 
 import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.AbstractNode;
+import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.ListItem;
+import org.asciidoctor.ast.ListNode;
+import org.asciidoctor.ast.Section;
 
-import java.util.HashMap;
 import java.util.Map;
 
-public class TextConverter implements ConverterBuiltIn {
-
+public class TextConverter extends AbstractConverter {
 
     private String LINE_SEPARATOR = "\n";
 
     public TextConverter(String backend, Map<Object, Object> opts) {
+        super(backend, opts);
     }
-
+    
     @Override
-    public Object convert(AbstractBlock node) {
-        return convert(node, null);
-    }
+    public Object convert(AbstractNode node, String transform, Map<Object, Object> o) {
 
-    @Override
-    public Object convert(AbstractBlock node, String transform) {
-        return convert(node, transform, new HashMap<Object, Object>());
-    }
-
-    @Override
-    public Object convert(AbstractBlock node, String transform, Map<Object, Object> opts) {
-        String nodeName = node.nodeName();
-        String transformationRule = transform != null ? transform : node.nodeName();
-
-        if (transformationRule.equals("document")) {
-            return node.content();
-        } else if (transformationRule.equals("section")) {
-            return new StringBuilder().append("!!!").append(node.title()).append(LINE_SEPARATOR).append(LINE_SEPARATOR).append(node.content()).toString();
-        } else if (transformationRule.equals("paragraph")) {
-            String content = (String) node.content();
-            return new StringBuilder(content.replaceAll(LINE_SEPARATOR, " ")).append('\n');
+        if (transform == null) {
+            transform = node.getNodeName();
         }
-
-        return node.content();
-
+ 
+        if (node instanceof DocumentRuby) {
+            DocumentRuby document = (DocumentRuby) node;
+            return document.getContent();
+        } else if (node instanceof Section) {
+            Section section = (Section) node;
+            return new StringBuilder()
+                    .append("== ").append(section.getTitle()).append(" ==")
+                    .append(LINE_SEPARATOR).append(LINE_SEPARATOR)
+                    .append(section.getContent()).toString();
+        } else if (transform.equals("paragraph")) {
+            AbstractBlock block = (AbstractBlock) node;
+            String content = (String) block.content();
+            return new StringBuilder(content.replaceAll(LINE_SEPARATOR, " ")).append(LINE_SEPARATOR);
+        } else if (node instanceof ListNode) {
+            StringBuilder sb = new StringBuilder();
+            for (AbstractBlock listItem: ((ListNode) node).getItems()) {
+                sb.append(listItem.convert()).append(LINE_SEPARATOR);
+            }
+            return sb.toString();
+        } else if (node instanceof ListItem) {
+            return "-> " + ((ListItem) node).getText();
+        } else if (node instanceof AbstractBlock) {
+            AbstractBlock block = (AbstractBlock) node;
+            return block.getContent();
+        }
+        return null;
     }
 
-    @Override
-    public String content(AbstractBlock node) {
-        return (String) node.content();
-    }
 }

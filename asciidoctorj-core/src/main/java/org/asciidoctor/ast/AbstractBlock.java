@@ -3,19 +3,30 @@ package org.asciidoctor.ast;
 import java.util.List;
 import java.util.Map;
 
-public interface AbstractBlock {
+public interface AbstractBlock extends AbstractNode {
 
-    String id();
+    /**
+     * @deprecated Please use {@linkplain #getTitle()} instead
+     */
     String title();
-    String role();
+    String getTitle();
+    /**
+     * @deprecated Please use {@linkplain #getStyle()} instead
+     */
     String style();
+    String getStyle();
+    /**
+     * @deprecated Please use {@linkplain #getBlocks()} instead
+     */
     List<AbstractBlock> blocks();
-    Map<String, Object> attributes();
+    List<AbstractBlock> getBlocks();
+    /**
+     * @deprecated Please use {@linkplain #getContent()} instead
+     */
     Object content();
-    String nodeName();
+    Object getContent();
     String convert();
-    DocumentRuby document();
-    String context();
     AbstractBlock delegate();
     List<AbstractBlock> findBy(Map<Object, Object> selector);
+    int getLevel();
 }

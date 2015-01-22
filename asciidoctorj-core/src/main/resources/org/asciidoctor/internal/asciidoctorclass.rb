@@ -100,3 +100,15 @@ class AsciidoctorModule
         return Asciidoctor::VERSION
     end
 end
+
+module Asciidoctor
+    class AbstractNode
+        alias :is_attr :attr? unless respond_to? :is_attr
+        alias :get_attr :attr unless respond_to? :get_attr
+        alias :is_reftext :reftext? unless respond_to? :is_reftext
+    end
+    
+    class AbstractBlock
+        alias :append :<< unless respond_to? :append
+    end
+end

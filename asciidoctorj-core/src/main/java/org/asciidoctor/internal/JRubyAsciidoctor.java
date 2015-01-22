@@ -12,7 +12,8 @@ import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.ast.Title;
-import org.asciidoctor.converter.ConverterRegistry;
+import org.asciidoctor.converter.JavaConverterRegistry;
+import org.asciidoctor.converter.internal.ConverterRegistryExecutor;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.extension.internal.ExtensionRegistryExecutor;
@@ -76,6 +77,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         //env.put(GEM_PATH, null);
         Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(env);
         registerExtensions(asciidoctor);
+        registerConverters(asciidoctor);
 
         return asciidoctor;
     }
@@ -87,6 +89,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(env);
         registerExtensions(asciidoctor);
+        registerConverters(asciidoctor);
 
         return asciidoctor;
     }
@@ -94,6 +97,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
     public static Asciidoctor create(List<String> loadPaths) {
         Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(loadPaths);
         registerExtensions(asciidoctor);
+        registerConverters(asciidoctor);
 
         return asciidoctor;
     }
@@ -107,8 +111,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
     public static Asciidoctor create(ClassLoader classloader, String gemPath) {
         Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(classloader, gemPath);
         registerExtensions(asciidoctor);
+        registerConverters(asciidoctor);
 
         return asciidoctor;
+    }
+
+    private static void registerConverters(Asciidoctor asciidoctor) {
+        new ConverterRegistryExecutor(asciidoctor).registerAllConverters();
     }
 
     private static void registerExtensions(Asciidoctor asciidoctor) {
@@ -226,7 +235,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
             textContent = child.convert();
         }
         ContentPart contentPart = ContentPart.createContentPart(child.id(), level, child.context(), child.title(),
-                child.style(), child.role(), child.attributes(), textContent);
+                child.style(), child.role(), child.getAttributes(), textContent);
         contentPart.setParts(getContents(child.blocks(), level + 1, maxDeepLevel));
         return contentPart;
     }
@@ -507,8 +516,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     @Override
-    public ConverterRegistry converterRegistry() {
-        return new ConverterRegistry(asciidoctorModule, rubyRuntime);
+    public JavaConverterRegistry javaConverterRegistry() {
+        return new JavaConverterRegistry(asciidoctorModule, rubyRuntime);
     }
 
     @Override
