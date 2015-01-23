@@ -41,6 +41,7 @@ ext {
   asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.2'
   asciidoctorEpub3GemVersion = project(':asciidoctorj-epub3').version.replace('-', '.')
   asciidoctorPdfGemVersion = project(':asciidoctorj-pdf').version.replace('-', '.')
+  asciidoctorDiagramGemVersion = project(':asciidoctorj-diagram').version.replace('-', '.')
   coderayGemVersion = '1.1.0'
   erubisGemVersion = '2.7.0'
   hamlGemVersion = '4.0.5'

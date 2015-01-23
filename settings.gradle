@@ -2,6 +2,7 @@ rootProject.name = 'asciidoctorj'
 
 include \
   'asciidoctorj',
+  'asciidoctorj-diagram',
   'asciidoctorj-epub3',
   'asciidoctorj-pdf',
   'asciidoctorj-distribution'
