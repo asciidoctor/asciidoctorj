@@ -14,6 +14,7 @@ dependencies {
   testCompile "net.sf.saxon:Saxon-HE:$saxonVersion"
   testCompile "com.google.guava:guava:$guavaVersion"
   testCompile "org.jsoup:jsoup:$jsoupVersion"
+  testCompile project(path: ':asciidoctorj-common', configuration: 'tests')
 }
 
 def gemFiles = fileTree(jruby.gemInstallDir) {
