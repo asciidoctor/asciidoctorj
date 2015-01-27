@@ -6,7 +6,7 @@ include \
   'asciidoctorj-epub3',
   'asciidoctorj-pdf',
   'asciidoctorj-distribution',
-  'asciidoctorj-common'
+  'asciidoctorj-test-support'
 
 project(':asciidoctorj').projectDir = file('asciidoctorj-core')
 

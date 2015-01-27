@@ -1,6 +1,6 @@
 dependencies {
   compile project(':asciidoctorj')
-  testCompile project(path: ':asciidoctorj-common', configuration: 'tests')
+  testCompile project(path: ':asciidoctorj-test-support', configuration: 'tests')
   gems("rubygems:asciidoctor-diagram:$asciidoctorDiagramGemVersion") {
     // Exclude gems provided by AsciidoctorJ core
     exclude module: 'asciidoctor'
