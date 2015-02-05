@@ -128,8 +128,8 @@ public class JavaExtensionRegistry {
     public void treeprocessor(String treeProcessor) {
         // this may change in future to external class to deal with dynamic
         // imports
-        javaImport(rubyRuntime, treeProcessor);
-        this.asciidoctorModule.treeprocessor(getClassName(treeProcessor));
+        RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, treeProcessor);
+        this.asciidoctorModule.treeprocessor(rubyClass);
     }
 
     public void block(String blockName,

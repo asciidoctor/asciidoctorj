@@ -30,9 +30,18 @@ public class TreeprocessorProxy extends RubyObject {
         this.treeprocessorClass = treeprocessorClass;
     }
 
+    public static RubyClass register(final Ruby rubyRuntime, final String treeProcessorClassName) {
+
+        try {
+            Class<? extends AbstractTreeProcessor>  treeProcessorClass = (Class<? extends AbstractTreeProcessor>) Class.forName(treeProcessorClassName);
+            return register(rubyRuntime, treeProcessorClass);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static RubyClass register(final Ruby rubyRuntime, final Class<? extends AbstractTreeProcessor> treeProcessor) {
         // Get the base class
-        System.out.println("REGISTER");
         RubyModule asciidoctorModule = rubyRuntime.getModule("Asciidoctor");
         RubyModule extensionsModule = asciidoctorModule.defineOrGetModuleUnder("Extensions");
         RubyClass baseClass = extensionsModule.getClass("Treeprocessor");
