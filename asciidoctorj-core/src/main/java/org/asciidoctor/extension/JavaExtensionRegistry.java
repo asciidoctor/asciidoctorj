@@ -1,8 +1,13 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.extension.processorproxies.TreeprocessorProxy;
 import org.asciidoctor.internal.AsciidoctorModule;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
+import org.jruby.RubyClass;
+import org.jruby.RubyModule;
+import org.jruby.runtime.ObjectAllocator;
+import org.jruby.runtime.builtin.IRubyObject;
 
 public class JavaExtensionRegistry {
 
@@ -103,13 +108,21 @@ public class JavaExtensionRegistry {
         javaImport(rubyRuntime, treeprocessor.getClass());
         this.asciidoctorModule.treeprocessor(treeprocessor);
     }
-    
+
+    /*
     public void treeprocessor(Class<? extends Treeprocessor> treeProcessor) {
         // this may change in future to external class to deal with dynamic
         // imports
         this.rubyRuntime
                 .evalScriptlet("java_import " + getImportLine(treeProcessor));
         this.asciidoctorModule.treeprocessor(RubyUtils.toRubyClass(rubyRuntime, treeProcessor));
+    }
+*/
+    public void treeprocessor(Class<? extends AbstractTreeProcessor> abstractTreeProcessor) {
+
+        RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, abstractTreeProcessor);
+        this.asciidoctorModule.treeprocessor(rubyClass);
+
     }
     
     public void treeprocessor(String treeProcessor) {

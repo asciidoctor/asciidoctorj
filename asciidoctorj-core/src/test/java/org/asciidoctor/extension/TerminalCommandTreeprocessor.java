@@ -8,17 +8,18 @@ import java.util.Map;
 import org.asciidoctor.ast.AbstractBlock;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.DocumentRuby;
 
-public class TerminalCommandTreeprocessor extends Treeprocessor {
+public class TerminalCommandTreeprocessor extends AbstractTreeProcessor {
 
-	private Document document;
+	private DocumentRuby document;
 	
     public TerminalCommandTreeprocessor(Map<String, Object> config) {
         super(config);
     }
 
     @Override
-    public Document process(Document document) {
+    public DocumentRuby process(DocumentRuby document) {
 
     	this.document = document;
     	
