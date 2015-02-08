@@ -16,10 +16,6 @@ public abstract class Postprocessor extends Processor {
         super(config);
     }
 
-    public abstract String process(Document document, String output);
-    
-    public String process(DocumentRuby documentRuby, String output) {
-    	return process(document(documentRuby), output);
-    }
-    
+    public abstract String process(DocumentRuby document, String output);
+
 }

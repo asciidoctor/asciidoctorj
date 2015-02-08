@@ -16,10 +16,6 @@ public abstract class Treeprocessor extends Processor {
         super(config);
     }
 
-    public abstract Document process(Document document);
-    
-    public DocumentRuby process(DocumentRuby documentRuby) {
-    	return process(document(documentRuby));
-    }
+    public abstract DocumentRuby process(DocumentRuby document);
     
 }

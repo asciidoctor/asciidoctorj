@@ -2,11 +2,10 @@ package org.asciidoctor.extension.processorproxies;
 
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentRuby;
-import org.asciidoctor.extension.AbstractTreeProcessor;
+import org.asciidoctor.extension.Treeprocessor;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
-import org.jruby.RubyModule;
 import org.jruby.RubyObject;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
@@ -21,47 +20,69 @@ import java.util.Map;
 
 public class TreeprocessorProxy extends RubyObject {
 
-    private Class<? extends AbstractTreeProcessor> treeprocessorClass;
+    private Class<? extends Treeprocessor> treeprocessorClass;
 
-    private AbstractTreeProcessor treeProcessor;
+    private Treeprocessor treeProcessor;
 
-    public TreeprocessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends AbstractTreeProcessor> treeprocessorClass) {
+    public TreeprocessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends Treeprocessor> treeprocessorClass) {
         super(runtime, metaClass);
         this.treeprocessorClass = treeprocessorClass;
+    }
+
+    public TreeprocessorProxy(Ruby runtime, RubyClass metaClass, Treeprocessor treeProcessor) {
+        super(runtime, metaClass);
+        this.treeProcessor = treeProcessor;
     }
 
     public static RubyClass register(final Ruby rubyRuntime, final String treeProcessorClassName) {
 
         try {
-            Class<? extends AbstractTreeProcessor>  treeProcessorClass = (Class<? extends AbstractTreeProcessor>) Class.forName(treeProcessorClassName);
+            Class<? extends Treeprocessor>  treeProcessorClass = (Class<? extends Treeprocessor>) Class.forName(treeProcessorClassName);
             return register(rubyRuntime, treeProcessorClass);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final Class<? extends AbstractTreeProcessor> treeProcessor) {
-        // Get the base class
-        RubyModule asciidoctorModule = rubyRuntime.getModule("Asciidoctor");
-        RubyModule extensionsModule = asciidoctorModule.defineOrGetModuleUnder("Extensions");
-        RubyClass baseClass = extensionsModule.getClass("Treeprocessor");
-
-        RubyClass rubyClass = extensionsModule.defineClassUnder(treeProcessor.getSimpleName(), baseClass, new ObjectAllocator() {
+    public static RubyClass register(final Ruby rubyRuntime, final Class<? extends Treeprocessor> treeProcessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "Treeprocessor", new ObjectAllocator() {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
                 return new TreeprocessorProxy(runtime, klazz, treeProcessor);
             }
         });
+        rubyClass.defineAnnotatedMethods(TreeprocessorProxy.class);
+        return rubyClass;
+    }
 
+    public static RubyClass register(final Ruby rubyRuntime, final Treeprocessor treeProcessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "Treeprocessor", new ObjectAllocator() {
+            @Override
+            public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
+                return new TreeprocessorProxy(runtime, klazz, treeProcessor);
+            }
+        });
         rubyClass.defineAnnotatedMethods(TreeprocessorProxy.class);
         return rubyClass;
     }
 
     @JRubyMethod(name = "initialize", required = 1)
     public IRubyObject initialize(ThreadContext context, IRubyObject options) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        treeProcessor = treeprocessorClass.getConstructor(Map.class).newInstance(RubyUtils.rubyToJava(getRuntime(), options, Map.class));
+        if (treeProcessor != null) {
+            // Instance was created in Java and has options set, so we pass these
+            // instead of those passed by asciidoctor
+            Helpers.invokeSuper(
+                    context,
+                    this,
+                    getMetaClass(),
+                    "initialize",
+                    new IRubyObject[]{JavaEmbedUtils.javaToRuby(getRuntime(), treeProcessor.getConfig())},
+                    Block.NULL_BLOCK);
+        } else {
+            treeProcessor = treeprocessorClass.getConstructor(Map.class).newInstance(RubyUtils.rubyToJava(getRuntime(), options, Map.class));
+            Helpers.invokeSuper(context, this, getMetaClass(), "initialize", new IRubyObject[]{options}, Block.NULL_BLOCK);
+        }
 
-        Helpers.invokeSuper(context, this, getMetaClass(), "initialize", new IRubyObject[]{options}, Block.NULL_BLOCK);
 
         return null;
     }

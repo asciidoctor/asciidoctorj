@@ -409,7 +409,7 @@ public class WhenJavaExtensionIsRegistered {
         assertThat(contentElement.text(), is("gem install asciidoctor"));
 
     }
-    /*
+
     @Test
     public void a_treeprocessor_instance_should_be_executed_in_document() {
 
@@ -430,7 +430,7 @@ public class WhenJavaExtensionIsRegistered {
         assertThat(contentElement.text(), is("gem install asciidoctor"));
 
     }
-*/
+
     @Test
     @Ignore
     public void extensions_should_be_correctly_added_using_extension_registry() throws IOException {

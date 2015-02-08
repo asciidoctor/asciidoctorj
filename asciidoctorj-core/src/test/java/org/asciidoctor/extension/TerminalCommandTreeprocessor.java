@@ -1,16 +1,15 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.DocumentRuby;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.DocumentRuby;
-
-public class TerminalCommandTreeprocessor extends AbstractTreeProcessor {
+public class TerminalCommandTreeprocessor extends Treeprocessor {
 
 	private DocumentRuby document;
 	

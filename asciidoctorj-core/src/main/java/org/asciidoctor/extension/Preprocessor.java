@@ -16,10 +16,6 @@ public abstract class Preprocessor extends Processor {
         super(config);
     }
 
-    public abstract PreprocessorReader process(Document document, PreprocessorReader reader);
-    
-    public PreprocessorReader process(DocumentRuby document, PreprocessorReader reader) {
-    	return this.process(document(document), reader);
-    }
-    
+    public abstract PreprocessorReader process(DocumentRuby document, PreprocessorReader reader);
+
 }
