@@ -12,7 +12,7 @@ public class ManpageMacro extends InlineMacroProcessor {
     }
 
     @Override
-    protected String process(AbstractBlock parent, String target,
+    public String process(AbstractBlock parent, String target,
             Map<String, Object> attributes) {
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("type", ":link");

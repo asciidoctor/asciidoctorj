@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -467,6 +468,23 @@ public class WhenJavaExtensionIsRegistered {
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-gist-macro.ad"), 
+                options().toFile(false).get());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element script = doc.getElementsByTag("script").first();
+
+        assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
+    }
+
+    @Test
+    public void a_block_macro_extension_instance_should_be_executed_when_macro_is_detected() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+        javaExtensionRegistry.blockMacro(new GistMacro("gist", new HashMap<String, Object>()));
+
+        String content = asciidoctor.renderFile(
+                classpath.getResource("sample-with-gist-macro.ad"),
                 options().toFile(false).get());
 
         Document doc = Jsoup.parse(content, "UTF-8");
