@@ -37,6 +37,10 @@ public class RubyHashUtil {
                 IRubyObject iRubyValue = toRubyObject(rubyRuntime, value);
 
                 rubyHash.put(newSymbol, iRubyValue);
+            } else if (keyType instanceof RubySymbol) {
+                Object value = entry.getValue();
+                IRubyObject iRubyValue = toRubyObject(rubyRuntime, value);
+                rubyHash.put(keyType, iRubyValue);
             }
 
         }
