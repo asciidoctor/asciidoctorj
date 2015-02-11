@@ -6,7 +6,6 @@ import org.asciidoctor.extension.InlineMacroProcessor;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
-import org.jruby.RubyObject;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Block;
@@ -18,40 +17,38 @@ import org.jruby.runtime.builtin.IRubyObject;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-public class InlineMacroProcessorProxy extends RubyObject {
+public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<InlineMacroProcessor> {
 
-    private Class<? extends InlineMacroProcessor> inlineMacroProcessorClass;
+    private static String blockName;
 
-    private InlineMacroProcessor inlineMacroProcessor;
-
-    public InlineMacroProcessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends InlineMacroProcessor> inlineMacroProcessorClass) {
-        super(runtime, metaClass);
-        this.inlineMacroProcessorClass = inlineMacroProcessorClass;
+    public InlineMacroProcessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends InlineMacroProcessor> inlineMacroProcessorClass, String blockName) {
+        super(runtime, metaClass, inlineMacroProcessorClass);
+        this.blockName = blockName;
     }
 
     public InlineMacroProcessorProxy(Ruby runtime, RubyClass metaClass, InlineMacroProcessor inlineMacroProcessor) {
-        super(runtime, metaClass);
-        this.inlineMacroProcessor = inlineMacroProcessor;
+        super(runtime, metaClass, inlineMacroProcessor);
+        this.blockName = inlineMacroProcessor.getName();
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final String inlineMacroProcessorClassName) {
+    public static RubyClass register(final Ruby rubyRuntime, final String inlineMacroProcessorClassName, final String blockName) {
 
         try {
             Class<? extends InlineMacroProcessor>  inlineMacroProcessorClass = (Class<? extends InlineMacroProcessor>) Class.forName(inlineMacroProcessorClassName);
-            return register(rubyRuntime, inlineMacroProcessorClass);
+            return register(rubyRuntime, inlineMacroProcessorClass, blockName);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
+    public static RubyClass register(final Ruby rubyRuntime, final Class<? extends InlineMacroProcessor> inlineMacroProcessor, final String blockName) {
         RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "InlineMacroProcessor", new ObjectAllocator() {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new InlineMacroProcessorProxy(runtime, klazz, inlineMacroProcessor);
+                return new InlineMacroProcessorProxy(runtime, klazz, inlineMacroProcessor, blockName);
             }
         });
-        rubyClass.defineAnnotatedMethods(InlineMacroProcessorProxy.class);
+        ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, InlineMacroProcessorProxy.class);
         return rubyClass;
     }
 
@@ -62,13 +59,13 @@ public class InlineMacroProcessorProxy extends RubyObject {
                 return new InlineMacroProcessorProxy(runtime, klazz, inlineMacroProcessor);
             }
         });
-        rubyClass.defineAnnotatedMethods(InlineMacroProcessorProxy.class);
+        ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, InlineMacroProcessorProxy.class);
         return rubyClass;
     }
 
     @JRubyMethod(name = "initialize", required = 1, optional = 1)
     public IRubyObject initialize(ThreadContext context, IRubyObject[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        if (inlineMacroProcessor != null) {
+        if (getProcessor() != null) {
             // Instance was created in Java and has options set, so we pass these
             // instead of those passed by asciidoctor
             Helpers.invokeSuper(
@@ -77,35 +74,25 @@ public class InlineMacroProcessorProxy extends RubyObject {
                     getMetaClass(),
                     "initialize",
                     new IRubyObject[]{
-                            JavaEmbedUtils.javaToRuby(getRuntime(), inlineMacroProcessor.getName()),
-                            JavaEmbedUtils.javaToRuby(getRuntime(), inlineMacroProcessor.getConfig()) },
+                            JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getName()),
+                            JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getConfig())},
                     Block.NULL_BLOCK);
         } else {
             if (args.length == 1) {
-                inlineMacroProcessor = inlineMacroProcessorClass.getConstructor(String.class).newInstance(RubyUtils.rubyToJava(getRuntime(), args[0], String.class));
+                setProcessor(
+                        getProcessorClass()
+                                .getConstructor(String.class)
+                                .newInstance(RubyUtils.rubyToJava(getRuntime(), args[0], String.class)));
             } else {
-                inlineMacroProcessor =
-                        inlineMacroProcessorClass
+                setProcessor(
+                        getProcessorClass()
                                 .getConstructor(String.class, Map.class)
                                 .newInstance(
                                         RubyUtils.rubyToJava(getRuntime(), args[0], String.class),
-                                        RubyUtils.rubyToJava(getRuntime(), args[1], Map.class));
+                                        RubyUtils.rubyToJava(getRuntime(), args[1], Map.class)));
             }
             Helpers.invokeSuper(context, this, getMetaClass(), "initialize", args, Block.NULL_BLOCK);
         }
-
-
-        return null;
-    }
-
-    @JRubyMethod(name = "name", required = 0)
-    public IRubyObject getName(ThreadContext context) {
-        return JavaEmbedUtils.javaToRuby(getRuntime(), inlineMacroProcessor.getName());
-    }
-
-    @JRubyMethod(name = "name=", required = 1)
-    public IRubyObject setName(ThreadContext context, IRubyObject name) {
-        inlineMacroProcessor.setName(RubyUtils.rubyToJava(getRuntime(), name, String.class));
         return null;
     }
 
@@ -113,7 +100,7 @@ public class InlineMacroProcessorProxy extends RubyObject {
     public IRubyObject process(ThreadContext context, IRubyObject parent, IRubyObject target, IRubyObject attributes) {
         return JavaEmbedUtils.javaToRuby(
                 getRuntime(),
-                inlineMacroProcessor.process(
+                getProcessor().process(
                         (AbstractBlock) NodeConverter.createASTNode(parent),
                         RubyUtils.rubyToJava(getRuntime(), target, String.class),
                         RubyUtils.rubyToJava(getRuntime(), attributes, Map.class)));

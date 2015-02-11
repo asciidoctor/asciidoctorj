@@ -3,11 +3,9 @@ package org.asciidoctor.extension.processorproxies;
 import org.asciidoctor.ast.AbstractBlock;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.BlockMacroProcessor;
-import org.asciidoctor.extension.Reader;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
-import org.jruby.RubyObject;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Block;
@@ -19,20 +17,14 @@ import org.jruby.runtime.builtin.IRubyObject;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-public class BlockMacroProcessorProxy extends RubyObject {
-
-    private Class<? extends BlockMacroProcessor> blockMacroProcessorClass;
-
-    private BlockMacroProcessor blockMacroProcessor;
+public class BlockMacroProcessorProxy extends AbstractMacroProcessorProxy<BlockMacroProcessor> {
 
     public BlockMacroProcessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends BlockMacroProcessor> blockMacroProcessorClass) {
-        super(runtime, metaClass);
-        this.blockMacroProcessorClass = blockMacroProcessorClass;
+        super(runtime, metaClass, blockMacroProcessorClass);
     }
 
     public BlockMacroProcessorProxy(Ruby runtime, RubyClass metaClass, BlockMacroProcessor blockMacroProcessor) {
-        super(runtime, metaClass);
-        this.blockMacroProcessor = blockMacroProcessor;
+        super(runtime, metaClass, blockMacroProcessor);
     }
 
     public static RubyClass register(final Ruby rubyRuntime, final String blockMacroProcessorClassName) {
@@ -52,7 +44,7 @@ public class BlockMacroProcessorProxy extends RubyObject {
                 return new BlockMacroProcessorProxy(runtime, klazz, blockMacroProcessor);
             }
         });
-        rubyClass.defineAnnotatedMethods(BlockMacroProcessorProxy.class);
+        ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, BlockMacroProcessorProxy.class);
         return rubyClass;
     }
 
@@ -63,13 +55,13 @@ public class BlockMacroProcessorProxy extends RubyObject {
                 return new BlockMacroProcessorProxy(runtime, klazz, blockMacroProcessor);
             }
         });
-        rubyClass.defineAnnotatedMethods(BlockMacroProcessorProxy.class);
+        ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, BlockMacroProcessorProxy.class);
         return rubyClass;
     }
 
     @JRubyMethod(name = "initialize", required = 1, optional = 1)
     public IRubyObject initialize(ThreadContext context, IRubyObject[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        if (blockMacroProcessor != null) {
+        if (getProcessor() != null) {
             // Instance was created in Java and has options set, so we pass these
             // instead of those passed by asciidoctor
             Helpers.invokeSuper(
@@ -78,35 +70,26 @@ public class BlockMacroProcessorProxy extends RubyObject {
                     getMetaClass(),
                     "initialize",
                     new IRubyObject[]{
-                            JavaEmbedUtils.javaToRuby(getRuntime(), blockMacroProcessor.getName()),
-                            JavaEmbedUtils.javaToRuby(getRuntime(), blockMacroProcessor.getConfig()) },
+                            JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getName()),
+                            JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getConfig()) },
                     Block.NULL_BLOCK);
         } else {
             if (args.length == 1) {
-                blockMacroProcessor = blockMacroProcessorClass.getConstructor(String.class).newInstance(RubyUtils.rubyToJava(getRuntime(), args[0], String.class));
+                setProcessor(
+                        getProcessorClass()
+                                .getConstructor(String.class)
+                                .newInstance(RubyUtils.rubyToJava(getRuntime(), args[0], String.class)));
             } else {
-                blockMacroProcessor =
-                        blockMacroProcessorClass
+                setProcessor(
+                        getProcessorClass()
                                 .getConstructor(String.class, Map.class)
                                 .newInstance(
                                         RubyUtils.rubyToJava(getRuntime(), args[0], String.class),
-                                        RubyUtils.rubyToJava(getRuntime(), args[1], Map.class));
+                                        RubyUtils.rubyToJava(getRuntime(), args[1], Map.class)));
             }
             Helpers.invokeSuper(context, this, getMetaClass(), "initialize", args, Block.NULL_BLOCK);
         }
 
-
-        return null;
-    }
-
-    @JRubyMethod(name = "name", required = 0)
-    public IRubyObject getName(ThreadContext context) {
-        return JavaEmbedUtils.javaToRuby(getRuntime(), blockMacroProcessor.getName());
-    }
-
-    @JRubyMethod(name = "name=", required = 1)
-    public IRubyObject setName(ThreadContext context, IRubyObject name) {
-        blockMacroProcessor.setName(RubyUtils.rubyToJava(getRuntime(), name, String.class));
         return null;
     }
 
@@ -114,7 +97,7 @@ public class BlockMacroProcessorProxy extends RubyObject {
     public IRubyObject process(ThreadContext context, IRubyObject parent, IRubyObject target, IRubyObject attributes) {
         return JavaEmbedUtils.javaToRuby(
                 getRuntime(),
-                blockMacroProcessor.process(
+                getProcessor().process(
                         (AbstractBlock) NodeConverter.createASTNode(parent),
                         RubyUtils.rubyToJava(getRuntime(), target, String.class),
                         RubyUtils.rubyToJava(getRuntime(), attributes, Map.class)));

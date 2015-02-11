@@ -1,9 +1,9 @@
 package org.asciidoctor.extension.processorproxies;
 
-import org.asciidoctor.extension.Processor;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyModule;
+import org.jruby.RubyObject;
 import org.jruby.runtime.ObjectAllocator;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -42,4 +42,17 @@ public final class ProcessorProxyUtil {
         return getExtensionsModule(baseClass.getRuntime()).defineClassUnder(rubyClassName, baseClass, objectAllocator);
     }
 
+    /**
+     * Defines the annotated methods of the given class and all super classes as
+     * {@link org.jruby.RubyClass#defineAnnotatedMethods(Class)} does not handle inherited methods.
+     * @param rubyClass
+     * @param proxyClass
+     */
+    public static void defineAnnotatedMethods(RubyClass rubyClass, Class<?> proxyClass) {
+        Class<?> currentClass = proxyClass;
+        while (currentClass != RubyObject.class) {
+            rubyClass.defineAnnotatedMethods(currentClass);
+            currentClass = currentClass.getSuperclass();
+        }
+    }
 }

@@ -6,7 +6,6 @@ import org.asciidoctor.extension.DocinfoProcessor;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
-import org.jruby.RubyObject;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Block;
@@ -18,20 +17,14 @@ import org.jruby.runtime.builtin.IRubyObject;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-public class DocinfoProcessorProxy extends RubyObject {
-
-    private Class<? extends DocinfoProcessor> docinfoProcessorClass;
-
-    private DocinfoProcessor docinfoProcessor;
+public class DocinfoProcessorProxy extends AbstractProcessorProxy<DocinfoProcessor> {
 
     public DocinfoProcessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends DocinfoProcessor> docinfoProcessorClass) {
-        super(runtime, metaClass);
-        this.docinfoProcessorClass = docinfoProcessorClass;
+        super(runtime, metaClass, docinfoProcessorClass);
     }
 
     public DocinfoProcessorProxy(Ruby runtime, RubyClass metaClass, DocinfoProcessor docinfoProcessor) {
-        super(runtime, metaClass);
-        this.docinfoProcessor = docinfoProcessor;
+        super(runtime, metaClass, docinfoProcessor);
     }
 
     public static RubyClass register(final Ruby rubyRuntime, final String docinfoProcessorClassName) {
@@ -51,7 +44,7 @@ public class DocinfoProcessorProxy extends RubyObject {
                 return new DocinfoProcessorProxy(runtime, klazz, docinfoProcessor);
             }
         });
-        rubyClass.defineAnnotatedMethods(DocinfoProcessorProxy.class);
+        ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, DocinfoProcessorProxy.class);
         return rubyClass;
     }
 
@@ -62,13 +55,13 @@ public class DocinfoProcessorProxy extends RubyObject {
                 return new DocinfoProcessorProxy(runtime, klazz, docinfoProcessor);
             }
         });
-        rubyClass.defineAnnotatedMethods(DocinfoProcessorProxy.class);
+        ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, DocinfoProcessorProxy.class);
         return rubyClass;
     }
 
     @JRubyMethod(name = "initialize", required = 1)
     public IRubyObject initialize(ThreadContext context, IRubyObject options) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        if (docinfoProcessor != null) {
+        if (getProcessor() != null) {
             // Instance was created in Java and has options set, so we pass these
             // instead of those passed by asciidoctor
             Helpers.invokeSuper(
@@ -76,10 +69,13 @@ public class DocinfoProcessorProxy extends RubyObject {
                     this,
                     getMetaClass(),
                     "initialize",
-                    new IRubyObject[]{ JavaEmbedUtils.javaToRuby(getRuntime(), docinfoProcessor.getConfig()) },
+                    new IRubyObject[]{ JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getConfig()) },
                     Block.NULL_BLOCK);
         } else {
-            docinfoProcessor = docinfoProcessorClass.getConstructor(Map.class).newInstance(RubyUtils.rubyToJava(getRuntime(), options, Map.class));
+            setProcessor(
+                    getProcessorClass()
+                            .getConstructor(Map.class)
+                            .newInstance(RubyUtils.rubyToJava(getRuntime(), options, Map.class)));
             Helpers.invokeSuper(context, this, getMetaClass(), "initialize", new IRubyObject[]{options}, Block.NULL_BLOCK);
         }
 
@@ -91,7 +87,7 @@ public class DocinfoProcessorProxy extends RubyObject {
     public IRubyObject process(ThreadContext context, IRubyObject document) {
         return JavaEmbedUtils.javaToRuby(
                 getRuntime(),
-                docinfoProcessor.process(
+                getProcessor().process(
                         new Document(
                                 RubyUtils.rubyToJava(getRuntime(), document, DocumentRuby.class),
                                 getRuntime())));

@@ -7,7 +7,6 @@ import org.asciidoctor.extension.PreprocessorReader;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
-import org.jruby.RubyObject;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Block;
@@ -19,20 +18,14 @@ import org.jruby.runtime.builtin.IRubyObject;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-public class PreprocessorProxy extends RubyObject {
-
-    private Class<? extends Preprocessor> preprocessorClass;
-
-    private Preprocessor preprocessor;
+public class PreprocessorProxy extends AbstractProcessorProxy<Preprocessor> {
 
     public PreprocessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends Preprocessor> preprocessorClass) {
-        super(runtime, metaClass);
-        this.preprocessorClass = preprocessorClass;
+        super(runtime, metaClass, preprocessorClass);
     }
 
     public PreprocessorProxy(Ruby runtime, RubyClass metaClass, Preprocessor preprocessor) {
-        super(runtime, metaClass);
-        this.preprocessor = preprocessor;
+        super(runtime, metaClass, preprocessor);
     }
 
     public static RubyClass register(final Ruby rubyRuntime, final String preprocessorClassName) {
@@ -52,7 +45,7 @@ public class PreprocessorProxy extends RubyObject {
                 return new PreprocessorProxy(runtime, klazz, preprocessor);
             }
         });
-        rubyClass.defineAnnotatedMethods(PreprocessorProxy.class);
+        ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, PreprocessorProxy.class);
         return rubyClass;
     }
 
@@ -63,13 +56,13 @@ public class PreprocessorProxy extends RubyObject {
                 return new PreprocessorProxy(runtime, klazz, preprocessor);
             }
         });
-        rubyClass.defineAnnotatedMethods(PreprocessorProxy.class);
+        ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, PreprocessorProxy.class);
         return rubyClass;
     }
 
     @JRubyMethod(name = "initialize", required = 1)
     public IRubyObject initialize(ThreadContext context, IRubyObject options) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        if (preprocessor != null) {
+        if (getProcessor() != null) {
             // Instance was created in Java and has options set, so we pass these
             // instead of those passed by asciidoctor
             Helpers.invokeSuper(
@@ -77,13 +70,15 @@ public class PreprocessorProxy extends RubyObject {
                     this,
                     getMetaClass(),
                     "initialize",
-                    new IRubyObject[]{ JavaEmbedUtils.javaToRuby(getRuntime(), preprocessor.getConfig()) },
+                    new IRubyObject[]{ JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getConfig()) },
                     Block.NULL_BLOCK);
         } else {
-            preprocessor = preprocessorClass.getConstructor(Map.class).newInstance(RubyUtils.rubyToJava(getRuntime(), options, Map.class));
+            setProcessor(
+                    getProcessorClass()
+                            .getConstructor(Map.class)
+                            .newInstance(RubyUtils.rubyToJava(getRuntime(), options, Map.class)));
             Helpers.invokeSuper(context, this, getMetaClass(), "initialize", new IRubyObject[]{options}, Block.NULL_BLOCK);
         }
-
 
         return null;
     }
@@ -92,11 +87,10 @@ public class PreprocessorProxy extends RubyObject {
     public IRubyObject process(ThreadContext context, IRubyObject document, IRubyObject preprocessorReader) {
         return JavaEmbedUtils.javaToRuby(
                 getRuntime(),
-                preprocessor.process(
+                getProcessor().process(
                         new Document(
                                 RubyUtils.rubyToJava(getRuntime(), document, DocumentRuby.class),
                                 getRuntime()),
                         RubyUtils.rubyToJava(getRuntime(), preprocessorReader, PreprocessorReader.class)));
     }
-
 }

@@ -23,14 +23,19 @@ public class Processor {
         this.config = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, config);
     }
 
-    public void update_config(Map<String, Object> config) {
+    public void update_config(Map<Object, Object> config) {
     	this.config.putAll(config);
     }
     
     public Map<Object, Object> getConfig() {
     	return this.config;
     }
-    
+
+    public RubyHash setConfig(Map<String, Object> config) {
+        this.config = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, config);
+        return null;
+    }
+
     public Block createBlock(AbstractBlock parent, String context, String content, Map<String, Object> attributes,
             Map<Object, Object> options) {
 

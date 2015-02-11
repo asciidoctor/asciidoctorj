@@ -6,9 +6,7 @@ import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.PreprocessorReader;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
-import org.jruby.RubyBoolean;
 import org.jruby.RubyClass;
-import org.jruby.RubyObject;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Block;
@@ -20,20 +18,14 @@ import org.jruby.runtime.builtin.IRubyObject;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-public class IncludeProcessorProxy extends RubyObject {
-
-    private Class<? extends IncludeProcessor> includeProcessorClass;
-
-    private IncludeProcessor includeProcessor;
+public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcessor> {
 
     public IncludeProcessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends IncludeProcessor> includeProcessorClass) {
-        super(runtime, metaClass);
-        this.includeProcessorClass = includeProcessorClass;
+        super(runtime, metaClass, includeProcessorClass);
     }
 
     public IncludeProcessorProxy(Ruby runtime, RubyClass metaClass, IncludeProcessor includeProcessor) {
-        super(runtime, metaClass);
-        this.includeProcessor = includeProcessor;
+        super(runtime, metaClass, includeProcessor);
     }
 
     public static RubyClass register(final Ruby rubyRuntime, final String includeProcessorClassName) {
@@ -53,7 +45,7 @@ public class IncludeProcessorProxy extends RubyObject {
                 return new IncludeProcessorProxy(runtime, klazz, includeProcessor);
             }
         });
-        rubyClass.defineAnnotatedMethods(IncludeProcessorProxy.class);
+        ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, IncludeProcessorProxy.class);
         return rubyClass;
     }
 
@@ -64,13 +56,13 @@ public class IncludeProcessorProxy extends RubyObject {
                 return new IncludeProcessorProxy(runtime, klazz, includeProcessor);
             }
         });
-        rubyClass.defineAnnotatedMethods(IncludeProcessorProxy.class);
+        ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, IncludeProcessorProxy.class);
         return rubyClass;
     }
 
     @JRubyMethod(name = "initialize", required = 1)
     public IRubyObject initialize(ThreadContext context, IRubyObject options) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        if (includeProcessor != null) {
+        if (getProcessor() != null) {
             // Instance was created in Java and has options set, so we pass these
             // instead of those passed by asciidoctor
             Helpers.invokeSuper(
@@ -78,10 +70,13 @@ public class IncludeProcessorProxy extends RubyObject {
                     this,
                     getMetaClass(),
                     "initialize",
-                    new IRubyObject[]{ JavaEmbedUtils.javaToRuby(getRuntime(), includeProcessor.getConfig()) },
+                    new IRubyObject[]{ JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getConfig()) },
                     Block.NULL_BLOCK);
         } else {
-            includeProcessor = includeProcessorClass.getConstructor(Map.class).newInstance(RubyUtils.rubyToJava(getRuntime(), options, Map.class));
+            setProcessor(
+                    getProcessorClass()
+                            .getConstructor(Map.class)
+                            .newInstance(RubyUtils.rubyToJava(getRuntime(), options, Map.class)));
             Helpers.invokeSuper(context, this, getMetaClass(), "initialize", new IRubyObject[]{options}, Block.NULL_BLOCK);
         }
 
@@ -91,7 +86,7 @@ public class IncludeProcessorProxy extends RubyObject {
 
     @JRubyMethod(name = "handles", required = 1)
     public IRubyObject handles(ThreadContext context, IRubyObject target) {
-        boolean b = includeProcessor.handles(RubyUtils.rubyToJava(getRuntime(), target, String.class));
+        boolean b = getProcessor().handles(RubyUtils.rubyToJava(getRuntime(), target, String.class));
         return JavaEmbedUtils.javaToRuby(getRuntime(), b);
     }
 
@@ -105,7 +100,7 @@ public class IncludeProcessorProxy extends RubyObject {
         PreprocessorReader reader = RubyUtils.rubyToJava(getRuntime(), args[1], PreprocessorReader.class);
         String target = RubyUtils.rubyToJava(getRuntime(), args[2], String.class);
         Map<String, Object> attributes = RubyUtils.rubyToJava(getRuntime(), args[3], Map.class);
-        includeProcessor.process(document, reader, target, attributes);
+        getProcessor().process(document, reader, target, attributes);
         return null;
     }
 
