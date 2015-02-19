@@ -3,9 +3,15 @@ package org.asciidoctor.extension.processorproxies;
 import org.asciidoctor.ast.AbstractBlock;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.InlineMacroProcessor;
+import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
+import org.jruby.RubyHash;
+import org.jruby.RubyRegexp;
+import org.jruby.RubyRegexp$INVOKER$i$0$0$casefold_p;
+import org.jruby.RubyString;
+import org.jruby.RubySymbol;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Block;
@@ -13,11 +19,16 @@ import org.jruby.runtime.Helpers;
 import org.jruby.runtime.ObjectAllocator;
 import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
+import org.jruby.util.RegexpOptions;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<InlineMacroProcessor> {
+
+    private static final String MEMBER_NAME_CONFIG = "@config";
+    private static final String METHOD_NAME_INITIALIZE = "initialize";
+    private static final String SUPER_CLASS_NAME = "InlineMacroProcessor";
 
     private static String blockName;
 
@@ -42,7 +53,7 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
     }
 
     public static RubyClass register(final Ruby rubyRuntime, final Class<? extends InlineMacroProcessor> inlineMacroProcessor, final String blockName) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "InlineMacroProcessor", new ObjectAllocator() {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, SUPER_CLASS_NAME, new ObjectAllocator() {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
                 return new InlineMacroProcessorProxy(runtime, klazz, inlineMacroProcessor, blockName);
@@ -53,7 +64,7 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
     }
 
     public static RubyClass register(final Ruby rubyRuntime, final InlineMacroProcessor inlineMacroProcessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "InlineMacroProcessor", new ObjectAllocator() {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, SUPER_CLASS_NAME, new ObjectAllocator() {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
                 return new InlineMacroProcessorProxy(runtime, klazz, inlineMacroProcessor);
@@ -68,11 +79,19 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
         if (getProcessor() != null) {
             // Instance was created in Java and has options set, so we pass these
             // instead of those passed by asciidoctor
+
+            // If options contains a String with a Regexp create the RubyRegexp from it
+            RubySymbol regexpSymbol = RubySymbol.newSymbol(getRuntime(), "regexp");
+            Object regexp = getProcessor().getConfig().get(regexpSymbol);
+            if (regexp != null && regexp instanceof String) {
+                getProcessor().getConfig().put(regexpSymbol, convertRegexp(regexp));
+            }
+
             Helpers.invokeSuper(
                     context,
                     this,
                     getMetaClass(),
-                    "initialize",
+                    METHOD_NAME_INITIALIZE,
                     new IRubyObject[]{
                             JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getName()),
                             JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getConfig())},
@@ -91,9 +110,17 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
                                         RubyUtils.rubyToJava(getRuntime(), args[0], String.class),
                                         RubyUtils.rubyToJava(getRuntime(), args[1], Map.class)));
             }
-            Helpers.invokeSuper(context, this, getMetaClass(), "initialize", args, Block.NULL_BLOCK);
+            Helpers.invokeSuper(context, this, getMetaClass(), METHOD_NAME_INITIALIZE, args, Block.NULL_BLOCK);
         }
+        // The Ruby initialize method may have changed the config, therefore copy it back
+        // because the accessor is routed to the Java Processor.config
+        RubyHash newConfig = (RubyHash) Helpers.getInstanceVariable(this, getRuntime(), MEMBER_NAME_CONFIG);
+        getProcessor().setConfig(RubyHashUtil.convertRubyHashMapToMap(newConfig));
         return null;
+    }
+
+    private RubyRegexp convertRegexp(Object regexp) {
+        return RubyRegexp.newRegexp(getRuntime(), regexp.toString(), RegexpOptions.NULL_OPTIONS);
     }
 
     @JRubyMethod(name = "process", required = 3)
