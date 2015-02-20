@@ -1,11 +1,11 @@
 package org.asciidoctor.extension;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
+import org.asciidoctor.ast.DocumentRuby;
 
 import java.util.Map;
 
-import org.asciidoctor.ast.Document;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class NumberLinesPreprocessor extends Preprocessor {
 
@@ -14,7 +14,7 @@ public class NumberLinesPreprocessor extends Preprocessor {
 	}
 
 	@Override
-	public PreprocessorReader process(Document document,
+	public PreprocessorReader process(DocumentRuby document,
 			PreprocessorReader reader) {
 
 		assertThat(reader.getLineno(), is(1));

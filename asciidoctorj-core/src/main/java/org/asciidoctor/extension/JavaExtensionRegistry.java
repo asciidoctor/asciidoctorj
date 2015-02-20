@@ -1,8 +1,16 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.extension.processorproxies.BlockMacroProcessorProxy;
+import org.asciidoctor.extension.processorproxies.BlockProcessorProxy;
+import org.asciidoctor.extension.processorproxies.DocinfoProcessorProxy;
+import org.asciidoctor.extension.processorproxies.IncludeProcessorProxy;
+import org.asciidoctor.extension.processorproxies.InlineMacroProcessorProxy;
+import org.asciidoctor.extension.processorproxies.PostprocessorProxy;
+import org.asciidoctor.extension.processorproxies.PreprocessorProxy;
+import org.asciidoctor.extension.processorproxies.TreeprocessorProxy;
 import org.asciidoctor.internal.AsciidoctorModule;
-import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
+import org.jruby.RubyClass;
 
 public class JavaExtensionRegistry {
 
@@ -16,224 +24,134 @@ public class JavaExtensionRegistry {
     }
 
     public void docinfoProcessor(Class<? extends DocinfoProcessor> docInfoProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, docInfoProcessor);
-        this.asciidoctorModule.docinfo_processor(RubyUtils.toRubyClass(rubyRuntime, docInfoProcessor));
+        RubyClass rubyClass = DocinfoProcessorProxy.register(rubyRuntime, docInfoProcessor);
+        this.asciidoctorModule.docinfo_processor(rubyClass);
     }
 
     public void docinfoProcessor(DocinfoProcessor docInfoProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, docInfoProcessor.getClass());
-        this.asciidoctorModule.docinfo_processor(docInfoProcessor);
+        RubyClass rubyClass = DocinfoProcessorProxy.register(rubyRuntime, docInfoProcessor);
+        this.asciidoctorModule.docinfo_processor(rubyClass);
     }
 
     public void docinfoProcessor(String docInfoProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, docInfoProcessor);
-        this.asciidoctorModule.docinfo_processor(getClassName(docInfoProcessor));
+        RubyClass rubyClass = DocinfoProcessorProxy.register(rubyRuntime, docInfoProcessor);
+        this.asciidoctorModule.docinfo_processor(rubyClass);
     }
 
     public void preprocessor(Class<? extends Preprocessor> preprocessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, preprocessor);
-        this.asciidoctorModule.preprocessor(RubyUtils.toRubyClass(rubyRuntime, preprocessor));
+        RubyClass rubyClass = PreprocessorProxy.register(rubyRuntime, preprocessor);
+        this.asciidoctorModule.preprocessor(rubyClass);
     }
 
     public void preprocessor(Preprocessor preprocessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, preprocessor.getClass());
-        this.asciidoctorModule.preprocessor(preprocessor);
+        RubyClass rubyClass = PreprocessorProxy.register(rubyRuntime, preprocessor);
+        this.asciidoctorModule.preprocessor(rubyClass);
     }
     
     public void preprocessor(String preprocessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, preprocessor);
-        this.asciidoctorModule.preprocessor(getClassName(preprocessor));
+        RubyClass rubyClass = PreprocessorProxy.register(rubyRuntime, preprocessor);
+        this.asciidoctorModule.preprocessor(rubyClass);
     }
     
     public void postprocessor(String postprocessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, postprocessor);
-        this.asciidoctorModule.postprocessor(getClassName(postprocessor));
+        RubyClass rubyClass = PostprocessorProxy.register(rubyRuntime, postprocessor);
+        this.asciidoctorModule.postprocessor(rubyClass);
     }
     
     public void postprocessor(Class<? extends Postprocessor> postprocessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, postprocessor);
-        this.asciidoctorModule.postprocessor(RubyUtils.toRubyClass(rubyRuntime, postprocessor));
+        RubyClass rubyClass = PostprocessorProxy.register(rubyRuntime, postprocessor);
+        this.asciidoctorModule.postprocessor(rubyClass);
     }
     
-    public void postprocessor(Postprocessor postprocesor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, postprocesor.getClass());
-        this.asciidoctorModule.postprocessor(postprocesor);
+    public void postprocessor(Postprocessor postprocessor) {
+        RubyClass rubyClass = PostprocessorProxy.register(rubyRuntime, postprocessor);
+        this.asciidoctorModule.postprocessor(rubyClass);
     }
 
     public void includeProcessor(String includeProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, includeProcessor);
-        this.asciidoctorModule.include_processor(getClassName(includeProcessor));
+        RubyClass rubyClass = IncludeProcessorProxy.register(rubyRuntime, includeProcessor);
+        this.asciidoctorModule.include_processor(rubyClass);
     }
     
     public void includeProcessor(
             Class<? extends IncludeProcessor> includeProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, includeProcessor);
-      this.asciidoctorModule.include_processor(RubyUtils.toRubyClass(rubyRuntime, includeProcessor));
+        RubyClass rubyClass = IncludeProcessorProxy.register(rubyRuntime, includeProcessor);
+        this.asciidoctorModule.include_processor(rubyClass);
     }
 
     public void includeProcessor(IncludeProcessor includeProcessor) {
-        String importLine = getImportLine(includeProcessor.getClass());
-        javaImport(rubyRuntime, importLine);
-        this.asciidoctorModule.include_processor(includeProcessor);
+        RubyClass rubyClass = IncludeProcessorProxy.register(rubyRuntime, includeProcessor);
+        this.asciidoctorModule.include_processor(rubyClass);
     }
     
     public void treeprocessor(Treeprocessor treeprocessor) {
-        javaImport(rubyRuntime, treeprocessor.getClass());
-        this.asciidoctorModule.treeprocessor(treeprocessor);
+        RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, treeprocessor);
+        this.asciidoctorModule.treeprocessor(rubyClass);
     }
-    
-    public void treeprocessor(Class<? extends Treeprocessor> treeProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        this.rubyRuntime
-                .evalScriptlet("java_import " + getImportLine(treeProcessor));
-        this.asciidoctorModule.treeprocessor(RubyUtils.toRubyClass(rubyRuntime, treeProcessor));
+
+    public void treeprocessor(Class<? extends Treeprocessor> abstractTreeProcessor) {
+        RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, abstractTreeProcessor);
+        this.asciidoctorModule.treeprocessor(rubyClass);
     }
     
     public void treeprocessor(String treeProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, treeProcessor);
-        this.asciidoctorModule.treeprocessor(getClassName(treeProcessor));
+        RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, treeProcessor);
+        this.asciidoctorModule.treeprocessor(rubyClass);
     }
 
     public void block(String blockName,
            String blockProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, blockProcessor);
-        
-        this.asciidoctorModule.block_processor(
-                getClassName(blockProcessor),
-                RubyUtils.toSymbol(rubyRuntime, blockName));
+        RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+        this.asciidoctorModule.block_processor(rubyClass, blockName);
     }
-    
+
     public void block(String blockName,
             Class<? extends BlockProcessor> blockProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, blockProcessor);
-        
-        this.asciidoctorModule.block_processor(
-                RubyUtils.toRubyClass(rubyRuntime, blockProcessor),
-                RubyUtils.toSymbol(rubyRuntime, blockName));
+        RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+        this.asciidoctorModule.block_processor(rubyClass, blockName);
     }
 
     public void block(BlockProcessor blockProcessor) {
-        block(blockProcessor.getName(), blockProcessor);
+        RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+        this.asciidoctorModule.block_processor(rubyClass, blockProcessor.getName());
     }
-    
+
     public void block(String blockName,
             BlockProcessor blockProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, blockProcessor.getClass());
-        
-        this.asciidoctorModule.block_processor(
-                blockProcessor,
-                RubyUtils.toSymbol(rubyRuntime, blockName));
+        RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+        this.asciidoctorModule.block_processor(rubyClass, blockName);
     }
 
     public void blockMacro(String blockName,
             Class<? extends BlockMacroProcessor> blockMacroProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, blockMacroProcessor);
-        this.asciidoctorModule.block_macro(
-                blockMacroProcessor.getSimpleName(),
-                RubyUtils.toSymbol(rubyRuntime, blockName));
+        RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+        this.asciidoctorModule.block_macro(rubyClass, blockName);
     }
 
     public void blockMacro(String blockName,
             String blockMacroProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, blockMacroProcessor);
-        this.asciidoctorModule.block_macro(
-                getClassName(blockMacroProcessor),
-                RubyUtils.toSymbol(rubyRuntime, blockName));
+        RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+        this.asciidoctorModule.block_macro(rubyClass, blockName);
     }
     
     public void blockMacro(BlockMacroProcessor blockMacroProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, blockMacroProcessor.getClass());
-        this.asciidoctorModule.block_macro(
-                blockMacroProcessor,
-                RubyUtils.toSymbol(rubyRuntime, blockMacroProcessor.getName()));
+        RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+        this.asciidoctorModule.block_macro(rubyClass, blockMacroProcessor.getName());
     }
 
     public void inlineMacro(InlineMacroProcessor inlineMacroProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, inlineMacroProcessor.getClass());
-        
-        this.asciidoctorModule.inline_macro(
-        		inlineMacroProcessor,
-                RubyUtils.toSymbol(rubyRuntime, inlineMacroProcessor.getName()));
+        RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
+        this.asciidoctorModule.inline_macro(rubyClass, inlineMacroProcessor.getName());
     }
     
     public void inlineMacro(String blockName,
             Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
-        // this may change in future to external class to deal with dynamic
-        // imports
-        javaImport(rubyRuntime, inlineMacroProcessor);
-        
-        this.asciidoctorModule.inline_macro(
-        		RubyUtils.toRubyClass(rubyRuntime, inlineMacroProcessor),
-                RubyUtils.toSymbol(rubyRuntime, blockName));
+        RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor, blockName);
+        this.asciidoctorModule.inline_macro(rubyClass, blockName);
     }
     
     public void inlineMacro(String blockName, String inlineMacroProcessor) {
-        // this may change in future to external class to deal with dynamic imports
-        javaImport(this.rubyRuntime, inlineMacroProcessor);
-        
-        this.asciidoctorModule.inline_macro(
-        		getClassName(inlineMacroProcessor),
-                RubyUtils.toSymbol(rubyRuntime, blockName));
+        RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor, blockName);
+        this.asciidoctorModule.inline_macro(rubyClass, blockName);
     }
-
-    private void javaImport(Ruby ruby, Class<?> clazz) {
-      ruby.evalScriptlet(String.format("java_import '%s'", getImportLine(clazz)));
-    }
-  
-    private void javaImport(Ruby ruby, String className) {
-      ruby.evalScriptlet(String.format("java_import '%s'", className));
-    }
-
-    private String getImportLine(Class<?> extensionClass) {
-        int dollarPosition = -1;
-        String className = extensionClass.getName();
-        if ((dollarPosition = className.indexOf("$")) != -1) {
-            className = className.substring(0, dollarPosition);
-        }
-        return className;
-    }
-    
-    private String getClassName(String clazz) {
-    	return clazz.substring(clazz.lastIndexOf(".")+1);
-    }
-    
 }

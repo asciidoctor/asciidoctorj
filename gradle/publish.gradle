@@ -47,6 +47,15 @@ def projectMeta = {
         role 'Contributor'
       }
     }
+    developer {
+      id 'robertpanzer'
+      name 'Robert Panzer'
+      email 'robert.panzer.pb@gmail.com'
+      timezone '1'
+      roles {
+          role 'Contributor'
+      }
+    }
   }
 }
 

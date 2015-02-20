@@ -13,7 +13,7 @@ public class ArrowsAndBoxesIncludesPostProcessor extends Postprocessor {
     }
 
     //@Override
-    public String process(Document doc, String output) {
+    public String process(DocumentRuby doc, String output) {
     
         Document document = Jsoup.parse(output);
         Element head = document.getElementsByTag("head").first();
@@ -25,8 +25,4 @@ public class ArrowsAndBoxesIncludesPostProcessor extends Postprocessor {
         return document.html();
     }
 
-    @Override
-    public String process(org.asciidoctor.ast.Document document, String output) {
-        return null;
-    }
 }

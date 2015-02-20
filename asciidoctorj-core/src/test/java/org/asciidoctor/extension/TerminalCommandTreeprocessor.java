@@ -1,24 +1,24 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.DocumentRuby;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.Document;
-
 public class TerminalCommandTreeprocessor extends Treeprocessor {
 
-	private Document document;
+	private DocumentRuby document;
 	
     public TerminalCommandTreeprocessor(Map<String, Object> config) {
         super(config);
     }
 
     @Override
-    public Document process(Document document) {
+    public DocumentRuby process(DocumentRuby document) {
 
     	this.document = document;
     	

@@ -9,6 +9,7 @@ import java.util.Set;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyHash;
+import org.jruby.RubyString;
 import org.jruby.RubySymbol;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
@@ -37,6 +38,10 @@ public class RubyHashUtil {
                 IRubyObject iRubyValue = toRubyObject(rubyRuntime, value);
 
                 rubyHash.put(newSymbol, iRubyValue);
+            } else if (keyType instanceof RubySymbol) {
+                Object value = entry.getValue();
+                IRubyObject iRubyValue = toRubyObject(rubyRuntime, value);
+                rubyHash.put(keyType, iRubyValue);
             }
 
         }
@@ -82,6 +87,26 @@ public class RubyHashUtil {
                 map.put(toJavaString((RubySymbol)element.getKey()), toJavaObject(element.getValue()));
             } else {
                 map.put(toJavaObject(element.getKey()).toString(), toJavaObject(element.getValue()));
+            }
+        }
+
+        return map;
+
+    }
+
+    public static Map<String, Object> convertRubyHashMapToStringObjectMap(Map<Object, Object> rubyHashMap) {
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        Set<Entry<Object, Object>> elements = rubyHashMap.entrySet();
+
+        for (Entry<Object, Object> element : elements) {
+            if(element.getKey() instanceof RubySymbol) {
+                map.put(toJavaString((RubySymbol)element.getKey()), toJavaObject(element.getValue()));
+            } else if (element.getKey() instanceof RubyString) {
+                map.put(((RubyString) element.getKey()).asJavaString(), toJavaObject(element.getValue()));
+            } else if (element.getKey() instanceof String) {
+                map.put((String) element.getKey(), toJavaObject(element.getValue()));
             }
         }
 

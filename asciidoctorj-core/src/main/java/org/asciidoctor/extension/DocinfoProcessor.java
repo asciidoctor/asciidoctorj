@@ -16,11 +16,7 @@ public abstract class DocinfoProcessor extends Processor {
         super(defaultLocation(config));
     }
 
-    public abstract String process(Document document);
-
-    public String process(DocumentRuby documentRuby) {
-        return this.process(document(documentRuby));
-    }
+    public abstract String process(DocumentRuby document);
 
     private static final Map<String, Object> defaultLocation(Map<String, Object> map) {
         if(!map.containsKey("location")) {

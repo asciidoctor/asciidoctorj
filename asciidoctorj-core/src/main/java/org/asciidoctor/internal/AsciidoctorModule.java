@@ -35,7 +35,8 @@ public interface AsciidoctorModule {
     void block_macro(String blockMacroClassName, Object blockName);
     void block_macro(Class<BlockMacroProcessor> blockMacroClass, Object blockName);
     void block_macro(BlockMacroProcessor blockMacroInstance, Object blockName);
-    
+    void block_macro(RubyClass blockClassName, Object blockSymbol);
+
     void inline_macro(String blockClassName, Object blockSymbol);
     void inline_macro(RubyClass blockClassName, Object blockSymbol);
     void inline_macro(InlineMacroProcessor blockClassName, Object blockSymbol);

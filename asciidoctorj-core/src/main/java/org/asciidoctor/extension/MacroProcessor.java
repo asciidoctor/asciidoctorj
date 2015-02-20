@@ -30,6 +30,6 @@ public abstract class MacroProcessor extends Processor {
         return new HashMap<Object, Object>();
     }
     
-    protected abstract Object process(AbstractBlock parent, String target, Map<String, Object> attributes);
+    public abstract Object process(AbstractBlock parent, String target, Map<String, Object> attributes);
     
 }
