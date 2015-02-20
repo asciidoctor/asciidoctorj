@@ -99,6 +99,8 @@ CAUTION: The artifactId changed to `asciidoctorj` starting in 1.5.0.
 
 AsciidoctorJ is a standard `.jar` file.
 To start using it, you need to add the library to your project's classpath.
+To start using it under Wildfly AS, you have to butcher^H^H^H^H^H^modify your Wildfly installation
+due to classpath loading issues; see <<wildfly-kludge>>.
 
 // SW: Need functional tests for a java maven project and a java gradle project
 
@@ -1600,6 +1602,7 @@ export JRUBY_OPTS="-J-Xverify:none -J-client" # <1>
 
 You can find a full explanation on how to improve the start time of JRuby applications in <<Optimization>>.
 
+[wildfly-kludge]
 == Running AsciidoctorJ on WildFly AS
 
 If you want to use AsciidoctorJ in an application deployed on [app]_WildFly AS_, you have to follow the instruction below:
@@ -1625,6 +1628,8 @@ If you want to use AsciidoctorJ in an application deployed on [app]_WildFly AS_,
   </dependencies>
 </module>
 ----
+
+. Copy the three Jar files cited in the <resources> section into the module
 
 . Add a dependency on your Java archive to this WildFly module using one of the following options:
 .. Add the dependency just into the [path]_MANIFEST.MF_ file.
