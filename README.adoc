@@ -1605,7 +1605,23 @@ You can find a full explanation on how to improve the start time of JRuby applic
 [[wildfly-kludge]]
 == Running AsciidoctorJ on WildFly AS
 
-If you want to use AsciidoctorJ in an application deployed on [app]_WildFly AS_, you have to follow the instruction below:
+If you want to use AsciidoctorJ in an application deployed on [app]_WildFly AS_, you have to install AsciiDoctorJ as a JBoss Module.
+
+Either: use the jboss-cli and give it the following commands:
+
+[source,shell]
+----
+MacKenzie$ vi /tmp/id
+
+connect
+
+module add \
+ --name=org.asciidoctor \ --resources=lib/asciidoctorj-1.5.2.jar,lib/jcommander-1.35.jar,lib/jruby-complete-1.7.16.1.jar \
+ --resource-delimiter=, \
+ --dependencies=javax.management.j2ee.api,javax.api
+ ----
+
+OR follow the manual steps below:
 
 . Create an *Asciidoctor module* for [app]_WildFly AS_.
 . Create the following folder tree: [path]_$JBOSS_HOME/modules/org/asciidoctor/main_.
@@ -1617,9 +1633,9 @@ If you want to use AsciidoctorJ in an application deployed on [app]_WildFly AS_,
 <?xml version="1.0" encoding="UTF-8"?>
 <module xmlns="urn:jboss:module:1.0" name="org.asciidoctor">
   <resources>
-    <resource-root path="asciidoctorj-1.5.0.jar"/>
-    <resource-root path="jcommander-1.32.jar"/>
-    <resource-root path="jruby-complete-1.7.9.jar"/>
+    <resource-root path="asciidoctorj-1.5.2.jar"/>
+    <resource-root path="jcommander-1.35.jar"/>
+    <resource-root path="jruby-complete-1.7.16.1.jar"/>
   </resources>
 
   <dependencies>
@@ -1628,7 +1644,7 @@ If you want to use AsciidoctorJ in an application deployed on [app]_WildFly AS_,
   </dependencies>
 </module>
 ----
-
+. Copy the jar files into the same folder as the _module.xml_ file. 
 . Make sure the version numbers of the jar files agree with what's in your application. Restart WildFly for the new module to take effect.
 
 . Add a dependency on your Java archive to this WildFly module using one of the following options:
