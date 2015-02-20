@@ -115,7 +115,7 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
         // The Ruby initialize method may have changed the config, therefore copy it back
         // because the accessor is routed to the Java Processor.config
         RubyHash newConfig = (RubyHash) Helpers.getInstanceVariable(this, getRuntime(), MEMBER_NAME_CONFIG);
-        getProcessor().setConfig(RubyHashUtil.convertRubyHashMapToMap(newConfig));
+        getProcessor().setConfig(RubyHashUtil.convertRubyHashMapToStringObjectMap(newConfig));
         return null;
     }
 
