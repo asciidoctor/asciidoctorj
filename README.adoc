@@ -1607,21 +1607,7 @@ You can find a full explanation on how to improve the start time of JRuby applic
 
 If you want to use AsciidoctorJ in an application deployed on [app]_WildFly AS_, you have to install AsciiDoctorJ as a JBoss Module.
 
-Either: use the jboss-cli and give it the following commands:
-
-[source,shell]
-----
-MacKenzie$ vi /tmp/id
-
-connect
-
-module add \
- --name=org.asciidoctor \ --resources=lib/asciidoctorj-1.5.2.jar,lib/jcommander-1.35.jar,lib/jruby-complete-1.7.16.1.jar \
- --resource-delimiter=, \
- --dependencies=javax.management.j2ee.api,javax.api
- ----
-
-OR follow the manual steps below:
+Follow the steps below:
 
 . Create an *Asciidoctor module* for [app]_WildFly AS_.
 . Create the following folder tree: [path]_$JBOSS_HOME/modules/org/asciidoctor/main_.
@@ -1638,14 +1624,21 @@ OR follow the manual steps below:
     <resource-root path="jruby-complete-1.7.16.1.jar"/>
   </resources>
 
-  <dependencies>
-    <module name="javax.management.j2ee.api"/>
-    <module name="javax.api"/>
-  </dependencies>
+    <dependencies>
+        <module name="sun.jdk" export="true" >
+		<imports>
+			<include path="sun/misc/Unsafe" />
+		</imports>
+        </module>
+        <module name="javax.management.j2ee.api"/>
+        <module name="javax.api"/>
+        <module name="org.slf4j"/>
+    </dependencies>
 </module>
 ----
 . Copy the jar files into the same folder as the _module.xml_ file. 
-. Make sure the version numbers of the jar files agree with what's in your application. Restart WildFly for the new module to take effect.
+. Make sure the version numbers of the jar files agree with what's in the current set. 
+Restart WildFly for the new module to take effect.
 
 . Add a dependency on your Java archive to this WildFly module using one of the following options:
 .. Add the dependency just into the [path]_MANIFEST.MF_ file.
