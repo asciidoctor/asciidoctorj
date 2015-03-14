@@ -24,11 +24,63 @@ public class GlobDirectoryWalker implements DirectoryWalker {
     private final List<File> matches = new ArrayList<File>();
     private final String globExpression;
 
-    public GlobDirectoryWalker(String rootDir, String globExpression) {
-        rootDirectory = new File(rootDir);
-        checkInput(rootDirectory);
-        this.canonicalRootDir = getCanonicalPath(rootDirectory);
-        this.globExpression = globExpression;
+    public GlobDirectoryWalker(String globExpression) {
+
+        if (isAbsoluteGlobExpression(globExpression)) {
+
+            // If the given path is an absolute path we want to split it into an absolute part containing
+            // directories without wildcards and a glob part with wildcards and file names
+            int indexOfUnglobbedPart = findIndexOfUnglobbedPart(globExpression);
+            this.rootDirectory = new File(globExpression.substring(0, indexOfUnglobbedPart));
+            this.globExpression = globExpression.substring(indexOfUnglobbedPart + 1);
+            checkInput(rootDirectory);
+            this.canonicalRootDir = getCanonicalPath(rootDirectory);
+
+        } else {
+            // It's a relative expression, current working dir is sufficient as root directory
+            rootDirectory = new File(".");
+            checkInput(rootDirectory);
+            this.canonicalRootDir = getCanonicalPath(rootDirectory);
+            this.globExpression = globExpression;
+
+        }
+    }
+
+    // An absolute path will consist of an absolute, unglobbed part and a globbed part.
+    // The globbed part starts at the first path element that contains a '*' or it is
+    // the part following the last separator
+    private int findIndexOfUnglobbedPart(String globExpression) {
+        int result = 0;
+        for (int i = 0; i < globExpression.length(); i++) {
+            switch (globExpression.charAt(i)) {
+                case '/':
+                case '\\':
+                    result = i;
+                    break;
+                case '*':
+                    return result;
+                default:
+            }
+        }
+        // There is apparently no wildcard in the path, let the directory part be the path
+        // and the glob part only the filename
+        return result;
+    }
+
+    // Determines if the given glob expression is an absolute path
+    // That is the expression starts with a separator or with [A-Za-z]:[/\] on Windows
+    private boolean isAbsoluteGlobExpression(String globExpression) {
+        if (globExpression.startsWith(File.separator)) {
+            return true;
+        }
+        if (isWindows()) {
+            return globExpression.matches("^[A-Za-z]:[\\\\/].*$");
+        }
+        return false;
+    }
+
+    private boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("win");
     }
 
     @Override
