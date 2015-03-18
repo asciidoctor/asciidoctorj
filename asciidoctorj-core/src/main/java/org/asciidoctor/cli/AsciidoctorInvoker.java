@@ -171,8 +171,7 @@ public class AsciidoctorInvoker {
         List<File> filesToBeRendered = new ArrayList<File>();
 
         for (String globExpression : parameters) {
-            DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(".",
-                    globExpression);
+            DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(globExpression);
             filesToBeRendered.addAll(globDirectoryWalker.scan());
         }
 

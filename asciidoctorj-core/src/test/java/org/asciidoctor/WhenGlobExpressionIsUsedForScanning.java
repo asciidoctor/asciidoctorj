@@ -21,7 +21,7 @@ public class WhenGlobExpressionIsUsedForScanning {
     public void all_files_with_given_extension_of_current_directory_should_be_returned() {
         
         File pathToWalk = classpath.getResource("src");
-        DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(pathToWalk.getPath(), "documents/*.adoc");
+        DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(pathToWalk.getPath() + File.separator + "documents/*.adoc");
         List<File> asciidocFiles = globDirectoryWalker.scan();
         
         assertThat(
@@ -35,7 +35,7 @@ public class WhenGlobExpressionIsUsedForScanning {
     public void all_files_with_given_extension_should_be_returned_recursively() {
         
         File pathToWalk = classpath.getResource("src");
-        DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(pathToWalk.getPath(), "**/*.adoc");
+        DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(pathToWalk.getPath() + File.separator + "**/*.adoc");
         List<File> asciidocFiles = globDirectoryWalker.scan();
         
         assertThat(
@@ -49,7 +49,7 @@ public class WhenGlobExpressionIsUsedForScanning {
     public void no_should_be_returned_if_glob_expression_does_not_match() {
         
         File pathToWalk = classpath.getResource("src");
-        DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(pathToWalk.getPath(), "**/*.a");
+        DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(pathToWalk.getPath() + File.separator + "**/*.a");
         List<File> asciidocFiles = globDirectoryWalker.scan();
         
         assertThat(asciidocFiles, is(empty()));

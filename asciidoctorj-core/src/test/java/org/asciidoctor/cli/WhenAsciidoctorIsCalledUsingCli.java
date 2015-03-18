@@ -231,7 +231,19 @@ public class WhenAsciidoctorIsCalledUsingCli {
 	    
 	}
 
-	private ByteArrayOutputStream redirectStdout() {
+    @Test
+    public void with_absolute_path_file_should_be_rendered() {
+
+        File inputFile = classpath.getResource("rendersample.asciidoc");
+        String inputPath = inputFile.getAbsolutePath();
+        new AsciidoctorInvoker().invoke(inputPath);
+        File expectedFile = new File(inputPath.replaceFirst("\\.asciidoc$", ".html"));
+
+        assertThat(expectedFile.exists(), is(true));
+        expectedFile.delete();
+    }
+
+    private ByteArrayOutputStream redirectStdout() {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(output));
 		return output;
