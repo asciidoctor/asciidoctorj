@@ -1,16 +1,17 @@
 package org.asciidoctor;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.junit.Assert.assertThat;
+import org.asciidoctor.util.ClasspathResources;
+import org.junit.Rule;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.List;
 
-import org.asciidoctor.util.ClasspathResources;
-import org.junit.Rule;
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.junit.Assert.assertThat;
 
 public class WhenGlobExpressionIsUsedForScanning {
 
@@ -54,5 +55,29 @@ public class WhenGlobExpressionIsUsedForScanning {
         
         assertThat(asciidocFiles, is(empty()));
     }
-    
+
+    @Test
+    public void should_not_fail_with_file_in_root_dir() {
+
+        final String fileNameInRootDir = "/this_file_does_not_exist.adoc";
+
+        DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(fileNameInRootDir);
+
+        List<File> asciidocFiles = globDirectoryWalker.scan();
+
+        assertThat(asciidocFiles, contains(new File(fileNameInRootDir).getAbsoluteFile()));
+    }
+
+    @Test
+    public void should_not_fail_with_file_in_current_working_dir() {
+
+        final String fileNameInCurrentWorkingDir = "this_file_does_not_exist.adoc";
+
+        DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(fileNameInCurrentWorkingDir);
+
+        List<File> asciidocFiles = globDirectoryWalker.scan();
+
+        assertThat(asciidocFiles, contains(new File(fileNameInCurrentWorkingDir).getAbsoluteFile()));
+    }
+
 }
