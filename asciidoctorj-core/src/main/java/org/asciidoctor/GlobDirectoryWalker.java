@@ -26,31 +26,42 @@ public class GlobDirectoryWalker implements DirectoryWalker {
 
     public GlobDirectoryWalker(String globExpression) {
 
-        if (isAbsoluteGlobExpression(globExpression)) {
+        // Determine leading part that is unglobbed, i.e. does not contain a '*'.
+        int indexOfUnglobbedPart = findIndexOfUnglobbedPart(globExpression);
 
-            // If the given path is an absolute path we want to split it into an absolute part containing
-            // directories without wildcards and a glob part with wildcards and file names
-            int indexOfUnglobbedPart = findIndexOfUnglobbedPart(globExpression);
-            this.rootDirectory = new File(globExpression.substring(0, indexOfUnglobbedPart));
-            this.globExpression = globExpression.substring(indexOfUnglobbedPart + 1);
-            checkInput(rootDirectory);
-            this.canonicalRootDir = getCanonicalPath(rootDirectory);
+        String unglobbedPart = globExpression.substring(0, indexOfUnglobbedPart + 1);
 
-        } else {
-            // It's a relative expression, current working dir is sufficient as root directory
-            rootDirectory = new File(".");
-            checkInput(rootDirectory);
-            this.canonicalRootDir = getCanonicalPath(rootDirectory);
-            this.globExpression = globExpression;
-
-        }
+        this.rootDirectory = new File(unglobbedPart).getAbsoluteFile();
+        this.globExpression = globExpression.substring(indexOfUnglobbedPart + 1);
+        checkInput(rootDirectory);
+        this.canonicalRootDir = getCanonicalPath(rootDirectory);
     }
 
-    // An absolute path will consist of an absolute, unglobbed part and a globbed part.
-    // The globbed part starts at the first path element that contains a '*' or it is
-    // the part following the last separator
+    /**
+     * This method computes the index of the last separator that splits
+     * the given glob expression into a leading part not containing wildcards
+     * and a trailing part containing wildcards.
+     * The last part of the path will never be counted to the leading part.
+     *
+     * <p>Example</p>
+     * <code><pre>
+     *     src/main/asciidoc/*.adoc
+     *                      ^ 17
+     *     /tmp/test.adoc
+     *         ^ 4
+     *     /test.adoc
+     *     ^ 0
+     *     *.adoc
+     *    ^ -1
+     * </pre></code>
+     *
+     * @param globExpression e.g. {@code src/main/asciidoc/*.adoc}, {@code *.adoc},
+     * {@code /tmp/test.adoc}
+     * @return The index of the last separator char that splits the string into an unglobbed and a globbed part.
+     * If there is no unglobbed part or the string is only a file name the method returns {@code -1}
+     */
     private int findIndexOfUnglobbedPart(String globExpression) {
-        int result = 0;
+        int result = -1;
         for (int i = 0; i < globExpression.length(); i++) {
             switch (globExpression.charAt(i)) {
                 case '/':
@@ -65,22 +76,6 @@ public class GlobDirectoryWalker implements DirectoryWalker {
         // There is apparently no wildcard in the path, let the directory part be the path
         // and the glob part only the filename
         return result;
-    }
-
-    // Determines if the given glob expression is an absolute path
-    // That is the expression starts with a separator or with [A-Za-z]:[/\] on Windows
-    private boolean isAbsoluteGlobExpression(String globExpression) {
-        if (globExpression.startsWith(File.separator)) {
-            return true;
-        }
-        if (isWindows()) {
-            return globExpression.matches("^[A-Za-z]:[\\\\/].*$");
-        }
-        return false;
-    }
-
-    private boolean isWindows() {
-        return System.getProperty("os.name").toLowerCase().contains("win");
     }
 
     @Override
