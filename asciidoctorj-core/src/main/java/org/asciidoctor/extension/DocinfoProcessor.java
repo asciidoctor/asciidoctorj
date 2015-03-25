@@ -6,6 +6,9 @@ import org.asciidoctor.ast.DocumentRuby;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @since 1.5.2
+ */
 public abstract class DocinfoProcessor extends Processor {
 
     public DocinfoProcessor() {
