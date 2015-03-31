@@ -197,6 +197,9 @@ Asciidoctor asciidoctor = create();
 Once you retrieve an instance of the `Asciidoctor` interface, you can use it to convert AsciiDoc content.
 Here's an example of using AsciidoctorJ to convert an AsciiDoc string.
 
+NOTE: The following `convertFile` or `convertFiles` methods will only return a converted `String` object or array if you disable writing to a file, which is enabled by default.
+To disable writing to a file, create a new `Options` object, disable the option to create a new file with `option.setToFile(false)`, and then pass the object as a parameter to `convertFile` or `convertFiles`.
+
 [source]
 .Converting an AsciiDoc string
 ----
