@@ -163,8 +163,6 @@ subprojects {
   }
 }
 
-apply from: 'gradle/idea.gradle'
-
 // disable bintrayUpload on root project to prevent build from failing
 // NOTE seems to only get added when we use the modern plugin syntax
 if (tasks.findByName(':bintrayUpload')) {
