@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 import java.io.BufferedReader;
@@ -583,6 +584,26 @@ public class WhenJavaExtensionIsRegistered {
         assertNotNull(link);
         assertThat(link.attr("href"), is("gittutorial.html"));
 
+    }
+
+    @Test
+    public void an_inline_macro_as_instance_extension_should_not_be_executed_when_regexp_is_set_and_does_not_match() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("regexp", "man(?:page)?:(ThisDoesNotMatch)\\[(.*?)\\]");
+
+        ManpageMacro inlineMacroProcessor = new ManpageMacro("man", options);
+        javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
+
+        String content = asciidoctor.renderFile(
+                classpath.getResource("sample-with-man-link.ad"),
+                options().toFile(false).get());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Element link = doc.getElementsByTag("a").first();
+        assertNull(link);
     }
 
     @Test

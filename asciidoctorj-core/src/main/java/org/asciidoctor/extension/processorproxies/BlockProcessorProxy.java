@@ -4,9 +4,12 @@ import org.asciidoctor.ast.AbstractBlock;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.extension.Reader;
+import org.asciidoctor.internal.RubyHashMapDecorator;
+import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
+import org.jruby.RubyHash;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Block;
@@ -69,26 +72,22 @@ public class BlockProcessorProxy extends AbstractProcessorProxy<BlockProcessor> 
                     context,
                     this,
                     getMetaClass(),
-                    "initialize",
+                    METHOD_NAME_INITIALIZE,
                     new IRubyObject[]{
                             JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getName()),
-                            JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getConfig()) },
+                            RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(getRuntime(), getProcessor().getConfig())},
                     Block.NULL_BLOCK);
+            // The extension config in the Java extension is just a view on the @config member of the Ruby part
+            getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
         } else {
-            if (args.length == 1) {
-                setProcessor(getProcessorClass().getConstructor(String.class).newInstance(RubyUtils.rubyToJava(getRuntime(), args[0], String.class)));
-            } else {
-                setProcessor(
-                        getProcessorClass()
-                                .getConstructor(String.class, Map.class)
-                                .newInstance(
-                                        RubyUtils.rubyToJava(getRuntime(), args[0], String.class),
-                                        RubyUtils.rubyToJava(getRuntime(), args[1], Map.class)));
-            }
-            Helpers.invokeSuper(context, this, getMetaClass(), "initialize", args, Block.NULL_BLOCK);
+            Helpers.invokeSuper(context, this, getMetaClass(), METHOD_NAME_INITIALIZE, args, Block.NULL_BLOCK);
+            setProcessor(
+                    getProcessorClass()
+                            .getConstructor(String.class, Map.class)
+                            .newInstance(
+                                    RubyUtils.rubyToJava(getRuntime(), args[0], String.class),
+                                    new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG))));
         }
-
-
         return null;
     }
 

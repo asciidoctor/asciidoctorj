@@ -3,6 +3,7 @@ package org.asciidoctor.extension.processorproxies;
 import org.asciidoctor.ast.AbstractBlock;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.InlineMacroProcessor;
+import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
@@ -26,8 +27,6 @@ import java.util.Map;
 
 public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<InlineMacroProcessor> {
 
-    private static final String MEMBER_NAME_CONFIG = "@config";
-    private static final String METHOD_NAME_INITIALIZE = "initialize";
     private static final String SUPER_CLASS_NAME = "InlineMacroProcessor";
 
     private static String blockName;
@@ -96,26 +95,18 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
                             JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getName()),
                             JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getConfig())},
                     Block.NULL_BLOCK);
+            // The Ruby initialize method may have changed the config, therefore copy it back
+            // because the accessor is routed to the Java Processor.config
+            getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
         } else {
-            if (args.length == 1) {
-                setProcessor(
-                        getProcessorClass()
-                                .getConstructor(String.class)
-                                .newInstance(RubyUtils.rubyToJava(getRuntime(), args[0], String.class)));
-            } else {
-                setProcessor(
-                        getProcessorClass()
-                                .getConstructor(String.class, Map.class)
-                                .newInstance(
-                                        RubyUtils.rubyToJava(getRuntime(), args[0], String.class),
-                                        RubyUtils.rubyToJava(getRuntime(), args[1], Map.class)));
-            }
             Helpers.invokeSuper(context, this, getMetaClass(), METHOD_NAME_INITIALIZE, args, Block.NULL_BLOCK);
+            setProcessor(
+                    getProcessorClass()
+                            .getConstructor(String.class, Map.class)
+                            .newInstance(
+                                    RubyUtils.rubyToJava(getRuntime(), args[0], String.class),
+                                    new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG))));
         }
-        // The Ruby initialize method may have changed the config, therefore copy it back
-        // because the accessor is routed to the Java Processor.config
-        RubyHash newConfig = (RubyHash) Helpers.getInstanceVariable(this, getRuntime(), MEMBER_NAME_CONFIG);
-        getProcessor().setConfig(RubyHashUtil.convertRubyHashMapToStringObjectMap(newConfig));
         return null;
     }
 

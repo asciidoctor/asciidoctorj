@@ -43,11 +43,13 @@ ext {
   asciidoctorPdfGemVersion = project(':asciidoctorj-pdf').version.replace('-', '.')
   asciidoctorDiagramGemVersion = project(':asciidoctorj-diagram').version.replace('-', '.')
   coderayGemVersion = '1.1.0'
+  groovyVersion = '2.1.8'
   erubisGemVersion = '2.7.0'
   hamlGemVersion = '4.0.5'
   openUriCachedGemVersion = '0.0.5'
   prawnGemVersion = '1.2.1'
   slimGemVersion = '2.0.3'
+  spockVersion = '0.7-groovy-2.0'
   threadSafeGemVersion = '0.3.4'
   tiltGemVersion = '2.0.1'
   ttfunkGemVersion = '1.2.2'
@@ -62,6 +64,7 @@ subprojects {
   // NOTE applying Java plugin changes the status; take steps to preserve value
   def _status = status
   apply plugin: 'java'
+  apply plugin: 'groovy'
   status = _status
 
   // NOTE sourceCompatibility & targetCompatibility are set in gradle.properties to meet requirements of Gradle
@@ -90,6 +93,14 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
   dependencies {
     testCompile "junit:junit:$junitVersion"
     testCompile "org.hamcrest:hamcrest-library:$hamcrestVersion"
+    testCompile("org.spockframework:spock-core:$spockVersion") {
+      exclude group: 'org.hamcrest', module: 'hamcrest-core'
+    }
+    testCompile "org.codehaus.groovy:groovy-all:$groovyVersion"
+  }
+  apply plugin: 'codenarc'
+  codenarc {
+    configFile = rootProject.file('config/codenarc/codenarc.groovy')
   }
 
   test {
