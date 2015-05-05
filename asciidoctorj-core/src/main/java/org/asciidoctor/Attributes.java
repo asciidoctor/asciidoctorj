@@ -78,18 +78,68 @@ public class Attributes {
         this.setAttributes(attributes);
     }
 
+    /**
+     * Allow Asciidoctor to read content from an URI.
+     * Additionally the option {@link SafeMode} must be less than {@link SafeMode#SECURE} to enable inclusion of content from an URI.
+     * @see <a href="http://asciidoctor.org/docs/user-manual/#include-content-from-a-uri">Asciidoctor User Manual</a>
+     * @param allowUriRead {@code true} to enable inclusion of content from an URI
+     */
     public void setAllowUriRead(boolean allowUriRead) {
         this.attributes.put(ALLOW_URI_READ, toAsciidoctorFlag(allowUriRead));
     }
 
+    /**
+     * Define how to handle missing attribute references.
+     * Possible values are:
+     * <table>
+     *     <tr>
+     *         <td>{@code skip}</td>
+     *         <td>leave the reference in place (default setting)</td>
+     *     </tr>
+     *     <tr>
+     *         <td>{@code drop}</td>
+     *         <td>drop the reference, but not the line</td>
+     *     </tr>
+     *     <tr>
+     *         <td>{@code drop-line}</td>
+     *         <td>drop the line on which the reference occurs (compliant behavior)</td>
+     *     </tr>
+     *     <tr>
+     *         <td>{@code warn}</td>
+     *         <td>print a warning about the missing attribute</td>
+     *     </tr>
+     * </table>
+     * @see <a href="http://asciidoctor.org/docs/user-manual/#catch-a-missing-or-undefined-attribute">Asciidoctor User Manual</a>
+     * @param attributeMissing One of the constants shown in the table above.
+     */
     public void setAttributeMissing(String attributeMissing) {
         this.attributes.put(ATTRIBUTE_MISSING, attributeMissing);
     }
 
+    /**
+     * Define how to handle expressions that undefine an attribute.
+     * Possible values are:
+     * <table>
+     *     <tr>
+     *         <td>{@code drop}</td>
+     *         <td>substitute the expression with an empty string after processing it</td>
+     *     </tr>
+     *     <tr>
+     *         <td>{@code drop-line}</td>
+     *         <td>drop the line that contains this expression (default setting and compliant behavior)</td>
+     *     </tr>
+     * </table>
+     * @see <a href="http://asciidoctor.org/docs/user-manual/#catch-a-missing-or-undefined-attribute">Asciidoctor User Manual</a>
+     * @param attributeUndefined One of the constants shown in the table above.
+     */
     public void setAttributeUndefined(String attributeUndefined) {
         this.attributes.put(ATTRIBUTE_UNDEFINED, attributeUndefined);
     }
 
+    /**
+     * Sets the backend attribute.
+     * @param backend The name of the backend, e.g. {@code docbook}.
+     */
     public void setBackend(String backend) {
         this.attributes.put(BACKEND, backend);
     }
@@ -98,22 +148,60 @@ public class Attributes {
         this.attributes.put(TITLE, title);
     }
 
+    /**
+     * Sets the document type, which defines how a document and what parts are rendered.
+     * Possible values are:
+     * <ul>
+     *     <li>{@code article}</li>
+     *     <li>{@code book}</li>
+     *     <li>{@code inline}</li>
+     *     <li>{@code manpage}</li>
+     * </ul>
+     * @see <a href="http://asciidoctor.org/docs/user-manual/#document-types">Asciidoctor User Manual</a>
+     * @param docType One of the constants mentioned above.
+     */
     public void setDocType(String docType) {
         this.attributes.put(DOCTYPE, docType);
     }
 
+    /**
+     * Sets the directory to which images are resolved if the image target is a relative path.
+     * @see <a href="http://asciidoctor.org/docs/user-manual/#set-the-images-directory">Asciidoctor User Manual</a>
+     * @param imagesDir The name of the directory.
+     */
     public void setImagesDir(String imagesDir) {
         this.attributes.put(IMAGESDIR, imagesDir);
     }
 
+    /**
+     * Globally sets the source language attribute when rendering source blocks.
+     * @see <a href="http://asciidoctor.org/docs/user-manual/#source-code-blocks">Asciidoctor User Manual</a>
+     * @param sourceLanguage The default source language to use, e.g. {@code Java}.
+     */
     public void setSourceLanguage(String sourceLanguage) {
         this.attributes.put(SOURCE_LANGUAGE, sourceLanguage);
     }
 
+    /**
+     * Sets the source highlighter to use for rendering source blocks.
+     * Possible values are:
+     * <ul>
+     *     <li>coderay</li>
+     *     <li>highlightjs</li>
+     *     <li>prettify</li>
+     * </ul>
+     * @see <a href="http://asciidoctor.org/docs/user-manual/#source-code-blocks">Asciidoctor User Manual</a>
+     * @param sourceHighlighter One of the constants mentioned above.
+     */
     public void setSourceHighlighter(String sourceHighlighter) {
         this.attributes.put(SOURCE_HIGHLIGHTER, sourceHighlighter);
     }
 
+    /**
+     * Defines how many documents can be recursively included.
+     * @see <a href="https://github.com/asciidoctor/asciidoctor/issues/581">Track include depth and enforce maximum depth #581</a>
+     * @param maxIncludeDepth A positive integer.
+     */
     public void setMaxIncludeDepth(int maxIncludeDepth) {
         this.attributes.put(MAX_INCLUDE_DEPTH, maxIncludeDepth);
     }
@@ -122,22 +210,49 @@ public class Attributes {
         this.attributes.put(SECT_NUM_LEVELS, sectNumLevels);
     }
 
+    /**
+     * Enables or disables preserving of line breaks in a paragraph.
+     * @see <a href="http://asciidoctor.org/docs/user-manual/#line-breaks">Asciidoctor User Manual</a>
+     * @param hardbreaks {@code true} to enable preserving of line breaks in paragraphs
+     */
     public void setHardbreaks(boolean hardbreaks) {
         this.attributes.put(HARDBREAKS, toAsciidoctorFlag(hardbreaks));
     }
 
-    public void setCacheUri(boolean hardbreaks) {
-        this.attributes.put(CACHE_URI, toAsciidoctorFlag(hardbreaks));
+    /**
+     * Enables or disables caching of content read from URIs
+     * @see <a href="http://asciidoctor.org/docs/user-manual/#include-content-from-a-uri">Asciidoctor User Manual</a>
+     * @param cacheUri {@code true} to enable caching of content read from URIs
+     */
+    public void setCacheUri(boolean cacheUri) {
+        this.attributes.put(CACHE_URI, toAsciidoctorFlag(cacheUri));
     }
 
+    /**
+     * Enables or disables rendering of the URI scheme when rendering URLs.
+     * @see <a href="http://asciidoctor.org/docs/user-manual/#url">Asciidoctor User Manual</a>
+     * @param hideUriScheme
+     */
     public void setHideUriScheme(boolean hideUriScheme) {
         this.attributes.put(HIDE_URI_SCHEME, toAsciidoctorFlag(hideUriScheme));
     }
 
+    /**
+     * Defines the prefix added to appendix sections.
+     * The default value is {@code Appendix}
+     * @see <a href="http://asciidoctor.org/docs/user-manual/#user-appendix">Asciidoctor User Manual</a>
+     * @param appendixCaption The string that is prefixed to the section name in the appendix.
+     */
     public void setAppendixCaption(String appendixCaption) {
         this.attributes.put(APPENDIX_CAPTION, appendixCaption);
     }
 
+
+    /**
+     * Sets the interpreter to use for rendering stems, i.e. equations and formulas.
+     * @see <a href="http://asciidoctor.org/docs/user-manual/#activating-stem-support">Asciidoctor User Manual</a>
+     * @param math The name of the interpreter, i.e. either {@code asciimath} or {@code latexmath}.
+     */
     public void setMath(String math) {
         this.attributes.put(MATH, math);
     }
