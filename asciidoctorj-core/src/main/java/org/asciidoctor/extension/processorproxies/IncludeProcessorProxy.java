@@ -4,9 +4,12 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.PreprocessorReader;
+import org.asciidoctor.internal.RubyHashMapDecorator;
+import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
+import org.jruby.RubyHash;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Block;
@@ -62,6 +65,7 @@ public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcess
 
     @JRubyMethod(name = "initialize", required = 1)
     public IRubyObject initialize(ThreadContext context, IRubyObject options) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+
         if (getProcessor() != null) {
             // Instance was created in Java and has options set, so we pass these
             // instead of those passed by asciidoctor
@@ -69,17 +73,20 @@ public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcess
                     context,
                     this,
                     getMetaClass(),
-                    "initialize",
-                    new IRubyObject[]{ JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getConfig()) },
+                    METHOD_NAME_INITIALIZE,
+                    new IRubyObject[]{
+                            RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(getRuntime(), getProcessor().getConfig())},
                     Block.NULL_BLOCK);
+            // The extension config in the Java extension is just a view on the @config member of the Ruby part
+            getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
         } else {
+            Helpers.invokeSuper(context, this, getMetaClass(), METHOD_NAME_INITIALIZE, new IRubyObject[0], Block.NULL_BLOCK);
             setProcessor(
                     getProcessorClass()
                             .getConstructor(Map.class)
-                            .newInstance(RubyUtils.rubyToJava(getRuntime(), options, Map.class)));
-            Helpers.invokeSuper(context, this, getMetaClass(), "initialize", new IRubyObject[]{options}, Block.NULL_BLOCK);
+                            .newInstance(
+                                    new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG))));
         }
-
 
         return null;
     }

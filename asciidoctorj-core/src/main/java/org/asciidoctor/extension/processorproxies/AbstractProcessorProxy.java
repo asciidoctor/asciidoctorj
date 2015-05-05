@@ -1,6 +1,7 @@
 package org.asciidoctor.extension.processorproxies;
 
 import org.asciidoctor.extension.Processor;
+import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
@@ -8,12 +9,18 @@ import org.jruby.RubyClass;
 import org.jruby.RubyHash;
 import org.jruby.RubyObject;
 import org.jruby.anno.JRubyMethod;
+import org.jruby.javasupport.JavaEmbedUtils;
+import org.jruby.runtime.Block;
+import org.jruby.runtime.Helpers;
 import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.Map;
 
 public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
+
+    protected static final String MEMBER_NAME_CONFIG = "@config";
+    protected static final String METHOD_NAME_INITIALIZE = "initialize";
 
     protected T processor;
 
@@ -43,24 +50,6 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
 
     public void setProcessorClass(Class<? extends T> processorClass) {
         this.processorClass = processorClass;
-    }
-
-    @JRubyMethod(name = "config")
-    public IRubyObject getConfig(ThreadContext context) {
-        return RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(getRuntime(), getProcessor().getConfig());
-    }
-
-    @JRubyMethod(name = "config=", required = 1)
-    public IRubyObject setConfig(ThreadContext context, IRubyObject newConfig) {
-        processor.setConfig(RubyHashUtil.convertRubyHashMapToStringObjectMap((RubyHash) newConfig));
-        return null;
-    }
-
-    @JRubyMethod(name = "update_config", required = 1)
-    public IRubyObject updateConfig(ThreadContext context, IRubyObject additionalConfig) {
-        Map additionalJavaConfig = RubyUtils.rubyToJava(getRuntime(), additionalConfig, Map.class);
-        processor.update_config(additionalJavaConfig);
-        return RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(getRuntime(), processor.getConfig());
     }
 
 }

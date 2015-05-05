@@ -19,7 +19,7 @@ public class GistMacro extends BlockMacroProcessor {
        		"<script src=\"https://gist.github.com/"+target+".js\"></script>\n" + 
        		"</div>"; 
        
-       return createBlock(parent, "pass", Arrays.asList(content), attributes, this.getConfig());
+       return createBlock(parent, "pass", Arrays.asList(content), attributes);
     }
 
 }

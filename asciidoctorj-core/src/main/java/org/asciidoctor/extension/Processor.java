@@ -10,6 +10,7 @@ import org.jruby.RubyHash;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,10 @@ public class Processor {
         return null;
     }
 
+    public Block createBlock(AbstractBlock parent, String context, String content, Map<String, Object> attributes) {
+        return createBlock(parent, context, content, attributes, new HashMap<Object, Object>());
+    }
+
     public Block createBlock(AbstractBlock parent, String context, String content, Map<String, Object> attributes,
             Map<Object, Object> options) {
 
@@ -44,7 +49,11 @@ public class Processor {
         
         return createBlock(parent, context, options);
     }
-    
+
+    public Block createBlock(AbstractBlock parent, String context, List<String> content, Map<String, Object> attributes) {
+        return createBlock(parent, context, content, attributes, new HashMap<Object, Object>());
+    }
+
     public Block createBlock(AbstractBlock parent, String context, List<String> content, Map<String, Object> attributes,
             Map<Object, Object> options) {
 
