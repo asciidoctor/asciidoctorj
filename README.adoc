@@ -1550,6 +1550,48 @@ Asciidoctor asciidoctor = create("/my/gem/path"); // <1>
 ----
 <1> Creates an `Asciidoctor` instance with given `GEM_PATH` location.
 
+== Using AsciidoctorJ in an OSGi environment
+
+In a non OSGi context, the following snippet will successfully create an Asciidoctor object:
+
+[source,java]
+----
+import static org.asciidoctor.Asciidoctor.Factory.create;
+import org.asciidoctor.Asciidoctor;
+
+Asciidoctor asciidoctor = create();
+----
+
+In an OSGi context it will not work because JRuby needs some paths to find the gems (the Asciidoctor ones and the Ruby themselves ones). In order to make it work, you will need two more classes (RubyInstanceConfig and JavaEmbedUtils) and a small modification of the previous snippet of code. The modifications take care of the class loaders because in OSGi, which are a key point in OSGi:
+
+[source,java]
+----
+import static org.asciidoctor.Asciidoctor.Factory.create;
+import org.asciidoctor.Asciidoctor;
+
+RubyInstanceConfig config = new RubyInstanceConfig();
+config.setLoader(this.getClass().getClassLoader()); <1>
+
+JavaEmbedUtils.initialize(Arrays.asList("META-INF/jruby.home/lib/ruby/2.0", "gems/asciidoctor-1.5.2/lib"), config); <2><3><4>
+
+Asciidoctor asciidoctor = create(this.getClass().getClassLoader()); <5>
+----
+<1> The RubyInstanceConfig will use the class loader of the OSGi bundle ;
+<2> The JavaEmbedUtils will specify the load paths of the required gems. If they are not specified, you will get JRuby exceptions ;
+<3> `META-INF/jruby.home/lib/ruby/2.0` specifies where the Ruby gems are located. Actually this path is located inside the `jruby-complete-<version>.jar` file. Without having this path specified you may get an `org.jruby.exceptions.RaiseException: (LoadError) no such file to load -- set` error ;
+<4> `gems/asciidoctor-<version>/lib` specifies where the gems for Asciidoctor are located. Actually this path is located inside the `asciidoctorj-<version>.jar` file ;
+<5> The factory for the Asciidoctor object also specify the class loader to use.
+
+[NOTE]
+We consider this code to be placed inside an OSGi bundle
+
+This solution has pros and cons:
+
+* _Pros:_ you don't need to extract the gems located in the asciidoctorj binary ;
+* _Cons:_
+** the version of asciidoctor is hard coded ;
+** the version of ruby is hard coded.
+
 == Optimization
 
 JRuby may start slower than expected versus the C-based Ruby implementation (MRI).
