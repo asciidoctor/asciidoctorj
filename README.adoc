@@ -1536,7 +1536,7 @@ To get this instance you can use `org.asciidoctor.internal.JRubyRuntimeContext.g
 == GEM_PATH
 
 By default, AsciidoctorJ comes with all required gems bundled within the jar.
-But in some circumstances like OSGi environments you may require to store gems in an external folder and be loaded by AsciidoctorJ.
+In certain circumstances, you may want to load gems from an external folder.
 To accomplish this scenario, `create` method provides a parameter to set folder where gems are present.
 Internally, AsciidoctorJ will set `GEM_PATH` environment variable to given path.
 
