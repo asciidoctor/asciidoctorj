@@ -206,6 +206,12 @@ public class Attributes {
         this.attributes.put(MAX_INCLUDE_DEPTH, maxIncludeDepth);
     }
 
+    /**
+     * Sets the depth of section numbering.
+     * That is if set to 1 only the top level section will be assigned a number.
+     * Default is 3.
+     * @param sectNumLevels A positive integer.
+     */
     public void setSectNumLevels(int sectNumLevels) {
         this.attributes.put(SECT_NUM_LEVELS, sectNumLevels);
     }
