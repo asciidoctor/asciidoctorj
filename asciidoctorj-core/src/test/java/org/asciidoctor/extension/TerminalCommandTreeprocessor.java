@@ -19,27 +19,30 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
 
     @Override
     public DocumentRuby process(DocumentRuby document) {
-
-    	this.document = document;
-    	
-        final List<AbstractBlock> blocks = this.document.blocks();
-
-        for (int i = 0; i < blocks.size(); i++) {
-            final AbstractBlock currentBlock = blocks.get(i);
-            if(currentBlock instanceof Block) {
-                Block block = (Block)currentBlock;
-                List<String> lines = block.lines();
-                if (lines.size() > 0 && lines.get(0).startsWith("$")) {
-                    blocks.set(
-                            i, convertToTerminalListing(block));
-                            
-                }
-            }
-        }
-        
+        this.document = document;
+        processBlock((AbstractBlock) this.document);
         return this.document;
     }
 
+    private void processBlock(AbstractBlock block) {
+
+        List<AbstractBlock> blocks = block.getBlocks();
+
+        for (int i = 0; i < blocks.size(); i++) {
+            final AbstractBlock currentBlock = blocks.get(i);
+            if(currentBlock instanceof AbstractBlock) {
+                if ("paragraph".equals(currentBlock.getContext())) {
+                    List<String> lines = ((Block) currentBlock).lines();
+                    if (lines.size() > 0 && lines.get(0).startsWith("$")) {
+                        blocks.set(i, convertToTerminalListing((Block) currentBlock));
+                    }
+                } else {
+                    // It's not a paragraph, so recursively descent into the child node
+                    processBlock(currentBlock);
+                }
+            }
+        }
+    }
     public Block convertToTerminalListing(Block block) {
 
         Map<String, Object> attributes = block.getAttributes();
