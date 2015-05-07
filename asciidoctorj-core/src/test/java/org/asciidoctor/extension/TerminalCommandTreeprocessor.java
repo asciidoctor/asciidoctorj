@@ -55,7 +55,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
             if (line.startsWith("$")) {
                 resultLines.append("<span class=\"command\">")
                         .append(line.substring(2, line.length()))
-                        .append("</command");
+                        .append("</span>");
             } else {
                 resultLines.append(line);
             }
