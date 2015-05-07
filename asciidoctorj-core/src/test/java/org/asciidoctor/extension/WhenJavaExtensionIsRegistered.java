@@ -392,6 +392,32 @@ public class WhenJavaExtensionIsRegistered {
     }
 
     @Test
+    public void a_treeprocessor_and_blockmacroprocessor_should_be_executed_in_document() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+        javaExtensionRegistry.treeprocessor(TerminalCommandTreeprocessor.class);
+        javaExtensionRegistry.blockMacro("gist", GistMacro.class);
+
+        String content = asciidoctor.renderFile(
+                classpath.getResource("sample-with-terminal-command-and-gist-macro.ad"),
+                options().toFile(false).get());
+
+        Document doc = Jsoup.parse(content, "UTF-8");
+
+        Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
+        assertThat(contentElement.text(), is("echo \"Hello, World!\""));
+
+        contentElement = doc.getElementsByAttributeValue("class", "command").last();
+        assertThat(contentElement.text(), is("gem install asciidoctor"));
+
+        Element script = doc.getElementsByTag("script").first();
+
+        assertThat(script.attr("src"), is("https://gist.github.com/42.js"));
+
+    }
+
+    @Test
     public void a_treeprocessor_as_string_should_be_executed_in_document() {
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
