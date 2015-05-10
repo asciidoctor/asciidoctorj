@@ -74,10 +74,11 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
             // instead of those passed by asciidoctor
 
             // If options contains a String with a Regexp create the RubyRegexp from it
-            RubySymbol regexpSymbol = RubySymbol.newSymbol(getRuntime(), InlineMacroProcessor.REGEXP);
-            Object regexp = getProcessor().getConfig().get(regexpSymbol);
+            RubyHash rubyConfig = RubyHashUtil.convertMapToRubyHashWithSymbols(getRuntime(), getProcessor().getConfig());
+            Object regexp = getProcessor().getConfig().get("regexp");
             if (regexp != null && regexp instanceof String) {
-                getProcessor().getConfig().put(regexpSymbol, convertRegexp(regexp));
+                RubySymbol regexpSymbol = RubySymbol.newSymbol(getRuntime(), "regexp");
+                rubyConfig.put(regexpSymbol, convertRegexp(regexp));
             }
 
             Helpers.invokeSuper(
@@ -87,7 +88,7 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
                     METHOD_NAME_INITIALIZE,
                     new IRubyObject[]{
                             JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getName()),
-                            JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getConfig())},
+                            rubyConfig},
                     Block.NULL_BLOCK);
             // The Ruby initialize method may have changed the config, therefore copy it back
             // because the accessor is routed to the Java Processor.config
@@ -101,7 +102,7 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
                                     RubyUtils.rubyToJava(getRuntime(), args[0], String.class)));
 
             // Then create the config hash that may contain config options defined in the Java constructor
-            RubyHash config = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(context.getRuntime(), getProcessor().getConfig());
+            RubyHash config = RubyHashUtil.convertMapToRubyHashWithSymbols(context.getRuntime(), getProcessor().getConfig());
 
             // Initialize the Ruby part and pass in the config options
             Helpers.invokeSuper(context, this, getMetaClass(), METHOD_NAME_INITIALIZE, new IRubyObject[] {args[0], config}, Block.NULL_BLOCK);

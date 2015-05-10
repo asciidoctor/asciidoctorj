@@ -1,4 +1,5 @@
 package org.asciidoctor.internal;
+import org.jruby.Ruby;
 import org.jruby.RubyHash;
 import org.jruby.RubyString;
 import org.jruby.RubySymbol;
@@ -12,7 +13,10 @@ public class RubyHashMapDecorator implements Map<String, Object> {
 
     private final RubyHash rubyHash;
 
+    private final Ruby rubyRuntime;
+
     public RubyHashMapDecorator(RubyHash rubyHash) {
+        this.rubyRuntime = rubyHash.getRuntime();
         this.rubyHash = rubyHash;
     }
 
@@ -108,6 +112,8 @@ public class RubyHashMapDecorator implements Map<String, Object> {
                 key = ((RubySymbol) rubyKey).asJavaString();
             } else if (rubyKey instanceof RubyString) {
                 key = ((RubyString) rubyKey).asJavaString();
+            } else if (rubyKey instanceof String) {
+                key = (String) rubyKey;
             } else {
                 throw new IllegalStateException("Did not expect key " + rubyKey + " of type " + rubyKey.getClass());
             }

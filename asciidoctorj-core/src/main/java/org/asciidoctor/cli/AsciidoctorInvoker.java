@@ -14,10 +14,8 @@ import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.GlobDirectoryWalker;
 import org.asciidoctor.Options;
 import org.asciidoctor.internal.JRubyAsciidoctor;
-import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
-import org.jruby.RubySymbol;
 
 import com.beust.jcommander.JCommander;
 
@@ -34,7 +32,7 @@ public class AsciidoctorInvoker {
             jCommander.usage();
         } else {
 
-            Asciidoctor asciidoctor = null;
+            JRubyAsciidoctor asciidoctor = null;
             
             asciidoctor = buildAsciidoctorJInstance(asciidoctorCliOptions);
             
@@ -59,12 +57,12 @@ public class AsciidoctorInvoker {
             
             if(asciidoctorCliOptions.isRequire()) {
                 for (String require : asciidoctorCliOptions.getRequire()) {
-                    RubyUtils.requireLibrary(JRubyRuntimeContext.get(), require);
+                    RubyUtils.requireLibrary(asciidoctor.getRubyRuntime(), require);
                 }
             }
             
-            setVerboseLevel(asciidoctorCliOptions);
-            
+            setVerboseLevel(asciidoctor, asciidoctorCliOptions);
+
             String output = renderInput(asciidoctor, options, inputFiles);
 
             if (asciidoctorCliOptions.isVerbose()) {
@@ -92,24 +90,24 @@ public class AsciidoctorInvoker {
         }
     }
 
-    private void setVerboseLevel(AsciidoctorCliOptions asciidoctorCliOptions) {
+    private void setVerboseLevel(JRubyAsciidoctor asciidoctor, AsciidoctorCliOptions asciidoctorCliOptions) {
         if(asciidoctorCliOptions.isVerbose()) {
-            RubyUtils.setGlobalVariable(JRubyRuntimeContext.get(), "VERBOSE", "true");
+            RubyUtils.setGlobalVariable(asciidoctor.getRubyRuntime(), "VERBOSE", "true");
         } else {
             if(asciidoctorCliOptions.isQuiet()) {
-                RubyUtils.setGlobalVariable(JRubyRuntimeContext.get(), "VERBOSE", "nil");
+                RubyUtils.setGlobalVariable(asciidoctor.getRubyRuntime(), "VERBOSE", "nil");
             }
         }
     }
 
-    private Asciidoctor buildAsciidoctorJInstance(AsciidoctorCliOptions asciidoctorCliOptions) {
+    private JRubyAsciidoctor buildAsciidoctorJInstance(AsciidoctorCliOptions asciidoctorCliOptions) {
         ClassLoader oldTccl = Thread.currentThread().getContextClassLoader();
         try {
             if (asciidoctorCliOptions.isClassPaths()) {
                 URLClassLoader tccl = createUrlClassLoader(asciidoctorCliOptions.getClassPaths());
                 Thread.currentThread().setContextClassLoader(tccl);
             }
-            Asciidoctor asciidoctor;
+            JRubyAsciidoctor asciidoctor;
             if (asciidoctorCliOptions.isLoadPaths()) {
                 asciidoctor = JRubyAsciidoctor.create(asciidoctorCliOptions.getLoadPaths());
             } else {
