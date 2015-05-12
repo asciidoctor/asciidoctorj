@@ -9,6 +9,8 @@ import static org.junit.Assert.assertThat;
 
 public class HasMoreLinesPreprocessor extends Preprocessor {
 
+	public HasMoreLinesPreprocessor() {}
+
 	public HasMoreLinesPreprocessor(Map<String, Object> config) {
 		super(config);
 	}

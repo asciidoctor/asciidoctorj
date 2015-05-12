@@ -12,7 +12,9 @@ import java.util.Map;
 public class TerminalCommandTreeprocessor extends Treeprocessor {
 
 	private DocumentRuby document;
-	
+
+    public TerminalCommandTreeprocessor() {}
+
     public TerminalCommandTreeprocessor(Map<String, Object> config) {
         super(config);
     }

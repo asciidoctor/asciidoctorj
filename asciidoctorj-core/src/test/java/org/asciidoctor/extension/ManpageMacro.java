@@ -7,6 +7,10 @@ import java.util.Map;
 
 public class ManpageMacro extends InlineMacroProcessor {
 
+    public ManpageMacro(String macroName) {
+        super(macroName);
+    }
+
     public ManpageMacro(String macroName, Map<String, Object> config) {
         super(macroName, config);
     }
