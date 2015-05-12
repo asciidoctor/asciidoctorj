@@ -16,7 +16,61 @@ import java.util.Map;
 
 public class Processor {
 
-	protected RubyHash config;
+    /**
+     * This value is used as the config option key to configure how Asciidoctor should treat blocks created by
+     * this Processor.
+     * Its value must be a String constant.
+     *
+     * <p>Example to Asciidoctor know that a BlockProcessor creates zero or more child blocks:
+     * <pre>
+     * <verbatim>
+     * Map&lt;String, Object&gt; config = new HashMap&lt;&gt;();
+     * config.put(CONTENT_MODEL, CONTENT_MODEL_COMPOUND);
+     * BlockProcessor blockProcessor = new BlockProcessor("foo", config);
+     * asciidoctor.javaExtensionRegistry().block(blockProcessor);
+     * </verbatim>
+     * </pre>
+     * </p>
+     */
+    public static final String CONTENT_MODEL = "content_model";
+
+    /**
+     * Predefined constant to let Asciidoctor know that this BlockProcessor creates zero or more child blocks.
+     */
+    public static final String CONTENT_MODEL_COMPOUND = ":compound";
+
+    /**
+     * Predefined constant to let Asciidoctor know that this BlockProcessor creates simple paragraph content.
+     */
+    public static final String CONTENT_MODEL_SIMPLE =":simple";
+
+    /**
+     * Predefined constant to let Asciidoctor know that this BlockProcessor creates literal content.
+     */
+    public static final String CONTENT_MODEL_VERBATIM =":verbatim";
+
+    /**
+     * Predefined constant to make Asciidoctor pass through the content unprocessed.
+     */
+    public static final String CONTENT_MODEL_RAW =":raw";
+
+    /**
+     * Predefined constant to make Asciidoctor drop the content.
+     */
+    public static final String CONTENT_MODEL_SKIP =":skip";
+
+    /**
+     * Predefined constant to make Asciidoctor not expect any content.
+     */
+    public static final String CONTENT_MODEL_EMPTY =":empty";
+
+    /**
+     * Predefined constant to make Asciidoctor parse content as attributes.
+     */
+    public static final String CONTENT_MODEL_ATTRIBUTES =":attributes";
+
+
+    protected RubyHash config;
     protected Ruby rubyRuntime;
 
     public Processor(Map<String, Object> config) {

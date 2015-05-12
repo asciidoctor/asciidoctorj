@@ -715,8 +715,8 @@ public class WhenJavaExtensionIsRegistered {
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
         Map<String, Object> config = new HashMap<String, Object>();
-        config.put("contexts", Arrays.asList(":paragraph"));
-        config.put("content_model", ":simple");
+        config.put(BlockProcessor.CONTEXTS, Arrays.asList(BlockProcessor.CONTEXT_PARAGRAPH));
+        config.put(Processor.CONTENT_MODEL, Processor.CONTENT_MODEL_SIMPLE);
         YellBlock yellBlock = new YellBlock("yell", config);
         javaExtensionRegistry.block(yellBlock);
         String content = asciidoctor.renderFile(
@@ -739,6 +739,27 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-yell-listing-block.ad"),
                 options().toFile(false).get());
 
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Elements elements = doc.getElementsByClass("paragraph");
+        assertThat(elements.size(), is(1));
+        assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
+
+    }
+
+    @Test
+    public void a_block_processor_instance_should_be_executed_when_registered_listing_block_is_found_in_document()
+            throws IOException {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+        Map<String, Object> config = new HashMap<String, Object>();
+        config.put(BlockProcessor.CONTEXTS, Arrays.asList(BlockProcessor.CONTEXT_LISTING));
+        config.put(Processor.CONTENT_MODEL, Processor.CONTENT_MODEL_SIMPLE);
+        YellBlock yellBlock = new YellBlock("yell", config);
+        javaExtensionRegistry.block(yellBlock);
+        String content = asciidoctor.renderFile(
+                classpath.getResource("sample-with-yell-listing-block.ad"),
+                options().toFile(false).get());
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
         assertThat(elements.size(), is(1));
