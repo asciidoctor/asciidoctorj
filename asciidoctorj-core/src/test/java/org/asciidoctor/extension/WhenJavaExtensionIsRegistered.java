@@ -664,7 +664,7 @@ public class WhenJavaExtensionIsRegistered {
                 .safe(SafeMode.UNSAFE).get();
 
         asciidoctor.unregisterAllExtensions();
-        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"),options);
+        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
 
         File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
         Document doc = Jsoup.parse(renderedFile, "UTF-8");
@@ -722,6 +722,23 @@ public class WhenJavaExtensionIsRegistered {
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-yell-block.ad"),
                 options().toFile(false).get());
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Elements elements = doc.getElementsByClass("paragraph");
+        assertThat(elements.size(), is(1));
+        assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
+
+    }
+
+    @Test
+    public void a_block_processor_should_be_executed_when_registered_listing_block_is_found_in_document() throws IOException {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+        javaExtensionRegistry.block("yell", YellStaticListingBlock.class);
+        String content = asciidoctor.renderFile(
+                classpath.getResource("sample-with-yell-listing-block.ad"),
+                options().toFile(false).get());
+
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
         assertThat(elements.size(), is(1));

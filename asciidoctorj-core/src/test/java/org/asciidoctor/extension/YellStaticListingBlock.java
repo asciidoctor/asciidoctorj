@@ -1,24 +1,24 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.ast.AbstractBlock;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.ast.AbstractBlock;
-
-public class YellStaticBlock extends BlockProcessor {
+public class YellStaticListingBlock extends BlockProcessor {
 
 	private static Map<String, Object> configs = new HashMap<String, Object>() {{
-		put("contexts", Arrays.asList(":paragraph"));
+		put("contexts", Arrays.asList(":listing"));
         put("content_model", ":simple");
 	}};
 
-    public YellStaticBlock(String name) {
+    public YellStaticListingBlock(String name) {
         super(name, configs);
     }
 
-    public YellStaticBlock(String name, Map<String, Object> config) {
+    public YellStaticListingBlock(String name, Map<String, Object> config) {
         super(name, configs);
     }
 
