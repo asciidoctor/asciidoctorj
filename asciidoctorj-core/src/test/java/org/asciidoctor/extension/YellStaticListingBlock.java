@@ -10,8 +10,8 @@ import java.util.Map;
 public class YellStaticListingBlock extends BlockProcessor {
 
 	private static Map<String, Object> configs = new HashMap<String, Object>() {{
-		put("contexts", Arrays.asList(":listing"));
-        put("content_model", ":simple");
+        put(CONTEXTS, Arrays.asList(CONTEXT_LISTING));
+        put(CONTENT_MODEL, CONTENT_MODEL_SIMPLE);
 	}};
 
     public YellStaticListingBlock(String name) {

@@ -10,8 +10,8 @@ import org.asciidoctor.ast.AbstractBlock;
 public class YellStaticBlock extends BlockProcessor {
 
 	private static Map<String, Object> configs = new HashMap<String, Object>() {{
-		put("contexts", Arrays.asList(":paragraph"));
-        put("content_model", ":simple");
+		put(CONTEXTS, Arrays.asList(CONTEXT_PARAGRAPH));
+        put(CONTENT_MODEL, CONTENT_MODEL_SIMPLE);
 	}};
 
     public YellStaticBlock(String name) {
