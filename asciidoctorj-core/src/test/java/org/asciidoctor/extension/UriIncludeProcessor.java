@@ -12,6 +12,8 @@ import org.asciidoctor.ast.DocumentRuby;
 
 public class UriIncludeProcessor extends IncludeProcessor {
 
+    public UriIncludeProcessor() {}
+
     public UriIncludeProcessor(Map<String, Object> config) {
         super(config);
     }

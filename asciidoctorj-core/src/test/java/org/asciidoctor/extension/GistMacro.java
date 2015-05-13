@@ -8,6 +8,10 @@ import org.asciidoctor.ast.Block;
 
 public class GistMacro extends BlockMacroProcessor {
 
+    public GistMacro(String macroName) {
+        super(macroName);
+    }
+
     public GistMacro(String macroName, Map<String, Object> config) {
         super(macroName, config);
     }

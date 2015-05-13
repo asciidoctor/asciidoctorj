@@ -9,6 +9,8 @@ import static org.junit.Assert.assertThat;
 
 public class NumberLinesPreprocessor extends Preprocessor {
 
+	public NumberLinesPreprocessor() {}
+
 	public NumberLinesPreprocessor(Map<String, Object> config) {
 		super(config);
 	}

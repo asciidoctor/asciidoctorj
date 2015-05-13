@@ -4,9 +4,12 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.extension.PreprocessorReader;
+import org.asciidoctor.internal.RubyHashMapDecorator;
+import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
+import org.jruby.RubyHash;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Block;
@@ -73,11 +76,20 @@ public class PreprocessorProxy extends AbstractProcessorProxy<Preprocessor> {
                     new IRubyObject[]{ JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getConfig()) },
                     Block.NULL_BLOCK);
         } else {
+            // First create only the instance passing in the block name
             setProcessor(
                     getProcessorClass()
-                            .getConstructor(Map.class)
-                            .newInstance(RubyUtils.rubyToJava(getRuntime(), options, Map.class)));
-            Helpers.invokeSuper(context, this, getMetaClass(), "initialize", new IRubyObject[]{options}, Block.NULL_BLOCK);
+                            .getConstructor()
+                            .newInstance());
+
+            // Then create the config hash that may contain config options defined in the Java constructor
+            RubyHash config = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(context.getRuntime(), getProcessor().getConfig());
+
+            // Initialize the Ruby part and pass in the config options
+            Helpers.invokeSuper(context, this, getMetaClass(), METHOD_NAME_INITIALIZE, new IRubyObject[]{config}, Block.NULL_BLOCK);
+
+            // Reset the Java config options to the decorated Ruby hash, so that Java and Ruby work on the same config map
+            getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
         }
 
         return null;
