@@ -7,9 +7,6 @@ import org.asciidoctor.extension.spi.ExtensionRegistry;
 
 public class ExtensionRegistryExecutor {
 
-    private static ServiceLoader<ExtensionRegistry> extensionRegistryServiceLoader = ServiceLoader
-            .load(ExtensionRegistry.class);
-
     private Asciidoctor asciidoctor;
 
     public ExtensionRegistryExecutor(Asciidoctor asciidoctor) {
@@ -17,6 +14,9 @@ public class ExtensionRegistryExecutor {
     }
 
     public void registerAllExtensions() {
+        ServiceLoader<ExtensionRegistry> extensionRegistryServiceLoader = ServiceLoader
+                .load(ExtensionRegistry.class);
+        
         for (ExtensionRegistry extensionRegistry : extensionRegistryServiceLoader) {
             extensionRegistry.register(asciidoctor);
         }
