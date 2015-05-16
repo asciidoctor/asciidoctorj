@@ -48,7 +48,7 @@ ext {
   hamlGemVersion = '4.0.5'
   openUriCachedGemVersion = '0.0.5'
   prawnGemVersion = '1.2.1'
-  slimGemVersion = '2.1.0'
+  slimGemVersion = '3.0.3'
   spockVersion = '0.7-groovy-2.0'
   threadSafeGemVersion = '0.3.4'
   tiltGemVersion = '2.0.1'
