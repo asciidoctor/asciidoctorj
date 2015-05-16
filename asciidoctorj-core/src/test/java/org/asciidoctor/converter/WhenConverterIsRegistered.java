@@ -4,9 +4,13 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
+import org.asciidoctor.arquillian.api.Unshared;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -16,12 +20,14 @@ import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+@RunWith(Arquillian.class)
 public class WhenConverterIsRegistered {
 
-    private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+    @ArquillianResource(Unshared.class)
+    private Asciidoctor asciidoctor;
 
-    @Rule
-    public ClasspathResources classpath = new ClasspathResources();
+    @ArquillianResource
+    private ClasspathResources classpath;
 
     @After
     public void cleanUp() {

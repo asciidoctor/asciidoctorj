@@ -1,24 +1,29 @@
 package org.asciidoctor;
 
-import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.util.ClasspathResources;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
 
 import java.io.File;
 
 import static org.asciidoctor.OptionsBuilder.options;
 
+@RunWith(Arquillian.class)
 public class WhenAsciidoctorLogsToConsole {
 
-    @Rule
-    public ClasspathResources classpath = new ClasspathResources();
+    @ArquillianResource
+    private ClasspathResources classpath = new ClasspathResources();
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
 
-    private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+    @ArquillianResource(Unshared.class)
+    private Asciidoctor asciidoctor;
 
     @Test
     public void shouldBeRedirectToAsciidoctorJLoggerSystem() {

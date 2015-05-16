@@ -29,8 +29,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
 
-import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.util.ClasspathResources;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -38,19 +40,22 @@ import org.jsoup.select.Elements;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
 import org.xml.sax.SAXException;
 
 import com.google.common.io.CharStreams;
 
+@RunWith(Arquillian.class)
 public class WhenAttributesAreUsedInAsciidoctor {
 
-    @Rule
-    public ClasspathResources classpath = new ClasspathResources();
+    @ArquillianResource
+    private ClasspathResources classpath = new ClasspathResources();
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
 
-    private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+    @ArquillianResource(Unshared.class)
+    private Asciidoctor asciidoctor;
 
     @Test
     public void qualified_http_url_inline_with_hide_uri_scheme_set() throws IOException {

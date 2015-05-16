@@ -11,6 +11,12 @@ import org.junit.runners.model.Statement;
  */
 public class ClasspathResources extends ClasspathHelper implements TestRule {
 
+    public ClasspathResources() {}
+
+    public ClasspathResources(Class<?> clazz) {
+        setClassloader(clazz);
+    }
+
     protected void before(Class<?> clazz) throws Throwable {
         super.setClassloader(clazz);
     }

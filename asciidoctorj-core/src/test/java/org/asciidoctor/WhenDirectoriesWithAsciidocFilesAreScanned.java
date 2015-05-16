@@ -11,15 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.asciidoctor.util.ClasspathResources;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
 
+@RunWith(Arquillian.class)
 public class WhenDirectoriesWithAsciidocFilesAreScanned {
 
-    @Rule
-    public ClasspathResources classpath = new ClasspathResources();
+    @ArquillianResource
+    private ClasspathResources classpath;
 
 	@ClassRule
 	public static TemporaryFolder temporaryFolder = new TemporaryFolder();

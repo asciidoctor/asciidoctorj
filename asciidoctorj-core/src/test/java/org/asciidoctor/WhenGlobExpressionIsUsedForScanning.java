@@ -1,8 +1,11 @@
 package org.asciidoctor;
 
 import org.asciidoctor.util.ClasspathResources;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.util.List;
@@ -13,10 +16,11 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.Assert.assertThat;
 
+@RunWith(Arquillian.class)
 public class WhenGlobExpressionIsUsedForScanning {
 
-    @Rule
-    public ClasspathResources classpath = new ClasspathResources();
+    @ArquillianResource
+    private ClasspathResources classpath;
 
     @Test
     public void all_files_with_given_extension_of_current_directory_should_be_returned() {

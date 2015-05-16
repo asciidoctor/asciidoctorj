@@ -1,14 +1,22 @@
 package org.asciidoctor.extension;
 
-import static org.asciidoctor.OptionsBuilder.options;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Options;
+import org.asciidoctor.SafeMode;
+import org.asciidoctor.arquillian.api.Unshared;
+import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.util.ClasspathResources;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,34 +26,24 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.Options;
-import org.asciidoctor.SafeMode;
-import org.asciidoctor.ast.DocumentRuby;
-import org.asciidoctor.internal.JRubyAsciidoctor;
-import org.asciidoctor.util.ClasspathResources;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import static org.asciidoctor.OptionsBuilder.options;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
+@RunWith(Arquillian.class)
 public class WhenJavaExtensionIsRegistered {
 
-    @Rule
-    public ClasspathResources classpath = new ClasspathResources();
+    @ArquillianResource
+    private ClasspathResources classpath;
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
 
-    private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+    @ArquillianResource(Unshared.class)
+    private Asciidoctor asciidoctor;
 
     class RubyIncludeSource extends IncludeProcessor {
 
