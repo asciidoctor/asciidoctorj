@@ -9,6 +9,7 @@ public class AsciidoctorExtension implements LoadableExtension {
     public void register(ExtensionBuilder builder) {
         builder.service(ResourceProvider.class, AsciidoctorResourceProvider.class);
         builder.service(ResourceProvider.class, ClasspathResourcesResourceProvider.class);
+        builder.service(ResourceProvider.class, TemporaryFolderResourceProvider.class);
         builder.observer(AsciidoctorTestObserver.class);
     }
 

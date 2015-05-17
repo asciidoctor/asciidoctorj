@@ -34,7 +34,6 @@ import org.asciidoctor.internal.AsciidoctorCoreException;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
@@ -48,8 +47,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     @ArquillianResource
     private ClasspathResources classpath;
 
-    @Rule
-    public TemporaryFolder testFolder = new TemporaryFolder();
+    @ArquillianResource
+    private TemporaryFolder testFolder;
 
     @ArquillianResource(Unshared.class)
     private Asciidoctor asciidoctor;

@@ -39,8 +39,8 @@ public class WhenJavaExtensionIsRegistered {
     @ArquillianResource
     private ClasspathResources classpath;
 
-    @Rule
-    public TemporaryFolder testFolder = new TemporaryFolder();
+    @ArquillianResource
+    public TemporaryFolder testFolder;
 
     @ArquillianResource(Unshared.class)
     private Asciidoctor asciidoctor;

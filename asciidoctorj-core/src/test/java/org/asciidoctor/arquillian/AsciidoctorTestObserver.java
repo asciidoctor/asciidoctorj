@@ -13,7 +13,9 @@ import org.jboss.arquillian.test.spi.event.suite.After;
 import org.jboss.arquillian.test.spi.event.suite.AfterClass;
 import org.jboss.arquillian.test.spi.event.suite.Before;
 import org.jboss.arquillian.test.spi.event.suite.BeforeClass;
+import org.junit.rules.TemporaryFolder;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -23,17 +25,29 @@ public class AsciidoctorTestObserver {
     private InstanceProducer<ScopedAsciidoctor> scopedAsciidoctor;
 
     @Inject @ApplicationScoped
+    private InstanceProducer<ScopedTemporaryFolder> scopedTemporaryFolder;
+
+    @Inject @ApplicationScoped
     private InstanceProducer<ClasspathResources> classpathResourcesInstanceProducer;
 
 
     public void beforeTestClassCreateScopedResourceHolder(@Observes(precedence = 100) BeforeClass beforeClass) {
         scopedAsciidoctor.set(new ScopedAsciidoctor());
+        scopedTemporaryFolder.set(new ScopedTemporaryFolder());
     }
 
     public void beforeTestClassCreateSharedAsciidoctorInstance(@Observes(precedence = -100) BeforeClass beforeClass) {
-        if (isSharedAsciidoctorInstanceRequired(beforeClass.getTestClass().getJavaClass())) {
+        if (isSharedInstanceRequired(beforeClass.getTestClass().getJavaClass(), Asciidoctor.class)) {
             scopedAsciidoctor.get().setSharedAsciidoctor(
                     Asciidoctor.Factory.create());
+        }
+    }
+
+    public void beforeTestClassCreateSharedTemporaryFolder(@Observes(precedence = -100) BeforeClass beforeClass) throws IOException {
+        if (isSharedInstanceRequired(beforeClass.getTestClass().getJavaClass(), TemporaryFolder.class)) {
+            TemporaryFolder temporaryFolder = new TemporaryFolder();
+            temporaryFolder.create();
+            scopedTemporaryFolder.get().setSharedTemporaryFolder(temporaryFolder);
         }
     }
 
@@ -45,10 +59,22 @@ public class AsciidoctorTestObserver {
 
     public void beforeTestCreateUnsharedAsciidoctorInstance(@Observes(precedence = 5) Before before) {
 
-        if (isUnsharedAsciidoctorInstanceRequired(before.getTestClass().getJavaClass())
-                || isUnsharedAsciidoctorInstanceRequired(before.getTestMethod())) {
+        if (isUnsharedInstanceRequired(before.getTestClass().getJavaClass(), Asciidoctor.class)
+                || isUnsharedInstanceRequired(before.getTestMethod(), Asciidoctor.class)) {
             scopedAsciidoctor.get().setUnsharedAsciidoctor(
                     Asciidoctor.Factory.create());
+        }
+
+    }
+
+    public void beforeTestCreateUnsharedTemporaryFolder(@Observes(precedence = 5) Before before) throws IOException {
+
+        if (isUnsharedInstanceRequired(before.getTestClass().getJavaClass(), TemporaryFolder.class)
+                || isUnsharedInstanceRequired(before.getTestMethod(), TemporaryFolder.class)) {
+            TemporaryFolder temporaryFolder = new TemporaryFolder();
+            temporaryFolder.create();
+            scopedTemporaryFolder.get().setUnsharedTemporaryFolder(
+                    temporaryFolder);
         }
 
     }
@@ -61,6 +87,14 @@ public class AsciidoctorTestObserver {
         }
     }
 
+    public void afterTestShutdownUnsharedTemporaryFolderInstance(@Observes After after) {
+        TemporaryFolder temporaryFolder = scopedTemporaryFolder.get().getUnsharedTemporaryFolder();
+        if (temporaryFolder != null) {
+            temporaryFolder.delete();
+            scopedTemporaryFolder.get().setUnsharedTemporaryFolder(null);
+        }
+    }
+
     public void afterTestClassShutdownSharedAsciidoctorInstance(@Observes AfterClass afterClass) {
         Asciidoctor asciidoctor = scopedAsciidoctor.get().getSharedAsciidoctor();
         if (asciidoctor != null) {
@@ -70,20 +104,29 @@ public class AsciidoctorTestObserver {
 
     }
 
-    private boolean isSharedAsciidoctorInstanceRequired(Class<?> testClass) {
+    public void afterTestClassShutdownSharedTemporaryFolderInstance(@Observes AfterClass afterClass) {
+        TemporaryFolder temporaryFolder = scopedTemporaryFolder.get().getSharedTemporaryFolder();
+        if (temporaryFolder != null) {
+            temporaryFolder.delete();
+            scopedTemporaryFolder.get().setSharedTemporaryFolder(null);
+        }
+
+    }
+
+    private boolean isSharedInstanceRequired(Class<?> testClass, Class<?> resourceClass) {
         for (Field f: SecurityActions.getFieldsWithAnnotation(testClass, ArquillianResource.class)) {
             ArquillianResource arquillianResource = SecurityActions.getAnnotation(f, ArquillianResource.class);
-            if (f.getType() == Asciidoctor.class && arquillianResource.value() == Shared.class) {
+            if (f.getType() == resourceClass && arquillianResource.value() == Shared.class) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean isUnsharedAsciidoctorInstanceRequired(Class<?> testClass) {
+    private boolean isUnsharedInstanceRequired(Class<?> testClass, Class<?> resourceClass) {
         for (Field f: SecurityActions.getFieldsWithAnnotation(testClass, ArquillianResource.class)) {
             ArquillianResource arquillianResource = SecurityActions.getAnnotation(f, ArquillianResource.class);
-            if (f.getType() == Asciidoctor.class &&
+            if (f.getType() == resourceClass &&
                     (arquillianResource.value() == ArquillianResource.class || arquillianResource.value() == Unshared.class)) {
                 return true;
             }
@@ -91,9 +134,9 @@ public class AsciidoctorTestObserver {
         return false;
     }
 
-    private boolean isSharedAsciidoctorInstanceRequired(Method testMethod) {
+    private boolean isSharedInstanceRequired(Method testMethod, Class<?> resourceClass) {
         for (int i = 0; i < testMethod.getParameterTypes().length; i++) {
-            if (testMethod.getParameterTypes()[i] == Asciidoctor.class) {
+            if (testMethod.getParameterTypes()[i] == resourceClass) {
                 ArquillianResource arquillianResource =
                         AnnotationUtils.filterAnnotation(testMethod.getParameterAnnotations()[i], ArquillianResource.class);
                 if (arquillianResource != null
@@ -106,9 +149,9 @@ public class AsciidoctorTestObserver {
     }
 
 
-    private boolean isUnsharedAsciidoctorInstanceRequired(Method testMethod) {
+    private boolean isUnsharedInstanceRequired(Method testMethod, Class<?> resourceClass) {
         for (int i = 0; i < testMethod.getParameterTypes().length; i++) {
-            if (testMethod.getParameterTypes()[i] == Asciidoctor.class) {
+            if (testMethod.getParameterTypes()[i] == resourceClass) {
                 ArquillianResource arquillianResource =
                         AnnotationUtils.filterAnnotation(testMethod.getParameterAnnotations()[i], ArquillianResource.class);
                 if (arquillianResource != null &&

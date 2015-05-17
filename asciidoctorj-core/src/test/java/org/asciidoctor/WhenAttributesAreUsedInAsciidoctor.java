@@ -37,7 +37,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
@@ -51,8 +50,8 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @ArquillianResource
     private ClasspathResources classpath = new ClasspathResources();
 
-    @Rule
-    public TemporaryFolder testFolder = new TemporaryFolder();
+    @ArquillianResource
+    private TemporaryFolder testFolder;
 
     @ArquillianResource(Unshared.class)
     private Asciidoctor asciidoctor;

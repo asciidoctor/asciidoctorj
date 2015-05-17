@@ -11,7 +11,6 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

@@ -29,8 +29,8 @@ public class WhenAsciidoctorIsCalledUsingCli {
     @ArquillianResource
     private ClasspathResources classpath;
 
-	@Rule
-	public TemporaryFolder temporaryFolder = new TemporaryFolder();
+	@ArquillianResource
+	public TemporaryFolder temporaryFolder;
 
     public String pwd = new File("").getAbsolutePath();
 	
