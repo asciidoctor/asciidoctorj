@@ -22,6 +22,7 @@ dependencies {
   testCompile "org.jsoup:jsoup:$jsoupVersion"
   testCompile project(path: ':asciidoctorj-test-support', configuration: 'tests')
 
+  arquillianExtension project(path: ':asciidoctorj-test-support', configuration: 'tests')
   arquillianExtension "org.jboss.arquillian.container:arquillian-container-spi:$arquillianVersion"
   arquillianExtension "org.jboss.arquillian.container:arquillian-container-test-spi:$arquillianVersion"
   arquillianExtension "org.jboss.arquillian.container:arquillian-container-impl-base:$arquillianVersion"
