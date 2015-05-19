@@ -29,3 +29,7 @@ jrubyPrepareGems << {
     into sourceSets.main.output.resourcesDir
   }
 }
+
+//jruby {
+//	execVersion = '1.7.20'
+//}
