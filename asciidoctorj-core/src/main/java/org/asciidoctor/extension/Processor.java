@@ -75,27 +75,37 @@ public class Processor {
 
     protected Ruby rubyRuntime;
 
+    /**
+     * The config map must not be reset once configFinalized is true.
+     * With the Asciidoctor Ruby implementation this flag will be set to
+     * true after the Ruby part of the extension is initialized.
+     */
+    private boolean configFinalized = false;
+
+    public Processor() {
+        this(new HashMap<String, Object>());
+    }
+
     public Processor(Map<String, Object> config) {
         this.config = new HashMap<String, Object>(config);
     }
 
-    public void update_config(Map<String, Object> config) {
-    	this.config.putAll(config);
-    }
-    
     public Map<String, Object> getConfig() {
     	return this.config;
     }
 
-    public void setConfig(Map<String, Object> config) {
-        if (config instanceof RubyHashMapDecorator) {
-            // ProcessorProxy has already taken over, replace config
-            this.config.clear();
-            this.config.putAll(config);
-        } else {
-            // Processor is still independent, simply set the member
-            this.config = config;
+    public final void setConfig(Map<String, Object> config) {
+        if (configFinalized) {
+            throw new IllegalStateException("It is only allowed to set the config in the constructor!");
         }
+        this.config = config;
+    }
+
+    /**
+     * Lock the config of this processor so that it is no longer allowed to invoke {@link #setConfig(Map)}.
+     */
+    public final void setConfigFinalized() {
+        this.configFinalized = true;
     }
 
     public Block createBlock(AbstractBlock parent, String context, String content, Map<String, Object> attributes) {

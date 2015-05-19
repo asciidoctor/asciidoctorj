@@ -95,6 +95,8 @@ public class DocinfoProcessorProxy extends AbstractProcessorProxy<DocinfoProcess
 
         }
 
+        finalizeJavaConfig();
+
         return null;
     }
 

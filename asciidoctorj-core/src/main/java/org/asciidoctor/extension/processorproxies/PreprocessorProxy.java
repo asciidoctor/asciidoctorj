@@ -91,6 +91,8 @@ public class PreprocessorProxy extends AbstractProcessorProxy<Preprocessor> {
             getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
         }
 
+        finalizeJavaConfig();
+
         return null;
     }
 

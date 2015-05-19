@@ -110,6 +110,9 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
             // Reset the Java config options to the decorated Ruby hash, so that Java and Ruby work on the same config map
             getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
         }
+
+        finalizeJavaConfig();
+
         return null;
     }
 

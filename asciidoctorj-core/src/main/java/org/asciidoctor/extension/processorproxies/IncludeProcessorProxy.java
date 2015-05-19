@@ -96,6 +96,8 @@ public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcess
             getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
         }
 
+        finalizeJavaConfig();
+
         return null;
     }
 

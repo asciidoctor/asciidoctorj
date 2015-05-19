@@ -40,4 +40,8 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
         this.processorClass = processorClass;
     }
 
+    public void finalizeJavaConfig() {
+        getProcessor().setConfigFinalized();
+    }
+
 }
