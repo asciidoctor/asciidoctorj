@@ -10,8 +10,6 @@ import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyHash;
 import org.jruby.RubyRegexp;
-import org.jruby.RubyRegexp$INVOKER$i$0$0$casefold_p;
-import org.jruby.RubyString;
 import org.jruby.RubySymbol;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
@@ -29,33 +27,29 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
 
     private static final String SUPER_CLASS_NAME = "InlineMacroProcessor";
 
-    private static String blockName;
-
-    public InlineMacroProcessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends InlineMacroProcessor> inlineMacroProcessorClass, String blockName) {
+    public InlineMacroProcessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends InlineMacroProcessor> inlineMacroProcessorClass) {
         super(runtime, metaClass, inlineMacroProcessorClass);
-        this.blockName = blockName;
     }
 
     public InlineMacroProcessorProxy(Ruby runtime, RubyClass metaClass, InlineMacroProcessor inlineMacroProcessor) {
         super(runtime, metaClass, inlineMacroProcessor);
-        this.blockName = inlineMacroProcessor.getName();
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final String inlineMacroProcessorClassName, final String blockName) {
+    public static RubyClass register(final Ruby rubyRuntime, final String inlineMacroProcessorClassName) {
 
         try {
             Class<? extends InlineMacroProcessor>  inlineMacroProcessorClass = (Class<? extends InlineMacroProcessor>) Class.forName(inlineMacroProcessorClassName);
-            return register(rubyRuntime, inlineMacroProcessorClass, blockName);
+            return register(rubyRuntime, inlineMacroProcessorClass);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final Class<? extends InlineMacroProcessor> inlineMacroProcessor, final String blockName) {
+    public static RubyClass register(final Ruby rubyRuntime, final Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
         RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, SUPER_CLASS_NAME, new ObjectAllocator() {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new InlineMacroProcessorProxy(runtime, klazz, inlineMacroProcessor, blockName);
+                return new InlineMacroProcessorProxy(runtime, klazz, inlineMacroProcessor);
             }
         });
         ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, InlineMacroProcessorProxy.class);
@@ -80,7 +74,7 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
             // instead of those passed by asciidoctor
 
             // If options contains a String with a Regexp create the RubyRegexp from it
-            RubySymbol regexpSymbol = RubySymbol.newSymbol(getRuntime(), "regexp");
+            RubySymbol regexpSymbol = RubySymbol.newSymbol(getRuntime(), InlineMacroProcessor.REGEXP);
             Object regexp = getProcessor().getConfig().get(regexpSymbol);
             if (regexp != null && regexp instanceof String) {
                 getProcessor().getConfig().put(regexpSymbol, convertRegexp(regexp));

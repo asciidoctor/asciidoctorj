@@ -120,7 +120,7 @@ public class WhenJavaExtensionIsRegistered {
 
             @Override
             public void process(DocumentRuby documentRuby, PreprocessorReader reader, String target,
-                    Map<String, Object> attributes) {
+                                Map<String, Object> attributes) {
                 StringBuilder content = readContent(target);
                 reader.push_include(content.toString(), target, target, 1, attributes);
             }
@@ -543,7 +543,7 @@ public class WhenJavaExtensionIsRegistered {
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
         Map<String, Object> options = new HashMap<String, Object>();
-        options.put("content_model", ":raw");
+        options.put(BlockMacroProcessor.CONTENT_MODEL, BlockMacroProcessor.CONTENT_MODEL_RAW);
 
         javaExtensionRegistry.blockMacro(new GistMacro("gist", options));
 
@@ -596,7 +596,7 @@ public class WhenJavaExtensionIsRegistered {
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
         Map<String, Object> options = new HashMap<String, Object>();
-        options.put("regexp", "man(?:page)?:(\\S+?)\\[(.*?)\\]");
+        options.put(InlineMacroProcessor.REGEXP, "man(?:page)?:(\\S+?)\\[(.*?)\\]");
 
         ManpageMacro inlineMacroProcessor = new ManpageMacro("man", options);
         javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
@@ -618,7 +618,7 @@ public class WhenJavaExtensionIsRegistered {
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
         Map<String, Object> options = new HashMap<String, Object>();
-        options.put("regexp", "man(?:page)?:(ThisDoesNotMatch)\\[(.*?)\\]");
+        options.put(InlineMacroProcessor.REGEXP, "man(?:page)?:(ThisDoesNotMatch)\\[(.*?)\\]");
 
         ManpageMacro inlineMacroProcessor = new ManpageMacro("man", options);
         javaExtensionRegistry.inlineMacro(inlineMacroProcessor);

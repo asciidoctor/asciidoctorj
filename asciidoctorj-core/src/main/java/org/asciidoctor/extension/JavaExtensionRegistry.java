@@ -146,12 +146,12 @@ public class JavaExtensionRegistry {
     
     public void inlineMacro(String blockName,
             Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
-        RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor, blockName);
+        RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
         this.asciidoctorModule.inline_macro(rubyClass, blockName);
     }
     
     public void inlineMacro(String blockName, String inlineMacroProcessor) {
-        RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor, blockName);
+        RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
         this.asciidoctorModule.inline_macro(rubyClass, blockName);
     }
 }
