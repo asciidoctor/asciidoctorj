@@ -3,7 +3,7 @@ package org.asciidoctor.extension;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.BlockNode;
 
 public abstract class MacroProcessor extends Processor {
 
@@ -30,6 +30,6 @@ public abstract class MacroProcessor extends Processor {
         return new HashMap<Object, Object>();
     }
     
-    public abstract Object process(AbstractBlock parent, String target, Map<String, Object> attributes);
+    public abstract Object process(BlockNode parent, String target, Map<String, Object> attributes);
     
 }

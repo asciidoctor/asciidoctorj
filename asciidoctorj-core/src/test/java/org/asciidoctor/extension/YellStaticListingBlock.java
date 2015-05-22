@@ -1,6 +1,6 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.BlockNode;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class YellStaticListingBlock extends BlockProcessor {
     }
 
     @Override
-    public Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes) {
+    public Object process(BlockNode parent, Reader reader, Map<String, Object> attributes) {
         List<String> lines = reader.readLines();
         String upperLines = null;
         for (String line : lines) {

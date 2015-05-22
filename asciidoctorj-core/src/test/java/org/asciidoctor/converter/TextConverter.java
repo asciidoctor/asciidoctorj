@@ -1,10 +1,10 @@
 package org.asciidoctor.converter;
 
-import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.AbstractNode;
-import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.BlockNode;
+import org.asciidoctor.ast.Node;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
-import org.asciidoctor.ast.ListNode;
+import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.Section;
 
 import java.util.Map;
@@ -18,14 +18,14 @@ public class TextConverter extends AbstractConverter {
     }
     
     @Override
-    public Object convert(AbstractNode node, String transform, Map<Object, Object> o) {
+    public Object convert(Node node, String transform, Map<Object, Object> o) {
 
         if (transform == null) {
             transform = node.getNodeName();
         }
  
-        if (node instanceof DocumentRuby) {
-            DocumentRuby document = (DocumentRuby) node;
+        if (node instanceof Document) {
+            Document document = (Document) node;
             return document.getContent();
         } else if (node instanceof Section) {
             Section section = (Section) node;
@@ -34,19 +34,19 @@ public class TextConverter extends AbstractConverter {
                     .append(LINE_SEPARATOR).append(LINE_SEPARATOR)
                     .append(section.getContent()).toString();
         } else if (transform.equals("paragraph")) {
-            AbstractBlock block = (AbstractBlock) node;
+            BlockNode block = (BlockNode) node;
             String content = (String) block.content();
             return new StringBuilder(content.replaceAll(LINE_SEPARATOR, " ")).append(LINE_SEPARATOR);
-        } else if (node instanceof ListNode) {
+        } else if (node instanceof List) {
             StringBuilder sb = new StringBuilder();
-            for (AbstractBlock listItem: ((ListNode) node).getItems()) {
+            for (BlockNode listItem: ((List) node).getItems()) {
                 sb.append(listItem.convert()).append(LINE_SEPARATOR);
             }
             return sb.toString();
         } else if (node instanceof ListItem) {
             return "-> " + ((ListItem) node).getText();
-        } else if (node instanceof AbstractBlock) {
-            AbstractBlock block = (AbstractBlock) node;
+        } else if (node instanceof BlockNode) {
+            BlockNode block = (BlockNode) node;
             return block.getContent();
         }
         return null;

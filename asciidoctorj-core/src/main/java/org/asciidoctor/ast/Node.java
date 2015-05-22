@@ -3,15 +3,15 @@ package org.asciidoctor.ast;
 import java.util.List;
 import java.util.Map;
 
-public interface AbstractNode {
+public interface Node {
 
     String id();
     String getNodeName();
     /**
      * @deprecated Use {@linkplain #getParent()}  instead.
      */
-    AbstractNode parent();
-    AbstractNode getParent();
+    Node parent();
+    Node getParent();
     /**
      * @deprecated Use {@linkplain #getContext()}  instead.
      */
@@ -20,8 +20,8 @@ public interface AbstractNode {
     /**
      * @deprecated Use {@linkplain #getDocument()}  instead.
      */
-    DocumentRuby document();
-    DocumentRuby getDocument();
+    Document document();
+    Document getDocument();
     boolean isInline();
     boolean isBlock();
     Map<String, Object> getAttributes();

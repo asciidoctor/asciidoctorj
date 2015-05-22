@@ -1,8 +1,8 @@
 package org.asciidoctor.ast;
 
-public interface ListNode extends AbstractBlock {
+public interface List extends BlockNode {
 
-    java.util.List<AbstractBlock> getItems();
+    java.util.List<BlockNode> getItems();
 
     boolean isItem();
 

@@ -1,10 +1,11 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
 import java.util.List;
 
+import org.asciidoctor.ast.Block;
 import org.jruby.Ruby;
 
-public class BlockImpl extends AbstractBlockImpl implements Block {
+public class BlockImpl extends BlockNodeImpl implements Block {
     private Block blockDelegate;
 
     public BlockImpl(Block blockDelegate, Ruby runtime) {

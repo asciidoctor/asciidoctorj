@@ -1,8 +1,9 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
+import org.asciidoctor.ast.Inline;
 import org.jruby.Ruby;
 
-public class InlineImpl extends AbstractNodeImpl implements Inline  {
+public class InlineImpl extends NodeImpl implements Inline {
 
     protected Inline delegate;
 

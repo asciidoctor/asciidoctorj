@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.DocumentRuby;
 
 public abstract class Treeprocessor extends Processor {
 
@@ -16,6 +15,6 @@ public abstract class Treeprocessor extends Processor {
         super(config);
     }
 
-    public abstract DocumentRuby process(DocumentRuby document);
+    public abstract Document process(Document document);
     
 }

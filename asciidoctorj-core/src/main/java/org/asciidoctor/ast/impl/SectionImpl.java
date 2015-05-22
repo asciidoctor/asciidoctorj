@@ -1,8 +1,9 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
+import org.asciidoctor.ast.Section;
 import org.jruby.Ruby;
 
-public class SectionImpl extends AbstractBlockImpl implements Section {
+public class SectionImpl extends BlockNodeImpl implements Section {
 
     private Section delegate;
     

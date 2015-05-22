@@ -10,7 +10,6 @@ import java.util.Map;
 
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
-import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.extension.JavaExtensionRegistry;
@@ -28,7 +27,7 @@ public interface Asciidoctor {
 	public static final String STRUCTURE_MAX_LEVEL = "STRUCTURE_MAX_LEVEL";
 	
     /**
-     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
      * 
      * Accepts input as String object.
@@ -43,7 +42,7 @@ public interface Asciidoctor {
     String render(String content, Map<String, Object> options);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
      * 
      * Accepts input as String object.
@@ -58,7 +57,7 @@ public interface Asciidoctor {
     String render(String content, Options options);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
      * 
      * Accepts input as String object.
@@ -127,7 +126,7 @@ public interface Asciidoctor {
             OptionsBuilder options) throws IOException;
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
      * 
      * Accepts input as File path.
@@ -153,7 +152,7 @@ public interface Asciidoctor {
     String renderFile(File filename, Map<String, Object> options);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
      * 
      * Accepts input as File path.
@@ -179,7 +178,7 @@ public interface Asciidoctor {
     String renderFile(File filename, Options options);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
      * 
      * Accepts input as File path.
@@ -281,7 +280,7 @@ public interface Asciidoctor {
             OptionsBuilder options);
         
     /**
-     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
      * 
      * Accepts input as String object.
@@ -296,7 +295,7 @@ public interface Asciidoctor {
     String convert(String content, Map<String, Object> options);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
      * 
      * Accepts input as String object.
@@ -311,7 +310,7 @@ public interface Asciidoctor {
     String convert(String content, Options options);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
      * 
      * Accepts input as String object.
@@ -380,7 +379,7 @@ public interface Asciidoctor {
             OptionsBuilder options) throws IOException;
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
      * 
      * Accepts input as File path.
@@ -406,7 +405,7 @@ public interface Asciidoctor {
     String convertFile(File filename, Map<String, Object> options);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
      * 
      * Accepts input as File path.
@@ -432,7 +431,7 @@ public interface Asciidoctor {
     String convertFile(File filename, Options options);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
+     * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
      * 
      * Accepts input as File path.

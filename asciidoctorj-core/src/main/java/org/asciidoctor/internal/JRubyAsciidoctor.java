@@ -5,13 +5,13 @@ import org.asciidoctor.Attributes;
 import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.BlockNode;
 import org.asciidoctor.ast.ContentPart;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
-import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.ast.Title;
+import org.asciidoctor.ast.impl.DocumentImpl;
 import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.converter.internal.ConverterRegistryExecutor;
 import org.asciidoctor.extension.JavaExtensionRegistry;
@@ -28,7 +28,6 @@ import org.jruby.javasupport.JavaEmbedUtils;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JRubyAsciidoctor implements Asciidoctor {
@@ -168,24 +167,24 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return config;
     }
 
-    private DocumentHeader toDocumentHeader(DocumentRuby documentRuby) {
+    private DocumentHeader toDocumentHeader(Document documentRuby) {
         Map<Object, Object> opts = new HashMap<Object, Object>();
         opts.put("partition", true);
 
-        Document document = new Document(documentRuby, rubyRuntime);
+        Document document = new DocumentImpl(documentRuby, rubyRuntime);
 
         return DocumentHeader.createDocumentHeader((Title) document.doctitle(opts), documentRuby.title(),
                 documentRuby.getAttributes());
     }
 
-    private StructuredDocument toDocument(DocumentRuby documentRuby, Ruby rubyRuntime, int maxDeepLevel) {
+    private StructuredDocument toDocument(Document documentRuby, Ruby rubyRuntime, int maxDeepLevel) {
 
-        Document document = new Document(documentRuby, rubyRuntime);
+        Document document = new DocumentImpl(documentRuby, rubyRuntime);
         List<ContentPart> contentParts = getContents(document.blocks(), 1, maxDeepLevel);
         return StructuredDocument.createStructuredDocument(toDocumentHeader(documentRuby), contentParts);
     }
 
-    private List<ContentPart> getContents(List<AbstractBlock> blocks, int level, int maxDeepLevel) {
+    private List<ContentPart> getContents(List<BlockNode> blocks, int level, int maxDeepLevel) {
         // finish getting childs if max structure level was riched
         if (level > maxDeepLevel) {
             return null;
@@ -199,13 +198,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
          */
         // add next level of contentParts
         List<ContentPart> parts = new ArrayList<ContentPart>();
-        for (AbstractBlock block : blocks) {
+        for (BlockNode block : blocks) {
             parts.add(getContentPartFromBlock(block, level, maxDeepLevel));
         }
         return parts;
     }
 
-    private ContentPart getContentPartFromBlock(AbstractBlock child, int level, int maxDeepLevel) {
+    private ContentPart getContentPartFromBlock(BlockNode child, int level, int maxDeepLevel) {
         Object content = child.content();
         String textContent;
         if (content instanceof String) {
@@ -226,10 +225,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        DocumentRuby documentRuby = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
+        Document document = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
         int maxDeepLevel = options.containsKey(STRUCTURE_MAX_LEVEL) ? (Integer) (options.get(STRUCTURE_MAX_LEVEL))
                 : DEFAULT_MAX_LEVEL;
-        return toDocument(documentRuby, rubyRuntime, maxDeepLevel);
+        return toDocument(document, rubyRuntime, maxDeepLevel);
     }
 
     @SuppressWarnings("unchecked")
@@ -240,10 +239,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
-        DocumentRuby documentRuby = this.asciidoctorModule.load(content, rubyHash);
+        Document document = this.asciidoctorModule.load(content, rubyHash);
         int maxDeepLevel = options.containsKey(STRUCTURE_MAX_LEVEL) ? (Integer) (options.get(STRUCTURE_MAX_LEVEL))
                 : DEFAULT_MAX_LEVEL;
-        return toDocument(documentRuby, rubyRuntime, maxDeepLevel);
+        return toDocument(document, rubyRuntime, maxDeepLevel);
     }
 
     @Override
@@ -258,8 +257,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = getParseHeaderOnlyOption();
 
-        DocumentRuby documentRuby = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
-        return toDocumentHeader(documentRuby);
+        Document document = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
+        return toDocumentHeader(document);
     }
 
     @SuppressWarnings("unchecked")
@@ -268,8 +267,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = getParseHeaderOnlyOption();
 
-        DocumentRuby documentRuby = this.asciidoctorModule.load(content, rubyHash);
-        return toDocumentHeader(documentRuby);
+        Document document = this.asciidoctorModule.load(content, rubyHash);
+        return toDocumentHeader(document);
     }
 
     @Override
@@ -592,13 +591,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
     @Override
     public Document load(String content, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        return new Document(this.asciidoctorModule.load(content, rubyHash), this.rubyRuntime);
+        return new DocumentImpl(this.asciidoctorModule.load(content, rubyHash), this.rubyRuntime);
     }
 
     @Override
     public Document loadFile(File file, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        return new Document(this.asciidoctorModule.load(file.getAbsolutePath(), rubyHash), this.rubyRuntime);
+        return new DocumentImpl(this.asciidoctorModule.load(file.getAbsolutePath(), rubyHash), this.rubyRuntime);
 
     }
 }

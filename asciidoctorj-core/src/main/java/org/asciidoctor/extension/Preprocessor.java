@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.DocumentRuby;
 
 public abstract class Preprocessor extends Processor {
 
@@ -16,6 +15,6 @@ public abstract class Preprocessor extends Processor {
         super(config);
     }
 
-    public abstract PreprocessorReader process(DocumentRuby document, PreprocessorReader reader);
+    public abstract PreprocessorReader process(Document document, PreprocessorReader reader);
 
 }

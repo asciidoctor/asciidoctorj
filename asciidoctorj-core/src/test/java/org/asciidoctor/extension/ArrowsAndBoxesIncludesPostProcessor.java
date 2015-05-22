@@ -1,21 +1,20 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.Document;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class ArrowsAndBoxesIncludesPostProcessor extends Postprocessor {
 
-    public ArrowsAndBoxesIncludesPostProcessor(DocumentRuby documentRuby) {
+    public ArrowsAndBoxesIncludesPostProcessor(Document document) {
         //super(documentRuby);
         super(null);
     }
 
     //@Override
-    public String process(DocumentRuby doc, String output) {
+    public String process(Document doc, String output) {
     
-        Document document = Jsoup.parse(output);
+        org.jsoup.nodes.Document document = Jsoup.parse(output);
         Element head = document.getElementsByTag("head").first();
         head.appendElement("link").attr("rel", "stylesheet").attr("type", "text/css").attr("href", "http://www.headjump.de/stylesheets/arrowsandboxes.css");
         head.appendElement("script").attr("type", "text/javascript").attr("src", "http://code.jquery.com/jquery-1.4.1.min.js");
