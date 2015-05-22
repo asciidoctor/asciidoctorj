@@ -7,9 +7,6 @@ import java.util.ServiceLoader;
 
 public class ConverterRegistryExecutor {
 
-    private static ServiceLoader<ConverterRegistry> converterRegistryServiceLoader = ServiceLoader
-            .load(ConverterRegistry.class);
-
     private Asciidoctor asciidoctor;
 
     public ConverterRegistryExecutor(Asciidoctor asciidoctor) {
@@ -17,6 +14,9 @@ public class ConverterRegistryExecutor {
     }
 
     public void registerAllConverters() {
+        ServiceLoader<ConverterRegistry> converterRegistryServiceLoader = ServiceLoader
+                .load(ConverterRegistry.class);
+
         for (ConverterRegistry converterRegistry : converterRegistryServiceLoader) {
             converterRegistry.register(asciidoctor);
         }
