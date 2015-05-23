@@ -6,12 +6,14 @@ import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.ast.BlockNode;
-import org.asciidoctor.ast.ContentPart;
-import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
+import org.asciidoctor.ast.impl.ContentPartImpl;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.impl.DocumentHeaderImpl;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.ast.Title;
 import org.asciidoctor.ast.impl.DocumentImpl;
+import org.asciidoctor.ast.impl.StructuredDocumentImpl;
 import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.converter.internal.ConverterRegistryExecutor;
 import org.asciidoctor.extension.JavaExtensionRegistry;
@@ -173,18 +175,18 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         Document document = new DocumentImpl(documentRuby, rubyRuntime);
 
-        return DocumentHeader.createDocumentHeader((Title) document.doctitle(opts), documentRuby.title(),
+        return DocumentHeaderImpl.createDocumentHeader((Title) document.doctitle(opts), documentRuby.title(),
                 documentRuby.getAttributes());
     }
 
     private StructuredDocument toDocument(Document documentRuby, Ruby rubyRuntime, int maxDeepLevel) {
 
         Document document = new DocumentImpl(documentRuby, rubyRuntime);
-        List<ContentPart> contentParts = getContents(document.blocks(), 1, maxDeepLevel);
-        return StructuredDocument.createStructuredDocument(toDocumentHeader(documentRuby), contentParts);
+        List<ContentPartImpl> contentParts = getContents(document.blocks(), 1, maxDeepLevel);
+        return StructuredDocumentImpl.createStructuredDocument(toDocumentHeader(documentRuby), contentParts);
     }
 
-    private List<ContentPart> getContents(List<BlockNode> blocks, int level, int maxDeepLevel) {
+    private List<ContentPartImpl> getContents(List<BlockNode> blocks, int level, int maxDeepLevel) {
         // finish getting childs if max structure level was riched
         if (level > maxDeepLevel) {
             return null;
@@ -197,14 +199,14 @@ public class JRubyAsciidoctor implements Asciidoctor {
          * maxDeepLevel); }
          */
         // add next level of contentParts
-        List<ContentPart> parts = new ArrayList<ContentPart>();
+        List<ContentPartImpl> parts = new ArrayList<ContentPartImpl>();
         for (BlockNode block : blocks) {
             parts.add(getContentPartFromBlock(block, level, maxDeepLevel));
         }
         return parts;
     }
 
-    private ContentPart getContentPartFromBlock(BlockNode child, int level, int maxDeepLevel) {
+    private ContentPartImpl getContentPartFromBlock(BlockNode child, int level, int maxDeepLevel) {
         Object content = child.content();
         String textContent;
         if (content instanceof String) {
@@ -212,7 +214,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         } else {
             textContent = child.convert();
         }
-        ContentPart contentPart = ContentPart.createContentPart(child.id(), level, child.context(), child.title(),
+        ContentPartImpl contentPart = ContentPartImpl.createContentPart(child.id(), level, child.context(), child.title(),
                 child.style(), child.role(), child.getAttributes(), textContent);
         contentPart.setParts(getContents(child.blocks(), level + 1, maxDeepLevel));
         return contentPart;
