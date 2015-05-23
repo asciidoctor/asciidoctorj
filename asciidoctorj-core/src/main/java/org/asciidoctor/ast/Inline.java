@@ -10,4 +10,6 @@ public interface Inline extends AbstractNode {
     public String getType();
 
     public String getText();
+
+    public String getTarget();
 }

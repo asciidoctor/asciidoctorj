@@ -30,4 +30,9 @@ public class InlineImpl extends AbstractNodeImpl implements Inline  {
     public String getText() {
         return delegate.getText();
     }
+
+    @Override
+    public String getTarget() {
+        return delegate.getTarget();
+    }
 }
