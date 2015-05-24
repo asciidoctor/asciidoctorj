@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.BlockNode;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.internal.IOUtils;
@@ -90,7 +90,7 @@ public class WhenAsciiDocIsRenderedToDocument {
         Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
         Map<Object, Object> selector = new HashMap<Object, Object>();
         selector.put("context", ":image");
-        List<AbstractBlock> findBy = document.findBy(selector);
+        List<BlockNode> findBy = document.findBy(selector);
         assertThat(findBy, hasSize(2));
         
         assertThat((String)findBy.get(0).getAttributes().get("target"), is("tiger.png"));
@@ -139,19 +139,19 @@ public class WhenAsciiDocIsRenderedToDocument {
     @Test
     public void should_be_able_to_get_roles() {
         Document document = asciidoctor.load(ROLE, new HashMap<String, Object>());
-        AbstractBlock abstractBlock = document.blocks().get(0);
-        assertThat(abstractBlock.getRole(), is("famous"));
-        assertThat(abstractBlock.hasRole("famous"), is(true));
+        BlockNode blockNode = document.blocks().get(0);
+        assertThat(blockNode.getRole(), is("famous"));
+        assertThat(blockNode.hasRole("famous"), is(true));
         //assertThat(abstractBlock.isRole(), is(true));
-        assertThat(abstractBlock.getRoles(), contains("famous"));
+        assertThat(blockNode.getRoles(), contains("famous"));
     }
 
     @Test
     public void should_be_able_to_get_reftext() {
         Document document = asciidoctor.load(REFTEXT, new HashMap<String, Object>());
-        AbstractBlock abstractBlock = document.blocks().get(0);
-        assertThat(abstractBlock.getReftext(), is("the first section"));
-        assertThat(abstractBlock.isReftext(), is(true));
+        BlockNode blockNode = document.blocks().get(0);
+        assertThat(blockNode.getReftext(), is("the first section"));
+        assertThat(blockNode.isReftext(), is(true));
     }
 
     @Test

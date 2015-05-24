@@ -3,7 +3,7 @@ package org.asciidoctor.ast;
 import java.util.List;
 import java.util.Map;
 
-public interface AbstractBlock extends AbstractNode {
+public interface BlockNode extends Node {
 
     /**
      * @deprecated Please use {@linkplain #getTitle()} instead
@@ -18,15 +18,15 @@ public interface AbstractBlock extends AbstractNode {
     /**
      * @deprecated Please use {@linkplain #getBlocks()} instead
      */
-    List<AbstractBlock> blocks();
-    List<AbstractBlock> getBlocks();
+    List<BlockNode> blocks();
+    List<BlockNode> getBlocks();
     /**
      * @deprecated Please use {@linkplain #getContent()} instead
      */
     Object content();
     Object getContent();
     String convert();
-    AbstractBlock delegate();
-    List<AbstractBlock> findBy(Map<Object, Object> selector);
+    BlockNode delegate();
+    List<BlockNode> findBy(Map<Object, Object> selector);
     int getLevel();
 }

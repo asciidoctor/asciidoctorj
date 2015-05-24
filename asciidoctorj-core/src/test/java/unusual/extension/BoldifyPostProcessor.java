@@ -1,6 +1,6 @@
 package unusual.extension;
 
-import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.Postprocessor;
 
 /**
@@ -10,7 +10,7 @@ import org.asciidoctor.extension.Postprocessor;
  * @see <a href="https://github.com/asciidoctor/asciidoctorj/issues/250">Issue #250</a>
  */
 public class BoldifyPostProcessor extends Postprocessor {
-  @Override public String process(DocumentRuby document, String output) {
+  @Override public String process(Document document, String output) {
     if (document.basebackend("html")) {
       return output.replaceAll("bold", "<b>bold</b>");
     } else {

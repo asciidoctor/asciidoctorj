@@ -1,53 +1,55 @@
 package org.asciidoctor.ast;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.internal.RubyHashUtil;
-import org.asciidoctor.internal.RubyUtils;
-import org.jruby.Ruby;
-import org.jruby.RubyHash;
-import org.jruby.runtime.builtin.IRubyObject;
+public interface Document extends BlockNode {
 
-public class Document extends AbstractBlockImpl implements DocumentRuby {
+    /**
+     * Get doc title
+     * 
+     * @param opts
+     *            to get the doc title. Key should be Ruby symbols.
+     * @return String if partition flag is not set to false or not present, Title if partition is set to true.
+     * @see Title
+     */
+    Object doctitle(Map<Object, Object> opts);
 
-    private DocumentRuby documentDelegate;
+    /**
+     * Get doc title
+     *
+     * @return the same as {@link #doctitle()} without the partition flag set.
+     * @see Title
+     */
+    String doctitle();
 
-    public Document(DocumentRuby documentRuby, Ruby runtime) {
-        super(documentRuby, runtime);
-        this.documentDelegate = documentRuby;
-    }
+    /**
+     * 
+     * @return page title
+     */
+    String title();
 
-    public DocumentRuby getDocumentRuby() {
-        return documentDelegate;
-    }
+    /**
+     * 
+     * @return attributes defined in document
+     */
+    Map<String, Object> getAttributes();
 
-    @Override
-    public boolean basebackend(String backend) {
-        return documentDelegate.basebackend(backend);
-    }
+    /**
+     * 
+     * @return basebackend attribute value
+     */
+    boolean basebackend(String backend);
 
-    @Override
-    public Map<Object, Object> getOptions() {
-        Map<Object, Object> options = (Map<Object, Object>)documentDelegate.getOptions();
-        return RubyHashUtil.convertRubyHashMapToMap(options);
-    }
+    /**
+     *
+     * @return blocks contained within current Document.
+     */
+    List<BlockNode> blocks();
 
-    @Override
-    public Object doctitle(Map<Object, Object> opts) {
-        RubyHash mapWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime, opts);
-
-        Object doctitle = documentDelegate.doctitle(mapWithSymbols);
-
-        if (doctitle instanceof IRubyObject) {
-            doctitle = RubyUtils.rubyToJava(runtime, (IRubyObject) doctitle, Title.class);
-        }
-
-        return doctitle;
-    }
-
-    public String doctitle() {
-        return (String) doctitle(new HashMap<Object, Object>());
-    }
-
+    /**
+     *
+     * @return options defined in document.
+     */
+    Map<Object, Object> getOptions();
 }

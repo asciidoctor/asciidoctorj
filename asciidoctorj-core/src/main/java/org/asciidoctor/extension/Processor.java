@@ -91,11 +91,11 @@ public class Processor {
         return null;
     }
 
-    public Block createBlock(AbstractBlock parent, String context, String content, Map<String, Object> attributes) {
+    public Block createBlock(BlockNode parent, String context, String content, Map<String, Object> attributes) {
         return createBlock(parent, context, content, attributes, new HashMap<Object, Object>());
     }
 
-    public Block createBlock(AbstractBlock parent, String context, String content, Map<String, Object> attributes,
+    public Block createBlock(BlockNode parent, String context, String content, Map<String, Object> attributes,
             Map<Object, Object> options) {
 
         options.put(Options.SOURCE, content);
@@ -104,11 +104,11 @@ public class Processor {
         return createBlock(parent, context, options);
     }
 
-    public Block createBlock(AbstractBlock parent, String context, List<String> content, Map<String, Object> attributes) {
+    public Block createBlock(BlockNode parent, String context, List<String> content, Map<String, Object> attributes) {
         return createBlock(parent, context, content, attributes, new HashMap<Object, Object>());
     }
 
-    public Block createBlock(AbstractBlock parent, String context, List<String> content, Map<String, Object> attributes,
+    public Block createBlock(BlockNode parent, String context, List<String> content, Map<String, Object> attributes,
             Map<Object, Object> options) {
 
         options.put(Options.SOURCE, content);
@@ -117,7 +117,7 @@ public class Processor {
         return createBlock(parent, context, options);
     }
 
-    public Inline createInline(AbstractBlock parent, String context, List<String> text, Map<String, Object> attributes, Map<Object, Object> options) {
+    public Inline createInline(BlockNode parent, String context, List<String> text, Map<String, Object> attributes, Map<Object, Object> options) {
         
         options.put(Options.ATTRIBUTES, attributes);
         
@@ -133,7 +133,7 @@ public class Processor {
                 "new", parameters, Inline.class);
     }
     
-    public Inline createInline(AbstractBlock parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {
+    public Inline createInline(BlockNode parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {
         
         options.put(Options.ATTRIBUTES, attributes);
         
@@ -153,11 +153,11 @@ public class Processor {
                 "new", parameters, Inline.class);
     }
     
-    protected Document document(DocumentRuby documentRuby) {
-    	return new Document(documentRuby, rubyRuntime);
-    }
+//    protected Document document(Document document) {
+//    	return new Document(document, rubyRuntime);
+//    }
     
-    private Block createBlock(AbstractBlock parent, String context,
+    private Block createBlock(BlockNode parent, String context,
             Map<Object, Object> options) {
         IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Block");
         RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime,

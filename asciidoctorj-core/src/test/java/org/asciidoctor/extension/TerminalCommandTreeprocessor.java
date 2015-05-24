@@ -1,8 +1,8 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.BlockNode;
 import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.Document;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class TerminalCommandTreeprocessor extends Treeprocessor {
 
-	private DocumentRuby document;
+	private Document document;
 
     public TerminalCommandTreeprocessor() {}
 
@@ -20,19 +20,19 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
     }
 
     @Override
-    public DocumentRuby process(DocumentRuby document) {
+    public Document process(Document document) {
         this.document = document;
-        processBlock((AbstractBlock) this.document);
+        processBlock((BlockNode) this.document);
         return this.document;
     }
 
-    private void processBlock(AbstractBlock block) {
+    private void processBlock(BlockNode block) {
 
-        List<AbstractBlock> blocks = block.getBlocks();
+        List<BlockNode> blocks = block.getBlocks();
 
         for (int i = 0; i < blocks.size(); i++) {
-            final AbstractBlock currentBlock = blocks.get(i);
-            if(currentBlock instanceof AbstractBlock) {
+            final BlockNode currentBlock = blocks.get(i);
+            if(currentBlock instanceof BlockNode) {
                 if ("paragraph".equals(currentBlock.getContext())) {
                     List<String> lines = ((Block) currentBlock).lines();
                     if (lines.size() > 0 && lines.get(0).startsWith("$")) {

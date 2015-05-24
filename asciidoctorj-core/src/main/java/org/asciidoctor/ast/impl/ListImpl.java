@@ -1,20 +1,19 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
+import org.asciidoctor.ast.List;
 import org.jruby.Ruby;
 
-import java.util.List;
+public class ListImpl extends BlockNodeImpl implements List {
 
-public class ListImpl extends AbstractBlockImpl implements ListNode {
+    private final List listDelegate;
 
-    private final ListNode listDelegate;
-
-    public ListImpl(ListNode delegate, Ruby rubyRuntime) {
+    public ListImpl(List delegate, Ruby rubyRuntime) {
         super(delegate, rubyRuntime);
         this.listDelegate = delegate;
     }
 
     @Override
-    public List<AbstractBlock> getItems() {
+    public java.util.List getItems() {
         return blocks();
     }
 

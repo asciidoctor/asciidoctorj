@@ -1,25 +1,24 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.converter.ConverterProxy;
+import org.asciidoctor.ast.BlockNode;
+import org.asciidoctor.ast.Node;
 import org.asciidoctor.internal.RubyHashUtil;
-import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyObject;
-import org.jruby.javasupport.JavaEmbedUtils;
 
-public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock {
+public class BlockNodeImpl extends NodeImpl implements BlockNode {
 
     private static final String BLOCK_CLASS = "Block";
     private static final String SECTION_CLASS = "Section";
     
-    protected AbstractBlock delegate;
+    protected BlockNode delegate;
 
 
-    public AbstractBlockImpl(AbstractBlock blockDelegate, Ruby runtime) {
+    public BlockNodeImpl(BlockNode blockDelegate, Ruby runtime) {
         super(blockDelegate, runtime);
         this.delegate = blockDelegate;
     }
@@ -45,19 +44,19 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     }
 
     @Override
-    public List<AbstractBlock> blocks() {
+    public List<BlockNode> blocks() {
         return getBlocks();
     }
 
     @Override
-    public List<AbstractBlock> getBlocks() {
-        List<AbstractBlock> rubyBlocks = delegate.getBlocks();
+    public List<BlockNode> getBlocks() {
+        List<BlockNode> rubyBlocks = delegate.getBlocks();
 
         for (int i = 0; i < rubyBlocks.size(); i++) {
             Object abstractBlock = rubyBlocks.get(i);
-            if (!(abstractBlock instanceof RubyArray) && !(abstractBlock instanceof AbstractNode)) {
+            if (!(abstractBlock instanceof RubyArray) && !(abstractBlock instanceof Node)) {
                 RubyObject rubyObject = (RubyObject) abstractBlock;
-                rubyBlocks.set(i, (AbstractBlock) NodeConverter.createASTNode(rubyObject));
+                rubyBlocks.set(i, (BlockNode) NodeConverter.createASTNode(rubyObject));
             }
         }
 
@@ -90,22 +89,22 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     }
 
     @Override
-    public AbstractBlock delegate() {
+    public BlockNode delegate() {
         return delegate;
     }
 
     @Override
-    public List<AbstractBlock> findBy(Map<Object, Object> selector) {
+    public List<BlockNode> findBy(Map<Object, Object> selector) {
 
         @SuppressWarnings("unchecked")
-        List<AbstractBlock> findBy = delegate.findBy(RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime,
+        List<BlockNode> findBy = delegate.findBy(RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime,
                 selector));
 
         for (int i = 0; i < findBy.size(); i++) {
             Object abstractBlock = findBy.get(i);
-            if (!(abstractBlock instanceof RubyArray) && !(abstractBlock instanceof AbstractBlock)) {
+            if (!(abstractBlock instanceof RubyArray) && !(abstractBlock instanceof BlockNode)) {
                 RubyObject rubyObject = (RubyObject)abstractBlock;
-                findBy.set(i, (AbstractBlock) NodeConverter.createASTNode(rubyObject));
+                findBy.set(i, (BlockNode) NodeConverter.createASTNode(rubyObject));
             }
 
         }

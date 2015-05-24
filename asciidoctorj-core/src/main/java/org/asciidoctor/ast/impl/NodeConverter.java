@@ -1,5 +1,12 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
+import org.asciidoctor.ast.Node;
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.Inline;
+import org.asciidoctor.ast.ListItem;
+import org.asciidoctor.ast.List;
+import org.asciidoctor.ast.Section;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.runtime.builtin.IRubyObject;
@@ -24,7 +31,7 @@ public final class NodeConverter {
 
     private NodeConverter() {}
 
-    public static AbstractNode createASTNode(IRubyObject rubyObject) {
+    public static Node createASTNode(IRubyObject rubyObject) {
         String rubyClassName = rubyObject.getMetaClass().getRealClass().getName();
         Ruby runtime = rubyObject.getRuntime();
         if (BLOCK_CLASS.equals(rubyClassName)) {
@@ -36,15 +43,15 @@ public final class NodeConverter {
             return new SectionImpl(blockRuby, runtime);
         }
         else if (DOCUMENT_CLASS.equals(rubyClassName)) {
-            DocumentRuby blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, DocumentRuby.class);
-            return new Document(blockRuby, runtime);
+            Document blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Document.class);
+            return new DocumentImpl(blockRuby, runtime);
         }
         else if (INLINE_CLASS.equals(rubyClassName)) {
             Inline inline = RubyUtils.rubyToJava(runtime, rubyObject, Inline.class);
             return new InlineImpl(inline, runtime);
         }
         else if (LIST_CLASS.equals(rubyClassName)) {
-            ListNode list = RubyUtils.rubyToJava(runtime, rubyObject, ListNode.class);
+            List list = RubyUtils.rubyToJava(runtime, rubyObject, List.class);
             return new ListImpl(list, runtime);
         }
         else if (LIST_ITEM_CLASS.equals(rubyClassName)) {

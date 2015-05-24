@@ -1,8 +1,9 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
+import org.asciidoctor.ast.ListItem;
 import org.jruby.Ruby;
 
-public class ListItemImpl extends AbstractBlockImpl implements ListItem {
+public class ListItemImpl extends BlockNodeImpl implements ListItem {
 
     private final ListItem listDelegate;
 

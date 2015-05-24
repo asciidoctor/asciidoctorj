@@ -1,15 +1,15 @@
 package org.asciidoctor.converter;
 
-import org.asciidoctor.ast.AbstractNode;
+import org.asciidoctor.ast.Node;
 
 import java.util.Map;
 
 public interface Converter {
 
     /**
-     * Converts an {@link org.asciidoctor.ast.AbstractNode} using the specified transform along
+     * Converts an {@link Node} using the specified transform along
      * with additional options. If a transform is not specified, implementations
-     * typically derive one from the {@link org.asciidoctor.ast.AbstractNode#getNodeName()} property.
+     * typically derive one from the {@link Node#getNodeName()} property.
      *
      * <p>Implementations are free to decide how to carry out the conversion. In
      * the case of the built-in converters, the tranform value is used to
@@ -25,6 +25,6 @@ public interface Converter {
      *             how to convert the node. (optional, default: empty map)
      * @return the converted result
      */
-    Object convert(AbstractNode node, String transform, Map<Object, Object> opts);
+    Object convert(Node node, String transform, Map<Object, Object> opts);
 
 }

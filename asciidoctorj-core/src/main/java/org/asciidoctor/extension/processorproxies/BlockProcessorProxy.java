@@ -1,7 +1,7 @@
 package org.asciidoctor.extension.processorproxies;
 
-import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.BlockNode;
+import org.asciidoctor.ast.impl.NodeConverter;
 import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.extension.Reader;
 import org.asciidoctor.internal.RubyHashMapDecorator;
@@ -116,7 +116,7 @@ public class BlockProcessorProxy extends AbstractProcessorProxy<BlockProcessor> 
         return JavaEmbedUtils.javaToRuby(
                 getRuntime(),
                 getProcessor().process(
-                        (AbstractBlock) NodeConverter.createASTNode(parent),
+                        (BlockNode) NodeConverter.createASTNode(parent),
                         RubyUtils.rubyToJava(getRuntime(), reader, Reader.class),
                         RubyUtils.rubyToJava(getRuntime(), attributes, Map.class)));
     }

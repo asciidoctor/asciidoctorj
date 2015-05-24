@@ -1,6 +1,6 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.BlockNode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ public class ManpageMacro extends InlineMacroProcessor {
     }
 
     @Override
-    public String process(AbstractBlock parent, String target,
+    public String process(BlockNode parent, String target,
             Map<String, Object> attributes) {
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("type", ":link");

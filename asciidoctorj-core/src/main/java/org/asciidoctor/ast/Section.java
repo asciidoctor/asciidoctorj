@@ -1,6 +1,6 @@
 package org.asciidoctor.ast;
 
-public interface Section extends AbstractBlock {
+public interface Section extends BlockNode {
 
     int index();
     int number();

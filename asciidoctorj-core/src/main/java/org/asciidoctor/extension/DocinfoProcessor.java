@@ -1,7 +1,6 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.DocumentRuby;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +15,7 @@ public abstract class DocinfoProcessor extends Processor {
         super(defaultLocation(config));
     }
 
-    public abstract String process(DocumentRuby document);
+    public abstract String process(Document document);
 
     private static final Map<String, Object> defaultLocation(Map<String, Object> map) {
         if(!map.containsKey("location")) {
