@@ -3,8 +3,13 @@ package org.asciidoctor.converter;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.util.ClasspathResources;
 import org.junit.After;
+import org.junit.Rule;
 import org.junit.Test;
+
+import java.net.URL;
+import java.net.URLClassLoader;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.empty;
@@ -14,6 +19,9 @@ import static org.junit.Assert.assertThat;
 public class WhenConverterIsRegistered {
 
     private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+
+    @Rule
+    public ClasspathResources classpath = new ClasspathResources();
 
     @After
     public void cleanUp() {
@@ -43,10 +51,18 @@ public class WhenConverterIsRegistered {
     }
 
     @Test
-    public void shouldRegisterConverterViaConverterRegistryExecutor() {
-        String result = asciidoctor.render("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend("extensiontext"));
+    public void shouldRegisterConverterViaConverterRegistryExecutor() throws Exception {
+        ClassLoader oldTCCL = Thread.currentThread().getContextClassLoader();
 
-        assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
+        try {
+            Thread.currentThread().setContextClassLoader(new URLClassLoader(new URL[]{classpath.getResource("serviceloadertest/3").toURI().toURL()}));
+            asciidoctor = JRubyAsciidoctor.create();
+            String result = asciidoctor.render("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend("extensiontext"));
+
+            assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
+        } finally {
+            Thread.currentThread().setContextClassLoader(oldTCCL);
+        }
     }
 
 }
