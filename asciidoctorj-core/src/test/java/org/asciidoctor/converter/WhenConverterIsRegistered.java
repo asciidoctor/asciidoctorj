@@ -42,4 +42,11 @@ public class WhenConverterIsRegistered {
         assertEquals(TextConverter.class, asciidoctor.javaConverterRegistry().converters().get("test2"));
     }
 
+    @Test
+    public void shouldRegisterConverterViaConverterRegistryExecutor() {
+        String result = asciidoctor.render("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend("extensiontext"));
+
+        assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
+    }
+
 }
