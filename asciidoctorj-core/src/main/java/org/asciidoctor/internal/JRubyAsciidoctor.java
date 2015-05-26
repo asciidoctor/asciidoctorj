@@ -10,6 +10,7 @@ import org.asciidoctor.ast.ContentPart;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.ast.Title;
 import org.asciidoctor.converter.JavaConverterRegistry;
@@ -591,13 +592,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
     @Override
     public Document load(String content, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        return new Document(this.asciidoctorModule.load(content, rubyHash), this.rubyRuntime);
+        return (Document) NodeConverter.createASTNode(this.asciidoctorModule.load(content, rubyHash));
     }
 
     @Override
     public Document loadFile(File file, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        return new Document(this.asciidoctorModule.load(file.getAbsolutePath(), rubyHash), this.rubyRuntime);
+        return (Document) NodeConverter.createASTNode(this.asciidoctorModule.load(file.getAbsolutePath(), rubyHash));
 
     }
 }

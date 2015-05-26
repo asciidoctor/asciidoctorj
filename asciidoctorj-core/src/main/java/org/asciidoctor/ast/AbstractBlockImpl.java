@@ -1,5 +1,6 @@
 package org.asciidoctor.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -55,9 +56,8 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
 
         for (int i = 0; i < rubyBlocks.size(); i++) {
             Object abstractBlock = rubyBlocks.get(i);
-            if (!(abstractBlock instanceof RubyArray) && !(abstractBlock instanceof AbstractNode)) {
-                RubyObject rubyObject = (RubyObject) abstractBlock;
-                rubyBlocks.set(i, (AbstractBlock) NodeConverter.createASTNode(rubyObject));
+            if (!(abstractBlock instanceof RubyArray)) {
+                rubyBlocks.set(i, (AbstractBlock) NodeConverter.createASTNode(abstractBlock));
             }
         }
 
@@ -98,18 +98,17 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     public List<AbstractBlock> findBy(Map<Object, Object> selector) {
 
         @SuppressWarnings("unchecked")
-        List<AbstractBlock> findBy = delegate.findBy(RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime,
+        List<?> findBy = delegate.findBy(RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime,
                 selector));
 
-        for (int i = 0; i < findBy.size(); i++) {
-            Object abstractBlock = findBy.get(i);
-            if (!(abstractBlock instanceof RubyArray) && !(abstractBlock instanceof AbstractBlock)) {
-                RubyObject rubyObject = (RubyObject)abstractBlock;
-                findBy.set(i, (AbstractBlock) NodeConverter.createASTNode(rubyObject));
+        List<AbstractBlock> ret = new ArrayList<AbstractBlock>(findBy.size());
+        for (Object abstractBlock: findBy) {
+            if (!(abstractBlock instanceof RubyArray)) {
+                ret.add((AbstractBlock) NodeConverter.createASTNode(abstractBlock));
             }
 
         }
-        return findBy;
+        return ret;
     }
 
 }

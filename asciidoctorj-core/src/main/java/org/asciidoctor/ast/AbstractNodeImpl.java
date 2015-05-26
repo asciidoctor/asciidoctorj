@@ -44,7 +44,7 @@ public abstract class AbstractNodeImpl implements AbstractNode {
 
     @Override
     public AbstractNode getParent() {
-        return this.abstractNode.getParent();
+        return NodeConverter.createASTNode(this.abstractNode.getParent());
     }
 
     @Override
@@ -54,7 +54,7 @@ public abstract class AbstractNodeImpl implements AbstractNode {
 
     @Override
     public DocumentRuby getDocument() {
-        return this.abstractNode.getDocument();
+        return (DocumentRuby) NodeConverter.createASTNode(this.abstractNode.getDocument());
     }
 
     @Override

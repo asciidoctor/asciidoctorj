@@ -2,6 +2,9 @@ package org.asciidoctor.ast;
 
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
+import org.jruby.RubyHash;
+import org.jruby.RubySymbol;
+import org.jruby.java.proxies.RubyObjectHolderProxy;
 import org.jruby.runtime.builtin.IRubyObject;
 
 /**
@@ -24,34 +27,61 @@ public final class NodeConverter {
 
     private NodeConverter() {}
 
-    public static AbstractNode createASTNode(IRubyObject rubyObject) {
-        String rubyClassName = rubyObject.getMetaClass().getRealClass().getName();
-        Ruby runtime = rubyObject.getRuntime();
-        if (BLOCK_CLASS.equals(rubyClassName)) {
-            Block blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Block.class);
-            return new BlockImpl(blockRuby, runtime);
+    public static AbstractNode createASTNode(Object object) {
+
+        if (object instanceof IRubyObject || object instanceof RubyObjectHolderProxy) {
+            IRubyObject rubyObject = asRubyObject(object);
+            NodeCache nodeCache = NodeCache.get(rubyObject);
+            AbstractNode cachedNode = nodeCache.getASTNode();
+            if (cachedNode != null) {
+                return cachedNode;
+            }
+
+            Ruby runtime = rubyObject.getRuntime();
+
+            String rubyClassName = rubyObject.getMetaClass().getRealClass().getName();
+            AbstractNode ret = null;
+            if (BLOCK_CLASS.equals(rubyClassName)) {
+                Block blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Block.class);
+                ret = new BlockImpl(blockRuby, runtime);
+            } else if (SECTION_CLASS.equals(rubyClassName)) {
+                Section blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Section.class);
+                ret = new SectionImpl(blockRuby, runtime);
+            } else if (DOCUMENT_CLASS.equals(rubyClassName)) {
+                DocumentRuby blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, DocumentRuby.class);
+                ret = new Document(blockRuby, runtime);
+            } else if (INLINE_CLASS.equals(rubyClassName)) {
+                Inline inline = RubyUtils.rubyToJava(runtime, rubyObject, Inline.class);
+                ret = new InlineImpl(inline, runtime);
+            } else if (LIST_CLASS.equals(rubyClassName)) {
+                ListNode list = RubyUtils.rubyToJava(runtime, rubyObject, ListNode.class);
+                ret = new ListImpl(list, runtime);
+            } else if (LIST_ITEM_CLASS.equals(rubyClassName)) {
+                ListItem list = RubyUtils.rubyToJava(runtime, rubyObject, ListItem.class);
+                ret = new ListItemImpl(list, runtime);
+            } else {
+                throw new IllegalArgumentException("Don't know what to do with a " + rubyObject);
+            }
+
+            nodeCache.setASTNode(ret);
+
+            return ret;
+        } else if (object instanceof AbstractNode) {
+
+            return (AbstractNode) object;
+
+        } else {
+            throw new IllegalArgumentException(object != null ? object.toString() : "null");
         }
-        else if (SECTION_CLASS.equals(rubyClassName)) {
-            Section blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Section.class);
-            return new SectionImpl(blockRuby, runtime);
-        }
-        else if (DOCUMENT_CLASS.equals(rubyClassName)) {
-            DocumentRuby blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, DocumentRuby.class);
-            return new Document(blockRuby, runtime);
-        }
-        else if (INLINE_CLASS.equals(rubyClassName)) {
-            Inline inline = RubyUtils.rubyToJava(runtime, rubyObject, Inline.class);
-            return new InlineImpl(inline, runtime);
-        }
-        else if (LIST_CLASS.equals(rubyClassName)) {
-            ListNode list = RubyUtils.rubyToJava(runtime, rubyObject, ListNode.class);
-            return new ListImpl(list, runtime);
-        }
-        else if (LIST_ITEM_CLASS.equals(rubyClassName)) {
-            ListItem list = RubyUtils.rubyToJava(runtime, rubyObject, ListItem.class);
-            return new ListItemImpl(list, runtime);
-        }
-        throw new IllegalArgumentException("Don't know what to do with a " + rubyObject);
     }
 
+    private static IRubyObject asRubyObject(Object o) {
+        if (o instanceof IRubyObject) {
+            return (IRubyObject) o;
+        } else if (o instanceof RubyObjectHolderProxy) {
+            return ((RubyObjectHolderProxy) o).__ruby_object();
+        } else {
+            throw new IllegalArgumentException(o.getClass() + " is not a IRubyObject nor a RubyObjectHolderProxy!");
+        }
+    }
 }
