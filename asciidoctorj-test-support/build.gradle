@@ -1,15 +1,6 @@
-jar.enabled = false
+apply plugin: 'nebula.nebula-test-jar'
 
-task testJar(type: Jar, dependsOn: testClasses) {
-    baseName = "test-${project.archivesBaseName}"
-    from sourceSets.test.output
+
+afterEvaluate {
+    publishing.publications.mavenNebula.artifacts = publishing.publications.mavenNebula.artifacts.findAll { it.classifier == 'tests' }
 }
-
-configurations {
-    tests
-}
-
-artifacts {
-    tests testJar
-}
-

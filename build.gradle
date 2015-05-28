@@ -167,7 +167,7 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
   processResources.dependsOn jrubyPrepareGems
 
   apply from: rootProject.file('gradle/eclipse.gradle')
-  if (JavaVersion.current().isJava7Compatible() && !it.name.endsWith('-test-support')) {
+  if (JavaVersion.current().isJava7Compatible()) {
     apply from: rootProject.file('gradle/publish.gradle')
   }
 }
