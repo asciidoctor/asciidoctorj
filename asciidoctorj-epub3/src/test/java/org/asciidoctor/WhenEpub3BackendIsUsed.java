@@ -6,18 +6,21 @@ import static org.junit.Assert.assertThat;
 
 import java.io.File;
 
-import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.util.ClasspathResources;
-import org.junit.Rule;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
-import org.junit.Ignore;
+import org.junit.runner.RunWith;
 
+@RunWith(Arquillian.class)
 public class WhenEpub3BackendIsUsed {
 
-    private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+    @ArquillianResource(Unshared.class)
+    private Asciidoctor asciidoctor;
     
-    @Rule
-    public ClasspathResources classpath = new ClasspathResources();
+    @ArquillianResource
+    private ClasspathResources classpath;
     
     @Test
     public void epub3_should_be_rendered_for_epub3_backend() {

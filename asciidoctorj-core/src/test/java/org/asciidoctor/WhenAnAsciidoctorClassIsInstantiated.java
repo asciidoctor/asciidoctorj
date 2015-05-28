@@ -29,25 +29,29 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
 
+import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.internal.AsciidoctorCoreException;
-import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
-import org.junit.Rule;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
 import org.xml.sax.SAXException;
 
 import com.google.common.io.CharStreams;
 
+@RunWith(Arquillian.class)
 public class WhenAnAsciidoctorClassIsInstantiated {
 
-    @Rule
-    public ClasspathResources classpath = new ClasspathResources();
+    @ArquillianResource
+    private ClasspathResources classpath;
 
-    @Rule
-    public TemporaryFolder testFolder = new TemporaryFolder();
+    @ArquillianResource
+    private TemporaryFolder testFolder;
 
-    private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+    @ArquillianResource(Unshared.class)
+    private Asciidoctor asciidoctor;
 
     @Test
     public void content_should_be_read_from_reader_and_written_to_writer() throws IOException, SAXException,

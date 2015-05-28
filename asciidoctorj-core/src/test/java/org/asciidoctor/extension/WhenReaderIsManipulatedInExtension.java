@@ -7,17 +7,21 @@ import java.io.File;
 import java.util.HashMap;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.util.ClasspathResources;
-import org.junit.Rule;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(Arquillian.class)
 public class WhenReaderIsManipulatedInExtension {
 
-    @Rule
-    public ClasspathResources classpath = new ClasspathResources();
+    @ArquillianResource
+    private ClasspathResources classpath;
 
-	private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+	@ArquillianResource(Unshared.class)
+	private Asciidoctor asciidoctor;
 
 	@Test
 	public void currentLineNumberShouldBeReturned() {

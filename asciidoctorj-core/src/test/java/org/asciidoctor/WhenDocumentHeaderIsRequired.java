@@ -7,24 +7,28 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 import java.util.Map;
 
+import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.Author;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.RevisionInfo;
-import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
-import org.junit.Rule;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
 
+@RunWith(Arquillian.class)
 public class WhenDocumentHeaderIsRequired {
 
-    @Rule
-    public ClasspathResources classpath = new ClasspathResources();
+    @ArquillianResource
+    private ClasspathResources classpath;
     
-	@Rule
-    public TemporaryFolder testFolder = new TemporaryFolder();
-	
-	private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+	@ArquillianResource
+    public TemporaryFolder testFolder;
+
+	@ArquillianResource(Unshared.class)
+	private Asciidoctor asciidoctor;
 	
 	@Test
 	public void doctitle_blocks_and_attributes_should_be_returned() {

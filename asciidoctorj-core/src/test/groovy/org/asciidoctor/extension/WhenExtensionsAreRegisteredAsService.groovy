@@ -3,28 +3,34 @@ package org.asciidoctor.extension
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
-import org.asciidoctor.internal.JRubyAsciidoctor
+import org.asciidoctor.arquillian.api.Unshared
 import org.asciidoctor.util.ClasspathResources
+import org.jboss.arquillian.spock.ArquillianSputnik
+import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import org.junit.runner.RunWith
 import spock.lang.Ignore
 import spock.lang.Specification
 
 import static org.asciidoctor.OptionsBuilder.options
 
+@RunWith(ArquillianSputnik)
 class WhenExtensionsAreRegisteredAsService extends Specification {
 
     static final String FILENAME_HTML = 'rendersample.html'
 
-    @Rule
-    ClasspathResources classpath = new ClasspathResources()
+    @ArquillianResource
+    ClasspathResources classpath
 
-    @Rule
-    TemporaryFolder testFolder = new TemporaryFolder()
+    @ArquillianResource(Unshared)
+    Asciidoctor asciidoctor
+
+    @ArquillianResource
+    TemporaryFolder testFolder
 
     ClassLoader originalTCCL
 
@@ -40,9 +46,6 @@ class WhenExtensionsAreRegisteredAsService extends Specification {
     @Ignore('Test is ignored because currently it is not possible to register two block extensions in same instance. This may require deep changes on Asciidoctor Extensions API')
     @Test
     def 'extensions should be correctly added'() throws IOException {
-
-        given:
-        Asciidoctor asciidoctor = JRubyAsciidoctor.create()
 
         when:
         //To avoid registering the same extension over and over for all tests, service is instantiated manually.
@@ -69,7 +72,7 @@ class WhenExtensionsAreRegisteredAsService extends Specification {
 
     }
 
-    def "the active TCCL when creatin the Asciidoctor instance should be used to load extensions"() {
+    def "the active TCCL when creating the Asciidoctor instance should be used to load extensions"() {
 
         when:
         URLClassLoader tccl1 = new URLClassLoader(classpath.getResource('serviceloadertest/1').toURI().toURL() as URL[])

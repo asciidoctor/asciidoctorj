@@ -13,20 +13,24 @@ import java.io.PrintStream;
 import java.io.StringWriter;
 
 import org.asciidoctor.util.ClasspathResources;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
 
+@RunWith(Arquillian.class)
 public class WhenAsciidoctorIsCalledUsingCli {
 
-    @Rule
-    public ClasspathResources classpath = new ClasspathResources();
+    @ArquillianResource
+    private ClasspathResources classpath;
 
-	@Rule
-	public TemporaryFolder temporaryFolder = new TemporaryFolder();
+	@ArquillianResource
+	public TemporaryFolder temporaryFolder;
 
     public String pwd = new File("").getAbsolutePath();
 	

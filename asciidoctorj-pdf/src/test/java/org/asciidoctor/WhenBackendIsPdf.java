@@ -7,17 +7,23 @@ import static org.junit.Assert.assertThat;
 import java.io.File;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.util.ClasspathResources;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.runner.RunWith;
 
+@RunWith(Arquillian.class)
 public class WhenBackendIsPdf {
 
-    private Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+    @ArquillianResource(Unshared.class)
+    private Asciidoctor asciidoctor;
 
-    @Rule
-    public ClasspathResources classpath = new ClasspathResources();
+    @ArquillianResource
+    private ClasspathResources classpath;
 
     @Test
     public void pdf_should_be_rendered_for_pdf_backend() {

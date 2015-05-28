@@ -2,20 +2,26 @@ package org.asciidoctor;
 
 import java.io.File;
 
+import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.util.ClasspathResources;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+@RunWith(Arquillian.class)
 public class WhenDocumentContainsDitaaDiagram {
 
-    private Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+    @ArquillianResource(Unshared.class)
+    private Asciidoctor asciidoctor;
 
-    @Rule
-    public ClasspathResources classpath = new ClasspathResources();
+    @ArquillianResource
+    private ClasspathResources classpath;
 
     @Test
     public void png_should_be_rendered_for_diagram() {
