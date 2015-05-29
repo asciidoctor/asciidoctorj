@@ -1,11 +1,11 @@
 dependencies {
-  runtime project(path: ':asciidoctorj')
-  runtime project(path: ':asciidoctorj-test-support', configuration: 'test')
-  runtime "org.jboss.arquillian.container:arquillian-container-spi:$arquillianVersion"
-  runtime "org.jboss.arquillian.container:arquillian-container-test-spi:$arquillianVersion"
-  runtime "org.jboss.arquillian.container:arquillian-container-impl-base:$arquillianVersion"
-  runtime "org.jboss.arquillian.container:arquillian-container-test-impl-base:$arquillianVersion"
-  runtime "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
+  compile project(path: ':asciidoctorj')
+  compile project(path: ':asciidoctorj-test-support', configuration: 'tests')
+  compile "org.jboss.arquillian.container:arquillian-container-spi:$arquillianVersion"
+  compile "org.jboss.arquillian.container:arquillian-container-test-spi:$arquillianVersion"
+  compile "org.jboss.arquillian.container:arquillian-container-impl-base:$arquillianVersion"
+  compile "org.jboss.arquillian.container:arquillian-container-test-impl-base:$arquillianVersion"
+  compile "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
 }
 
 jar.dependsOn project(':asciidoctorj').testClasses
@@ -14,6 +14,12 @@ jar {
   from project(':asciidoctorj').sourceSets.test.output
   include 'org/asciidoctor/arquillian/**/*'
   include 'META-INF/services/*'
+}
+javadoc {
+  source project(':asciidoctorj').fileTree('src/test/java') {
+    include 'org/asciidoctor/arquillian/**/*'
+  }
+  classpath = sourceSets.main.output + sourceSets.main.compileClasspath + project(':asciidoctorj-test-support').sourceSets.test.output
 }
 
 sourcesJar {

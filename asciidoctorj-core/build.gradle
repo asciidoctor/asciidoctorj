@@ -14,7 +14,7 @@ dependencies {
   testCompile "net.sf.saxon:Saxon-HE:$saxonVersion"
   testCompile "com.google.guava:guava:$guavaVersion"
   testCompile "org.jsoup:jsoup:$jsoupVersion"
-  testCompile project(path: ':asciidoctorj-test-support', configuration: 'test')
+  testCompile project(path: ':asciidoctorj-test-support', configuration: 'tests')
 
   testCompile "org.jboss.arquillian.container:arquillian-container-spi:$arquillianVersion"
   testCompile "org.jboss.arquillian.container:arquillian-container-test-spi:$arquillianVersion"
@@ -34,6 +34,10 @@ jrubyPrepareGems << {
     from gemFiles
     into sourceSets.main.output.resourcesDir
   }
+}
+
+javadoc {
+  classpath = sourceSets.main.output + sourceSets.main.compileClasspath + project(':asciidoctorj-test-support').sourceSets.test.output
 }
 
 //jruby {

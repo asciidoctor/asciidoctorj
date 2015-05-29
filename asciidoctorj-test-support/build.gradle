@@ -1,6 +1,25 @@
-apply plugin: 'nebula.nebula-test-jar'
+configurations {
+    tests
+}
 
+dependencies {
+    // Without this it won't make it into the pom, even though there are no main classes in this module
+    compile "junit:junit:$junitVersion"
+}
 
-afterEvaluate {
-    publishing.publications.mavenNebula.artifacts = publishing.publications.mavenNebula.artifacts.findAll { it.classifier == 'tests' }
+jar {
+    from sourceSets.test.output
+    dependsOn testClasses
+}
+
+javadoc {
+    source sourceSets.test.allSource
+}
+
+sourcesJar {
+    from sourceSets.test.allSource
+}
+
+artifacts {
+    tests jar
 }
