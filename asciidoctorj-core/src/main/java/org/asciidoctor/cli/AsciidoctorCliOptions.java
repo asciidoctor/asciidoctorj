@@ -16,6 +16,7 @@ import com.beust.jcommander.Parameter;
 public class AsciidoctorCliOptions {
 
     public static final String LOAD_PATHS = "-I";
+    public static final String CLASSPATH = "--cp";
     public static final String REQUIRE = "-r";
     public static final String QUIET = "-q";
     public static final String ATTRIBUTE = "-a";
@@ -97,6 +98,9 @@ public class AsciidoctorCliOptions {
     @Parameter(names = { REQUIRE, "--require" }, description = "require the specified library before executing the processor (using require)")
     private List<String> require;
 
+    @Parameter(names = { CLASSPATH }, description = "add a directory to the classpath may be specified more than once", variableArity = true)
+    private List<String> classPaths = new ArrayList<String>();
+
     @Parameter(names = { LOAD_PATHS, "--load-path" }, description = "add a directory to the $LOAD_PATH may be specified more than once", variableArity = true)
     private List<String> loadPaths = new ArrayList<String>();
 
@@ -113,6 +117,14 @@ public class AsciidoctorCliOptions {
 
     public List<String> getRequire() {
         return require;
+    }
+
+    public boolean isClassPaths() {
+        return this.classPaths != null && this.classPaths.size() > 0;
+    }
+
+    public List<String> getClassPaths() {
+        return this.classPaths;
     }
 
     public boolean isLoadPaths() {
