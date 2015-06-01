@@ -1,6 +1,9 @@
 package org.asciidoctor.cli;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -100,13 +103,37 @@ public class AsciidoctorInvoker {
     }
 
     private Asciidoctor buildAsciidoctorJInstance(AsciidoctorCliOptions asciidoctorCliOptions) {
-        Asciidoctor asciidoctor;
-        if(asciidoctorCliOptions.isLoadPaths()) {
-         asciidoctor = JRubyAsciidoctor.create(asciidoctorCliOptions.getLoadPaths());   
-        } else {
-            asciidoctor = JRubyAsciidoctor.create();
+        ClassLoader oldTccl = Thread.currentThread().getContextClassLoader();
+        try {
+            if (asciidoctorCliOptions.isClassPaths()) {
+                URLClassLoader tccl = createUrlClassLoader(asciidoctorCliOptions.getClassPaths());
+                Thread.currentThread().setContextClassLoader(tccl);
+            }
+            Asciidoctor asciidoctor;
+            if (asciidoctorCliOptions.isLoadPaths()) {
+                asciidoctor = JRubyAsciidoctor.create(asciidoctorCliOptions.getLoadPaths());
+            } else {
+                asciidoctor = JRubyAsciidoctor.create();
+            }
+            return asciidoctor;
+        } finally {
+            Thread.currentThread().setContextClassLoader(oldTccl);
         }
-        return asciidoctor;
+    }
+
+    private URLClassLoader createUrlClassLoader(List<String> classPaths) {
+        List<URL> cpUrls = new ArrayList<URL>();
+        for (String cp: classPaths) {
+            try {
+                DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(cp);
+                for (File f: globDirectoryWalker.scan()) {
+                    cpUrls.add(f.toURI().toURL());
+                }
+            } catch (Exception e) {
+                System.err.println(String.format("asciidoctor: WARNING: Could not resolve classpath '%s': %s", cp, e.getMessage()));
+            }
+        }
+        return new URLClassLoader(cpUrls.toArray(new URL[cpUrls.size()]));
     }
 
     private String renderInput(Asciidoctor asciidoctor, Options options, List<File> inputFiles) {
