@@ -75,7 +75,7 @@ public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcess
                     getMetaClass(),
                     METHOD_NAME_INITIALIZE,
                     new IRubyObject[]{
-                            RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(getRuntime(), getProcessor().getConfig())},
+                            RubyHashUtil.convertMapToRubyHashWithSymbols(getRuntime(), getProcessor().getConfig())},
                     Block.NULL_BLOCK);
             // The extension config in the Java extension is just a view on the @config member of the Ruby part
             getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
@@ -87,7 +87,7 @@ public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcess
                             .newInstance());
 
             // Then create the config hash that may contain config options defined in the Java constructor
-            RubyHash config = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(context.getRuntime(), getProcessor().getConfig());
+            RubyHash config = RubyHashUtil.convertMapToRubyHashWithSymbols(context.getRuntime(), getProcessor().getConfig());
 
             // Initialize the Ruby part and pass in the config options
             Helpers.invokeSuper(context, this, getMetaClass(), METHOD_NAME_INITIALIZE, new IRubyObject[] {config}, Block.NULL_BLOCK);
@@ -95,6 +95,8 @@ public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcess
             // Reset the Java config options to the decorated Ruby hash, so that Java and Ruby work on the same config map
             getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
         }
+
+        finalizeJavaConfig();
 
         return null;
     }

@@ -1,17 +1,13 @@
 package org.asciidoctor.ast;
 
-import java.util.List;
-import java.util.Map;
-
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.java.proxies.RubyObjectHolderProxy;
-import org.jruby.javasupport.JavaEmbedUtils;
-import org.jruby.runtime.Helpers;
 import org.jruby.runtime.builtin.IRubyObject;
-import org.jruby.runtime.builtin.InstanceVariables;
-import org.jruby.runtime.builtin.Variable;
+
+import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractNodeImpl implements AbstractNode {
 
@@ -19,6 +15,9 @@ public abstract class AbstractNodeImpl implements AbstractNode {
     protected AbstractNode abstractNode;
 
     public AbstractNodeImpl(AbstractNode abstractNode, Ruby ruby) {
+        if (!(abstractNode instanceof IRubyObject) && !(abstractNode instanceof RubyObjectHolderProxy)) {
+            throw new IllegalArgumentException("Node delegate must be an IRubyObject or RubyObjectHolderProxy!");
+        }
         this.runtime = ruby;
         this.abstractNode = abstractNode;
     }
@@ -200,5 +199,12 @@ public abstract class AbstractNodeImpl implements AbstractNode {
     @Override
     public String listMarkerKeyword(String listType) {
         return abstractNode.listMarkerKeyword(listType);
+    }
+
+    /**
+     * @return The nodes delegate in the Ruby world
+     */
+    public AbstractNode getDelegate() {
+        return abstractNode;
     }
 }

@@ -1,34 +1,26 @@
 package org.asciidoctor.internal;
 
+import org.asciidoctor.Asciidoctor;
 import org.jruby.Ruby;
 
 /**
- * This class is a bit complicated to explain because we require to have access
- * to Ruby runtime in places where it is impossible to retrieve it from
- * JRubyAscidoctor class because it is Asciidoctor Ruby part which instantiate
- * an extension. Moreover the approach used before using this class, it makes
- * Gradle crash.
- * 
+ * This class gives access to the Ruby instance that is used by a JRuby Asciidoctor instance.
+ *
  * @author alex
- * 
+ * @author Robert
+ *
  */
 public class JRubyRuntimeContext {
-
-    private static Ruby rubyRuntime = null;
 
     private JRubyRuntimeContext() {
     }
 
-    static void set(Ruby ruby) {
-        rubyRuntime = ruby;
-    }
-
-    public static Ruby get() {
-        if (rubyRuntime == null) {
-            throw new IllegalStateException(
-                    "Ruby runtime should be set, was not present in current Thread instance.");
+    public static Ruby get(Asciidoctor asciidoctor) {
+        if (!(asciidoctor instanceof JRubyAsciidoctor)) {
+            throw new IllegalArgumentException(
+                    "Expected a " + JRubyAsciidoctor.class.getName() + "instead of " + asciidoctor);
         }
-        return rubyRuntime;
+        return ((JRubyAsciidoctor) asciidoctor).getRubyRuntime();
     }
 
 }

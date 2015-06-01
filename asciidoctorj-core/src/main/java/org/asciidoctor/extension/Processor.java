@@ -2,11 +2,12 @@ package org.asciidoctor.extension;
 
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.*;
-import org.asciidoctor.internal.JRubyRuntimeContext;
+import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
+import org.jruby.java.proxies.RubyObjectHolderProxy;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 
@@ -70,25 +71,41 @@ public class Processor {
     public static final String CONTENT_MODEL_ATTRIBUTES =":attributes";
 
 
-    protected RubyHash config;
+    protected Map<String, Object> config;
+
     protected Ruby rubyRuntime;
 
-    public Processor(Map<String, Object> config) {
-        this.rubyRuntime = JRubyRuntimeContext.get();
-        this.config = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, config);
+    /**
+     * The config map must not be reset once configFinalized is true.
+     * With the Asciidoctor Ruby implementation this flag will be set to
+     * true after the Ruby part of the extension is initialized.
+     */
+    private boolean configFinalized = false;
+
+    public Processor() {
+        this(new HashMap<String, Object>());
     }
 
-    public void update_config(Map<Object, Object> config) {
-    	this.config.putAll(config);
+    public Processor(Map<String, Object> config) {
+        this.config = new HashMap<String, Object>(config);
     }
-    
-    public Map<Object, Object> getConfig() {
+
+    public Map<String, Object> getConfig() {
     	return this.config;
     }
 
-    public RubyHash setConfig(Map<String, Object> config) {
-        this.config = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, config);
-        return null;
+    public final void setConfig(Map<String, Object> config) {
+        if (configFinalized) {
+            throw new IllegalStateException("It is only allowed to set the config in the constructor!");
+        }
+        this.config = config;
+    }
+
+    /**
+     * Lock the config of this processor so that it is no longer allowed to invoke {@link #setConfig(Map)}.
+     */
+    public final void setConfigFinalized() {
+        this.configFinalized = true;
     }
 
     public Block createBlock(AbstractBlock parent, String context, String content, Map<String, Object> attributes) {
@@ -118,7 +135,9 @@ public class Processor {
     }
 
     public Inline createInline(AbstractBlock parent, String context, List<String> text, Map<String, Object> attributes, Map<Object, Object> options) {
-        
+
+        Ruby rubyRuntime = getRubyRuntimeFromNode(parent);
+
         options.put(Options.ATTRIBUTES, attributes);
         
         IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Inline");
@@ -136,7 +155,9 @@ public class Processor {
     public Inline createInline(AbstractBlock parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {
         
         options.put(Options.ATTRIBUTES, attributes);
-        
+
+        Ruby rubyRuntime = getRubyRuntimeFromNode(parent);
+
         IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Inline");
         RubyHash convertedOptions = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
         // FIXME hack to ensure we have the underlying Ruby instance
@@ -154,11 +175,14 @@ public class Processor {
     }
     
     protected Document document(DocumentRuby documentRuby) {
-    	return new Document(documentRuby, rubyRuntime);
+    	return new Document(documentRuby, getRubyRuntimeFromNode(documentRuby));
     }
     
     private Block createBlock(AbstractBlock parent, String context,
             Map<Object, Object> options) {
+
+        Ruby rubyRuntime = getRubyRuntimeFromNode(parent);
+
         IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Block");
         RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime,
                 options);
@@ -173,6 +197,19 @@ public class Processor {
                 convertMapToRubyHashWithSymbols };
         return (Block) JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass,
                 "new", parameters, Block.class);
+    }
+
+    private Ruby getRubyRuntimeFromNode(AbstractNode node) {
+        if (node instanceof IRubyObject) {
+            return ((IRubyObject) node).getRuntime();
+        } else if (node instanceof RubyObjectHolderProxy) {
+            return ((RubyObjectHolderProxy) node).__ruby_object().getRuntime();
+        } else if (node instanceof AbstractNodeImpl) {
+            AbstractNode nodeDelegate = ((AbstractNodeImpl) node).getDelegate();
+            return getRubyRuntimeFromNode(nodeDelegate);
+        } else {
+            throw new IllegalArgumentException("Don't know what to with a " + node);
+        }
     }
 
 }

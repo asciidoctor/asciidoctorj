@@ -19,7 +19,6 @@ import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 
 public class PreprocessorProxy extends AbstractProcessorProxy<Preprocessor> {
 
@@ -83,7 +82,7 @@ public class PreprocessorProxy extends AbstractProcessorProxy<Preprocessor> {
                             .newInstance());
 
             // Then create the config hash that may contain config options defined in the Java constructor
-            RubyHash config = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(context.getRuntime(), getProcessor().getConfig());
+            RubyHash config = RubyHashUtil.convertMapToRubyHashWithSymbols(context.getRuntime(), getProcessor().getConfig());
 
             // Initialize the Ruby part and pass in the config options
             Helpers.invokeSuper(context, this, getMetaClass(), METHOD_NAME_INITIALIZE, new IRubyObject[]{config}, Block.NULL_BLOCK);
@@ -91,6 +90,8 @@ public class PreprocessorProxy extends AbstractProcessorProxy<Preprocessor> {
             // Reset the Java config options to the decorated Ruby hash, so that Java and Ruby work on the same config map
             getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
         }
+
+        finalizeJavaConfig();
 
         return null;
     }

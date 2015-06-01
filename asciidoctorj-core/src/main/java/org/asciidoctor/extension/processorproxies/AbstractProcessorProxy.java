@@ -1,21 +1,9 @@
 package org.asciidoctor.extension.processorproxies;
 
 import org.asciidoctor.extension.Processor;
-import org.asciidoctor.internal.RubyHashMapDecorator;
-import org.asciidoctor.internal.RubyHashUtil;
-import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
-import org.jruby.RubyHash;
 import org.jruby.RubyObject;
-import org.jruby.anno.JRubyMethod;
-import org.jruby.javasupport.JavaEmbedUtils;
-import org.jruby.runtime.Block;
-import org.jruby.runtime.Helpers;
-import org.jruby.runtime.ThreadContext;
-import org.jruby.runtime.builtin.IRubyObject;
-
-import java.util.Map;
 
 public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
 
@@ -50,6 +38,10 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
 
     public void setProcessorClass(Class<? extends T> processorClass) {
         this.processorClass = processorClass;
+    }
+
+    public void finalizeJavaConfig() {
+        getProcessor().setConfigFinalized();
     }
 
 }
