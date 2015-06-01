@@ -2,9 +2,11 @@ package org.asciidoctor.cli;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.Options;
@@ -16,7 +18,6 @@ import com.beust.jcommander.Parameter;
 public class AsciidoctorCliOptions {
 
     public static final String LOAD_PATHS = "-I";
-    public static final String CLASSPATH = "--cp";
     public static final String REQUIRE = "-r";
     public static final String QUIET = "-q";
     public static final String ATTRIBUTE = "-a";
@@ -98,11 +99,11 @@ public class AsciidoctorCliOptions {
     @Parameter(names = { REQUIRE, "--require" }, description = "require the specified library before executing the processor (using require)")
     private List<String> require;
 
-    @Parameter(names = { CLASSPATH }, description = "add a directory to the classpath may be specified more than once", variableArity = true)
-    private List<String> classPaths = new ArrayList<String>();
+    @Parameter(names = { "-cp", "-classpath", "--classpath" }, description = "add a directory to the classpath may be specified more than once")
+    private String classPath;
 
-    @Parameter(names = { LOAD_PATHS, "--load-path" }, description = "add a directory to the $LOAD_PATH may be specified more than once", variableArity = true)
-    private List<String> loadPaths = new ArrayList<String>();
+    @Parameter(names = { LOAD_PATHS, "--load-path" }, description = "add a directory to the $LOAD_PATH may be specified more than once")
+    private String loadPath;
 
     @Parameter(description = "input files")
     private List<String> parameters = new ArrayList<String>();
@@ -120,19 +121,19 @@ public class AsciidoctorCliOptions {
     }
 
     public boolean isClassPaths() {
-        return this.classPaths != null && this.classPaths.size() > 0;
+        return this.classPath != null && this.classPath.length() > 0;
     }
 
     public List<String> getClassPaths() {
-        return this.classPaths;
+        return splitByPathSeparator(this.classPath);
     }
 
     public boolean isLoadPaths() {
-        return this.loadPaths != null && this.loadPaths.size() > 0;
+        return this.loadPath != null && this.loadPath.length() > 0;
     }
 
     public List<String> getLoadPaths() {
-        return this.loadPaths;
+        return splitByPathSeparator(this.loadPath);
     }
 
     public List<String> getParameters() {
@@ -315,4 +316,17 @@ public class AsciidoctorCliOptions {
 
         attributeValues.put(attributeName, attributeValue);
     }
+
+    private List<String> splitByPathSeparator(String path) {
+        if (path == null || path.trim().length() == 0) {
+            return Collections.emptyList();
+        }
+        StringTokenizer tokenizer = new StringTokenizer(path, File.pathSeparator);
+        List<String> ret = new ArrayList<String>();
+        while (tokenizer.hasMoreTokens()) {
+            ret.add(tokenizer.nextToken());
+        }
+        return ret;
+    }
+
 }
