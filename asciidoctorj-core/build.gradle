@@ -65,12 +65,12 @@ jar {
   manifest {
     symbolicName = 'org.asciidoctor'
     instruction 'Export-Package',
-      'org.asciidoctor',
-      'org.asciidoctor.ast',
-      'org.asciidoctor.converter',
-      'org.asciidoctor.converter.spi',
-      'org.asciidoctor.extension',
-      'org.asciidoctor.extension.spi'
+      "org.asciidoctor;version=\"${version}\"",
+      "org.asciidoctor.ast;version=\"${version}\"",
+      "org.asciidoctor.converter;version=\"${version}\"",
+      "org.asciidoctor.converter.spi;version=\"${version}\"",
+      "org.asciidoctor.extension;version=\"${version}\"",
+      "org.asciidoctor.extension.spi;version=\"${version}\""
     instruction 'Import-Package',
       'com.beust.jcommander;resolution:=optional',
       '*'
