@@ -172,17 +172,17 @@ public class JRubyAsciidoctor implements Asciidoctor {
         Map<Object, Object> opts = new HashMap<Object, Object>();
         opts.put("partition", true);
 
-        Document document = new Document(documentRuby, rubyRuntime);
+        Document document = (Document) NodeConverter.createASTNode(documentRuby);
 
-        return DocumentHeader.createDocumentHeader((Title) document.doctitle(opts), documentRuby.title(),
-                documentRuby.getAttributes());
+        return DocumentHeader.createDocumentHeader((Title) document.doctitle(opts), document.title(),
+                document.getAttributes());
     }
 
     private StructuredDocument toDocument(DocumentRuby documentRuby, Ruby rubyRuntime, int maxDeepLevel) {
 
-        Document document = new Document(documentRuby, rubyRuntime);
-        List<ContentPart> contentParts = getContents(document.blocks(), 1, maxDeepLevel);
-        return StructuredDocument.createStructuredDocument(toDocumentHeader(documentRuby), contentParts);
+        Document document = (Document) NodeConverter.createASTNode(documentRuby);
+        List<ContentPart> contentParts = getContents(document.getBlocks(), 1, maxDeepLevel);
+        return StructuredDocument.createStructuredDocument(toDocumentHeader(document), contentParts);
     }
 
     private List<ContentPart> getContents(List<AbstractBlock> blocks, int level, int maxDeepLevel) {

@@ -1,9 +1,12 @@
 package org.asciidoctor.extension.processorproxies;
 
+import org.asciidoctor.ast.AbstractNodeImpl;
 import org.asciidoctor.extension.Processor;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyObject;
+import org.jruby.javasupport.JavaEmbedUtils;
+import org.jruby.runtime.builtin.IRubyObject;
 
 public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
 
@@ -42,6 +45,14 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
 
     public void finalizeJavaConfig() {
         getProcessor().setConfigFinalized();
+    }
+
+    protected IRubyObject convertProcessorResult(Object o) {
+        if (o instanceof AbstractNodeImpl) {
+            return ((AbstractNodeImpl) o).getRubyObject();
+        } else {
+            return JavaEmbedUtils.javaToRuby(getRuntime(), o);
+        }
     }
 
 }

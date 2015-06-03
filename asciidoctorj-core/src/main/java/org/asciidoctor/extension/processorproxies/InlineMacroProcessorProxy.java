@@ -1,6 +1,7 @@
 package org.asciidoctor.extension.processorproxies;
 
 import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.AbstractNodeImpl;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.InlineMacroProcessor;
 import org.asciidoctor.internal.RubyHashMapDecorator;
@@ -122,12 +123,11 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
 
     @JRubyMethod(name = "process", required = 3)
     public IRubyObject process(ThreadContext context, IRubyObject parent, IRubyObject target, IRubyObject attributes) {
-        return JavaEmbedUtils.javaToRuby(
-                getRuntime(),
-                getProcessor().process(
-                        (AbstractBlock) NodeConverter.createASTNode(parent),
-                        RubyUtils.rubyToJava(getRuntime(), target, String.class),
-                        RubyUtils.rubyToJava(getRuntime(), attributes, Map.class)));
+        Object o = getProcessor().process(
+                (AbstractBlock) NodeConverter.createASTNode(parent),
+                RubyUtils.rubyToJava(getRuntime(), target, String.class),
+                RubyUtils.rubyToJava(getRuntime(), attributes, Map.class));
+        return convertProcessorResult(o);
     }
 
 }

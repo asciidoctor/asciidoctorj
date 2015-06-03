@@ -42,23 +42,17 @@ public final class NodeConverter {
             String rubyClassName = rubyObject.getMetaClass().getRealClass().getName();
             AbstractNode ret = null;
             if (BLOCK_CLASS.equals(rubyClassName)) {
-                Block blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Block.class);
-                ret = new BlockImpl(blockRuby, runtime);
+                ret = new BlockImpl(rubyObject);
             } else if (SECTION_CLASS.equals(rubyClassName)) {
-                Section blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, Section.class);
-                ret = new SectionImpl(blockRuby, runtime);
+                ret = new SectionImpl(rubyObject);
             } else if (DOCUMENT_CLASS.equals(rubyClassName)) {
-                DocumentRuby blockRuby = RubyUtils.rubyToJava(runtime, rubyObject, DocumentRuby.class);
-                ret = new Document(blockRuby, runtime);
+                ret = new Document(rubyObject);
             } else if (INLINE_CLASS.equals(rubyClassName)) {
-                Inline inline = RubyUtils.rubyToJava(runtime, rubyObject, Inline.class);
-                ret = new InlineImpl(inline, runtime);
+                ret = new InlineImpl(rubyObject);
             } else if (LIST_CLASS.equals(rubyClassName)) {
-                ListNode list = RubyUtils.rubyToJava(runtime, rubyObject, ListNode.class);
-                ret = new ListImpl(list, runtime);
+                ret = new ListImpl(rubyObject);
             } else if (LIST_ITEM_CLASS.equals(rubyClassName)) {
-                ListItem list = RubyUtils.rubyToJava(runtime, rubyObject, ListItem.class);
-                ret = new ListItemImpl(list, runtime);
+                ret = new ListItemImpl(rubyObject);
             } else {
                 throw new IllegalArgumentException("Don't know what to do with a " + rubyObject);
             }
@@ -75,7 +69,7 @@ public final class NodeConverter {
         }
     }
 
-    private static IRubyObject asRubyObject(Object o) {
+    public static IRubyObject asRubyObject(Object o) {
         if (o instanceof IRubyObject) {
             return (IRubyObject) o;
         } else if (o instanceof RubyObjectHolderProxy) {

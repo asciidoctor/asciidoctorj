@@ -3,22 +3,21 @@ package org.asciidoctor.ast;
 import java.util.List;
 
 import org.jruby.Ruby;
+import org.jruby.runtime.builtin.IRubyObject;
 
 public class BlockImpl extends AbstractBlockImpl implements Block {
-    private Block blockDelegate;
 
-    public BlockImpl(Block blockDelegate, Ruby runtime) {
-        super(blockDelegate, runtime);
-        this.blockDelegate = blockDelegate;
+    public BlockImpl(IRubyObject blockDelegate) {
+        super(blockDelegate);
     }
 
     @Override
     public List<String> lines() {
-        return blockDelegate.lines();
+        return getList("lines", String.class);
     }
     
     @Override
     public String source() {
-        return blockDelegate.source();
+        return getString("source");
     }
 }

@@ -129,7 +129,7 @@ public class Processor {
             Map<Object, Object> options) {
 
         options.put(Options.SOURCE, content);
-        options.put(Options.ATTRIBUTES, attributes);        
+        options.put(Options.ATTRIBUTES, new HashMap<String, Object>(attributes));
         
         return createBlock(parent, context, options);
     }
@@ -144,12 +144,12 @@ public class Processor {
         RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime,
                 options);
         Object[] parameters = {
-                parent.delegate(),
+                ((AbstractBlockImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
                 text,
                 convertMapToRubyHashWithSymbols };
-        return (Inline) JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass,
-                "new", parameters, Inline.class);
+        return (Inline) NodeConverter.createASTNode(
+                JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass, "new", parameters, Inline.class));
     }
     
     public Inline createInline(AbstractBlock parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {
@@ -160,22 +160,14 @@ public class Processor {
 
         IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Inline");
         RubyHash convertedOptions = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        // FIXME hack to ensure we have the underlying Ruby instance
-        try {
-            parent = parent.delegate();
-        } catch (Exception e) {}
 
         Object[] parameters = {
-                parent,
+                ((AbstractBlockImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
                 text,
                 convertedOptions };
-        return (Inline) JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass,
-                "new", parameters, Inline.class);
-    }
-    
-    protected Document document(DocumentRuby documentRuby) {
-    	return new Document(documentRuby, getRubyRuntimeFromNode(documentRuby));
+        return (Inline) NodeConverter.createASTNode(
+                JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass, "new", parameters, Inline.class));
     }
     
     private Block createBlock(AbstractBlock parent, String context,
@@ -186,17 +178,12 @@ public class Processor {
         IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Block");
         RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime,
                 options);
-        // FIXME hack to ensure we have the underlying Ruby instance
-        try {
-            parent = parent.delegate();
-        } catch (Exception e) {}
 
         Object[] parameters = {
-                parent,
+                ((AbstractBlockImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
                 convertMapToRubyHashWithSymbols };
-        return (Block) JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass,
-                "new", parameters, Block.class);
+        return (Block) NodeConverter.createASTNode(JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass, "new", parameters, Block.class));
     }
 
     private Ruby getRubyRuntimeFromNode(AbstractNode node) {
@@ -205,8 +192,8 @@ public class Processor {
         } else if (node instanceof RubyObjectHolderProxy) {
             return ((RubyObjectHolderProxy) node).__ruby_object().getRuntime();
         } else if (node instanceof AbstractNodeImpl) {
-            AbstractNode nodeDelegate = ((AbstractNodeImpl) node).getDelegate();
-            return getRubyRuntimeFromNode(nodeDelegate);
+            IRubyObject nodeDelegate = ((AbstractNodeImpl) node).getRubyObject();
+            return nodeDelegate.getRuntime();
         } else {
             throw new IllegalArgumentException("Don't know what to with a " + node);
         }

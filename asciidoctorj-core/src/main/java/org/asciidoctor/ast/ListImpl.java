@@ -1,35 +1,33 @@
 package org.asciidoctor.ast;
 
 import org.jruby.Ruby;
+import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.List;
 
 public class ListImpl extends AbstractBlockImpl implements ListNode {
 
-    private final ListNode listDelegate;
-
-    public ListImpl(ListNode delegate, Ruby rubyRuntime) {
-        super(delegate, rubyRuntime);
-        this.listDelegate = delegate;
+    public ListImpl(IRubyObject delegate) {
+        super(delegate);
     }
 
     @Override
     public List<AbstractBlock> getItems() {
-        return blocks();
+        return getBlocks();
     }
 
     @Override
     public boolean isItem() {
-        return isBlock();
+        return getBoolean("items?");
     }
 
     @Override
     public String render() {
-        return listDelegate.render();
+        return getString("render");
     }
 
     @Override
     public String convert() {
-        return listDelegate.convert();
+        return getString("convert");
     }
 }

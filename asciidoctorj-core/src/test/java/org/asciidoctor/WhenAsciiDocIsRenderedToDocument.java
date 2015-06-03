@@ -1,6 +1,8 @@
 package org.asciidoctor;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsMapContaining.hasKey;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
@@ -98,6 +100,7 @@ public class WhenAsciiDocIsRenderedToDocument {
         assertThat(findBy, hasSize(2));
         
         assertThat((String)findBy.get(0).getAttributes().get("target"), is("tiger.png"));
+        assertThat(findBy.get(0).getLevel(), greaterThan(0));
         
     }
 
@@ -146,7 +149,7 @@ public class WhenAsciiDocIsRenderedToDocument {
         AbstractBlock abstractBlock = document.blocks().get(0);
         assertThat(abstractBlock.getRole(), is("famous"));
         assertThat(abstractBlock.hasRole("famous"), is(true));
-        //assertThat(abstractBlock.isRole(), is(true));
+        assertThat(abstractBlock.isRole(), is(true));
         assertThat(abstractBlock.getRoles(), contains("famous"));
     }
 
@@ -207,6 +210,32 @@ public class WhenAsciiDocIsRenderedToDocument {
         File inputFile = classpath.getResource("rendersample.asciidoc");
         String content = document.readAsset(inputFile.getAbsolutePath(), new HashMap<Object, Object>());
         assertThat(content, is(IOUtils.readFull(new FileReader(inputFile))));
+    }
+
+    @Test
+    public void should_be_able_to_get_list_marker_keyword() {
+        Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
+        assertThat(document.listMarkerKeyword("upperalpha"), is("A"));
+    }
+
+    @Test
+    public void should_be_able_to_set_attribute() {
+        final Object attributeName = "testattribute";
+        final Object attributeValue = "testvalue";
+        Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
+        assertThat(document.setAttr(attributeName, attributeValue, true), is(true));
+        assertThat(document.getAttr(attributeName), is(attributeValue));
+        assertThat(document.getAttributes().get(attributeName), is(attributeValue));
+    }
+
+    @Test
+    public void should_be_able_to_set_attribute_on_attributes_map() {
+        final String attributeName = "testattribute";
+        final Object attributeValue = "testvalue";
+        Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
+        document.getAttributes().put(attributeName, attributeValue);
+        assertThat(document.getAttr(attributeName), is(attributeValue));
+        assertThat(document.getAttributes().get(attributeName), is(attributeValue));
     }
 
 }

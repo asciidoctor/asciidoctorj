@@ -2,6 +2,7 @@ package org.asciidoctor.extension.processorproxies;
 
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.Treeprocessor;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
@@ -100,11 +101,8 @@ public class TreeprocessorProxy extends AbstractProcessorProxy<Treeprocessor> {
 
     @JRubyMethod(name = "process", required = 1)
     public IRubyObject process(ThreadContext context, IRubyObject document) {
-        return JavaEmbedUtils.javaToRuby(
-                getRuntime(),
-                getProcessor().process(
-                        new Document(
-                                RubyUtils.rubyToJava(getRuntime(), document, DocumentRuby.class),
-                                getRuntime())));
+        Object o = getProcessor().process(
+                (DocumentRuby) NodeConverter.createASTNode(document));
+        return convertProcessorResult(o);
     }
 }

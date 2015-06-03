@@ -19,7 +19,7 @@ public final class ProcessorProxyUtil {
      * from Asciidoctor::Extensions, e.g. Asciidoctor::Extensions::Treeprocessor
      * @param rubyRuntime
      * @param processorClassName
-     * @return
+     * @return The Ruby class object for the given extension class name, e.g. Asciidoctor::Extensions::TreeProcessor
      */
     public static RubyClass getExtensionBaseClass(Ruby rubyRuntime, String processorClassName) {
         RubyModule extensionsModule = getExtensionsModule(rubyRuntime);
@@ -29,7 +29,7 @@ public final class ProcessorProxyUtil {
     /**
      * Returns the Ruby module Asciidoc::Extensions.
      * @param rubyRuntime
-     * @return
+     * @return The Ruby object for the module Asciidoc::Extensions.
      */
     private static RubyModule getExtensionsModule(Ruby rubyRuntime) {
         RubyModule asciidoctorModule = rubyRuntime.getModule("Asciidoctor");
