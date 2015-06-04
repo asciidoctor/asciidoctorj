@@ -1,4 +1,4 @@
-= AsciidoctorJ: Java bindings for AsciidoctorJ
+= AsciidoctorJ: Java bindings for Asciidoctor
 Alex Soto <https://github.com/lordofthejars[@lordofthejars]>; Dan Allen <https://github.com/mojavelinux[@mojavelinux]>
 // Settings:
 :compat-mode!:
