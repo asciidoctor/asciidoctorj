@@ -21,6 +21,8 @@ def gemFiles = fileTree(jruby.gemInstallDir) {
   include "gems/prawn-$prawnGemVersion/VERSION"
   include "gems/prawn-$prawnGemVersion/data/*.txt"
   include "gems/prawn-$prawnGemVersion/data/encodings/*"
+  // Include Font Awesome fonts
+  include "gems/prawn-icon-*/fonts/fa/*"
   // Accomodate Addressable's non-conforming packaging
   include "gems/addressable-*/data/*.data"
 }
