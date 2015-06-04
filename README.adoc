@@ -852,6 +852,9 @@ Each extension point has an abstract class in Java that maps to the extension AP
 
 |Include processor
 |org.asciidoctor.extension.IncludeProcessor
+
+|Docinfo processor
+|org.asciidoctor.extension.DocinfoProcessor
 |===
 
 To create an extension two things are required:
