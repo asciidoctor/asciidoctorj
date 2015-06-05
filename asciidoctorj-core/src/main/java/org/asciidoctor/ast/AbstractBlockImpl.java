@@ -45,7 +45,7 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     @Override
     public List<AbstractBlock> getBlocks() {
         RubyArray rubyBlocks = (RubyArray) getRubyProperty("blocks");
-        return new RubyBlockListDecorator(rubyBlocks);
+        return new RubyBlockListDecorator<AbstractBlock>(rubyBlocks);
     }
 
     @Override

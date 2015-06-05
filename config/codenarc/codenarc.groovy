@@ -44,7 +44,10 @@ ruleset {
         exclude 'IfStatementBraces'
     }
     ruleset('rulesets/size.xml')
-    ruleset('rulesets/junit.xml')
+    ruleset('rulesets/junit.xml') {
+        // Does not play well with Spock tests
+        exclude 'JUnitPublicNonTestMethod'
+    }
     ruleset('rulesets/unnecessary.xml') {
         // UnnecessaryGetter rule does not work correct if there are methods like getRole() and isRole()
         exclude 'UnnecessaryGetter'
