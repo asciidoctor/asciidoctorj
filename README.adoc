@@ -1515,7 +1515,7 @@ assertThat(new File("target/test-classes/index.epub").exists(), is(true));
 == Writing a custom converter
 
 For output formats that are not natively supported by Asciidoctor it is possible to write an own converter in Java.
-To get an own converter running in {uri-repo}[AsciidoctorJ] these steps are required:
+To get your own converter running in {uri-repo}[AsciidoctorJ] these steps are required:
 
 - Implement the converter as a subclass of `org.asciidoctor.converter.AbstractConverter`.
 - Register the converter with a well defined backend name at the `ConverterRegistry`.
@@ -1595,7 +1595,7 @@ import org.asciidoctor.Asciidoctor;
 public class TextConverterRegistry implements ConverterRegistry{
     @Override
     public void register(Asciidoctor asciidoctor) {
-        asciidoctor.javaConverterRegistry().register(TextConverter.class, "textt");
+        asciidoctor.javaConverterRegistry().register(TextConverter.class, "text");
     }
 }
 ----
@@ -1612,7 +1612,7 @@ To render a document with this converter the backend name `text` has to be passe
 [source,java]
 ----
 File adocFile = ...
-asciidoctor.renderFile(adocFile, OptionsBuilder.options().backend("text"));
+asciidoctor.convertFile(adocFile, OptionsBuilder.options().backend("text"));
 ----
 
 == Loading Ruby libraries
