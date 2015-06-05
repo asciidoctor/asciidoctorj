@@ -5,7 +5,6 @@ dependencies {
   compile "org.jboss.arquillian.container:arquillian-container-test-spi:$arquillianVersion"
   compile "org.jboss.arquillian.container:arquillian-container-impl-base:$arquillianVersion"
   compile "org.jboss.arquillian.container:arquillian-container-test-impl-base:$arquillianVersion"
-  compile "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
 }
 
 jar.dependsOn project(':asciidoctorj').testClasses
