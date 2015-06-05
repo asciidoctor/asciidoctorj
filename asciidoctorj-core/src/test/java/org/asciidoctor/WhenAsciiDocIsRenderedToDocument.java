@@ -213,12 +213,6 @@ public class WhenAsciiDocIsRenderedToDocument {
     }
 
     @Test
-    public void should_be_able_to_get_list_marker_keyword() {
-        Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
-        assertThat(document.listMarkerKeyword("upperalpha"), is("A"));
-    }
-
-    @Test
     public void should_be_able_to_set_attribute() {
         final Object attributeName = "testattribute";
         final Object attributeValue = "testvalue";

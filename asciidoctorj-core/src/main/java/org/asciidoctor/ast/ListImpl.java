@@ -1,6 +1,5 @@
 package org.asciidoctor.ast;
 
-import org.jruby.Ruby;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public class ListImpl extends AbstractBlockImpl implements ListNode {
     }
 
     @Override
-    public boolean isItem() {
+    public boolean hasItems() {
         return getBoolean("items?");
     }
 

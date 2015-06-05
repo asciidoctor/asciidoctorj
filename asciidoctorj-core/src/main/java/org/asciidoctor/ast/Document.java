@@ -1,12 +1,8 @@
 package org.asciidoctor.ast;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
-import org.asciidoctor.internal.RubyUtils;
-import org.jruby.Ruby;
 import org.jruby.RubyHash;
 import org.jruby.RubyString;
 import org.jruby.runtime.builtin.IRubyObject;
@@ -18,27 +14,32 @@ public class Document extends AbstractBlockImpl implements DocumentRuby {
     }
 
     @Override
-    public boolean basebackend(String backend) {
+    public boolean isBasebackend(String backend) {
         return getBoolean("basebackend?", backend);
     }
 
     @Override
+    public boolean basebackend(String backend) {
+        return isBasebackend(backend);
+    }
+
+    @Override
     public Map<Object, Object> getOptions() {
-        return RubyHashUtil.convertRubyHashMapToMap((RubyHash) getProperty("options"));
+        return RubyHashUtil.convertRubyHashMapToMap((RubyHash) getRubyProperty("options"));
     }
 
     @Override
     public Object doctitle(Map<Object, Object> opts) {
         RubyHash mapWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime, opts);
 
-        Object doctitle = getProperty("doctitle", mapWithSymbols);
+        Object doctitle = getRubyProperty("doctitle", mapWithSymbols);
 
         if (doctitle instanceof RubyString) {
             return ((RubyString) doctitle).asJavaString();
         } else if (doctitle instanceof String) {
             return doctitle;
         } else {
-            return RubyUtils.rubyToJava(runtime, (IRubyObject) doctitle, Title.class);
+            return toJava((IRubyObject) doctitle, Title.class);
         }
 
     }

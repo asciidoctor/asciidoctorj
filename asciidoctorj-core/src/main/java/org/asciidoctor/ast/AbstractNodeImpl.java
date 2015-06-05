@@ -1,7 +1,6 @@
 package org.asciidoctor.ast;
 
 import org.asciidoctor.internal.RubyAttributesMapDecorator;
-import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
@@ -13,12 +12,10 @@ import org.jruby.RubyNil;
 import org.jruby.RubyNumeric;
 import org.jruby.RubyString;
 import org.jruby.RubySymbol;
-import org.jruby.java.proxies.RubyObjectHolderProxy;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.ThreadContext;
-import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +53,7 @@ public abstract class AbstractNodeImpl implements AbstractNode {
 
     @Override
     public AbstractNode getParent() {
-        return NodeConverter.createASTNode(getProperty("parent"));
+        return NodeConverter.createASTNode(getRubyProperty("parent"));
     }
 
     @Override
@@ -66,7 +63,7 @@ public abstract class AbstractNodeImpl implements AbstractNode {
 
     @Override
     public DocumentRuby getDocument() {
-        return (DocumentRuby) NodeConverter.createASTNode(getProperty("document"));
+        return (DocumentRuby) NodeConverter.createASTNode(getRubyProperty("document"));
     }
 
     public IRubyObject getRubyObject() {
@@ -90,22 +87,22 @@ public abstract class AbstractNodeImpl implements AbstractNode {
 
     @Override
     public Map<String, Object> getAttributes() {
-        return new RubyAttributesMapDecorator((RubyHash) getProperty("attributes"));
+        return new RubyAttributesMapDecorator((RubyHash) getRubyProperty("attributes"));
     }
 
     @Override
     public Object getAttr(Object name, Object defaultValue, boolean inherit) {
-        return JavaEmbedUtils.rubyToJava(getProperty("attr", name, defaultValue, inherit));
+        return JavaEmbedUtils.rubyToJava(getRubyProperty("attr", name, defaultValue, inherit));
     }
 
     @Override
     public Object getAttr(Object name, Object defaultValue) {
-        return JavaEmbedUtils.rubyToJava(getProperty("attr", name, defaultValue));
+        return JavaEmbedUtils.rubyToJava(getRubyProperty("attr", name, defaultValue));
     }
 
     @Override
     public Object getAttr(Object name) {
-        return JavaEmbedUtils.rubyToJava(getProperty("attr", name));
+        return JavaEmbedUtils.rubyToJava(getRubyProperty("attr", name));
     }
 
     @Override
@@ -193,24 +190,8 @@ public abstract class AbstractNodeImpl implements AbstractNode {
         return getString("normalize_web_path", path, start, preserveUriTarget);
     }
 
-    @Override
-    public String getStyle() {
-        return getString("@style");
-    }
-
-    @Override
-    public String listMarkerKeyword() {
-        return getString("list_marker_keyword");
-    }
-
-    @Override
-    public String listMarkerKeyword(String listType) {
-        return getString("list_marker_keyword", listType);
-    }
-
-
     protected String getString(String propertyName, Object... args) {
-        IRubyObject result = getProperty(propertyName, args);
+        IRubyObject result = getRubyProperty(propertyName, args);
 
         if (result instanceof RubyNil) {
             return null;
@@ -222,7 +203,7 @@ public abstract class AbstractNodeImpl implements AbstractNode {
     }
 
     protected boolean getBoolean(String propertyName, Object... args) {
-        IRubyObject result = getProperty(propertyName, args);
+        IRubyObject result = getRubyProperty(propertyName, args);
         if (result instanceof RubyNil) {
             return false;
         } else {
@@ -231,7 +212,7 @@ public abstract class AbstractNodeImpl implements AbstractNode {
     }
 
     protected int getInt(String propertyName, Object... args) {
-        IRubyObject result = getProperty(propertyName, args);
+        IRubyObject result = getRubyProperty(propertyName, args);
         if (result instanceof RubyNil) {
             return 0;
         } else {
@@ -240,7 +221,7 @@ public abstract class AbstractNodeImpl implements AbstractNode {
     }
 
     protected <T> List<T> getList(String propertyName, Class<T> elementClass, Object... args) {
-        IRubyObject result = getProperty(propertyName, args);
+        IRubyObject result = getRubyProperty(propertyName, args);
         if (result instanceof RubyNil) {
             return null;
         } else {
@@ -254,7 +235,7 @@ public abstract class AbstractNodeImpl implements AbstractNode {
     }
 
 
-    protected IRubyObject getProperty(String propertyName, Object... args) {
+    protected IRubyObject getRubyProperty(String propertyName, Object... args) {
         ThreadContext threadContext = runtime.getThreadService().getCurrentContext();
 
         IRubyObject result = null;
@@ -275,6 +256,18 @@ public abstract class AbstractNodeImpl implements AbstractNode {
             }
         }
         return result;
+    }
+
+    protected Object getProperty(String propertyName, Object... args) {
+        return toJava(getRubyProperty(propertyName, args));
+    }
+
+    protected Object toJava(IRubyObject rubyObject) {
+        return JavaEmbedUtils.rubyToJava(rubyObject);
+    }
+
+    protected <T> T toJava(IRubyObject rubyObject, Class<T> targetClass) {
+        return (T) JavaEmbedUtils.rubyToJava(runtime, rubyObject, targetClass);
     }
 
 }

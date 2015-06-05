@@ -1,7 +1,5 @@
 package org.asciidoctor.ast;
 
-import org.jruby.RubySymbol;
-
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +36,12 @@ public interface DocumentRuby extends AbstractBlock {
     Map<String, Object> getAttributes();
 
     /**
-     * 
+     * @return basebackend attribute value
+     */
+    boolean isBasebackend(String backend);
+
+    /**
+     * @deprecated Please use {@link #isBasebackend(String)}
      * @return basebackend attribute value
      */
     boolean basebackend(String backend);

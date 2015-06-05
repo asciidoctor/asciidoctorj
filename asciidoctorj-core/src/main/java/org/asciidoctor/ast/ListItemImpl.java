@@ -1,6 +1,5 @@
 package org.asciidoctor.ast;
 
-import org.jruby.Ruby;
 import org.jruby.runtime.builtin.IRubyObject;
 
 public class ListItemImpl extends AbstractBlockImpl implements ListItem {
