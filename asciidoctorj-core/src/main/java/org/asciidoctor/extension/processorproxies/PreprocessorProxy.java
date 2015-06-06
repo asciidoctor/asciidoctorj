@@ -1,7 +1,9 @@
 package org.asciidoctor.extension.processorproxies;
 
+import org.asciidoctor.ast.AbstractNodeImpl;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.extension.PreprocessorReader;
 import org.asciidoctor.internal.RubyHashMapDecorator;
@@ -98,12 +100,10 @@ public class PreprocessorProxy extends AbstractProcessorProxy<Preprocessor> {
 
     @JRubyMethod(name = "process", required = 2)
     public IRubyObject process(ThreadContext context, IRubyObject document, IRubyObject preprocessorReader) {
-        return JavaEmbedUtils.javaToRuby(
-                getRuntime(),
-                getProcessor().process(
-                        new Document(
-                                RubyUtils.rubyToJava(getRuntime(), document, DocumentRuby.class),
-                                getRuntime()),
-                        RubyUtils.rubyToJava(getRuntime(), preprocessorReader, PreprocessorReader.class)));
+        Object o = getProcessor().process(
+                (DocumentRuby) NodeConverter.createASTNode(document),
+                RubyUtils.rubyToJava(getRuntime(), preprocessorReader, PreprocessorReader.class));
+
+        return convertProcessorResult(o);
     }
 }

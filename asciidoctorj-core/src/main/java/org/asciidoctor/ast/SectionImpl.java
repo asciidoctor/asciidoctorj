@@ -1,39 +1,61 @@
 package org.asciidoctor.ast;
 
-import org.jruby.Ruby;
+import org.jruby.runtime.builtin.IRubyObject;
 
 public class SectionImpl extends AbstractBlockImpl implements Section {
 
-    private Section delegate;
-    
-    public SectionImpl(Section blockDelegate, Ruby runtime) {
-        super(blockDelegate, runtime);
-        this.delegate = blockDelegate;
+    public SectionImpl(IRubyObject blockDelegate) {
+        super(blockDelegate);
     }
 
     @Override
     public int index() {
-        return this.delegate.index();
+        return getIndex();
+    }
+
+    @Override
+    public int getIndex() {
+        return getInt("index");
     }
 
     @Override
     public int number() {
-        return this.delegate.number();
+        return getNumber();
+    }
+
+    @Override
+    public int getNumber() {
+        return getInt("number");
     }
 
     @Override
     public String sectname() {
-        return this.delegate.sectname();
+        return getSectionName();
+    }
+
+    @Override
+    public String getSectionName() {
+        return getString("sectname");
     }
 
     @Override
     public boolean special() {
-        return this.delegate.special();
+        return isSpecial();
     }
 
     @Override
-    public int numbered() {
-        return this.delegate.number();
+    public boolean isSpecial() {
+        return getBoolean("special");
+    }
+
+    @Override
+    public boolean numbered() {
+        return isNumbered();
+    }
+
+    @Override
+    public boolean isNumbered() {
+        return getBoolean("numbered");
     }
 
 }

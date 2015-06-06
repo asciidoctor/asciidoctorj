@@ -2,6 +2,7 @@ package org.asciidoctor.extension.processorproxies;
 
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.DocinfoProcessor;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
@@ -104,10 +105,7 @@ public class DocinfoProcessorProxy extends AbstractProcessorProxy<DocinfoProcess
     public IRubyObject process(ThreadContext context, IRubyObject document) {
         return JavaEmbedUtils.javaToRuby(
                 getRuntime(),
-                getProcessor().process(
-                        new Document(
-                                RubyUtils.rubyToJava(getRuntime(), document, DocumentRuby.class),
-                                getRuntime())));
+                getProcessor().process((DocumentRuby) NodeConverter.createASTNode(document)));
     }
 
 }

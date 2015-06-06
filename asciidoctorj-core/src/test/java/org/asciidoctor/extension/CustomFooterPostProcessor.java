@@ -19,7 +19,7 @@ public class CustomFooterPostProcessor extends Postprocessor {
         
         String copyright  = "Copyright Acme, Inc.";
         
-        if(document.basebackend("html")) {
+        if(document.isBasebackend("html")) {
             org.jsoup.nodes.Document doc = Jsoup.parse(output, "UTF-8");
 
             Element contentElement = doc.getElementById("footer-text");

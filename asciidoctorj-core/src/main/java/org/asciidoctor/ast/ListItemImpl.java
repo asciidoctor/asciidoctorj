@@ -1,28 +1,25 @@
 package org.asciidoctor.ast;
 
-import org.jruby.Ruby;
+import org.jruby.runtime.builtin.IRubyObject;
 
 public class ListItemImpl extends AbstractBlockImpl implements ListItem {
 
-    private final ListItem listDelegate;
-
-    public ListItemImpl(ListItem listDelegate, Ruby runtime) {
-        super(listDelegate, runtime);
-        this.listDelegate = listDelegate;
+    public ListItemImpl(IRubyObject listDelegate) {
+        super(listDelegate);
     }
 
     @Override
     public String getMarker() {
-        return listDelegate.getMarker();
+        return getString("marker");
     }
 
     @Override
     public String getText() {
-        return listDelegate.getText();
+        return getString("text");
     }
 
     @Override
     public boolean hasText() {
-        return listDelegate.hasText();
+        return getBoolean("text?");
     }
 }

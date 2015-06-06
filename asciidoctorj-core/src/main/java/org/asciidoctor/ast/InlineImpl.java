@@ -1,38 +1,36 @@
 package org.asciidoctor.ast;
 
 import org.jruby.Ruby;
+import org.jruby.runtime.builtin.IRubyObject;
 
 public class InlineImpl extends AbstractNodeImpl implements Inline  {
 
-    protected Inline delegate;
-
-    public InlineImpl(Inline delegate, Ruby ruby) {
-        super(delegate, ruby);
-        this.delegate = delegate;
+    public InlineImpl(IRubyObject delegate) {
+        super(delegate);
     }
 
     @Override
     public String render() {
-        return delegate.render();
+        return getString("render");
     }
 
     @Override
     public String convert() {
-        return delegate.convert();
+        return getString("convert");
     }
 
     @Override
     public String getType() {
-        return delegate.getType();
+        return getString("type");
     }
 
     @Override
     public String getText() {
-        return delegate.getText();
+        return getString("text");
     }
 
     @Override
     public String getTarget() {
-        return delegate.getTarget();
+        return getString("target");
     }
 }

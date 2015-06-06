@@ -10,6 +10,7 @@ import org.asciidoctor.ast.ContentPart;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.ast.Title;
 import org.asciidoctor.converter.JavaConverterRegistry;
@@ -168,20 +169,18 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     private DocumentHeader toDocumentHeader(DocumentRuby documentRuby) {
-        Map<Object, Object> opts = new HashMap<Object, Object>();
-        opts.put("partition", true);
 
-        Document document = new Document(documentRuby, rubyRuntime);
+        Document document = (Document) NodeConverter.createASTNode(documentRuby);
 
-        return DocumentHeader.createDocumentHeader((Title) document.doctitle(opts), documentRuby.title(),
-                documentRuby.getAttributes());
+        return DocumentHeader.createDocumentHeader((Title) document.getStructuredDoctitle(), document.getDoctitle(),
+                document.getAttributes());
     }
 
     private StructuredDocument toDocument(DocumentRuby documentRuby, Ruby rubyRuntime, int maxDeepLevel) {
 
-        Document document = new Document(documentRuby, rubyRuntime);
-        List<ContentPart> contentParts = getContents(document.blocks(), 1, maxDeepLevel);
-        return StructuredDocument.createStructuredDocument(toDocumentHeader(documentRuby), contentParts);
+        Document document = (Document) NodeConverter.createASTNode(documentRuby);
+        List<ContentPart> contentParts = getContents(document.getBlocks(), 1, maxDeepLevel);
+        return StructuredDocument.createStructuredDocument(toDocumentHeader(document), contentParts);
     }
 
     private List<ContentPart> getContents(List<AbstractBlock> blocks, int level, int maxDeepLevel) {
@@ -591,13 +590,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
     @Override
     public Document load(String content, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        return new Document(this.asciidoctorModule.load(content, rubyHash), this.rubyRuntime);
+        return (Document) NodeConverter.createASTNode(this.asciidoctorModule.load(content, rubyHash));
     }
 
     @Override
     public Document loadFile(File file, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        return new Document(this.asciidoctorModule.load(file.getAbsolutePath(), rubyHash), this.rubyRuntime);
+        return (Document) NodeConverter.createASTNode(this.asciidoctorModule.load(file.getAbsolutePath(), rubyHash));
 
     }
 }

@@ -26,7 +26,6 @@ public interface AbstractBlock extends AbstractNode {
     Object content();
     Object getContent();
     String convert();
-    AbstractBlock delegate();
     List<AbstractBlock> findBy(Map<Object, Object> selector);
     int getLevel();
 }

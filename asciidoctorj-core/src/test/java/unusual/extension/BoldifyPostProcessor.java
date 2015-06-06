@@ -11,7 +11,7 @@ import org.asciidoctor.extension.Postprocessor;
  */
 public class BoldifyPostProcessor extends Postprocessor {
   @Override public String process(DocumentRuby document, String output) {
-    if (document.basebackend("html")) {
+    if (document.isBasebackend("html")) {
       return output.replaceAll("bold", "<b>bold</b>");
     } else {
       return output;

@@ -5,7 +5,17 @@ import java.util.Map;
 
 public interface AbstractNode {
 
+    /**
+     * @deprecated Please use {@link #getId()}
+     * @return A unique ID for this node
+     */
     String id();
+
+    /**
+     * @return A unique ID for this node
+     */
+    String getId();
+
     String getNodeName();
     /**
      * @deprecated Use {@linkplain #getParent()}  instead.
@@ -50,8 +60,5 @@ public interface AbstractNode {
     String readAsset(String path, Map<Object, Object> opts);
     String normalizeWebPath(String path, String start, boolean preserveUriTarget);
 
-    String getStyle();
 
-    String listMarkerKeyword();
-    String listMarkerKeyword(String listType);
 }
