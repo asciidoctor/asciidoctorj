@@ -5,7 +5,17 @@ import java.util.Map;
 
 public interface AbstractNode {
 
+    /**
+     * @deprecated Please use {@link #getId()}
+     * @return A unique ID for this node
+     */
     String id();
+
+    /**
+     * @return A unique ID for this node
+     */
+    String getId();
+
     String getNodeName();
     /**
      * @deprecated Use {@linkplain #getParent()}  instead.

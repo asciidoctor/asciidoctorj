@@ -33,6 +33,11 @@ public abstract class AbstractNodeImpl implements AbstractNode {
 
     @Override
     public String id() {
+        return getId();
+    }
+
+    @Override
+    public String getId() {
         return getString("id");
     }
 

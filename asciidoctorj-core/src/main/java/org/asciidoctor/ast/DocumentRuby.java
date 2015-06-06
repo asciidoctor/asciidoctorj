@@ -6,22 +6,23 @@ import java.util.Map;
 public interface DocumentRuby extends AbstractBlock {
 
     /**
-     * Get doc title
-     * 
-     * @param opts
-     *            to get the doc title. Key should be Ruby symbols.
-     * @return String if partition flag is not set to false or not present, Title if partition is set to true.
+     * @return The Title structure for this document.
      * @see Title
      */
-    Object doctitle(Map<Object, Object> opts);
+    Title getStructuredDoctitle();
 
     /**
-     * Get doc title
-     *
-     * @return String if partition flag is not set to false or not present, Title if partition is set to true.
+     * @return The title as a String.
      * @see Title
      */
-    Object doctitle();
+    String getDoctitle();
+
+    /**
+     * @deprecated Please use {@link #getDoctitle()}
+     * @return The title as a String.
+     * @see Title
+     */
+    String doctitle();
 
     /**
      * 

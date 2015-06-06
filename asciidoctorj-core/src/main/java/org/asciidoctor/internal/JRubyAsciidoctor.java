@@ -169,12 +169,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     private DocumentHeader toDocumentHeader(DocumentRuby documentRuby) {
-        Map<Object, Object> opts = new HashMap<Object, Object>();
-        opts.put("partition", true);
 
         Document document = (Document) NodeConverter.createASTNode(documentRuby);
 
-        return DocumentHeader.createDocumentHeader((Title) document.doctitle(opts), document.title(),
+        return DocumentHeader.createDocumentHeader((Title) document.getStructuredDoctitle(), document.getDoctitle(),
                 document.getAttributes());
     }
 
