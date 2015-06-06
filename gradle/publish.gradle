@@ -90,6 +90,15 @@ afterEvaluate {
       rootNode.name[0].setValue(project.properName)
       // FIXME I'm slightly annoyed that the dependencies node comes before name and description
       rootNode.children().last() + projectMeta
+
+      // Replace dependency "runtime" scope element value with "provided"
+      rootNode.dependencies.dependency.findAll {
+        it.scope.text() == JavaPlugin.RUNTIME_CONFIGURATION_NAME && configurations.provided.allDependencies.find { dep ->
+          dep.name == it.artifactId.text()
+        }
+      }.each { runtimeDep ->
+        runtimeDep.scope*.value = 'provided'
+      }
     }
   }
 }
