@@ -5,7 +5,7 @@ buildscript {
   }
   dependencies {
     if (JavaVersion.current().isJava7Compatible()) {
-      classpath 'com.netflix.nebula:nebula-publishing-plugin:2.0.0'
+      classpath 'com.netflix.nebula:nebula-publishing-plugin:2.2.+'
     }
   }
 }
@@ -67,6 +67,7 @@ subprojects {
   def _status = status
   apply plugin: 'java'
   apply plugin: 'groovy'
+  apply from: "$rootDir/gradle/providedConfiguration.gradle"
   status = _status
 
   // NOTE sourceCompatibility & targetCompatibility are set in gradle.properties to meet requirements of Gradle
