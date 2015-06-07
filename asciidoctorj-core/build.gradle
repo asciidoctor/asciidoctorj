@@ -17,13 +17,7 @@ dependencies {
   testCompile "com.google.guava:guava:$guavaVersion"
   testCompile "org.jsoup:jsoup:$jsoupVersion"
   testCompile "io.netty:netty-all:$nettyVersion"
-  testCompile project(path: ':asciidoctorj-test-support', configuration: 'tests')
-
-  testCompile "org.jboss.arquillian.container:arquillian-container-spi:$arquillianVersion"
-  testCompile "org.jboss.arquillian.container:arquillian-container-test-spi:$arquillianVersion"
-  testCompile "org.jboss.arquillian.container:arquillian-container-impl-base:$arquillianVersion"
-  testCompile "org.jboss.arquillian.container:arquillian-container-test-impl-base:$arquillianVersion"
-  testCompile "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
+  testCompile project(path: ':asciidoctorj-arquillian-extension')
 }
 
 def gemFiles = fileTree(jruby.gemInstallDir) {
