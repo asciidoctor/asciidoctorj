@@ -18,7 +18,10 @@ javadoc {
   source project(':asciidoctorj').fileTree('src/test/java') {
     include 'org/asciidoctor/arquillian/**/*'
   }
-  classpath = sourceSets.main.output + sourceSets.main.compileClasspath + project(':asciidoctorj-test-support').sourceSets.test.output
+  classpath = sourceSets.main.output +
+          sourceSets.main.compileClasspath +
+          project(':asciidoctorj-test-support').sourceSets.test.output +
+          project(':asciidoctorj').configurations.testCompile
 }
 
 sourcesJar {
