@@ -5,7 +5,7 @@ buildscript {
   }
   dependencies {
     if (JavaVersion.current().isJava7Compatible()) {
-      classpath 'com.netflix.nebula:nebula-publishing-plugin:2.2.+'
+      classpath 'com.netflix.nebula:nebula-publishing-plugin:2.2.2'
     }
   }
 }
@@ -102,6 +102,7 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
     testCompile "org.codehaus.groovy:groovy-all:$groovyVersion"
     testCompile "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
     testCompile "org.jboss.arquillian.spock:arquillian-spock-container:$arquillianSpockVersion"
+
   }
   apply plugin: 'codenarc'
   codenarc {
