@@ -1,15 +1,18 @@
-jar.enabled = false
-
-task testJar(type: Jar, dependsOn: testClasses) {
-    baseName = "test-${project.archivesBaseName}"
+jar {
     from sourceSets.test.output
+    dependsOn testClasses
 }
 
-configurations {
-    tests
+def javaApiUrl = "https://docs.oracle.com/javase/6/docs/api"
+def junitURL = "http://junit.org/javadoc/latest/"
+
+javadoc {
+    source sourceSets.test.allSource
+    classpath = files([sourceSets.test.compileClasspath, sourceSets.test.output])
+    options.links(javaApiUrl, junitURL)
 }
 
-artifacts {
-    tests testJar
-}
 
+sourcesJar {
+    from sourceSets.test.allSource
+}

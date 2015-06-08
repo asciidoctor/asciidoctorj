@@ -1,8 +1,7 @@
 dependencies {
   compile project(':asciidoctorj')
 
-  testCompile project(path: ':asciidoctorj-test-support', configuration: 'tests')
-  testCompile project(path: ':asciidoctorj', configuration: 'arquillianExtension')
+  testCompile project(path: ':asciidoctorj-arquillian-extension')
 
   gems("rubygems:asciidoctor-pdf:$asciidoctorPdfGemVersion") {
     // Exclude gems provided by AsciidoctorJ core

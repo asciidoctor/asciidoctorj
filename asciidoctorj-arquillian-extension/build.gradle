@@ -1,0 +1,25 @@
+dependencies {
+  provided project(path: ':asciidoctorj')
+  compile project(path: ':asciidoctorj-test-support')
+  compile "org.jboss.arquillian.container:arquillian-container-spi:$arquillianVersion"
+  compile "org.jboss.arquillian.container:arquillian-container-test-spi:$arquillianVersion"
+  compile "org.jboss.arquillian.container:arquillian-container-impl-base:$arquillianVersion"
+  compile "org.jboss.arquillian.container:arquillian-container-test-impl-base:$arquillianVersion"
+}
+
+jar {
+  from sourceSets.test.output
+}
+
+def javaApiUrl = "https://docs.oracle.com/javase/6/docs/api"
+def junitURL = "http://junit.org/javadoc/latest/"
+
+javadoc {
+  source sourceSets.test.allJava
+  classpath = files([sourceSets.test.compileClasspath, sourceSets.test.output])
+  options.links( javaApiUrl, junitURL )
+}
+
+sourcesJar {
+  from sourceSets.test.allSource
+}

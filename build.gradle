@@ -5,7 +5,7 @@ buildscript {
   }
   dependencies {
     if (JavaVersion.current().isJava7Compatible()) {
-      classpath 'com.netflix.nebula:nebula-publishing-plugin:2.0.0'
+      classpath 'com.netflix.nebula:nebula-publishing-plugin:2.2.2'
     }
   }
 }
@@ -67,6 +67,7 @@ subprojects {
   def _status = status
   apply plugin: 'java'
   apply plugin: 'groovy'
+  apply from: "$rootDir/gradle/providedConfiguration.gradle"
   status = _status
 
   // NOTE sourceCompatibility & targetCompatibility are set in gradle.properties to meet requirements of Gradle
@@ -101,6 +102,7 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
     testCompile "org.codehaus.groovy:groovy-all:$groovyVersion"
     testCompile "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
     testCompile "org.jboss.arquillian.spock:arquillian-spock-container:$arquillianSpockVersion"
+
   }
   apply plugin: 'codenarc'
   codenarc {
@@ -166,7 +168,7 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
   processResources.dependsOn jrubyPrepareGems
 
   apply from: rootProject.file('gradle/eclipse.gradle')
-  if (JavaVersion.current().isJava7Compatible() && !it.name.endsWith('-test-support')) {
+  if (JavaVersion.current().isJava7Compatible()) {
     apply from: rootProject.file('gradle/publish.gradle')
   }
 }

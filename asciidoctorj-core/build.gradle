@@ -1,9 +1,3 @@
-configurations {
-  arquillianExtension
-  testCompile.extendsFrom arquillianExtension
-}
-
-
 dependencies {
   compile "org.jruby:jruby-complete:$jrubyVersion"
   compile "com.beust:jcommander:$jcommanderVersion"
@@ -20,14 +14,7 @@ dependencies {
   testCompile "net.sf.saxon:Saxon-HE:$saxonVersion"
   testCompile "com.google.guava:guava:$guavaVersion"
   testCompile "org.jsoup:jsoup:$jsoupVersion"
-  testCompile project(path: ':asciidoctorj-test-support', configuration: 'tests')
-
-  arquillianExtension project(path: ':asciidoctorj-test-support', configuration: 'tests')
-  arquillianExtension "org.jboss.arquillian.container:arquillian-container-spi:$arquillianVersion"
-  arquillianExtension "org.jboss.arquillian.container:arquillian-container-test-spi:$arquillianVersion"
-  arquillianExtension "org.jboss.arquillian.container:arquillian-container-impl-base:$arquillianVersion"
-  arquillianExtension "org.jboss.arquillian.container:arquillian-container-test-impl-base:$arquillianVersion"
-  arquillianExtension "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
+  testCompile project(path: ':asciidoctorj-arquillian-extension')
 }
 
 def gemFiles = fileTree(jruby.gemInstallDir) {
@@ -43,18 +30,10 @@ jrubyPrepareGems << {
   }
 }
 
+javadoc {
+  classpath = sourceSets.main.output + sourceSets.main.compileClasspath + project(':asciidoctorj-test-support').sourceSets.test.output
+}
+
 //jruby {
 //	execVersion = '1.7.20'
 //}
-
-task arquillianExtensionJar(type: Jar, dependsOn: testClasses) {
-  baseName = "arquillianExtension-${project.archivesBaseName}"
-  from sourceSets.test.output
-  include 'org/asciidoctor/arquillian/**/*'
-  include 'META-INF/services/*'
-}
-
-
-artifacts {
-  arquillianExtension arquillianExtensionJar
-}
