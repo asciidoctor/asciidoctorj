@@ -51,6 +51,35 @@ public class WhenConverterIsRegistered {
     }
 
     @Test
+    public void shouldRegisterWithBackendNameFromAnnotation() {
+        // Register as default converter
+        asciidoctor.javaConverterRegistry().register(TextConverter.class);
+        asciidoctor.javaConverterRegistry().register(DummyConverter.class);
+
+        String result = asciidoctor.render("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend(TextConverter.DEFAULT_BACKEND));
+
+        assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
+    }
+
+    @Test
+    public void shouldUseDefaultBackend() {
+        // Register as default converter
+        asciidoctor.javaConverterRegistry().register(DummyConverter.class);
+
+        String result = asciidoctor.render("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options());
+
+        assertThat(result, is("Dummy"));
+    }
+
+
+    @Test
+    public void shouldReturnConverterRegisteredWithAnnotation() {
+        asciidoctor.javaConverterRegistry().register(TextConverter.class);
+        assertEquals(TextConverter.class, asciidoctor.javaConverterRegistry().converters().get(TextConverter.DEFAULT_BACKEND));
+    }
+
+
+    @Test
     public void shouldReturnRegisteredConverter() {
         asciidoctor.javaConverterRegistry().register(TextConverter.class, "test2");
         assertEquals(TextConverter.class, asciidoctor.javaConverterRegistry().converters().get("test2"));

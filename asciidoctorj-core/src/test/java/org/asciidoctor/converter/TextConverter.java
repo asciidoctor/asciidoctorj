@@ -9,7 +9,10 @@ import org.asciidoctor.ast.Section;
 
 import java.util.Map;
 
+@Backend(TextConverter.DEFAULT_BACKEND)
 public class TextConverter extends AbstractConverter {
+
+    public static final String DEFAULT_BACKEND = "annotatedtext";
 
     private String LINE_SEPARATOR = "\n";
 

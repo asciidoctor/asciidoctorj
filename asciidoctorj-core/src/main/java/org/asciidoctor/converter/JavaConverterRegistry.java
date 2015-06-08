@@ -30,10 +30,18 @@ public class JavaConverterRegistry {
                 rubyRuntime.getObject(),
                 new ConverterProxy.Allocator(converterClass));
         clazz.defineAnnotatedMethods(ConverterProxy.class);
-        if (backends.length > 0) {
-            this.asciidoctorModule.register_converter(clazz, backends);
-        } else {
+
+        Backend backendAnnotation = converterClass.getAnnotation(Backend.class);
+        if (backendAnnotation != null) {
+            // Backend annotation present => Register with name given in annotation
+            this.asciidoctorModule.register_converter(clazz, new String[] { backendAnnotation.value() });
+        } else if (backends.length == 0) {
+            // No backend annotation and no backend defined => register as default backend
             this.asciidoctorModule.register_converter(clazz);
+        }
+        if (backends.length > 0) {
+            // Always additionally register with names passed to this method
+            this.asciidoctorModule.register_converter(clazz, backends);
         }
     }
 
