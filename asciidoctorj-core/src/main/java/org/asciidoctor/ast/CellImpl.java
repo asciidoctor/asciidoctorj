@@ -35,6 +35,32 @@ public class CellImpl extends AbstractNodeImpl implements Cell {
 
     @Override
     public String getStyle() {
-        return getString("style");
+        return getSymbol("style");
     }
+
+    @Override
+    public void setStyle(String style) {
+        setSymbol("style", style);
+    }
+
+    @Override
+    public Table.HAlign getHAlign() {
+        return Table.HAlign.valueOf(((String) getAttr("halign", "left")).toUpperCase());
+    }
+
+    @Override
+    public void setHAlign(Table.HAlign halign) {
+        setAttr("halign", halign.name().toLowerCase(), true);
+    }
+
+    @Override
+    public Table.VAlign getVAlign() {
+        return Table.VAlign.valueOf(((String) getAttr("valign", "top")).toUpperCase());
+    }
+
+    @Override
+    public void setVAlign(Table.VAlign valign) {
+        setAttr("valign", valign.name().toLowerCase(), true);
+    }
+
 }

@@ -3,18 +3,18 @@ package org.asciidoctor.ast;
 import org.asciidoctor.internal.RubyBlockListDecorator;
 import org.asciidoctor.internal.RubyObjectWrapper;
 import org.jruby.RubyArray;
-import org.jruby.RubyFixnum;
 import org.jruby.RubyNil;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.AbstractList;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class TableImpl extends AbstractBlockImpl implements Table {
+
+    private static final String FRAME_ATTR = "frame";
+
+    private static final String GRID_ATTR  = "grid";
 
     private Rows rows;
 
@@ -26,6 +26,26 @@ public class TableImpl extends AbstractBlockImpl implements Table {
     @Override
     public boolean hasHeaderOption() {
         return getBoolean("has_header_option");
+    }
+
+    @Override
+    public String getFrame() {
+        return (String)getAttr(FRAME_ATTR, "all");
+    }
+
+    @Override
+    public void setFrame(String frame) {
+        setAttr(FRAME_ATTR, frame, true);
+    }
+
+    @Override
+    public String getGrid() {
+        return (String)getAttr(GRID_ATTR, "all");
+    }
+
+    @Override
+    public void setGrid(String grid) {
+        setAttr(GRID_ATTR, grid, true);
     }
 
     @Override

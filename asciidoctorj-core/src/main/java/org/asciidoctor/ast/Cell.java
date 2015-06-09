@@ -12,5 +12,53 @@ public interface Cell extends AbstractNode {
 
     Object getContent();
 
+    /**
+     * Returns the style of this cell.
+     * The default is {@code null}.
+     * Possible values are:
+     * <ul>
+     *     <li>{@code null}</li>
+     *     <li>{@code "strong"}</li>
+     *     <li>{@code "emphasis"}</li>
+     *     <li>{@code "monospaced"}</li>
+     *     <li>{@code "header"}</li>
+     *     <li>{@code "literal"}</li>
+     *     <li>{@code "verse"}</li>
+     *     <li>{@code "asciidoc"}</li>
+     * </ul>
+     * @return The style of this cell.
+     */
     String getStyle();
+
+    /**
+     * Sets the style of this cell.
+     * @see #getStyle()
+     * @param style Values like {@code asciidoc}, {@code verse}, {@code literal}or {@code header}.
+     */
+    void setStyle(String style);
+
+    /**
+     * Returns the horizonzal alignment of this cell.
+     * @return a constant representing the horizontal alignment.
+     */
+    Table.HAlign getHAlign();
+
+    /**
+     * Sets the horizontal alignment of this cell.
+     * @param halign Either {@link Table.HAlign#LEFT}, {@link Table.HAlign#CENTER} or {@link Table.HAlign#RIGHT}
+     */
+    void setHAlign(Table.HAlign halign);
+
+    /**
+     * Returns the vertical alignment of this cell.
+     * @return a constant representing the vertical alignment.
+     */
+    Table.VAlign getVAlign();
+
+    /**
+     * Sets the vertical alignment of this cell.
+     * @param valign Either {@link Table.VAlign#TOP}, {@link Table.VAlign#MIDDLE} or {@link Table.VAlign#BOTTOM}
+     */
+    void setVAlign(Table.VAlign valign);
+
 }

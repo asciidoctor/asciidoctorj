@@ -28,6 +28,11 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     }
 
     @Override
+    public void setTitle(String title) {
+        setString("title", title);
+    }
+
+    @Override
     public String style() {
         return getStyle();
     }

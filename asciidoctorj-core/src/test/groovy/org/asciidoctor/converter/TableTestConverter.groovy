@@ -40,13 +40,13 @@ class TableTestConverter extends AbstractConverter {
                 cell.content.toString().padRight(COLWIDTH)
             } else {
                 switch (cell.column.HAlign) {
-                    case 'left':
+                    case Table.HAlign.LEFT:
                         cell.text.padRight(COLWIDTH)
                         break
-                    case 'center':
+                    case Table.HAlign.CENTER:
                         cell.text.center(COLWIDTH)
                         break
-                    case 'right':
+                    case Table.HAlign.RIGHT:
                         cell.text.padLeft(COLWIDTH)
                         break
                 }

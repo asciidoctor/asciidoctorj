@@ -19,6 +19,8 @@ class TableCreatorTreeProcessor extends Treeprocessor {
 
         // Create and add a column
         Column column = createTableColumn(table, 0, [:])
+        column.setHAlign(Table.HAlign.CENTER)
+        column.setVAlign(Table.VAlign.BOTTOM)
         table.columns.add(column)
 
         // Create and add a row to the table

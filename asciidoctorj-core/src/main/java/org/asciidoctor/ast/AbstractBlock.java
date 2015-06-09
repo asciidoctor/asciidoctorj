@@ -10,6 +10,7 @@ public interface AbstractBlock extends AbstractNode {
      */
     String title();
     String getTitle();
+    void setTitle(String title);
     /**
      * @deprecated Please use {@linkplain #getStyle()} instead
      */

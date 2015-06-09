@@ -45,6 +45,23 @@ public class RubyObjectWrapper {
         }
     }
 
+    protected void setString(String propertyName, String value) {
+        setRubyProperty(propertyName, runtime.newString(value));
+    }
+
+    protected String getSymbol(String propertyName, Object... args) {
+        IRubyObject result = getRubyProperty(propertyName, args);
+
+        if (result instanceof RubyNil) {
+            return null;
+        }
+        return ((RubySymbol) result).asJavaString();
+    }
+
+    protected void setSymbol(String propertyName, String value) {
+        setRubyProperty(propertyName, runtime.newSymbol(value));
+    }
+
     protected boolean getBoolean(String propertyName, Object... args) {
         IRubyObject result = getRubyProperty(propertyName, args);
         if (result instanceof RubyNil) {
@@ -99,6 +116,21 @@ public class RubyObjectWrapper {
             }
         }
         return result;
+    }
+
+    protected void setRubyProperty(String propertyName, IRubyObject arg) {
+        ThreadContext threadContext = runtime.getThreadService().getCurrentContext();
+
+        IRubyObject result = null;
+        if (propertyName.startsWith("@")) {
+            rubyNode.getInstanceVariables().setInstanceVariable(propertyName, arg);
+        } else {
+            if (arg == null) {
+                rubyNode.callMethod(threadContext, propertyName + "=", runtime.getNil());
+            } else {
+                rubyNode.callMethod(threadContext, propertyName + "=", arg);
+            }
+        }
     }
 
     protected Object getProperty(String propertyName, Object... args) {
