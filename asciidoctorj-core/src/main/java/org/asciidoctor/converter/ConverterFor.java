@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  *
  * <p>Example:
  * <pre>
- * <code>&#64;Backend("my")
+ * <code>&#64;ConverterFor("myFormat")
  * public class MyConverter extends AbstractConverter {
  *     ...
  * }
@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Backend {
+public @interface ConverterFor {
 
     String value();
 

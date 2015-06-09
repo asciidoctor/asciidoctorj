@@ -8,7 +8,6 @@ import org.asciidoctor.arquillian.api.Unshared;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.After;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -56,7 +55,7 @@ public class WhenConverterIsRegistered {
         asciidoctor.javaConverterRegistry().register(TextConverter.class);
         asciidoctor.javaConverterRegistry().register(DummyConverter.class);
 
-        String result = asciidoctor.render("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend(TextConverter.DEFAULT_BACKEND));
+        String result = asciidoctor.render("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend(TextConverter.DEFAULT_FORMAT));
 
         assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
     }
@@ -75,7 +74,7 @@ public class WhenConverterIsRegistered {
     @Test
     public void shouldReturnConverterRegisteredWithAnnotation() {
         asciidoctor.javaConverterRegistry().register(TextConverter.class);
-        assertEquals(TextConverter.class, asciidoctor.javaConverterRegistry().converters().get(TextConverter.DEFAULT_BACKEND));
+        assertEquals(TextConverter.class, asciidoctor.javaConverterRegistry().converters().get(TextConverter.DEFAULT_FORMAT));
     }
 
 
