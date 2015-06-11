@@ -41,24 +41,24 @@ public interface Cell extends AbstractNode {
      * Returns the horizonzal alignment of this cell.
      * @return a constant representing the horizontal alignment.
      */
-    Table.HAlign getHAlign();
+    Table.HorizontalAlignment getHorizontalAlignment();
 
     /**
      * Sets the horizontal alignment of this cell.
-     * @param halign Either {@link Table.HAlign#LEFT}, {@link Table.HAlign#CENTER} or {@link Table.HAlign#RIGHT}
+     * @param halign Either {@link Table.HorizontalAlignment#LEFT}, {@link Table.HorizontalAlignment#CENTER} or {@link Table.HorizontalAlignment#RIGHT}
      */
-    void setHAlign(Table.HAlign halign);
+    void setHorizontalAlignment(Table.HorizontalAlignment halign);
 
     /**
      * Returns the vertical alignment of this cell.
      * @return a constant representing the vertical alignment.
      */
-    Table.VAlign getVAlign();
+    Table.VerticalAlignment getVerticalAlignment();
 
     /**
      * Sets the vertical alignment of this cell.
-     * @param valign Either {@link Table.VAlign#TOP}, {@link Table.VAlign#MIDDLE} or {@link Table.VAlign#BOTTOM}
+     * @param valign Either {@link Table.VerticalAlignment#TOP}, {@link Table.VerticalAlignment#MIDDLE} or {@link Table.VerticalAlignment#BOTTOM}
      */
-    void setVAlign(Table.VAlign valign);
+    void setVerticalAlignment(Table.VerticalAlignment valign);
 
 }

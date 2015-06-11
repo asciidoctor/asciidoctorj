@@ -39,14 +39,14 @@ class TableTestConverter extends AbstractConverter {
             if (cell.style == 'asciidoc') {
                 cell.content.toString().padRight(COLWIDTH)
             } else {
-                switch (cell.column.HAlign) {
-                    case Table.HAlign.LEFT:
+                switch (cell.column.horizontalAlignment) {
+                    case Table.HorizontalAlignment.LEFT:
                         cell.text.padRight(COLWIDTH)
                         break
-                    case Table.HAlign.CENTER:
+                    case Table.HorizontalAlignment.CENTER:
                         cell.text.center(COLWIDTH)
                         break
-                    case Table.HAlign.RIGHT:
+                    case Table.HorizontalAlignment.RIGHT:
                         cell.text.padLeft(COLWIDTH)
                         break
                 }

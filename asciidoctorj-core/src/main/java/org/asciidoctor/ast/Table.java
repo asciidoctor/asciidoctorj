@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface Table extends AbstractBlock {
 
-    public static enum HAlign {
+    public static enum HorizontalAlignment {
         LEFT, CENTER, RIGHT
     }
 
-    public static enum VAlign {
+    public static enum VerticalAlignment {
         TOP, BOTTOM, MIDDLE
     }
 

@@ -44,22 +44,22 @@ public class CellImpl extends AbstractNodeImpl implements Cell {
     }
 
     @Override
-    public Table.HAlign getHAlign() {
-        return Table.HAlign.valueOf(((String) getAttr("halign", "left")).toUpperCase());
+    public Table.HorizontalAlignment getHorizontalAlignment() {
+        return Table.HorizontalAlignment.valueOf(((String) getAttr("halign", "left")).toUpperCase());
     }
 
     @Override
-    public void setHAlign(Table.HAlign halign) {
+    public void setHorizontalAlignment(Table.HorizontalAlignment halign) {
         setAttr("halign", halign.name().toLowerCase(), true);
     }
 
     @Override
-    public Table.VAlign getVAlign() {
-        return Table.VAlign.valueOf(((String) getAttr("valign", "top")).toUpperCase());
+    public Table.VerticalAlignment getVerticalAlignment() {
+        return Table.VerticalAlignment.valueOf(((String) getAttr("valign", "top")).toUpperCase());
     }
 
     @Override
-    public void setVAlign(Table.VAlign valign) {
+    public void setVerticalAlignment(Table.VerticalAlignment valign) {
         setAttr("valign", valign.name().toLowerCase(), true);
     }
 
