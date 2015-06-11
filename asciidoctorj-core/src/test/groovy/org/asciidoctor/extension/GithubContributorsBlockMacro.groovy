@@ -5,6 +5,7 @@ import org.asciidoctor.ast.AbstractBlock
 import org.asciidoctor.ast.Column
 import org.asciidoctor.ast.Row
 import org.asciidoctor.ast.Table
+import org.asciidoctor.util.TestHttpServer
 
 class GithubContributorsBlockMacro extends BlockMacroProcessor {
 
@@ -14,7 +15,9 @@ class GithubContributorsBlockMacro extends BlockMacroProcessor {
 
     @Override
     Object process(AbstractBlock parent, String target, Map<String, Object> attributes) {
-        String content = new URL("https://api.github.com/repos/${target}/contributors").text
+        URL url = new URL("http://api.github.com/repos/${target}/contributors")
+        URLConnection connection = url.openConnection(new Proxy(Proxy.Type.HTTP, new InetSocketAddress('localhost', TestHttpServer.instance.localPort)))
+        String content = connection.inputStream.text
         def contributors = new JsonSlurper().parseText(content)
 
         // Create the table

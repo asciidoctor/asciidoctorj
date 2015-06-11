@@ -3,5 +3,5 @@
 .Gemfile
 [source,ruby]
 ----
-include::https://raw.github.com/asciidoctor/asciidoctor/master/Gemfile[]
+include::http://example.com/asciidoctorclass.rb[]
 ----

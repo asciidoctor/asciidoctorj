@@ -20,6 +20,7 @@ dependencies {
   testCompile "net.sf.saxon:Saxon-HE:$saxonVersion"
   testCompile "com.google.guava:guava:$guavaVersion"
   testCompile "org.jsoup:jsoup:$jsoupVersion"
+  testCompile "io.netty:netty-all:$nettyVersion"
   testCompile project(path: ':asciidoctorj-test-support', configuration: 'tests')
 
   arquillianExtension project(path: ':asciidoctorj-test-support', configuration: 'tests')

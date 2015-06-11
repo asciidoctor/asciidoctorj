@@ -3,6 +3,8 @@ package org.asciidoctor.extension
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.OptionsBuilder
 import org.asciidoctor.SafeMode
+import org.asciidoctor.util.ClasspathResources
+import org.asciidoctor.util.TestHttpServer
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
@@ -16,7 +18,7 @@ class WhenABlockMacroProcessorCreatesATable extends Specification {
 
     public static final String FIRST_TD = 'td:first-child'
     public static final String SECOND_TD = 'td:nth-child(2)'
-    public static final String CONTRIBUTOR = 'robertpanzer'
+    public static final String CONTRIBUTOR = 'bob'
     public static final String BLOCKMACRO_NAME = 'githubcontributors'
     public static final String ALIGN_ATTRIBUTE = '@align'
     @ArquillianResource
@@ -30,6 +32,17 @@ class WhenABlockMacroProcessorCreatesATable extends Specification {
 
 githubcontributors::asciidoctor/asciidoctorj[]
 '''
+
+    @ArquillianResource
+    private ClasspathResources classpathResources
+
+    def setup() {
+        TestHttpServer.start(['http://api.github.com/repos/asciidoctor/asciidoctorj/contributors' : classpathResources.getResource('githubcontributors.json')])
+    }
+
+    def cleanup() {
+        TestHttpServer.instance.stop()
+    }
 
     def "the table should be rendered to html"() {
 

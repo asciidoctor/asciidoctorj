@@ -4,11 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Map;
 
 import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.util.TestHttpServer;
 
 public class UriIncludeProcessor extends IncludeProcessor {
 
@@ -38,8 +42,8 @@ public class UriIncludeProcessor extends IncludeProcessor {
         try {
 
             URL url = new URL(target);
-            InputStream openStream = url.openStream();
-
+            URLConnection connection = url.openConnection(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", TestHttpServer.getInstance().getLocalPort())));
+            InputStream openStream = connection.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(openStream));
 
