@@ -54,6 +54,12 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     }
 
     @Override
+    public void append(AbstractBlock block) {
+
+        getRubyObject().callMethod(runtime.getCurrentContext(), "<<", ((AbstractBlockImpl) block).getRubyObject());
+    }
+
+    @Override
     public Object content() {
         return getContent();
     }

@@ -16,6 +16,8 @@ public interface AbstractNode {
      */
     String getId();
 
+    void setId(String id);
+
     String getNodeName();
     /**
      * @deprecated Use {@linkplain #getParent()}  instead.
