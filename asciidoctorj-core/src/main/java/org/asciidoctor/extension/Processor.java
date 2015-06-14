@@ -3,7 +3,9 @@ package org.asciidoctor.extension;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.*;
 import org.asciidoctor.internal.JRubyRuntimeContext;
+import org.asciidoctor.extension.ReaderImpl;
 import org.asciidoctor.internal.RubyHashUtil;
+import org.asciidoctor.internal.RubyObjectWrapper;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
@@ -299,4 +301,66 @@ public class Processor {
         return (Document) NodeConverter.createASTNode(runtime, DOCUMENT_CLASS, runtime.getNil(), options);
     }
 
+    /**
+     * Parses the given raw asciidoctor content, parses it and appends it as children to the given parent block.
+     * <p>The following example will add two paragraphs with the role {@code newcontent} to all top
+     * level sections of a document:
+     * <pre>
+     *     <verbatim>
+     * Asciidoctor asciidoctor = ...
+     * asciidoctor.javaExtensionRegistry().treeprocessor(new Treeprocessor() {
+     *     DocumentRuby process(DocumentRuby document) {
+     *         for (AbstractBlock block: document.getBlocks()) {
+     *             if (block instanceof Section) {
+     *                 parseContent(block, Arrays.asList(new String[]{
+     *                                             "[newcontent]",
+     *                                             "This is new content"
+     *                                             "",
+     *                                             "[newcontent]",
+     *                                             "This is also new content"}));
+     *             }
+     *         }
+     *     }
+     * });
+     *     </verbatim>
+     * </pre>
+     *
+     * @param parent The block to which the parsed content should be added as children.
+     * @param lines Raw asciidoctor content
+     */
+    public void parseContent(AbstractBlock parent, List<String> lines) {
+        Ruby runtime = JRubyRuntimeContext.get(parent);
+        Parser parser = new Parser(runtime, parent, ReaderImpl.createReader(runtime, lines));
+
+        AbstractBlock nextBlock = parser.nextBlock();
+        while (nextBlock != null) {
+            parent.append(nextBlock);
+            nextBlock = parser.nextBlock();
+        }
+    }
+
+    private class Parser extends RubyObjectWrapper {
+
+        private final Reader reader;
+        private final AbstractBlock parent;
+
+        public Parser(Ruby runtime, AbstractBlock parent, Reader reader) {
+            super(runtime.getModule("Asciidoctor").getClass("Parser"));
+
+            this.reader = reader;
+            this.parent = parent;
+        }
+
+        public AbstractBlock nextBlock() {
+            if (!reader.hasMoreLines()) {
+                return null;
+            }
+            IRubyObject nextBlock = getRubyProperty("next_block", reader, ((AbstractBlockImpl)parent).getRubyObject());
+            if (nextBlock.isNil()) {
+                return null;
+            } else {
+                return (AbstractBlock) NodeConverter.createASTNode(nextBlock);
+            }
+        }
+    }
 }

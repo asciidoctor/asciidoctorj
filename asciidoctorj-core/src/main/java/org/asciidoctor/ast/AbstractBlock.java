@@ -49,4 +49,5 @@ public interface AbstractBlock extends AbstractNode {
      * @return the source location of this block or {@code null} if the {@code sourcemap} option is not enabled when loading the document.
      */
     Cursor getSourceLocation();
+
 }
