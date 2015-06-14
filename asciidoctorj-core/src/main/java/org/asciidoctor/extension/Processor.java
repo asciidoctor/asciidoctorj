@@ -2,13 +2,13 @@ package org.asciidoctor.extension;
 
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.*;
-import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
+import org.jruby.RubyArray;
+import org.jruby.RubyFixnum;
 import org.jruby.RubyHash;
 import org.jruby.java.proxies.RubyObjectHolderProxy;
-import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.HashMap;
@@ -108,6 +108,68 @@ public class Processor {
         this.configFinalized = true;
     }
 
+
+    public Table createTable(AbstractBlock parent) {
+        return createTable(parent, new HashMap<String, Object>());
+    }
+
+    public Table createTable(AbstractBlock parent, Map<String, Object> attributes) {
+        Ruby rubyRuntime = getRubyRuntimeFromNode(parent);
+
+        RubyHash rubyAttributes = RubyHash.newHash(rubyRuntime);
+        rubyAttributes.putAll(attributes);
+
+        IRubyObject[] parameters = {
+                ((AbstractBlockImpl) parent).getRubyObject(),
+                rubyAttributes};
+        Table ret = (Table) NodeConverter.createASTNode(rubyRuntime, NodeConverter.TABLE_CLASS, parameters);
+        ret.setAttr("rowcount", 0, false);
+        return ret;
+    }
+
+    public Row createTableRow(Table parent) {
+        Ruby rubyRuntime = getRubyRuntimeFromNode(parent);
+
+        RubyArray rubyRow = rubyRuntime.newArray();
+        return new RowImpl(rubyRow);
+    }
+
+    public Column createTableColumn(Table parent, int index) {
+        return createTableColumn(parent, index, new HashMap<String, Object>());
+    }
+
+    public Column createTableColumn(Table parent, int index, Map<String, Object> attributes) {
+        Ruby rubyRuntime = getRubyRuntimeFromNode(parent);
+
+        RubyHash rubyAttributes = RubyHash.newHash(rubyRuntime);
+        rubyAttributes.putAll(attributes);
+
+        IRubyObject[] parameters = {
+                ((AbstractBlockImpl) parent).getRubyObject(),
+                RubyFixnum.newFixnum(rubyRuntime, index),
+                rubyAttributes}; // No cursor parameter yet
+
+        return (Column) NodeConverter.createASTNode(rubyRuntime, NodeConverter.TABLE_COLUMN_CLASS, parameters);
+    }
+
+    public Cell createTableCell(Column column, String text) {
+        return createTableCell(column, text, new HashMap<String, Object>());
+    }
+
+    public Cell createTableCell(Column column, String text, Map<String, Object> attributes) {
+        Ruby rubyRuntime = getRubyRuntimeFromNode(column);
+
+        RubyHash rubyAttributes = RubyHash.newHash(rubyRuntime);
+        rubyAttributes.putAll(attributes);
+
+        IRubyObject[] parameters = {
+                ((ColumnImpl) column).getRubyObject(),
+                rubyRuntime.newString(text),
+                rubyAttributes}; // No cursor parameter yet
+
+        return (Cell) NodeConverter.createASTNode(rubyRuntime, NodeConverter.TABLE_CELL_CLASS, parameters);
+    }
+
     public Block createBlock(AbstractBlock parent, String context, String content, Map<String, Object> attributes) {
         return createBlock(parent, context, content, attributes, new HashMap<Object, Object>());
     }
@@ -140,16 +202,18 @@ public class Processor {
 
         options.put(Options.ATTRIBUTES, attributes);
         
-        IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Inline");
         RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime,
                 options);
-        Object[] parameters = {
+
+        RubyArray rubyText = rubyRuntime.newArray();
+        rubyText.addAll(text);
+
+        IRubyObject[] parameters = {
                 ((AbstractBlockImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
-                text,
+                rubyText,
                 convertMapToRubyHashWithSymbols };
-        return (Inline) NodeConverter.createASTNode(
-                JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass, "new", parameters, Inline.class));
+        return (Inline) NodeConverter.createASTNode(rubyRuntime, NodeConverter.INLINE_CLASS, parameters);
     }
     
     public Inline createInline(AbstractBlock parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {
@@ -158,16 +222,14 @@ public class Processor {
 
         Ruby rubyRuntime = getRubyRuntimeFromNode(parent);
 
-        IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Inline");
         RubyHash convertedOptions = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
-        Object[] parameters = {
+        IRubyObject[] parameters = {
                 ((AbstractBlockImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
-                text,
+                rubyRuntime.newString(text),
                 convertedOptions };
-        return (Inline) NodeConverter.createASTNode(
-                JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass, "new", parameters, Inline.class));
+        return (Inline) NodeConverter.createASTNode(rubyRuntime, NodeConverter.INLINE_CLASS, parameters);
     }
     
     private Block createBlock(AbstractBlock parent, String context,
@@ -175,16 +237,17 @@ public class Processor {
 
         Ruby rubyRuntime = getRubyRuntimeFromNode(parent);
 
-        IRubyObject rubyClass = rubyRuntime.evalScriptlet("Asciidoctor::Block");
         RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime,
                 options);
 
-        Object[] parameters = {
+        IRubyObject[] parameters = {
                 ((AbstractBlockImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
                 convertMapToRubyHashWithSymbols };
-        return (Block) NodeConverter.createASTNode(JavaEmbedUtils.invokeMethod(rubyRuntime, rubyClass, "new", parameters, Block.class));
+        return (Block) NodeConverter.createASTNode(rubyRuntime, NodeConverter.BLOCK_CLASS, parameters);
     }
+
+
 
     private Ruby getRubyRuntimeFromNode(AbstractNode node) {
         if (node instanceof IRubyObject) {

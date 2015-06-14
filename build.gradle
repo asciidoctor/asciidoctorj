@@ -36,6 +36,7 @@ ext {
   jrubyVersion = '1.7.20'
   jsoupVersion = '1.8.1'
   junitVersion = '4.12'
+  nettyVersion = '4.0.28.Final'
   saxonVersion = '9.5.1-6'
   xmlMatchersVersion = '1.0-RC1'
 

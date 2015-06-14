@@ -1,19 +1,21 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.util.ClasspathResources;
+import org.asciidoctor.util.TestHttpServer;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.After;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
@@ -23,9 +25,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,6 +50,13 @@ public class WhenJavaExtensionIsRegistered {
 
     @ArquillianResource(Unshared.class)
     private Asciidoctor asciidoctor;
+
+    @After
+    public void tearDown() {
+        if (TestHttpServer.getInstance() != null) {
+            TestHttpServer.getInstance().stop();
+        }
+    }
 
     class RubyIncludeSource extends IncludeProcessor {
 
@@ -64,7 +77,8 @@ public class WhenJavaExtensionIsRegistered {
             try {
 
                 URL url = new URL(target);
-                InputStream openStream = url.openStream();
+                URLConnection connection = url.openConnection(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", TestHttpServer.getInstance().getLocalPort())));
+                InputStream openStream = connection.getInputStream();
 
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(openStream));
 
@@ -93,6 +107,8 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void an_inner_class_should_be_registered() {
 
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
+
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
         javaExtensionRegistry.includeProcessor(new RubyIncludeSource(new HashMap<String, Object>()));
@@ -105,12 +121,14 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith("source 'https://rubygems.org"));
+        assertThat(contentElement.text(), startsWith("module AsciidoctorJ"));
 
     }
 
     @Test
     public void an_inner_anonymous_class_should_be_registered() {
+
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
@@ -129,7 +147,8 @@ public class WhenJavaExtensionIsRegistered {
                 try {
 
                     URL url = new URL(target);
-                    InputStream openStream = url.openStream();
+                    URLConnection connection = url.openConnection(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", TestHttpServer.getInstance().getLocalPort())));
+                    InputStream openStream = connection.getInputStream();
 
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(openStream));
 
@@ -162,7 +181,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith("source 'https://rubygems.org"));
+        assertThat(contentElement.text(), startsWith("module AsciidoctorJ"));
 
     }
 
@@ -314,24 +333,28 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_include_processor_as_string_should_be_executed_when_include_macro_is_found() {
 
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
+
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
         javaExtensionRegistry.includeProcessor("org.asciidoctor.extension.UriIncludeProcessor");
 
         String content = asciidoctor.renderFile(
-                classpath.getResource("sample-with-uri-include.ad"), 
+                classpath.getResource("sample-with-uri-include.ad"),
                 options().toFile(false).get());
 
         Document doc = Jsoup.parse(content, "UTF-8");
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith("source 'https://rubygems.org"));
+        assertThat(contentElement.text(), startsWith("module AsciidoctorJ"));
 
     }
 
     @Test
     public void a_include_processor_should_be_executed_when_include_macro_is_found() {
+
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
@@ -345,12 +368,14 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith("source 'https://rubygems.org"));
+        assertThat(contentElement.text(), startsWith("module AsciidoctorJ"));
 
     }
 
     @Test
     public void a_include_instance_processor_should_be_executed_when_include_macro_is_found() {
+
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
@@ -364,7 +389,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith("source 'https://rubygems.org"));
+        assertThat(contentElement.text(), startsWith("module AsciidoctorJ"));
 
     }
 
