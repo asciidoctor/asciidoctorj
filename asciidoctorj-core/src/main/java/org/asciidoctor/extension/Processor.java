@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.asciidoctor.ast.NodeConverter.NodeType.*;
+
 public class Processor {
 
     /**
@@ -122,7 +124,7 @@ public class Processor {
         IRubyObject[] parameters = {
                 ((AbstractBlockImpl) parent).getRubyObject(),
                 rubyAttributes};
-        Table ret = (Table) NodeConverter.createASTNode(rubyRuntime, NodeConverter.TABLE_CLASS, parameters);
+        Table ret = (Table) NodeConverter.createASTNode(rubyRuntime, TABLE_CLASS, parameters);
         ret.setAttr("rowcount", 0, false);
         return ret;
     }
@@ -149,7 +151,7 @@ public class Processor {
                 RubyFixnum.newFixnum(rubyRuntime, index),
                 rubyAttributes}; // No cursor parameter yet
 
-        return (Column) NodeConverter.createASTNode(rubyRuntime, NodeConverter.TABLE_COLUMN_CLASS, parameters);
+        return (Column) NodeConverter.createASTNode(rubyRuntime, TABLE_COLUMN_CLASS, parameters);
     }
 
     public Cell createTableCell(Column column, String text) {
@@ -167,7 +169,11 @@ public class Processor {
                 rubyRuntime.newString(text),
                 rubyAttributes}; // No cursor parameter yet
 
-        return (Cell) NodeConverter.createASTNode(rubyRuntime, NodeConverter.TABLE_CELL_CLASS, parameters);
+        return (Cell) NodeConverter.createASTNode(rubyRuntime, TABLE_CELL_CLASS, parameters);
+    }
+
+    public Block createBlock(AbstractBlock parent, String context, String content) {
+        return createBlock(parent, context, content, new HashMap<String, Object>(), new HashMap<Object, Object>());
     }
 
     public Block createBlock(AbstractBlock parent, String context, String content, Map<String, Object> attributes) {
@@ -183,6 +189,10 @@ public class Processor {
         return createBlock(parent, context, options);
     }
 
+    public Block createBlock(AbstractBlock parent, String context, List<String> content) {
+        return createBlock(parent, context, content, new HashMap<String, Object>(), new HashMap<Object, Object>());
+    }
+
     public Block createBlock(AbstractBlock parent, String context, List<String> content, Map<String, Object> attributes) {
         return createBlock(parent, context, content, attributes, new HashMap<Object, Object>());
     }
@@ -194,6 +204,14 @@ public class Processor {
         options.put(Options.ATTRIBUTES, new HashMap<String, Object>(attributes));
         
         return createBlock(parent, context, options);
+    }
+
+    public Inline createInline(AbstractBlock parent, String context, List<String> text) {
+        return createInline(parent, context, text, new HashMap<String, Object>());
+    }
+
+    public Inline createInline(AbstractBlock parent, String context, List<String> text, Map<String, Object> attributes) {
+        return createInline(parent, context, text, attributes, new HashMap<Object, Object>());
     }
 
     public Inline createInline(AbstractBlock parent, String context, List<String> text, Map<String, Object> attributes, Map<Object, Object> options) {
@@ -213,9 +231,17 @@ public class Processor {
                 RubyUtils.toSymbol(rubyRuntime, context),
                 rubyText,
                 convertMapToRubyHashWithSymbols };
-        return (Inline) NodeConverter.createASTNode(rubyRuntime, NodeConverter.INLINE_CLASS, parameters);
+        return (Inline) NodeConverter.createASTNode(rubyRuntime, INLINE_CLASS, parameters);
     }
-    
+
+    public Inline createInline(AbstractBlock parent, String context, String text) {
+        return createInline(parent, context, text, new HashMap<String, Object>());
+    }
+
+    public Inline createInline(AbstractBlock parent, String context, String text, Map<String, Object> attributes) {
+        return createInline(parent, context, text, attributes, new HashMap<String, Object>());
+    }
+
     public Inline createInline(AbstractBlock parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {
         
         options.put(Options.ATTRIBUTES, attributes);
@@ -229,7 +255,7 @@ public class Processor {
                 RubyUtils.toSymbol(rubyRuntime, context),
                 rubyRuntime.newString(text),
                 convertedOptions };
-        return (Inline) NodeConverter.createASTNode(rubyRuntime, NodeConverter.INLINE_CLASS, parameters);
+        return (Inline) NodeConverter.createASTNode(rubyRuntime, INLINE_CLASS, parameters);
     }
     
     private Block createBlock(AbstractBlock parent, String context,
@@ -244,7 +270,7 @@ public class Processor {
                 ((AbstractBlockImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
                 convertMapToRubyHashWithSymbols };
-        return (Block) NodeConverter.createASTNode(rubyRuntime, NodeConverter.BLOCK_CLASS, parameters);
+        return (Block) NodeConverter.createASTNode(rubyRuntime, BLOCK_CLASS, parameters);
     }
 
 

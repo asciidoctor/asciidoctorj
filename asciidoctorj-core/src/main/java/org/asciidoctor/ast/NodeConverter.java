@@ -1,6 +1,8 @@
 package org.asciidoctor.ast;
 
 import org.jruby.Ruby;
+import org.jruby.RubyClass;
+import org.jruby.RubyModule;
 import org.jruby.java.proxies.RubyObjectHolderProxy;
 import org.jruby.runtime.builtin.IRubyObject;
 
@@ -10,29 +12,60 @@ import org.jruby.runtime.builtin.IRubyObject;
  */
 public final class NodeConverter {
 
-    public static final String BLOCK_CLASS        = "Asciidoctor::Block";
+    public enum NodeType {
 
-    public static final String SECTION_CLASS      = "Asciidoctor::Section";
+        BLOCK_CLASS("Asciidoctor", "Block"),
 
-    public static final String DOCUMENT_CLASS     = "Asciidoctor::Document";
+        SECTION_CLASS("Asciidoctor", "Section"),
 
-    public static final String INLINE_CLASS       = "Asciidoctor::Inline";
+        DOCUMENT_CLASS("Asciidoctor", "Document"),
 
-    public static final String LIST_CLASS         = "Asciidoctor::List";
+        INLINE_CLASS("Asciidoctor", "Inline"),
 
-    public static final String LIST_ITEM_CLASS    = "Asciidoctor::ListItem";
+        LIST_CLASS("Asciidoctor", "List"),
 
-    public static final String TABLE_CLASS        = "Asciidoctor::Table";
+        LIST_ITEM_CLASS("Asciidoctor", "ListItem"),
 
-    public static final String TABLE_COLUMN_CLASS = "Asciidoctor::Table::Column";
+        TABLE_CLASS("Asciidoctor", "Table"),
 
-    public static final String TABLE_CELL_CLASS   = "Asciidoctor::Table::Cell";
+        TABLE_COLUMN_CLASS("Asciidoctor", "Table", "Column"),
+
+        TABLE_CELL_CLASS("Asciidoctor", "Table", "Cell");
+
+        private String[] path;
+
+        NodeType(String... path) {
+            this.path = path;
+        }
+
+        public RubyClass getRubyClass(Ruby runtime) {
+            RubyModule object = runtime.getModule(path[0]);
+
+            RubyClass rubyClass = object.getClass(path[1]);
+
+            if (path.length == 2) {
+                return rubyClass;
+            } else {
+                return rubyClass.getClass(path[2]);
+            }
+        }
+
+        public static NodeType getNodeType(RubyClass rubyClass) {
+            Ruby runtime = rubyClass.getRuntime();
+            for (NodeType nodeType: values()) {
+                if (nodeType.getRubyClass(runtime).equals(rubyClass)) {
+                    return nodeType;
+                }
+            }
+            throw new IllegalArgumentException("Don't know what to do with a " + rubyClass);
+        }
+
+    }
 
     private NodeConverter() {}
 
-    public static AbstractNode createASTNode(Ruby runtime, String rubyClassName, IRubyObject... args) {
-        IRubyObject rubyClass = runtime.evalScriptlet(rubyClassName);
-        IRubyObject node = rubyClass.callMethod(runtime.getCurrentContext(), "new", args);
+    public static AbstractNode createASTNode(Ruby runtime, NodeType nodeType, IRubyObject... args) {
+        IRubyObject node = nodeType.getRubyClass(runtime).callMethod(runtime.getCurrentContext(), "new", args);
         return createASTNode(node);
     }
 
@@ -49,28 +82,39 @@ public final class NodeConverter {
 
             Ruby runtime = rubyObject.getRuntime();
 
-            String rubyClassName = rubyObject.getMetaClass().getRealClass().getName();
+            RubyClass rubyClass = rubyObject.getMetaClass().getRealClass();
             AbstractNode ret = null;
-            if (BLOCK_CLASS.equals(rubyClassName)) {
-                ret = new BlockImpl(rubyObject);
-            } else if (SECTION_CLASS.equals(rubyClassName)) {
-                ret = new SectionImpl(rubyObject);
-            } else if (DOCUMENT_CLASS.equals(rubyClassName)) {
-                ret = new Document(rubyObject);
-            } else if (INLINE_CLASS.equals(rubyClassName)) {
-                ret = new InlineImpl(rubyObject);
-            } else if (LIST_CLASS.equals(rubyClassName)) {
-                ret = new ListImpl(rubyObject);
-            } else if (LIST_ITEM_CLASS.equals(rubyClassName)) {
-                ret = new ListItemImpl(rubyObject);
-            } else if (TABLE_CLASS.equals(rubyClassName)) {
-                ret = new TableImpl(rubyObject);
-            } else if (TABLE_COLUMN_CLASS.equals(rubyClassName)) {
-                ret = new ColumnImpl(rubyObject);
-            } else if (TABLE_CELL_CLASS.equals(rubyClassName)) {
-                ret = new CellImpl(rubyObject);
-            } else {
-                throw new IllegalArgumentException("Don't know what to do with a " + rubyObject);
+
+            switch (NodeType.getNodeType(rubyClass)) {
+                case BLOCK_CLASS:
+                    ret = new BlockImpl(rubyObject);
+                    break;
+                case SECTION_CLASS:
+                    ret = new SectionImpl(rubyObject);
+                    break;
+                case DOCUMENT_CLASS:
+                    ret = new Document(rubyObject);
+                    break;
+                case INLINE_CLASS:
+                    ret = new InlineImpl(rubyObject);
+                    break;
+                case LIST_CLASS:
+                    ret = new ListImpl(rubyObject);
+                    break;
+                case LIST_ITEM_CLASS:
+                    ret = new ListItemImpl(rubyObject);
+                    break;
+                case TABLE_CLASS:
+                    ret = new TableImpl(rubyObject);
+                    break;
+                case TABLE_COLUMN_CLASS:
+                    ret = new ColumnImpl(rubyObject);
+                    break;
+                case TABLE_CELL_CLASS:
+                    ret = new CellImpl(rubyObject);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Don't know what to do with a " + rubyObject);
             }
 
             nodeCache.setASTNode(ret);
