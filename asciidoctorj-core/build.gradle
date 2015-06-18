@@ -1,3 +1,5 @@
+apply plugin: 'osgi'
+
 dependencies {
   compile "org.jruby:jruby-complete:$jrubyVersion"
   compile "com.beust:jcommander:$jcommanderVersion"
@@ -32,3 +34,19 @@ jrubyPrepareGems << {
 //jruby {
 //	execVersion = '1.7.20'
 //}
+
+jar {
+  manifest {
+    symbolicName = 'org.asciidoctor'
+    instruction 'Export-Package',
+      "org.asciidoctor;version=\"${version}\"",
+      "org.asciidoctor.ast;version=\"${version}\"",
+      "org.asciidoctor.converter;version=\"${version}\"",
+      "org.asciidoctor.converter.spi;version=\"${version}\"",
+      "org.asciidoctor.extension;version=\"${version}\"",
+      "org.asciidoctor.extension.spi;version=\"${version}\""
+    instruction 'Import-Package',
+      'com.beust.jcommander;resolution:=optional',
+      '*'
+  }
+}
