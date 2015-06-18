@@ -1518,14 +1518,16 @@ For output formats that are not natively supported by Asciidoctor it is possible
 To get your own converter running in {uri-repo}[AsciidoctorJ] these steps are required:
 
 - Implement the converter as a subclass of `org.asciidoctor.converter.AbstractConverter`.
-- Register the converter with a well defined backend name at the `ConverterRegistry`.
-- Pass the backend name to the `Asciidoctor` instance when rendering a source file.
+  Annotate it as a converter for your target format using the annotation `@org.asciidoctor.converter.ConverterFor`.
+- Register the converter at the `ConverterRegistry`.
+- Pass the target format name to the `Asciidoctor` instance when rendering a source file.
 
 A basic converter that converts to an own text format looks like this:
 
 [source,java]
 .org.asciidoctor.converter.TextConverter.java
 ----
+@ConverterFor("text")
 public class TextConverter extends AbstractConverter {
 
     private String LINE_SEPARATOR = "\n";
@@ -1577,9 +1579,10 @@ Then the converter has to be registered like this with a well defined backend na
 .Register a converter
 ----
 Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-asciidoctor.javaConverterRegistry().register(TextConverter.class, "text"); // <1>
+asciidoctor.javaConverterRegistry().register(TextConverter.class); // <1>
 ----
-<1> Registers the converter class `TextConverter` with the backend name `text`.
+<1> Registers the converter class `TextConverter` for this Asciidoctor instance.
+    The given converter is responsible for converting to the target format `text`.
 
 Alternatively the converter can be registered automatically once the jar file containing the converter is available on the classpath.
 Therefore a service implementation for the interface `org.asciidoctor.converter.spi.ConverterRegistry` has to be in the same jar file.
@@ -1595,7 +1598,7 @@ import org.asciidoctor.Asciidoctor;
 public class TextConverterRegistry implements ConverterRegistry{
     @Override
     public void register(Asciidoctor asciidoctor) {
-        asciidoctor.javaConverterRegistry().register(TextConverter.class, "text");
+        asciidoctor.javaConverterRegistry().register(TextConverter.class);
     }
 }
 ----
@@ -1607,7 +1610,7 @@ The jar file must also contain the services file containing the fully qualified 
 org.asciidoctor.converter.spi.TextConverterRegistry
 ----
 
-To render a document with this converter the backend name `text` has to be passed via the options:
+To render a document with this converter the target format name `text` has to be passed via the option `backend`:
 
 [source,java]
 ----
