@@ -6,8 +6,6 @@ import org.jruby.RubyArray;
 import org.jruby.RubyClass;
 import org.jruby.RubyModule;
 import org.jruby.RubyString;
-import org.jruby.runtime.ObjectAllocator;
-import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,10 +28,18 @@ public class JavaConverterRegistry {
                 rubyRuntime.getObject(),
                 new ConverterProxy.Allocator(converterClass));
         clazz.defineAnnotatedMethods(ConverterProxy.class);
-        if (backends.length > 0) {
-            this.asciidoctorModule.register_converter(clazz, backends);
-        } else {
+
+        ConverterFor converterForAnnotation = converterClass.getAnnotation(ConverterFor.class);
+        if (converterForAnnotation != null) {
+            // Backend annotation present => Register with name given in annotation
+            this.asciidoctorModule.register_converter(clazz, new String[] { converterForAnnotation.value() });
+        } else if (backends.length == 0) {
+            // No backend annotation and no backend defined => register as default backend
             this.asciidoctorModule.register_converter(clazz);
+        }
+        if (backends.length > 0) {
+            // Always additionally register with names passed to this method
+            this.asciidoctorModule.register_converter(clazz, backends);
         }
     }
 
