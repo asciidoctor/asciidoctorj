@@ -6,11 +6,6 @@ import org.asciidoctor.Asciidoctor;
 import org.junit.Test;
 
  class AsciiDoctorJClassloaderTestRunnable implements Runnable {
-    public AsciiDoctorJClassloaderTestRunnable(Asciidoctor.Factory instance){
-        asciidoctorfactory = instance;
-    }
-    private Asciidoctor.Factory asciidoctorfactory = null;
-
     private boolean loadingsucceeded = false;
     private ClassLoader classloader = null;
 
@@ -25,9 +20,9 @@ import org.junit.Test;
     public void run() {
         try{
             if(classloader == null) {
-                asciidoctorfactory.create();
+                Asciidoctor.Factory.create();
             } else {
-                asciidoctorfactory.create(classloader);
+                Asciidoctor.Factory.create(classloader);
             }
             loadingsucceeded = true;
         } catch(org.jruby.exceptions.RaiseException exp) {
@@ -49,7 +44,7 @@ public class WhenClassloaderIsRequired {
     public void contentsOfJRubyCompleteShouldFailToLoadWithoutPassingClassloader() throws Exception{
         ClassLoader currentclassloader =  this.getClass().getClassLoader();
         ClassLoader rootclassloader =  currentclassloader.getParent();
-        AsciiDoctorJClassloaderTestRunnable runnable = new AsciiDoctorJClassloaderTestRunnable(new Asciidoctor.Factory());
+        AsciiDoctorJClassloaderTestRunnable runnable = new AsciiDoctorJClassloaderTestRunnable();
         final Thread thread = new Thread( runnable );
         // make the thread use  classloader context  without JRuby and all
         thread.setContextClassLoader(rootclassloader);
@@ -62,7 +57,7 @@ public class WhenClassloaderIsRequired {
     public void contentsOfJRubyCompleteShouldSucceedWhenPassingTheCorrectClassloader() throws Exception{
         ClassLoader currentclassloader =  this.getClass().getClassLoader();
         ClassLoader rootclassloader =  currentclassloader.getParent();
-        AsciiDoctorJClassloaderTestRunnable runnable = new AsciiDoctorJClassloaderTestRunnable(new Asciidoctor.Factory());
+        AsciiDoctorJClassloaderTestRunnable runnable = new AsciiDoctorJClassloaderTestRunnable();
         runnable.setClassloader(currentclassloader);
         final Thread thread = new Thread( runnable );
         // make the thread use  classloader context  without JRuby and all

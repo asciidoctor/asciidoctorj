@@ -656,8 +656,9 @@ public interface Asciidoctor {
      * @author lordofthejars
      * 
      */
-    public static class Factory {
+    public static final class Factory {
 
+        private Factory() {}
         /**
          * Creates a new instance of Asciidoctor.
          * 
