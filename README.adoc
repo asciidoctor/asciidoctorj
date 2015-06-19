@@ -306,7 +306,7 @@ StringBuffer htmlBuffer = writer.getBuffer();
 System.out.println(htmlBuffer.toString());
 ----
 
-==== Safe mode and file system access
+=== Safe mode and file system access
 Asciidoctor provides security levels that control the read and write access of attributes, the include directive, macros, and scripts while a document is processing. Each level includes the restrictions enabled in the prior security level.
 
 When Asciidoctor (and AsciidoctorJ) is used as _API_, it uses `SECURE` safe mode by default.
@@ -1510,6 +1510,113 @@ assertThat(new File("target/test-classes/index.epub").exists(), is(true));
 
 // TODO document how to convert to KF8/MOBI (need to set KINDLEGEN environment variable)
 // TODO add section that covers using Asciidoctor PDF via the AsciidoctorJ PDF jar
+
+
+== Writing a custom converter
+
+For output formats that are not natively supported by Asciidoctor it is possible to write an own converter in Java.
+To get your own converter running in {uri-repo}[AsciidoctorJ] these steps are required:
+
+- Implement the converter as a subclass of `org.asciidoctor.converter.AbstractConverter`.
+  Annotate it as a converter for your target format using the annotation `@org.asciidoctor.converter.ConverterFor`.
+- Register the converter at the `ConverterRegistry`.
+- Pass the target format name to the `Asciidoctor` instance when rendering a source file.
+
+A basic converter that converts to an own text format looks like this:
+
+[source,java]
+.org.asciidoctor.converter.TextConverter.java
+----
+@ConverterFor("text")
+public class TextConverter extends AbstractConverter {
+
+    private String LINE_SEPARATOR = "\n";
+
+    public TextConverter(String backend, Map<Object, Object> opts) {         // <1>
+        super(backend, opts);
+    }
+    
+    @Override
+    public Object convert(
+            AbstractNode node, String transform, Map<Object, Object> o) {    // <2>
+
+        if (transform == null) {                                             // <3>
+            transform = node.getNodeName();
+        }
+ 
+        if (node instanceof DocumentRuby) {
+            DocumentRuby document = (DocumentRuby) node;
+            return document.getContent();                                    // <4>
+        } else if (node instanceof Section) {
+            Section section = (Section) node;
+            return new StringBuilder()
+                    .append("== ").append(section.getTitle()).append(" ==")
+                    .append(LINE_SEPARATOR).append(LINE_SEPARATOR)
+                    .append(section.getContent()).toString();                // <4>
+        } else if (transform.equals("paragraph")) {
+            AbstractBlock block = (AbstractBlock) node;
+            String content = (String) block.content();                       // <4>
+            return new StringBuilder(content.replaceAll(LINE_SEPARATOR, " "))
+                            .append(LINE_SEPARATOR);
+        } 
+        return null;
+    }
+
+}
+----
+<1> A converter must implement this constructor, because {uri-repo}[AsciidoctorJ] will call the constructor with this signature.
+    For every conversion a new instance will be created.
+<2> The method `convert()` is called with the AST object for the document, i.e. a `DocumentRuby` instance, when a document is rendered.
+<3> The optional parameter `transform` hints at the transformation to be executed.
+    This could be for example the value `embedded` to indicate that the resulting document should be without headers and footers.
+    If it is `null` the transformation usually is defined by the node type and name.
+<4> Calls to the method `getContent()` of a node will recursively call the method `convert()` with the child nodes again.
+    Thereby the converter can collect the rendered child nodes, merge them appropriately and return the rendering of the whole node.
+
+Then the converter has to be registered like this with a well defined backend name:
+
+[source,java]
+.Register a converter
+----
+Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+asciidoctor.javaConverterRegistry().register(TextConverter.class); // <1>
+----
+<1> Registers the converter class `TextConverter` for this Asciidoctor instance.
+    The given converter is responsible for converting to the target format `text`.
+
+Alternatively the converter can be registered automatically once the jar file containing the converter is available on the classpath.
+Therefore a service implementation for the interface `org.asciidoctor.converter.spi.ConverterRegistry` has to be in the same jar file.
+For the `TextConverter` this implementation could look like this:
+
+[source,java]
+.org.asciidoctor.converter.spi.TextConverterRegistry
+----
+package org.asciidoctor.converter.spi;
+
+import org.asciidoctor.Asciidoctor;
+
+public class TextConverterRegistry implements ConverterRegistry{
+    @Override
+    public void register(Asciidoctor asciidoctor) {
+        asciidoctor.javaConverterRegistry().register(TextConverter.class);
+    }
+}
+----
+
+The jar file must also contain the services file containing the fully qualified class name of the `ConverterRegistry` implementation to make this service implementation available:
+
+.META-INF/services/org.asciidoctor.converter.ConverterRegistry
+----
+org.asciidoctor.converter.spi.TextConverterRegistry
+----
+
+To render a document with this converter the target format name `text` has to be passed via the option `backend`:
+
+[source,java]
+----
+File adocFile = ...
+asciidoctor.convertFile(adocFile, OptionsBuilder.options().backend("text"));
+----
 
 == Loading Ruby libraries
 
