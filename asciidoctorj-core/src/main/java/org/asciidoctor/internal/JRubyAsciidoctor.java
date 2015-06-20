@@ -73,6 +73,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<String>(), classloader, gemPath));
     }
 
+    public static JRubyAsciidoctor create(List<String> loadPaths, String gemPath) {
+        return processRegistrations(createJRubyAsciidoctorInstance(null, loadPaths, null, gemPath));
+    }
+
     private static JRubyAsciidoctor processRegistrations(JRubyAsciidoctor asciidoctor) {
         registerExtensions(asciidoctor);
         registerConverters(asciidoctor);
