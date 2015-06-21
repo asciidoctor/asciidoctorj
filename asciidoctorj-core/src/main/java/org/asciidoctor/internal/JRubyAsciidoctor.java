@@ -29,7 +29,6 @@ import org.jruby.javasupport.JavaEmbedUtils;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JRubyAsciidoctor implements Asciidoctor {
@@ -52,47 +51,35 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     public static JRubyAsciidoctor create() {
-        Map<String, Object> env = new HashMap<String, Object>();
+        //Map<String, Object> env = new HashMap<String, Object>();
         // ideally, we want to clear GEM_PATH by default, but for backwards compatibility we play nice
         //env.put(GEM_PATH, null);
-        JRubyAsciidoctor asciidoctor = createJRubyAsciidoctorInstance(env);
-        registerExtensions(asciidoctor);
-        registerConverters(asciidoctor);
-
-        return asciidoctor;
+        return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<String>(), null, null));
     }
 
     public static JRubyAsciidoctor create(String gemPath) {
-        Map<String, Object> env = new HashMap<String, Object>();
-        // a null value will clear the GEM_PATH and GEM_HOME
-        env.put(GEM_PATH, gemPath);
-
-        JRubyAsciidoctor asciidoctor = createJRubyAsciidoctorInstance(env);
-        registerExtensions(asciidoctor);
-        registerConverters(asciidoctor);
-
-        return asciidoctor;
+        return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<String>(), null, gemPath));
     }
 
     public static JRubyAsciidoctor create(List<String> loadPaths) {
-        JRubyAsciidoctor asciidoctor = createJRubyAsciidoctorInstance(loadPaths);
-        registerExtensions(asciidoctor);
-        registerConverters(asciidoctor);
-
-        return asciidoctor;
+        return processRegistrations(createJRubyAsciidoctorInstance(null, loadPaths, null, null));
     }
 
     public static JRubyAsciidoctor create(ClassLoader classloader) {
-        JRubyAsciidoctor asciidoctor = createJRubyAsciidoctorInstance(classloader, null);
-        registerExtensions(asciidoctor);
-
-        return asciidoctor;
+        return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<String>(), classloader, null));
     }
+
     public static JRubyAsciidoctor create(ClassLoader classloader, String gemPath) {
-        JRubyAsciidoctor asciidoctor = createJRubyAsciidoctorInstance(classloader, gemPath);
+        return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<String>(), classloader, gemPath));
+    }
+
+    public static JRubyAsciidoctor create(List<String> loadPaths, String gemPath) {
+        return processRegistrations(createJRubyAsciidoctorInstance(null, loadPaths, null, gemPath));
+    }
+
+    private static JRubyAsciidoctor processRegistrations(JRubyAsciidoctor asciidoctor) {
         registerExtensions(asciidoctor);
         registerConverters(asciidoctor);
-
         return asciidoctor;
     }
 
@@ -106,42 +93,29 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
     private static JRubyAsciidoctor createJRubyAsciidoctorInstance(List<String> loadPaths) {
 
-        RubyInstanceConfig config = createOptimizedConfiguration();
-
-        Ruby rubyRuntime = JavaEmbedUtils.initialize(loadPaths, config);
-
-        JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(rubyRuntime);
-
-        AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory.createAsciidoctorModule();
-        JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
-
-        return jRubyAsciidoctor;
+        return createJRubyAsciidoctorInstance(null, loadPaths, null, null);
     }
 
     private static JRubyAsciidoctor createJRubyAsciidoctorInstance(Map<String, Object> environmentVars) {
 
-        RubyInstanceConfig config = createOptimizedConfiguration();
-        injectEnvironmentVariables(config, environmentVars);
-
-        Ruby rubyRuntime = JavaEmbedUtils.initialize(Collections.EMPTY_LIST, config);
-
-        JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(rubyRuntime);
-
-        AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory.createAsciidoctorModule();
-
-        JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
-        return jRubyAsciidoctor;
+        return createJRubyAsciidoctorInstance(environmentVars, new ArrayList<String>(), null, null);
     }
 
-    private static JRubyAsciidoctor createJRubyAsciidoctorInstance(ClassLoader classloader, String gemPath) {
+    private static JRubyAsciidoctor createJRubyAsciidoctorInstance(Map<String, Object> environmentVars, List<String> loadPaths, ClassLoader classloader, String gemPath) {
 
-        Map<String, Object> env = new HashMap<String, Object>();
-        env.put(GEM_PATH, gemPath);
+        Map<String, Object> env = environmentVars != null ?
+                new HashMap<String, Object>(environmentVars) : new HashMap<String, Object>();
+        if (gemPath != null) {
+            env.put(GEM_PATH, gemPath);
+        }
 
-        ScriptingContainer container = new ScriptingContainer();
-        injectEnvironmentVariables(container.getProvider().getRubyInstanceConfig(), env);
-        container.setClassLoader(classloader);
-        Ruby rubyRuntime = container.getProvider().getRuntime();
+        RubyInstanceConfig config = createOptimizedConfiguration();
+        if (classloader != null) {
+            config.setLoader(classloader);
+        }
+        injectEnvironmentVariables(config, env);
+
+        Ruby rubyRuntime = JavaEmbedUtils.initialize(loadPaths, config);
 
         JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(rubyRuntime);
 

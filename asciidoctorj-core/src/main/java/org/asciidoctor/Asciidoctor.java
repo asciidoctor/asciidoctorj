@@ -656,8 +656,9 @@ public interface Asciidoctor {
      * @author lordofthejars
      * 
      */
-    public static class Factory {
+    public static final class Factory {
 
+        private Factory() {}
         /**
          * Creates a new instance of Asciidoctor.
          * 
@@ -704,6 +705,8 @@ public interface Asciidoctor {
          * @param classloader
          * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
          *         Ruby calls.
+         * @deprecated Please use {@link #create()} and set the TCCL before or {@link #create(List)} passing the paths
+         * that you would have used to create the ClassLoader.
          */
         public static Asciidoctor create(ClassLoader classloader) {
             return JRubyAsciidoctor.create(classloader);
@@ -714,9 +717,26 @@ public interface Asciidoctor {
          * @param classloader
          * @param gemPath
          * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
+         * @deprecated Please use {@link #create(String)} and set the TCCL before or {@link #create(List, String)}
+         * passing the paths that you would have used to create the ClassLoader.
          */
         public static Asciidoctor create(ClassLoader classloader, String gemPath) {
             return JRubyAsciidoctor.create(classloader, gemPath);
+        }
+
+        /**
+         * Creates a new instance of Asciidoctor and sets loadPath to provided paths.
+         * The gem path of the Ruby instance is set to the gemPath parameter.
+         *
+         * @param loadPaths
+         *            where Ruby libraries are located.
+         * @param gemPath
+         *           where gems are located.
+         * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
+         *         Ruby calls.
+         */
+        public static Asciidoctor create(List<String> loadPaths, String gemPath) {
+            return JRubyAsciidoctor.create(loadPaths, gemPath);
         }
 
     }
