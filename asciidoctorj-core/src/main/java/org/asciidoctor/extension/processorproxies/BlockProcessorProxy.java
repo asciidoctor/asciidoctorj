@@ -32,16 +32,6 @@ public class BlockProcessorProxy extends AbstractProcessorProxy<BlockProcessor> 
         super(runtime, metaClass, blockProcessor);
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final String blockProcessorClassName) {
-
-        try {
-            Class<? extends BlockProcessor>  blockProcessorClass = (Class<? extends BlockProcessor>) Class.forName(blockProcessorClassName);
-            return register(rubyRuntime, blockProcessorClass);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static RubyClass register(final Ruby rubyRuntime, final Class<? extends BlockProcessor> blockProcessor) {
         RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "BlockProcessor", new ObjectAllocator() {
             @Override
@@ -49,6 +39,9 @@ public class BlockProcessorProxy extends AbstractProcessorProxy<BlockProcessor> 
                 return new BlockProcessorProxy(runtime, klazz, blockProcessor);
             }
         });
+
+        applyAnnotations(blockProcessor, rubyClass);
+
         ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, BlockProcessorProxy.class);
         return rubyClass;
     }
@@ -60,6 +53,9 @@ public class BlockProcessorProxy extends AbstractProcessorProxy<BlockProcessor> 
                 return new BlockProcessorProxy(runtime, klazz, blockProcessor);
             }
         });
+
+        applyAnnotations(blockProcessor.getClass(), rubyClass);
+
         ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, BlockProcessorProxy.class);
         return rubyClass;
     }

@@ -36,16 +36,6 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
         super(runtime, metaClass, inlineMacroProcessor);
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final String inlineMacroProcessorClassName) {
-
-        try {
-            Class<? extends InlineMacroProcessor>  inlineMacroProcessorClass = (Class<? extends InlineMacroProcessor>) Class.forName(inlineMacroProcessorClassName);
-            return register(rubyRuntime, inlineMacroProcessorClass);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static RubyClass register(final Ruby rubyRuntime, final Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
         RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, SUPER_CLASS_NAME, new ObjectAllocator() {
             @Override
@@ -53,6 +43,9 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
                 return new InlineMacroProcessorProxy(runtime, klazz, inlineMacroProcessor);
             }
         });
+
+        applyAnnotations(inlineMacroProcessor, rubyClass);
+
         ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, InlineMacroProcessorProxy.class);
         return rubyClass;
     }
@@ -64,6 +57,9 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
                 return new InlineMacroProcessorProxy(runtime, klazz, inlineMacroProcessor);
             }
         });
+
+        applyAnnotations(inlineMacroProcessor.getClass(), rubyClass);
+
         ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, InlineMacroProcessorProxy.class);
         return rubyClass;
     }
@@ -77,9 +73,9 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
             // If options contains a String with a Regexp create the RubyRegexp from it
             RubyHash rubyConfig = RubyHashUtil.convertMapToRubyHashWithSymbols(getRuntime(), getProcessor().getConfig());
             Object regexp = getProcessor().getConfig().get("regexp");
-            if (regexp != null && regexp instanceof String) {
+            if (regexp != null && regexp instanceof CharSequence) {
                 RubySymbol regexpSymbol = RubySymbol.newSymbol(getRuntime(), "regexp");
-                rubyConfig.put(regexpSymbol, convertRegexp(regexp));
+                rubyConfig.put(regexpSymbol, convertRegexp(getRuntime(), (CharSequence) regexp));
             }
 
             Helpers.invokeSuper(
@@ -115,10 +111,6 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
         finalizeJavaConfig();
 
         return null;
-    }
-
-    private RubyRegexp convertRegexp(Object regexp) {
-        return RubyRegexp.newRegexp(getRuntime(), regexp.toString(), RegexpOptions.NULL_OPTIONS);
     }
 
     @JRubyMethod(name = "process", required = 3)
