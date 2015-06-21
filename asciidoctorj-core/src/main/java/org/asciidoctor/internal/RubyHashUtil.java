@@ -73,7 +73,7 @@ public class RubyHashUtil {
     }
 
     private static boolean isNotARubySymbol(Object keyType) {
-        return keyType instanceof String;
+        return keyType instanceof CharSequence;
     }
 
     public static Map<Object, Object> convertRubyHashMapToMap(Map<Object, Object> rubyHashMap) {
@@ -134,10 +134,10 @@ public class RubyHashUtil {
         } else {
 
             if (isNotARubySymbol(value)) {
-                String stringValue = ((String) value);
+                CharSequence stringValue = ((CharSequence) value);
 
-                if (stringValue.startsWith(":")) {
-                    return RubyUtils.toSymbol(rubyRuntime, stringValue.substring(1));
+                if (stringValue.charAt(0) == ':') {
+                    return RubyUtils.toSymbol(rubyRuntime, stringValue.subSequence(1, stringValue.length()).toString());
                 }
             }
 
