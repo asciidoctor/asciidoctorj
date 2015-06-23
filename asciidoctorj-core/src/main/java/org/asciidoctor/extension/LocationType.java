@@ -1,5 +1,8 @@
 package org.asciidoctor.extension;
 
+/**
+ * Location used by the {@link Location} annotation.
+ */
 public enum LocationType {
 
     HEADER(":header"),

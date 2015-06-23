@@ -1,5 +1,8 @@
 package org.asciidoctor.extension;
 
+/**
+ * Inline macro format used by the {@link Format} annotation.
+ */
 public enum FormatType {
     LONG(":long"),
     SHORT(":short"),

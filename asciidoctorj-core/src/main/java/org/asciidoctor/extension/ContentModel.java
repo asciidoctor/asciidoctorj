@@ -8,6 +8,19 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation defines how to handle content created by a {@code BlockProcessor}.
+ * Applicable for:
+ * <table>
+ * <tr><td>BlockMacroProcessor</td><td></td></tr>
+ * <tr><td>BlockProcessor</td><td>&#10003;</td></tr>
+ * <tr><td>BlockProcessor</td><td></td></tr>
+ * <tr><td>DocInfoProcessor</td><td></td></tr>
+ * <tr><td>IncludeProcessor</td><td></td></tr>
+ * <tr><td>InlineMacroProcessor</td><td></td></tr>
+ * <tr><td>Postprocessor</td><td></td></tr>
+ * <tr><td>Preprocessor</td><td></td></tr>
+ * <tr><td>Treeprocessor</td><td></td></tr>
+ * </table>
+
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

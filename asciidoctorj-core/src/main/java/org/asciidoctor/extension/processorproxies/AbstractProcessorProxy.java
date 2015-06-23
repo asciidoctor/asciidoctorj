@@ -9,6 +9,7 @@ import org.asciidoctor.extension.Format;
 import org.asciidoctor.extension.FormatType;
 import org.asciidoctor.extension.Location;
 import org.asciidoctor.extension.Name;
+import org.asciidoctor.extension.PositionalAttributes;
 import org.asciidoctor.extension.Processor;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
@@ -79,6 +80,8 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
 
         handleDefaultAttributesAnnotation(processor, rubyClass);
 
+        handlePositionalAttributesAnnotation(processor, rubyClass);
+
         handleContextsAnnotation(processor, rubyClass);
 
         handleFormatAnnotation(processor, rubyClass);
@@ -143,6 +146,21 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
             rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[] {
                     rubyRuntime.newSymbol("default_attrs"),
                     defaultAttrs
+            });
+        }
+    }
+
+    private static void handlePositionalAttributesAnnotation(Class<? extends Processor> processor, RubyClass rubyClass) {
+        Ruby rubyRuntime = rubyClass.getRuntime();
+        if (processor.isAnnotationPresent(PositionalAttributes.class)) {
+            PositionalAttributes positionalAttributes = processor.getAnnotation(PositionalAttributes.class);
+            RubyArray positionalAttrs = RubyArray.newArray(rubyRuntime);
+            for (String positionalAttribute: positionalAttributes.value()) {
+                positionalAttrs.add(positionalAttribute);
+            }
+            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[] {
+                    rubyRuntime.newSymbol("pos_attrs"),
+                    positionalAttrs
             });
         }
     }

@@ -75,7 +75,7 @@ This should also be uppercase
 
     private static final String INLINE_MACRO_DOCUMENT = '''= Test document
 
-You can find infos on man:gittutorial[7].
+You can find infos on man:gittutorial[7] or man:git[8, 1].
 
 '''
 
