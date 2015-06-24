@@ -32,16 +32,6 @@ public class BlockMacroProcessorProxy extends AbstractMacroProcessorProxy<BlockM
         super(runtime, metaClass, blockMacroProcessor);
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final String blockMacroProcessorClassName) {
-
-        try {
-            Class<? extends BlockMacroProcessor>  blockMacroProcessorClass = (Class<? extends BlockMacroProcessor>) Class.forName(blockMacroProcessorClassName);
-            return register(rubyRuntime, blockMacroProcessorClass);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static RubyClass register(final Ruby rubyRuntime, final Class<? extends BlockMacroProcessor> blockMacroProcessor) {
         RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "BlockMacroProcessor", new ObjectAllocator() {
             @Override
@@ -49,6 +39,9 @@ public class BlockMacroProcessorProxy extends AbstractMacroProcessorProxy<BlockM
                 return new BlockMacroProcessorProxy(runtime, klazz, blockMacroProcessor);
             }
         });
+
+        applyAnnotations(blockMacroProcessor, rubyClass);
+
         ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, BlockMacroProcessorProxy.class);
         return rubyClass;
     }
@@ -60,6 +53,9 @@ public class BlockMacroProcessorProxy extends AbstractMacroProcessorProxy<BlockM
                 return new BlockMacroProcessorProxy(runtime, klazz, blockMacroProcessor);
             }
         });
+
+        applyAnnotations(blockMacroProcessor.getClass(), rubyClass);
+
         ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, BlockMacroProcessorProxy.class);
         return rubyClass;
     }

@@ -32,16 +32,6 @@ public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcess
         super(runtime, metaClass, includeProcessor);
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final String includeProcessorClassName) {
-
-        try {
-            Class<? extends IncludeProcessor>  includeProcessorClass = (Class<? extends IncludeProcessor>) Class.forName(includeProcessorClassName);
-            return register(rubyRuntime, includeProcessorClass);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static RubyClass register(final Ruby rubyRuntime, final Class<? extends IncludeProcessor> includeProcessor) {
         RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "IncludeProcessor", new ObjectAllocator() {
             @Override
@@ -49,6 +39,9 @@ public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcess
                 return new IncludeProcessorProxy(runtime, klazz, includeProcessor);
             }
         });
+
+        applyAnnotations(includeProcessor, rubyClass);
+
         ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, IncludeProcessorProxy.class);
         return rubyClass;
     }
@@ -60,6 +53,9 @@ public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcess
                 return new IncludeProcessorProxy(runtime, klazz, includeProcessor);
             }
         });
+
+        applyAnnotations(includeProcessor.getClass(), rubyClass);
+
         ProcessorProxyUtil.defineAnnotatedMethods(rubyClass, IncludeProcessorProxy.class);
         return rubyClass;
     }

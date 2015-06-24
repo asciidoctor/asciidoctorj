@@ -30,16 +30,6 @@ public class TreeprocessorProxy extends AbstractProcessorProxy<Treeprocessor> {
         super(runtime, metaClass, treeProcessor);
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final String treeProcessorClassName) {
-
-        try {
-            Class<? extends Treeprocessor> treeProcessorClass = (Class<? extends Treeprocessor>) Class.forName(treeProcessorClassName);
-            return register(rubyRuntime, treeProcessorClass);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static RubyClass register(final Ruby rubyRuntime, final Class<? extends Treeprocessor> treeProcessor) {
         RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "Treeprocessor", new ObjectAllocator() {
             @Override
@@ -47,6 +37,9 @@ public class TreeprocessorProxy extends AbstractProcessorProxy<Treeprocessor> {
                 return new TreeprocessorProxy(runtime, klazz, treeProcessor);
             }
         });
+
+        applyAnnotations(treeProcessor, rubyClass);
+
         rubyClass.defineAnnotatedMethods(TreeprocessorProxy.class);
         return rubyClass;
     }
@@ -58,6 +51,9 @@ public class TreeprocessorProxy extends AbstractProcessorProxy<Treeprocessor> {
                 return new TreeprocessorProxy(runtime, klazz, treeProcessor);
             }
         });
+
+        applyAnnotations(treeProcessor.getClass(), rubyClass);
+
         rubyClass.defineAnnotatedMethods(TreeprocessorProxy.class);
         return rubyClass;
     }
