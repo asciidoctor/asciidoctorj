@@ -25,12 +25,14 @@ public class ColumnImpl extends AbstractNodeImpl implements Column {
 
     @Override
     public int getColumnNumber() {
-        return Integer.parseInt((String) getAttr("colnumber"));
+        Number columnNumber = (Number) getAttr("colnumber");
+        return columnNumber == null ? -1 : columnNumber.intValue();
     }
 
     @Override
     public int getWidth() {
-        return ((Number) getAttr("width")).intValue();
+        Number width =  (Number) getAttr("width");
+        return width == null ? 0 : width.intValue();
     }
 
     @Override

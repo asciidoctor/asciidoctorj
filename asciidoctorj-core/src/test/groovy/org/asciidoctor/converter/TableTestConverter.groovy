@@ -53,6 +53,11 @@ class TableTestConverter extends AbstractConverter {
             }
         }
 
+
+        (1..table.columns.size()).each {
+            assert table.columns[it - 1].columnNumber == it
+        }
+
         def tableRows = []
 
         if (table.header.size() > 0) {
