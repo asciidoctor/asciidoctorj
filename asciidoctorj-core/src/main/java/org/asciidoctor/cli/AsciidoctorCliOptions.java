@@ -28,6 +28,7 @@ public class AsciidoctorCliOptions {
     public static final String TEMPLATE_ENGINE = "-E";
     public static final String COMPACT = "-C";
     public static final String ERUBY = "-e";
+    public static final String RUBY_OPTION = "-R";
     public static final String SECTION_NUMBERS = "-n";
     public static final String NO_HEADER_FOOTER = "-s";
     public static final String SAFE = "-S";
@@ -68,6 +69,9 @@ public class AsciidoctorCliOptions {
 
     @Parameter(names = { ERUBY, "--eruby" }, description = "specify eRuby implementation to render built-in templates: [erb, erubis] (default: erb)")
     private String eruby = "erb";
+
+    @Parameter(names = { RUBY_OPTION }, description = "specify JRuby options like -R compat.version=1.9")
+    private List<String> rubyOptions = new ArrayList<String>();
 
     @Parameter(names = { COMPACT, "--compact" }, description = "compact the output by removing blank lines (default: false)")
     private boolean compact = false;
@@ -178,6 +182,10 @@ public class AsciidoctorCliOptions {
 
     public String getEruby() {
         return this.eruby;
+    }
+
+    public List<String> getRubyOptions() {
+        return rubyOptions;
     }
 
     public boolean isCompact() {
