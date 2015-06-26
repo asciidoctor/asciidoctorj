@@ -100,7 +100,14 @@ public class AsciidoctorInvoker {
         }
     }
 
-    private JRubyAsciidoctor buildAsciidoctorJInstance(AsciidoctorCliOptions asciidoctorCliOptions) {
+    JRubyAsciidoctor buildAsciidoctorJInstance(AsciidoctorCliOptions asciidoctorCliOptions) {
+
+        for (String rubyOption: asciidoctorCliOptions.getRubyOptions()) {
+            String key = rubyOption.substring(0, rubyOption.indexOf('='));
+            String value = rubyOption.substring(rubyOption.indexOf('=') + 1);
+            System.setProperty("jruby." + key, value);
+        }
+
         ClassLoader oldTccl = Thread.currentThread().getContextClassLoader();
         try {
             if (asciidoctorCliOptions.isClassPaths()) {
