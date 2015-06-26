@@ -28,6 +28,14 @@ def gemFiles = fileTree(jruby.gemInstallDir) {
 jrubyPrepareGems << {
   copy { // bundles the gems inside this artifact
     from gemFiles
+    eachFile {
+      if (it.path == 'gems/asciidoctor-pdf-1.5.0.alpha.8/lib/asciidoctor-pdf/prawn_ext/formatted_text/fragment.rb' ||
+          it.path == 'gems/asciidoctor-pdf-1.5.0.alpha.8/lib/asciidoctor-pdf/formatted_text/inline_image_arranger.rb') {
+        it.filter { line ->
+          line.replaceAll(/^( *)if ::RUBY_MIN_VERSION_2$/, "\$1if respond_to? :prepend")
+        }
+      }
+    }
     into sourceSets.main.output.resourcesDir
   }
 }
