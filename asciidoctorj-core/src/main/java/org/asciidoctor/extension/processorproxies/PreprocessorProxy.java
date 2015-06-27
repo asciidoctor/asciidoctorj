@@ -74,10 +74,7 @@ public class PreprocessorProxy extends AbstractProcessorProxy<Preprocessor> {
                     Block.NULL_BLOCK);
         } else {
             // First create only the instance passing in the block name
-            setProcessor(
-                    getProcessorClass()
-                            .getConstructor()
-                            .newInstance());
+            setProcessor(instantiateProcessor());
 
             // Then create the config hash that may contain config options defined in the Java constructor
             RubyHash config = RubyHashUtil.convertMapToRubyHashWithSymbols(context.getRuntime(), getProcessor().getConfig());

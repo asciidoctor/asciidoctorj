@@ -78,11 +78,12 @@ public class BlockMacroProcessorProxy extends AbstractMacroProcessorProxy<BlockM
             getProcessor().setConfig(new RubyHashMapDecorator((RubyHash)getInstanceVariable(MEMBER_NAME_CONFIG)));
         } else {
             // First create only the instance passing in the name
-            setProcessor(
-                    getProcessorClass()
-                            .getConstructor(String.class)
-                            .newInstance(
-                                    RubyUtils.rubyToJava(getRuntime(), args[0], String.class)));
+            String macroName = RubyUtils.rubyToJava(getRuntime(), args[0], String.class);
+            setProcessor(instantiateProcessor(macroName));
+
+            if (getProcessor().getName() == null) {
+                getProcessor().setName(macroName);
+            }
 
             // Then create the config hash that may contain config options defined in the Java constructor
             RubyHash config = RubyHashUtil.convertMapToRubyHashWithSymbols(context.getRuntime(), getProcessor().getConfig());

@@ -160,7 +160,7 @@ And even more infos on manpage:git[7].
     def "when registering a BlockProcessor instance it should be configurable via annotations"() {
 
         when:
-        asciidoctor.javaExtensionRegistry().block(new AnnotatedBlockProcessor('yell2'))
+        asciidoctor.javaExtensionRegistry().block(new AnnotatedBlockProcessor('dummy', 'yell2'))
         String result = asciidoctor.convert(BLOCK_DOCUMENT_2, OptionsBuilder.options().headerFooter(false))
 
         then:

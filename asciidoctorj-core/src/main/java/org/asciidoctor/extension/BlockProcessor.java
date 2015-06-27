@@ -126,7 +126,11 @@ public abstract class BlockProcessor extends Processor {
     public static final String CONTEXT_PARAGRAPH = ":paragraph";
 
     protected String name;
-    
+
+    public BlockProcessor() {
+        this(null);
+    }
+
     public BlockProcessor(String name) {
         this(name, new HashMap<String, Object>());
     }

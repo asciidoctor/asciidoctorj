@@ -9,11 +9,6 @@ class AnnotatedBlockMacroProcessor extends BlockMacroProcessor {
 
     public static final String RESULT = 'This content is added by this macro!'
 
-    AnnotatedBlockMacroProcessor(String macroName) {
-        super(macroName)
-        assert macroName == 'testmacro'
-    }
-
     @Override
     Object process(AbstractBlock parent, String target, Map<String, Object> attributes) {
         createBlock(parent, 'paragraph', RESULT)
