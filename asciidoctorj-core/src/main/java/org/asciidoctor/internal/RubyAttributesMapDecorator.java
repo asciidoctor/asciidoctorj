@@ -100,17 +100,19 @@ public class RubyAttributesMapDecorator implements Map<String, Object> {
         Set<Entry<Object, Object>> rubyEntrySet = rubyHash.entrySet();
         for (Entry<Object, Object> o: rubyEntrySet) {
             String key;
-            Object value;
             Object rubyKey = o.getKey();
             Object rubyValue = o.getValue();
             if (rubyKey instanceof RubyString) {
                 key = ((RubyString) rubyKey).asJavaString();
             } else if (rubyKey instanceof String) {
                 key = (String) rubyKey;
+            } else if (rubyKey instanceof RubySymbol && "attribute_entries".equals(((RubySymbol) rubyKey).asJavaString())) {
+                // FIXME: What's the meaning of this entry?
+                continue;
             } else {
                 throw new IllegalStateException("Did not expect key " + rubyKey + " of type " + rubyKey.getClass());
             }
-            value = convertRubyValue(rubyValue);
+            Object value = convertRubyValue(rubyValue);
             copy.put(key, value);
         }
         return copy;
