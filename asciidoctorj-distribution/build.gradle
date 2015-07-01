@@ -23,8 +23,7 @@ startScripts {
   mainClassName = 'org.asciidoctor.cli.AsciidoctorInvoker'
   defaultJvmOpts = [
     '-client', '-Xmn128m', '-Xms256m', '-Xmx256m',
-    '-Xverify:none', '-XX:+UseFastAccessorMethods', '-XX:+TieredCompilation', '-XX:TieredStopAtLevel=1', '-XX:+DisableExplicitGC',
-    '-Djruby.compile.mode=OFF', '-Djruby.compat.version=RUBY2_0'
+    '-Xverify:none', '-XX:+UseFastAccessorMethods', '-XX:+TieredCompilation', '-XX:TieredStopAtLevel=1', '-XX:+DisableExplicitGC'
   ]
 }
 

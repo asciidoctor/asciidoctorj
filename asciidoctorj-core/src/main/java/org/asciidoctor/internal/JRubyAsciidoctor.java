@@ -132,9 +132,6 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
     private static RubyInstanceConfig createOptimizedConfiguration() {
         RubyInstanceConfig config = new RubyInstanceConfig();
-        config.setCompatVersion(CompatVersion.RUBY2_0);
-        config.setCompileMode(CompileMode.OFF);
-
         return config;
     }
 
