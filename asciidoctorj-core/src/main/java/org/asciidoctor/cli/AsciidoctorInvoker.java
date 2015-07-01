@@ -14,10 +14,12 @@ import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.GlobDirectoryWalker;
 import org.asciidoctor.Options;
 import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 
 import com.beust.jcommander.JCommander;
+import org.jruby.Main;
 
 public class AsciidoctorInvoker {
 
@@ -38,6 +40,8 @@ public class AsciidoctorInvoker {
             
             if (asciidoctorCliOptions.isVersion()) {
                 System.out.println("Asciidoctor " + asciidoctor.asciidoctorVersion() + " [http://asciidoctor.org]");
+                System.out.println("JRuby : " + JRubyRuntimeContext.get(asciidoctor).evalScriptlet("JRUBY_VERSION"));
+                System.out.println("Ruby compat version: " + JRubyRuntimeContext.get(asciidoctor).evalScriptlet("RUBY_VERSION"));
                 return;
             }
             
@@ -205,6 +209,10 @@ public class AsciidoctorInvoker {
     }
 
     public static void main(String args[]) {
+
+        // Process .jrubyrc file
+        Main.processDotfile();
+
         new AsciidoctorInvoker().invoke(args);
     }
 
