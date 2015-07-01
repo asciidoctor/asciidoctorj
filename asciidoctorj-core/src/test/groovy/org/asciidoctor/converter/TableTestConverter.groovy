@@ -3,6 +3,7 @@ package org.asciidoctor.converter
 import org.asciidoctor.ast.AbstractNode
 import org.asciidoctor.ast.Cell
 import org.asciidoctor.ast.DocumentRuby
+import org.asciidoctor.ast.Section
 import org.asciidoctor.ast.Table
 
 class TableTestConverter extends AbstractConverter {
@@ -10,6 +11,7 @@ class TableTestConverter extends AbstractConverter {
     public static final int COLWIDTH = 15
     public static final String COL_SEPARATOR = '|'
     public static final String NEWLINE = '\n'
+    public static final String NEWLINE_2 = NEWLINE * 2
 
     TableTestConverter(String backend, Map<Object, Object> opts) {
         super(backend, opts)
@@ -28,7 +30,16 @@ class TableTestConverter extends AbstractConverter {
         String result = node.doctitle.toUpperCase()
         String content = node.content
         if (content && content.trim().length() > 0) {
-            result += NEWLINE * 2 + content
+            result += NEWLINE_2 + content
+        }
+        result
+    }
+
+    Object convertSection(Section section) {
+        String result = "-- ${section.title} --"
+        String content = section.content
+        if (content && content.trim().length() > 0) {
+            result += NEWLINE_2 + content
         }
         result
     }

@@ -17,7 +17,12 @@ class TableConverterTest extends Specification {
         given:
         String document = '''
 = Hello Table
+:attr: a
 
+[chapter]
+== A chapter
+
+.Simple table with single text rows and a header
 [options="header,footer"]
 [cols="<,^,^"]
 |====
@@ -36,6 +41,8 @@ class TableConverterTest extends Specification {
 
         then:
         content.readLines().collect {it - ~/\s+$/ } == '''HELLO TABLE
+
+-- A chapter --
 
                |   Column A    |   Column B
 ---------------+---------------+---------------
