@@ -12,7 +12,11 @@ import org.asciidoctor.ast.AbstractBlock
 ])
 class AnnotatedBlockProcessor extends BlockProcessor {
 
-    AnnotatedBlockProcessor(String blockName) {
+    AnnotatedBlockProcessor() {}
+
+    // This constructor will not be called when registered as a a class
+    // because 2 Strings don't match any known signature.
+    AnnotatedBlockProcessor(String dummyValue, String blockName) {
         super(blockName)
     }
 

@@ -8,8 +8,6 @@ import org.asciidoctor.ast.AbstractBlock
 @Format(regexp = 'manpage:(.*?)\\[(.*?)\\]')
 class AnnotatedRegexpInlineMacroProcessor extends InlineMacroProcessor {
 
-    public static final String RESULT = 'This content is added by this macro!'
-
     AnnotatedRegexpInlineMacroProcessor(String macroName) {
         super(macroName)
     }

@@ -12,7 +12,7 @@ class AnnotatedDocinfoProcessor extends DocinfoProcessor {
     AnnotatedDocinfoProcessor() {}
 
     AnnotatedDocinfoProcessor(LocationType location) {
-        config['location'] = ":${location.name().toLowerCase()}"
+        config['location'] = location.optionValue()
     }
 
     @Override

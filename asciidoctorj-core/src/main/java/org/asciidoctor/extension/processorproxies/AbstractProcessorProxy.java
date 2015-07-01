@@ -6,7 +6,6 @@ import org.asciidoctor.extension.Contexts;
 import org.asciidoctor.extension.DefaultAttribute;
 import org.asciidoctor.extension.DefaultAttributes;
 import org.asciidoctor.extension.Format;
-import org.asciidoctor.extension.FormatType;
 import org.asciidoctor.extension.Location;
 import org.asciidoctor.extension.Name;
 import org.asciidoctor.extension.PositionalAttributes;
@@ -17,10 +16,15 @@ import org.jruby.RubyClass;
 import org.jruby.RubyHash;
 import org.jruby.RubyObject;
 import org.jruby.RubyRegexp;
-import org.jruby.RubySymbol;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.jruby.util.RegexpOptions;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
 
@@ -56,6 +60,51 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
     public void setProcessorClass(Class<? extends T> processorClass) {
         this.processorClass = processorClass;
     }
+
+    T instantiateProcessor(Object... args) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        Constructor<T> constructor = findConstructorWithMostMatchingArguments(args);
+        return constructor.newInstance(Arrays.copyOf(args, constructor.getParameterTypes().length));
+    }
+
+    private Constructor<T> findConstructorWithMostMatchingArguments(Object... args) {
+        int numberOfMatchingArguments = -1;
+        Constructor<?> bestConstructor = null;
+        for (Constructor<?> constructor: getProcessorClass().getConstructors()) {
+            int currentNumberOfArguments = constructor.getParameterTypes().length;
+            if (currentNumberOfArguments > numberOfMatchingArguments && isConstructorCandidate(constructor, args)) {
+                numberOfMatchingArguments = currentNumberOfArguments;
+                bestConstructor = constructor;
+            }
+        }
+        if (bestConstructor != null) {
+            return (Constructor<T>) bestConstructor;
+        } else {
+            List<Class<?>> expectedTypes = new ArrayList<Class<?>>(args.length);
+            for (Object arg: args) {
+                if (arg == null) {
+                    expectedTypes.add(Void.class);
+                } else {
+                    expectedTypes.add(arg.getClass());
+                }
+            }
+            throw new IllegalArgumentException(
+                    "Processor class " + getProcessorClass() + " does not provide a constructor accepting " + expectedTypes);
+        }
+    }
+
+    private boolean isConstructorCandidate(Constructor<?> constructor, Object... args) {
+        if (constructor.getParameterTypes().length > args.length) {
+            return false;
+        }
+        Class<?>[] constructorParameterTypes = constructor.getParameterTypes();
+        for (int i = 0; i < constructorParameterTypes.length; i++) {
+            if (args[i] != null && !constructorParameterTypes[i].isAssignableFrom(args[i].getClass())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public void finalizeJavaConfig() {
         getProcessor().setConfigFinalized();

@@ -25,6 +25,10 @@ public abstract class InlineMacroProcessor extends MacroProcessor {
      */
     public static final String REGEXP = "regexp";
 
+    public InlineMacroProcessor() {
+        this(null);
+    }
+
     public InlineMacroProcessor(String macroName) {
         this(macroName, new HashMap<String, Object>());
     }

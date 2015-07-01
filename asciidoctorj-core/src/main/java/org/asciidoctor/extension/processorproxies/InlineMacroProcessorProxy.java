@@ -91,12 +91,13 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
             // because the accessor is routed to the Java Processor.config
             getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
         } else {
+            String macroName = RubyUtils.rubyToJava(getRuntime(), args[0], String.class);
             // First create only the instance passing in the block name
-            setProcessor(
-                    getProcessorClass()
-                            .getConstructor(String.class)
-                            .newInstance(
-                                    RubyUtils.rubyToJava(getRuntime(), args[0], String.class)));
+            setProcessor(instantiateProcessor(macroName));
+
+            if (getProcessor().getName() == null) {
+                getProcessor().setName(macroName);
+            }
 
             // Then create the config hash that may contain config options defined in the Java constructor
             RubyHash config = RubyHashUtil.convertMapToRubyHashWithSymbols(context.getRuntime(), getProcessor().getConfig());

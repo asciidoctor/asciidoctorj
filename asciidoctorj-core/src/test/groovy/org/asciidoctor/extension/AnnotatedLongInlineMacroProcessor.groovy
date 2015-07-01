@@ -9,13 +9,8 @@ import org.asciidoctor.ast.AbstractBlock
 @PositionalAttributes(['section', 'subsection'])
 class AnnotatedLongInlineMacroProcessor extends InlineMacroProcessor {
 
-    public static final String RESULT = 'This content is added by this macro!'
     public static final String SUBSECTION = 'subsection'
     public static final String SECTION = 'section'
-
-    AnnotatedLongInlineMacroProcessor(String macroName) {
-        super(macroName)
-    }
 
     @Override
     Object process(AbstractBlock parent, String target, Map<String, Object> attributes) {
