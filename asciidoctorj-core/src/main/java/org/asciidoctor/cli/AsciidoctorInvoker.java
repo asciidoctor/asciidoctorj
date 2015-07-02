@@ -40,8 +40,8 @@ public class AsciidoctorInvoker {
             
             if (asciidoctorCliOptions.isVersion()) {
                 System.out.println("Asciidoctor " + asciidoctor.asciidoctorVersion() + " [http://asciidoctor.org]");
-                System.out.println("JRuby : " + JRubyRuntimeContext.get(asciidoctor).evalScriptlet("JRUBY_VERSION"));
-                System.out.println("Ruby compat version: " + JRubyRuntimeContext.get(asciidoctor).evalScriptlet("RUBY_VERSION"));
+                Object rubyVersionString = JRubyRuntimeContext.get(asciidoctor).evalScriptlet("\"#{JRUBY_VERSION} (#{RUBY_VERSION})\"");
+                System.out.println("Runtime Environment: jruby " + rubyVersionString);
                 return;
             }
             
