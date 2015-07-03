@@ -11,10 +11,6 @@ public class NumberLinesPreprocessor extends Preprocessor {
 
 	public NumberLinesPreprocessor() {}
 
-	public NumberLinesPreprocessor(Map<String, Object> config) {
-		super(config);
-	}
-
 	@Override
 	public PreprocessorReader process(DocumentRuby document,
 			PreprocessorReader reader) {

@@ -20,6 +20,7 @@ import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class BlockMacroProcessorProxy extends AbstractMacroProcessorProxy<BlockMacroProcessor> {
@@ -79,7 +80,7 @@ public class BlockMacroProcessorProxy extends AbstractMacroProcessorProxy<BlockM
         } else {
             // First create only the instance passing in the name
             String macroName = RubyUtils.rubyToJava(getRuntime(), args[0], String.class);
-            setProcessor(instantiateProcessor(macroName));
+            setProcessor(instantiateProcessor(macroName, new HashMap<String, Object>()));
 
             if (getProcessor().getName() == null) {
                 getProcessor().setName(macroName);

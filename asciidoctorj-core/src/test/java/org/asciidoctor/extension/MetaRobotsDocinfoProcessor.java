@@ -6,10 +6,6 @@ import java.util.Map;
 
 public class MetaRobotsDocinfoProcessor extends DocinfoProcessor {
 
-    public MetaRobotsDocinfoProcessor() {
-        super();
-    }
-
     public MetaRobotsDocinfoProcessor(Map<String, Object> config) {
         super(config);
     }
