@@ -1689,10 +1689,10 @@ Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 When starting AsciidoctorJ via the CLI these options can be defined in the files `.jrubyrc` that are loaded from the current working directory and the home directory of the user.
 
 ----
-> cat ./.jrubyrc
+$ cat ./.jrubyrc
 compat.version=RUBY1_9
 compile.mode=OFF
-> ./asciidoctorj -V
+$ ./asciidoctorj -V
 AsciidoctorJ 1.5.2 [http://asciidoctor.org]
 Runtime Environment: jruby 1.7.20 (1.9.3)
 ----
@@ -1700,6 +1700,15 @@ Runtime Environment: jruby 1.7.20 (1.9.3)
 [NOTE]
 The properties in these `.jrubyrc` files do not contain the prefix `jruby.`. 
 The property values also must not have trailing blanks!
+
+Alternatively you can also set any system properties using the environment variable `ASCIIDOCTORJ_OPTS`:
+
+----
+$ export ASCIIDOCTORJ_OPTS=-Djruby.compat.version=RUBY1_9
+$ asciidoctorj -V
+AsciidoctorJ 1.5.2 [http://asciidoctor.org]
+Runtime Environment: jruby 1.7.20 (1.9.3)
+----
 
 The Java flags available for improving start time depend on whether your working on a 32- or 64-bit processor and your JDK version.
 Let's see a summary of these flags and in which environments they can be used.
