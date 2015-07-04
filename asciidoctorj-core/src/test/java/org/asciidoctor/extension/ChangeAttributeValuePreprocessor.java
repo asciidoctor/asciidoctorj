@@ -6,8 +6,6 @@ import java.util.Map;
 
 public class ChangeAttributeValuePreprocessor extends Preprocessor {
 
-	public ChangeAttributeValuePreprocessor() {}
-
 	public ChangeAttributeValuePreprocessor(Map<String, Object> config) {
 		super(config);
 	}

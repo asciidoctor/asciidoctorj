@@ -8,8 +8,6 @@ import java.util.Map;
 
 public class CustomFooterPostProcessor extends Postprocessor {
 
-    public CustomFooterPostProcessor() {}
-
     public CustomFooterPostProcessor(Map<String, Object> config) {
         super(config);
     }
