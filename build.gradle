@@ -183,6 +183,6 @@ subprojects {
 
 // disable bintrayUpload on root project to prevent build from failing
 // NOTE seems to only get added when we use the modern plugin syntax
-if (tasks.findByName(':bintrayUpload')) {
+if (tasks.findByName('bintrayUpload')) {
   bintrayUpload.enabled = false
 }
