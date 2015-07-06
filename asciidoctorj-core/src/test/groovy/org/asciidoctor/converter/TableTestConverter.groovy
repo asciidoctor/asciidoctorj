@@ -48,7 +48,7 @@ class TableTestConverter extends AbstractConverter {
 
         Closure cellFormatter = { Cell cell ->
             if (cell.style == 'asciidoc') {
-                cell.content.toString().padRight(COLWIDTH)
+                cell.innerDocument.convert().padRight(COLWIDTH)
             } else {
                 switch (cell.column.horizontalAlignment) {
                     case Table.HorizontalAlignment.LEFT:

@@ -2,12 +2,16 @@ package org.asciidoctor.extension
 
 import groovy.json.JsonSlurper
 import org.asciidoctor.ast.AbstractBlock
+import org.asciidoctor.ast.Cell
 import org.asciidoctor.ast.Column
+import org.asciidoctor.ast.DocumentRuby
 import org.asciidoctor.ast.Row
 import org.asciidoctor.ast.Table
 import org.asciidoctor.util.TestHttpServer
 
 class GithubContributorsBlockMacro extends BlockMacroProcessor {
+
+    private static final String IMAGE = 'image'
 
     GithubContributorsBlockMacro(String macroName) {
         super(macroName)
@@ -26,12 +30,14 @@ class GithubContributorsBlockMacro extends BlockMacroProcessor {
         table.title = "Github contributors of $target"
 
         // Create the columns 'Login' and 'Contributions'
-        Column loginColumn = createTableColumn(table, 0)
-        Column contributionsColumn = createTableColumn(table, 1)
+        Column avatarColumn = createTableColumn(table, 0)
+        Column loginColumn = createTableColumn(table, 1)
+        Column contributionsColumn = createTableColumn(table, 2)
         contributionsColumn.setHorizontalAlignment(Table.HorizontalAlignment.CENTER)
 
         // Create the single header row with the column titles
         Row headerRow = createTableRow(table)
+        headerRow.cells << createTableCell(avatarColumn, 'Avatar')
         headerRow.cells << createTableCell(loginColumn, 'Login')
         headerRow.cells << createTableCell(loginColumn, 'Contributions')
         table.header << headerRow
@@ -39,6 +45,11 @@ class GithubContributorsBlockMacro extends BlockMacroProcessor {
         // for each contributor create a cell with the login and the number of contributions
         contributors.each { contributor ->
             Row row = createTableRow(table)
+
+            DocumentRuby document = createDocument(parent.getDocument())
+            document.blocks << createBlock(document, IMAGE, null, ['type': IMAGE, 'target': contributor.avatar_url])
+            Cell avatarCell = createTableCell(loginColumn, document)
+            row.cells << avatarCell
             row.cells << createTableCell(loginColumn, contributor.login)
             row.cells << createTableCell(contributionsColumn, contributor.contributions as String)
             table.body << row

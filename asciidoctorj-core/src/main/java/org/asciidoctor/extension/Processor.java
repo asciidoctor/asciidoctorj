@@ -75,8 +75,6 @@ public class Processor {
 
     protected Map<String, Object> config;
 
-    protected Ruby rubyRuntime;
-
     /**
      * The config map must not be reset once configFinalized is true.
      * With the Asciidoctor Ruby implementation this flag will be set to
@@ -158,6 +156,17 @@ public class Processor {
         return createTableCell(column, text, new HashMap<String, Object>());
     }
 
+    public Cell createTableCell(Column column, DocumentRuby innerDocument) {
+        return createTableCell(column, innerDocument, new HashMap<String, Object>());
+    }
+
+    public Cell createTableCell(Column column, DocumentRuby innerDocument, Map<String, Object> attributes) {
+        Cell cell = createTableCell(column, (String) null, attributes);
+        cell.setStyle("asciidoc");
+        cell.setInnerDocument(innerDocument);
+        return cell;
+    }
+
     public Cell createTableCell(Column column, String text, Map<String, Object> attributes) {
         Ruby rubyRuntime = getRubyRuntimeFromNode(column);
 
@@ -166,7 +175,7 @@ public class Processor {
 
         IRubyObject[] parameters = {
                 ((ColumnImpl) column).getRubyObject(),
-                rubyRuntime.newString(text),
+                text != null ? rubyRuntime.newString(text) : rubyRuntime.getNil(),
                 rubyAttributes}; // No cursor parameter yet
 
         return (Cell) NodeConverter.createASTNode(rubyRuntime, TABLE_CELL_CLASS, parameters);
@@ -273,6 +282,21 @@ public class Processor {
         return (Block) NodeConverter.createASTNode(rubyRuntime, BLOCK_CLASS, parameters);
     }
 
+    /**
+     * Creates an inner document for the given parent document.
+     * Inner documents are used for tables cells with style {@code asciidoc}.
+     * @param parentDocument The parent document of the new document.
+     * @return A new inner document.
+     */
+    public DocumentRuby createDocument(DocumentRuby parentDocument) {
+        Ruby runtime = getRubyRuntimeFromNode(parentDocument);
+        RubyHash options = RubyHash.newHash(runtime);
+        options.put(
+                runtime.newSymbol("parent"),
+                ((Document) parentDocument).getRubyObject());
+
+        return (DocumentRuby) NodeConverter.createASTNode(runtime, DOCUMENT_CLASS, runtime.getNil(), options);
+    }
 
 
     private Ruby getRubyRuntimeFromNode(AbstractNode node) {
