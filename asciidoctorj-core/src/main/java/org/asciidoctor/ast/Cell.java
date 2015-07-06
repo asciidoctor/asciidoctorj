@@ -61,4 +61,16 @@ public interface Cell extends AbstractNode {
      */
     void setVerticalAlignment(Table.VerticalAlignment valign);
 
+    /**
+     * If the style of a cell is {@code asciidoc} the content of the cell is an inner document.
+     * This method returns this inner document.
+     * @return The inner document if the cell style is {@code asciidoc}
+     */
+    DocumentRuby getInnerDocument();
+
+    /**
+     * @see {@link #getInnerDocument()}
+     */
+    void setInnerDocument(DocumentRuby document);
+
 }

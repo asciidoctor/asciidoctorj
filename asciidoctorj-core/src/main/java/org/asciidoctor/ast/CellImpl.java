@@ -63,4 +63,14 @@ public class CellImpl extends AbstractNodeImpl implements Cell {
         setAttr("valign", valign.name().toLowerCase(), true);
     }
 
+    @Override
+    public DocumentRuby getInnerDocument() {
+        return (DocumentRuby) NodeConverter.createASTNode(getRubyProperty("inner_document"));
+    }
+
+    @Override
+    public void setInnerDocument(DocumentRuby document) {
+        setRubyProperty("@inner_document", ((Document) document).getRubyObject());
+    }
+
 }

@@ -2,7 +2,7 @@
   {
     "login": "alice",
     "id": 1,
-    "avatar_url": "https://avatars.githubusercontent.com/u/1517153?v=3",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1?v=3",
     "gravatar_id": "",
     "url": "https://api.github.com/users/alice",
     "html_url": "https://github.com/alice",
@@ -22,7 +22,7 @@
   {
     "login": "bob",
     "id": 2,
-    "avatar_url": "https://avatars.githubusercontent.com/u/79351?v=3",
+    "avatar_url": "https://avatars.githubusercontent.com/u/2?v=3",
     "gravatar_id": "",
     "url": "https://api.github.com/users/bob",
     "html_url": "https://github.com/bob",
@@ -42,7 +42,7 @@
   {
     "login": "charlie",
     "id": 3,
-    "avatar_url": "https://avatars.githubusercontent.com/u/1163662?v=3",
+    "avatar_url": "https://avatars.githubusercontent.com/u/3?v=3",
     "gravatar_id": "",
     "url": "https://api.github.com/users/charlie",
     "html_url": "https://github.com/charlie",
