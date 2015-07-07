@@ -29,4 +29,11 @@ public interface AbstractBlock extends AbstractNode {
     String convert();
     List<AbstractBlock> findBy(Map<Object, Object> selector);
     int getLevel();
+
+    /**
+     * Returns the source location of this block.
+     * This information is only available if the {@code sourcemap} option is enabled when loading or rendering the document.
+     * @return the source location of this block or {@code null} if the {@code sourcemap} option is not enabled when loading the document.
+     */
+    Cursor getSourceLocation();
 }

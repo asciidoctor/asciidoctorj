@@ -232,4 +232,30 @@ public class WhenAsciiDocIsRenderedToDocument {
         assertThat(document.getAttributes().get(attributeName), is(attributeValue));
     }
 
+    @Test
+    public void should_be_able_to_get_source_location() {
+        // Given
+        File file = classpath.getResource("sourcelocation.adoc");
+
+        // When
+        Document document = asciidoctor.loadFile(file, OptionsBuilder.options().option("sourcemap", "true").asMap());
+        Map<Object, Object> selector = new HashMap<Object, Object>();
+        selector.put("context", ":paragraph");
+        List<AbstractBlock> findBy = document.findBy(selector);
+        AbstractBlock block = findBy.get(0);
+
+        // Then
+        AbstractBlock block1 = findBy.get(0);
+        assertThat(block1.getSourceLocation().getLineNumber(), is(3));
+        assertThat(block1.getSourceLocation().getPath(), is(file.getName()));
+        assertThat(block1.getSourceLocation().getFile(), is(file.getName()));
+        assertThat(block1.getSourceLocation().getDir(), is(file.getParent().replaceAll("\\\\", "/")));
+
+        AbstractBlock block2 = findBy.get(1);
+        assertThat(block2.getSourceLocation().getLineNumber(), is(8));
+        assertThat(block2.getSourceLocation().getPath(), is(file.getName()));
+        assertThat(block2.getSourceLocation().getFile(), is(file.getName()));
+        assertThat(block2.getSourceLocation().getDir(), is(file.getParent().replaceAll("\\\\", "/")));
+    }
+
 }

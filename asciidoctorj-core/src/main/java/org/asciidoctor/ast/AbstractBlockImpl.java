@@ -74,6 +74,15 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     }
 
     @Override
+    public Cursor getSourceLocation() {
+        IRubyObject object = getRubyProperty("source_location");
+        if (object == null || object.isNil()) {
+            return null;
+        }
+        return new CursorImpl(object);
+    }
+
+    @Override
     public List<AbstractBlock> findBy(Map<Object, Object> selector) {
 
         RubyArray rubyBlocks = (RubyArray) getRubyProperty("find_by", RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime,

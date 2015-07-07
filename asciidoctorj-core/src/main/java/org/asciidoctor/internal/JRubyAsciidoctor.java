@@ -18,12 +18,9 @@ import org.asciidoctor.converter.internal.ConverterRegistryExecutor;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.extension.internal.ExtensionRegistryExecutor;
-import org.jruby.CompatVersion;
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
 import org.jruby.RubyInstanceConfig;
-import org.jruby.RubyInstanceConfig.CompileMode;
-import org.jruby.embed.ScriptingContainer;
 import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
 
@@ -567,7 +564,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
     @Override
     public Document loadFile(File file, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        return (Document) NodeConverter.createASTNode(this.asciidoctorModule.load(file.getAbsolutePath(), rubyHash));
+        return (Document) NodeConverter.createASTNode(this.asciidoctorModule.load_file(file.getAbsolutePath(), rubyHash));
 
     }
 }
