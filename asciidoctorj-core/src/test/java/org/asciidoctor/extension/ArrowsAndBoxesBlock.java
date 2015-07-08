@@ -1,12 +1,10 @@
 package org.asciidoctor.extension;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.Document;
 
 public class ArrowsAndBoxesBlock extends BlockProcessor {
 
@@ -15,7 +13,7 @@ public class ArrowsAndBoxesBlock extends BlockProcessor {
 //        config.put("content_model", ":simple");
 //    }
 
-    public ArrowsAndBoxesBlock(String context, DocumentRuby documentRuby) {
+    public ArrowsAndBoxesBlock(String context, Document document) {
         //super(context, documentRuby);
         super(null, null);
     }

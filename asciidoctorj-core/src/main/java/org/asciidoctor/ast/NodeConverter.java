@@ -93,7 +93,7 @@ public final class NodeConverter {
                     ret = new SectionImpl(rubyObject);
                     break;
                 case DOCUMENT_CLASS:
-                    ret = new Document(rubyObject);
+                    ret = new DocumentImpl(rubyObject);
                     break;
                 case INLINE_CLASS:
                     ret = new InlineImpl(rubyObject);

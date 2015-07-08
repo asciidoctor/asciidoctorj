@@ -1,6 +1,6 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.Document;
 
 import java.util.Map;
 
@@ -12,7 +12,7 @@ public class NumberLinesPreprocessor extends Preprocessor {
 	public NumberLinesPreprocessor() {}
 
 	@Override
-	public PreprocessorReader process(DocumentRuby document,
+	public PreprocessorReader process(Document document,
 			PreprocessorReader reader) {
 
 		assertThat(reader.getLineno(), is(1));

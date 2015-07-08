@@ -30,8 +30,8 @@ public interface AbstractNode {
     /**
      * @deprecated Use {@linkplain #getDocument()}  instead.
      */
-    DocumentRuby document();
-    DocumentRuby getDocument();
+    Document document();
+    Document getDocument();
     boolean isInline();
     boolean isBlock();
     Map<String, Object> getAttributes();

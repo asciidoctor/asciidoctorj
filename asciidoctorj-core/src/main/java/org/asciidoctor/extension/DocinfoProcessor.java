@@ -1,6 +1,6 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.Document;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +15,6 @@ public abstract class DocinfoProcessor extends Processor {
         super(config);
     }
 
-    public abstract String process(DocumentRuby document);
+    public abstract String process(Document document);
 
 }

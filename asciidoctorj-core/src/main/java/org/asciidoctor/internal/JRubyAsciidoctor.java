@@ -9,7 +9,6 @@ import org.asciidoctor.ast.AbstractBlock;
 import org.asciidoctor.ast.ContentPart;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
-import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.ast.Title;
@@ -136,19 +135,19 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return rubyRuntime;
     }
 
-    private DocumentHeader toDocumentHeader(DocumentRuby documentRuby) {
+    private DocumentHeader toDocumentHeader(Document document) {
 
-        Document document = (Document) NodeConverter.createASTNode(documentRuby);
+        Document documentImpl = (Document) NodeConverter.createASTNode(document);
 
-        return DocumentHeader.createDocumentHeader((Title) document.getStructuredDoctitle(), document.getDoctitle(),
-                document.getAttributes());
+        return DocumentHeader.createDocumentHeader((Title) documentImpl.getStructuredDoctitle(), documentImpl.getDoctitle(),
+                documentImpl.getAttributes());
     }
 
-    private StructuredDocument toDocument(DocumentRuby documentRuby, Ruby rubyRuntime, int maxDeepLevel) {
+    private StructuredDocument toDocument(Document document, Ruby rubyRuntime, int maxDeepLevel) {
 
-        Document document = (Document) NodeConverter.createASTNode(documentRuby);
-        List<ContentPart> contentParts = getContents(document.getBlocks(), 1, maxDeepLevel);
-        return StructuredDocument.createStructuredDocument(toDocumentHeader(document), contentParts);
+        Document documentImpl = (Document) NodeConverter.createASTNode(document);
+        List<ContentPart> contentParts = getContents(documentImpl.getBlocks(), 1, maxDeepLevel);
+        return StructuredDocument.createStructuredDocument(toDocumentHeader(documentImpl), contentParts);
     }
 
     private List<ContentPart> getContents(List<AbstractBlock> blocks, int level, int maxDeepLevel) {
@@ -192,10 +191,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        DocumentRuby documentRuby = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
+        Document document = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
         int maxDeepLevel = options.containsKey(STRUCTURE_MAX_LEVEL) ? (Integer) (options.get(STRUCTURE_MAX_LEVEL))
                 : DEFAULT_MAX_LEVEL;
-        return toDocument(documentRuby, rubyRuntime, maxDeepLevel);
+        return toDocument(document, rubyRuntime, maxDeepLevel);
     }
 
     @SuppressWarnings("unchecked")
@@ -206,10 +205,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
-        DocumentRuby documentRuby = this.asciidoctorModule.load(content, rubyHash);
+        Document document = this.asciidoctorModule.load(content, rubyHash);
         int maxDeepLevel = options.containsKey(STRUCTURE_MAX_LEVEL) ? (Integer) (options.get(STRUCTURE_MAX_LEVEL))
                 : DEFAULT_MAX_LEVEL;
-        return toDocument(documentRuby, rubyRuntime, maxDeepLevel);
+        return toDocument(document, rubyRuntime, maxDeepLevel);
     }
 
     @Override
@@ -224,8 +223,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = getParseHeaderOnlyOption();
 
-        DocumentRuby documentRuby = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
-        return toDocumentHeader(documentRuby);
+        Document document = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
+        return toDocumentHeader(document);
     }
 
     @SuppressWarnings("unchecked")
@@ -234,8 +233,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = getParseHeaderOnlyOption();
 
-        DocumentRuby documentRuby = this.asciidoctorModule.load(content, rubyHash);
-        return toDocumentHeader(documentRuby);
+        Document document = this.asciidoctorModule.load(content, rubyHash);
+        return toDocumentHeader(document);
     }
 
     @Override

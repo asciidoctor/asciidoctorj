@@ -238,7 +238,7 @@ public class WhenAsciiDocIsRenderedToDocument {
         File file = classpath.getResource("sourcelocation.adoc");
 
         // When
-        Document document = asciidoctor.loadFile(file, OptionsBuilder.options().option("sourcemap", "true").asMap());
+        Document document = asciidoctor.loadFile(file, OptionsBuilder.options().option("sourcemap", "true").docType("book").asMap());
         Map<Object, Object> selector = new HashMap<Object, Object>();
         selector.put("context", ":paragraph");
         List<AbstractBlock> findBy = document.findBy(selector);

@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
  *
  *     public static final String META_TAG = "&lt;meta name=\"robots\" content=\"index, follow\"/&gt;";
  *
- *     public String process(DocumentRuby document) {
+ *     public String process(Document document) {
  *         return META_TAG;
  *     }
  * }

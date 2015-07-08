@@ -1,11 +1,6 @@
 package org.asciidoctor.converter;
 
-import org.asciidoctor.ast.AbstractBlock;
 import org.asciidoctor.ast.AbstractNode;
-import org.asciidoctor.ast.DocumentRuby;
-import org.asciidoctor.ast.ListItem;
-import org.asciidoctor.ast.ListNode;
-import org.asciidoctor.ast.Section;
 
 import java.util.Map;
 

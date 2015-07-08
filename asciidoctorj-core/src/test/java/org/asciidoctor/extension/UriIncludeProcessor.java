@@ -11,7 +11,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
 
-import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.util.TestHttpServer;
 
 public class UriIncludeProcessor extends IncludeProcessor {
@@ -28,7 +28,7 @@ public class UriIncludeProcessor extends IncludeProcessor {
     }
 
     @Override
-    public void process(DocumentRuby document, PreprocessorReader reader, String target,
+    public void process(Document document, PreprocessorReader reader, String target,
             Map<String, Object> attributes) {
 
         StringBuilder content = readContent(target);

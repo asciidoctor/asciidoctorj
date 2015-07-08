@@ -1,6 +1,6 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.Document;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
@@ -13,7 +13,7 @@ public class CustomFooterPostProcessor extends Postprocessor {
     }
 
     @Override
-    public String process(DocumentRuby document, String output) {
+    public String process(Document document, String output) {
         
         String copyright  = "Copyright Acme, Inc.";
         
