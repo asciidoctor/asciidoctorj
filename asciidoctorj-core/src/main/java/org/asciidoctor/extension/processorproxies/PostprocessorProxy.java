@@ -1,8 +1,6 @@
 package org.asciidoctor.extension.processorproxies;
 
-import org.asciidoctor.ast.AbstractNodeImpl;
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.Postprocessor;
 import org.asciidoctor.internal.RubyHashMapDecorator;
@@ -12,7 +10,6 @@ import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyHash;
 import org.jruby.anno.JRubyMethod;
-import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Block;
 import org.jruby.runtime.Helpers;
 import org.jruby.runtime.ObjectAllocator;
@@ -97,7 +94,7 @@ public class PostprocessorProxy extends AbstractProcessorProxy<Postprocessor> {
     @JRubyMethod(name = "process", required = 2)
     public IRubyObject process(ThreadContext context, IRubyObject document, IRubyObject output) {
         Object o = getProcessor().process(
-                (DocumentRuby) NodeConverter.createASTNode(document),
+                (Document) NodeConverter.createASTNode(document),
                 RubyUtils.rubyToJava(getRuntime(), output, String.class));
 
         return convertProcessorResult(o);

@@ -2,12 +2,10 @@ package org.asciidoctor.internal;
 
 import java.util.Map;
 
-import org.asciidoctor.ast.DocumentRuby;
-import org.asciidoctor.converter.Converter;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.*;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
-import org.jruby.RubyHash;
 
 
 public interface AsciidoctorModule {
@@ -50,8 +48,8 @@ public interface AsciidoctorModule {
     Object convert(String content, Map<String, Object> options);
     Object convertFile(String filename, Map<String, Object> options);
 
-    DocumentRuby load_file(String filename, Map<String, Object> options);
-    DocumentRuby load(String content, Map<String, Object> options);
+    Document load_file(String filename, Map<String, Object> options);
+    Document load(String content, Map<String, Object> options);
 
     void register_converter(RubyClass converter);
     void register_converter(RubyClass converter, String[] backends);

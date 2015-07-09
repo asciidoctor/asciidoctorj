@@ -2,7 +2,7 @@ package org.asciidoctor.converter
 
 import org.asciidoctor.ast.AbstractNode
 import org.asciidoctor.ast.Cell
-import org.asciidoctor.ast.DocumentRuby
+import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.Section
 import org.asciidoctor.ast.Table
 
@@ -26,7 +26,7 @@ class TableTestConverter extends AbstractConverter {
         this."convert${transform.capitalize()}"(node)
     }
 
-    Object convertEmbedded(DocumentRuby node) {
+    Object convertEmbedded(Document node) {
         String result = node.doctitle.toUpperCase()
         String content = node.content
         if (content && content.trim().length() > 0) {

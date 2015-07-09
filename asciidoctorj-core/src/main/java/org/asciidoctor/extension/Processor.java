@@ -156,11 +156,11 @@ public class Processor {
         return createTableCell(column, text, new HashMap<String, Object>());
     }
 
-    public Cell createTableCell(Column column, DocumentRuby innerDocument) {
+    public Cell createTableCell(Column column, Document innerDocument) {
         return createTableCell(column, innerDocument, new HashMap<String, Object>());
     }
 
-    public Cell createTableCell(Column column, DocumentRuby innerDocument, Map<String, Object> attributes) {
+    public Cell createTableCell(Column column, Document innerDocument, Map<String, Object> attributes) {
         Cell cell = createTableCell(column, (String) null, attributes);
         cell.setStyle("asciidoc");
         cell.setInnerDocument(innerDocument);
@@ -288,14 +288,14 @@ public class Processor {
      * @param parentDocument The parent document of the new document.
      * @return A new inner document.
      */
-    public DocumentRuby createDocument(DocumentRuby parentDocument) {
+    public Document createDocument(Document parentDocument) {
         Ruby runtime = getRubyRuntimeFromNode(parentDocument);
         RubyHash options = RubyHash.newHash(runtime);
         options.put(
                 runtime.newSymbol("parent"),
-                ((Document) parentDocument).getRubyObject());
+                ((DocumentImpl) parentDocument).getRubyObject());
 
-        return (DocumentRuby) NodeConverter.createASTNode(runtime, DOCUMENT_CLASS, runtime.getNil(), options);
+        return (Document) NodeConverter.createASTNode(runtime, DOCUMENT_CLASS, runtime.getNil(), options);
     }
 
 

@@ -4,7 +4,7 @@ import groovy.json.JsonSlurper
 import org.asciidoctor.ast.AbstractBlock
 import org.asciidoctor.ast.Cell
 import org.asciidoctor.ast.Column
-import org.asciidoctor.ast.DocumentRuby
+import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.Row
 import org.asciidoctor.ast.Table
 import org.asciidoctor.util.TestHttpServer
@@ -46,7 +46,7 @@ class GithubContributorsBlockMacro extends BlockMacroProcessor {
         contributors.each { contributor ->
             Row row = createTableRow(table)
 
-            DocumentRuby document = createDocument(parent.getDocument())
+            Document document = createDocument(parent.getDocument())
             document.blocks << createBlock(document, IMAGE, null, ['type': IMAGE, 'target': contributor.avatar_url])
             Cell avatarCell = createTableCell(loginColumn, document)
             row.cells << avatarCell

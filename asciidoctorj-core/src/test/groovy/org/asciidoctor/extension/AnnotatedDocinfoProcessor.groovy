@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import groovy.transform.CompileStatic
-import org.asciidoctor.ast.DocumentRuby
+import org.asciidoctor.ast.Document
 
 @CompileStatic
 @Location(LocationType.FOOTER)
@@ -16,7 +16,7 @@ class AnnotatedDocinfoProcessor extends DocinfoProcessor {
     }
 
     @Override
-    String process(DocumentRuby document) {
+    String process(Document document) {
         META_TAG
     }
 }

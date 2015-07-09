@@ -1,55 +1,61 @@
 package org.asciidoctor.ast;
 
+import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.internal.RubyHashUtil;
-import org.jruby.Ruby;
-import org.jruby.RubyBoolean;
-import org.jruby.RubyHash;
-import org.jruby.RubyString;
-import org.jruby.RubySymbol;
-import org.jruby.runtime.builtin.IRubyObject;
+public interface Document extends AbstractBlock {
 
-public class Document extends AbstractBlockImpl implements DocumentRuby {
+    /**
+     * @return The Title structure for this document.
+     * @see Title
+     */
+    Title getStructuredDoctitle();
 
-    public Document(IRubyObject documentRuby) {
-        super(documentRuby);
-    }
+    /**
+     * @return The title as a String.
+     * @see Title
+     */
+    String getDoctitle();
 
-    @Override
-    public boolean isBasebackend(String backend) {
-        return getBoolean("basebackend?", backend);
-    }
+    /**
+     * @deprecated Please use {@link #getDoctitle()}
+     * @return The title as a String.
+     * @see Title
+     */
+    String doctitle();
 
-    @Override
-    public boolean basebackend(String backend) {
-        return isBasebackend(backend);
-    }
+    /**
+     * 
+     * @return page title
+     */
+    String title();
 
-    @Override
-    public Map<Object, Object> getOptions() {
-        return RubyHashUtil.convertRubyHashMapToMap((RubyHash) getRubyProperty("options"));
-    }
+    /**
+     * 
+     * @return attributes defined in document
+     */
+    Map<String, Object> getAttributes();
 
-    @Override
-    public Title getStructuredDoctitle() {
-        Ruby runtime = getRubyObject().getRuntime();
-        RubyHash options = RubyHash.newHash(runtime);
-        RubySymbol partitioned = RubySymbol.newSymbol(runtime, "partition");
-        options.put(partitioned, RubyBoolean.newBoolean(runtime, true));
+    /**
+     * @return basebackend attribute value
+     */
+    boolean isBasebackend(String backend);
 
-        Object doctitle = getRubyProperty("doctitle", options);
+    /**
+     * @deprecated Please use {@link #isBasebackend(String)}
+     * @return basebackend attribute value
+     */
+    boolean basebackend(String backend);
 
-        return toJava((IRubyObject) doctitle, Title.class);
+    /**
+     *
+     * @return blocks contained within current Document.
+     */
+    List<AbstractBlock> blocks();
 
-    }
-
-    public String getDoctitle() {
-        return getString("doctitle");
-    }
-
-    public String doctitle() {
-        return getDoctitle();
-    }
-
+    /**
+     *
+     * @return options defined in document.
+     */
+    Map<Object, Object> getOptions();
 }

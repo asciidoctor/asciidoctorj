@@ -64,13 +64,13 @@ public class CellImpl extends AbstractNodeImpl implements Cell {
     }
 
     @Override
-    public DocumentRuby getInnerDocument() {
-        return (DocumentRuby) NodeConverter.createASTNode(getRubyProperty("inner_document"));
+    public Document getInnerDocument() {
+        return (Document) NodeConverter.createASTNode(getRubyProperty("inner_document"));
     }
 
     @Override
-    public void setInnerDocument(DocumentRuby document) {
-        setRubyProperty("@inner_document", ((Document) document).getRubyObject());
+    public void setInnerDocument(Document document) {
+        setRubyProperty("@inner_document", ((DocumentImpl) document).getRubyObject());
     }
 
 }

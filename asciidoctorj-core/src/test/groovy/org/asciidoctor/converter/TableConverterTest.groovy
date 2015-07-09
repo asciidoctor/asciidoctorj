@@ -17,7 +17,6 @@ class TableConverterTest extends Specification {
         given:
         String document = '''
 = Hello Table
-:attr: a
 
 [chapter]
 == A chapter

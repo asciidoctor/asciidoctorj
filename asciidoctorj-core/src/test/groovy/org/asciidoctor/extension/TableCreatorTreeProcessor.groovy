@@ -3,7 +3,7 @@ package org.asciidoctor.extension
 import groovy.transform.CompileStatic
 import org.asciidoctor.ast.Cell
 import org.asciidoctor.ast.Column
-import org.asciidoctor.ast.DocumentRuby
+import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.Row
 import org.asciidoctor.ast.Table
 
@@ -11,7 +11,7 @@ import org.asciidoctor.ast.Table
 class TableCreatorTreeProcessor extends Treeprocessor {
 
     @Override
-    DocumentRuby process(DocumentRuby document) {
+    Document process(Document document) {
 
         // Create and add the table
         Table table = createTable(document, [:])

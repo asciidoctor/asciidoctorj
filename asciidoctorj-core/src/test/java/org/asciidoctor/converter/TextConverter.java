@@ -2,7 +2,7 @@ package org.asciidoctor.converter;
 
 import org.asciidoctor.ast.AbstractBlock;
 import org.asciidoctor.ast.AbstractNode;
-import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.ListNode;
 import org.asciidoctor.ast.Section;
@@ -27,8 +27,8 @@ public class TextConverter extends AbstractConverter {
             transform = node.getNodeName();
         }
  
-        if (node instanceof DocumentRuby) {
-            DocumentRuby document = (DocumentRuby) node;
+        if (node instanceof Document) {
+            Document document = (Document) node;
             return document.getContent();
         } else if (node instanceof Section) {
             Section section = (Section) node;

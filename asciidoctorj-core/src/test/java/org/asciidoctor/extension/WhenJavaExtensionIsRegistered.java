@@ -5,13 +5,12 @@ import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.ast.DocumentRuby;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.util.ClasspathResources;
 import org.asciidoctor.util.TestHttpServer;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.After;
@@ -65,7 +64,7 @@ public class WhenJavaExtensionIsRegistered {
         }
 
         @Override
-        public void process(DocumentRuby document, PreprocessorReader reader, String target,
+        public void process(Document document, PreprocessorReader reader, String target,
                 Map<String, Object> attributes) {
             StringBuilder content = readContent(target);
             reader.push_include(content.toString(), target, target, 1, attributes);
@@ -117,7 +116,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-uri-include.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
@@ -135,7 +134,7 @@ public class WhenJavaExtensionIsRegistered {
         javaExtensionRegistry.includeProcessor(new IncludeProcessor(new HashMap<String, Object>()) {
 
             @Override
-            public void process(DocumentRuby documentRuby, PreprocessorReader reader, String target,
+            public void process(Document document, PreprocessorReader reader, String target,
                                 Map<String, Object> attributes) {
                 StringBuilder content = readContent(target);
                 reader.push_include(content.toString(), target, target, 1, attributes);
@@ -177,7 +176,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-uri-include.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
@@ -195,7 +194,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("simple.adoc"),
                 options().headerFooter(true).safe(SafeMode.SERVER).toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element metaRobots = doc.getElementsByAttributeValueContaining("name", "robots").first();
         assertThat(metaRobots, is(notNullValue()));
@@ -215,7 +214,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("simple.adoc"),
                 options().headerFooter(true).safe(SafeMode.SERVER).toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element footer = doc.getElementById("footer");
         Element metaRobots = footer.getElementsByAttributeValueContaining("name", "robots").first();
@@ -233,7 +232,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("changeattribute.adoc"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         assertThat(doc.getElementsByTag("p").first().text(), is("sample Alex"));
 
@@ -250,7 +249,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("changeattribute.adoc"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         assertThat(doc.getElementsByTag("p").first().text(), is("sample Alex"));
 
@@ -267,7 +266,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("changeattribute.adoc"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         assertThat(doc.getElementsByTag("p").first().text(), is("sample Alex"));
 
@@ -286,7 +285,7 @@ public class WhenJavaExtensionIsRegistered {
         asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
 
         File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
-        Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
         assertThat(footer.text(), containsString("Copyright Acme, Inc."));
@@ -305,7 +304,7 @@ public class WhenJavaExtensionIsRegistered {
         asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
 
         File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
-        Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
         assertThat(footer.text(), containsString("Copyright Acme, Inc."));
@@ -324,7 +323,7 @@ public class WhenJavaExtensionIsRegistered {
         asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
 
         File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
-        Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
         assertThat(footer.text(), containsString("Copyright Acme, Inc."));
@@ -343,7 +342,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-uri-include.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
@@ -364,7 +363,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-uri-include.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
@@ -385,7 +384,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-uri-include.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
@@ -404,7 +403,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-terminal-command.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
         assertThat(contentElement.text(), is("echo \"Hello, World!\""));
@@ -426,7 +425,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-terminal-command-and-gist-macro.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
         assertThat(contentElement.text(), is("echo \"Hello, World!\""));
@@ -451,7 +450,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-terminal-command.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
         assertThat(contentElement.text(), is("echo \"Hello, World!\""));
@@ -472,7 +471,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-terminal-command.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
         assertThat(contentElement.text(), is("echo \"Hello, World!\""));
@@ -496,7 +495,7 @@ public class WhenJavaExtensionIsRegistered {
         asciidoctor.renderFile(classpath.getResource("arrows-and-boxes-example.ad"), options);
 
         File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
-        Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element arrowsJs = doc.select("script[src=http://www.headjump.de/javascripts/arrowsandboxes.js").first();
         assertThat(arrowsJs, is(notNullValue()));
@@ -520,7 +519,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-gist-macro.ad"), 
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element script = doc.getElementsByTag("script").first();
 
         assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
@@ -537,7 +536,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-gist-macro.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element script = doc.getElementsByTag("script").first();
 
         assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
@@ -554,7 +553,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-gist-macro.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element script = doc.getElementsByTag("script").first();
 
         assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
@@ -574,7 +573,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-gist-macro.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element script = doc.getElementsByTag("script").first();
 
         assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
@@ -591,7 +590,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-man-link.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
         assertThat(link.attr("href"), is("gittutorial.html"));
     }
@@ -607,7 +606,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-man-link.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
         assertThat(link.attr("href"), is("gittutorial.html"));
 
@@ -628,7 +627,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-man-link.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
         assertNotNull(link);
         assertThat(link.attr("href"), is("gittutorial.html"));
@@ -650,7 +649,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-man-link.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
         assertNull(link);
     }
@@ -669,7 +668,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-man-link.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
         assertNotNull(link);
         assertThat(link.attr("href"), is("gittutorial.html"));
@@ -690,7 +689,7 @@ public class WhenJavaExtensionIsRegistered {
         asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
 
         File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
-        Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
         assertThat(footer.text(), not(containsString("Copyright Acme, Inc.")));
@@ -707,7 +706,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-yell-block.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
         assertThat(elements.size(), is(1));
         assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
@@ -724,7 +723,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-yell-block.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
         assertThat(elements.size(), is(1));
         assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
@@ -745,7 +744,7 @@ public class WhenJavaExtensionIsRegistered {
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-yell-block.ad"),
                 options().toFile(false).get());
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
         assertThat(elements.size(), is(1));
         assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
@@ -762,7 +761,7 @@ public class WhenJavaExtensionIsRegistered {
                 classpath.getResource("sample-with-yell-listing-block.ad"),
                 options().toFile(false).get());
 
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
         assertThat(elements.size(), is(1));
         assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
@@ -783,7 +782,7 @@ public class WhenJavaExtensionIsRegistered {
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-yell-listing-block.ad"),
                 options().toFile(false).get());
-        Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
         assertThat(elements.size(), is(1));
         assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));

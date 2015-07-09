@@ -48,13 +48,13 @@ public abstract class AbstractNodeImpl extends RubyObjectWrapper implements Abst
     }
 
     @Override
-    public DocumentRuby document() {
+    public Document document() {
         return getDocument();
     }
 
     @Override
-    public DocumentRuby getDocument() {
-        return (DocumentRuby) NodeConverter.createASTNode(getRubyProperty("document"));
+    public Document getDocument() {
+        return (Document) NodeConverter.createASTNode(getRubyProperty("document"));
     }
 
     @Override

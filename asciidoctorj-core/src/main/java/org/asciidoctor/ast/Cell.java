@@ -66,11 +66,11 @@ public interface Cell extends AbstractNode {
      * This method returns this inner document.
      * @return The inner document if the cell style is {@code asciidoc}
      */
-    DocumentRuby getInnerDocument();
+    Document getInnerDocument();
 
     /**
      * @see {@link #getInnerDocument()}
      */
-    void setInnerDocument(DocumentRuby document);
+    void setInnerDocument(Document document);
 
 }
