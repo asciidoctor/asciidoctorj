@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import static org.hamcrest.CoreMatchers.either;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -143,7 +144,7 @@ public class WhenStructuredDocumentIsRequired {
 					is("link" + (i + 1) + ".html"));
 		}
 		assertThat(document.getPartByStyle("Open").getContent(),
-				startsWith("<div class=\"paragraph text-center\">"));
+				either(startsWith("<div class=\"paragraph text-center\">")).or(startsWith("<div class=\"text-center paragraph\">")));
 	}
 
 	@Test
