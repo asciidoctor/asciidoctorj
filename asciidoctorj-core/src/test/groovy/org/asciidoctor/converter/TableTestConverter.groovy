@@ -13,7 +13,7 @@ class TableTestConverter extends AbstractConverter {
     public static final String NEWLINE = '\n'
     public static final String NEWLINE_2 = NEWLINE * 2
 
-    TableTestConverter(String backend, Map<Object, Object> opts) {
+    TableTestConverter(String backend, Map<String, Object> opts) {
         super(backend, opts)
     }
 

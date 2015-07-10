@@ -52,6 +52,10 @@ public class RubyHashUtil {
 
     public static RubyHash convertMapToRubyHashWithSymbols(Ruby rubyRuntime, Map<String, Object> options) {
 
+        if (options instanceof RubyHashMapDecorator) {
+            return ((RubyHashMapDecorator) options).getRubyHash();
+        }
+
         RubyHash rubyHash = new RubyHash(rubyRuntime);
 
         Set<Entry<String, Object>> optionsSet = options.entrySet();

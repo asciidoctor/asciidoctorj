@@ -9,14 +9,14 @@ import org.asciidoctor.ast.Section;
 
 import java.util.Map;
 
-@ConverterFor(TextConverter.DEFAULT_FORMAT)
+@ConverterFor(value = TextConverter.DEFAULT_FORMAT, suffix = ".txt")
 public class TextConverter extends AbstractConverter {
 
     public static final String DEFAULT_FORMAT = "annotatedtext";
 
     private String LINE_SEPARATOR = "\n";
 
-    public TextConverter(String backend, Map<Object, Object> opts) {
+    public TextConverter(String backend, Map<String, Object> opts) {
         super(backend, opts);
     }
     

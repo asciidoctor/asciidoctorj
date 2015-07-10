@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class DummyConverter extends AbstractConverter {
 
-    public DummyConverter(String backend, Map<Object, Object> opts) {
+    public DummyConverter(String backend, Map<String, Object> opts) {
         super(backend, opts);
     }
     

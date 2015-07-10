@@ -142,4 +142,8 @@ public class RubyHashMapDecorator implements Map<String, Object> {
             return JavaEmbedUtils.javaToRuby(rubyHash.getRuntime(), value);
         }
     }
+
+    RubyHash getRubyHash() {
+        return rubyHash;
+    }
 }
