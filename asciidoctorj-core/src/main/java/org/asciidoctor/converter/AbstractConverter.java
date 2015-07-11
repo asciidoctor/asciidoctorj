@@ -5,18 +5,33 @@ import java.util.Map;
 public abstract class AbstractConverter implements Converter {
 
     private String backend;
-    private Map<Object, Object> options;
 
-    public AbstractConverter(String backend, Map<Object, Object> opts) {
+    private Map<String, Object> options;
+
+    private String outfilesuffix = null;
+
+    public AbstractConverter(String backend, Map<String, Object> opts) {
         this.backend = backend;
         this.options = opts;
     }
 
-    public Map<Object, Object> getOptions() {
+    @Override
+    public Map<String, Object> getOptions() {
         return options;
     }
 
     public String getBackend() {
         return backend;
     }
+
+    @Override
+    public String getOutfileSuffix() {
+        return outfilesuffix;
+    }
+
+    @Override
+    public void setOutfileSuffix(String outfilesuffix) {
+        this.outfilesuffix = outfilesuffix;
+    }
+
 }

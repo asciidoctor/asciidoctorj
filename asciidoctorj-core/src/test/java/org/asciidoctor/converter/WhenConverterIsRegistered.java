@@ -2,6 +2,7 @@ package org.asciidoctor.converter;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.SafeMode;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
 import org.asciidoctor.arquillian.api.Unshared;
@@ -9,8 +10,10 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.After;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -27,6 +30,9 @@ public class WhenConverterIsRegistered {
 
     @ArquillianResource
     private ClasspathResources classpath;
+
+    @ArquillianResource
+    private TemporaryFolder tmp;
 
     @After
     public void cleanUp() {
@@ -97,6 +103,33 @@ public class WhenConverterIsRegistered {
         } finally {
             Thread.currentThread().setContextClassLoader(oldTCCL);
         }
+    }
+
+
+    @Test
+    public void shouldWriteFileWithSuffixFromConverterWithAnnotation() throws Exception {
+
+        asciidoctor.javaConverterRegistry().register(TextConverter.class);
+
+        File todir = tmp.newFolder();
+        asciidoctor.convertFile(classpath.getResource("simple.adoc"), OptionsBuilder.options().backend(TextConverter.DEFAULT_FORMAT).toDir(todir).safe(SafeMode.UNSAFE));
+
+        assertThat(new File(todir, "simple.html").exists(), is(false));
+        assertThat(new File(todir, "simple.txt").exists(), is(true));
+
+    }
+
+    @Test
+    public void shouldWriteFileWithSuffixFromConverterThatInvokesSetOutfileSuffix() throws Exception {
+
+        asciidoctor.javaConverterRegistry().register(TextConverterWithSuffix.class);
+
+        File todir = tmp.newFolder();
+        asciidoctor.convertFile(classpath.getResource("simple.adoc"), OptionsBuilder.options().backend(TextConverterWithSuffix.DEFAULT_FORMAT).toDir(todir).safe(SafeMode.UNSAFE));
+
+        assertThat(new File(todir, "simple.html").exists(), is(false));
+        assertThat(new File(todir, "simple.text").exists(), is(true));
+
     }
 
 }

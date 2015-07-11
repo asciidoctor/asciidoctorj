@@ -27,4 +27,17 @@ public interface Converter {
      */
     Object convert(AbstractNode node, String transform, Map<Object, Object> opts);
 
+    Map<String, Object> getOptions();
+
+    /**
+     * To change the extension of the generated file invoke this method in the constructor of the converter implementation.
+     * The default extension is {@code .html}.
+     * @param outfilesuffix The file extension for the generated file, e.g. {@code .txt}
+     */
+    void setOutfileSuffix(String outfilesuffix);
+
+    /**
+     * @return The file extension of the generated files.
+     */
+    String getOutfileSuffix();
 }

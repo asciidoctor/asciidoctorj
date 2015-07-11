@@ -27,12 +27,14 @@ public class JavaConverterRegistry {
                 converterClass.getSimpleName(),
                 rubyRuntime.getObject(),
                 new ConverterProxy.Allocator(converterClass));
+        includeModule(clazz, "Asciidoctor", "Converter");
         clazz.defineAnnotatedMethods(ConverterProxy.class);
 
         ConverterFor converterForAnnotation = converterClass.getAnnotation(ConverterFor.class);
         if (converterForAnnotation != null) {
             // Backend annotation present => Register with name given in annotation
-            this.asciidoctorModule.register_converter(clazz, new String[] { converterForAnnotation.value() });
+            String backend = !ConverterFor.UNDEFINED.equals(converterForAnnotation.format()) ? converterForAnnotation.format() : converterForAnnotation.value();
+            this.asciidoctorModule.register_converter(clazz, new String[] { backend });
         } else if (backends.length == 0) {
             // No backend annotation and no backend defined => register as default backend
             this.asciidoctorModule.register_converter(clazz);
@@ -41,6 +43,16 @@ public class JavaConverterRegistry {
             // Always additionally register with names passed to this method
             this.asciidoctorModule.register_converter(clazz, backends);
         }
+    }
+
+    private void includeModule(RubyClass clazz, String moduleName, String... moduleNames) {
+        RubyModule module = rubyRuntime.getModule(moduleName);
+        if (moduleNames != null && moduleNames.length > 0) {
+            for (String submoduleName: moduleNames) {
+                module = module.defineOrGetModuleUnder(submoduleName);
+            }
+        }
+        clazz.includeModule(module);
     }
 
     private String getModuleName(Class<?> converterClass) {
