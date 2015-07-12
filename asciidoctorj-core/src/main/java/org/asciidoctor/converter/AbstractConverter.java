@@ -2,7 +2,7 @@ package org.asciidoctor.converter;
 
 import java.util.Map;
 
-public abstract class AbstractConverter implements Converter {
+public abstract class AbstractConverter<T> implements Converter<T> {
 
     private String backend;
 

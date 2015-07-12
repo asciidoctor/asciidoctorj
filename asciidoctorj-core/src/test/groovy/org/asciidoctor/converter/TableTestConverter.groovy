@@ -6,7 +6,7 @@ import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.Section
 import org.asciidoctor.ast.Table
 
-class TableTestConverter extends AbstractConverter {
+class TableTestConverter extends AbstractConverter<String> {
 
     public static final int COLWIDTH = 15
     public static final String COL_SEPARATOR = '|'
@@ -18,7 +18,7 @@ class TableTestConverter extends AbstractConverter {
     }
 
     @Override
-    Object convert(AbstractNode node, String transform, Map<Object, Object> opts) {
+    String convert(AbstractNode node, String transform, Map<Object, Object> opts) {
         if (transform == null) {
             transform = node.nodeName
         }

@@ -22,13 +22,8 @@ public class JavaConverterRegistry {
     }
 
     public void register(final Class<? extends Converter> converterClass, String... backends) {
-        RubyModule module = rubyRuntime.defineModule(getModuleName(converterClass));
-        RubyClass clazz = module.defineClassUnder(
-                converterClass.getSimpleName(),
-                rubyRuntime.getObject(),
-                new ConverterProxy.Allocator(converterClass));
-        includeModule(clazz, "Asciidoctor", "Converter");
-        clazz.defineAnnotatedMethods(ConverterProxy.class);
+
+        RubyClass clazz = ConverterProxy.register(rubyRuntime, converterClass);
 
         ConverterFor converterForAnnotation = converterClass.getAnnotation(ConverterFor.class);
         if (converterForAnnotation != null) {
@@ -43,26 +38,6 @@ public class JavaConverterRegistry {
             // Always additionally register with names passed to this method
             this.asciidoctorModule.register_converter(clazz, backends);
         }
-    }
-
-    private void includeModule(RubyClass clazz, String moduleName, String... moduleNames) {
-        RubyModule module = rubyRuntime.getModule(moduleName);
-        if (moduleNames != null && moduleNames.length > 0) {
-            for (String submoduleName: moduleNames) {
-                module = module.defineOrGetModuleUnder(submoduleName);
-            }
-        }
-        clazz.includeModule(module);
-    }
-
-    private String getModuleName(Class<?> converterClass) {
-        StringBuilder sb = new StringBuilder();
-        for (String s: converterClass.getPackage().getName().split("\\.")) {
-            sb
-                    .append(s.substring(0, 1).toUpperCase())
-                    .append(s.substring(1).toLowerCase());
-        }
-        return sb.toString();
     }
 
     public Class<?> resolve(String backend) {

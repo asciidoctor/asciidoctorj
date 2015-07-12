@@ -134,4 +134,9 @@ public class RubyAttributesMapDecorator implements Map<String, Object> {
             return JavaEmbedUtils.javaToRuby(rubyHash.getRuntime(), value);
         }
     }
+
+    @Override
+    public String toString() {
+        return createJavaMap().toString();
+    }
 }

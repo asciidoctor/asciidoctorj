@@ -4,10 +4,13 @@ import org.asciidoctor.ast.AbstractNode;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
+import org.asciidoctor.internal.RubyObjectWrapper;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyHash;
+import org.jruby.RubyModule;
 import org.jruby.RubyObject;
+import org.jruby.RubyString;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Block;
@@ -16,14 +19,37 @@ import org.jruby.runtime.ObjectAllocator;
 import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.Map;
 
-public class ConverterProxy extends RubyObject {
+public class ConverterProxy<T> extends RubyObject {
 
     protected static final String METHOD_NAME_INITIALIZE = "initialize";
+
+    private T output;
+
+    public static RubyClass register(Ruby rubyRuntime, final Class<? extends Converter> converterClass) {
+        RubyModule module = rubyRuntime.defineModule(getModuleName(converterClass));
+        RubyClass clazz = module.defineClassUnder(
+                converterClass.getSimpleName(),
+                rubyRuntime.getObject(),
+                new ConverterProxy.Allocator(converterClass));
+        includeModule(clazz, "Asciidoctor", "Converter");
+
+        clazz.defineAnnotatedMethod(ConverterProxy.class, "initialize");
+        clazz.defineAnnotatedMethod(ConverterProxy.class, "convert");
+
+        if (WritingConverter.class.isAssignableFrom(converterClass)) {
+            includeModule(clazz, "Asciidoctor", "Writer");
+            clazz.defineAnnotatedMethod(ConverterProxy.class, "write");
+        }
+
+        //clazz.defineAnnotatedMethods(ConverterProxy.class);
+        return clazz;
+    }
 
     public static class Allocator implements ObjectAllocator {
         private final Class<? extends Converter> converterClass;
@@ -43,7 +69,7 @@ public class ConverterProxy extends RubyObject {
 
     private final Class<? extends Converter> converterClass;
 
-    private Converter delegate;
+    private Converter<T> delegate;
 
     public ConverterProxy(Ruby runtime, RubyClass metaClass, Class<? extends Converter> converterClass) {
         super(runtime, metaClass);
@@ -101,7 +127,7 @@ public class ConverterProxy extends RubyObject {
     public IRubyObject convert(ThreadContext context, IRubyObject[] args) {
         AbstractNode node = NodeConverter.createASTNode(args[0]);
 
-        Object ret = null;
+        T ret = null;
         if (args.length == 1) {
             ret = delegate.convert(
                     node,
@@ -113,12 +139,41 @@ public class ConverterProxy extends RubyObject {
                     (String) JavaEmbedUtils.rubyToJava(getRuntime(), args[1], String.class),
                     Collections.emptyMap());//RubyString.objAsString(context, args[1]).asJavaString());
         } else if (args.length == 3) {
-            ret = delegate.convert(
+            ret = (T) delegate.convert(
                     node,
                     (String) JavaEmbedUtils.rubyToJava(getRuntime(), args[1], String.class),
                     (Map) JavaEmbedUtils.rubyToJava(getRuntime(), args[2], Map.class));
         }
+        this.output = ret;
         return JavaEmbedUtils.javaToRuby(getRuntime(), ret);
+    }
+
+    @JRubyMethod
+    public IRubyObject write(ThreadContext context, IRubyObject output, IRubyObject target) {
+        File f = new File(((RubyString) target).asJavaString());
+        ((WritingConverter<T>) delegate).write(this.output, f);
+        return null;
+    }
+
+
+    private static void includeModule(RubyClass clazz, String moduleName, String... moduleNames) {
+        RubyModule module = clazz.getRuntime().getModule(moduleName);
+        if (moduleNames != null && moduleNames.length > 0) {
+            for (String submoduleName: moduleNames) {
+                module = module.defineOrGetModuleUnder(submoduleName);
+            }
+        }
+        clazz.includeModule(module);
+    }
+
+    private static String getModuleName(Class<?> converterClass) {
+        StringBuilder sb = new StringBuilder();
+        for (String s: converterClass.getPackage().getName().split("\\.")) {
+            sb
+                    .append(s.substring(0, 1).toUpperCase())
+                    .append(s.substring(1).toLowerCase());
+        }
+        return sb.toString();
     }
 
 

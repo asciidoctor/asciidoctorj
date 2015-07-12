@@ -22,6 +22,7 @@ import org.jruby.RubyHash;
 import org.jruby.RubyInstanceConfig;
 import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
+import org.jruby.runtime.builtin.IRubyObject;
 
 import java.io.*;
 import java.util.*;
@@ -254,64 +255,14 @@ public class JRubyAsciidoctor implements Asciidoctor {
     @Override
     @Deprecated
     public String render(String content, Map<String, Object> options) {
-
-        this.rubyGemsPreloader.preloadRequiredLibraries(options);
-
-        logger.fine(AsciidoctorUtils.toAsciidoctorCommand(options, "-"));
-
-        if (AsciidoctorUtils.isOptionWithAttribute(options, Attributes.SOURCE_HIGHLIGHTER, "pygments")) {
-            logger.fine("In order to use Pygments with Asciidoctor, you need to install Pygments (and Python, if you don't have it yet). Read http://asciidoctor.org/news/#syntax-highlighting-with-pygments.");
-        }
-
-        String currentDirectory = rubyRuntime.getCurrentDirectory();
-
-        if (options.containsKey(Options.BASEDIR)) {
-            rubyRuntime.setCurrentDirectory((String) options.get(Options.BASEDIR));
-        }
-
-        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-
-        try {
-            Object object = this.asciidoctorModule.convert(content, rubyHash);
-            return returnExpectedValue(object);
-        } catch(RaiseException e) {
-            logger.severe(e.getException().getClass().getCanonicalName());
-            throw new AsciidoctorCoreException(e);
-        } finally {
-            // we restore current directory to its original value.
-            rubyRuntime.setCurrentDirectory(currentDirectory);
-        }
-
+        return convert(content, options);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     @Deprecated
     public String renderFile(File filename, Map<String, Object> options) {
-
-        this.rubyGemsPreloader.preloadRequiredLibraries(options);
-
-        logger.fine(AsciidoctorUtils.toAsciidoctorCommand(options, filename.getAbsolutePath()));
-
-        String currentDirectory = rubyRuntime.getCurrentDirectory();
-
-        if (options.containsKey(Options.BASEDIR)) {
-            rubyRuntime.setCurrentDirectory((String) options.get(Options.BASEDIR));
-        }
-
-        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-
-        try {
-            Object object = this.asciidoctorModule.convertFile(filename.getAbsolutePath(), rubyHash);
-            return returnExpectedValue(object);
-        } catch(RaiseException e) {
-            logger.severe(e.getMessage());
-
-            throw new AsciidoctorCoreException(e);
-        } finally {
-            // we restore current directory to its original value.
-            rubyRuntime.setCurrentDirectory(currentDirectory);
-        }
+        return convertFile(filename, options);
     }
 
     /**
@@ -481,17 +432,63 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
     @Override
     public String convert(String content, Map<String, Object> options) {
-        return render(content, options);
+        return convert(content, options, String.class);
     }
+
+    public <T> T convert(String content, Map<String, Object> options, Class<T> expectedResult) {
+
+        this.rubyGemsPreloader.preloadRequiredLibraries(options);
+
+        logger.fine(AsciidoctorUtils.toAsciidoctorCommand(options, "-"));
+
+        if (AsciidoctorUtils.isOptionWithAttribute(options, Attributes.SOURCE_HIGHLIGHTER, "pygments")) {
+            logger.fine("In order to use Pygments with Asciidoctor, you need to install Pygments (and Python, if you don't have it yet). Read http://asciidoctor.org/news/#syntax-highlighting-with-pygments.");
+        }
+
+        String currentDirectory = rubyRuntime.getCurrentDirectory();
+
+        if (options.containsKey(Options.BASEDIR)) {
+            rubyRuntime.setCurrentDirectory((String) options.get(Options.BASEDIR));
+        }
+
+        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+
+        try {
+            Object object = this.asciidoctorModule.convert(content, rubyHash);
+            if (object instanceof IRubyObject && ((IRubyObject) object).getMetaClass() == NodeConverter.NodeType.DOCUMENT_CLASS.getRubyClass(getRubyRuntime())) {
+                // If a document is rendered to a file Asciidoctor returns the document, we return null
+                return null;
+            }
+            return (T) object;
+        } catch(RaiseException e) {
+            logger.severe(e.getException().getClass().getCanonicalName());
+            throw new AsciidoctorCoreException(e);
+        } finally {
+            // we restore current directory to its original value.
+            rubyRuntime.setCurrentDirectory(currentDirectory);
+        }
+
+    }
+
 
     @Override
     public String convert(String content, Options options) {
-        return render(content, options);
+        return convert(content, options, String.class);
+    }
+
+    @Override
+    public <T> T convert(String content, Options options, Class<T> expectedResult) {
+        return convert(content, options.map(), expectedResult);
     }
 
     @Override
     public String convert(String content, OptionsBuilder options) {
-        return render(content, options);
+        return convert(content, options, String.class);
+    }
+
+    @Override
+    public <T> T convert(String content, OptionsBuilder options, Class<T> expectedResult) {
+        return convert(content, options.asMap(), expectedResult);
     }
 
     @Override
@@ -511,17 +508,59 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
     @Override
     public String convertFile(File filename, Map<String, Object> options) {
-        return renderFile(filename, options);
+        return convertFile(filename, options, String.class);
+    }
+
+    @Override
+    public <T> T convertFile(File filename, Map<String, Object> options, Class<T> expectedResult) {
+
+        this.rubyGemsPreloader.preloadRequiredLibraries(options);
+
+        logger.fine(AsciidoctorUtils.toAsciidoctorCommand(options, filename.getAbsolutePath()));
+
+        String currentDirectory = rubyRuntime.getCurrentDirectory();
+
+        if (options.containsKey(Options.BASEDIR)) {
+            rubyRuntime.setCurrentDirectory((String) options.get(Options.BASEDIR));
+        }
+
+        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+
+        try {
+            Object object = this.asciidoctorModule.convertFile(filename.getAbsolutePath(), rubyHash);
+            if (object instanceof IRubyObject && ((IRubyObject) object).getMetaClass() == NodeConverter.NodeType.DOCUMENT_CLASS.getRubyClass(getRubyRuntime())) {
+                // If a document is rendered to a file Asciidoctor returns the document, we return null
+                return null;
+            }
+            return (T) object;
+        } catch(RaiseException e) {
+            logger.severe(e.getMessage());
+
+            throw new AsciidoctorCoreException(e);
+        } finally {
+            // we restore current directory to its original value.
+            rubyRuntime.setCurrentDirectory(currentDirectory);
+        }
     }
 
     @Override
     public String convertFile(File filename, Options options) {
-        return renderFile(filename, options);
+        return convertFile(filename, options, String.class);
+    }
+
+    @Override
+    public <T> T convertFile(File filename, Options options, Class<T> expectedResult) {
+        return convertFile(filename, options.map(), expectedResult);
     }
 
     @Override
     public String convertFile(File filename, OptionsBuilder options) {
-        return renderFile(filename, options);
+        return convertFile(filename, options.asMap(), String.class);
+    }
+
+    @Override
+    public <T> T convertFile(File filename, OptionsBuilder options, Class<T> expectedResult) {
+        return convertFile(filename, options.asMap(), expectedResult);
     }
 
     @Override
