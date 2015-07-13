@@ -1,6 +1,7 @@
 package org.asciidoctor;
 
 import java.io.File;
+import java.io.OutputStream;
 import java.util.Map;
 
 public class OptionsBuilder {
@@ -175,6 +176,11 @@ public class OptionsBuilder {
      */
     public OptionsBuilder toFile(File toFile) {
         this.options.setToFile(toFile.getPath());
+        return this;
+    }
+
+    public OptionsBuilder toStream(OutputStream toStream) {
+        this.options.setToStream(toStream);
         return this;
     }
 

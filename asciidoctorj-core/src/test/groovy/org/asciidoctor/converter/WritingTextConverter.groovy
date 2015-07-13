@@ -11,16 +11,15 @@ class WritingTextConverter extends TextConverter implements WritingConverter<Str
 
     static File targetFile
 
+    static boolean called = false
+
     WritingTextConverter(String backend, Map<String, Object> opts) {
         super(backend, opts)
     }
     
     @Override
-    void write(String output, File f) {
-        if (targetFile != null) {
-            targetFile.text = output
-        } else {
-            f.text = output
-        }
+    void write(String output, OutputStream out) {
+        called = true
+        out.write(output.bytes)
     }
 }

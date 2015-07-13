@@ -7,8 +7,6 @@ import org.asciidoctor.ast.AbstractNode
 @ConverterFor(format = '42')
 class ObjectConverter extends AbstractConverter<ObjectConverterResult> implements WritingConverter<ObjectConverterResult> {
 
-    static Object result
-
     static final int FIXED_RESULT = 42
 
     ObjectConverter(String backend, Map<String, Object> opts) {
@@ -21,8 +19,8 @@ class ObjectConverter extends AbstractConverter<ObjectConverterResult> implement
     }
 
     @Override
-    void write(ObjectConverterResult output, File f) {
-        result = output
+    void write(ObjectConverterResult output, OutputStream f) {
+        f.write(output.toString().bytes)
     }
 
 }

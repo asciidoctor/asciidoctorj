@@ -12,6 +12,7 @@ import org.jruby.RubyModule;
 import org.jruby.RubyObject;
 import org.jruby.RubyString;
 import org.jruby.anno.JRubyMethod;
+import org.jruby.java.proxies.JavaProxy;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Block;
 import org.jruby.runtime.Helpers;
@@ -20,6 +21,9 @@ import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
@@ -149,9 +153,30 @@ public class ConverterProxy<T> extends RubyObject {
     }
 
     @JRubyMethod
-    public IRubyObject write(ThreadContext context, IRubyObject output, IRubyObject target) {
-        File f = new File(((RubyString) target).asJavaString());
-        ((WritingConverter<T>) delegate).write(this.output, f);
+    public IRubyObject write(ThreadContext context, IRubyObject output, IRubyObject target) throws IOException {
+        OutputStream out = null;
+        if (target instanceof JavaProxy) {
+            JavaProxy javaProxy = (JavaProxy) target;
+            if (javaProxy.getObject() instanceof OutputStream) {
+                out = (OutputStream) ((JavaProxy) target).getObject();
+            } else {
+                throw new IllegalArgumentException("Can't write to a " + javaProxy.getObject());
+            }
+        } else if (target instanceof RubyString) {
+            File f = new File(((RubyString) target).asJavaString());
+            out = new FileOutputStream(f);
+        } else {
+            throw new IllegalArgumentException("Can't write to a " + target);
+        }
+        if (out != null) {
+            try {
+                ((WritingConverter<T>) delegate).write(this.output, out);
+            } finally {
+                if (out != null) {
+                    out.close();
+                }
+            }
+        }
         return null;
     }
 

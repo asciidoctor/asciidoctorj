@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -69,6 +70,10 @@ public class Options {
 
     public void setToFile(String toFile) {
         this.options.put(TO_FILE, toFile);
+    }
+
+    public void setToStream(OutputStream toStream) {
+        this.options.put(TO_FILE, toStream);
     }
 
     public void setToFile(boolean toFile) {
