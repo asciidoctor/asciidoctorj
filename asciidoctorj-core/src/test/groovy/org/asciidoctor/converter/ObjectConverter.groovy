@@ -5,7 +5,7 @@ import org.asciidoctor.ast.AbstractNode
 
 @CompileStatic
 @ConverterFor(format = '42')
-class ObjectConverter extends AbstractConverter<ObjectConverterResult> implements WritingConverter<ObjectConverterResult> {
+class ObjectConverter extends AbstractConverter<ObjectConverterResult> implements OutputFormatWriter<ObjectConverterResult> {
 
     static final int FIXED_RESULT = 42
 

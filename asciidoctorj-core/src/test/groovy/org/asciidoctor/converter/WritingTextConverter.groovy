@@ -5,7 +5,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 @ConverterFor(value = WritingTextConverter.DEFAULT_FORMAT, suffix = '.txt')
-class WritingTextConverter extends TextConverter implements WritingConverter<String> {
+class WritingTextConverter extends TextConverter implements OutputFormatWriter<String> {
 
     static final String DEFAULT_FORMAT = 'writabletext'
 

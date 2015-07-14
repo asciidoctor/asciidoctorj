@@ -6,7 +6,7 @@ import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.Section
 import org.asciidoctor.ast.Table
 
-class TableTestConverter extends AbstractConverter<String> {
+class TableTestConverter extends StringConverter {
 
     public static final int COLWIDTH = 15
     public static final String COL_SEPARATOR = '|'

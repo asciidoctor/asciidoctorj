@@ -4,7 +4,6 @@ import org.asciidoctor.internal.AsciidoctorModule;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
-import org.jruby.RubyModule;
 import org.jruby.RubyString;
 
 import java.util.HashMap;
@@ -21,7 +20,7 @@ public class JavaConverterRegistry {
         this.rubyRuntime = rubyRuntime;
     }
 
-    public void register(final Class<? extends Converter> converterClass, String... backends) {
+    public <U, T  extends Converter<U> & OutputFormatWriter<U>> void register(final Class<T> converterClass, String... backends) {
 
         RubyClass clazz = ConverterProxy.register(rubyRuntime, converterClass);
 

@@ -10,7 +10,7 @@ import org.asciidoctor.ast.Section;
 import java.util.Map;
 
 @ConverterFor(value = TextConverter.DEFAULT_FORMAT, suffix = ".txt")
-public class TextConverter extends AbstractConverter<String> {
+public class TextConverter extends StringConverter {
 
     public static final String DEFAULT_FORMAT = "annotatedtext";
 

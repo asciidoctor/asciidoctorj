@@ -4,7 +4,7 @@ import org.asciidoctor.ast.AbstractNode;
 
 import java.util.Map;
 
-public class DummyConverter extends AbstractConverter<String> {
+public class DummyConverter extends StringConverter {
 
     public DummyConverter(String backend, Map<String, Object> opts) {
         super(backend, opts);

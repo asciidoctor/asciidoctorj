@@ -4,7 +4,6 @@ import org.asciidoctor.ast.AbstractNode;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
-import org.asciidoctor.internal.RubyObjectWrapper;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyHash;
@@ -35,7 +34,7 @@ public class ConverterProxy<T> extends RubyObject {
 
     private T output;
 
-    public static RubyClass register(Ruby rubyRuntime, final Class<? extends Converter> converterClass) {
+    public static <U, T  extends Converter<U> & OutputFormatWriter<U>> RubyClass register(Ruby rubyRuntime, final Class<T> converterClass) {
         RubyModule module = rubyRuntime.defineModule(getModuleName(converterClass));
         RubyClass clazz = module.defineClassUnder(
                 converterClass.getSimpleName(),
@@ -46,10 +45,8 @@ public class ConverterProxy<T> extends RubyObject {
         clazz.defineAnnotatedMethod(ConverterProxy.class, "initialize");
         clazz.defineAnnotatedMethod(ConverterProxy.class, "convert");
 
-        if (WritingConverter.class.isAssignableFrom(converterClass)) {
-            includeModule(clazz, "Asciidoctor", "Writer");
-            clazz.defineAnnotatedMethod(ConverterProxy.class, "write");
-        }
+        includeModule(clazz, "Asciidoctor", "Writer");
+        clazz.defineAnnotatedMethod(ConverterProxy.class, "write");
 
         //clazz.defineAnnotatedMethods(ConverterProxy.class);
         return clazz;
@@ -170,11 +167,9 @@ public class ConverterProxy<T> extends RubyObject {
         }
         if (out != null) {
             try {
-                ((WritingConverter<T>) delegate).write(this.output, out);
+                ((OutputFormatWriter<T>) delegate).write(this.output, out);
             } finally {
-                if (out != null) {
-                    out.close();
-                }
+                out.close();
             }
         }
         return null;
