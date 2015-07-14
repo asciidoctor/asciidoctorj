@@ -1,6 +1,7 @@
 package org.asciidoctor.converter;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 
 /**
@@ -11,6 +12,6 @@ import java.io.OutputStream;
  */
 public interface WritingConverter<T> extends Converter<T> {
 
-    void write(T output, OutputStream out);
+    void write(T output, OutputStream out) throws IOException;
 
 }
