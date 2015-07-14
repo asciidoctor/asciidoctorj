@@ -1,0 +1,11 @@
+..
+.
+asciidoctor-1.5.2.gemspec
+coderay-1.1.0.gemspec
+erubis-2.7.0.gemspec
+haml-4.0.5.gemspec
+open-uri-cached-0.0.5.gemspec
+slim-2.0.3.gemspec
+temple-0.6.10.gemspec
+thread_safe-0.3.4-java.gemspec
+tilt-2.0.1.gemspec
