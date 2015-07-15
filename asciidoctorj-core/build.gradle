@@ -49,7 +49,7 @@ jar {
       "org.asciidoctor.extension.spi;version=\"${version}\""
     instruction 'Import-Package',
       'com.beust.jcommander;resolution:=optional',
-      'org.jruby.*;version="[1.7,10)"',
+      'org.jruby.*;version="[9,10)"',
       '*'
   }
 }
