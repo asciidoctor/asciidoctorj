@@ -32,6 +32,14 @@ jrubyPrepareGems << {
   }
 }
 
+task createJRubyDirFile(dependsOn: jrubyPrepareGems) << {
+  List specs = file('build/resources/main/specifications').listFiles().findAll { it.name.endsWith('.gemspec') }.collect { it.name }
+  String content = "..\n.\n${specs.join("\n")}"
+  file('build/resources/main/specifications/.jrubydir').write(content)
+}
+
+jar.dependsOn createJRubyDirFile
+
 //jruby {
 //	execVersion = '1.7.20'
 //}
