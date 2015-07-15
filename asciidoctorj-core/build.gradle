@@ -3,7 +3,7 @@ apply plugin: 'osgi'
 dependencies {
   compile "org.jruby:jruby-complete:$jrubyVersion"
   compile "com.beust:jcommander:$jcommanderVersion"
-  compile "org.osgi:org.osgi.core:4.3.0"
+  compile "org.osgi:org.osgi.core:4.2.0"
   gems "rubygems:asciidoctor:$asciidoctorGemVersion"
   gems "rubygems:coderay:$coderayGemVersion"
   gems "rubygems:erubis:$erubisGemVersion"
