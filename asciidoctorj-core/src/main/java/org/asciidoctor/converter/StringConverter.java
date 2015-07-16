@@ -17,6 +17,8 @@ public abstract class StringConverter extends AbstractConverter<String> {
 
     @Override
     public void write(String output, OutputStream out) throws IOException {
-        out.write(output.getBytes(Charset.forName("UTF-8")));
+        if (output != null) {
+            out.write(output.getBytes(Charset.forName("UTF-8")));
+        }
     }
 }
