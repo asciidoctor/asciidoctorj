@@ -1,9 +1,15 @@
 apply plugin: 'osgi'
 
+configurations {
+  osgiBundle
+  integrationTestOsgiCompile.extendsFrom compile
+  integrationTestOsgiRuntime
+}
+
 dependencies {
   compile "org.jruby:jruby-complete:$jrubyVersion"
   compile "com.beust:jcommander:$jcommanderVersion"
-  compile "org.osgi:org.osgi.core:4.2.0"
+  compile "org.osgi:org.osgi.core:$osgiCoreVersion"
   gems "rubygems:asciidoctor:$asciidoctorGemVersion"
   gems "rubygems:coderay:$coderayGemVersion"
   gems "rubygems:erubis:$erubisGemVersion"
@@ -17,6 +23,18 @@ dependencies {
   testCompile "net.sf.saxon:Saxon-HE:$saxonVersion"
   testCompile "com.google.guava:guava:$guavaVersion"
   testCompile "org.jsoup:jsoup:$jsoupVersion"
+  testCompile "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
+
+  osgiBundle group: 'org.jboss.arquillian.osgi', name: 'arquillian-osgi-bundle', version: '2.1.0.CR18', transitive: false
+  osgiBundle "org.jruby:jruby-complete:$jrubyVersion"
+
+  integrationTestOsgiCompile "junit:junit:$junitVersion"
+  integrationTestOsgiCompile "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
+  integrationTestOsgiCompile "org.jboss.arquillian.protocol:arquillian-protocol-jmx:$arquillianVersion"
+  integrationTestOsgiCompile "org.jboss.arquillian.container:arquillian-container-felix-embedded:$arquillianContainerFelixVersion"
+  integrationTestOsgiCompile "org.apache.felix:org.apache.felix.framework:5.0.0"
+  integrationTestOsgiCompile "org.apache.felix:org.apache.felix.main:5.0.0"
+
 }
 
 def gemFiles = fileTree(jruby.gemInstallDir) {
@@ -61,3 +79,45 @@ jar {
       '*'
   }
 }
+
+
+sourceSets {
+  integrationTestOsgi {
+    java {
+      srcDir file('src/integration-test-osgi/java')
+      compileClasspath += main.output + test.output + configurations.integrationTestOsgiCompile
+    }
+    resources.srcDir file('src/integration-test-osgi/resources')
+  }
+}
+
+task copyOsgiBundle(type: Copy) {
+  from configurations.osgiBundle
+  into sourceSets.integrationTestOsgi.output.resourcesDir
+}
+
+processIntegrationTestOsgiResources {
+  eachFile {
+    if (it.name == 'felix.properties') {
+      it.filter {line ->
+        line
+                .replaceAll('<arquillian-osgi-bundle>', arquillianContainerFelixVersion)
+                .replaceAll('<jrubyVersion>', jrubyVersion)
+      }
+    }
+  }
+}
+
+
+task integrationTestOsgi(type: Test) {
+
+  systemProperty 'asciidoctorJarName', jar.archivePath.toString()
+
+  testClassesDir = sourceSets.integrationTestOsgi.output.classesDir
+  classpath = sourceSets.integrationTestOsgi.runtimeClasspath
+  dependsOn copyOsgiBundle
+  dependsOn jar
+  shouldRunAfter test
+}
+
+check.dependsOn integrationTestOsgi
