@@ -297,6 +297,24 @@ public interface Asciidoctor {
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
+     *
+     * Accepts input as String object.
+     *
+     *
+     * @param content
+     *            the AsciiDoc source as String.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @param expectedResult
+     *            the expected return type. Usually {@link String} for HTML based formats.
+     *            In this case {@link #convert(String, Map)} is the same.
+     * @return the rendered output String is returned
+     */
+    <T> T convert(String content, Map<String, Object> options, Class<T> expectedResult);
+
+    /**
+     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * render it to the specified backend format.
      * 
      * Accepts input as String object.
      * 
@@ -312,6 +330,24 @@ public interface Asciidoctor {
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
+     *
+     * Accepts input as String object.
+     *
+     *
+     * @param content
+     *            the AsciiDoc source as String.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @param expectedResult
+     *            the expected return type. Usually {@link String} for HTML based formats.
+     *            In this case {@link #convert(String, Options)} is the same.
+     * @return the rendered output String is returned
+     */
+    <T> T convert(String content, Options options, Class<T> expectedResult);
+
+    /**
+     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * render it to the specified backend format.
      * 
      * Accepts input as String object.
      * 
@@ -323,6 +359,24 @@ public interface Asciidoctor {
      * @return the rendered output String is returned
      */
     String convert(String content, OptionsBuilder options);
+
+    /**
+     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * render it to the specified backend format.
+     *
+     * Accepts input as String object.
+     *
+     *
+     * @param content
+     *            the AsciiDoc source as String.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @param expectedResult
+     *            the expected return type. Usually {@link String} for HTML based formats.
+     *            In this case {@link #convert(String, OptionsBuilder)} is the same.
+     * @return the rendered output String is returned
+     */
+    <T> T convert(String content, OptionsBuilder options, Class<T> expectedResult);
 
     /**
      * Parse the document read from reader, and rendered result is sent to
@@ -407,6 +461,36 @@ public interface Asciidoctor {
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
+     *
+     * Accepts input as File path.
+     *
+     * If the :in_place option is true, and the input is a File, the output is
+     * written to a file adjacent to the input file, having an extension that
+     * corresponds to the backend format. Otherwise, if the :to_file option is
+     * specified, the file is written to that file. If :to_file is not an
+     * absolute path, it is resolved relative to :to_dir, if given, otherwise
+     * the Document#base_dir. If the target directory does not exist, it will
+     * not be created unless the :mkdirs option is set to true. If the file
+     * cannot be written because the target directory does not exist, or because
+     * it falls outside of the Document#base_dir in safe mode, an IOError is
+     * raised.
+     *
+     * @param filename
+     *            an input Asciidoctor file.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @param expectedResult
+     *            the expected return type. Usually {@link String} for HTML based formats.
+     *            In this case {@link #convertFile(File, Map)} is the same.
+     * @return returns nothing if the rendered output is written to a
+     *         file.
+     */
+    <T> T convertFile(File filename, Map<String, Object> options, Class<T> expectedResult);
+
+
+    /**
+     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * render it to the specified backend format.
      * 
      * Accepts input as File path.
      * 
@@ -433,6 +517,35 @@ public interface Asciidoctor {
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
      * render it to the specified backend format.
+     *
+     * Accepts input as File path.
+     *
+     * If the :in_place option is true, and the input is a File, the output is
+     * written to a file adjacent to the input file, having an extension that
+     * corresponds to the backend format. Otherwise, if the :to_file option is
+     * specified, the file is written to that file. If :to_file is not an
+     * absolute path, it is resolved relative to :to_dir, if given, otherwise
+     * the Document#base_dir. If the target directory does not exist, it will
+     * not be created unless the :mkdirs option is set to true. If the file
+     * cannot be written because the target directory does not exist, or because
+     * it falls outside of the Document#base_dir in safe mode, an IOError is
+     * raised.
+     *
+     * @param filename
+     *            an input Asciidoctor file.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @param expectedResult
+     *            the expected return type. Usually {@link String} for HTML based formats.
+     *            In this case {@link #convertFile(File, Map)} is the same.
+     * @return returns nothing if the rendered output is written to a
+     *         file.
+     */
+    <T> T convertFile(File filename, Options options, Class<T> expectedResult);
+
+    /**
+     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * render it to the specified backend format.
      * 
      * Accepts input as File path.
      * 
@@ -455,6 +568,35 @@ public interface Asciidoctor {
      *         file.
      */
     String convertFile(File filename, OptionsBuilder options);
+
+    /**
+     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * render it to the specified backend format.
+     *
+     * Accepts input as File path.
+     *
+     * If the :in_place option is true, and the input is a File, the output is
+     * written to a file adjacent to the input file, having an extension that
+     * corresponds to the backend format. Otherwise, if the :to_file option is
+     * specified, the file is written to that file. If :to_file is not an
+     * absolute path, it is resolved relative to :to_dir, if given, otherwise
+     * the Document#base_dir. If the target directory does not exist, it will
+     * not be created unless the :mkdirs option is set to true. If the file
+     * cannot be written because the target directory does not exist, or because
+     * it falls outside of the Document#base_dir in safe mode, an IOError is
+     * raised.
+     *
+     * @param filename
+     *            an input Asciidoctor file.
+     * @param options
+     *            a Hash of options to control processing (default: {}).
+     * @param expectedResult
+     *            the expected return type. Usually {@link String} for HTML based formats.
+     *            In this case {@link #convertFile(File, Map)} is the same.
+     * @return returns nothing if the rendered output is written to a
+     *         file.
+     */
+    <T> T convertFile(File filename, OptionsBuilder options, Class<T> expectedResult);
 
     /**
      * Parse all AsciiDoc files found using DirectoryWalker instance.

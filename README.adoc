@@ -1515,9 +1515,9 @@ assertThat(new File("target/test-classes/index.epub").exists(), is(true));
 == Writing a custom converter
 
 For output formats that are not natively supported by Asciidoctor it is possible to write an own converter in Java.
-To get your own converter running in {uri-repo}[AsciidoctorJ] these steps are required:
+To get your own converter that creates string content running in {uri-repo}[AsciidoctorJ] these steps are required:
 
-- Implement the converter as a subclass of `org.asciidoctor.converter.AbstractConverter`.
+- Implement the converter as a subclass of `org.asciidoctor.converter.StringConverter`.
   Annotate it as a converter for your target format using the annotation `@org.asciidoctor.converter.ConverterFor`.
 - Register the converter at the `ConverterRegistry`.
 - Pass the target format name to the `Asciidoctor` instance when rendering a source file.
@@ -1528,7 +1528,7 @@ A basic converter that converts to an own text format looks like this:
 .org.asciidoctor.converter.TextConverter.java
 ----
 @ConverterFor("text")
-public class TextConverter extends AbstractConverter {
+public class TextConverter extends StringConverter {
 
     private String LINE_SEPARATOR = "\n";
 
@@ -1537,7 +1537,7 @@ public class TextConverter extends AbstractConverter {
     }
     
     @Override
-    public Object convert(
+    public String convert(
             AbstractNode node, String transform, Map<Object, Object> o) {    // <2>
 
         if (transform == null) {                                             // <3>
@@ -1546,7 +1546,7 @@ public class TextConverter extends AbstractConverter {
  
         if (node instanceof DocumentRuby) {
             DocumentRuby document = (DocumentRuby) node;
-            return document.getContent();                                    // <4>
+            return document.getContent().toString();                         // <4>
         } else if (node instanceof Section) {
             Section section = (Section) node;
             return new StringBuilder()
@@ -1557,7 +1557,7 @@ public class TextConverter extends AbstractConverter {
             AbstractBlock block = (AbstractBlock) node;
             String content = (String) block.content();                       // <4>
             return new StringBuilder(content.replaceAll(LINE_SEPARATOR, " "))
-                            .append(LINE_SEPARATOR);
+                            .append(LINE_SEPARATOR).toString();
         } 
         return null;
     }
@@ -1617,6 +1617,10 @@ To render a document with this converter the target format name `text` has to be
 File adocFile = ...
 asciidoctor.convertFile(adocFile, OptionsBuilder.options().backend("text"));
 ----
+
+It is also possible to provide converters for binary formats.
+In this case the converter should extend the generic class `org.asciidoctor.converter.AbstractConverter<T>` where `T` is the return type of the method `convert()`.
+`StringConverter` is actually a concrete subclass for the type `String`.
 
 == Loading Ruby libraries
 

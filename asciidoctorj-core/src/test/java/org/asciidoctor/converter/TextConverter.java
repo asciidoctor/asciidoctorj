@@ -10,7 +10,7 @@ import org.asciidoctor.ast.Section;
 import java.util.Map;
 
 @ConverterFor(value = TextConverter.DEFAULT_FORMAT, suffix = ".txt")
-public class TextConverter extends AbstractConverter {
+public class TextConverter extends StringConverter {
 
     public static final String DEFAULT_FORMAT = "annotatedtext";
 
@@ -21,7 +21,7 @@ public class TextConverter extends AbstractConverter {
     }
     
     @Override
-    public Object convert(AbstractNode node, String transform, Map<Object, Object> o) {
+    public String convert(AbstractNode node, String transform, Map<Object, Object> o) {
 
         if (transform == null) {
             transform = node.getNodeName();
@@ -29,7 +29,7 @@ public class TextConverter extends AbstractConverter {
  
         if (node instanceof Document) {
             Document document = (Document) node;
-            return document.getContent();
+            return (String) document.getContent();
         } else if (node instanceof Section) {
             Section section = (Section) node;
             return new StringBuilder()
@@ -39,7 +39,7 @@ public class TextConverter extends AbstractConverter {
         } else if (transform.equals("paragraph")) {
             AbstractBlock block = (AbstractBlock) node;
             String content = (String) block.content();
-            return new StringBuilder(content.replaceAll(LINE_SEPARATOR, " ")).append(LINE_SEPARATOR);
+            return new StringBuilder(content.replaceAll(LINE_SEPARATOR, " ")).append(LINE_SEPARATOR).toString();
         } else if (node instanceof ListNode) {
             StringBuilder sb = new StringBuilder();
             for (AbstractBlock listItem: ((ListNode) node).getItems()) {
@@ -50,7 +50,7 @@ public class TextConverter extends AbstractConverter {
             return "-> " + ((ListItem) node).getText();
         } else if (node instanceof AbstractBlock) {
             AbstractBlock block = (AbstractBlock) node;
-            return block.getContent();
+            return block.getContent().toString();
         }
         return null;
     }

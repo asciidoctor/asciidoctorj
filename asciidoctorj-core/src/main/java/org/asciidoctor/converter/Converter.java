@@ -4,7 +4,7 @@ import org.asciidoctor.ast.AbstractNode;
 
 import java.util.Map;
 
-public interface Converter {
+public interface Converter<T> {
 
     /**
      * Converts an {@link org.asciidoctor.ast.AbstractNode} using the specified transform along
@@ -25,7 +25,7 @@ public interface Converter {
      *             how to convert the node. (optional, default: empty map)
      * @return the converted result
      */
-    Object convert(AbstractNode node, String transform, Map<Object, Object> opts);
+    T convert(AbstractNode node, String transform, Map<Object, Object> opts);
 
     Map<String, Object> getOptions();
 

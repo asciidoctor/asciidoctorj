@@ -11,6 +11,7 @@ import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
+import org.jruby.runtime.builtin.IRubyObject;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -18,6 +19,8 @@ import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
 public class WhenBackendIsPdf {
+
+    public static final String DOCUMENT = "= A document\n\n Test";
 
     @ArquillianResource(Unshared.class)
     private Asciidoctor asciidoctor;
@@ -36,4 +39,14 @@ public class WhenBackendIsPdf {
         outputFile1.delete();
         outputFile2.delete();
     }
+
+    @Test
+    public void pdf_should_be_rendered_to_object_for_pdf_backend() {
+        // The asciidoctor-pdf backend returns the converter itself on convert.
+        // If the result should be written to a file the write method will convert to a PDF stream
+        // Therefore, if the result should not be written to a file the PDF converter should be returned.
+        IRubyObject o = asciidoctor.convert(DOCUMENT, options().backend("pdf").get(), IRubyObject.class);
+        assertThat(o.getMetaClass().getRealClass().getName(), is("Asciidoctor::Pdf::Converter"));
+    }
+
 }
