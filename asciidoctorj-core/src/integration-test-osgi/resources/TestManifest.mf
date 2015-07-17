@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Version: 1.0.0
-Bundle-Name: asciidoctorj-test
-Bundle-ManifestVersion: 2
-Bundle-SymbolicName: org.asciidoctorj.test
-Import-Package: org.asciidoctor;version="[1.5.2,2)"

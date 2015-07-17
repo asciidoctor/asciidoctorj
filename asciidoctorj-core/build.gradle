@@ -24,12 +24,14 @@ dependencies {
   testCompile "com.google.guava:guava:$guavaVersion"
   testCompile "org.jsoup:jsoup:$jsoupVersion"
   testCompile "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
+  testCompile "org.jboss.shrinkwrap.osgi:shrinkwrap-osgi:1.0.0-alpha-1"
 
   osgiBundle group: 'org.jboss.arquillian.osgi', name: 'arquillian-osgi-bundle', version: '2.1.0.CR18', transitive: false
   osgiBundle "org.jruby:jruby-complete:$jrubyVersion"
 
   integrationTestOsgiCompile "junit:junit:$junitVersion"
   integrationTestOsgiCompile "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
+  integrationTestOsgiCompile "org.jboss.shrinkwrap.osgi:shrinkwrap-osgi:1.0.0-alpha-1"
   integrationTestOsgiCompile "org.jboss.arquillian.protocol:arquillian-protocol-jmx:$arquillianVersion"
   integrationTestOsgiCompile "org.jboss.arquillian.container:arquillian-container-felix-embedded:$arquillianContainerFelixVersion"
   integrationTestOsgiCompile "org.apache.felix:org.apache.felix.framework:5.0.0"
