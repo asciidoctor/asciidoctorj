@@ -3,7 +3,6 @@ jdk:
   - oraclejdk8
   - oraclejdk7
   - openjdk7
-  - openjdk6
 before_script: unset GEM_PATH GEM_HOME JRUBY_OPTS
 install: ./gradlew assemble
 script: ./gradlew -S check && bash test-asciidoctor-upstream.sh
