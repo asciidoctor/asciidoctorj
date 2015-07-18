@@ -1,0 +1,9 @@
+= Test document
+
+== This is section 1
+
+Paragraph 1
+
+== This is section 2
+
+Paragraph 2

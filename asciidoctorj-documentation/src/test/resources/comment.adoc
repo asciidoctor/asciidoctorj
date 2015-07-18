@@ -1,0 +1,5 @@
+Normal content.
+
+////
+RP: This is a comment and should only appear in draft documents
+////
