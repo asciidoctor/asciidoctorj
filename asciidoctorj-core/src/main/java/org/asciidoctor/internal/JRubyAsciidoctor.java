@@ -109,7 +109,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
         RubyInstanceConfig config = createOptimizedConfiguration();
         if (classloader != null) {
             config.setLoader(classloader);
+        } else {
+            config.setLoader(Thread.currentThread().getContextClassLoader());
         }
+
         injectEnvironmentVariables(config, env);
 
         Ruby rubyRuntime = JavaEmbedUtils.initialize(loadPaths, config);
