@@ -110,7 +110,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
         if (classloader != null) {
             config.setLoader(classloader);
         } else {
-            config.setLoader(Thread.currentThread().getContextClassLoader());
+            ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+            if (tccl != null){
+                config.setLoader(tccl);
+            }
         }
 
         injectEnvironmentVariables(config, env);
