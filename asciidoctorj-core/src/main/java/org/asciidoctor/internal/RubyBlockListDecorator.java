@@ -4,6 +4,7 @@ import org.asciidoctor.ast.AbstractNode;
 import org.asciidoctor.ast.AbstractNodeImpl;
 import org.asciidoctor.ast.NodeConverter;
 import org.jruby.RubyArray;
+import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -42,6 +43,9 @@ public class RubyBlockListDecorator<T extends AbstractNode> extends AbstractList
 
     @Override
     public boolean remove(Object o) {
+        if (o instanceof IRubyObject) {
+            return rubyBlockList.remove(o);
+        }
         if (!(o instanceof AbstractNodeImpl)) {
             return false;
         }
@@ -86,13 +90,22 @@ public class RubyBlockListDecorator<T extends AbstractNode> extends AbstractList
 
     @Override
     public T set(int index, T element) {
-        Object oldObject = rubyBlockList.set(index, ((AbstractNodeImpl) element).getRubyObject());
+        Object oldObject;
+        if (element instanceof IRubyObject) {
+            oldObject = rubyBlockList.set(index, element);
+        } else {
+            oldObject = rubyBlockList.set(index, ((AbstractNodeImpl) element).getRubyObject());
+        }
         return (T) NodeConverter.createASTNode(oldObject);
     }
 
     @Override
     public void add(int index, T element) {
-        rubyBlockList.add(index, ((AbstractNodeImpl) element).getRubyObject());
+        if (element instanceof IRubyObject) {
+            rubyBlockList.set(index, element);
+        } else {
+            rubyBlockList.add(index, ((AbstractNodeImpl) element).getRubyObject());
+        }
     }
 
     @Override
@@ -107,7 +120,9 @@ public class RubyBlockListDecorator<T extends AbstractNode> extends AbstractList
 
     @Override
     public int indexOf(Object o) {
-        if (o instanceof AbstractNodeImpl) {
+        if (o instanceof IRubyObject) {
+            return rubyBlockList.indexOf(o);
+        } else if (o instanceof AbstractNodeImpl) {
             return rubyBlockList.indexOf(((AbstractNodeImpl) o).getRubyObject());
         } else {
             return -1;
@@ -116,7 +131,9 @@ public class RubyBlockListDecorator<T extends AbstractNode> extends AbstractList
 
     @Override
     public int lastIndexOf(Object o) {
-        if (o instanceof AbstractNodeImpl) {
+        if (o instanceof IRubyObject) {
+            return rubyBlockList.lastIndexOf(o);
+        } else if (o instanceof AbstractNodeImpl) {
             return rubyBlockList.lastIndexOf(((AbstractNodeImpl) o).getRubyObject());
         } else {
             return -1;
