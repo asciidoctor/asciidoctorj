@@ -88,20 +88,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
         new ExtensionRegistryExecutor(asciidoctor).registerAllExtensions();
     }
 
-    private static JRubyAsciidoctor createJRubyAsciidoctorInstance(List<String> loadPaths) {
+    private static JRubyAsciidoctor createJRubyAsciidoctorInstance(Map<String, String> environmentVars, List<String> loadPaths, ClassLoader classloader, String gemPath) {
 
-        return createJRubyAsciidoctorInstance(null, loadPaths, null, null);
-    }
-
-    private static JRubyAsciidoctor createJRubyAsciidoctorInstance(Map<String, Object> environmentVars) {
-
-        return createJRubyAsciidoctorInstance(environmentVars, new ArrayList<String>(), null, null);
-    }
-
-    private static JRubyAsciidoctor createJRubyAsciidoctorInstance(Map<String, Object> environmentVars, List<String> loadPaths, ClassLoader classloader, String gemPath) {
-
-        Map<String, Object> env = environmentVars != null ?
-                new HashMap<String, Object>(environmentVars) : new HashMap<String, Object>();
+        Map<String, String> env = environmentVars != null ?
+                new HashMap<String, String>(environmentVars) : new HashMap<String, String>();
         if (gemPath != null) {
             env.put(GEM_PATH, gemPath);
         }
@@ -122,7 +112,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return jRubyAsciidoctor;
     }
 
-    private static void injectEnvironmentVariables(RubyInstanceConfig config, Map<String, Object> environmentVars) {
+    private static void injectEnvironmentVariables(RubyInstanceConfig config, Map<String, String> environmentVars) {
         EnvironmentInjector environmentInjector = new EnvironmentInjector(config);
         environmentInjector.inject(environmentVars);
     }
