@@ -7,6 +7,7 @@ buildscript {
     if (JavaVersion.current().isJava7Compatible()) {
       classpath 'com.netflix.nebula:nebula-publishing-plugin:2.2.2'
     }
+    classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1'
   }
 }
 
@@ -177,7 +178,11 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
 subprojects {
   if (JavaVersion.current().isJava7Compatible()) {
     apply from: rootProject.file('gradle/sign.gradle')
-    apply from: rootProject.file('gradle/deploy.gradle')
+    if (statusIsRelease) {
+      apply from: rootProject.file('gradle/deploy.gradle')
+    } else if (it.version.endsWith('SNAPSHOT')) {
+      apply from: rootProject.file('gradle/deploySnapshot.gradle')
+    }
   }
 }
 

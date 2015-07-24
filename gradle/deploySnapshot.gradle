@@ -1,0 +1,38 @@
+if (project.name.endsWith('-distribution')) {
+    // artifactory-upload is for publishing configurations
+    apply plugin: 'com.jfrog.artifactory-upload'
+} else {
+    // artifactory is for publishing publications
+    apply plugin: 'com.jfrog.artifactory'
+}
+
+artifactory {
+    contextUrl = 'https://oss.jfrog.org/artifactory'   //The base Artifactory URL if not overridden by the publisher/resolver
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local'
+            username = System.env['BINTRAY_USER'] ?: (project.hasProperty('bintrayUsername') ? project.bintrayUsername : '')
+            password = System.env['BINTRAY_KEY'] ?: (project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : '')
+            maven = true
+        }
+        defaults {
+
+            if (project.name.endsWith('-distribution')) {
+                // NOTE ignore warning that install task does not exist; the plugin is looking for the wrong task!!
+                publishConfigs('archives')
+            }
+            else {
+                publications('mavenNebula')
+            }
+
+            def dryRun = project.hasProperty('dryRun') && project.dryRun.toBoolean()
+            publishBuildInfo = !dryRun  //Publish build-info to Artifactory (true by default)
+            publishArtifacts = !dryRun   //Publish artifacts to Artifactory (true by default)
+            publishPom = !dryRun && !project.name.endsWith('-distribution')  //Publish generated POM files to Artifactory (true by default).
+            publishIvy = false   //Publish generated Ivy descriptor files to Artifactory (true by default).
+
+        }
+    }
+}
+
+artifactoryPublish.dependsOn preparePublish
