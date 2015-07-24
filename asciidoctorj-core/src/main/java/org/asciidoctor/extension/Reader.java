@@ -8,8 +8,16 @@ public interface Reader {
      * Get the 1-based offset of the current line.
      * 
      * @return 1-based offset.
+     * @deprecated Please use {@link #getLineNumber()}
      */
     int getLineno();
+
+    /**
+     * Get the 1-based offset of the current line.
+     *
+     * @return 1-based offset.
+     */
+    int getLineNumber();
 
     /**
      * Check whether there are any lines left to read. If a previous call to this method resulted in a value of false,

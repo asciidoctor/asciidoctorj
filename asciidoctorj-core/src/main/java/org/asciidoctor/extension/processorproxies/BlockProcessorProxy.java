@@ -5,6 +5,7 @@ import org.asciidoctor.ast.AbstractNodeImpl;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.extension.Reader;
+import org.asciidoctor.extension.ReaderImpl;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
@@ -117,7 +118,7 @@ public class BlockProcessorProxy extends AbstractProcessorProxy<BlockProcessor> 
     public IRubyObject process(ThreadContext context, IRubyObject parent, IRubyObject reader, IRubyObject attributes) {
         Object o = getProcessor().process(
                 (AbstractBlock) NodeConverter.createASTNode(parent),
-                RubyUtils.rubyToJava(getRuntime(), reader, Reader.class),
+                new ReaderImpl(reader),
                 RubyUtils.rubyToJava(getRuntime(), attributes, Map.class));
 
         return convertProcessorResult(o);
