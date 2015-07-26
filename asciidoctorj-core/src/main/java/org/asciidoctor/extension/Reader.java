@@ -8,8 +8,16 @@ public interface Reader {
      * Get the 1-based offset of the current line.
      * 
      * @return 1-based offset.
+     * @deprecated Please use {@link #getLineNumber()}
      */
     int getLineno();
+
+    /**
+     * Get the 1-based offset of the current line.
+     *
+     * @return 1-based offset.
+     */
+    int getLineNumber();
 
     /**
      * Check whether there are any lines left to read. If a previous call to this method resulted in a value of false,
@@ -45,7 +53,48 @@ public interface Reader {
      */
     List<String> readLines();
 
+    /**
+     * Get the next line of source data. Consumes the line returned.
+     *
+     * @return the String of the next line of the source data if data is present or
+     * nulll if there is no more data.
+    */
+    String readLine();
+
     List<String> lines();
+
+    /**
+     * Push the String line onto the beginning of the Array of source data.
+     *
+     * Since this line was (assumed to be) previously retrieved through the
+     * reader, it is marked as seen.
+     */
+    void restoreLine(String line);
+
+    /**
+     * Push multiple lines onto the beginning of the Array of source data.
+     *
+     * Since this lines were (assumed to be) previously retrieved through the
+     * reader, they are marked as seen.
+     */
+    void restoreLines(List<String> line);
+
+    /**
+     * Peek at the next line of source data. Processes the line, if not
+     * already marked as processed, but does not consume it.
+     *
+     * This method will probe the reader for more lines.
+     */
+    String peekLine();
+
+    /**
+     * Peek at the next multiple lines of source data. Processes the lines, if not
+     * already marked as processed, but does not consume them.
+     *
+     * @param lineCount The Integer number of lines to peek.
+     * @return
+     */
+    List<String> peekLines(int lineCount);
 
     /**
      * Advance to the next line by discarding the line at the front of the stack
