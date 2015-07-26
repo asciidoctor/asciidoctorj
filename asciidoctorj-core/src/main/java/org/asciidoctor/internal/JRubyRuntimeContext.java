@@ -1,7 +1,11 @@
 package org.asciidoctor.internal;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.ast.AbstractNode;
+import org.asciidoctor.ast.AbstractNodeImpl;
 import org.jruby.Ruby;
+import org.jruby.java.proxies.RubyObjectHolderProxy;
+import org.jruby.runtime.builtin.IRubyObject;
 
 /**
  * This class gives access to the Ruby instance that is used by a JRuby Asciidoctor instance.
@@ -21,6 +25,19 @@ public class JRubyRuntimeContext {
                     "Expected a " + JRubyAsciidoctor.class.getName() + "instead of " + asciidoctor);
         }
         return ((JRubyAsciidoctor) asciidoctor).getRubyRuntime();
+    }
+
+    public static Ruby get(AbstractNode node) {
+        if (node instanceof IRubyObject) {
+            return ((IRubyObject) node).getRuntime();
+        } else if (node instanceof RubyObjectHolderProxy) {
+            return ((RubyObjectHolderProxy) node).__ruby_object().getRuntime();
+        } else if (node instanceof AbstractNodeImpl) {
+            IRubyObject nodeDelegate = ((AbstractNodeImpl) node).getRubyObject();
+            return nodeDelegate.getRuntime();
+        } else {
+            throw new IllegalArgumentException("Don't know what to with a " + node);
+        }
     }
 
 }

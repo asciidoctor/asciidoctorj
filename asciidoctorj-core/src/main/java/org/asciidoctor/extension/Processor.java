@@ -2,6 +2,7 @@ package org.asciidoctor.extension;
 
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.*;
+import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
@@ -114,7 +115,7 @@ public class Processor {
     }
 
     public Table createTable(AbstractBlock parent, Map<String, Object> attributes) {
-        Ruby rubyRuntime = getRubyRuntimeFromNode(parent);
+        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         RubyHash rubyAttributes = RubyHash.newHash(rubyRuntime);
         rubyAttributes.putAll(attributes);
@@ -128,7 +129,7 @@ public class Processor {
     }
 
     public Row createTableRow(Table parent) {
-        Ruby rubyRuntime = getRubyRuntimeFromNode(parent);
+        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         RubyArray rubyRow = rubyRuntime.newArray();
         return new RowImpl(rubyRow);
@@ -139,7 +140,7 @@ public class Processor {
     }
 
     public Column createTableColumn(Table parent, int index, Map<String, Object> attributes) {
-        Ruby rubyRuntime = getRubyRuntimeFromNode(parent);
+        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         RubyHash rubyAttributes = RubyHash.newHash(rubyRuntime);
         rubyAttributes.putAll(attributes);
@@ -168,7 +169,7 @@ public class Processor {
     }
 
     public Cell createTableCell(Column column, String text, Map<String, Object> attributes) {
-        Ruby rubyRuntime = getRubyRuntimeFromNode(column);
+        Ruby rubyRuntime = JRubyRuntimeContext.get(column);
 
         RubyHash rubyAttributes = RubyHash.newHash(rubyRuntime);
         rubyAttributes.putAll(attributes);
@@ -225,7 +226,7 @@ public class Processor {
 
     public Inline createInline(AbstractBlock parent, String context, List<String> text, Map<String, Object> attributes, Map<Object, Object> options) {
 
-        Ruby rubyRuntime = getRubyRuntimeFromNode(parent);
+        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         options.put(Options.ATTRIBUTES, attributes);
         
@@ -255,7 +256,7 @@ public class Processor {
         
         options.put(Options.ATTRIBUTES, attributes);
 
-        Ruby rubyRuntime = getRubyRuntimeFromNode(parent);
+        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         RubyHash convertedOptions = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
@@ -270,7 +271,7 @@ public class Processor {
     private Block createBlock(AbstractBlock parent, String context,
             Map<Object, Object> options) {
 
-        Ruby rubyRuntime = getRubyRuntimeFromNode(parent);
+        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime,
                 options);
@@ -289,27 +290,13 @@ public class Processor {
      * @return A new inner document.
      */
     public Document createDocument(Document parentDocument) {
-        Ruby runtime = getRubyRuntimeFromNode(parentDocument);
+        Ruby runtime = JRubyRuntimeContext.get(parentDocument);
         RubyHash options = RubyHash.newHash(runtime);
         options.put(
                 runtime.newSymbol("parent"),
                 ((DocumentImpl) parentDocument).getRubyObject());
 
         return (Document) NodeConverter.createASTNode(runtime, DOCUMENT_CLASS, runtime.getNil(), options);
-    }
-
-
-    private Ruby getRubyRuntimeFromNode(AbstractNode node) {
-        if (node instanceof IRubyObject) {
-            return ((IRubyObject) node).getRuntime();
-        } else if (node instanceof RubyObjectHolderProxy) {
-            return ((RubyObjectHolderProxy) node).__ruby_object().getRuntime();
-        } else if (node instanceof AbstractNodeImpl) {
-            IRubyObject nodeDelegate = ((AbstractNodeImpl) node).getRubyObject();
-            return nodeDelegate.getRuntime();
-        } else {
-            throw new IllegalArgumentException("Don't know what to with a " + node);
-        }
     }
 
 }
