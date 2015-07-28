@@ -67,14 +67,11 @@ afterEvaluate {
     //artifacts.clear()
     //from components.java
 
-    // NOTE only build sources and javadoc jars when releasing
-    if (project.statusIsRelease) {
-      if (project.tasks.withType(Jar).findByName('sourcesJar')) {
-        artifact sourcesJar
-      }
-      if (project.tasks.withType(Jar).findByName('javadocJar')) {
-        artifact javadocJar
-      }
+    if (project.tasks.withType(Jar).findByName('sourcesJar')) {
+      artifact sourcesJar
+    }
+    if (project.tasks.withType(Jar).findByName('javadocJar')) {
+      artifact javadocJar
     }
 
     pom.withXml {
