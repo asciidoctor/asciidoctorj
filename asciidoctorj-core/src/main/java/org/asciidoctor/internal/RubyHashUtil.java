@@ -31,10 +31,10 @@ public class RubyHashUtil {
             Object keyType = entry.getKey();
 
             if (isNotARubySymbol(keyType)) {
-                String key = (String) keyType;
+                CharSequence key = (CharSequence) keyType;
                 Object value = entry.getValue();
 
-                RubySymbol newSymbol = RubyUtils.toSymbol(rubyRuntime, key);
+                RubySymbol newSymbol = RubyUtils.toSymbol(rubyRuntime, key.toString());
                 IRubyObject iRubyValue = toRubyObject(rubyRuntime, value);
 
                 rubyHash.put(newSymbol, iRubyValue);
@@ -140,7 +140,7 @@ public class RubyHashUtil {
             if (isNotARubySymbol(value)) {
                 CharSequence stringValue = ((CharSequence) value);
 
-                if (stringValue.charAt(0) == ':') {
+                if (stringValue.length() > 0 && stringValue.charAt(0) == ':') {
                     return RubyUtils.toSymbol(rubyRuntime, stringValue.subSequence(1, stringValue.length()).toString());
                 }
             }
