@@ -46,7 +46,11 @@ public class RubyObjectWrapper {
     }
 
     protected void setString(String propertyName, String value) {
-        setRubyProperty(propertyName, runtime.newString(value));
+        if (value == null) {
+            setRubyProperty(propertyName, runtime.getNil());
+        } else {
+            setRubyProperty(propertyName, runtime.newString(value));
+        }
     }
 
     protected String getSymbol(String propertyName, Object... args) {
@@ -59,7 +63,11 @@ public class RubyObjectWrapper {
     }
 
     protected void setSymbol(String propertyName, String value) {
-        setRubyProperty(propertyName, runtime.newSymbol(value));
+        if (value == null) {
+            setRubyProperty(propertyName, runtime.getNil());
+        } else {
+            setRubyProperty(propertyName, runtime.newSymbol(value));
+        }
     }
 
     protected boolean getBoolean(String propertyName, Object... args) {
