@@ -14,5 +14,4 @@ notifications:
     channels:
       - "irc.freenode.org#asciidoctor"
 env:
-  - secure: "wRlCGOBxIeRE7M0yAZ1LhKGyZ0nhzj4CkF9wiA6Rc2vXONIL5M9NMkaExmrtui1gXffixyRlGYeas6Q6awTvBZ5uKiNnt530BuzrMFN1kIhAdyXhcuzvO5seOwKyyyyLEFaWRFqqWDu9bSeZvzIoUXCpC+q47CdMzWExEdbE7eE="
-  - secure: "poMdVYonDHXsmILnF6ZIub11xgQz219J2F6HbEP2dlUpEtiDhrg+NxorPaU5K+r0gA8YoqlISQLyuVoEReOgjb+Xv++1iaD3ryU5gAFGPsfnK8cWP4praWS3zD0UbbkPaNDP85LtpUB234mMQJ9HZHEeDGMWnd9kH8Ii8JdAME0="
+  - secure: "WYU2AptOM6CIiIykVUCj2Ca4umapAl2Qxv8sQDDTNuv9gVHk1rtU42kD6oqS/YoID0QoPy8g6Ggyvy1MF0wMpL4Vvu8pLnbLiYoJtmecpLHB0UZ1UixsgWL7bHExrh+ciCjjqliN9C0rUnmiDHj9Ald2VSWH6Vvcl2YG67Pbl+c="
