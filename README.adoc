@@ -1854,6 +1854,18 @@ To use a snapshot version of the the AsciidoctorJ library add this repository to
 </repositories>
 ----
 
+If you build your project using {uri-gradle}[Gradle] add the repository like this to our build:
+
+[source,groovy]
+----
+repositories {
+    maven {
+        url 'http://oss.jfrog.org/oss-snapshot-local/'
+    }
+}
+----
+
+
 You can also download a snapshot version of the distribution from here: https://oss.jfrog.org/oss-snapshot-local/org/asciidoctor/asciidoctorj-distribution
 
 == Development
@@ -1882,6 +1894,15 @@ asciidoctorj-epub3::
 asciidoctorj-pdf::
   Bundles the Asciidoctor PDF RubyGem (asciidoctor-pdf) and its dependencies as the asciidoctorj-pdf jar.
 
+asciidoctorj-diagram::
+  Bundles the Asciidoctor Diagram RubyGem (asciidoctor-diagram) and its dependencies as the asciidoctorj-diagram jar.
+
+asciidoctorj-arquillian-extension::
+  Bundles an Arquillian extension that allows to inject an Asciidoctor instance or other instances commonly used by Asciidoctor tests into a test case.
+
+asciidoctorj-test-support::
+  Contains some common test classes that are used by multiple other subprojects and the Arquillian extension.
+
 The Gradle build is partitioned into the following files:
 
 ....
@@ -1892,17 +1913,24 @@ gradle/
   wrapper/
     ...
   deploy.gradle
+  deploySnapshot.gradle
   eclipse.gradle
-  idea.gradle
+  providedConfiguration.gradle
   publish.gradle
   sign.gradle
+asciidoctorj-arquillian-extension/
+  build.gradle
 asciidoctorj-core/
+  build.gradle
+asciidoctorj-diagram/
   build.gradle
 asciidoctorj-distribution/
   build.gradle
 asciidoctorj-epub3/
   build.gradle
 asciidoctorj-pdf/
+  build.gradle
+asciidoctorj-test-support/
   build.gradle
 ....
 
