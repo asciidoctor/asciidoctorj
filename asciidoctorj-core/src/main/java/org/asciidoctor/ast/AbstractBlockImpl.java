@@ -1,12 +1,12 @@
 package org.asciidoctor.ast;
 
-import java.util.List;
-import java.util.Map;
-
 import org.asciidoctor.internal.RubyBlockListDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.jruby.RubyArray;
 import org.jruby.runtime.builtin.IRubyObject;
+
+import java.util.List;
+import java.util.Map;
 
 public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock {
 
@@ -51,6 +51,12 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     public List<AbstractBlock> getBlocks() {
         RubyArray rubyBlocks = (RubyArray) getRubyProperty("blocks");
         return new RubyBlockListDecorator<AbstractBlock>(rubyBlocks);
+    }
+
+    @Override
+    public void append(AbstractBlock block) {
+
+        getRubyObject().callMethod(runtime.getCurrentContext(), "<<", ((AbstractBlockImpl) block).getRubyObject());
     }
 
     @Override

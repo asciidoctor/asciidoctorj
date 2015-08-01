@@ -28,6 +28,11 @@ public abstract class AbstractNodeImpl extends RubyObjectWrapper implements Abst
     }
 
     @Override
+    public void setId(String id) {
+        setString("id", id);
+    }
+
+    @Override
     public String context() {
         return getContext();
     }

@@ -1,6 +1,9 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.internal.RubyObjectWrapper;
+import org.jruby.Ruby;
+import org.jruby.RubyArray;
+import org.jruby.RubyClass;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.List;
@@ -9,6 +12,16 @@ public class ReaderImpl extends RubyObjectWrapper implements Reader {
 
     public ReaderImpl(IRubyObject rubyNode) {
         super(rubyNode);
+    }
+
+    static ReaderImpl createReader(Ruby runtime, List<String> lines) {
+        RubyArray rubyLines = runtime.newArray(lines.size());
+        for (String line: lines) {
+            rubyLines.add(runtime.newString(line));
+        }
+
+        RubyClass readerClass = runtime.getModule("Asciidoctor").getClass("Reader");
+        return new ReaderImpl(readerClass.callMethod("new", rubyLines));
     }
 
     @Override

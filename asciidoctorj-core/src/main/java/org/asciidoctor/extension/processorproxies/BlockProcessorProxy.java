@@ -1,10 +1,8 @@
 package org.asciidoctor.extension.processorproxies;
 
 import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.AbstractNodeImpl;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.BlockProcessor;
-import org.asciidoctor.extension.Reader;
 import org.asciidoctor.extension.ReaderImpl;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;

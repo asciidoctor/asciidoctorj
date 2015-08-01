@@ -16,11 +16,24 @@ public interface AbstractBlock extends AbstractNode {
      */
     String style();
     String getStyle();
+
     /**
+     * @return The list of child blocks of this block
      * @deprecated Please use {@linkplain #getBlocks()} instead
      */
     List<AbstractBlock> blocks();
+
+    /**
+     * @return The list of child blocks of this block
+     */
     List<AbstractBlock> getBlocks();
+
+    /**
+     * Appends a new child block as the last block to this block.
+     * @param block The new child block added as last child to this block.
+     */
+    void append(AbstractBlock block);
+
     /**
      * @deprecated Please use {@linkplain #getContent()} instead
      */
@@ -36,4 +49,5 @@ public interface AbstractBlock extends AbstractNode {
      * @return the source location of this block or {@code null} if the {@code sourcemap} option is not enabled when loading the document.
      */
     Cursor getSourceLocation();
+
 }

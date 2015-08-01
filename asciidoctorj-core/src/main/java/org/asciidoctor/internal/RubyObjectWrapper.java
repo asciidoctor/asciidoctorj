@@ -118,7 +118,11 @@ public class RubyObjectWrapper {
             } else {
                 IRubyObject[] rubyArgs = new IRubyObject[args.length];
                 for (int i = 0; i < args.length; i++) {
-                    rubyArgs[i] = JavaEmbedUtils.javaToRuby(runtime, args[i]);
+                    if (args[i] instanceof RubyObjectWrapper) {
+                        rubyArgs[i] = ((RubyObjectWrapper)args[i]).getRubyObject();
+                    } else {
+                        rubyArgs[i] = JavaEmbedUtils.javaToRuby(runtime, args[i]);
+                    }
                 }
                 result = rubyNode.callMethod(threadContext, propertyName, rubyArgs);
             }
