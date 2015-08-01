@@ -162,6 +162,7 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
   jruby {
     defaultRepositories = false
     defaultVersion = jrubyVersion
+    execVersion = jrubyVersion
     // TODO I'd like to be able to customize the name of the gemInstallDir
   }
 
