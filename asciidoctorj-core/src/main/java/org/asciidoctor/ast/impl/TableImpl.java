@@ -1,5 +1,8 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
+import org.asciidoctor.ast.Column;
+import org.asciidoctor.ast.Row;
+import org.asciidoctor.ast.Table;
 import org.asciidoctor.internal.RubyBlockListDecorator;
 import org.asciidoctor.internal.RubyObjectWrapper;
 import org.jruby.RubyArray;
@@ -10,7 +13,7 @@ import java.util.AbstractList;
 import java.util.Collection;
 import java.util.List;
 
-public class TableImpl extends AbstractBlockImpl implements Table {
+public class TableImpl extends StructuralNodeImpl implements Table {
 
     private static final String FRAME_ATTR = "frame";
 

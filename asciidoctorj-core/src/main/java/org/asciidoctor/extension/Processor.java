@@ -2,8 +2,11 @@ package org.asciidoctor.extension;
 
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.*;
+import org.asciidoctor.ast.impl.ColumnImpl;
+import org.asciidoctor.ast.impl.DocumentImpl;
+import org.asciidoctor.ast.impl.RowImpl;
+import org.asciidoctor.ast.impl.StructuralNodeImpl;
 import org.asciidoctor.internal.JRubyRuntimeContext;
-import org.asciidoctor.extension.ReaderImpl;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyObjectWrapper;
 import org.asciidoctor.internal.RubyUtils;
@@ -11,7 +14,6 @@ import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyFixnum;
 import org.jruby.RubyHash;
-import org.jruby.java.proxies.RubyObjectHolderProxy;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.HashMap;
@@ -112,18 +114,18 @@ public class Processor {
     }
 
 
-    public Table createTable(AbstractBlock parent) {
+    public Table createTable(StructuralNode parent) {
         return createTable(parent, new HashMap<String, Object>());
     }
 
-    public Table createTable(AbstractBlock parent, Map<String, Object> attributes) {
+    public Table createTable(StructuralNode parent, Map<String, Object> attributes) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         RubyHash rubyAttributes = RubyHash.newHash(rubyRuntime);
         rubyAttributes.putAll(attributes);
 
         IRubyObject[] parameters = {
-                ((AbstractBlockImpl) parent).getRubyObject(),
+                ((StructuralNodeImpl) parent).getRubyObject(),
                 rubyAttributes};
         Table ret = (Table) NodeConverter.createASTNode(rubyRuntime, TABLE_CLASS, parameters);
         ret.setAttr("rowcount", 0, false);
@@ -148,7 +150,7 @@ public class Processor {
         rubyAttributes.putAll(attributes);
 
         IRubyObject[] parameters = {
-                ((AbstractBlockImpl) parent).getRubyObject(),
+                ((StructuralNodeImpl) parent).getRubyObject(),
                 RubyFixnum.newFixnum(rubyRuntime, index),
                 rubyAttributes}; // No cursor parameter yet
 
@@ -184,15 +186,15 @@ public class Processor {
         return (Cell) NodeConverter.createASTNode(rubyRuntime, TABLE_CELL_CLASS, parameters);
     }
 
-    public Block createBlock(AbstractBlock parent, String context, String content) {
+    public Block createBlock(StructuralNode parent, String context, String content) {
         return createBlock(parent, context, content, new HashMap<String, Object>(), new HashMap<Object, Object>());
     }
 
-    public Block createBlock(AbstractBlock parent, String context, String content, Map<String, Object> attributes) {
+    public Block createBlock(StructuralNode parent, String context, String content, Map<String, Object> attributes) {
         return createBlock(parent, context, content, attributes, new HashMap<Object, Object>());
     }
 
-    public Block createBlock(AbstractBlock parent, String context, String content, Map<String, Object> attributes,
+    public Block createBlock(StructuralNode parent, String context, String content, Map<String, Object> attributes,
             Map<Object, Object> options) {
 
         options.put(Options.SOURCE, content);
@@ -201,15 +203,15 @@ public class Processor {
         return createBlock(parent, context, options);
     }
 
-    public Block createBlock(AbstractBlock parent, String context, List<String> content) {
+    public Block createBlock(StructuralNode parent, String context, List<String> content) {
         return createBlock(parent, context, content, new HashMap<String, Object>(), new HashMap<Object, Object>());
     }
 
-    public Block createBlock(AbstractBlock parent, String context, List<String> content, Map<String, Object> attributes) {
+    public Block createBlock(StructuralNode parent, String context, List<String> content, Map<String, Object> attributes) {
         return createBlock(parent, context, content, attributes, new HashMap<Object, Object>());
     }
 
-    public Block createBlock(AbstractBlock parent, String context, List<String> content, Map<String, Object> attributes,
+    public Block createBlock(StructuralNode parent, String context, List<String> content, Map<String, Object> attributes,
             Map<Object, Object> options) {
 
         options.put(Options.SOURCE, content);
@@ -218,31 +220,31 @@ public class Processor {
         return createBlock(parent, context, options);
     }
 
-    public Section createSection(AbstractBlock parent) {
+    public Section createSection(StructuralNode parent) {
         return createSection(parent, null, true, new HashMap<Object, Object>());
     }
 
-    public Section createSection(AbstractBlock parent, Map<Object, Object> options) {
+    public Section createSection(StructuralNode parent, Map<Object, Object> options) {
         return createSection(parent, null, true, options);
     }
 
-    public Section createSection(AbstractBlock parent, boolean numbered, Map<Object, Object> options) {
+    public Section createSection(StructuralNode parent, boolean numbered, Map<Object, Object> options) {
         return createSection(parent, null, numbered, options);
     }
 
-    public Section createSection(AbstractBlock parent, int level, boolean numbered, Map<Object, Object> options) {
+    public Section createSection(StructuralNode parent, int level, boolean numbered, Map<Object, Object> options) {
         return createSection(parent, Integer.valueOf(level), numbered, options);
     }
 
-    public Inline createInline(AbstractBlock parent, String context, List<String> text) {
-        return createInline(parent, context, text, new HashMap<String, Object>());
+    public PhraseNode createPhraseNode(StructuralNode parent, String context, List<String> text) {
+        return createPhraseNode(parent, context, text, new HashMap<String, Object>());
     }
 
-    public Inline createInline(AbstractBlock parent, String context, List<String> text, Map<String, Object> attributes) {
-        return createInline(parent, context, text, attributes, new HashMap<Object, Object>());
+    public PhraseNode createPhraseNode(StructuralNode parent, String context, List<String> text, Map<String, Object> attributes) {
+        return createPhraseNode(parent, context, text, attributes, new HashMap<Object, Object>());
     }
 
-    public Inline createInline(AbstractBlock parent, String context, List<String> text, Map<String, Object> attributes, Map<Object, Object> options) {
+    public PhraseNode createPhraseNode(StructuralNode parent, String context, List<String> text, Map<String, Object> attributes, Map<Object, Object> options) {
 
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
@@ -255,22 +257,22 @@ public class Processor {
         rubyText.addAll(text);
 
         IRubyObject[] parameters = {
-                ((AbstractBlockImpl) parent).getRubyObject(),
+                ((StructuralNodeImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
                 rubyText,
                 convertMapToRubyHashWithSymbols };
-        return (Inline) NodeConverter.createASTNode(rubyRuntime, INLINE_CLASS, parameters);
+        return (PhraseNode) NodeConverter.createASTNode(rubyRuntime, INLINE_CLASS, parameters);
     }
 
-    public Inline createInline(AbstractBlock parent, String context, String text) {
-        return createInline(parent, context, text, new HashMap<String, Object>());
+    public PhraseNode createPhraseNode(StructuralNode parent, String context, String text) {
+        return createPhraseNode(parent, context, text, new HashMap<String, Object>());
     }
 
-    public Inline createInline(AbstractBlock parent, String context, String text, Map<String, Object> attributes) {
-        return createInline(parent, context, text, attributes, new HashMap<String, Object>());
+    public PhraseNode createPhraseNode(StructuralNode parent, String context, String text, Map<String, Object> attributes) {
+        return createPhraseNode(parent, context, text, attributes, new HashMap<String, Object>());
     }
 
-    public Inline createInline(AbstractBlock parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {
+    public PhraseNode createPhraseNode(StructuralNode parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {
         
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
@@ -279,14 +281,14 @@ public class Processor {
         RubyHash convertedOptions = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
         IRubyObject[] parameters = {
-                ((AbstractBlockImpl) parent).getRubyObject(),
+                ((StructuralNodeImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
                 text == null ? rubyRuntime.getNil() : rubyRuntime.newString(text),
                 convertedOptions };
-        return (Inline) NodeConverter.createASTNode(rubyRuntime, INLINE_CLASS, parameters);
+        return (PhraseNode) NodeConverter.createASTNode(rubyRuntime, INLINE_CLASS, parameters);
     }
     
-    private Block createBlock(AbstractBlock parent, String context,
+    private Block createBlock(StructuralNode parent, String context,
             Map<Object, Object> options) {
 
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
@@ -295,13 +297,13 @@ public class Processor {
                 options);
 
         IRubyObject[] parameters = {
-                ((AbstractBlockImpl) parent).getRubyObject(),
+                ((StructuralNodeImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
                 convertMapToRubyHashWithSymbols };
         return (Block) NodeConverter.createASTNode(rubyRuntime, BLOCK_CLASS, parameters);
     }
 
-    private Section createSection(AbstractBlock parent, Integer level, boolean numbered, Map<Object, Object> options) {
+    private Section createSection(StructuralNode parent, Integer level, boolean numbered, Map<Object, Object> options) {
 
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
@@ -309,7 +311,7 @@ public class Processor {
                 options);
 
         IRubyObject[] parameters = {
-                ((AbstractBlockImpl) parent).getRubyObject(),
+                ((StructuralNodeImpl) parent).getRubyObject(),
                 level == null ? rubyRuntime.getNil() : rubyRuntime.newFixnum(level),
                 rubyRuntime.newBoolean(numbered),
                 convertMapToRubyHashWithSymbols };
@@ -359,11 +361,11 @@ public class Processor {
      * @param parent The block to which the parsed content should be added as children.
      * @param lines Raw asciidoctor content
      */
-    public void parseContent(AbstractBlock parent, List<String> lines) {
+    public void parseContent(StructuralNode parent, List<String> lines) {
         Ruby runtime = JRubyRuntimeContext.get(parent);
         Parser parser = new Parser(runtime, parent, ReaderImpl.createReader(runtime, lines));
 
-        AbstractBlock nextBlock = parser.nextBlock();
+        StructuralNode nextBlock = parser.nextBlock();
         while (nextBlock != null) {
             parent.append(nextBlock);
             nextBlock = parser.nextBlock();
@@ -373,24 +375,24 @@ public class Processor {
     private class Parser extends RubyObjectWrapper {
 
         private final Reader reader;
-        private final AbstractBlock parent;
+        private final StructuralNode parent;
 
-        public Parser(Ruby runtime, AbstractBlock parent, Reader reader) {
+        public Parser(Ruby runtime, StructuralNode parent, Reader reader) {
             super(runtime.getModule("Asciidoctor").getClass("Parser"));
 
             this.reader = reader;
             this.parent = parent;
         }
 
-        public AbstractBlock nextBlock() {
+        public StructuralNode nextBlock() {
             if (!reader.hasMoreLines()) {
                 return null;
             }
-            IRubyObject nextBlock = getRubyProperty("next_block", reader, ((AbstractBlockImpl)parent).getRubyObject());
+            IRubyObject nextBlock = getRubyProperty("next_block", reader, ((StructuralNodeImpl)parent).getRubyObject());
             if (nextBlock.isNil()) {
                 return null;
             } else {
-                return (AbstractBlock) NodeConverter.createASTNode(nextBlock);
+                return (StructuralNode) NodeConverter.createASTNode(nextBlock);
             }
         }
     }

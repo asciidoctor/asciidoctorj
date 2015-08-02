@@ -781,7 +781,7 @@ assertThat(document.doctitle(), is("Document Title")); // <2>
 
 But also all blocks that conforms the document can be retrieved.
 Currently there are support for three kinds of blocks.
-`Blocks` itself, `Section` for sections of the document and `AbstractBlock` which is the base type where all kind of blocks (including those not mapped as Java class) are mapped.
+`Blocks` itself, `Section` for sections of the document and `StructuralNode` which is the base type where all kind of blocks (including those not mapped as Java class) are mapped.
 
 [source]
 ----
@@ -809,7 +809,7 @@ Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
 Map<Object, Object> selector = new HashMap<Object, Object>(); // <1>
 selector.put("context", ":image"); // <2>
 
-List<AbstractBlock> findBy = document.findBy(selector);
+List<StructuralNode> findBy = document.findBy(selector);
 assertThat(findBy, hasSize(2)); //<3>
 ----
 <1> To make queries you need to use a `map` approach. Currently this is because of the Asciidoctor API but it will change in near future.
@@ -932,10 +932,10 @@ public class TerminalCommandTreeprocessor extends Treeprocessor { // <1>
 
     this.document = document;
 
-    final List<AbstractBlock> blocks = this.document.blocks(); // <2>
+    final List<StructuralNode> blocks = this.document.blocks(); // <2>
 
     for (int i = 0; i < blocks.size(); i++) {
-        final AbstractBlock currentBlock = blocks.get(i);
+        final StructuralNode currentBlock = blocks.get(i);
         if(currentBlock instanceof Block) {
             Block block = (Block)currentBlock;
             List<String> lines = block.lines(); // <3>
@@ -1122,7 +1122,7 @@ public class YellBlock extends BlockProcessor { // <1>
   }
 
   @Override
-  public Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes) { // <3>
+  public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) { // <3>
       List<String> lines = reader.readLines();
       String upperLines = null;
       for (String line : lines) {
@@ -1181,7 +1181,7 @@ public class GistMacro extends BlockMacroProcessor { // <1>
   }
 
   @Override
-  public Block process(AbstractBlock parent, String target,
+  public Block process(StructuralNode parent, String target,
                         Map<String, Object> attributes) { // <3>
 
     String content = "<div class=\"content\">\n" +
@@ -1236,12 +1236,12 @@ public class ManpageMacro extends InlineMacroProcessor { //<1>
   }
 
   @Override
-  protected String process(AbstractBlock parent, String target, Map<String, Object> attributes) { // <3>
+  protected String process(StructuralNode parent, String target, Map<String, Object> attributes) { // <3>
 
       Map<String, Object> options = new HashMap<String, Object>();
       options.put("type", ":link");
       options.put("target", target + ".html");
-      return createInline(parent, "anchor", target, attributes, options).convert(); // <4>
+      return createPhraseNode(parent, "anchor", target, attributes, options).convert(); // <4>
   }
 
 }
@@ -1537,7 +1537,7 @@ public class TextConverter extends StringConverter {
     
     @Override
     public String convert(
-            AbstractNode node, String transform, Map<Object, Object> o) {    // <2>
+            ContentNode node, String transform, Map<Object, Object> o) {     // <2>
 
         if (transform == null) {                                             // <3>
             transform = node.getNodeName();
@@ -1553,7 +1553,7 @@ public class TextConverter extends StringConverter {
                     .append(LINE_SEPARATOR).append(LINE_SEPARATOR)
                     .append(section.getContent()).toString();                // <4>
         } else if (transform.equals("paragraph")) {
-            AbstractBlock block = (AbstractBlock) node;
+            StructuralNode block = (StructuralNode) node;
             String content = (String) block.content();                       // <4>
             return new StringBuilder(content.replaceAll(LINE_SEPARATOR, " "))
                             .append(LINE_SEPARATOR).toString();
@@ -1853,7 +1853,7 @@ To use a snapshot version of the the AsciidoctorJ library add this repository to
 </repositories>
 ----
 
-If you build your project using {uri-gradle}[Gradle] add the repository like this to our build:
+If you build your project using {uri-gradle}[Gradle] add the repository like this to your build:
 
 [source,groovy]
 ----

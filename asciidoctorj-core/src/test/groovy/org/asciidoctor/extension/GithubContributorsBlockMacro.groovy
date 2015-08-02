@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import groovy.json.JsonSlurper
-import org.asciidoctor.ast.AbstractBlock
+import org.asciidoctor.ast.StructuralNode
 import org.asciidoctor.ast.Cell
 import org.asciidoctor.ast.Column
 import org.asciidoctor.ast.Document
@@ -18,7 +18,7 @@ class GithubContributorsBlockMacro extends BlockMacroProcessor {
     }
 
     @Override
-    Object process(AbstractBlock parent, String target, Map<String, Object> attributes) {
+    Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
         URL url = new URL("http://api.github.com/repos/${target}/contributors")
         URLConnection connection = url.openConnection(new Proxy(Proxy.Type.HTTP, new InetSocketAddress('localhost', TestHttpServer.instance.localPort)))
         String content = connection.inputStream.text

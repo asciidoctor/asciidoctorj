@@ -1,10 +1,10 @@
 package org.asciidoctor.converter;
 
-import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.AbstractNode;
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
-import org.asciidoctor.ast.ListNode;
+import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.Section;
 
 import java.util.Map;
@@ -21,7 +21,7 @@ public class TextConverter extends StringConverter {
     }
     
     @Override
-    public String convert(AbstractNode node, String transform, Map<Object, Object> o) {
+    public String convert(ContentNode node, String transform, Map<Object, Object> o) {
 
         if (transform == null) {
             transform = node.getNodeName();
@@ -37,19 +37,19 @@ public class TextConverter extends StringConverter {
                     .append(LINE_SEPARATOR).append(LINE_SEPARATOR)
                     .append(section.getContent()).toString();
         } else if (transform.equals("paragraph")) {
-            AbstractBlock block = (AbstractBlock) node;
+            StructuralNode block = (StructuralNode) node;
             String content = (String) block.content();
             return new StringBuilder(content.replaceAll(LINE_SEPARATOR, " ")).append(LINE_SEPARATOR).toString();
-        } else if (node instanceof ListNode) {
+        } else if (node instanceof List) {
             StringBuilder sb = new StringBuilder();
-            for (AbstractBlock listItem: ((ListNode) node).getItems()) {
+            for (StructuralNode listItem: ((List) node).getItems()) {
                 sb.append(listItem.convert()).append(LINE_SEPARATOR);
             }
             return sb.toString();
         } else if (node instanceof ListItem) {
             return "-> " + ((ListItem) node).getText();
-        } else if (node instanceof AbstractBlock) {
-            AbstractBlock block = (AbstractBlock) node;
+        } else if (node instanceof StructuralNode) {
+            StructuralNode block = (StructuralNode) node;
             return block.getContent().toString();
         }
         return null;

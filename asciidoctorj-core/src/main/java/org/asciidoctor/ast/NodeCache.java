@@ -34,12 +34,12 @@ public class NodeCache {
         this.runtime = cache.getRuntime();
     }
 
-    public AbstractNode getASTNode() {
-        AbstractNode astNode = (AbstractNode) cache.get(getRuntime().newSymbol(KEY_AST_NODE));
+    public ContentNode getASTNode() {
+        ContentNode astNode = (ContentNode) cache.get(getRuntime().newSymbol(KEY_AST_NODE));
         return astNode;
     }
 
-    public void setASTNode(AbstractNode astNode) {
+    public void setASTNode(ContentNode astNode) {
         cache.put(getRuntime().newSymbol(KEY_AST_NODE), astNode);
     }
 

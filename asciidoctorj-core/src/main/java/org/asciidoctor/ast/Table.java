@@ -2,7 +2,7 @@ package org.asciidoctor.ast;
 
 import java.util.List;
 
-public interface Table extends AbstractBlock {
+public interface Table extends StructuralNode {
 
     public static enum HorizontalAlignment {
         LEFT, CENTER, RIGHT

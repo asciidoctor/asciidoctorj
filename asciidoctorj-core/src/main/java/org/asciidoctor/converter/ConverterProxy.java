@@ -1,6 +1,6 @@
 package org.asciidoctor.converter;
 
-import org.asciidoctor.ast.AbstractNode;
+import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
@@ -126,7 +126,7 @@ public class ConverterProxy<T> extends RubyObject {
 
     @JRubyMethod(required = 1, optional = 2)
     public IRubyObject convert(ThreadContext context, IRubyObject[] args) {
-        AbstractNode node = NodeConverter.createASTNode(args[0]);
+        ContentNode node = NodeConverter.createASTNode(args[0]);
 
         T ret = null;
         if (args.length == 1) {

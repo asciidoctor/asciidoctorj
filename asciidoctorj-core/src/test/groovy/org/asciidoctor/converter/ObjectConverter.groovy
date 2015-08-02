@@ -1,7 +1,7 @@
 package org.asciidoctor.converter
 
 import groovy.transform.CompileStatic
-import org.asciidoctor.ast.AbstractNode
+import org.asciidoctor.ast.ContentNode
 
 @CompileStatic
 @ConverterFor(format = '42')
@@ -14,7 +14,7 @@ class ObjectConverter extends AbstractConverter<ObjectConverterResult> implement
     }
 
     @Override
-    ObjectConverterResult convert(AbstractNode node, String transform, Map<Object, Object> opts) {
+    ObjectConverterResult convert(ContentNode node, String transform, Map<Object, Object> opts) {
         new ObjectConverterResult(x: FIXED_RESULT)
     }
 

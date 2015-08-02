@@ -3,7 +3,7 @@ package org.asciidoctor.extension;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Document;
 
 public class ArrowsAndBoxesBlock extends BlockProcessor {
@@ -19,7 +19,7 @@ public class ArrowsAndBoxesBlock extends BlockProcessor {
     }
 
     @Override
-    public Object process(AbstractBlock parent, Reader reader,
+    public Object process(StructuralNode parent, Reader reader,
             Map<String, Object> attributes) {
 
         List<String> lines = reader.lines();

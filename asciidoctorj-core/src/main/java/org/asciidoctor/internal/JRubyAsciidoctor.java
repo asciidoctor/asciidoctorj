@@ -5,7 +5,7 @@ import org.asciidoctor.Attributes;
 import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.ContentPart;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
@@ -141,7 +141,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return StructuredDocument.createStructuredDocument(toDocumentHeader(documentImpl), contentParts);
     }
 
-    private List<ContentPart> getContents(List<AbstractBlock> blocks, int level, int maxDeepLevel) {
+    private List<ContentPart> getContents(List<StructuralNode> blocks, int level, int maxDeepLevel) {
         // finish getting childs if max structure level was riched
         if (level > maxDeepLevel) {
             return null;
@@ -155,13 +155,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
          */
         // add next level of contentParts
         List<ContentPart> parts = new ArrayList<ContentPart>();
-        for (AbstractBlock block : blocks) {
+        for (StructuralNode block : blocks) {
             parts.add(getContentPartFromBlock(block, level, maxDeepLevel));
         }
         return parts;
     }
 
-    private ContentPart getContentPartFromBlock(AbstractBlock child, int level, int maxDeepLevel) {
+    private ContentPart getContentPartFromBlock(StructuralNode child, int level, int maxDeepLevel) {
         Object content = child.content();
         String textContent;
         if (content instanceof String) {

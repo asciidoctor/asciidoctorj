@@ -1,10 +1,12 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
 import java.util.List;
 
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.impl.StructuralNodeImpl;
 import org.jruby.runtime.builtin.IRubyObject;
 
-public class BlockImpl extends AbstractBlockImpl implements Block {
+public class BlockImpl extends StructuralNodeImpl implements Block {
 
     public BlockImpl(IRubyObject blockDelegate) {
         super(blockDelegate);

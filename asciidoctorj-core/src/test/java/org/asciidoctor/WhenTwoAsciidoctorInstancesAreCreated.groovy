@@ -1,6 +1,6 @@
 package org.asciidoctor
 
-import org.asciidoctor.ast.AbstractBlock
+import org.asciidoctor.ast.StructuralNode
 import org.asciidoctor.extension.BlockMacroProcessor
 import spock.lang.Specification
 
@@ -36,7 +36,7 @@ testmacro::Test[]
         }
 
         @Override
-        Object process(AbstractBlock parent, String target, Map<String, Object> attributes) {
+        Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
             createBlock(parent, PARAGRAPH, TEST_STRING)
         }
     }

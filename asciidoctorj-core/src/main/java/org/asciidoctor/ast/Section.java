@@ -1,6 +1,6 @@
 package org.asciidoctor.ast;
 
-public interface Section extends AbstractBlock {
+public interface Section extends StructuralNode {
 
     /**
      * @deprecated Please use {@link #getIndex()}

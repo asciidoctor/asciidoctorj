@@ -1,6 +1,6 @@
 package org.asciidoctor.converter;
 
-import org.asciidoctor.ast.AbstractNode;
+import org.asciidoctor.ast.ContentNode;
 
 import java.util.Map;
 
@@ -11,7 +11,7 @@ public class DummyConverter extends StringConverter {
     }
     
     @Override
-    public String convert(AbstractNode node, String transform, Map<Object, Object> o) {
+    public String convert(ContentNode node, String transform, Map<Object, Object> o) {
         return "Dummy";
     }
 

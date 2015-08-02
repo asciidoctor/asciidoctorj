@@ -2,7 +2,7 @@ package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.OptionsBuilder
-import org.asciidoctor.ast.AbstractBlock
+import org.asciidoctor.ast.StructuralNode
 import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.Section
@@ -123,7 +123,7 @@ testmacro::target[]
 
         asciidoctor.javaExtensionRegistry().blockMacro(new BlockMacroProcessor('testmacro'){
             @Override
-            Object process(AbstractBlock parent, String target, Map<String, Object> attributes) {
+            Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
                 createBlock(parent, 'paragraph', expectedContent, [:])
             }
         })

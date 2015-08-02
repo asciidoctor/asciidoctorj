@@ -1,6 +1,6 @@
 package org.asciidoctor.ast;
 
-public interface Column extends AbstractNode {
+public interface Column extends ContentNode {
 
     /**
      * Returns the style of this column.

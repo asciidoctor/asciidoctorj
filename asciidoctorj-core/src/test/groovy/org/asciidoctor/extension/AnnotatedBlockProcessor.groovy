@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import groovy.transform.CompileStatic
-import org.asciidoctor.ast.AbstractBlock
+import org.asciidoctor.ast.StructuralNode
 
 @CompileStatic
 @Name('yell')
@@ -21,7 +21,7 @@ class AnnotatedBlockProcessor extends BlockProcessor {
     }
 
     @Override
-    Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes) {
+    Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
         assert attributes['key'] == 'value'
         List<String> lines = reader.readLines()
         List<String> newLines = lines*.toUpperCase()

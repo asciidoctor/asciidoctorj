@@ -1,6 +1,6 @@
 package org.asciidoctor.extension
 
-import org.asciidoctor.ast.AbstractBlock
+import org.asciidoctor.ast.StructuralNode
 
 class ConfigModifyingBlockProcessor extends BlockProcessor {
 
@@ -18,7 +18,7 @@ class ConfigModifyingBlockProcessor extends BlockProcessor {
     }
 
     @Override
-    Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes) {
+    Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
         setConfig([:])
     }
 }

@@ -1,6 +1,6 @@
 package org.asciidoctor.extension.processorproxies;
 
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.extension.ReaderImpl;
@@ -115,7 +115,7 @@ public class BlockProcessorProxy extends AbstractProcessorProxy<BlockProcessor> 
     @JRubyMethod(name = "process", required = 3)
     public IRubyObject process(ThreadContext context, IRubyObject parent, IRubyObject reader, IRubyObject attributes) {
         Object o = getProcessor().process(
-                (AbstractBlock) NodeConverter.createASTNode(parent),
+                (StructuralNode) NodeConverter.createASTNode(parent),
                 new ReaderImpl(reader),
                 RubyUtils.rubyToJava(getRuntime(), attributes, Map.class));
 

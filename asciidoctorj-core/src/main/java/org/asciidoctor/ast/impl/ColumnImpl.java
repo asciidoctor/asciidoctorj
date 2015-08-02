@@ -1,8 +1,10 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
+import org.asciidoctor.ast.Column;
+import org.asciidoctor.ast.Table;
 import org.jruby.runtime.builtin.IRubyObject;
 
-public class ColumnImpl extends AbstractNodeImpl implements Column {
+public class ColumnImpl extends ContentNodeImpl implements Column {
 
     public ColumnImpl(IRubyObject rubyNode) {
         super(rubyNode);

@@ -3,7 +3,7 @@ package org.asciidoctor.ast;
 import java.util.List;
 import java.util.Map;
 
-public interface AbstractBlock extends AbstractNode {
+public interface StructuralNode extends ContentNode {
 
     /**
      * @deprecated Please use {@linkplain #getTitle()} instead
@@ -21,18 +21,18 @@ public interface AbstractBlock extends AbstractNode {
      * @return The list of child blocks of this block
      * @deprecated Please use {@linkplain #getBlocks()} instead
      */
-    List<AbstractBlock> blocks();
+    List<StructuralNode> blocks();
 
     /**
      * @return The list of child blocks of this block
      */
-    List<AbstractBlock> getBlocks();
+    List<StructuralNode> getBlocks();
 
     /**
      * Appends a new child block as the last block to this block.
      * @param block The new child block added as last child to this block.
      */
-    void append(AbstractBlock block);
+    void append(StructuralNode block);
 
     /**
      * @deprecated Please use {@linkplain #getContent()} instead
@@ -40,7 +40,7 @@ public interface AbstractBlock extends AbstractNode {
     Object content();
     Object getContent();
     String convert();
-    List<AbstractBlock> findBy(Map<Object, Object> selector);
+    List<StructuralNode> findBy(Map<Object, Object> selector);
     int getLevel();
 
     /**

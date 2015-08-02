@@ -1,6 +1,6 @@
 package org.asciidoctor.ast;
 
-public interface Cell extends AbstractNode {
+public interface Cell extends ContentNode {
 
     Column getColumn();
 
