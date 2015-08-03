@@ -9,10 +9,9 @@ dependencies {
     exclude module: 'thread_safe'
     // We must lock Prawn to 1.3.0 until AsciidoctorJ upgrades to JRuby 9.0.0.0
     exclude module: 'prawn'
-    exclude module: 'ttfunk'
   }
   gems "rubygems:prawn:$prawnGemVersion"
-  gems "rubygems:ttfunk:$ttfunkGemVersion"
+  gems "rubygems:rouge:$rougeGemVersion"
 }
 
 def gemFiles = fileTree(jruby.gemInstallDir) {
@@ -28,6 +27,8 @@ def gemFiles = fileTree(jruby.gemInstallDir) {
   include "gems/prawn-icon-*/fonts/fa/*"
   // Accomodate Addressable's non-conforming packaging
   include "gems/addressable-*/data/*.data"
+
+  exclude 'gems/rouge-*/lib/rouge/demos/**'
 }
 
 jrubyPrepareGems << {

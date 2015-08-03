@@ -1,9 +1,15 @@
 = Document Title
-:source-highlighter: coderay
+:source-highlighter: rouge
+
+== Section
 
 Content.
 
 [source,java]
 ----
-System.out.println("Hello, World!");
+public class Test {
+  public static void main(String[] args) {
+    System.out.println("Hello World!");
+  }
+}
 ----
