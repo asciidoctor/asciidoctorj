@@ -24,7 +24,7 @@ public class WhenBackendIsPdf {
         File inputFile = classpath.getResource("sample.adoc");
         File outputFile1 = new File(inputFile.getParentFile(), "sample.pdf");
         File outputFile2 = new File(inputFile.getParentFile(), "sample.pdfmarks");
-        asciidoctor.convertFile(inputFile, options().backend("pdf").get());
+        asciidoctor.convertFile(inputFile, options().backend("pdf").safe(SafeMode.UNSAFE).get());
         assertThat(outputFile1.exists(), is(true));
         assertThat(outputFile2.exists(), is(true));
         outputFile1.delete();
