@@ -8,6 +8,7 @@ dependencies {
     exclude module: 'prawn'
   }
   gems "rubygems:prawn:$prawnGemVersion"
+  gems "rubygems:rouge:$rougeGemVersion"
 }
 
 def gemFiles = fileTree(jruby.gemInstallDir) {
@@ -23,6 +24,8 @@ def gemFiles = fileTree(jruby.gemInstallDir) {
   include "gems/prawn-icon-*/fonts/*/*"
   // Include required data file from the addressable gem
   include "gems/addressable-*/data/*.data"
+
+  exclude 'gems/rouge-*/lib/rouge/demos/**'
 }
 
 jrubyPrepareGems << {

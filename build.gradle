@@ -41,6 +41,7 @@ subprojects {
     hamlGemVersion = '4.0.5'
     openUriCachedGemVersion = '0.0.5'
     prawnGemVersion = '1.3.0'
+    rougeGemVersion = '1.9.1'
     slimGemVersion = '2.0.3'
     threadSafeGemVersion = '0.3.4'
     tiltGemVersion = '2.0.1'
