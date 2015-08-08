@@ -1,4 +1,4 @@
-= Document Title
+= Source code highlighting
 :source-highlighter: rouge
 
 This document shows some code highlighting examples.

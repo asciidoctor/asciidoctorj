@@ -12,6 +12,8 @@ dependencies {
   }
   gems "rubygems:prawn:$prawnGemVersion"
   gems "rubygems:rouge:$rougeGemVersion"
+
+  testCompile "org.apache.pdfbox:pdfbox:$pdfboxVersion"
 }
 
 def gemFiles = fileTree(jruby.gemInstallDir) {
