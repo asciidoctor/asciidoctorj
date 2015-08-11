@@ -38,7 +38,7 @@ jrubyPrepareGems << {
     from gemFiles
     eachFile {
       // convince Asciidoctor PDF to use the thread_safe 0.3.4 provided by AsciidoctorJ
-      if (it.path == 'specifications/asciidoctor-pdf-1.5.0.alpha.9.gemspec') {
+      if (it.path =~ 'specifications/asciidoctor-pdf-1.5.0.*.gemspec') {
         it.filter { line ->
           line.replaceAll(/<thread_safe>, \["= 0.3.5"\]/, '<thread_safe>, ["= 0.3.4"]')
         }
