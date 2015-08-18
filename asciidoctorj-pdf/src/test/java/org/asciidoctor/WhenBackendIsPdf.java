@@ -47,19 +47,16 @@ public class WhenBackendIsPdf {
         String filename = "image-sample";
         File inputFile = this.classpath.getResource(filename + ".adoc");
         File outputFile1 = new File(inputFile.getParentFile(), filename + ".pdf");
-        File outputFile2 = new File(inputFile.getParentFile(), filename + ".pdfmarks");
 
         asciidoctor.convertFile(inputFile, options().backend("pdf").safe(SafeMode.UNSAFE).get());
 
         assertThat(outputFile1.exists(), is(true));
-        assertThat(outputFile2.exists(), is(true));
         ImageProcessor imageProcessor = new ImageProcessor();
         imageProcessor.parse(outputFile1.getAbsolutePath());
         List images = imageProcessor.getImages();
         assertThat(images.size(), is(2));
 
         outputFile1.delete();
-        outputFile2.delete();
     }
 
     @Test
@@ -67,12 +64,11 @@ public class WhenBackendIsPdf {
         String filename = "code-sample";
         File inputFile = this.classpath.getResource(filename + ".adoc");
         File outputFile1 = new File(inputFile.getParentFile(), filename + ".pdf");
-        File outputFile2 = new File(inputFile.getParentFile(), filename + ".pdfmarks");
 
         asciidoctor.convertFile(inputFile, options().backend("pdf").safe(SafeMode.UNSAFE).get());
 
         assertThat(outputFile1.exists(), is(true));
-        assertThat(outputFile2.exists(), is(true));
+
         ColorsProcessor colorsProcessor = new ColorsProcessor("program", "System.out.println", "printHello", "HelloWorld", "<body>", "else", "Math.sqrt" );
         colorsProcessor.parse(outputFile1.getAbsolutePath());
         Map<String, List<Color>> colors = colorsProcessor.getColors();
@@ -85,7 +81,6 @@ public class WhenBackendIsPdf {
         assertThat(colors.get("Math.sqrt").get(0), equalTo(RougeColors.LIGHT_BLUE));
 
         outputFile1.delete();
-        outputFile2.delete();
     }
 
 }
