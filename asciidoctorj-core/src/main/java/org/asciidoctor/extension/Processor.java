@@ -218,6 +218,22 @@ public class Processor {
         return createBlock(parent, context, options);
     }
 
+    public Section createSection(AbstractBlock parent) {
+        return createSection(parent, null, true, new HashMap<Object, Object>());
+    }
+
+    public Section createSection(AbstractBlock parent, Map<Object, Object> options) {
+        return createSection(parent, null, true, options);
+    }
+
+    public Section createSection(AbstractBlock parent, boolean numbered, Map<Object, Object> options) {
+        return createSection(parent, null, numbered, options);
+    }
+
+    public Section createSection(AbstractBlock parent, int level, boolean numbered, Map<Object, Object> options) {
+        return createSection(parent, Integer.valueOf(level), numbered, options);
+    }
+
     public Inline createInline(AbstractBlock parent, String context, List<String> text) {
         return createInline(parent, context, text, new HashMap<String, Object>());
     }
@@ -283,6 +299,21 @@ public class Processor {
                 RubyUtils.toSymbol(rubyRuntime, context),
                 convertMapToRubyHashWithSymbols };
         return (Block) NodeConverter.createASTNode(rubyRuntime, BLOCK_CLASS, parameters);
+    }
+
+    private Section createSection(AbstractBlock parent, Integer level, boolean numbered, Map<Object, Object> options) {
+
+        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
+
+        RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime,
+                options);
+
+        IRubyObject[] parameters = {
+                ((AbstractBlockImpl) parent).getRubyObject(),
+                level == null ? rubyRuntime.getNil() : rubyRuntime.newFixnum(level),
+                rubyRuntime.newBoolean(numbered),
+                convertMapToRubyHashWithSymbols };
+        return (Section) NodeConverter.createASTNode(rubyRuntime, SECTION_CLASS, parameters);
     }
 
     /**
