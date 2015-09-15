@@ -12,12 +12,11 @@ public class NumberLinesPreprocessor extends Preprocessor {
 	public NumberLinesPreprocessor() {}
 
 	@Override
-	public PreprocessorReader process(Document document,
+	public void process(Document document,
 			PreprocessorReader reader) {
 
 		assertThat(reader.getLineno(), is(1));
 
-		return reader;
 	}
 
 }

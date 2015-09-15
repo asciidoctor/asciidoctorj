@@ -886,9 +886,8 @@ public class ChangeAttributeValuePreprocessor extends Preprocessor { // <1>
 	}
 
 	@Override
-	public PreprocessorReader process(Document document, PreprocessorReader reader) { // <3>
+	public void process(Document document, PreprocessorReader reader) { // <3>
 		document.getAttributes().put("content", "Alex");
-		return reader;
 	}
 
 }

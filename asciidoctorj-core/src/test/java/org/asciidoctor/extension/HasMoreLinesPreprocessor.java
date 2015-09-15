@@ -14,12 +14,10 @@ public class HasMoreLinesPreprocessor extends Preprocessor {
 	}
 
 	@Override
-	public PreprocessorReader process(Document document,
+	public void process(Document document,
 			PreprocessorReader reader) {
 
 		assertThat(reader.hasMoreLines(), is(true));
-
-		return reader;
 	}
 
 }
