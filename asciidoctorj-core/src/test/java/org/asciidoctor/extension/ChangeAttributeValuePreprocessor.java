@@ -11,12 +11,10 @@ public class ChangeAttributeValuePreprocessor extends Preprocessor {
 	}
 
 	@Override
-	public PreprocessorReader process(Document document,
+	public void process(Document document,
 			PreprocessorReader reader) {
 
 		document.getAttributes().put("content", "Alex");
-		
-		return reader;
 	}
 
 }

@@ -94,14 +94,10 @@ public class PreprocessorProxy extends AbstractProcessorProxy<Preprocessor> {
 
     @JRubyMethod(name = "process", required = 2)
     public IRubyObject process(ThreadContext context, IRubyObject document, IRubyObject preprocessorReader) {
-        PreprocessorReader result = getProcessor().process(
+        getProcessor().process(
                 (Document) NodeConverter.createASTNode(document),
                 new PreprocessorReaderImpl(preprocessorReader));
 
-        if (result instanceof PreprocessorReaderImpl) {
-            return ((PreprocessorReaderImpl) result).getRubyObject();
-        } else {
-            return JavaEmbedUtils.javaToRuby(getRuntime(), result);
-        }
+        return getRuntime().getNil();
     }
 }

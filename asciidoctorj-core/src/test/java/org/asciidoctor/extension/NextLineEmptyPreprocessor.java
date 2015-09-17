@@ -14,7 +14,7 @@ public class NextLineEmptyPreprocessor extends Preprocessor {
 	}
 
 	@Override
-	public PreprocessorReader process(Document document,
+	public void process(Document document,
 			PreprocessorReader reader) {
 
 		assertThat(reader.isNextLineEmpty(), is(false));
@@ -22,8 +22,6 @@ public class NextLineEmptyPreprocessor extends Preprocessor {
 		reader.advance();
 		
 		assertThat(reader.isNextLineEmpty(), is(true));
-		
-		return reader;
 	}
 
 }
