@@ -76,6 +76,31 @@ public class RubyHashUtil {
 
     }
 
+    public static RubyHash convertMapToRubyHashWithStrings(Ruby rubyRuntime, Map<String, Object> attributes) {
+
+        if (attributes instanceof RubyHashMapDecorator) {
+            return ((RubyHashMapDecorator) attributes).getRubyHash();
+        } else if (attributes instanceof RubyHash) {
+            return (RubyHash) attributes;
+        }
+
+        RubyHash rubyHash = new RubyHash(rubyRuntime);
+
+        Set<Entry<String, Object>> optionsSet = attributes.entrySet();
+
+        for (Entry<String, Object> entry : optionsSet) {
+
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            RubyString newKey = rubyRuntime.newString(key);
+            IRubyObject iRubyValue = toRubyObject(rubyRuntime, value);
+
+            rubyHash.put(newKey, iRubyValue);
+        }
+        return rubyHash;
+    }
+
     private static boolean isNotARubySymbol(Object keyType) {
         return keyType instanceof CharSequence;
     }

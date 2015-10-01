@@ -272,16 +272,16 @@ public class Processor {
 
     public Inline createInline(AbstractBlock parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {
         
-        options.put(Options.ATTRIBUTES, attributes);
-
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
+
+        options.put(Options.ATTRIBUTES, RubyHashUtil.convertMapToRubyHashWithStrings(rubyRuntime, attributes));
 
         RubyHash convertedOptions = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
         IRubyObject[] parameters = {
                 ((AbstractBlockImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
-                rubyRuntime.newString(text),
+                text == null ? rubyRuntime.getNil() : rubyRuntime.newString(text),
                 convertedOptions };
         return (Inline) NodeConverter.createASTNode(rubyRuntime, INLINE_CLASS, parameters);
     }
