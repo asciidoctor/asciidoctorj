@@ -41,7 +41,8 @@ Parsing will crash when processing this block
         asciidoctor.render(document, OptionsBuilder.options().toFile(false))
 
         then:
-        thrown AsciidoctorCoreException
+        Exception e = thrown()
+        e instanceof AsciidoctorCoreException || e instanceof IllegalStateException
     }
 
     def 'setConfig should throw an IllegalStateException in Processor_process when a processor class is registered'() {
@@ -55,7 +56,8 @@ Parsing will crash when processing this block
         asciidoctor.render(document, OptionsBuilder.options().toFile(false))
 
         then:
-        thrown AsciidoctorCoreException
+        Exception e = thrown()
+        e instanceof AsciidoctorCoreException || e instanceof IllegalStateException
     }
 
 }
