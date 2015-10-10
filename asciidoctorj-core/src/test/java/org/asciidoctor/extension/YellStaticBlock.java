@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.StructuralNode;
 
 public class YellStaticBlock extends BlockProcessor {
 
@@ -23,7 +23,7 @@ public class YellStaticBlock extends BlockProcessor {
     }
 
     @Override
-    public Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes) {
+    public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
         List<String> lines = reader.readLines();
         String upperLines = null;
         for (String line : lines) {

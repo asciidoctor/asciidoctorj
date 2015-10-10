@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.internal.IOUtils;
@@ -96,7 +96,7 @@ public class WhenAsciiDocIsRenderedToDocument {
         Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
         Map<Object, Object> selector = new HashMap<Object, Object>();
         selector.put("context", ":image");
-        List<AbstractBlock> findBy = document.findBy(selector);
+        List<StructuralNode> findBy = document.findBy(selector);
         assertThat(findBy, hasSize(2));
         
         assertThat((String)findBy.get(0).getAttributes().get("target"), is("tiger.png"));
@@ -146,7 +146,7 @@ public class WhenAsciiDocIsRenderedToDocument {
     @Test
     public void should_be_able_to_get_roles() {
         Document document = asciidoctor.load(ROLE, new HashMap<String, Object>());
-        AbstractBlock abstractBlock = document.blocks().get(0);
+        StructuralNode abstractBlock = document.blocks().get(0);
         assertThat(abstractBlock.getRole(), is("famous"));
         assertThat(abstractBlock.hasRole("famous"), is(true));
         assertThat(abstractBlock.isRole(), is(true));
@@ -156,7 +156,7 @@ public class WhenAsciiDocIsRenderedToDocument {
     @Test
     public void should_be_able_to_get_reftext() {
         Document document = asciidoctor.load(REFTEXT, new HashMap<String, Object>());
-        AbstractBlock abstractBlock = document.blocks().get(0);
+        StructuralNode abstractBlock = document.blocks().get(0);
         assertThat(abstractBlock.getReftext(), is("the first section"));
         assertThat(abstractBlock.isReftext(), is(true));
     }
@@ -241,17 +241,17 @@ public class WhenAsciiDocIsRenderedToDocument {
         Document document = asciidoctor.loadFile(file, OptionsBuilder.options().option("sourcemap", "true").docType("book").asMap());
         Map<Object, Object> selector = new HashMap<Object, Object>();
         selector.put("context", ":paragraph");
-        List<AbstractBlock> findBy = document.findBy(selector);
-        AbstractBlock block = findBy.get(0);
+        List<StructuralNode> findBy = document.findBy(selector);
+        StructuralNode block = findBy.get(0);
 
         // Then
-        AbstractBlock block1 = findBy.get(0);
+        StructuralNode block1 = findBy.get(0);
         assertThat(block1.getSourceLocation().getLineNumber(), is(3));
         assertThat(block1.getSourceLocation().getPath(), is(file.getName()));
         assertThat(block1.getSourceLocation().getFile(), is(file.getName()));
         assertThat(block1.getSourceLocation().getDir(), is(file.getParent().replaceAll("\\\\", "/")));
 
-        AbstractBlock block2 = findBy.get(1);
+        StructuralNode block2 = findBy.get(1);
         assertThat(block2.getSourceLocation().getLineNumber(), is(8));
         assertThat(block2.getSourceLocation().getPath(), is(file.getName()));
         assertThat(block2.getSourceLocation().getFile(), is(file.getName()));

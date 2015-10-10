@@ -1,5 +1,7 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
+import org.asciidoctor.ast.Cursor;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.internal.RubyBlockListDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.jruby.RubyArray;
@@ -8,12 +10,12 @@ import org.jruby.runtime.builtin.IRubyObject;
 import java.util.List;
 import java.util.Map;
 
-public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock {
+public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNode {
 
     private static final String BLOCK_CLASS = "Block";
     private static final String SECTION_CLASS = "Section";
     
-    public AbstractBlockImpl(IRubyObject blockDelegate) {
+    public StructuralNodeImpl(IRubyObject blockDelegate) {
         super(blockDelegate);
     }
 
@@ -43,20 +45,20 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     }
 
     @Override
-    public List<AbstractBlock> blocks() {
+    public List<StructuralNode> blocks() {
         return getBlocks();
     }
 
     @Override
-    public List<AbstractBlock> getBlocks() {
+    public List<StructuralNode> getBlocks() {
         RubyArray rubyBlocks = (RubyArray) getRubyProperty("blocks");
-        return new RubyBlockListDecorator<AbstractBlock>(rubyBlocks);
+        return new RubyBlockListDecorator<StructuralNode>(rubyBlocks);
     }
 
     @Override
-    public void append(AbstractBlock block) {
+    public void append(StructuralNode block) {
 
-        getRubyObject().callMethod(runtime.getCurrentContext(), "<<", ((AbstractBlockImpl) block).getRubyObject());
+        getRubyObject().callMethod(runtime.getCurrentContext(), "<<", ((StructuralNodeImpl) block).getRubyObject());
     }
 
     @Override
@@ -89,7 +91,7 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     }
 
     @Override
-    public List<AbstractBlock> findBy(Map<Object, Object> selector) {
+    public List<StructuralNode> findBy(Map<Object, Object> selector) {
 
         RubyArray rubyBlocks = (RubyArray) getRubyProperty("find_by", RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime,
                 selector));

@@ -1,7 +1,10 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
 import java.util.Map;
 
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.Title;
+import org.asciidoctor.ast.impl.StructuralNodeImpl;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.jruby.Ruby;
 import org.jruby.RubyBoolean;
@@ -9,7 +12,7 @@ import org.jruby.RubyHash;
 import org.jruby.RubySymbol;
 import org.jruby.runtime.builtin.IRubyObject;
 
-public class DocumentImpl extends AbstractBlockImpl implements Document {
+public class DocumentImpl extends StructuralNodeImpl implements Document {
 
     public DocumentImpl(IRubyObject document) {
         super(document);

@@ -3,7 +3,7 @@ package org.asciidoctor.extension;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.StructuralNode;
 
 public abstract class BlockProcessor extends Processor {
 
@@ -148,5 +148,5 @@ public abstract class BlockProcessor extends Processor {
         this.name = name;
     }
     
-    public abstract Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes);
+    public abstract Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes);
 }

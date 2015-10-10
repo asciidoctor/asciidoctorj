@@ -1,6 +1,6 @@
 package org.asciidoctor.extension.processorproxies;
 
-import org.asciidoctor.ast.AbstractNodeImpl;
+import org.asciidoctor.ast.impl.ContentNodeImpl;
 import org.asciidoctor.extension.ContentModel;
 import org.asciidoctor.extension.Contexts;
 import org.asciidoctor.extension.DefaultAttribute;
@@ -111,8 +111,8 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
     }
 
     protected IRubyObject convertProcessorResult(Object o) {
-        if (o instanceof AbstractNodeImpl) {
-            return ((AbstractNodeImpl) o).getRubyObject();
+        if (o instanceof ContentNodeImpl) {
+            return ((ContentNodeImpl) o).getRubyObject();
         } else {
             return JavaEmbedUtils.javaToRuby(getRuntime(), o);
         }

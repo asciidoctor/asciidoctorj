@@ -1,6 +1,6 @@
 package org.asciidoctor.ast;
 
-public interface Inline extends AbstractNode {
+public interface PhraseNode extends ContentNode {
 
     @Deprecated
     public String render();

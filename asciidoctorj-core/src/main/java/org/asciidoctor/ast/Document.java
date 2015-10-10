@@ -3,7 +3,7 @@ package org.asciidoctor.ast;
 import java.util.List;
 import java.util.Map;
 
-public interface Document extends AbstractBlock {
+public interface Document extends StructuralNode {
 
     /**
      * @return The Title structure for this document.
@@ -51,7 +51,7 @@ public interface Document extends AbstractBlock {
      *
      * @return blocks contained within current Document.
      */
-    List<AbstractBlock> blocks();
+    List<StructuralNode> blocks();
 
     /**
      *

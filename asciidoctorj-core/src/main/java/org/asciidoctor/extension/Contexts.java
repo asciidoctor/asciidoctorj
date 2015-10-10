@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
  *         super(blockName);
  *     }
  *
- *     public Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes) {
+ *     public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
  *         List<String> lines = reader.readLines();
  *         List<String> newLines = new ArrayList<>();
  *         for (String line: lines) {

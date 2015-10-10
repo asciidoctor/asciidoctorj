@@ -1,5 +1,14 @@
 package org.asciidoctor.ast;
 
+import org.asciidoctor.ast.impl.BlockImpl;
+import org.asciidoctor.ast.impl.CellImpl;
+import org.asciidoctor.ast.impl.ColumnImpl;
+import org.asciidoctor.ast.impl.DocumentImpl;
+import org.asciidoctor.ast.impl.ListImpl;
+import org.asciidoctor.ast.impl.ListItemImpl;
+import org.asciidoctor.ast.impl.PhraseNodeImpl;
+import org.asciidoctor.ast.impl.SectionImpl;
+import org.asciidoctor.ast.impl.TableImpl;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyModule;
@@ -64,18 +73,18 @@ public final class NodeConverter {
 
     private NodeConverter() {}
 
-    public static AbstractNode createASTNode(Ruby runtime, NodeType nodeType, IRubyObject... args) {
+    public static ContentNode createASTNode(Ruby runtime, NodeType nodeType, IRubyObject... args) {
         IRubyObject node = nodeType.getRubyClass(runtime).callMethod(runtime.getCurrentContext(), "new", args);
         return createASTNode(node);
     }
 
 
-    public static AbstractNode createASTNode(Object object) {
+    public static ContentNode createASTNode(Object object) {
 
         if (object instanceof IRubyObject || object instanceof RubyObjectHolderProxy) {
             IRubyObject rubyObject = asRubyObject(object);
             NodeCache nodeCache = NodeCache.get(rubyObject);
-            AbstractNode cachedNode = nodeCache.getASTNode();
+            ContentNode cachedNode = nodeCache.getASTNode();
             if (cachedNode != null) {
                 return cachedNode;
             }
@@ -83,7 +92,7 @@ public final class NodeConverter {
             Ruby runtime = rubyObject.getRuntime();
 
             RubyClass rubyClass = rubyObject.getMetaClass().getRealClass();
-            AbstractNode ret = null;
+            ContentNode ret = null;
 
             switch (NodeType.getNodeType(rubyClass)) {
                 case BLOCK_CLASS:
@@ -96,7 +105,7 @@ public final class NodeConverter {
                     ret = new DocumentImpl(rubyObject);
                     break;
                 case INLINE_CLASS:
-                    ret = new InlineImpl(rubyObject);
+                    ret = new PhraseNodeImpl(rubyObject);
                     break;
                 case LIST_CLASS:
                     ret = new ListImpl(rubyObject);
@@ -120,9 +129,9 @@ public final class NodeConverter {
             nodeCache.setASTNode(ret);
 
             return ret;
-        } else if (object instanceof AbstractNode) {
+        } else if (object instanceof ContentNode) {
 
-            return (AbstractNode) object;
+            return (ContentNode) object;
 
         } else {
             throw new IllegalArgumentException(object != null ? object.toString() : "null");

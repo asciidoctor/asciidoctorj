@@ -1,8 +1,10 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
+import org.asciidoctor.ast.Section;
+import org.asciidoctor.ast.impl.StructuralNodeImpl;
 import org.jruby.runtime.builtin.IRubyObject;
 
-public class SectionImpl extends AbstractBlockImpl implements Section {
+public class SectionImpl extends StructuralNodeImpl implements Section {
 
     public SectionImpl(IRubyObject blockDelegate) {
         super(blockDelegate);

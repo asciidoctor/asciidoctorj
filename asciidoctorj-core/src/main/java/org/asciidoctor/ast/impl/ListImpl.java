@@ -1,17 +1,17 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
+import org.asciidoctor.ast.List;
+import org.asciidoctor.ast.impl.StructuralNodeImpl;
 import org.jruby.runtime.builtin.IRubyObject;
 
-import java.util.List;
-
-public class ListImpl extends AbstractBlockImpl implements ListNode {
+public class ListImpl extends StructuralNodeImpl implements List {
 
     public ListImpl(IRubyObject delegate) {
         super(delegate);
     }
 
     @Override
-    public List<AbstractBlock> getItems() {
+    public java.util.List getItems() {
         return getBlocks();
     }
 

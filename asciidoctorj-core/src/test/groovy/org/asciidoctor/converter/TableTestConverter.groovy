@@ -1,6 +1,6 @@
 package org.asciidoctor.converter
 
-import org.asciidoctor.ast.AbstractNode
+import org.asciidoctor.ast.ContentNode
 import org.asciidoctor.ast.Cell
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.Section
@@ -18,7 +18,7 @@ class TableTestConverter extends StringConverter {
     }
 
     @Override
-    String convert(AbstractNode node, String transform, Map<Object, Object> opts) {
+    String convert(ContentNode node, String transform, Map<Object, Object> opts) {
         if (transform == null) {
             transform = node.nodeName
         }

@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.ast.AbstractBlock
+import org.asciidoctor.ast.StructuralNode
 import org.asciidoctor.ast.Document
 import spock.lang.Specification
 
@@ -31,7 +31,7 @@ A list with items
     def "getDocument should always return the same instance"() {
         when:
         Document document = asciidoctor.load(DOCUMENT, [:])
-        List<AbstractBlock>  allBlocks = document.findBy([:])
+        List<StructuralNode>  allBlocks = document.findBy([:])
 
         then:
         document.is(document.getDocument())

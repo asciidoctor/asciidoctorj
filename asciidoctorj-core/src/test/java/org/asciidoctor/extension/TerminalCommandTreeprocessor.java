@@ -1,6 +1,6 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 
@@ -22,17 +22,17 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
     @Override
     public Document process(Document document) {
         this.document = document;
-        processBlock((AbstractBlock) this.document);
+        processBlock((StructuralNode) this.document);
         return this.document;
     }
 
-    private void processBlock(AbstractBlock block) {
+    private void processBlock(StructuralNode block) {
 
-        List<AbstractBlock> blocks = block.getBlocks();
+        List<StructuralNode> blocks = block.getBlocks();
 
         for (int i = 0; i < blocks.size(); i++) {
-            final AbstractBlock currentBlock = blocks.get(i);
-            if(currentBlock instanceof AbstractBlock) {
+            final StructuralNode currentBlock = blocks.get(i);
+            if(currentBlock instanceof StructuralNode) {
                 if ("paragraph".equals(currentBlock.getContext())) {
                     List<String> lines = ((Block) currentBlock).lines();
                     if (lines.size() > 0 && lines.get(0).startsWith("$")) {

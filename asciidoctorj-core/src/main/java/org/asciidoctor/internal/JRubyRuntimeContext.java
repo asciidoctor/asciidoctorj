@@ -1,8 +1,8 @@
 package org.asciidoctor.internal;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.ast.AbstractNode;
-import org.asciidoctor.ast.AbstractNodeImpl;
+import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.impl.ContentNodeImpl;
 import org.jruby.Ruby;
 import org.jruby.java.proxies.RubyObjectHolderProxy;
 import org.jruby.runtime.builtin.IRubyObject;
@@ -27,13 +27,13 @@ public class JRubyRuntimeContext {
         return ((JRubyAsciidoctor) asciidoctor).getRubyRuntime();
     }
 
-    public static Ruby get(AbstractNode node) {
+    public static Ruby get(ContentNode node) {
         if (node instanceof IRubyObject) {
             return ((IRubyObject) node).getRuntime();
         } else if (node instanceof RubyObjectHolderProxy) {
             return ((RubyObjectHolderProxy) node).__ruby_object().getRuntime();
-        } else if (node instanceof AbstractNodeImpl) {
-            IRubyObject nodeDelegate = ((AbstractNodeImpl) node).getRubyObject();
+        } else if (node instanceof ContentNodeImpl) {
+            IRubyObject nodeDelegate = ((ContentNodeImpl) node).getRubyObject();
             return nodeDelegate.getRuntime();
         } else {
             throw new IllegalArgumentException("Don't know what to with a " + node);

@@ -1,7 +1,7 @@
 package org.asciidoctor.internal;
 
-import org.asciidoctor.ast.AbstractNode;
-import org.asciidoctor.ast.AbstractNodeImpl;
+import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.impl.ContentNodeImpl;
 import org.asciidoctor.ast.NodeConverter;
 import org.jruby.RubyArray;
 import org.jruby.runtime.builtin.IRubyObject;
@@ -9,13 +9,9 @@ import org.jruby.runtime.builtin.IRubyObject;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 
-
-public class RubyBlockListDecorator<T extends AbstractNode> extends AbstractList<T> {
+public class RubyBlockListDecorator<T extends ContentNode> extends AbstractList<T> {
 
     private final RubyArray rubyBlockList;
 
@@ -30,15 +26,15 @@ public class RubyBlockListDecorator<T extends AbstractNode> extends AbstractList
 
     @Override
     public boolean contains(Object o) {
-        if (!(o instanceof AbstractNodeImpl)) {
+        if (!(o instanceof ContentNodeImpl)) {
             return false;
         }
-        return rubyBlockList.contains(((AbstractNodeImpl) o).getRubyObject());
+        return rubyBlockList.contains(((ContentNodeImpl) o).getRubyObject());
     }
 
     @Override
     public boolean add(T abstractBlock) {
-        return rubyBlockList.add(((AbstractNodeImpl) abstractBlock).getRubyObject());
+        return rubyBlockList.add(((ContentNodeImpl) abstractBlock).getRubyObject());
     }
 
     @Override
@@ -46,17 +42,17 @@ public class RubyBlockListDecorator<T extends AbstractNode> extends AbstractList
         if (o instanceof IRubyObject) {
             return rubyBlockList.remove(o);
         }
-        if (!(o instanceof AbstractNodeImpl)) {
+        if (!(o instanceof ContentNodeImpl)) {
             return false;
         }
-        return rubyBlockList.remove(((AbstractNodeImpl) o).getRubyObject());
+        return rubyBlockList.remove(((ContentNodeImpl) o).getRubyObject());
     }
 
     private Collection<Object> getDelegateCollection(Collection<?> c) {
         Collection<Object> delegateList = new ArrayList<Object>(c.size());
         for (Object o: c) {
-            if (o instanceof AbstractNodeImpl) {
-                delegateList.add(((AbstractNodeImpl) o).getRubyObject());
+            if (o instanceof ContentNodeImpl) {
+                delegateList.add(((ContentNodeImpl) o).getRubyObject());
             } else {
                 delegateList.add(o);
             }
@@ -94,7 +90,7 @@ public class RubyBlockListDecorator<T extends AbstractNode> extends AbstractList
         if (element instanceof IRubyObject) {
             oldObject = rubyBlockList.set(index, element);
         } else {
-            oldObject = rubyBlockList.set(index, ((AbstractNodeImpl) element).getRubyObject());
+            oldObject = rubyBlockList.set(index, ((ContentNodeImpl) element).getRubyObject());
         }
         return (T) NodeConverter.createASTNode(oldObject);
     }
@@ -104,7 +100,7 @@ public class RubyBlockListDecorator<T extends AbstractNode> extends AbstractList
         if (element instanceof IRubyObject) {
             rubyBlockList.set(index, element);
         } else {
-            rubyBlockList.add(index, ((AbstractNodeImpl) element).getRubyObject());
+            rubyBlockList.add(index, ((ContentNodeImpl) element).getRubyObject());
         }
     }
 
@@ -122,8 +118,8 @@ public class RubyBlockListDecorator<T extends AbstractNode> extends AbstractList
     public int indexOf(Object o) {
         if (o instanceof IRubyObject) {
             return rubyBlockList.indexOf(o);
-        } else if (o instanceof AbstractNodeImpl) {
-            return rubyBlockList.indexOf(((AbstractNodeImpl) o).getRubyObject());
+        } else if (o instanceof ContentNodeImpl) {
+            return rubyBlockList.indexOf(((ContentNodeImpl) o).getRubyObject());
         } else {
             return -1;
         }
@@ -133,8 +129,8 @@ public class RubyBlockListDecorator<T extends AbstractNode> extends AbstractList
     public int lastIndexOf(Object o) {
         if (o instanceof IRubyObject) {
             return rubyBlockList.lastIndexOf(o);
-        } else if (o instanceof AbstractNodeImpl) {
-            return rubyBlockList.lastIndexOf(((AbstractNodeImpl) o).getRubyObject());
+        } else if (o instanceof ContentNodeImpl) {
+            return rubyBlockList.lastIndexOf(((ContentNodeImpl) o).getRubyObject());
         } else {
             return -1;
         }

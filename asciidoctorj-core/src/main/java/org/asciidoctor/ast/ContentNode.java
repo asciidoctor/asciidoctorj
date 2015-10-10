@@ -3,7 +3,7 @@ package org.asciidoctor.ast;
 import java.util.List;
 import java.util.Map;
 
-public interface AbstractNode {
+public interface ContentNode {
 
     /**
      * @deprecated Please use {@link #getId()}
@@ -22,8 +22,8 @@ public interface AbstractNode {
     /**
      * @deprecated Use {@linkplain #getParent()}  instead.
      */
-    AbstractNode parent();
-    AbstractNode getParent();
+    ContentNode parent();
+    ContentNode getParent();
     /**
      * @deprecated Use {@linkplain #getContext()}  instead.
      */

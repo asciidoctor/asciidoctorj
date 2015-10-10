@@ -1,8 +1,6 @@
 package org.asciidoctor.extension.processorproxies;
 
-import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.AbstractNode;
-import org.asciidoctor.ast.AbstractNodeImpl;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.BlockMacroProcessor;
 import org.asciidoctor.internal.RubyHashMapDecorator;
@@ -104,7 +102,7 @@ public class BlockMacroProcessorProxy extends AbstractMacroProcessorProxy<BlockM
     @JRubyMethod(name = "process", required = 3)
     public IRubyObject process(ThreadContext context, IRubyObject parent, IRubyObject target, IRubyObject attributes) {
         Object o = getProcessor().process(
-                (AbstractBlock) NodeConverter.createASTNode(parent),
+                (StructuralNode) NodeConverter.createASTNode(parent),
                 RubyUtils.rubyToJava(getRuntime(), target, String.class),
                 RubyUtils.rubyToJava(getRuntime(), attributes, Map.class));
 

@@ -1,8 +1,13 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
+import org.asciidoctor.ast.Cell;
+import org.asciidoctor.ast.Column;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.Table;
 import org.jruby.runtime.builtin.IRubyObject;
 
-public class CellImpl extends AbstractNodeImpl implements Cell {
+public class CellImpl extends ContentNodeImpl implements Cell {
 
     public CellImpl(IRubyObject rubyNode) {
         super(rubyNode);

@@ -1,11 +1,11 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
-import org.jruby.Ruby;
+import org.asciidoctor.ast.PhraseNode;
 import org.jruby.runtime.builtin.IRubyObject;
 
-public class InlineImpl extends AbstractNodeImpl implements Inline  {
+public class PhraseNodeImpl extends ContentNodeImpl implements PhraseNode {
 
-    public InlineImpl(IRubyObject delegate) {
+    public PhraseNodeImpl(IRubyObject delegate) {
         super(delegate);
     }
 

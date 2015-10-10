@@ -2,7 +2,7 @@ package org.asciidoctor.ast;
 
 import java.util.List;
 
-public interface Block extends AbstractBlock {
+public interface Block extends StructuralNode {
     /**
      * @deprecated Please use {@link #getLines}
      * @return The original content of this block

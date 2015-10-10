@@ -1,5 +1,8 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.internal.RubyAttributesMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyObjectWrapper;
@@ -11,9 +14,9 @@ import org.jruby.javasupport.JavaEmbedUtils;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractNodeImpl extends RubyObjectWrapper implements AbstractNode {
+public abstract class ContentNodeImpl extends RubyObjectWrapper implements ContentNode {
 
-    public AbstractNodeImpl(IRubyObject rubyNode) {
+    public ContentNodeImpl(IRubyObject rubyNode) {
         super(rubyNode);
     }
 
@@ -43,12 +46,12 @@ public abstract class AbstractNodeImpl extends RubyObjectWrapper implements Abst
     }
 
     @Override
-    public AbstractNode parent() {
+    public ContentNode parent() {
         return getParent();
     }
 
     @Override
-    public AbstractNode getParent() {
+    public ContentNode getParent() {
         return NodeConverter.createASTNode(getRubyProperty("parent"));
     }
 
