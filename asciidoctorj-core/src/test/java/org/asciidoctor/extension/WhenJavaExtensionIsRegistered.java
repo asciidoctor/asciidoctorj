@@ -218,7 +218,8 @@ public class WhenJavaExtensionIsRegistered {
 
         Element footer = doc.getElementById("footer");
         Element metaRobots = footer.getElementsByAttributeValueContaining("name", "robots").first();
-        assertThat(metaRobots, is(notNullValue()));
+        // 1.5.2 || 1.5.3.dev
+        assertTrue(metaRobots != null || "robots".equals(footer.nextElementSibling().attr("name")));
     }
 
     @Test

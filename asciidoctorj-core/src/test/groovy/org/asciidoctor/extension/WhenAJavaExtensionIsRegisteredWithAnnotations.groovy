@@ -96,7 +96,8 @@ And even more infos on manpage:git[7].
         then:
         Document doc = Jsoup.parse(result, UTF8)
         Element footer = doc.getElementById(ELEMENTID_FOOTER)
-        !footer.getElementsByAttributeValueContaining(ATTR_KEY_NAME, ATTR_VALUE_ROBOTS).empty
+        // 1. test Asciidoctor 1.5.2, 2. test Asciidoctor 1.5.3.dev
+        !footer.getElementsByAttributeValueContaining(ATTR_KEY_NAME, ATTR_VALUE_ROBOTS).empty || footer.nextElementSibling().attr(ATTR_KEY_NAME) == ATTR_VALUE_ROBOTS
     }
 
     def "a docinfoprocessor instance should be configurable via the Location annotation"() {
@@ -107,7 +108,8 @@ And even more infos on manpage:git[7].
         then:
         Document doc = Jsoup.parse(result, UTF8)
         Element footer = doc.getElementById(ELEMENTID_FOOTER)
-        !footer.getElementsByAttributeValueContaining(ATTR_KEY_NAME, ATTR_VALUE_ROBOTS).empty
+        // 1. test Asciidoctor 1.5.2, 2. test Asciidoctor 1.5.3.dev
+        !footer.getElementsByAttributeValueContaining(ATTR_KEY_NAME, ATTR_VALUE_ROBOTS).empty || footer.nextElementSibling().attr(ATTR_KEY_NAME) == ATTR_VALUE_ROBOTS
     }
 
     def "a docinfoprocessor instance can override the annotation from footer to header"() {
@@ -128,7 +130,8 @@ And even more infos on manpage:git[7].
         then:
         Document doc = Jsoup.parse(result, UTF8)
         Element footer = doc.getElementById(ELEMENTID_FOOTER)
-        !footer.getElementsByAttributeValueContaining(ATTR_KEY_NAME, ATTR_VALUE_ROBOTS).empty
+        // 1. test Asciidoctor 1.5.2, 2. test Asciidoctor 1.5.3.dev
+        !footer.getElementsByAttributeValueContaining(ATTR_KEY_NAME, ATTR_VALUE_ROBOTS).empty || footer.nextElementSibling().attr(ATTR_KEY_NAME) == ATTR_VALUE_ROBOTS
     }
 
     def "when registering a BlockMacroProcessor class it should be configurable via annotations"() {
