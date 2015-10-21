@@ -122,9 +122,6 @@ public class WhenStructuredDocumentIsRequired {
 		assertThat(header.getDocumentTitle().getMain(), is("TODO"));
 		assertThat(header.getDocumentTitle().getSubtitle(), is("Document Title"));
 		
-		Map<String, Object> attributes = header.getAttributes();
-		assertThat((String) attributes.get("type"), is("object.type"));
-
 		List<ContentPart> parts = document.getParts();
 
 		assertThat(parts, notNullValue());
