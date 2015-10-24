@@ -1,0 +1,81 @@
+jar.enabled = false
+
+dependencies {
+    testCompile project(':asciidoctorj')
+    testCompile project(':asciidoctorj-pdf')
+    testCompile project(path: ':asciidoctorj-arquillian-extension')
+    testCompile "commons-io:commons-io:$commonsioVersion"
+    testCompile "org.jsoup:jsoup:$jsoupVersion"
+}
+
+task processAsciidocFiles(type: Copy) {
+
+    dependsOn test
+
+    from 'src/main/asciidoc'
+    include '*.adoc'
+    into rootProject.file('docs')
+    eachFile { file ->
+        file.filter { line ->
+
+            switch (line) {
+                case ~/^include::(.*?)\[(.*?)\]\s*$/:
+                    String target = java.util.regex.Matcher.lastMatcher[0][1]
+                    String attributes = java.util.regex.Matcher.lastMatcher[0][2]
+
+                    String text = project.file(target).text
+                    switch (attributes) {
+                        case ~/lines=([0-9]+)\.\.((-1)|([0-9]+))/:
+                            // line number based inclusion
+                            int from = java.util.regex.Matcher.lastMatcher[0][1].toInteger()
+                            int to = java.util.regex.Matcher.lastMatcher[0][2].toInteger()
+
+                            List<String> lines = text.readLines()
+                            if (to == -1) {
+                                lines.subList(from - 1, lines.size()).join('\n')
+                            } else {
+                                lines.subList(from - 1, to).join('\n')
+                            }
+                            break;
+                        case ~/tags=(.*)/:
+                            // tag based inclusion
+                            Set<String> inTags = [];
+                            List<String> tags = java.util.regex.Matcher.lastMatcher[0][1].split(';') as List
+                            List<String> taggedText = []
+
+                            text.eachLine { textLine ->
+                                switch (textLine) {
+                                case ~/^.*tag::(.*?)\[(.*?)\]\s*$/:
+                                    String tag = java.util.regex.Matcher.lastMatcher[0][1]
+                                    if (tags.contains(tag)) {
+                                        inTags << tag
+                                    }
+                                    break;
+                                case ~/^.*end::(.*?)\[(.*?)\]\s*$/:
+                                    inTags -= java.util.regex.Matcher.lastMatcher[0][1]
+                                    break;
+                                default:
+                                    if (!inTags.empty) {
+                                        taggedText << textLine
+                                    }
+                                    break
+                                }
+                            }
+                            taggedText.join('\n')
+                            break;
+                        default:
+                            text
+                            break;
+                    }
+                    break
+                default:
+                    line
+            }
+        }
+    }
+}
+
+build.dependsOn processAsciidocFiles
+
+test.enabled = testClasses.enabled = JavaVersion.current().isJava7Compatible()
+
