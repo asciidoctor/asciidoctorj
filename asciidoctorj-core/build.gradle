@@ -1,7 +1,7 @@
 apply plugin: 'osgi'
 
 dependencies {
-  compile "org.jruby:jruby-complete:$jrubyVersion"
+  compile "org.jruby:jruby:$jrubyVersion"
   compile "com.beust:jcommander:$jcommanderVersion"
   gems "rubygems:asciidoctor:$asciidoctorGemVersion"
   gems "rubygems:coderay:$coderayGemVersion"
@@ -26,7 +26,7 @@ def gemFiles = fileTree(jruby.gemInstallDir) {
   include "gems/asciidoctor-${asciidoctorGemVersion}/data/**"
 }
 
-jrubyPrepareGems << {
+jrubyPrepare << {
   copy { // bundles the gems inside this artifact
     from gemFiles
     into sourceSets.main.output.resourcesDir
