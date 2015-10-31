@@ -142,7 +142,17 @@ public abstract class ContentNodeImpl extends RubyObjectWrapper implements Conte
 
     @Override
     public boolean hasRole(String role) {
-        return getBoolean("role?", role);
+        return getBoolean("has_role?", role);
+    }
+
+    @Override
+    public void addRole(String role) {
+        getRubyProperty("add_role", role);
+    }
+
+    @Override
+    public void removeRole(String role) {
+        getRubyProperty("remove_role", role);
     }
 
     @Override

@@ -96,8 +96,7 @@ And even more infos on manpage:git[7].
         then:
         Document doc = Jsoup.parse(result, UTF8)
         Element footer = doc.getElementById(ELEMENTID_FOOTER)
-        // 1. test Asciidoctor 1.5.2, 2. test Asciidoctor 1.5.3.dev
-        !footer.getElementsByAttributeValueContaining(ATTR_KEY_NAME, ATTR_VALUE_ROBOTS).empty || footer.nextElementSibling().attr(ATTR_KEY_NAME) == ATTR_VALUE_ROBOTS
+        footer.nextElementSibling().attr(ATTR_KEY_NAME) == ATTR_VALUE_ROBOTS
     }
 
     def "a docinfoprocessor instance should be configurable via the Location annotation"() {
@@ -108,8 +107,7 @@ And even more infos on manpage:git[7].
         then:
         Document doc = Jsoup.parse(result, UTF8)
         Element footer = doc.getElementById(ELEMENTID_FOOTER)
-        // 1. test Asciidoctor 1.5.2, 2. test Asciidoctor 1.5.3.dev
-        !footer.getElementsByAttributeValueContaining(ATTR_KEY_NAME, ATTR_VALUE_ROBOTS).empty || footer.nextElementSibling().attr(ATTR_KEY_NAME) == ATTR_VALUE_ROBOTS
+        footer.nextElementSibling().attr(ATTR_KEY_NAME) == ATTR_VALUE_ROBOTS
     }
 
     @spock.lang.Ignore('Option for docinfo in header changed from :header to :head in AsciidoctorJ. Ignore as long as these tests have to run on both Asciidoctor 1.5.2 as well as 1.5.3.dev')
@@ -131,8 +129,7 @@ And even more infos on manpage:git[7].
         then:
         Document doc = Jsoup.parse(result, UTF8)
         Element footer = doc.getElementById(ELEMENTID_FOOTER)
-        // 1. test Asciidoctor 1.5.2, 2. test Asciidoctor 1.5.3.dev
-        !footer.getElementsByAttributeValueContaining(ATTR_KEY_NAME, ATTR_VALUE_ROBOTS).empty || footer.nextElementSibling().attr(ATTR_KEY_NAME) == ATTR_VALUE_ROBOTS
+        footer.nextElementSibling().attr(ATTR_KEY_NAME) == ATTR_VALUE_ROBOTS
     }
 
     def "when registering a BlockMacroProcessor class it should be configurable via annotations"() {

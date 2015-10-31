@@ -154,6 +154,26 @@ public class WhenAsciiDocIsRenderedToDocument {
     }
 
     @Test
+    public void should_be_able_to_add_role() {
+        final String tmpRole = "tmpRole";
+        Document document = asciidoctor.load(ROLE, new HashMap<String, Object>());
+        StructuralNode abstractBlock = document.blocks().get(0);
+        assertThat(abstractBlock.hasRole(tmpRole), is(false));
+        abstractBlock.addRole(tmpRole);
+        assertThat(abstractBlock.hasRole(tmpRole), is(true));
+    }
+
+    @Test
+    public void should_be_able_to_remove_role() {
+        final String famousRole = "famous";
+        Document document = asciidoctor.load(ROLE, new HashMap<String, Object>());
+        StructuralNode abstractBlock = document.blocks().get(0);
+        assertThat(abstractBlock.hasRole(famousRole), is(true));
+        abstractBlock.removeRole(famousRole);
+        assertThat(abstractBlock.hasRole(famousRole), is(false));
+    }
+
+    @Test
     public void should_be_able_to_get_reftext() {
         Document document = asciidoctor.load(REFTEXT, new HashMap<String, Object>());
         StructuralNode abstractBlock = document.blocks().get(0);

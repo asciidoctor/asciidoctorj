@@ -1,7 +1,6 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
@@ -220,9 +219,8 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element footer = doc.getElementById("footer");
-        Element metaRobots = footer.getElementsByAttributeValueContaining("name", "robots").first();
-        // 1.5.2 || 1.5.3.dev
-        assertTrue(metaRobots != null || "robots".equals(footer.nextElementSibling().attr("name")));
+        // Since Asciidoctor 1.5.3 the docinfo in the footer is a sibling to the footer element
+        assertTrue("robots".equals(footer.nextElementSibling().attr("name")));
     }
 
     @Test
