@@ -6,6 +6,8 @@ import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.Section;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.util.ClasspathResources;
 import org.asciidoctor.util.TestHttpServer;
 import org.jboss.arquillian.junit.Arquillian;
@@ -32,6 +34,7 @@ import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.asciidoctor.OptionsBuilder.options;
@@ -788,6 +791,33 @@ public class WhenJavaExtensionIsRegistered {
         assertThat(elements.size(), is(1));
         assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
 
+    }
+
+    @Test
+    public void should_create_toc_with_treeprocessor() throws Exception {
+        asciidoctor.javaExtensionRegistry().treeprocessor(new Treeprocessor() {
+            @Override
+            public org.asciidoctor.ast.Document process(org.asciidoctor.ast.Document document) {
+                List<StructuralNode> blocks=document.getBlocks();
+                for (StructuralNode block : blocks) {
+                    for (StructuralNode block2 : block.getBlocks()) {
+                        if(block2 instanceof Section)
+                            System.out.println(((Section) block2).id());
+                    }
+                }
+                return document;
+            }
+        });
+
+        String content = asciidoctor.renderFile(
+                classpath.getResource("documentwithtoc.adoc"),
+                options().headerFooter(true).toFile(false).safe(SafeMode.UNSAFE).get());
+
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
+        Element toc = doc.getElementById("toc");
+        assertThat(toc, notNullValue());
+        Elements elements = toc.getElementsByAttributeValue("href", "#TestId");
+        assertThat(elements.size(), is(1));
     }
 
 }
