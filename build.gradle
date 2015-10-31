@@ -8,12 +8,12 @@ buildscript {
       classpath 'com.netflix.nebula:nebula-publishing-plugin:2.2.2'
     }
     classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1'
+    classpath 'com.github.jruby-gradle:jruby-gradle-plugin:1.0.2'
   }
 }
 
 // modern plugins config
 plugins {
-  id 'com.github.jruby-gradle.base' version '0.1.17'
   // Adding the nebula-publishing plugin when using JDK6 causes the build to abort
   //id 'nebula.nebula-publishing' version '2.0.0'
   id 'com.jfrog.bintray' version '1.0'
@@ -171,7 +171,7 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
 
   // QUESTION is this the right place to insert this task dependency in the lifecycle?
   // IMPORTANT The TMP or TEMP environment variable must be set for the gem install command to work on Windows
-  processResources.dependsOn jrubyPrepareGems
+  processResources.dependsOn jrubyPrepare
 
   apply from: rootProject.file('gradle/eclipse.gradle')
   if (JavaVersion.current().isJava7Compatible() && !it.name.endsWith('-documentation')) {
