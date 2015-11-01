@@ -131,9 +131,9 @@ public class WhenAsciiDocIsRenderedToDocument {
                                                     .attributes(AttributesBuilder.attributes().dataUri(true))
                                                     .compact(true).asMap();
         Document document = asciidoctor.load(DOCUMENT, options);
-        assertThat(document.getAttributes(), hasKey("encoding"));
-        assertThat(document.isAttr("encoding", "UTF-8", false), is(true));
-        assertThat(document.getAttr("encoding", "", false).toString(), is("UTF-8"));
+        assertThat(document.getAttributes(), hasKey("toc-placement"));
+        assertThat(document.isAttr("toc-placement", "auto", false), is(true));
+        assertThat(document.getAttr("toc-placement", "", false).toString(), is("auto"));
     }
 
     @Test
