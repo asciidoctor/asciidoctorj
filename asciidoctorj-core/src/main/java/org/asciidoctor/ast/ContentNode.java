@@ -53,6 +53,11 @@ public interface ContentNode {
      */
     String role();
     List<String> getRoles();
+
+    void addRole(String role);
+
+    void removeRole(String role);
+
     boolean isReftext();
     String getReftext();
     String iconUri(String name);

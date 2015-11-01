@@ -52,7 +52,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {    // <1>
                 originalBlock.getAttributes(),
                 options);
 
-        block.setAttr("role", "terminal", true);                     // <5>
+        block.addRole("terminal");                                   // <5>
         return block;
     }
 }

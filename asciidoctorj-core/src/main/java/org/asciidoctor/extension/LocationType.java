@@ -5,7 +5,7 @@ package org.asciidoctor.extension;
  */
 public enum LocationType {
 
-    HEADER(":header"),
+    HEADER(":head"),
     FOOTER(":footer");
 
     private final String optionValue;

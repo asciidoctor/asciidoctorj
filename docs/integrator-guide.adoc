@@ -1436,7 +1436,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {    // <1>
                 originalBlock.getAttributes(),
                 options);
 
-        block.setAttr("role", "terminal", true);                     // <5>
+        block.addRole("terminal");                                   // <5>
         return block;
     }
 }
@@ -1450,7 +1450,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {    // <1>
     The context of the new block has to be `listing` to get a source block.
     The content can be simply taken from the original block.
     We add the option 'subs' with the value ':specialcharacters' so that special characters are substituted, i.e. `>` and `<` will be replaced with `\&gt;` and `\&lt;` respectively.
-<5> Finally we set the role of the node to `terminal`, which will result in the div containing the listing having the class `terminal`.
+<5> Finally we add the role of the node to `terminal`, which will result in the div containing the listing having the class `terminal`.
 
 After that we can simply use that Treeprocessor by registering it at the `JavaExtensionRegistry`.
 
@@ -1515,10 +1515,10 @@ To make AsciidoctorJ use our processor it also has to be registered at the `Java
                         .toFile(false));
 
         org.jsoup.nodes.Document document = Jsoup.parse(result); // <4>
-        Element metaElement = document.head().children().last();
-        assertThat(metaElement.tagName(), is("meta"));
-        assertThat(metaElement.attr("name"), is("robots"));
-        assertThat(metaElement.attr("content"), is("index,follow"));
+        Elements metaElements = document.head().getElementsByAttributeValue("name", "robots");
+        assertThat(metaElements, hasSize(1));
+        assertThat(metaElements.get(0).attr("name"), is("robots"));
+        assertThat(metaElements.get(0).attr("content"), is("index,follow"));
 ----
 <1> The Docinfo Processor implementation is registered at the `JavaExtensionRegistry` of the Asciidoctor instance.
 <2> We render our document with header and footer instead of an embeddable document.
