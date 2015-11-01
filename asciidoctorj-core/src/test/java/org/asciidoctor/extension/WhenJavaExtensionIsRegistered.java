@@ -8,6 +8,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -199,8 +200,8 @@ public class WhenJavaExtensionIsRegistered {
         Document doc = Jsoup.parse(content, "UTF-8");
 
         Element footer = doc.getElementById("footer");
-        Element metaRobots = footer.getElementsByAttributeValueContaining("name", "robots").first();
-        assertThat(metaRobots, is(notNullValue()));
+        // Since Asciidoctor 1.5.3 the docinfo in the footer is a sibling to the footer element
+        assertTrue("robots".equals(footer.nextElementSibling().attr("name")));
     }
 
     @Test

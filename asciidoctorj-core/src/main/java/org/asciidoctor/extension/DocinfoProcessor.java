@@ -27,7 +27,7 @@ public abstract class DocinfoProcessor extends Processor {
 
     private static final Map<String, Object> defaultLocation(Map<String, Object> map) {
         if(!map.containsKey("location")) {
-            map.put("location", ":header");
+            map.put("location", ":head");
         }
         return map;
     }
