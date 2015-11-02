@@ -23,11 +23,8 @@ public class WhenBackendIsPdf {
     public void pdf_should_be_rendered_for_pdf_backend() {
         File inputFile = classpath.getResource("sample.adoc");
         File outputFile1 = new File(inputFile.getParentFile(), "sample.pdf");
-        File outputFile2 = new File(inputFile.getParentFile(), "sample.pdfmarks");
         asciidoctor.convertFile(inputFile, options().backend("pdf").get());
         assertThat(outputFile1.exists(), is(true));
-        assertThat(outputFile2.exists(), is(true));
         outputFile1.delete();
-        outputFile2.delete();
     }
 }
