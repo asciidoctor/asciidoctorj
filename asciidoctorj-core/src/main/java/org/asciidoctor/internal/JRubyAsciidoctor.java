@@ -295,7 +295,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         logger.fine(AsciidoctorUtils.toAsciidoctorCommand(options, "-"));
 
         if (AsciidoctorUtils.isOptionWithAttribute(options, Attributes.SOURCE_HIGHLIGHTER, "pygments")) {
-            logger.fine("In order to use Pygments with Asciidoctor, you need to install Pygments (and Python, if you don’t have it yet). Read http://asciidoctor.org/news/#syntax-highlighting-with-pygments.");
+            logger.fine("In order to use Pygments with Asciidoctor, you need to install Pygments (and Python, if you don't have it yet). Read http://asciidoctor.org/news/#syntax-highlighting-with-pygments.");
         }
 
         String currentDirectory = rubyRuntime.getCurrentDirectory();
