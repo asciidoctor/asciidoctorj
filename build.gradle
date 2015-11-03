@@ -98,6 +98,20 @@ subprojects {
 
 // apply Java and JRuby stuff for all subprojects except the distribution
 configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
+
+  plugins.withType(JavaPlugin) {
+
+    project.tasks.withType(JavaCompile) { task ->
+      task.sourceCompatibility = project.sourceCompatibility
+      task.targetCompatibility = project.targetCompatibility
+    }
+
+    project.tasks.withType(GroovyCompile) { task ->
+      task.sourceCompatibility = project.sourceCompatibility
+      task.targetCompatibility = project.targetCompatibility
+    }
+  }
+  
   dependencies {
     testCompile "junit:junit:$junitVersion"
     testCompile "org.hamcrest:hamcrest-library:$hamcrestVersion"
