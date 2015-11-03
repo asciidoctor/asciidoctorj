@@ -1,5 +1,6 @@
 dependencies {
   compile project(':asciidoctorj')
+  compile project(':asciidoctorj-diagram')
   compile project(':asciidoctorj-epub3')
   compile project(':asciidoctorj-pdf')
 }
