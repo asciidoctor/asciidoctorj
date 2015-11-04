@@ -40,7 +40,11 @@ ext {
   // gem versions
   asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.3'
   asciidoctorEpub3GemVersion = project(':asciidoctorj-epub3').version.replace('-', '.')
-  asciidoctorPdfGemVersion = project(':asciidoctorj-pdf').version.replace('-', '.')
+
+  // Commented out to provide a fix for alpha.10. Activate again for alpha.11
+  // asciidoctorPdfGemVersion = project(':asciidoctorj-pdf').version.replace('-', '.')
+  asciidoctorPdfGemVersion = '1.5.0.alpha.10'
+
   asciidoctorDiagramGemVersion = project(':asciidoctorj-diagram').version.replace('-', '.')
   coderayGemVersion = '1.1.0'
   erubisGemVersion = '2.7.0'
