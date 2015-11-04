@@ -1,5 +1,5 @@
 = Document Title
-:source-highlighter: coderay
+:source-highlighter: rouge
 
 Content.
 

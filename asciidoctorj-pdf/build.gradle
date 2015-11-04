@@ -4,24 +4,28 @@ dependencies {
     // Exclude gems provided by AsciidoctorJ core
     exclude module: 'asciidoctor'
     exclude module: 'thread_safe'
-    // FIXME The prawn and ttfunk gems are not resolving correctly, so we have to do it manually for now
+    // We must lock Prawn to 1.3.0 until AsciidoctorJ upgrades to JRuby 9.0.0.0
     exclude module: 'prawn'
-    exclude module: 'ttfunk'
   }
   gems "rubygems:prawn:$prawnGemVersion"
-  gems "rubygems:ttfunk:$ttfunkGemVersion"
+  gems "rubygems:rouge:$rougeGemVersion"
 }
 
 def gemFiles = fileTree(jruby.gemInstallDir) {
   include 'specifications/*.gemspec'
   include 'gems/*/lib/**'
-  include "gems/*/data/fonts/*"
-  include "gems/addressable-*/data/unicode.data"
-  include "gems/asciidoctor-pdf-${asciidoctorPdfGemVersion}/data/**"
+  include "gems/*/data/fonts/**"
+  include "gems/asciidoctor-pdf-$asciidoctorPdfGemVersion/data/**"
   // Accomodate Prawn's non-conforming packaging
   include "gems/prawn-$prawnGemVersion/VERSION"
   include "gems/prawn-$prawnGemVersion/data/*.txt"
   include "gems/prawn-$prawnGemVersion/data/encodings/*"
+  // Include icon fonts
+  include "gems/prawn-icon-*/fonts/*/*"
+  // Include required data file from the addressable gem
+  include "gems/addressable-*/data/*.data"
+
+  exclude 'gems/rouge-*/lib/rouge/demos/**'
 }
 
 jrubyPrepareGems << {
