@@ -31,7 +31,7 @@ ext {
   guavaVersion = '18.0'
   hamcrestVersion = '1.3'
   jcommanderVersion = '1.35'
-  jrubyVersion = '1.7.22'
+  jrubyVersion = '1.7.21'
   jsoupVersion = '1.8.3'
   junitVersion = '4.12'
   saxonVersion = '9.5.1-6'
@@ -162,6 +162,7 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
   jruby {
     defaultRepositories = false
     defaultVersion = jrubyVersion
+    execVersion = jrubyVersion
     // TODO I'd like to be able to customize the name of the gemInstallDir
   }
 
