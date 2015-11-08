@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 
-public class RubyBlockListDecorator<T extends ContentNode> extends AbstractList<T> {
+public class RubyBlockListDecorator<T> extends AbstractList<T> {
 
     private final RubyArray rubyBlockList;
 

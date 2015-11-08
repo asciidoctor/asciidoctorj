@@ -33,7 +33,7 @@ public class RubyObjectWrapper {
         return runtime;
     }
 
-    protected String getString(String propertyName, Object... args) {
+    public String getString(String propertyName, Object... args) {
         IRubyObject result = getRubyProperty(propertyName, args);
 
         if (result instanceof RubyNil) {
@@ -45,7 +45,7 @@ public class RubyObjectWrapper {
         }
     }
 
-    protected void setString(String propertyName, String value) {
+    public void setString(String propertyName, String value) {
         if (value == null) {
             setRubyProperty(propertyName, runtime.getNil());
         } else {
@@ -53,7 +53,7 @@ public class RubyObjectWrapper {
         }
     }
 
-    protected String getSymbol(String propertyName, Object... args) {
+    public String getSymbol(String propertyName, Object... args) {
         IRubyObject result = getRubyProperty(propertyName, args);
 
         if (result instanceof RubyNil) {
@@ -62,7 +62,7 @@ public class RubyObjectWrapper {
         return ((RubySymbol) result).asJavaString();
     }
 
-    protected void setSymbol(String propertyName, String value) {
+    public void setSymbol(String propertyName, String value) {
         if (value == null) {
             setRubyProperty(propertyName, runtime.getNil());
         } else {
@@ -70,7 +70,7 @@ public class RubyObjectWrapper {
         }
     }
 
-    protected boolean getBoolean(String propertyName, Object... args) {
+    public boolean getBoolean(String propertyName, Object... args) {
         IRubyObject result = getRubyProperty(propertyName, args);
         if (result instanceof RubyNil) {
             return false;
@@ -79,7 +79,7 @@ public class RubyObjectWrapper {
         }
     }
 
-    protected int getInt(String propertyName, Object... args) {
+    public int getInt(String propertyName, Object... args) {
         IRubyObject result = getRubyProperty(propertyName, args);
         if (result instanceof RubyNil) {
             return 0;
@@ -88,7 +88,7 @@ public class RubyObjectWrapper {
         }
     }
 
-    protected <T> List<T> getList(String propertyName, Class<T> elementClass, Object... args) {
+    public <T> List<T> getList(String propertyName, Class<T> elementClass, Object... args) {
         IRubyObject result = getRubyProperty(propertyName, args);
         if (result instanceof RubyNil) {
             return null;
@@ -103,7 +103,7 @@ public class RubyObjectWrapper {
     }
 
 
-    protected IRubyObject getRubyProperty(String propertyName, Object... args) {
+    public IRubyObject getRubyProperty(String propertyName, Object... args) {
         ThreadContext threadContext = runtime.getThreadService().getCurrentContext();
 
         IRubyObject result = null;
@@ -130,7 +130,7 @@ public class RubyObjectWrapper {
         return result;
     }
 
-    protected void setRubyProperty(String propertyName, IRubyObject arg) {
+    public void setRubyProperty(String propertyName, IRubyObject arg) {
         ThreadContext threadContext = runtime.getThreadService().getCurrentContext();
 
         IRubyObject result = null;
@@ -145,15 +145,15 @@ public class RubyObjectWrapper {
         }
     }
 
-    protected Object getProperty(String propertyName, Object... args) {
+    public Object getProperty(String propertyName, Object... args) {
         return toJava(getRubyProperty(propertyName, args));
     }
 
-    protected Object toJava(IRubyObject rubyObject) {
+    public Object toJava(IRubyObject rubyObject) {
         return JavaEmbedUtils.rubyToJava(rubyObject);
     }
 
-    protected <T> T toJava(IRubyObject rubyObject, Class<T> targetClass) {
+    public <T> T toJava(IRubyObject rubyObject, Class<T> targetClass) {
         return (T) JavaEmbedUtils.rubyToJava(runtime, rubyObject, targetClass);
     }
 
