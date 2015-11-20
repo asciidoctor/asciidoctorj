@@ -2,6 +2,9 @@ dependencies {
   compile project(':asciidoctorj')
   compile project(':asciidoctorj-epub3')
   compile project(':asciidoctorj-pdf')
+  compile project(':asciidoctorj-diagram')
+
+  testCompile project(':asciidoctorj-arquillian-extension')
 }
 
 // we're creating a dist, not a jar, silly Gradle
