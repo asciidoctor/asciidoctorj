@@ -132,7 +132,15 @@ dependencies {
 ----
 libraryDependencies += "org.asciidoctor" % "asciidoctorj" % "{artifact-version}" // <1>
 ----
+
 <1> Specifying the version of AsciidoctorJ implicitly selects the version of Asciidoctor
+
+[source,clojure]
+[subs="specialcharacters,attributes,callouts"]
+.Declaring the dependency in a Leiningen build file (e.g., project.clj)
+----
+:dependencies [[org.asciidoctor/asciidoctorj "{artifact-version}"]]
+----
 
 // DA: Should we mention how to download if you just want to use the asciidoctorj command?
 
