@@ -1515,10 +1515,10 @@ To make AsciidoctorJ use our processor it also has to be registered at the `Java
                         .toFile(false));
 
         org.jsoup.nodes.Document document = Jsoup.parse(result); // <4>
-        Elements metaElements = document.head().getElementsByAttributeValue("name", "robots");
-        assertThat(metaElements, hasSize(1));
-        assertThat(metaElements.get(0).attr("name"), is("robots"));
-        assertThat(metaElements.get(0).attr("content"), is("index,follow"));
+        Element metaElement = document.head().children().last();
+        assertThat(metaElement.tagName(), is("meta"));
+        assertThat(metaElement.attr("name"), is("robots"));
+        assertThat(metaElement.attr("content"), is("index,follow"));
 ----
 <1> The Docinfo Processor implementation is registered at the `JavaExtensionRegistry` of the Asciidoctor instance.
 <2> We render our document with header and footer instead of an embeddable document.
