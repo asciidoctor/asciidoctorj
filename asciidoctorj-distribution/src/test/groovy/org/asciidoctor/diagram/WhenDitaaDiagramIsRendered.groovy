@@ -10,13 +10,46 @@ import spock.lang.Specification
 @RunWith(ArquillianSputnik)
 class WhenDitaaDiagramIsRendered extends Specification {
 
+    static final String ASCIIDOCTOR_DIAGRAM = 'asciidoctor-diagram'
+
+    static final String BUILD_DIR = 'build'
+
     @ArquillianResource
     private Asciidoctor asciidoctor
 
-    def 'should render ditaa diagram'() throws Exception {
+    def 'should render ditaa diagram to HTML'() throws Exception {
 
         given:
+        String imageFileName = UUID.randomUUID()
+        String document = """= Document Title
 
+Hello World
+
+[ditaa,${imageFileName}]
+....
+
++---+
+| A |
++---+
+....
+
+"""
+
+        asciidoctor.requireLibrary(ASCIIDOCTOR_DIAGRAM)
+
+        when:
+        String result = asciidoctor.convert(document, OptionsBuilder.options().toFile(false))
+
+        then:
+        result.contains("""src="${imageFileName}.png""")
+        new File("${imageFileName}.png").exists()
+        new File("${imageFileName}.png.cache").exists()
+    }
+
+    def 'should render ditaa diagram to PDF'() throws Exception {
+
+        given:
+        String destinationFileName = 'build/test.pdf'
         String imageFileName = UUID.randomUUID()
 
         String document = """= Document Title
@@ -33,14 +66,24 @@ Hello World
 
 """
 
-        asciidoctor.requireLibrary('asciidoctor-diagram')
+        asciidoctor.requireLibrary(ASCIIDOCTOR_DIAGRAM)
 
         when:
-        String result = asciidoctor.convert(document, OptionsBuilder.options().toFile(false).attributes(['imagesoutdir': 'build']))
+        asciidoctor.convert(document, OptionsBuilder.options()
+                .toFile(new File(destinationFileName))
+                .backend('pdf'))
 
         then:
-        result.contains("""src="${imageFileName}.png""")
-        new File("build/${imageFileName}.png").exists()
-        new File("build/${imageFileName}.png.cache").exists()
+        new File(destinationFileName).exists()
+        File png = new File("build/${imageFileName}.png")
+        File pngCache = new File("build/${imageFileName}.png.cache")
+        png.exists()
+        pngCache.exists()
+
+        cleanup:
+        png.delete()
+        pngCache.delete()
+
     }
+
 }
