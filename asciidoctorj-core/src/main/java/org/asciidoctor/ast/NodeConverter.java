@@ -3,13 +3,17 @@ package org.asciidoctor.ast;
 import org.asciidoctor.ast.impl.BlockImpl;
 import org.asciidoctor.ast.impl.CellImpl;
 import org.asciidoctor.ast.impl.ColumnImpl;
+import org.asciidoctor.ast.impl.DescriptionListImpl;
+import org.asciidoctor.ast.impl.DescriptionListEntryImpl;
 import org.asciidoctor.ast.impl.DocumentImpl;
 import org.asciidoctor.ast.impl.ListImpl;
 import org.asciidoctor.ast.impl.ListItemImpl;
 import org.asciidoctor.ast.impl.PhraseNodeImpl;
 import org.asciidoctor.ast.impl.SectionImpl;
 import org.asciidoctor.ast.impl.TableImpl;
+import org.asciidoctor.internal.RubyObjectWrapper;
 import org.jruby.Ruby;
+import org.jruby.RubyArray;
 import org.jruby.RubyClass;
 import org.jruby.RubyModule;
 import org.jruby.java.proxies.RubyObjectHolderProxy;
@@ -31,7 +35,34 @@ public final class NodeConverter {
 
         INLINE_CLASS("Asciidoctor", "Inline"),
 
-        LIST_CLASS("Asciidoctor", "List"),
+        LIST_CLASS("Asciidoctor", "List") {
+            @Override
+            public boolean isInstance(IRubyObject object) {
+                return super.isInstance(object) && !"dlist".equals(new RubyObjectWrapper(object).getString("context"));
+            }
+        },
+
+        DEFINITIONLIST_CLASS("Asciidoctor", "List") {
+            @Override
+            public boolean isInstance(IRubyObject object) {
+                return super.isInstance(object) && "dlist".equals(new RubyObjectWrapper(object).getString("context"));
+            }
+        },
+
+        DEFINITIONLIST_ITEM_CLASS("Array") {
+            @Override
+            public boolean isInstance(IRubyObject object) {
+                if (!super.isInstance(object)) {
+                    return false;
+                }
+                RubyArray array = (RubyArray) object;
+                boolean ret = array.size() == 2
+                        && object.getRuntime().getArray().isInstance((IRubyObject) array.get(0))
+                        && LIST_ITEM_CLASS.isInstance((IRubyObject) array.get(1));
+                return ret;
+            }
+
+        },
 
         LIST_ITEM_CLASS("Asciidoctor", "ListItem"),
 
@@ -48,27 +79,39 @@ public final class NodeConverter {
         }
 
         public RubyClass getRubyClass(Ruby runtime) {
-            RubyModule object = runtime.getModule(path[0]);
 
-            RubyClass rubyClass = object.getClass(path[1]);
-
-            if (path.length == 2) {
-                return rubyClass;
+            if (path.length == 1) {
+                return runtime.getClass(path[0]);
             } else {
-                return rubyClass.getClass(path[2]);
+                RubyModule object = runtime.getModule(path[0]);
+
+                RubyClass rubyClass = object.getClass(path[1]);
+
+                if (path.length == 2) {
+                    return rubyClass;
+                } else {
+                    return rubyClass.getClass(path[2]);
+                }
             }
         }
 
-        public static NodeType getNodeType(RubyClass rubyClass) {
-            Ruby runtime = rubyClass.getRuntime();
+        private static NodeType getNodeType(IRubyObject rubyObject) {
             for (NodeType nodeType: values()) {
-                if (nodeType.getRubyClass(runtime).equals(rubyClass)) {
+                if (nodeType.isInstance(rubyObject)) {
                     return nodeType;
                 }
             }
-            throw new IllegalArgumentException("Don't know what to do with a " + rubyClass);
+            throw new IllegalArgumentException("Don't know what to do with a " + rubyObject.getMetaClass());
         }
 
+        /**
+         * @param object
+         * @return {@code true} if the given Ruby object is recognized as this node type.
+         */
+        public boolean isInstance(IRubyObject object) {
+            Ruby rubyRuntime = object.getRuntime();
+            return getRubyClass(rubyRuntime).equals(object.getMetaClass().getRealClass());
+        }
     }
 
     private NodeConverter() {}
@@ -91,10 +134,9 @@ public final class NodeConverter {
 
             Ruby runtime = rubyObject.getRuntime();
 
-            RubyClass rubyClass = rubyObject.getMetaClass().getRealClass();
             ContentNode ret = null;
 
-            switch (NodeType.getNodeType(rubyClass)) {
+            switch (NodeType.getNodeType(rubyObject)) {
                 case BLOCK_CLASS:
                     ret = new BlockImpl(rubyObject);
                     break;
@@ -112,6 +154,12 @@ public final class NodeConverter {
                     break;
                 case LIST_ITEM_CLASS:
                     ret = new ListItemImpl(rubyObject);
+                    break;
+                case DEFINITIONLIST_CLASS:
+                    ret = new DescriptionListImpl(rubyObject);
+                    break;
+                case DEFINITIONLIST_ITEM_CLASS:
+                    ret = new DescriptionListEntryImpl(rubyObject);
                     break;
                 case TABLE_CLASS:
                     ret = new TableImpl(rubyObject);

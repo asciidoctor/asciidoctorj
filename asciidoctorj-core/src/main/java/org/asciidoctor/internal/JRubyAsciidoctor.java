@@ -445,7 +445,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         try {
             Object object = this.asciidoctorModule.convert(content, rubyHash);
-            if (object instanceof IRubyObject && ((IRubyObject) object).getMetaClass() == NodeConverter.NodeType.DOCUMENT_CLASS.getRubyClass(getRubyRuntime())) {
+            if (object instanceof IRubyObject && NodeConverter.NodeType.DOCUMENT_CLASS.isInstance((IRubyObject) object)) {
                 // If a document is rendered to a file Asciidoctor returns the document, we return null
                 return null;
             }
@@ -518,7 +518,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         try {
             Object object = this.asciidoctorModule.convertFile(filename.getAbsolutePath(), rubyHash);
-            if (object instanceof IRubyObject && ((IRubyObject) object).getMetaClass() == NodeConverter.NodeType.DOCUMENT_CLASS.getRubyClass(getRubyRuntime())) {
+            if (object instanceof IRubyObject && NodeConverter.NodeType.DOCUMENT_CLASS.isInstance((IRubyObject) object)) {
                 // If a document is rendered to a file Asciidoctor returns the document, we return null
                 return null;
             }

@@ -685,11 +685,19 @@ The AST is built from the following types:
   .. `pass``
 
 `org.asciidoctor.ast.List`::
-  The list node is the container for all lists supported by Asciidoctor.
-  The type of list is available in the field `context`, with the content `ulist` for unordered lists, `olist` for ordered lists and `dlist` for definition lists.
+  The list node is the container for ordered and unordered lists.
+  The type of list is available in the field `context`, with the content `ulist` for unordered lists, `olist` for ordered lists.
 
 `org.asciidoctor.ast.ListItem`::
   A list item represents a single item of a list.
+
+`org.asciidoctor.ast.DescriptionList`::
+  The description list node is the container for description lists.
+  The context of the node is `dlist`.
+
+`org.asciidoctor.ast.DescriptionListEntry`::
+  A list entry represents a single item of a description list.
+  It has multiple terms that are again instances of `org.asciidoctor.ast.ListItem` and a description that is also an instance of `org.asciidoctor.ast.ListItem`.
 
 `org.asciidoctor.ast.Table`::
   This represents a table and is probably the most complex node type.
