@@ -38,15 +38,9 @@ ext {
   xmlMatchersVersion = '1.0-RC1'
 
   // gem versions
-  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.3'
-
-  // Commented out to provide a new asciidoctorj-epub3 that has no dependency on AsciidoctorJ 1.5.3. Activate again for next release
-  // asciidoctorEpub3GemVersion = project(':asciidoctorj-epub3').version.replace('-', '.')
-  asciidoctorEpub3GemVersion = '1.5.0.alpha.5'
-
-  // Commented out to provide a fix for alpha.10. Activate again for alpha.11
-  // asciidoctorPdfGemVersion = project(':asciidoctorj-pdf').version.replace('-', '.')
-  asciidoctorPdfGemVersion = '1.5.0.alpha.10'
+  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.4'
+  asciidoctorEpub3GemVersion = project(':asciidoctorj-epub3').version.replace('-', '.')
+  asciidoctorPdfGemVersion = project(':asciidoctorj-pdf').version.replace('-', '.')
 
   asciidoctorDiagramGemVersion = project(':asciidoctorj-diagram').version.replace('-', '.')
   coderayGemVersion = '1.1.0'
