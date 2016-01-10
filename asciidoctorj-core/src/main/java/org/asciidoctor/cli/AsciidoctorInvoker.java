@@ -115,7 +115,7 @@ public class AsciidoctorInvoker {
             if (asciidoctorCliOptions.isLoadPaths()) {
                 asciidoctor = JRubyAsciidoctor.create(asciidoctorCliOptions.getLoadPaths());
             } else {
-                asciidoctor = JRubyAsciidoctor.create();
+                asciidoctor = JRubyAsciidoctor.create((String) null);
             }
             return asciidoctor;
         } finally {
