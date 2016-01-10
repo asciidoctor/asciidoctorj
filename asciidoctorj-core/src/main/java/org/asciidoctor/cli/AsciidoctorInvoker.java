@@ -101,10 +101,10 @@ public class AsciidoctorInvoker {
 
     private Asciidoctor buildAsciidoctorJInstance(AsciidoctorCliOptions asciidoctorCliOptions) {
         Asciidoctor asciidoctor;
-        if(asciidoctorCliOptions.isLoadPaths()) {
-         asciidoctor = JRubyAsciidoctor.create(asciidoctorCliOptions.getLoadPaths());   
+        if (asciidoctorCliOptions.isLoadPaths()) {
+            asciidoctor = JRubyAsciidoctor.create(asciidoctorCliOptions.getLoadPaths());   
         } else {
-            asciidoctor = JRubyAsciidoctor.create();
+            asciidoctor = JRubyAsciidoctor.create((String) null);
         }
         return asciidoctor;
     }
