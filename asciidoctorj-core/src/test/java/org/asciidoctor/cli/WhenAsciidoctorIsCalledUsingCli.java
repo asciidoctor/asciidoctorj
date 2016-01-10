@@ -41,6 +41,22 @@ public class WhenAsciidoctorIsCalledUsingCli {
 		assertThat(expectedFile.exists(), is(true));
 		expectedFile.delete();
 	}
+
+    @Test
+    public void should_honor_doctype_defined_in_document_by_default() throws IOException {
+        File inputFile = classpath.getResource("sample-book.adoc");
+        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+
+		new AsciidoctorInvoker().invoke(inputPath);
+
+		File expectedFile = new File(inputPath.replaceFirst("\\.adoc$", ".html"));
+		assertThat(expectedFile.exists(), is(true));
+		Document doc = Jsoup.parse(expectedFile, "UTF-8");
+		Elements body = doc.select("body");
+		String attr = body.attr("class");
+		assertThat(attr, is("book"));
+		expectedFile.delete();
+    }
 	
 	@Test
 	public void file_should_be_rendered_to_docbook_with_docbook_backend() {

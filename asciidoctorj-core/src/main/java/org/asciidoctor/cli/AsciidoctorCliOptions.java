@@ -47,7 +47,7 @@ public class AsciidoctorCliOptions {
     private String backend = "html5";
 
     @Parameter(names = { DOCTYPE, "--doctype" }, description = "document type to use when rendering output: [article, book, inline] (default: article)")
-    private String doctype = "article";
+    private String doctype;
 
     @Parameter(names = { OUTFILE, "--out-file" }, description = "output file (default: based on input file path); use - to output to STDOUT")
     private String outFile;
@@ -139,6 +139,10 @@ public class AsciidoctorCliOptions {
         return this.doctype;
     }
 
+    public boolean isDoctypeOption() {
+        return this.doctype != null;
+    }
+
     public String getOutFile() {
         return this.outFile;
     }
@@ -223,7 +227,11 @@ public class AsciidoctorCliOptions {
         OptionsBuilder optionsBuilder = OptionsBuilder.options();
         AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
 
-        optionsBuilder.backend(this.backend).safe(this.safeMode).docType(this.doctype).eruby(this.eruby);
+        optionsBuilder.backend(this.backend).safe(this.safeMode).eruby(this.eruby);
+
+        if (isDoctypeOption()) {
+            optionsBuilder.docType(this.doctype);
+        }
 
         if (isOutFileOption() && !isOutputStdout()) {
             optionsBuilder.toFile(new File(this.outFile));
