@@ -10,6 +10,7 @@ ifdef::awestruct[:toclevels: 1]
 //:table-caption!:
 :source-language: java
 :language: {source-language}
+ifdef::env-github[:badges:]
 // Aliases:
 :dagger: &#8224;
 // URIs:
@@ -36,9 +37,10 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 {uri-repo}[AsciidoctorJ] is the official library for running {uri-asciidoctor}[Asciidoctor] on the JVM.
 Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of a parsed AsciiDoc document from Java and other JVM languages.
 
-ifdef::env-github[]
+ifdef::badges[]
 image:https://img.shields.io/travis/asciidoctor/asciidoctorj/master.svg[Build Status (Travis CI), link=https://travis-ci.org/asciidoctor/asciidoctorj]
 image:https://ci.appveyor.com/api/projects/status/syxrlv047esal4n0/branch/master?svg=true[Build Status (AppVeyor), link=https://ci.appveyor.com/project/asciidoctor/asciidoctorj]
+image:https://img.shields.io/badge/javadoc.io-1.5.4-blue.svg[Javadoc, link=http://www.javadoc.io/doc/org.asciidoctor/asciidoctorj/1.5.4]
 endif::[]
 
 ifdef::awestruct,env-browser[]
