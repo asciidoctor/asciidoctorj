@@ -29,7 +29,7 @@ public class WhenAnAsciidoctorClassIsInstantiatedInAnEnvironmentWithGemPath {
         Asciidoctor asciidoctor = Asciidoctor.Factory.create((String) null);
 
         // Then: The org.jruby.JRuby instance does not see this variable
-        Ruby rubyRuntime = JRubyRuntimeContext.get();
+        Ruby rubyRuntime = JRubyRuntimeContext.get(asciidoctor);
         assertThat(rubyRuntime.evalScriptlet("ENV['GEM_PATH']"), is(rubyRuntime.getNil()));
         assertThat(rubyRuntime.evalScriptlet("ENV['GEM_HOME']"), is(rubyRuntime.getNil()));
     }
@@ -44,7 +44,7 @@ public class WhenAnAsciidoctorClassIsInstantiatedInAnEnvironmentWithGemPath {
         Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 
         // Then: The org.jruby.JRuby instance sees this variable
-        Ruby rubyRuntime = JRubyRuntimeContext.get();
+        Ruby rubyRuntime = JRubyRuntimeContext.get(asciidoctor);
         assertThat(rubyRuntime.evalScriptlet("ENV['GEM_PATH']"), not(is(rubyRuntime.getNil())));
         assertThat(rubyRuntime.evalScriptlet("ENV['GEM_HOME']"), not(is(rubyRuntime.getNil())));
     }
@@ -60,7 +60,7 @@ public class WhenAnAsciidoctorClassIsInstantiatedInAnEnvironmentWithGemPath {
         Asciidoctor asciidoctor = Asciidoctor.Factory.create(gemPath);
 
         // Then: The org.jruby.JRuby instance does not see this variable
-        Ruby rubyRuntime = JRubyRuntimeContext.get();
+        Ruby rubyRuntime = JRubyRuntimeContext.get(asciidoctor);
         RubyString rubyGemPath = rubyRuntime.newString(gemPath);
         assertThat(rubyRuntime.evalScriptlet("ENV['GEM_PATH']"), is((Object) rubyGemPath));
         assertThat(rubyRuntime.evalScriptlet("ENV['GEM_HOME']"), is((Object) rubyGemPath));
