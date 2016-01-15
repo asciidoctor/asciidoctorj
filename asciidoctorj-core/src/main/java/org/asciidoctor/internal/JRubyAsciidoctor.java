@@ -51,27 +51,27 @@ public class JRubyAsciidoctor implements Asciidoctor {
         //Map<String, Object> env = new HashMap<String, Object>();
         // ideally, we want to clear GEM_PATH by default, but for backwards compatibility we play nice
         //env.put(GEM_PATH, null);
-        return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<String>(), null, null));
+        return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<String>(), null));
     }
 
     public static JRubyAsciidoctor create(String gemPath) {
-        return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<String>(), null, gemPath));
+        return processRegistrations(createJRubyAsciidoctorInstance(Collections.singletonMap(GEM_PATH, gemPath), new ArrayList<String>(), null));
     }
 
     public static JRubyAsciidoctor create(List<String> loadPaths) {
-        return processRegistrations(createJRubyAsciidoctorInstance(null, loadPaths, null, null));
+        return processRegistrations(createJRubyAsciidoctorInstance(null, loadPaths, null));
     }
 
     public static JRubyAsciidoctor create(ClassLoader classloader) {
-        return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<String>(), classloader, null));
+        return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<String>(), classloader));
     }
 
     public static JRubyAsciidoctor create(ClassLoader classloader, String gemPath) {
-        return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<String>(), classloader, gemPath));
+        return processRegistrations(createJRubyAsciidoctorInstance(Collections.singletonMap(GEM_PATH, gemPath), new ArrayList<String>(), classloader));
     }
 
     public static JRubyAsciidoctor create(List<String> loadPaths, String gemPath) {
-        return processRegistrations(createJRubyAsciidoctorInstance(null, loadPaths, null, gemPath));
+        return processRegistrations(createJRubyAsciidoctorInstance(Collections.singletonMap(GEM_PATH, gemPath), loadPaths, null));
     }
 
     private static JRubyAsciidoctor processRegistrations(JRubyAsciidoctor asciidoctor) {
@@ -88,13 +88,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
         new ExtensionRegistryExecutor(asciidoctor).registerAllExtensions();
     }
 
-    private static JRubyAsciidoctor createJRubyAsciidoctorInstance(Map<String, String> environmentVars, List<String> loadPaths, ClassLoader classloader, String gemPath) {
+    private static JRubyAsciidoctor createJRubyAsciidoctorInstance(Map<String, String> environmentVars, List<String> loadPaths, ClassLoader classloader) {
 
         Map<String, String> env = environmentVars != null ?
                 new HashMap<String, String>(environmentVars) : new HashMap<String, String>();
-        if (gemPath != null) {
-            env.put(GEM_PATH, gemPath);
-        }
 
         RubyInstanceConfig config = createOptimizedConfiguration();
         if (classloader != null) {
