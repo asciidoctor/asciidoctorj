@@ -4,7 +4,7 @@ import java.net.URI;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Attributes {
@@ -60,7 +60,7 @@ public class Attributes {
     public static final String HIDE_URI_SCHEME = "hide-uri-scheme";
     public static final String COMPAT_MODE = "compat-mode";
 
-    private Map<String, Object> attributes = new HashMap<String, Object>();
+    private Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 
     public Attributes() {
         super();
