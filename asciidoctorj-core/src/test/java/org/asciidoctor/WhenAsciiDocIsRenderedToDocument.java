@@ -1,9 +1,11 @@
 package org.asciidoctor;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsMapContaining.hasKey;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -203,6 +205,20 @@ public class WhenAsciiDocIsRenderedToDocument {
         File inputFile = classpath.getResource("rendersample.asciidoc");
         String content = document.readAsset(inputFile.getAbsolutePath(), new HashMap<Object, Object>());
         assertThat(content, is(IOUtils.readFull(new FileReader(inputFile))));
+    }
+
+    @Test
+    public void should_load_a_document_from_File() throws FileNotFoundException {
+        Map<String, Object> options = OptionsBuilder.options().safe(SafeMode.SAFE)
+            .attributes(AttributesBuilder.attributes().dataUri(false))
+            .compact(true).asMap();
+        File inputFile = classpath.getResource("rendersample.asciidoc");
+        Document document = asciidoctor.loadFile(inputFile, options);
+        assertEquals(1, document.blocks().size());
+        assertThat(document.blocks().get(0), instanceOf(Section.class));
+        Section section = (Section) document.blocks().get(0);
+        assertEquals(1, section.getBlocks().size());
+        assertEquals("<strong>Section A</strong> paragraph.", section.getBlocks().get(0).getContent());
     }
 
 }

@@ -598,7 +598,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
     @Override
     public Document loadFile(File file, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        return new Document(this.asciidoctorModule.load(file.getAbsolutePath(), rubyHash), this.rubyRuntime);
+        return new Document(this.asciidoctorModule.load_file(file.getAbsolutePath(), rubyHash), this.rubyRuntime);
 
     }
 }
