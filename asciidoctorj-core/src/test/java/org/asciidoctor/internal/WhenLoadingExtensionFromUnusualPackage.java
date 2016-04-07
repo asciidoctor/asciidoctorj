@@ -44,4 +44,22 @@ public class WhenLoadingExtensionFromUnusualPackage {
     registry.postprocessor(BoldifyPostProcessor.class);
   }
 
+  @Test
+  public void shouldAllowTreeprocessorLoadingUsingInstance() {
+    final JavaExtensionRegistry registry = asciidoctor.javaExtensionRegistry();
+    registry.treeprocessor(new unusual.extension.UnusualTreeProcessor());
+  }
+
+  @Test
+  public void shouldAllowTreeprocessorLoadingByClassName() {
+    final JavaExtensionRegistry registry = asciidoctor.javaExtensionRegistry();
+    registry.treeprocessor(unusual.extension.UnusualTreeProcessor.class.getCanonicalName());
+  }
+
+  @Test
+  public void shouldAllowTreeprocessorLoadingByClass() {
+    final JavaExtensionRegistry registry = asciidoctor.javaExtensionRegistry();
+    registry.treeprocessor(unusual.extension.UnusualTreeProcessor.class);
+  }
+
 }

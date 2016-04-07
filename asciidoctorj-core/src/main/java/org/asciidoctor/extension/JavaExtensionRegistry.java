@@ -107,8 +107,7 @@ public class JavaExtensionRegistry {
     public void treeprocessor(Class<? extends Treeprocessor> treeProcessor) {
         // this may change in future to external class to deal with dynamic
         // imports
-        this.rubyRuntime
-                .evalScriptlet("java_import " + getImportLine(treeProcessor));
+        javaImport(rubyRuntime, treeProcessor);
         this.asciidoctorModule.treeprocessor(RubyUtils.toRubyClass(rubyRuntime, treeProcessor));
     }
     
