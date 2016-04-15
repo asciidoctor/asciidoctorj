@@ -1,11 +1,11 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.ast.ContentNode;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.ast.StructuralNode;
-
-public abstract class MacroProcessor extends Processor {
+public abstract class MacroProcessor<T extends ContentNode> extends Processor {
 
     protected String name;
     
@@ -30,6 +30,6 @@ public abstract class MacroProcessor extends Processor {
         return new HashMap<Object, Object>();
     }
     
-    public abstract Object process(StructuralNode parent, String target, Map<String, Object> attributes);
+    public abstract Object process(T parent, String target, Map<String, Object> attributes);
     
 }
