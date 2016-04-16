@@ -850,7 +850,8 @@ The InlineMacroProcessor for these macros looks like this:
 .An InlineMacroProcessor that replaces issue macros with links
 [source,java,indent=0]
 ----
-import org.asciidoctor.ast.StructuralNode;
+
+import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.extension.InlineMacroProcessor;
 import org.asciidoctor.extension.Name;
 
@@ -862,7 +863,7 @@ public class IssueInlineMacroProcessor extends InlineMacroProcessor {    // <2>
 
     @Override
     public Object process(                                               // <3>
-            StructuralNode parent, String target, Map<String, Object> attributes) {
+            ContentNode parent, String target, Map<String, Object> attributes) {
 
         String href =
                 new StringBuilder()
@@ -933,7 +934,7 @@ The example assumes that the macro is called with the macro name `ctrl` and a ke
 public class KeyboardInlineMacroProcessor extends InlineMacroProcessor {
 
     @Override
-    public Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+    public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
         Map<String, Object> attrs = new HashMap<String, Object>();
         attrs.put("keys", Arrays.asList("Ctrl", target));            // <1>
         return createPhraseNode(parent, "kbd", (String) null, attrs) // <2>
@@ -956,7 +957,7 @@ The following processor would render the macro `rightclick:New|Class[]` like thi
 public class ContextMenuInlineMacroProcessor extends InlineMacroProcessor {
 
     @Override
-    public Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+    public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
         String[] items = target.split("\\|");
         Map<String, Object> attrs = new HashMap<String, Object>();
         attrs.put("menu", "Right click");                         // <1>
@@ -989,7 +990,7 @@ That means the MacroProcessor should replace the macro `foo:1234` to an image el
 public class ImageInlineMacroProcessor extends InlineMacroProcessor {
 
     @Override
-    public Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+    public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
 
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("type", "image");                                           // <1>

@@ -1,12 +1,10 @@
 package org.asciidoctor.integrationguide.extension;
 
-import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.extension.InlineMacroProcessor;
 import org.asciidoctor.extension.Name;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 //tag::include[]
@@ -14,7 +12,7 @@ import java.util.Map;
 public class ImageInlineMacroProcessor extends InlineMacroProcessor {
 
     @Override
-    public Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+    public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
 
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("type", "image");                                           // <1>

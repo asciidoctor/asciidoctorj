@@ -1,9 +1,11 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.ast.ContentNode;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class InlineMacroProcessor extends MacroProcessor {
+public abstract class InlineMacroProcessor extends MacroProcessor<ContentNode> {
 
     /**
      * This value is used as the config option key when defining a regular expression that should be

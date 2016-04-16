@@ -3,6 +3,7 @@ package org.asciidoctor.extension;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.*;
 import org.asciidoctor.ast.impl.ColumnImpl;
+import org.asciidoctor.ast.impl.ContentNodeImpl;
 import org.asciidoctor.ast.impl.DocumentImpl;
 import org.asciidoctor.ast.impl.RowImpl;
 import org.asciidoctor.ast.impl.StructuralNodeImpl;
@@ -236,15 +237,15 @@ public class Processor {
         return createSection(parent, Integer.valueOf(level), numbered, options);
     }
 
-    public PhraseNode createPhraseNode(StructuralNode parent, String context, List<String> text) {
+    public PhraseNode createPhraseNode(ContentNode parent, String context, List<String> text) {
         return createPhraseNode(parent, context, text, new HashMap<String, Object>());
     }
 
-    public PhraseNode createPhraseNode(StructuralNode parent, String context, List<String> text, Map<String, Object> attributes) {
+    public PhraseNode createPhraseNode(ContentNode parent, String context, List<String> text, Map<String, Object> attributes) {
         return createPhraseNode(parent, context, text, attributes, new HashMap<Object, Object>());
     }
 
-    public PhraseNode createPhraseNode(StructuralNode parent, String context, List<String> text, Map<String, Object> attributes, Map<Object, Object> options) {
+    public PhraseNode createPhraseNode(ContentNode parent, String context, List<String> text, Map<String, Object> attributes, Map<Object, Object> options) {
 
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
@@ -257,22 +258,22 @@ public class Processor {
         rubyText.addAll(text);
 
         IRubyObject[] parameters = {
-                ((StructuralNodeImpl) parent).getRubyObject(),
+                ((ContentNodeImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
                 rubyText,
                 convertMapToRubyHashWithSymbols };
         return (PhraseNode) NodeConverter.createASTNode(rubyRuntime, INLINE_CLASS, parameters);
     }
 
-    public PhraseNode createPhraseNode(StructuralNode parent, String context, String text) {
+    public PhraseNode createPhraseNode(ContentNode parent, String context, String text) {
         return createPhraseNode(parent, context, text, new HashMap<String, Object>());
     }
 
-    public PhraseNode createPhraseNode(StructuralNode parent, String context, String text, Map<String, Object> attributes) {
+    public PhraseNode createPhraseNode(ContentNode parent, String context, String text, Map<String, Object> attributes) {
         return createPhraseNode(parent, context, text, attributes, new HashMap<String, Object>());
     }
 
-    public PhraseNode createPhraseNode(StructuralNode parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {
+    public PhraseNode createPhraseNode(ContentNode parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {
         
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
@@ -281,7 +282,7 @@ public class Processor {
         RubyHash convertedOptions = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
         IRubyObject[] parameters = {
-                ((StructuralNodeImpl) parent).getRubyObject(),
+                ((ContentNodeImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
                 text == null ? rubyRuntime.getNil() : rubyRuntime.newString(text),
                 convertedOptions };
