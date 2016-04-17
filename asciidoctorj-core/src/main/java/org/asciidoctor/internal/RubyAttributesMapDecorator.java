@@ -139,4 +139,12 @@ public class RubyAttributesMapDecorator implements Map<String, Object> {
     public String toString() {
         return createJavaMap().toString();
     }
+
+    /**
+     * Invoked by JRuby when the map should be copied.
+     * @return
+     */
+    public Object dup() {
+        return new RubyHashMapDecorator((RubyHash) rubyHash.dup());
+    }
 }

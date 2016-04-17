@@ -5,6 +5,7 @@ import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.PreprocessorReader;
 import org.asciidoctor.extension.PreprocessorReaderImpl;
+import org.asciidoctor.internal.RubyAttributesMapDecorator;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
@@ -108,7 +109,7 @@ public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcess
         Document document = (Document) NodeConverter.createASTNode(args[0]);
         PreprocessorReader reader = new PreprocessorReaderImpl(args[1]);
         String target = RubyUtils.rubyToJava(getRuntime(), args[2], String.class);
-        Map<String, Object> attributes = RubyUtils.rubyToJava(getRuntime(), args[3], Map.class);
+        Map<String, Object> attributes = new RubyAttributesMapDecorator((RubyHash) args[3]);
         getProcessor().process(document, reader, target, attributes);
         return null;
     }

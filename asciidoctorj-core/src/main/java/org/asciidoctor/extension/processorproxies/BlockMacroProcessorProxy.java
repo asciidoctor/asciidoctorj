@@ -1,8 +1,9 @@
 package org.asciidoctor.extension.processorproxies;
 
-import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.BlockMacroProcessor;
+import org.asciidoctor.internal.RubyAttributesMapDecorator;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
@@ -19,7 +20,6 @@ import org.jruby.runtime.builtin.IRubyObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class BlockMacroProcessorProxy extends AbstractMacroProcessorProxy<BlockMacroProcessor> {
 
@@ -104,7 +104,7 @@ public class BlockMacroProcessorProxy extends AbstractMacroProcessorProxy<BlockM
         Object o = getProcessor().process(
                 (StructuralNode) NodeConverter.createASTNode(parent),
                 RubyUtils.rubyToJava(getRuntime(), target, String.class),
-                RubyUtils.rubyToJava(getRuntime(), attributes, Map.class));
+                new RubyAttributesMapDecorator((RubyHash) attributes));
 
         return convertProcessorResult(o);
 
