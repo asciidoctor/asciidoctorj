@@ -104,7 +104,7 @@ public class RubyHashMapDecorator implements Map<String, Object> {
         Map<String, Object> copy = new HashMap<String, Object>();
         Set<Entry<Object, Object>> rubyEntrySet = rubyHash.entrySet();
         for (Map.Entry<Object, Object> o: rubyEntrySet) {
-            String key;
+            String key = null;
             Object value;
             Object rubyKey = o.getKey();
             Object rubyValue = o.getValue();
@@ -114,11 +114,15 @@ public class RubyHashMapDecorator implements Map<String, Object> {
                 key = ((RubyString) rubyKey).asJavaString();
             } else if (rubyKey instanceof String) {
                 key = (String) rubyKey;
+            } else if (rubyKey instanceof Long) {
+                // Skip it silently, it is a positional attribute
             } else {
                 throw new IllegalStateException("Did not expect key " + rubyKey + " of type " + rubyKey.getClass());
             }
-            value = convertRubyValue(rubyValue);
-            copy.put(key, value);
+            if (key != null) {
+                value = convertRubyValue(rubyValue);
+                copy.put(key, value);
+            }
         }
         return copy;
     }

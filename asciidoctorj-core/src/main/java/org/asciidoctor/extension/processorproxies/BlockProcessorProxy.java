@@ -1,9 +1,10 @@
 package org.asciidoctor.extension.processorproxies;
 
-import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.extension.ReaderImpl;
+import org.asciidoctor.internal.RubyAttributesMapDecorator;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
@@ -20,7 +21,6 @@ import org.jruby.runtime.builtin.IRubyObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class BlockProcessorProxy extends AbstractProcessorProxy<BlockProcessor> {
 
@@ -117,7 +117,7 @@ public class BlockProcessorProxy extends AbstractProcessorProxy<BlockProcessor> 
         Object o = getProcessor().process(
                 (StructuralNode) NodeConverter.createASTNode(parent),
                 new ReaderImpl(reader),
-                RubyUtils.rubyToJava(getRuntime(), attributes, Map.class));
+                new RubyAttributesMapDecorator((RubyHash) attributes));
 
         return convertProcessorResult(o);
     }
