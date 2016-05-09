@@ -22,12 +22,12 @@ public class RubyHashMapDecorator implements Map<String, Object> {
 
     @Override
     public int size() {
-        return rubyHash.size();
+        return createJavaMap().size();
     }
 
     @Override
     public boolean isEmpty() {
-        return rubyHash.isEmpty();
+        return size() == 0;
     }
 
     @Override
