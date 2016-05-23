@@ -3,32 +3,18 @@ apply plugin: 'com.jfrog.bintray'
 bintray {
   user = System.env['BINTRAY_USER'] ?: (project.hasProperty('bintrayUsername') ? project.bintrayUsername : '')
   key = System.env['BINTRAY_KEY'] ?: (project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : '')
-  if (project.name.endsWith('-distribution')) {
-    // NOTE ignore warning that install task does not exist; the plugin is looking for the wrong task!!
-    configurations = ['archives']
-    // FIXME asc for distribution zip doesn't get added by nebula-sign
-    // NOTE it is added by normal signing plugin, but .asc extension replaces the archive extension instead of being appended to it
-    filesSpec {
-      def distsDir = "${project.buildDir}/${project.distsDirName}"
-      // ideally, this is: from project.tasks.signJars.getSignatureFiles()
-      // FIXME WTF??? <flips table>
-      // NOTE we have to plant a placeholder so filesSpec resolves the location of the signature file during the initialization phase
-      file(distsDir).mkdirs()
-      // QUESTION can we use the archivePath property of the distPath to get this location?
-      file("$distsDir/${project(':asciidoctorj').name}-${project.version}-bin.zip.asc").createNewFile()
-      from(distsDir) { include '*.asc' }
-      into "${project.group.replace('.', '/')}/${project(':asciidoctorj').name}/${project.version}"
-    }
+
+  if ( !project.isDistribution() ) {
+    publications = ['jars']
   }
-  else {
-    publications = ['mavenNebula']
-  }
+  configurations = ['archives']
+
   dryRun = project.hasProperty('dryRun') && project.dryRun.toBoolean()
   publish = project.statusIsRelease
 
   pkg {
     repo = System.env['BINTRAY_REPO'] ?: (project.hasProperty('bintrayRepo') ? project.bintrayRepo : 'maven')
-    if (!project.hasProperty('bintrayPersonal') || !project.bintrayPrivate.toBoolean()) {
+    if (!project.hasProperty('bintrayPersonal')) {
       userOrg = 'asciidoctor'
     }
 
@@ -62,4 +48,5 @@ bintray {
   }
 }
 
-bintrayUpload.dependsOn preparePublish
+bintrayUpload.dependsOn build
+bintrayUpload.dependsOn signPom
