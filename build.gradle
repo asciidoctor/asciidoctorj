@@ -1,27 +1,30 @@
-// legacy plugins config; necessary to accomodate Java 6
+/*
+    adding the plugin jars to the classpath to apply them later.
+    currently the new plugins DSL does apply them directly.
+    there are other limitations too. See https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block
+    we don't need to apply the jruby and bintray plugin on the rootProject.
+*/
 buildscript {
-  repositories {
-    jcenter()
-  }
-  dependencies {
-    if (JavaVersion.current().isJava7Compatible()) {
-      classpath 'com.netflix.nebula:nebula-publishing-plugin:2.2.2'
+    repositories {
+        jcenter()
     }
-    classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1'
-  }
+    dependencies {
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
+    }
 }
 
 // modern plugins config
 plugins {
   id 'com.github.jruby-gradle.base' version '1.1.4'
-  // Adding the nebula-publishing plugin when using JDK6 causes the build to abort
-  //id 'nebula.nebula-publishing' version '2.0.0'
-  id 'com.jfrog.bintray' version '1.0'
 }
 
 // TIP use -PpublishRelease=true to active release behavior regardless of the version
 status = project.hasProperty('publishRelease') && project.publishRelease.toBoolean() ?
     'release' : ((version == 'unspecified' || version.endsWith('-SNAPSHOT')) ? 'snapshot' : 'release')
+
+// using ExpandoMetaClass to add isDistribution() Method to Project instances...
+Project.metaClass.isDistribution = { delegate.getName().endsWith("-distribution") }
 
 ext {
   buildDateTime = new Date()
@@ -73,43 +76,38 @@ subprojects {
   apply plugin: 'java'
   apply plugin: 'groovy'
   apply from: "$rootDir/gradle/providedConfiguration.gradle"
+
+  if (!it.name.endsWith('-documentation')) {
+    apply from: rootProject.file('gradle/publish.gradle')
+    if (statusIsRelease) {
+      apply from: rootProject.file('gradle/deploy.gradle')
+    } else if (it.version.endsWith('SNAPSHOT')) {
+      apply from: rootProject.file('gradle/deploySnapshot.gradle')
+    }
+  }
   status = _status
 
   // NOTE sourceCompatibility & targetCompatibility are set in gradle.properties to meet requirements of Gradle
   // Must redefine here to work around a bug in the Eclipse plugin
   sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_7
 
-  repositories {
-    if (project.hasProperty('useMavenLocal') && project.useMavenLocal.toBoolean()) {
-      mavenLocal()
-    }
-    // QUESTION can we switch to jcenter() only?
-    mavenCentral()
-    maven {
-      name 'rubygems-release'
-      url 'http://rubygems-proxy.torquebox.org/releases'
-    }
-    maven {
-      name 'rubygems-prerelease'
-      url 'http://rubygems-proxy.torquebox.org/prereleases'
-    }
-  }
-}
-
-// apply Java and JRuby stuff for all subprojects except the distribution
-subprojects {
-
   plugins.withType(JavaPlugin) {
-
     project.tasks.withType(JavaCompile) { task ->
       task.sourceCompatibility = project.sourceCompatibility
       task.targetCompatibility = project.targetCompatibility
     }
-
     project.tasks.withType(GroovyCompile) { task ->
       task.sourceCompatibility = project.sourceCompatibility
       task.targetCompatibility = project.targetCompatibility
     }
+  }
+
+  repositories {
+    if (project.hasProperty('useMavenLocal') && project.useMavenLocal.toBoolean()) {
+      mavenLocal()
+    }
+
+    jcenter()
   }
 
   dependencies {
@@ -149,6 +147,25 @@ subprojects {
     }
   }
 
+}
+
+// apply JRuby and sources/javadocs packaging stuff for all subprojects except the distribution
+configure(subprojects.findAll { !it.isDistribution() }) {
+
+  apply plugin: 'com.github.jruby-gradle.base'
+  apply from: rootProject.file('gradle/eclipse.gradle')
+
+  repositories {
+    maven {
+      name 'rubygems-release'
+      url 'http://rubygems-proxy.torquebox.org/releases'
+    }
+    maven {
+      name 'rubygems-prerelease'
+      url 'http://rubygems-proxy.torquebox.org/prereleases'
+    }
+  }
+
   if (JavaVersion.current().isJava8Compatible()) {
     javadoc {
       // Oracle JDK8 likes to fail the build over spoiled HTML
@@ -157,7 +174,7 @@ subprojects {
   }
 }
 
-configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
+configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.endsWith('-documentation')}) {
 
   task sourcesJar(type: Jar, dependsOn: classes, group: 'Release') {
     description 'Assembles a jar archive containing the main source code.'
@@ -176,8 +193,6 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
     archives sourcesJar, javadocJar
   }
 
-  apply plugin: 'com.github.jruby-gradle.base'
-
   jruby {
     defaultRepositories = false
     defaultVersion = jrubyVersion
@@ -188,26 +203,4 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
   // QUESTION is this the right place to insert this task dependency in the lifecycle?
   // IMPORTANT The TMP or TEMP environment variable must be set for the gem install command to work on Windows
   processResources.dependsOn jrubyPrepare
-
-  apply from: rootProject.file('gradle/eclipse.gradle')
-  if (JavaVersion.current().isJava7Compatible() && !it.name.endsWith('-documentation')) {
-    apply from: rootProject.file('gradle/publish.gradle')
-  }
-}
-
-subprojects {
-  if (JavaVersion.current().isJava7Compatible() && it.name != 'asciidoctorj-documentation' && it.name != 'asciidoctorj-distribution') {
-    apply from: rootProject.file('gradle/sign.gradle')
-    if (statusIsRelease) {
-      apply from: rootProject.file('gradle/deploy.gradle')
-    } else if (it.version.endsWith('SNAPSHOT')) {
-      apply from: rootProject.file('gradle/deploySnapshot.gradle')
-    }
-  }
-}
-
-// disable bintrayUpload on root project to prevent build from failing
-// NOTE seems to only get added when we use the modern plugin syntax
-if (tasks.findByName('bintrayUpload')) {
-  bintrayUpload.enabled = false
 }

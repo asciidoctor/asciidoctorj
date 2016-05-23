@@ -1,3 +1,5 @@
+apply plugin: 'application'
+
 dependencies {
   compile project(':asciidoctorj')
   compile project(':asciidoctorj-epub3')
@@ -7,11 +9,11 @@ dependencies {
   testCompile project(':asciidoctorj-arquillian-extension')
 }
 
-// we're creating a dist, not a jar, silly Gradle
 jar.enabled = false
-configurations.all { artifacts.clear() }
 
-apply plugin: 'application'
+configurations.all {
+  artifacts.clear()
+}
 
 tasks.withType(AbstractArchiveTask) {
   baseName rootProject.name

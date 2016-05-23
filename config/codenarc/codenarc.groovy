@@ -54,5 +54,4 @@ ruleset {
         exclude 'UnnecessaryCollectCall'
     }
     ruleset('rulesets/dry.xml')
-    ruleset('rulesets/design.xml')
 }
