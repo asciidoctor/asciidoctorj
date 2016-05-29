@@ -6,11 +6,17 @@ apply plugin: 'maven-publish'
 ext.pom = file("$buildDir/publications/jars/pom-default.xml")
 ext.signedPom = file("$buildDir/publications/jars/pom-default.xml.asc")
 
-if ( !project.hasProperty('siging.skip') ){
+if ( !project.hasProperty('skip.signing') ){
     apply plugin: 'signing'
 
     signing {
         sign configurations.archives
+    }
+
+    if ( !signing.signatory ) {
+        logger.warn "No Signatory configured for project $project.name. Skip signing! See https://docs.gradle.org/current/userguide/signing_plugin.html"
+        signArchives.enabled = false
+        ext."skip.signing" = true
     }
 
     task signPom(type: Sign) {
@@ -123,7 +129,7 @@ publishing {
 
                 // register the signed pom file
                 // signedPom is an output file from the signPom task
-                if ( !project.hasProperty('siging.skip') ) {
+                if ( !project.hasProperty('skip.signing') ) {
                     artifact(signedPom) {
                         extension = "pom.asc"
                         classifier = null
