@@ -58,7 +58,7 @@ public final class NodeConverter {
                 RubyArray array = (RubyArray) object;
                 boolean ret = array.size() == 2
                         && object.getRuntime().getArray().isInstance((IRubyObject) array.get(0))
-                        && LIST_ITEM_CLASS.isInstance((IRubyObject) array.get(1));
+                        && (null == array.get(1) || LIST_ITEM_CLASS.isInstance((IRubyObject) array.get(1)));
                 return ret;
             }
 
