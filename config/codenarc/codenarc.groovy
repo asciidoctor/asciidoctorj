@@ -24,7 +24,7 @@ ruleset {
     ruleset('rulesets/naming.xml') {
         exclude 'PropertyName'
         'ClassName' {
-            regex = '^[A-Z][a-zA-Z0-9]*$'
+            regex = '^[A-Z][a-zA-Z0-9$]*$'
         }
         'FieldName' {
             finalRegex = '^_?[a-z][a-zA-Z0-9]*$'
@@ -51,6 +51,7 @@ ruleset {
     ruleset('rulesets/unnecessary.xml') {
         // UnnecessaryGetter rule does not work correct if there are methods like getRole() and isRole()
         exclude 'UnnecessaryGetter'
+        exclude 'UnnecessaryCollectCall'
     }
     ruleset('rulesets/dry.xml')
     ruleset('rulesets/design.xml')

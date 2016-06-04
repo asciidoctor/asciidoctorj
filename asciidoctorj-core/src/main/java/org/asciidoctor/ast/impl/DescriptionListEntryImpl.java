@@ -22,7 +22,8 @@ public class DescriptionListEntryImpl extends StructuralNodeImpl implements Desc
 
     @Override
     public ListItem getDescription() {
-        return (ListItem) NodeConverter.createASTNode(getAt(1));
+        Object firstItem = getAt(1);
+        return firstItem == null ? null : (ListItem) NodeConverter.createASTNode(firstItem);
     }
 
     private Object getAt(int i) {
