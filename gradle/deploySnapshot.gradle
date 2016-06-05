@@ -11,7 +11,7 @@ artifactory {
         }
         defaults {
 
-            if ( !project.isDistribution() ) {
+            if ( !project.isDistribution() && !project.name.endsWith('-documentation') ) {
                 publications('jars')
             }
             publicConfigs('archives')
