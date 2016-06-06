@@ -1,6 +1,6 @@
 dependencies {
-  provided project(path: ':asciidoctorj')
-  compile project(path: ':asciidoctorj-test-support')
+  provided project(':asciidoctorj')
+  compile project(':asciidoctorj-test-support')
   compile "org.jboss.arquillian.container:arquillian-container-spi:$arquillianVersion"
   compile "org.jboss.arquillian.container:arquillian-container-test-spi:$arquillianVersion"
   compile "org.jboss.arquillian.container:arquillian-container-impl-base:$arquillianVersion"

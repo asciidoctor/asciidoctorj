@@ -3,66 +3,6 @@
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
-ext.pom = file("$buildDir/publications/jars/pom-default.xml")
-ext.signedPom = file("$buildDir/publications/jars/pom-default.xml.asc")
-
-if ( !project.hasProperty('skip.signing') ){
-    apply plugin: 'signing'
-
-    signing {
-        sign configurations.archives
-    }
-
-    if ( !signing.signatory ) {
-        logger.warn "No Signatory configured for project $project.name. Skip signing! See https://docs.gradle.org/current/userguide/signing_plugin.html"
-        signArchives.enabled = false
-        ext."skip.signing" = true
-    }
-
-    task signPom(type: Sign) {
-        group "publishing"
-        description "Sign the projects pom file"
-
-        inputs.file pom
-        outputs.file signedPom
-
-        doLast{
-
-            def input = pom.newInputStream()
-            def output = signedPom.newOutputStream()
-            try{
-                signatory.sign(input, output)
-            }
-            catch (Exception e){
-                logger.error e.message
-            }
-            finally {
-                input.close()
-                output.close()
-            }
-        }
-    }
-
-    /**
-     * The signPom Task depends on the GenerateMavenPom task which gets dynamically added
-     * with a name derived from a publication. In our case 'jars'.
-     *
-     * Our jars publication registers the signed pom as artifact.
-     * If the task does not run before publishJarsPublicationToMavenLocal this task will fail.
-     */
-    tasks.whenTaskAdded {
-
-        switch (it.name) {
-            case "generatePomFileForJarsPublication":
-                signPom.dependsOn it
-                break
-            case "publishJarsPublicationToMavenLocal":
-                it.dependsOn signPom
-                break
-        }
-    }
-}
-
 def projectMeta = {
     resolveStrategy = groovy.lang.Closure.DELEGATE_FIRST
     name project.name
@@ -123,8 +63,8 @@ def projectMeta = {
     }
 }
 
-publishing {
-    publications {
+afterEvaluate {
+    publishing.publications {
         jars(MavenPublication) {
 
             // NOTE only build sources and javadoc jars when releasing
@@ -138,7 +78,7 @@ publishing {
 
                 // register the signed pom file
                 // signedPom is an output file from the signPom task
-                if ( !project.hasProperty('skip.signing') ) {
+                if (!project.hasProperty('skip.signing')) {
                     artifact(signedPom) {
                         extension = "pom.asc"
                         classifier = null
@@ -150,14 +90,12 @@ publishing {
                 asNode().children().last() + projectMeta
             }
 
-            if ( !project.isDistribution() ) {
+            if (!project.isDistribution()) {
                 from components.java
             }
         }
-
     }
 }
-
 
 // QUESTION should we move manifest creation to general Java plugin config?
 jar {

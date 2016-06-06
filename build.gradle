@@ -77,14 +77,19 @@ subprojects {
   apply plugin: 'groovy'
   apply from: "$rootDir/gradle/providedConfiguration.gradle"
 
-  if (!it.name.endsWith('-documentation')) {
-    apply from: rootProject.file('gradle/publish.gradle')
+  if (JavaVersion.current().isJava7Compatible() && !it.name.endsWith('-documentation')) {
+
+    apply from: rootProject.file('gradle/signing.gradle')
+    if (!it.isDistribution()) {
+      apply from: rootProject.file('gradle/publish.gradle')
+    }
     if (statusIsRelease) {
       apply from: rootProject.file('gradle/deploy.gradle')
     } else if (it.version.endsWith('SNAPSHOT')) {
       apply from: rootProject.file('gradle/deploySnapshot.gradle')
     }
   }
+  
   status = _status
 
   // NOTE sourceCompatibility & targetCompatibility are set in gradle.properties to meet requirements of Gradle
