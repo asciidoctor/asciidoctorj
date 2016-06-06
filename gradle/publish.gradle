@@ -54,8 +54,8 @@ def projectMeta = {
     }
 }
 
-publishing {
-    publications {
+afterEvaluate {
+    publishing.publications {
         jars(MavenPublication) {
 
             // NOTE only build sources and javadoc jars when releasing
@@ -69,7 +69,7 @@ publishing {
 
                 // register the signed pom file
                 // signedPom is an output file from the signPom task
-                if ( !project.hasProperty('skip.signing') ) {
+                if (!project.hasProperty('skip.signing')) {
                     artifact(signedPom) {
                         extension = "pom.asc"
                         classifier = null
@@ -81,14 +81,12 @@ publishing {
                 asNode().children().last() + projectMeta
             }
 
-            if ( !project.isDistribution() ) {
+            if (!project.isDistribution()) {
                 from components.java
             }
         }
-
     }
 }
-
 
 // QUESTION should we move manifest creation to general Java plugin config?
 jar {
