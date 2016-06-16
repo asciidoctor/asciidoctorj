@@ -9,14 +9,10 @@ buildscript {
         jcenter()
     }
     dependencies {
+        classpath "com.github.jruby-gradle:jruby-gradle-plugin:1.1.4"
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6"
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
     }
-}
-
-// modern plugins config
-plugins {
-  id 'com.github.jruby-gradle.base' version '1.1.4'
 }
 
 // TIP use -PpublishRelease=true to active release behavior regardless of the version
@@ -52,7 +48,7 @@ ext {
   asciidoctorPdfGemVersion = project.hasProperty('asciidoctorPdfGemVersion') ? project.asciidoctorPdfGemVersion : project(':asciidoctorj-pdf').version.replace('-', '.')
   asciidoctorDiagramGemVersion = project(':asciidoctorj-diagram').version.replace('-', '.')
   coderayGemVersion = '1.1.0'
-  groovyVersion = '2.1.8'
+  groovyVersion = '2.4.7'
   erubisGemVersion = '2.7.0'
   hamlGemVersion = '4.0.5'
   openUriCachedGemVersion = '0.0.5'
@@ -75,12 +71,11 @@ subprojects {
   def _status = status
   apply plugin: 'java'
   apply plugin: 'groovy'
-  apply from: "$rootDir/gradle/providedConfiguration.gradle"
 
   if (JavaVersion.current().isJava7Compatible() && !it.name.endsWith('-documentation')) {
 
     apply from: rootProject.file('gradle/signing.gradle')
-    if (!it.isDistribution()) {
+    if (!it.isDistribution()){
       apply from: rootProject.file('gradle/publish.gradle')
     }
     if (statusIsRelease) {
@@ -89,7 +84,7 @@ subprojects {
       apply from: rootProject.file('gradle/deploySnapshot.gradle')
     }
   }
-  
+
   status = _status
 
   // NOTE sourceCompatibility & targetCompatibility are set in gradle.properties to meet requirements of Gradle

@@ -1,5 +1,5 @@
 dependencies {
-  provided project(':asciidoctorj')
+  testCompileOnly project(':asciidoctorj')
   compile project(':asciidoctorj-test-support')
   compile "org.jboss.arquillian.container:arquillian-container-spi:$arquillianVersion"
   compile "org.jboss.arquillian.container:arquillian-container-test-spi:$arquillianVersion"
