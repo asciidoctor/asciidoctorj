@@ -1,88 +1,91 @@
 // NOTE replace deficient built-in publishing plugin with nebula-publishing,
 // which does a better job generating the POM and properly aggregates signature files for upload to Bintray
-apply plugin: 'nebula-publishing'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 def projectMeta = {
-  url 'https://github.com/asciidoctor/asciidoctorj'
-  inceptionYear '2013'
-  licenses {
-    license([:]) {
-      name 'The Apache Software License, Version 2.0'
-      url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-      distribution 'repo'
-    }
-  }
-  issueManagement {
-    system 'github'
-    url 'https://github.com/asciidoctor/asciidoctorj/issues'
-  }
-  scm {
+    resolveStrategy = groovy.lang.Closure.DELEGATE_FIRST
+    name project.name
+    description project.description
     url 'https://github.com/asciidoctor/asciidoctorj'
-  }
-  developers {
-    developer {
-      id 'asotobu'
-      name 'Alex Soto Bueno'
-      email 'asotobu@gmail.com'
-      timezone '1'
-      roles {
-        role 'Project Lead'
-      }
+    inceptionYear '2013'
+    licenses {
+        license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+        }
     }
-    developer {
-      id 'mojavelinux'
-      name 'Dan Allen'
-      email 'dan.j.allen@gmail.com'
-      timezone '-7'
-      roles {
-        role 'Contributor'
-      }
+    issueManagement {
+        system 'github'
+        url 'https://github.com/asciidoctor/asciidoctorj/issues'
     }
-    developer {
-      id 'abelsromero'
-      name 'Abel Salgado Romero'
-      email 'abelromero@gmail.com'
-      timezone '1'
-      roles {
-        role 'Contributor'
-      }
+    scm {
+        url 'https://github.com/asciidoctor/asciidoctorj'
     }
-  }
+    developers {
+        developer {
+            id 'asotobu'
+            name 'Alex Soto Bueno'
+            email 'asotobu@gmail.com'
+            timezone '1'
+            roles {
+                role 'Project Lead'
+            }
+        }
+        developer {
+            id 'mojavelinux'
+            name 'Dan Allen'
+            email 'dan.j.allen@gmail.com'
+            timezone '-7'
+            roles {
+                role 'Contributor'
+            }
+        }
+        developer {
+            id 'abelsromero'
+            name 'Abel Salgado Romero'
+            email 'abelromero@gmail.com'
+            timezone '1'
+            roles {
+                role 'Contributor'
+            }
+        }
+    }
 }
 
-// FIXME we have to do afterEvaluate or the pom.xml changes don't take
 afterEvaluate {
-  publishing.publications.withType(MavenPublication) {
-    // FIXME need to clear artifacts or else we get "multiple artifacts with the identical extension and classifier ('jar', 'null')" 
-    // ...but perhaps we don't need this anyway
-    //artifacts.clear()
-    //from components.java
+    publishing.publications {
+        jars(MavenPublication) {
 
-    // NOTE only build sources and javadoc jars when releasing
-    if (project.statusIsRelease) {
-      if (project.tasks.withType(Jar).findByName('sourcesJar')) {
-        artifact sourcesJar
-      }
-      if (project.tasks.withType(Jar).findByName('javadocJar')) {
-        artifact javadocJar
-      }
-    }
+            // NOTE only build sources and javadoc jars when releasing
+            if (project.statusIsRelease) {
+                if (project.tasks.withType(Jar).findByName('sourcesJar')) {
+                    artifact sourcesJar
+                }
+                if (project.tasks.withType(Jar).findByName('javadocJar')) {
+                    artifact javadocJar
+                }
 
-    pom.withXml {
-      def rootNode = asNode()
-      // NOTE Gradle sets the scope of all dependencies to runtime.
-      //      jruby-core should be added with scope provided, but otherwise we're okay with runtime scopes.
-      //def depsNode = rootNode.dependencies[0]
-      //depsNode.dependency.each {
-      //  if (it.scope.text() == 'runtime') {
-      //    it.remove(it.scope)
-      //  }
-      //}
-      rootNode.name[0].setValue(project.properName)
-      // FIXME I'm slightly annoyed that the dependencies node comes before name and description
-      rootNode.children().last() + projectMeta
+                // register the signed pom file
+                // signedPom is an output file from the signPom task
+                if (!project.hasProperty('skip.signing')) {
+                    artifact(signedPom) {
+                        extension = "pom.asc"
+                        classifier = null
+                    }
+                }
+            }
+
+            pom.withXml {
+                asNode().children().last() + projectMeta
+            }
+
+            if (!project.isDistribution()) {
+                from components.java
+            }
+        }
     }
-  }
 }
 
 // QUESTION should we move manifest creation to general Java plugin config?

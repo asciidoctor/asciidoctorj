@@ -1,0 +1,59 @@
+ext.pom = file("$buildDir/publications/jars/pom-default.xml")
+ext.signedPom = file("$buildDir/publications/jars/pom-default.xml.asc")
+
+if ( !project.hasProperty('skip.signing') ){
+    apply plugin: 'signing'
+
+    signing {
+        sign configurations.archives
+    }
+
+    if ( !signing.signatory ) {
+        logger.warn "No Signatory configured for project $project.name. Skip signing! See https://docs.gradle.org/current/userguide/signing_plugin.html"
+        signArchives.enabled = false
+        ext."skip.signing" = true
+    }
+
+    task signPom(type: Sign) {
+        group "publishing"
+        description "Sign the projects pom file"
+
+        inputs.file pom
+        outputs.file signedPom
+
+        doLast{
+
+            def input = pom.newInputStream()
+            def output = signedPom.newOutputStream()
+            try{
+                signatory.sign(input, output)
+            }
+            catch (Exception e){
+                logger.error e.message
+            }
+            finally {
+                input.close()
+                output.close()
+            }
+        }
+    }
+
+    /**
+     * The signPom Task depends on the GenerateMavenPom task which gets dynamically added
+     * with a name derived from a publication. In our case 'jars'.
+     *
+     * Our jars publication registers the signed pom as artifact.
+     * If the task does not run before publishJarsPublicationToMavenLocal this task will fail.
+     */
+    tasks.whenTaskAdded {
+
+        switch (it.name) {
+            case "generatePomFileForJarsPublication":
+                signPom.dependsOn it
+                break
+            case "publishJarsPublicationToMavenLocal":
+                it.dependsOn signPom
+                break
+        }
+    }
+}
