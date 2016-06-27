@@ -1,0 +1,54 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.zafarkhaja:java-semver:0.9.0'
+    }
+}
+
+import groovy.json.JsonSlurper
+import com.github.zafarkhaja.semver.Version
+
+task checkVersion() {
+    group "verification"
+    description "Check if current project version is behind published gem version. (skip with -P skip.checkVersion)"
+
+    if ( !project.hasProperty("gem_name")) {
+        throw new GradleException("I need the gem name to check the version. Add a 'gem_name' property to the gradle.properties file. (e.g.: gem_name=asciidoctor-diagram)")
+    }
+
+    def gem_version_pattern = ~/(((\d+\.){1,2}\d+)(\.)?(.*))/
+    def gem_latest_version_url = "https://rubygems.org/api/v1/versions/${gem_name}/latest.json".toURL()
+
+    def json = new JsonSlurper().parse( gem_latest_version_url )
+    def gem_latest_version = json.version
+
+    def matcher = gem_latest_version =~ gem_version_pattern
+    def javaVersion = gem_latest_version
+
+    doLast {
+
+        if ( gem_latest_version ==~ gem_version_pattern ) {
+            matcher.find()
+            if (matcher.group(4)) {
+                javaVersion = "${matcher.group(2)}-${matcher.group(5)}"
+            }
+        }
+
+
+        Version projectVersion = Version.valueOf(version)
+        Version gemJavaVersion = Version.valueOf(javaVersion)
+
+        if ( projectVersion.lessThan(gemJavaVersion) ) {
+            logger.warn "\nWARNING\nVersion mismatch: Current Version: $version, Gem Version: $gem_latest_version\n"
+        }
+        else {
+            println "up-to-date"
+        }
+    }
+}
+
+checkVersion.onlyIf { !gradle.startParameter.isOffline() }
+checkVersion.onlyIf { !project.hasProperty("skip.checkVersion") }
+check.dependsOn checkVersion

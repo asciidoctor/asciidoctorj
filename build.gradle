@@ -159,6 +159,7 @@ configure(subprojects.findAll { !it.isDistribution() }) {
 
   apply plugin: 'com.github.jruby-gradle.base'
   apply from: rootProject.file('gradle/eclipse.gradle')
+  apply from: rootProject.file('gradle/versioncheck.gradle')
 
   repositories {
     maven {
