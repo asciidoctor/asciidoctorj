@@ -16,8 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.ast.Column;
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.Section;
+import org.asciidoctor.ast.Table;
 import org.asciidoctor.internal.IOUtils;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
@@ -219,6 +222,67 @@ public class WhenAsciiDocIsRenderedToDocument {
         Section section = (Section) document.blocks().get(0);
         assertEquals(1, section.getBlocks().size());
         assertEquals("<strong>Section A</strong> paragraph.", section.getBlocks().get(0).getContent());
+    }
+
+    @Test
+    public void should_load_document_with_table() throws Exception {
+
+        final String doc = "= Test\n" +
+            "\n" +
+            "== Section \n" +
+            "\n" +
+            "[options=\"header,footer\"]\n" +
+            "[cols=\"<,>\"]\n" +
+            "|===\n" +
+            "| A | B\n" +
+            "\n" +
+            "| C\n" +
+            "| D\n" +
+            "\n" +
+            "| E\n" +
+            "| F\n" +
+            "\n" +
+            "| G | H\n" +
+            "|===\n";
+
+        Document document = asciidoctor.load(doc, OptionsBuilder.options().asMap());
+
+        Table table = (Table) document.getBlocks().get(0).getBlocks().get(0);
+
+        List<Row> header = table.getHeader();
+        assertThat(header, hasSize(1));
+
+        Row headerRow = header.get(0);
+        assertThat(headerRow.getCells(), hasSize(2));
+        assertThat(headerRow.getCells().get(0).getText(), is("A"));
+        assertThat(headerRow.getCells().get(1).getText(), is("B"));
+
+        List<Row> footer = table.getFooter();
+        assertThat(footer, hasSize(1));
+
+        Row footerRow = footer.get(0);
+        assertThat(footerRow.getCells(), hasSize(2));
+        assertThat(footerRow.getCells().get(0).getText(), is("G"));
+        assertThat(footerRow.getCells().get(1).getText(), is("H"));
+
+        List<Row> body = table.getBody();
+        assertThat(body, hasSize(2));
+
+        Row firstBodyRow = body.get(0);
+        assertThat(firstBodyRow.getCells(), hasSize(2));
+        assertThat(firstBodyRow.getCells().get(0).getText(), is("C"));
+        assertThat(firstBodyRow.getCells().get(1).getText(), is("D"));
+
+        Row secondBodyRow = body.get(1);
+        assertThat(secondBodyRow.getCells(), hasSize(2));
+        assertThat(secondBodyRow.getCells().get(0).getText(), is("E"));
+        assertThat(secondBodyRow.getCells().get(1).getText(), is("F"));
+
+        List<Column> columns = table.getColumns();
+        assertThat(columns, hasSize(2));
+
+        assertThat(columns.get(0).getHorizontalAlignment(), is(Table.HorizontalAlignment.LEFT));
+        assertThat(columns.get(1).getHorizontalAlignment(), is(Table.HorizontalAlignment.RIGHT));
     }
 
 }

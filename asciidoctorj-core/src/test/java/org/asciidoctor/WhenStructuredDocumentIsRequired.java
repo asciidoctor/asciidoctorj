@@ -190,4 +190,16 @@ public class WhenStructuredDocumentIsRequired {
 		assertThat(parts, hasSize(0));
 	}
 
+	@Test
+	public void document_with_table_should_be_read() {
+		final String doc = "= Test\n" +
+			"\n" +
+			"|===\n" +
+			"| A | B\n" +
+			"|===\n";
+
+		StructuredDocument document = asciidoctor.readDocumentStructure(doc, new HashMap<String, Object>());
+
+	}
+
 }

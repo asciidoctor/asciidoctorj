@@ -22,6 +22,12 @@ public final class NodeConverter {
 
     private static final String LIST_ITEM_CLASS = "Asciidoctor::ListItem";
 
+    private static final String TABLE_CLASS = "Asciidoctor::Table";
+
+    private static final String TABLE_COLUMN_CLASS = "Asciidoctor::Table::Column";
+
+    private static final String TABLE_CELL_CLASS = "Asciidoctor::Table::Cell";
+
     private NodeConverter() {}
 
     public static AbstractNode createASTNode(IRubyObject rubyObject) {
@@ -50,6 +56,18 @@ public final class NodeConverter {
         else if (LIST_ITEM_CLASS.equals(rubyClassName)) {
             ListItem list = RubyUtils.rubyToJava(runtime, rubyObject, ListItem.class);
             return new ListItemImpl(list, runtime);
+        }
+        else if (TABLE_CLASS.equals(rubyClassName)) {
+            Table table = RubyUtils.rubyToJava(runtime, rubyObject, Table.class);
+            return new TableImpl(table, runtime);
+        }
+        else if (TABLE_CELL_CLASS.equals(rubyClassName)) {
+            Cell cell = RubyUtils.rubyToJava(runtime, rubyObject, Cell.class);
+            return new CellImpl(cell, runtime);
+        }
+        else if (TABLE_COLUMN_CLASS.equals(rubyClassName)) {
+            Column column = RubyUtils.rubyToJava(runtime, rubyObject, Column.class);
+            return new ColumnImpl(column, runtime);
         }
         throw new IllegalArgumentException("Don't know what to do with a " + rubyObject);
     }
