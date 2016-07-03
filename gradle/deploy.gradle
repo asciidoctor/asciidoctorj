@@ -7,7 +7,9 @@ bintray {
   if ( !project.isDistribution() ) {
     publications = ['jars']
   }
-  configurations = ['archives']
+  else {
+    configurations = ['archives']
+  }
 
   dryRun = project.hasProperty('dryRun') && project.dryRun.toBoolean()
   publish = project.statusIsRelease

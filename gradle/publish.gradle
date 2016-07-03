@@ -1,6 +1,4 @@
-// NOTE replace deficient built-in publishing plugin with nebula-publishing,
-// which does a better job generating the POM and properly aggregates signature files for upload to Bintray
-apply plugin: 'maven'
+// NOTE the nebula-publishing plugin does not handle signature files anymore
 apply plugin: 'maven-publish'
 
 def projectMeta = {
@@ -87,6 +85,26 @@ afterEvaluate {
         }
     }
 }
+
+task addSignaturesToPublication(dependsOn: signArchives) {
+    group "publishing"
+    description "add all signatures to the publication"
+
+    doLast {
+        publishing.publications {
+            jars(MavenPublication) {
+                configurations.signatures.getArtifacts().each { sig ->
+                    logger.debug "adding signature to jars publication: $sig"
+                    artifact(sig){
+                        extension "jar.asc"
+                    }
+                }
+            }
+        }
+    }
+}
+
+tasks["signPom"].finalizedBy addSignaturesToPublication
 
 // QUESTION should we move manifest creation to general Java plugin config?
 jar {
