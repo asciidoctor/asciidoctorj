@@ -6,7 +6,6 @@ bintray {
 
   if ( !project.isDistribution() ) {
     publications = ['jars']
-    configurations = ['signatures']
   }
   else {
     configurations = ['archives']
