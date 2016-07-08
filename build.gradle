@@ -30,7 +30,7 @@ ext {
   guavaVersion = '18.0'
   hamcrestVersion = '1.3'
   jcommanderVersion = '1.35'
-  jrubyVersion = '1.7.24'
+  jrubyVersion = '1.7.25'
   jsoupVersion = '1.8.3'
   junitVersion = '4.12'
   saxonVersion = '9.5.1-6'
