@@ -21,7 +21,7 @@ public class WhenDocumentContainsDitaaDiagram {
     public void png_should_be_rendered_for_diagram() {
         File inputFile = classpath.getResource("sample.adoc");
         File outputFile1 = new File(inputFile.getParentFile(), "asciidoctor-diagram-process.png");
-        File outputFile2 = new File(inputFile.getParentFile(), "asciidoctor-diagram-process.png.cache");
+        File outputFile2 = new File(inputFile.getParentFile(), ".asciidoctor/diagram/asciidoctor-diagram-process.png.cache");
         asciidoctor.requireLibrary("asciidoctor-diagram");
         asciidoctor.convertFile(inputFile, options().backend("html5").get());
         assertThat(outputFile1.exists(), is(true));
