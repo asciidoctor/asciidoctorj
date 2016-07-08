@@ -38,7 +38,9 @@ public class WhenDitaaDiagramIsRendered {
         // then:
         assertThat(result, containsString("src=\"" + imageFileName + ".png\""));
         assertThat("PNG file not created!", new File("build/" + imageFileName + ".png").exists(), is(true));
-        assertThat("PNG cache file not created!", new File("build/" + imageFileName + ".png.cache").exists(), is(true));
+
+        File cacheFile = new File(".asciidoctor/diagram/" + imageFileName + ".png.cache");
+        assertThat("PNG cache file " + cacheFile + " not created!", cacheFile.exists(), is(true));
     }
 
     @Test
@@ -66,7 +68,7 @@ public class WhenDitaaDiagramIsRendered {
         assertThat(destinationFile.exists(), is(true));
         assertThat(destinationFile.length(), greaterThan(0L));
         assertThat("PNG file not created!", new File("build/" + imageFileName + ".png").exists(), is(true));
-        assertThat("PNG cache file not created!", new File("build/" + imageFileName + ".png.cache").exists(), is(true));
+        assertThat("PNG cache file not created!", new File("build/.asciidoctor/diagram/" + imageFileName + ".png.cache").exists(), is(true));
     }
 
     private String getTestDocument(String imageFileName) {
