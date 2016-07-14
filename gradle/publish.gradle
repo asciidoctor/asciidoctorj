@@ -77,6 +77,11 @@ afterEvaluate {
 
             pom.withXml {
                 asNode().children().last() + projectMeta
+
+                //evil unnecessary complicated change to fix packaging type in the pom
+                def children = asNode().children()
+                def versionIndex = children.indexOf(children.find {it.name().localPart == 'packaging'})
+                children.remove(versionIndex)
             }
 
             if (!project.isDistribution()) {
