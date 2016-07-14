@@ -8,7 +8,10 @@ dependencies {
 }
 
 jar.enabled = false
-signPom.enabled = false
+
+if ( !project.hasProperty('skip.signing') ) {
+  signPom.enabled = false
+}
 
 configurations.all {
   artifacts.clear()

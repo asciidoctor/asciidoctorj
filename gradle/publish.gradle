@@ -64,24 +64,10 @@ afterEvaluate {
                 if (project.tasks.withType(Jar).findByName('javadocJar')) {
                     artifact javadocJar
                 }
-
-                // register the signed pom file
-                // signedPom is an output file from the signPom task
-                if (!project.hasProperty('skip.signing')) {
-                    artifact(signedPom) {
-                        extension = "pom.asc"
-                        classifier = null
-                    }
-                }
             }
 
             pom.withXml {
                 asNode().children().last() + projectMeta
-
-                //evil unnecessary complicated change to fix packaging type in the pom
-                def children = asNode().children()
-                def versionIndex = children.indexOf(children.find {it.name().localPart == 'packaging'})
-                children.remove(versionIndex)
             }
 
             if (!project.isDistribution()) {
@@ -91,25 +77,27 @@ afterEvaluate {
     }
 }
 
-task addSignaturesToPublication(dependsOn: signArchives) {
-    group "publishing"
-    description "add all signatures to the publication"
+if ( !project.hasProperty('skip.signing') ) {
+    task addSignaturesToPublication(dependsOn: signArchives) {
+        group "publishing"
+        description "add all signatures to the publication"
 
-    doLast {
-        publishing.publications {
-            jars(MavenPublication) {
-                configurations.signatures.getArtifacts().each { sig ->
-                    logger.debug "adding signature to jars publication: $sig"
-                    artifact(sig){
-                        extension "jar.asc"
+        doLast {
+            publishing.publications {
+                jars(MavenPublication) {
+                    configurations.signatures.getArtifacts().each { sig ->
+                        logger.debug "adding signature to jars publication: $sig"
+                        artifact(sig) {
+                            extension "jar.asc"
+                        }
                     }
                 }
             }
         }
     }
-}
 
-tasks["signPom"].finalizedBy addSignaturesToPublication
+    tasks["signPom"].finalizedBy addSignaturesToPublication
+}
 
 // QUESTION should we move manifest creation to general Java plugin config?
 jar {
