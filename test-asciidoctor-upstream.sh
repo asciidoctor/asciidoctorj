@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# This script runs the AsciidoctorJ tests against the specified tag (or master) of the Asciidoctor RubyGem.
+# This script runs the AsciidoctorJ tests against the specified tag (or master) of the Asciidoctor Ruby gem.
 
 GRADLE_CMD=./gradlew
-#if [ ! -z $TRAVIS ]; then
-#  GRADLE_CMD=gradle
-#fi
+if [ ! -z $TRAVIS_JOB_NUMBER ] && [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "${TRAVIS_JOB_NUMBER##*.}" != '1' ]; then
+  exit 0
+fi
 # to build against a tag, set TAG to a git tag name (e.g., v1.5.2)
 TAG=master
 if [ "$TAG" == "master" ]; then
@@ -19,8 +19,9 @@ unzip -q $SRC_DIR.zip
 cp ../../asciidoctor-gem-installer.pom $SRC_DIR/pom.xml
 cd $SRC_DIR
 ASCIIDOCTOR_VERSION=`grep 'VERSION' ./lib/asciidoctor/version.rb | sed "s/.*'\(.*\)'.*/\1/"`
-sed "s;<version></version>;<version>$ASCIIDOCTOR_VERSION</version>;" pom.xml > pom.xml.sedtmp && mv -f pom.xml.sedtmp pom.xml
-sed "s;^ *s\.files *.*$;s.files = Dir['*.gemspec', '*.adoc', '{bin,data,lib}/*', '{bin,data,lib}/**/*'];" asciidoctor.gemspec > asciidoctor.gemspec.sedtmp && mv -f asciidoctor.gemspec.sedtmp asciidoctor.gemspec
+# we don't use sed -i here for compatibility with OSX
+sed "s;<version></version>;<version>$ASCIIDOCTOR_VERSION</version>;" pom.xml > pom.xml.sedtmp && \
+  mv -f pom.xml.sedtmp pom.xml
 mvn install -Dgemspec=asciidoctor.gemspec
 cd ../..
 #rm -rf maven
