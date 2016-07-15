@@ -9,8 +9,8 @@ before_install:
   - (cat /etc/hosts ; echo 127.0.0.1 $(hostname)) | sudo tee /etc/hosts
   - sudo apt-get -qq update
   - sudo apt-get install -y graphviz
-install: ./gradlew -S assemble
-script: ./gradlew -S check && bash test-asciidoctor-upstream.sh
+install: ./gradlew -S -Pskip.signing assemble
+script: ./gradlew -S -Pskip.signing check && bash test-asciidoctor-upstream.sh
 after_success: if [ "${TRAVIS_BRANCH}" = "asciidoctorj-1.6.0" -a "${TRAVIS_PULL_REQUEST}" = "false" -a "${TRAVIS_JDK_VERSION}" = "oraclejdk8" ]; then ./gradlew clean build artifactoryPublish -x test ; fi
 notifications:
   email: false
