@@ -154,12 +154,15 @@ subprojects {
 
 }
 
+configure(subprojects.findAll { !it.isDistribution() && it.name != 'asciidoctorj-documentation' && it.name != 'asciidoctorj-test-support' && it.name != 'asciidoctorj-arquillian-extension' }) {
+  apply from: rootProject.file('gradle/versioncheck.gradle')
+}
+
 // apply JRuby and sources/javadocs packaging stuff for all subprojects except the distribution
 configure(subprojects.findAll { !it.isDistribution() }) {
 
   apply plugin: 'com.github.jruby-gradle.base'
   apply from: rootProject.file('gradle/eclipse.gradle')
-  apply from: rootProject.file('gradle/versioncheck.gradle')
 
   repositories {
     maven {
