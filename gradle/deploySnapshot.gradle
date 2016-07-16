@@ -27,4 +27,3 @@ artifactory {
 }
 
 artifactoryPublish.dependsOn build
-artifactoryPublish.dependsOn signPom
