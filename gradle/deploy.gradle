@@ -11,6 +11,15 @@ bintray {
     configurations = ['archives']
   }
 
+  if ( !project.hasProperty('skip.signing') ) {
+    // Copy the signed pom to bintrayDestination
+    filesSpec {
+      from signPom
+      into signPom.bintrayDestination
+    }
+    bintrayUpload.dependsOn signPom
+  }
+
   dryRun = project.hasProperty('dryRun') && project.dryRun.toBoolean()
   publish = project.statusIsRelease
 
@@ -51,4 +60,3 @@ bintray {
 }
 
 bintrayUpload.dependsOn build
-bintrayUpload.dependsOn signPom

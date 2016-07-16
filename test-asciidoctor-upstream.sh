@@ -26,5 +26,5 @@ mvn install -Dgemspec=asciidoctor.gemspec
 cd ../..
 #rm -rf maven
 cd ..
-$GRADLE_CMD -S -PasciidoctorGemVersion=$ASCIIDOCTOR_VERSION -PuseMavenLocal=true :asciidoctorj:clean :asciidoctorj:check
+$GRADLE_CMD -S -Pskip.signing -PasciidoctorGemVersion=$ASCIIDOCTOR_VERSION -PuseMavenLocal=true :asciidoctorj:clean :asciidoctorj:check
 exit $?
