@@ -139,6 +139,7 @@ public class WhenAsciiDocIsRenderedToDocument {
                                                     .compact(true).asMap();
         Document document = asciidoctor.load(DOCUMENT, options);
         assertThat(document.getAttributes(), hasKey("toc-placement"));
+        assertThat(document.hasAttr("toc-placement"), is(true));
         assertThat(document.isAttr("toc-placement", "auto", false), is(true));
         assertThat(document.getAttr("toc-placement", "", false).toString(), is("auto"));
     }
@@ -276,6 +277,36 @@ public class WhenAsciiDocIsRenderedToDocument {
         assertThat(block2.getSourceLocation().getPath(), is(file.getName()));
         assertThat(block2.getSourceLocation().getFile(), is(file.getName()));
         assertThat(block2.getSourceLocation().getDir(), is(file.getParent().replaceAll("\\\\", "/")));
+    }
+
+    @Test
+    public void should_get_attributes() {
+
+        final String documentWithAttributes = "= Document Title\n" +
+            ":docattr: docvalue\n" +
+            "\n" +
+            "preamble\n" +
+            "\n" +
+            "== Section A\n" +
+            "\n" +
+            "paragraph\n" +
+            "\n";
+
+        Document document = asciidoctor.load(documentWithAttributes, new HashMap<String, Object>());
+        List<StructuralNode> blocks = document.getBlocks();
+
+        Section section = (Section) blocks.get(1);
+        section.setAttr("testattr", "testvalue", true);
+
+        assertThat(document.hasAttr("testattr"), is(false));
+
+        assertThat(section.hasAttr("testattr"), is(true));
+        assertThat(section.hasAttr("testattr", true), is(true));
+        assertThat(section.hasAttr("testattr", false), is(true));
+        assertThat(section.isAttr("testattr", "testvalue"), is(true));
+
+        assertThat(section.hasAttr("docattr", true), is(true));
+        assertThat(section.hasAttr("docattr", false), is(false));
     }
 
 }
