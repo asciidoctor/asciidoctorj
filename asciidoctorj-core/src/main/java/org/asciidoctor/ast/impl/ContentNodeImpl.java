@@ -82,7 +82,7 @@ public abstract class ContentNodeImpl extends RubyObjectWrapper implements Conte
 
     @Override
     public Map<String, Object> getAttributes() {
-        return new RubyAttributesMapDecorator((RubyHash) getRubyProperty("attributes"));
+        return new RubyAttributesMapDecorator((RubyHash) getRubyProperty("@attributes"));
     }
 
     @Override
@@ -103,6 +103,16 @@ public abstract class ContentNodeImpl extends RubyObjectWrapper implements Conte
     @Override
     public boolean isAttr(Object name, Object expected, boolean inherit) {
         return getBoolean("attr?", name, expected, inherit);
+    }
+
+    @Override
+    public boolean hasAttr(Object name) {
+        return getBoolean("attr?", name);
+    }
+
+    @Override
+    public boolean hasAttr(Object name, boolean inherited) {
+        return getBoolean("attr?", name, null, inherited);
     }
 
     @Override
