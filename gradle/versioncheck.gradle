@@ -1,0 +1,94 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.zafarkhaja:java-semver:0.9.0'
+    }
+}
+
+import groovy.json.JsonSlurper
+import com.github.zafarkhaja.semver.Version
+
+task checkVersion() {
+    group "verification"
+    description "Check if current project version is behind published gem version. (skip with -P skip.checkVersion)"
+
+    if ( !project.hasProperty("gem_name")) {
+        throw new GradleException("I need the gem name to check the version. Add a 'gem_name' property to the gradle.properties file. (e.g.: gem_name=asciidoctor-diagram)")
+    }
+
+    doLast {
+
+        String gem_latest_version = getLatestGemVersion(gem_name)
+        String javaVersion = latestGemVersionAsJavaVersion(gem_latest_version)
+
+        try {
+
+            Version projectVersion = Version.valueOf(version as String)
+            Version gemJavaVersion = Version.valueOf(javaVersion)
+
+            if (projectVersion.lessThan(gemJavaVersion)) {
+                logger.warn "\nWARNING\nVersion mismatch: Current Version: {}, Gem Version: {}\n",version , gem_latest_version
+            } else {
+                println "up-to-date"
+            }
+        }
+        catch (Exception e) {
+            logger.error "\nWARNING\nSemantic version violation: Current Version: {}, Gem Version: {}\n",version , gem_latest_version
+        }
+    }
+}
+
+/**
+ * Consume rubygems webservice to determine latest gem version
+ *
+ * @param gemName The gem's package name. eg.: asciidoctor-diagram
+ * @return latest gem version as String
+ */
+private String getLatestGemVersion(String gemName) {
+    def gemVersion
+
+    try {
+        def gem_latest_version_url = "https://rubygems.org/api/v1/versions/${gemName}/latest.json".toURL()
+        def json = new JsonSlurper().parse(gem_latest_version_url)
+        gemVersion = json.version
+    }
+    catch (Exception e) {
+        logger.error "Problems getting latest gem version. {}", e.message
+        throw new StopExecutionException()
+    }
+    gemVersion
+}
+
+/**
+ * Transforms a gem version into a java version representation.
+ *
+ * e.g.: The gem version of asciidoctorj-epub3 1.5.0.alpha.6 transforms to 1.5.0-alpha.6
+ *
+ * @param gem_latest_version The latest gem version as String
+ * @return a java compatible presentation of a gem version
+ */
+private String latestGemVersionAsJavaVersion(String gem_latest_version) {
+    def gem_version_pattern = ~/(((\d+\.){1,2}\d+)(\.)?(.*))/
+    def matcher = gem_latest_version =~ gem_version_pattern
+    def javaVersion = gem_latest_version
+
+    try {
+        if (gem_latest_version ==~ gem_version_pattern) {
+            matcher.find()
+            if (matcher.group(4)) {
+                javaVersion = "${matcher.group(2)}-${matcher.group(5)}"
+            }
+        }
+    }
+    catch (Exception e) {
+        logger.error "Problems transforming gem version {} to java version", gem_latest_version
+        throw new StopExecutionException()
+    }
+    javaVersion
+}
+
+checkVersion.onlyIf { !gradle.startParameter.isOffline() }
+checkVersion.onlyIf { !project.hasProperty("skip.checkVersion") }
+check.dependsOn checkVersion

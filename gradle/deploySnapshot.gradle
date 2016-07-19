@@ -14,7 +14,9 @@ artifactory {
             if ( !project.isDistribution() && !project.name.endsWith('-documentation') ) {
                 publications('jars')
             }
-            publicConfigs('archives')
+            else {
+                publicConfigs('archives')
+            }
 
             def dryRun = project.hasProperty('dryRun') && project.dryRun.toBoolean()
             publishBuildInfo = !dryRun  //Publish build-info to Artifactory (true by default)
@@ -27,4 +29,3 @@ artifactory {
 }
 
 artifactoryPublish.dependsOn build
-artifactoryPublish.dependsOn signPom

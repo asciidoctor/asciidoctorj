@@ -9,7 +9,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6"
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7"
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
     }
 }
@@ -152,6 +152,10 @@ subprojects {
     }
   }
 
+}
+
+configure(subprojects.findAll { !it.isDistribution() && it.name != 'asciidoctorj-documentation' && it.name != 'asciidoctorj-test-support' && it.name != 'asciidoctorj-arquillian-extension' }) {
+  apply from: rootProject.file('gradle/versioncheck.gradle')
 }
 
 // apply JRuby and sources/javadocs packaging stuff for all subprojects except the distribution
