@@ -23,209 +23,240 @@ public class JavaExtensionRegistry {
         this.rubyRuntime = rubyRuntime;
     }
 
-    public void docinfoProcessor(Class<? extends DocinfoProcessor> docInfoProcessor) {
+    public JavaExtensionRegistry docinfoProcessor(Class<? extends DocinfoProcessor> docInfoProcessor) {
         RubyClass rubyClass = DocinfoProcessorProxy.register(rubyRuntime, docInfoProcessor);
         this.asciidoctorModule.docinfo_processor(rubyClass);
+        return this;
     }
 
-    public void docinfoProcessor(DocinfoProcessor docInfoProcessor) {
+    public JavaExtensionRegistry docinfoProcessor(DocinfoProcessor docInfoProcessor) {
         RubyClass rubyClass = DocinfoProcessorProxy.register(rubyRuntime, docInfoProcessor);
         this.asciidoctorModule.docinfo_processor(rubyClass);
+        return this;
     }
 
-    public void docinfoProcessor(String docInfoProcessor) {
+    public JavaExtensionRegistry docinfoProcessor(String docInfoProcessor) {
         try {
             Class<? extends DocinfoProcessor>  docinfoProcessorClass = (Class<? extends DocinfoProcessor>) Class.forName(docInfoProcessor);
             docinfoProcessor(docinfoProcessorClass);
+            return this;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void preprocessor(Class<? extends Preprocessor> preprocessor) {
+    public JavaExtensionRegistry preprocessor(Class<? extends Preprocessor> preprocessor) {
         RubyClass rubyClass = PreprocessorProxy.register(rubyRuntime, preprocessor);
         this.asciidoctorModule.preprocessor(rubyClass);
+        return this;
     }
 
-    public void preprocessor(Preprocessor preprocessor) {
+    public JavaExtensionRegistry preprocessor(Preprocessor preprocessor) {
         RubyClass rubyClass = PreprocessorProxy.register(rubyRuntime, preprocessor);
         this.asciidoctorModule.preprocessor(rubyClass);
+        return this;
     }
     
-    public void preprocessor(String preprocessor) {
+    public JavaExtensionRegistry preprocessor(String preprocessor) {
         try {
             Class<? extends Preprocessor>  preprocessorClass = (Class<? extends Preprocessor>) Class.forName(preprocessor);
             preprocessor(preprocessorClass);
+            return this;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
     
-    public void postprocessor(String postprocessor) {
+    public JavaExtensionRegistry postprocessor(String postprocessor) {
         try {
             Class<? extends Postprocessor>  postprocessorClass = (Class<? extends Postprocessor>) Class.forName(postprocessor);
             postprocessor(postprocessorClass);
+            return this;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
     
-    public void postprocessor(Class<? extends Postprocessor> postprocessor) {
+    public JavaExtensionRegistry postprocessor(Class<? extends Postprocessor> postprocessor) {
         RubyClass rubyClass = PostprocessorProxy.register(rubyRuntime, postprocessor);
         this.asciidoctorModule.postprocessor(rubyClass);
+        return this;
     }
     
-    public void postprocessor(Postprocessor postprocessor) {
+    public JavaExtensionRegistry postprocessor(Postprocessor postprocessor) {
         RubyClass rubyClass = PostprocessorProxy.register(rubyRuntime, postprocessor);
         this.asciidoctorModule.postprocessor(rubyClass);
+        return this;
     }
 
-    public void includeProcessor(String includeProcessor) {
+    public JavaExtensionRegistry includeProcessor(String includeProcessor) {
         try {
             Class<? extends IncludeProcessor>  includeProcessorClass = (Class<? extends IncludeProcessor>) Class.forName(includeProcessor);
             includeProcessor(includeProcessorClass);
+            return this;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
     
-    public void includeProcessor(
+    public JavaExtensionRegistry includeProcessor(
             Class<? extends IncludeProcessor> includeProcessor) {
         RubyClass rubyClass = IncludeProcessorProxy.register(rubyRuntime, includeProcessor);
         this.asciidoctorModule.include_processor(rubyClass);
+        return this;
     }
 
-    public void includeProcessor(IncludeProcessor includeProcessor) {
+    public JavaExtensionRegistry includeProcessor(IncludeProcessor includeProcessor) {
         RubyClass rubyClass = IncludeProcessorProxy.register(rubyRuntime, includeProcessor);
         this.asciidoctorModule.include_processor(rubyClass);
+        return this;
     }
     
-    public void treeprocessor(Treeprocessor treeprocessor) {
+    public JavaExtensionRegistry treeprocessor(Treeprocessor treeprocessor) {
         RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, treeprocessor);
         this.asciidoctorModule.treeprocessor(rubyClass);
+        return this;
     }
 
-    public void treeprocessor(Class<? extends Treeprocessor> abstractTreeProcessor) {
+    public JavaExtensionRegistry treeprocessor(Class<? extends Treeprocessor> abstractTreeProcessor) {
         RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, abstractTreeProcessor);
         this.asciidoctorModule.treeprocessor(rubyClass);
+        return this;
     }
     
-    public void treeprocessor(String treeProcessor) {
+    public JavaExtensionRegistry treeprocessor(String treeProcessor) {
         try {
             Class<? extends Treeprocessor>  treeProcessorClass = (Class<? extends Treeprocessor>) Class.forName(treeProcessor);
             treeprocessor(treeProcessorClass);
+            return this;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void block(String blockName,
+    public JavaExtensionRegistry block(String blockName,
            String blockProcessor) {
         try {
             Class<? extends BlockProcessor>  blockProcessorClass = (Class<? extends BlockProcessor>) Class.forName(blockProcessor);
             block(blockName, blockProcessorClass);
+            return this;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void block(String blockProcessor) {
+    public JavaExtensionRegistry block(String blockProcessor) {
         try {
             Class<? extends BlockProcessor>  blockProcessorClass = (Class<? extends BlockProcessor>) Class.forName(blockProcessor);
             block(blockProcessorClass);
+            return this;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void block(String blockName,
+    public JavaExtensionRegistry block(String blockName,
             Class<? extends BlockProcessor> blockProcessor) {
         RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
         this.asciidoctorModule.block_processor(rubyClass, blockName);
+        return this;
     }
 
-    public void block(Class<? extends BlockProcessor> blockProcessor) {
+    public JavaExtensionRegistry block(Class<? extends BlockProcessor> blockProcessor) {
         String name = getName(blockProcessor);
         block(name, blockProcessor);
+        return this;
     }
 
-    public void block(BlockProcessor blockProcessor) {
+    public JavaExtensionRegistry block(BlockProcessor blockProcessor) {
         RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
         this.asciidoctorModule.block_processor(rubyClass, blockProcessor.getName());
+        return this;
     }
 
-    public void block(String blockName,
+    public JavaExtensionRegistry block(String blockName,
             BlockProcessor blockProcessor) {
         RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
         this.asciidoctorModule.block_processor(rubyClass, blockName);
+        return this;
     }
 
-    public void blockMacro(String blockName,
+    public JavaExtensionRegistry blockMacro(String blockName,
             Class<? extends BlockMacroProcessor> blockMacroProcessor) {
         RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
         this.asciidoctorModule.block_macro(rubyClass, blockName);
+        return this;
     }
 
-    public void blockMacro(Class<? extends BlockMacroProcessor> blockMacroProcessor) {
+    public JavaExtensionRegistry blockMacro(Class<? extends BlockMacroProcessor> blockMacroProcessor) {
         String name = getName(blockMacroProcessor);
         RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
         this.asciidoctorModule.block_macro(rubyClass, name);
+        return this;
     }
 
-    public void blockMacro(String blockName,
+    public JavaExtensionRegistry blockMacro(String blockName,
             String blockMacroProcessor) {
         try {
             Class<? extends BlockMacroProcessor>  blockMacroProcessorClass = (Class<? extends BlockMacroProcessor>) Class.forName(blockMacroProcessor);
             blockMacro(blockName, blockMacroProcessorClass);
+            return this;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void blockMacro(String blockMacroProcessor) {
+    public JavaExtensionRegistry blockMacro(String blockMacroProcessor) {
         try {
             Class<? extends BlockMacroProcessor>  blockMacroProcessorClass = (Class<? extends BlockMacroProcessor>) Class.forName(blockMacroProcessor);
             blockMacro(blockMacroProcessorClass);
+            return this;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void blockMacro(BlockMacroProcessor blockMacroProcessor) {
+    public JavaExtensionRegistry blockMacro(BlockMacroProcessor blockMacroProcessor) {
         RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
         this.asciidoctorModule.block_macro(rubyClass, blockMacroProcessor.getName());
+        return this;
     }
 
-    public void inlineMacro(InlineMacroProcessor inlineMacroProcessor) {
+    public JavaExtensionRegistry inlineMacro(InlineMacroProcessor inlineMacroProcessor) {
         RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
         this.asciidoctorModule.inline_macro(rubyClass, inlineMacroProcessor.getName());
+        return this;
     }
     
-    public void inlineMacro(String blockName,
+    public JavaExtensionRegistry inlineMacro(String blockName,
             Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
         RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
         this.asciidoctorModule.inline_macro(rubyClass, blockName);
+        return this;
     }
 
-    public void inlineMacro(Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
+    public JavaExtensionRegistry inlineMacro(Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
         String name = getName(inlineMacroProcessor);
         RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
         this.asciidoctorModule.inline_macro(rubyClass, name);
+        return this;
     }
 
-    public void inlineMacro(String blockName, String inlineMacroProcessor) {
+    public JavaExtensionRegistry inlineMacro(String blockName, String inlineMacroProcessor) {
         try {
             Class<? extends InlineMacroProcessor>  inlineMacroProcessorClass = (Class<? extends InlineMacroProcessor>) Class.forName(inlineMacroProcessor);
             inlineMacro(blockName, inlineMacroProcessorClass);
+            return this;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void inlineMacro(String inlineMacroProcessor) {
+    public JavaExtensionRegistry inlineMacro(String inlineMacroProcessor) {
         try {
             Class<? extends InlineMacroProcessor>  inlineMacroProcessorClass = (Class<? extends InlineMacroProcessor>) Class.forName(inlineMacroProcessor);
             inlineMacro(inlineMacroProcessorClass);
+            return this;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
