@@ -34,48 +34,65 @@ public class Processor {
      * <pre>
      * <verbatim>
      * Map&lt;String, Object&gt; config = new HashMap&lt;&gt;();
-     * config.put(CONTENT_MODEL, CONTENT_MODEL_COMPOUND);
+     * config.put(CONTENT_MODEL, ContentModel.COMPOUND);
      * BlockProcessor blockProcessor = new BlockProcessor("foo", config);
      * asciidoctor.javaExtensionRegistry().block(blockProcessor);
      * </verbatim>
      * </pre>
      * </p>
+     *
+     * @deprecated Use the constant {@link ContentModel#KEY} instead or the annotation {@link ContentModel} to describe this Processor
      */
+    @Deprecated
     public static final String CONTENT_MODEL = "content_model";
 
     /**
      * Predefined constant to let Asciidoctor know that this BlockProcessor creates zero or more child blocks.
+     * @deprecated Use {@link ContentModel#COMPOUND} instead.
      */
+    @Deprecated
     public static final String CONTENT_MODEL_COMPOUND = ":compound";
 
     /**
      * Predefined constant to let Asciidoctor know that this BlockProcessor creates simple paragraph content.
+     * @deprecated Use {@link ContentModel#SIMPLE} instead.
      */
+    @Deprecated
     public static final String CONTENT_MODEL_SIMPLE =":simple";
 
     /**
      * Predefined constant to let Asciidoctor know that this BlockProcessor creates literal content.
+     * @deprecated Use {@link ContentModel#VERBATIM} instead.
      */
+    @Deprecated
     public static final String CONTENT_MODEL_VERBATIM =":verbatim";
 
     /**
      * Predefined constant to make Asciidoctor pass through the content unprocessed.
+     * @deprecated Use {@link ContentModel#RAW} instead.
      */
+    @Deprecated
     public static final String CONTENT_MODEL_RAW =":raw";
 
     /**
      * Predefined constant to make Asciidoctor drop the content.
+     * @deprecated Use {@link ContentModel#SKIP} instead.
      */
+    @Deprecated
     public static final String CONTENT_MODEL_SKIP =":skip";
 
     /**
      * Predefined constant to make Asciidoctor not expect any content.
+     * @deprecated Use {@link ContentModel#EMPTY} instead.
      */
+    @Deprecated
     public static final String CONTENT_MODEL_EMPTY =":empty";
 
     /**
      * Predefined constant to make Asciidoctor parse content as attributes.
+     * @deprecated Use {@link ContentModel#ATTRIBUTES} instead.
      */
+    @Deprecated
     public static final String CONTENT_MODEL_ATTRIBUTES =":attributes";
 
 
