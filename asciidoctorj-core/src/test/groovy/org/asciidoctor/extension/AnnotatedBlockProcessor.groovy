@@ -1,6 +1,7 @@
 package org.asciidoctor.extension
 
 import groovy.transform.CompileStatic
+import org.asciidoctor.ast.ContentModel
 import org.asciidoctor.ast.StructuralNode
 
 @CompileStatic
