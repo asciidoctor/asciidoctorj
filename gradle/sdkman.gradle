@@ -1,0 +1,10 @@
+apply plugin: "io.sdkman.vendors"
+
+sdkman {
+    consumerKey = project.sdkman_consumer_key
+    consumerToken = project.sdkman_consumer_token
+    candidate = rootProject.name
+    version = rootProject.version
+    url = "https://dl.bintray.com/asciidoctor/maven/org/asciidoctor/asciidoctorj/$rootProject.version/$distZip.archiveName"
+    hashtag = "#asciidoctorj"
+}
