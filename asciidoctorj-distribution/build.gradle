@@ -1,5 +1,9 @@
 apply plugin: 'application'
 
+if (project.statusIsRelease) {
+    apply from: rootProject.file('gradle/sdkman.gradle')
+}
+
 dependencies {
   compile(project(':asciidoctorj')) {
     exclude group: 'org.jruby'
