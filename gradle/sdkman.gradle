@@ -5,6 +5,30 @@ sdkman {
     consumerToken = project.sdkman_consumer_token
     candidate = rootProject.name
     version = rootProject.version
-    url = "https://dl.bintray.com/asciidoctor/maven/org/asciidoctor/asciidoctorj/$rootProject.version/$distZip.archiveName"
     hashtag = "#asciidoctorj"
+}
+
+afterEvaluate {
+    sdkman.url = "https://dl.bintray.com/asciidoctor/maven/org/asciidoctor/asciidoctorj/$rootProject.version/$distZip.archiveName"
+}
+
+task distributionAvailable() {
+    group = "Verification"
+    description = "Check if distribution is available on bintray"
+
+    doLast {
+        String errorMsg = "Distribution is not available at $sdkman.url"
+
+        HttpURLConnection connection = sdkman.url.toURL().openConnection()
+        connection.setRequestMethod("HEAD")
+        connection.connect()
+
+        if ( connection.responseCode != 200 ){
+            throw new GradleException(errorMsg)
+        }
+    }
+}
+
+tasks.findAll{ it.name ==~ /sdk.*(Release|Version)/ }.each {
+    it.dependsOn distributionAvailable
 }
