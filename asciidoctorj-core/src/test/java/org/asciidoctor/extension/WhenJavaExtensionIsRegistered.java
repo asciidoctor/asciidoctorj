@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.ast.DocumentRuby;
@@ -389,6 +390,24 @@ public class WhenJavaExtensionIsRegistered {
         assertThat(contentElement.text(), is("gem install asciidoctor"));
 
     }
+
+    /**
+     * See https://github.com/asciidoctor/asciidoctorj/issues/497.
+     */
+    @Test
+    public void when_using_a_tree_processor_a_toc_should_still_be_created() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+        javaExtensionRegistry.treeprocessor(TerminalCommandTreeprocessor.class);
+
+        String content = asciidoctor.renderFile(
+            classpath.getResource("sample-with-sections.ad"),
+            options().toFile(false)
+                .attributes(AttributesBuilder.attributes().tableOfContents(true))
+                .get());
+    }
+
 
     @Test
     public void a_treeprocessor_as_string_should_be_executed_in_document() {

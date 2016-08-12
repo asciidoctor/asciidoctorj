@@ -1,15 +1,13 @@
 package org.asciidoctor.ast;
 
-import java.util.List;
-import java.util.Map;
-
-import org.asciidoctor.converter.ConverterProxy;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyObject;
-import org.jruby.javasupport.JavaEmbedUtils;
+
+import java.util.List;
+import java.util.Map;
 
 public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock {
 
@@ -42,6 +40,10 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     @Override
     public String getStyle() {
         return delegate.getStyle();
+    }
+
+    public String getCaption() {
+        return RubyUtils.invokeRubyMethod(delegate, "caption", new Object[0], String.class);
     }
 
     @Override
