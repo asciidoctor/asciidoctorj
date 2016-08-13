@@ -103,12 +103,12 @@ end
 
 module Asciidoctor
     class AbstractNode
-        alias :is_attr :attr? unless respond_to? :is_attr
-        alias :get_attr :attr unless respond_to? :get_attr
-        alias :is_reftext :reftext? unless respond_to? :is_reftext
+        alias :is_attr :attr? unless method_defined? :is_attr
+        alias :get_attr :attr unless method_defined? :get_attr
+        alias :is_reftext :reftext? unless method_defined? :is_reftext
     end
     
     class AbstractBlock
-        alias :append :<< unless respond_to? :append
+        alias :append :<< unless method_defined? :append
     end
 end
