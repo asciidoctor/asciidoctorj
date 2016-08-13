@@ -35,8 +35,8 @@ public class SectionImpl extends AbstractBlockImpl implements Section {
     }
 
     @Override
-    public int numbered() {
-        return this.delegate.number();
+    public boolean numbered() {
+        return RubyUtils.invokeRubyMethod(delegate, "numbered", new Object[0], Boolean.class);
     }
 
     public String sectnum() {
@@ -51,15 +51,15 @@ public class SectionImpl extends AbstractBlockImpl implements Section {
         return RubyUtils.invokeRubyMethod(delegate, "sectnum", new Object[]{delimiter, append}, String.class);
     }
 
-    public List<Section> getSections() {
-        return RubyUtils.invokeRubyMethod(delegate, "sections", new Object[0], List.class);
-    }
-
-    public boolean isSections() {
-        return RubyUtils.invokeRubyMethod(delegate, "sections?", new Object[0], Boolean.class);
-    }
-
     public String getCaptionedTitle() {
         return RubyUtils.invokeRubyMethod(delegate, "captioned_title", new Object[0], String.class);
+    }
+
+    public String generateId() {
+        return RubyUtils.invokeRubyMethod(delegate, "generate_id", new Object[0], String.class);
+    }
+
+    public String getName() {
+        return getTitle();
     }
 }

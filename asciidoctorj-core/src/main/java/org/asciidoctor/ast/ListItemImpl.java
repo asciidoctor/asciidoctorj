@@ -1,5 +1,6 @@
 package org.asciidoctor.ast;
 
+import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 
 public class ListItemImpl extends AbstractBlockImpl implements ListItem {
@@ -23,6 +24,18 @@ public class ListItemImpl extends AbstractBlockImpl implements ListItem {
 
     @Override
     public boolean hasText() {
-        return listDelegate.hasText();
+        return isText();
+    }
+
+    public boolean isText() {
+        return RubyUtils.invokeRubyMethod(delegate, "text?", new Object[0], Boolean.class);
+    }
+
+    public boolean isSimple() {
+        return RubyUtils.invokeRubyMethod(delegate, "simple?", new Object[0], Boolean.class);
+    }
+
+    public boolean isCompound() {
+        return RubyUtils.invokeRubyMethod(delegate, "compound?", new Object[0], Boolean.class);
     }
 }

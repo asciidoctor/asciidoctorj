@@ -1,8 +1,8 @@
 package org.asciidoctor.ast;
 
-import java.util.List;
-
 import org.jruby.Ruby;
+
+import java.util.List;
 
 public class BlockImpl extends AbstractBlockImpl implements Block {
     private Block blockDelegate;
@@ -20,5 +20,9 @@ public class BlockImpl extends AbstractBlockImpl implements Block {
     @Override
     public String source() {
         return blockDelegate.source();
+    }
+
+    public String getBlockname() {
+        return getContext();
     }
 }

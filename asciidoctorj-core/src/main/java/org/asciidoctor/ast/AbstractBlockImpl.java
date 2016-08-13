@@ -32,6 +32,10 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
         return delegate.getTitle();
     }
 
+    public boolean isTitle() {
+        return RubyUtils.invokeRubyMethod(delegate, "title?", new Object[0], Boolean.class);
+    }
+
     @Override
     public String style() {
         return getStyle();
@@ -66,6 +70,10 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
         return rubyBlocks;
     }
 
+    public boolean isBlocks() {
+        return RubyUtils.invokeRubyMethod(delegate, "blocks?", new Object[0], Boolean.class);
+    }
+
     @Override
     public Object content() {
         return getContent();
@@ -94,6 +102,14 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
     @Override
     public AbstractBlock delegate() {
         return delegate;
+    }
+
+    public List<Section> getSections() {
+        return RubyUtils.invokeRubyMethod(delegate, "sections", new Object[0], List.class);
+    }
+
+    public boolean isSections() {
+        return RubyUtils.invokeRubyMethod(delegate, "sections?", new Object[0], Boolean.class);
     }
 
     @Override
