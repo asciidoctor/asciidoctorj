@@ -7,6 +7,7 @@ import org.jruby.RubyClass;
 import org.jruby.RubyObject;
 import org.jruby.RubySymbol;
 import org.jruby.internal.runtime.GlobalVariable.Scope;
+import org.jruby.java.proxies.RubyObjectHolderProxy;
 import org.jruby.javasupport.JavaClass;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.GlobalVariable;
@@ -39,6 +40,19 @@ public class RubyUtils {
     public static final void setGlobalVariable(Ruby rubyRuntime, String variableName, Object variableValue) {
         String script = String.format("$%s = %s", variableName, variableValue);
         rubyRuntime.evalScriptlet(script);
+    }
+
+    public static <T> T invokeRubyMethod(final Object target, final String methodName, final Object[] args, final Class<T> resultType) {
+        IRubyObject rubyObject = null;
+        if (target instanceof RubyObjectHolderProxy) {
+            rubyObject = RubyObjectHolderProxy.class.cast(target).__ruby_object();
+        } else if (target instanceof IRubyObject) {
+            rubyObject = (IRubyObject) target;
+        }
+        if (rubyObject != null) {
+            return (T) JavaEmbedUtils.invokeMethod(rubyObject.getRuntime(), rubyObject, methodName, args, resultType);
+        }
+        throw new IllegalArgumentException("Target is a " + target.getClass() + " instead of a Ruby object.");
     }
 
 }
