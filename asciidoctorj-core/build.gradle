@@ -29,10 +29,9 @@ jrubyPrepareGems << {
     from gemFiles
     eachFile {
       // See https://github.com/asciidoctor/asciidoctorj/issues/497
-      if (it.path ==~ /gems\/asciidoctor-.+\/lib\/asciidoctor\/.*\.rb/) {
+      if (it.path ==~ /gems\/asciidoctor-.+\/lib\/asciidoctor\/abstract_block.rb/) {
         it.filter { line ->
-          line.replaceAll(/\.context /, '.context.to_sym ')
-                  .replaceAll(/\.context\)/, '.context.to_sym)')
+          line.replaceAll(/block.context == :section/, 'block.context.to_sym == :section')
         }
       }
     }
