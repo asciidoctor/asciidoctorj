@@ -1,5 +1,6 @@
 package org.asciidoctor.ast;
 
+import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 
 import java.util.List;
@@ -19,8 +20,15 @@ public class ListImpl extends AbstractBlockImpl implements ListNode {
     }
 
     @Override
-    public boolean isItem() {
-        return isBlock();
+    public boolean hasItems() {
+        return isItems();
+    }
+
+    /**
+     * This method will be invoked by Ruby.
+     */
+    public boolean isItems() {
+        return isBlocks();
     }
 
     @Override
@@ -31,5 +39,10 @@ public class ListImpl extends AbstractBlockImpl implements ListNode {
     @Override
     public String convert() {
         return listDelegate.convert();
+    }
+
+    public boolean isOutline() {
+        final String context = getContext();
+        return "ulist".equals(context) || "olist".equals(context);
     }
 }

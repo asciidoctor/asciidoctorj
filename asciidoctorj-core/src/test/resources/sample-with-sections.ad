@@ -10,6 +10,20 @@ More text
 
 Subsections are also so important.
 
+* And unordered lists
+* are also very important
+
+. and numbered ones
+. too
+
 == Section B
 
 And even more text
+
+|===
+| A | Table
+
+| is | also
+| a  | nice
+| thing | !
+|===

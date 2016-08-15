@@ -6,5 +6,5 @@ public interface Section extends AbstractBlock {
     int number();
     String sectname();
     boolean special();
-    int numbered();
+    boolean numbered();
 }

@@ -395,15 +395,31 @@ public class WhenJavaExtensionIsRegistered {
      * See https://github.com/asciidoctor/asciidoctorj/issues/497.
      */
     @Test
-    public void when_using_a_tree_processor_a_toc_should_still_be_created() {
+    public void when_using_a_tree_processor_a_toc_should_still_be_created_when_rendering_to_html() {
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-        javaExtensionRegistry.treeprocessor(TerminalCommandTreeprocessor.class);
+        javaExtensionRegistry.treeprocessor(TouchEverythingTreeprocessor.class);
 
         String content = asciidoctor.renderFile(
             classpath.getResource("sample-with-sections.ad"),
             options().toFile(false)
+                .backend("html")
+                .attributes(AttributesBuilder.attributes().tableOfContents(true))
+                .get());
+    }
+
+    @Test
+    public void when_using_a_tree_processor_a_toc_should_still_be_created_when_rendering_to_docbook() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+        javaExtensionRegistry.treeprocessor(TouchEverythingTreeprocessor.class);
+
+        String content = asciidoctor.renderFile(
+            classpath.getResource("sample-with-sections.ad"),
+            options().toFile(false)
+                .backend("docbook")
                 .attributes(AttributesBuilder.attributes().tableOfContents(true))
                 .get());
     }
