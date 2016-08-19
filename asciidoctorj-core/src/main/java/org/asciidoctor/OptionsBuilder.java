@@ -155,10 +155,13 @@ public class OptionsBuilder {
     }
 
     /**
-     * Sets to file value. This is the destination file name.
+     * Sets to file value. This toggles writing output to a file or returning output
+     * as a string. If writing to a string, the header and footer are omitted from the
+     * output by default.
      * 
      * @param toFile
-     *            name of output file.
+     *            <code>true</code> to write output to a file, <code>false</code>
+     *            to write output to a string.
      * @return this instance.
      */
     public OptionsBuilder toFile(boolean toFile) {
