@@ -6,10 +6,7 @@ sdkman {
     candidate = rootProject.name
     version = rootProject.version
     hashtag = "#asciidoctorj"
-}
-
-afterEvaluate {
-    sdkman.url = "https://dl.bintray.com/asciidoctor/maven/org/asciidoctor/asciidoctorj/$rootProject.version/$distZip.archiveName"
+    url = "https://dl.bintray.com/asciidoctor/maven/org/asciidoctor/asciidoctorj/${rootProject.version}/asciidoctorj-${rootProject.version}-bin.zip"
 }
 
 task distributionAvailable() {
