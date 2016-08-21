@@ -7,10 +7,14 @@
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath "com.github.jruby-gradle:jruby-gradle-plugin:0.1.17"
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7"
+        classpath "gradle.plugin.io.sdkman:gradle-sdkvendor-plugin:1.1.0"
     }
 }
 
@@ -71,7 +75,7 @@ subprojects {
     }
     apply from: rootProject.file('gradle/deploy.gradle')
   }
-  
+
   status = _status
 
   // NOTE sourceCompatibility & targetCompatibility are set in gradle.properties to meet requirements of Gradle
