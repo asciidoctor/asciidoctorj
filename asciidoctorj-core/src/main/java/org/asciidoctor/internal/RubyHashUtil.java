@@ -161,7 +161,7 @@ public class RubyHashUtil {
         if (value instanceof List) {
             return toRubyArray(rubyRuntime, (List<Object>) value);
         } else if (value instanceof Map) {
-        	return convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime, (Map<Object, Object>) value);
+        	return convertMapToRubyHashWithStrings(rubyRuntime, (Map<String, Object>) value);
         } else {
 
             if (isNotARubySymbol(value)) {
