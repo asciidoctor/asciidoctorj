@@ -50,6 +50,13 @@ public class Options {
         this.options.put(ATTRIBUTES, attributes);
     }
 
+    /**
+     * Toggle including header and footer into the output.
+     *
+     * @param headerFooter If <code>true</true>, include header and footer into the output,
+     *                     otherwise exclude them. This overrides any output-specific defaults.
+     *
+     */
     public void setHeaderFooter(boolean headerFooter) {
         this.options.put(HEADER_FOOTER, headerFooter);
     }
@@ -68,6 +75,14 @@ public class Options {
         this.options.put(TEMPLATE_ENGINE, templateEngine);
     }
 
+    /**
+     * Enable writing output to a file. The file includes header and footer by default.
+     *
+     * @param toFile The path to the output file. If the path is not absolute, it is
+     *               interpreted relative to what was set via {@link #setToDir()}
+     *               or {@link #setBaseDir()}, in that order.
+     *
+     */
     public void setToFile(String toFile) {
         this.options.put(TO_FILE, toFile);
     }
@@ -76,6 +91,16 @@ public class Options {
         this.options.put(TO_FILE, toStream);
     }
 
+    /**
+     * Toogle writing output to a file.
+     *
+     * @param toFile If <code>true</true>, write output to a file in the same directory
+     *               as the input file, including header and footer into the output. If
+     *               <code>false</code>, return output as a string without any header or
+     *               footer. The default header and footer visibility can be overridden
+     *               using {@link #setHeaderFooter()}.
+     *
+     */
     public void setToFile(boolean toFile) {
         this.options.put(TO_FILE, toFile);
     }
