@@ -71,8 +71,9 @@ public class CellImpl extends ContentNodeImpl implements Cell {
     @Override
     public Document getInnerDocument() {
         IRubyObject innerDocument = getRubyProperty("inner_document");
-        if (innerDocument.isNil())
+        if (innerDocument.isNil()) {
         	return null;
+        }
 		return (Document) NodeConverter.createASTNode(innerDocument);
     }
 
