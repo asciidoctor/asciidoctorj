@@ -16,29 +16,29 @@ import spock.lang.Specification
 @RunWith(ArquillianSputnik)
 class WhenABlockProcessorCreatesABlockThatATreeProcessorVisits extends Specification {
 
-	@Name("tst")
+	@Name('tst')
 	@Contexts(Contexts.CONTEXT_OPEN)
 	@ContentModel(ContentModel.COMPOUND)
-	public static class BlockCreator extends BlockProcessor {
+	static class BlockCreator extends BlockProcessor {
 
 		@Override
-		public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
-			List<String> output = new LinkedList<>();
-			output.add("line 1");
-			output.add("line 2");
+		Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
+			List<String> output = new LinkedList<>()
+			output.add('line 1')
+			output.add('line 2')
 
-			attributes.put("name", "value");
+			attributes.put('name', 'value')
 
-			return createBlock(parent, "open", output, attributes);
+			createBlock(parent, 'open', output, attributes)
 		}
 	}
 
-	public static class BlockVisitor extends Treeprocessor {
+	static class BlockVisitor extends Treeprocessor {
 
 		@Override
-		public Document process(Document document) {
-			recurse(document);
-			return document;
+		Document process(Document document) {
+			recurse(document)
+			document
 		}
 
 		private void recurse(StructuralNode node) {
@@ -46,10 +46,14 @@ class WhenABlockProcessorCreatesABlockThatATreeProcessorVisits extends Specifica
 			// causes a ClassCastException in ContentNodeImpl#getAttributes since the value returned
 			// from the AbstractNode in the JRuby AST is an instance of MapJavaProxy, which does not
 			// conform to RubyHash.
-			Map<String, Object> attributes = node.getAttributes();
+			Map<String, Object> attributes = node.getAttributes()
 
-			for (Block block : node.getBlocks())
-				recurse(block);
+			// To silence Codenarc. We must access the attributes to provoke the error.
+			attributes = new HashMap<String, Object>(attributes)
+
+			for (Block block : node.getBlocks()) {
+				recurse(block)
+			}
 		}
 	}
 
