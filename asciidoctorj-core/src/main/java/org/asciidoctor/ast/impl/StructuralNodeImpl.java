@@ -15,7 +15,7 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
 
     private static final String BLOCK_CLASS = "Block";
     private static final String SECTION_CLASS = "Section";
-    
+
     public StructuralNodeImpl(IRubyObject blockDelegate) {
         super(blockDelegate);
     }
@@ -89,6 +89,11 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
             return null;
         }
         return new CursorImpl(object);
+    }
+
+    @Override
+    public String getContentModel() {
+    	return getString("content_model");
     }
 
     @Override

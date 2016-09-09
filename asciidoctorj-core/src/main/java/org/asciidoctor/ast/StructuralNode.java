@@ -80,6 +80,15 @@ public interface StructuralNode extends ContentNode {
     int getLevel();
 
     /**
+     * Returns the content model.
+     *
+     * @see ContentModel
+     *
+     * @return the content model
+     */
+    String getContentModel();
+
+    /**
      * Returns the source location of this block.
      * This information is only available if the {@code sourcemap} option is enabled when loading or rendering the document.
      * @return the source location of this block or {@code null} if the {@code sourcemap} option is not enabled when loading the document.
