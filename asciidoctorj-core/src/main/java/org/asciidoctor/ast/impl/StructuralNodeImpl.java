@@ -46,6 +46,11 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
     }
 
     @Override
+    public void setStyle(String style) {
+        setString("style", style);
+    }
+
+    @Override
     public List<StructuralNode> blocks() {
         return getBlocks();
     }

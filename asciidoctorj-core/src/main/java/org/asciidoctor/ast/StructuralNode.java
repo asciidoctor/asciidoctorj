@@ -53,6 +53,8 @@ public interface StructuralNode extends ContentNode {
     String style();
     String getStyle();
 
+    void setStyle(String style);
+
     /**
      * @return The list of child blocks of this block
      * @deprecated Please use {@linkplain #getBlocks()} instead
