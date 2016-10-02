@@ -16,7 +16,7 @@ public interface Cell extends ContentNode {
     /**
      * @return The text of the cell without substitutions being applied.
      */
-    String getRawText();
+    String getSource();
 
     Object getContent();
 

@@ -34,7 +34,7 @@ public class CellImpl extends ContentNodeImpl implements Cell {
     }
 
     @Override
-    public String getRawText() {
+    public String getSource() {
         return getString("@text");
     }
 

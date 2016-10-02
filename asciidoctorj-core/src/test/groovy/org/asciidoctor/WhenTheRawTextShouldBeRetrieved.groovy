@@ -37,7 +37,7 @@ This paragraph should show {foo}
         Block block = doc.blocks[0].blocks[0]
 
         then:
-        block.lines == ['This paragraph should show {foo}']
+        block.source == 'This paragraph should show {foo}'
         block.content == 'This paragraph should show bar'
     }
 
@@ -61,7 +61,7 @@ This paragraph should show {foo}
         ListItem listItem = list.items[0]
 
         then:
-        listItem.rawText == '''This list item should show {foo}
+        listItem.source == '''This list item should show {foo}
 and should continue here'''
         listItem.text == '''This list item should show bar
 and should continue here'''
@@ -87,7 +87,7 @@ and should continue here'''
         Cell cell = table.body[0].cells[0]
 
         then:
-        cell.rawText == 'Hello {foo}'
+        cell.source == 'Hello {foo}'
         cell.text == 'Hello bar'
     }
 

@@ -12,7 +12,7 @@ public interface ListItem extends StructuralNode {
     /**
      * @return The text of the cell without substitutions being applied.
      */
-    public String getRawText();
+    public String getSource();
 
     public boolean hasText();
 }

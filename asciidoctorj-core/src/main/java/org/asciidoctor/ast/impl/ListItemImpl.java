@@ -21,7 +21,7 @@ public class ListItemImpl extends StructuralNodeImpl implements ListItem {
     }
 
     @Override
-    public String getRawText() {
+    public String getSource() {
         return getString("@text");
     }
 
