@@ -51,14 +51,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     public static Asciidoctor create() {
-        Map<String, Object> env = new HashMap<String, Object>();
-        // ideally, we want to clear GEM_PATH by default, but for backwards compatibility we play nice
-        //env.put(GEM_PATH, null);
-        Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(env);
-        registerExtensions(asciidoctor);
-        registerConverters(asciidoctor);
-
-        return asciidoctor;
+        return create((String) null);
     }
 
     public static Asciidoctor create(String gemPath) {
