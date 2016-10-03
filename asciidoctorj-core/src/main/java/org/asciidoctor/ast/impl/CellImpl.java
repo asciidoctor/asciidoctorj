@@ -34,6 +34,11 @@ public class CellImpl extends ContentNodeImpl implements Cell {
     }
 
     @Override
+    public String getSource() {
+        return getString("@text");
+    }
+
+    @Override
     public Object getContent() {
         return toJava(getRubyProperty("content"));
     }

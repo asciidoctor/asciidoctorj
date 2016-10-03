@@ -8,7 +8,15 @@ public interface Cell extends ContentNode {
 
     int getRowspan();
 
+    /**
+     * @return The text of the cell including substitutions being applied.
+     */
     String getText();
+
+    /**
+     * @return The text of the cell without substitutions being applied.
+     */
+    String getSource();
 
     Object getContent();
 

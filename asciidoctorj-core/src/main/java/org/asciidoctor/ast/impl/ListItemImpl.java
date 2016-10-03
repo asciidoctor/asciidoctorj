@@ -21,6 +21,11 @@ public class ListItemImpl extends StructuralNodeImpl implements ListItem {
     }
 
     @Override
+    public String getSource() {
+        return getString("@text");
+    }
+
+    @Override
     public boolean hasText() {
         return getBoolean("text?");
     }
