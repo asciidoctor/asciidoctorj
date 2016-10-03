@@ -35,7 +35,7 @@ public class WhenAnAsciidoctorClassIsInstantiatedInAnEnvironmentWithGemPath {
     }
 
     @Test
-    public void should_have_gempath_in_ruby_env_when_created_with_non_null_gempath() {
+    public void should_have_gempath_in_ruby_env_when_created_with_default_create() {
         // Given: Our environment is polluted (Cannot set these env vars here, so just check that gradle has set them correctly)
         assertThat(System.getenv("GEM_PATH"), notNullValue());
         assertThat(System.getenv("GEM_HOME"), notNullValue());
@@ -45,8 +45,8 @@ public class WhenAnAsciidoctorClassIsInstantiatedInAnEnvironmentWithGemPath {
 
         // Then: The org.jruby.JRuby instance sees this variable
         Ruby rubyRuntime = JRubyRuntimeContext.get(asciidoctor);
-        assertThat(rubyRuntime.evalScriptlet("ENV['GEM_PATH']"), not(is(rubyRuntime.getNil())));
-        assertThat(rubyRuntime.evalScriptlet("ENV['GEM_HOME']"), not(is(rubyRuntime.getNil())));
+        assertThat(rubyRuntime.evalScriptlet("ENV['GEM_PATH']"), is(rubyRuntime.getNil()));
+        assertThat(rubyRuntime.evalScriptlet("ENV['GEM_HOME']"), is(rubyRuntime.getNil()));
     }
 
     @Test
