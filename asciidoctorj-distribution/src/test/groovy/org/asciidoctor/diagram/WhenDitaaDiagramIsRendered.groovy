@@ -43,7 +43,7 @@ Hello World
         then:
         result.contains("""src="${imageFileName}.png""")
         new File("${imageFileName}.png").exists()
-        new File("${imageFileName}.png.cache").exists()
+        new File(".asciidoctor/diagram/${imageFileName}.png.cache").exists()
     }
 
     def 'should render ditaa diagram to PDF'() throws Exception {
@@ -76,7 +76,7 @@ Hello World
         then:
         new File(destinationFileName).exists()
         File png = new File("build/${imageFileName}.png")
-        File pngCache = new File("build/${imageFileName}.png.cache")
+        File pngCache = new File("build/.asciidoctor/diagram/${imageFileName}.png.cache")
         png.exists()
         pngCache.exists()
 
