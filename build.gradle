@@ -41,7 +41,7 @@ ext {
   xmlMatchersVersion = '1.0-RC1'
 
   // gem versions
-  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.4'
+  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.5'
   asciidoctorEpub3GemVersion = project(':asciidoctorj-epub3').version.replace('-', '.')
   asciidoctorPdfGemVersion = project(':asciidoctorj-pdf').version.replace('-', '.')
 
