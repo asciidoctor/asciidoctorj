@@ -18,6 +18,12 @@ public interface Cell extends ContentNode {
      */
     String getSource();
 
+    /**
+     * Sets the source of the Cell.
+     * @param source The source of this Cell, substitutions will still be applied.
+     */
+    void setSource(String source);
+
     Object getContent();
 
     /**

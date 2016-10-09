@@ -14,5 +14,11 @@ public interface ListItem extends StructuralNode {
      */
     public String getSource();
 
+    /**
+     * Sets the source of the ListItem.
+     * @param source The source of this ListItem, substitutions will still be applied.
+     */
+    public void setSource(String source);
+
     public boolean hasText();
 }
