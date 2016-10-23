@@ -4,6 +4,7 @@ import org.asciidoctor.ast.DescriptionListEntry;
 import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.internal.RubyBlockListDecorator;
+import org.asciidoctor.internal.RubyObjectWrapper;
 import org.jruby.RubyArray;
 import org.jruby.runtime.builtin.IRubyObject;
 
@@ -26,7 +27,17 @@ public class DescriptionListEntryImpl extends StructuralNodeImpl implements Desc
         return firstItem == null ? null : (ListItem) NodeConverter.createASTNode(firstItem);
     }
 
+    public void setDescription(final ListItem description) {
+        setAt(1, description);
+    }
+
     private Object getAt(int i) {
         return ((RubyArray) getRubyObject()).get(i);
     }
+
+    private void setAt(int i, Object object) {
+        ((RubyArray) getRubyObject()).set(i, RubyObjectWrapper.class.cast(object).getRubyObject());
+    }
+
+
 }
