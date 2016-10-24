@@ -25,7 +25,7 @@ import org.asciidoctor.internal.JRubyAsciidoctor;
  */
 public interface Asciidoctor {
 
-	public static final String STRUCTURE_MAX_LEVEL = "STRUCTURE_MAX_LEVEL";
+	String STRUCTURE_MAX_LEVEL = "STRUCTURE_MAX_LEVEL";
 	
     /**
      * Parse the AsciiDoc source input into an Document {@link DocumentRuby} and
@@ -656,7 +656,7 @@ public interface Asciidoctor {
      * @author lordofthejars
      * 
      */
-    public static class Factory {
+    class Factory {
 
         /**
          * Creates a new instance of Asciidoctor.

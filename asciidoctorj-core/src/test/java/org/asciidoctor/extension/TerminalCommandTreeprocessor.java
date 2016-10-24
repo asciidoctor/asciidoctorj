@@ -22,7 +22,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
 
     	this.document = document;
     	
-        final List<AbstractBlock> blocks = this.document.blocks();
+        final List<AbstractBlock> blocks = this.document.getBlocks();
 
         for (int i = 0; i < blocks.size(); i++) {
             final AbstractBlock currentBlock = blocks.get(i);

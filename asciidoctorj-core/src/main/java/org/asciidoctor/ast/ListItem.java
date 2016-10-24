@@ -2,9 +2,9 @@ package org.asciidoctor.ast;
 
 public interface ListItem extends AbstractBlock {
 
-    public String getMarker();
+    String getMarker();
 
-    public String getText();
+    String getText();
 
-    public boolean hasText();
+    boolean hasText();
 }

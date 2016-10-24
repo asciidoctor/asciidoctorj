@@ -35,7 +35,7 @@ public class TextConverter extends AbstractConverter {
                     .append(section.getContent()).toString();
         } else if (transform.equals("paragraph")) {
             AbstractBlock block = (AbstractBlock) node;
-            String content = (String) block.content();
+            String content = (String) block.getContent();
             return new StringBuilder(content.replaceAll(LINE_SEPARATOR, " ")).append(LINE_SEPARATOR);
         } else if (node instanceof ListNode) {
             StringBuilder sb = new StringBuilder();

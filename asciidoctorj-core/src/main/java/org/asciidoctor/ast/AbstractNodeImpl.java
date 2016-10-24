@@ -28,6 +28,8 @@ public abstract class AbstractNodeImpl implements AbstractNode {
         return this.abstractNode.id();
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     @Override
     public String context() {
         return getContext();
@@ -38,6 +40,8 @@ public abstract class AbstractNodeImpl implements AbstractNode {
         return this.abstractNode.getContext();
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     @Override
     public AbstractNode parent() {
         return getParent();
@@ -48,6 +52,8 @@ public abstract class AbstractNodeImpl implements AbstractNode {
         return this.abstractNode.getParent();
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     @Override
     public DocumentRuby document() {
         return getDocument();
@@ -123,9 +129,11 @@ public abstract class AbstractNodeImpl implements AbstractNode {
         return this.abstractNode.getRole();
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     @Override
     public String role() {
-        return this.abstractNode.role();
+        return getRole();
     }
 
     @Override

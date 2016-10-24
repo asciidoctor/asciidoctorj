@@ -81,7 +81,7 @@ public class TableImpl extends AbstractBlockImpl implements Table {
         return rows.getHead();
     }
 
-    public static interface Rows {
+    public interface Rows {
         List<Row> getHead();
 
         List<Row> getFoot();

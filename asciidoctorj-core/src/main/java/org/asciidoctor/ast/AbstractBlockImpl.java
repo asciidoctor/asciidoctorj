@@ -22,6 +22,8 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
         this.delegate = blockDelegate;
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     @Override
     public String title() {
         return getTitle();
@@ -36,6 +38,8 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
         return RubyUtils.invokeRubyMethod(delegate, "title?", new Object[0], Boolean.class);
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     @Override
     public String style() {
         return getStyle();
@@ -50,6 +54,8 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
         return RubyUtils.invokeRubyMethod(delegate, "caption", new Object[0], String.class);
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     @Override
     public List<AbstractBlock> blocks() {
         return getBlocks();
@@ -74,11 +80,15 @@ public class AbstractBlockImpl extends AbstractNodeImpl implements AbstractBlock
         return RubyUtils.invokeRubyMethod(delegate, "blocks?", new Object[0], Boolean.class);
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     @Override
     public Object content() {
         return getContent();
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     @Override
     public Object getContent() {
         return delegate.content();
