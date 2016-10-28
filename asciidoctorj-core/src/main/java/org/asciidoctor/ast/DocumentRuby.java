@@ -29,6 +29,8 @@ public interface DocumentRuby extends AbstractBlock {
      * 
      * @return page title
      */
+    @SuppressWarnings("deprecation")
+    @Deprecated
     String title();
 
     /**
@@ -47,6 +49,8 @@ public interface DocumentRuby extends AbstractBlock {
      *
      * @return blocks contained within current Document.
      */
+    @SuppressWarnings("deprecation")
+    @Deprecated
     List<AbstractBlock> blocks();
 
     /**

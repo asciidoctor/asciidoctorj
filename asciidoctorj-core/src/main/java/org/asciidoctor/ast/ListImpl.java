@@ -16,7 +16,7 @@ public class ListImpl extends AbstractBlockImpl implements ListNode {
 
     @Override
     public List<AbstractBlock> getItems() {
-        return blocks();
+        return getBlocks();
     }
 
     @Override
@@ -31,6 +31,8 @@ public class ListImpl extends AbstractBlockImpl implements ListNode {
         return isBlocks();
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     @Override
     public String render() {
         return listDelegate.render();

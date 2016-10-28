@@ -7,8 +7,8 @@ public interface ListNode extends AbstractBlock {
     boolean hasItems();
 
     @Deprecated
-    public String render();
+    String render();
 
-    public String convert();
+    String convert();
 
 }

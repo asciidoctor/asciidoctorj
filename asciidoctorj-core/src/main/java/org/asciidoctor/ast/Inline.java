@@ -3,11 +3,11 @@ package org.asciidoctor.ast;
 public interface Inline extends AbstractNode {
 
     @Deprecated
-    public String render();
+    String render();
     
-    public String convert();
+    String convert();
 
-    public String getType();
+    String getType();
 
-    public String getText();
+    String getText();
 }

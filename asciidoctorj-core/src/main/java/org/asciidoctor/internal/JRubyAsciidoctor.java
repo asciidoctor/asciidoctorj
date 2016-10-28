@@ -167,25 +167,25 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         Document document = new Document(documentRuby, rubyRuntime);
 
-        return DocumentHeader.createDocumentHeader((Title) document.doctitle(opts), documentRuby.title(),
+        return DocumentHeader.createDocumentHeader((Title) document.doctitle(opts), documentRuby.getTitle(),
                 documentRuby.getAttributes());
     }
 
     private StructuredDocument toDocument(DocumentRuby documentRuby, Ruby rubyRuntime, int maxDeepLevel) {
 
         Document document = new Document(documentRuby, rubyRuntime);
-        List<ContentPart> contentParts = getContents(document.blocks(), 1, maxDeepLevel);
+        List<ContentPart> contentParts = getContents(document.getBlocks(), 1, maxDeepLevel);
         return StructuredDocument.createStructuredDocument(toDocumentHeader(documentRuby), contentParts);
     }
 
     private List<ContentPart> getContents(List<AbstractBlock> blocks, int level, int maxDeepLevel) {
-        // finish getting childs if max structure level was riched
+        // finish getting children if max structure level was reached
         if (level > maxDeepLevel) {
             return null;
         }
         // if document has only one child don't treat as actual contentpart
         // unless
-        // it has no childs
+        // it has no children
         /*
          * if (blocks.size() == 1 && blocks.get(0).blocks().size() > 0) { return getContents(blocks.get(0).blocks(), 0,
          * maxDeepLevel); }
@@ -199,16 +199,16 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     private ContentPart getContentPartFromBlock(AbstractBlock child, int level, int maxDeepLevel) {
-        Object content = child.content();
+        Object content = child.getContent();
         String textContent;
         if (content instanceof String) {
             textContent = (String) content;
         } else {
             textContent = child.convert();
         }
-        ContentPart contentPart = ContentPart.createContentPart(child.id(), level, child.context(), child.title(),
-                child.style(), child.role(), child.getAttributes(), textContent);
-        contentPart.setParts(getContents(child.blocks(), level + 1, maxDeepLevel));
+        ContentPart contentPart = ContentPart.createContentPart(child.id(), level, child.getContext(), child.getTitle(),
+                child.getStyle(), child.getRole(), child.getAttributes(), textContent);
+        contentPart.setParts(getContents(child.getBlocks(), level + 1, maxDeepLevel));
         return contentPart;
     }
 

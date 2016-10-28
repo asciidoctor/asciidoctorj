@@ -11,6 +11,8 @@ public class InlineImpl extends AbstractNodeImpl implements Inline  {
         this.delegate = delegate;
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     @Override
     public String render() {
         return delegate.render();
