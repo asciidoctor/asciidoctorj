@@ -34,7 +34,7 @@ ext {
   guavaVersion = '18.0'
   hamcrestVersion = '1.3'
   jcommanderVersion = '1.35'
-  jrubyVersion = '1.7.25'
+  jrubyVersion = '1.7.26'
   jsoupVersion = '1.8.3'
   junitVersion = '4.12'
   saxonVersion = '9.5.1-6'
@@ -46,6 +46,9 @@ ext {
   asciidoctorPdfGemVersion = project(':asciidoctorj-pdf').version.replace('-', '.')
 
   asciidoctorDiagramGemVersion = project(':asciidoctorj-diagram').version.replace('-', '.')
+  addressableVersion = '2.4.0'
+  public_suffixVersion = '1.4.6'
+
   coderayGemVersion = '1.1.0'
   erubisGemVersion = '2.7.0'
   hamlGemVersion = '4.0.5'
