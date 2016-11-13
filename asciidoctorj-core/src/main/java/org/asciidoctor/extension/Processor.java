@@ -1,10 +1,24 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Options;
-import org.asciidoctor.ast.*;
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.Cell;
+import org.asciidoctor.ast.Column;
+import org.asciidoctor.ast.ContentModel;
+import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.ListItem;
+import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.PhraseNode;
+import org.asciidoctor.ast.Row;
+import org.asciidoctor.ast.Section;
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.ast.Table;
 import org.asciidoctor.ast.impl.ColumnImpl;
 import org.asciidoctor.ast.impl.ContentNodeImpl;
+import org.asciidoctor.ast.impl.DescriptionListImpl;
 import org.asciidoctor.ast.impl.DocumentImpl;
+import org.asciidoctor.ast.impl.ListImpl;
 import org.asciidoctor.ast.impl.RowImpl;
 import org.asciidoctor.ast.impl.StructuralNodeImpl;
 import org.asciidoctor.internal.JRubyRuntimeContext;
@@ -21,7 +35,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.asciidoctor.ast.NodeConverter.NodeType.*;
+import static org.asciidoctor.ast.NodeConverter.NodeType.BLOCK_CLASS;
+import static org.asciidoctor.ast.NodeConverter.NodeType.DOCUMENT_CLASS;
+import static org.asciidoctor.ast.NodeConverter.NodeType.INLINE_CLASS;
+import static org.asciidoctor.ast.NodeConverter.NodeType.LIST_ITEM_CLASS;
+import static org.asciidoctor.ast.NodeConverter.NodeType.SECTION_CLASS;
+import static org.asciidoctor.ast.NodeConverter.NodeType.TABLE_CELL_CLASS;
+import static org.asciidoctor.ast.NodeConverter.NodeType.TABLE_CLASS;
+import static org.asciidoctor.ast.NodeConverter.NodeType.TABLE_COLUMN_CLASS;
 
 public class Processor {
 
@@ -350,6 +371,18 @@ public class Processor {
                 ((DocumentImpl) parentDocument).getRubyObject());
 
         return (Document) NodeConverter.createASTNode(runtime, DOCUMENT_CLASS, runtime.getNil(), options);
+    }
+
+    public ListItem createListItem(final org.asciidoctor.ast.List parent, final String text) {
+        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
+
+        return (ListItem) NodeConverter.createASTNode(rubyRuntime, LIST_ITEM_CLASS, ListImpl.class.cast(parent).getRubyObject(), rubyRuntime.newString(text));
+    }
+
+    public ListItem createListItem(final org.asciidoctor.ast.DescriptionList parent, final String text) {
+        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
+
+        return (ListItem) NodeConverter.createASTNode(rubyRuntime, LIST_ITEM_CLASS, DescriptionListImpl.class.cast(parent).getRubyObject(), rubyRuntime.newString(text));
     }
 
     /**
