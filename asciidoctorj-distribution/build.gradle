@@ -37,6 +37,7 @@ startScripts {
     '-Xverify:none', '-XX:+UseFastAccessorMethods', '-XX:+TieredCompilation', '-XX:TieredStopAtLevel=1', '-XX:+DisableExplicitGC',
     '-Djruby.compile.mode=OFF', '-Djruby.compat.version=RUBY2_0'
   ]
+  classpath = configurations.getByName('compile').asFileTree
 }
 
 artifacts {
