@@ -6,14 +6,17 @@ import org.asciidoctor.ast.DescriptionListEntry
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.ListItem
 import org.asciidoctor.converter.StringConverter
+import org.asciidoctor.extension.Treeprocessor
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
+import org.jsoup.Jsoup
 import org.junit.runner.RunWith
 import spock.lang.Specification
 
 @RunWith(ArquillianSputnik)
 class WhenADocumentContainsADefinitionList extends Specification {
 
+    static final String TAG_DD = 'dd'
 
     @ArquillianResource
     private Asciidoctor asciidoctor
@@ -142,4 +145,31 @@ A very nice description
 '''
     }
 
+    def 'a processor should be able to set the description of a description list'() {
+
+        given:
+        String document = '''= Test document
+
+Item A::
+  Replace me
+'''
+        String newDescription = 'A nice description'
+
+        when:
+        asciidoctor.javaExtensionRegistry().treeprocessor(new Treeprocessor() {
+            @Override
+            Document process(Document doc) {
+                DescriptionList dl = doc.getBlocks().get(0)
+                DescriptionListEntry dlEntry = dl.items[0]
+                dlEntry.setDescription(createListItem(dl, newDescription))
+                doc
+            }
+        })
+        String result = asciidoctor.convert(document, OptionsBuilder.options().headerFooter(false).asMap())
+
+        then:
+        org.jsoup.nodes.Document htmlDoc = Jsoup.parse(result)
+        htmlDoc.getElementsByTag(TAG_DD).size() == 1
+        htmlDoc.getElementsByTag(TAG_DD)[0].text() ==  newDescription
+    }
 }
