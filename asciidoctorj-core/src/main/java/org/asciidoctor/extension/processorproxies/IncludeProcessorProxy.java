@@ -1,5 +1,9 @@
 package org.asciidoctor.extension.processorproxies;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.IncludeProcessor;
@@ -19,10 +23,6 @@ import org.jruby.runtime.Helpers;
 import org.jruby.runtime.ObjectAllocator;
 import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcessor> {
 
@@ -97,7 +97,7 @@ public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcess
         return null;
     }
 
-    @JRubyMethod(name = "handles", required = 1)
+	@JRubyMethod(name = "handles?", required = 1)
     public IRubyObject handles(ThreadContext context, IRubyObject target) {
         boolean b = getProcessor().handles(RubyUtils.rubyToJava(getRuntime(), target, String.class));
         return JavaEmbedUtils.javaToRuby(getRuntime(), b);
