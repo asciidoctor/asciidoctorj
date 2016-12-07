@@ -2,4 +2,5 @@
 
 Some text
 
+[role=IncludeBlock]
 include::sample-book.adoc[My,Anonym,"Attribute List"]

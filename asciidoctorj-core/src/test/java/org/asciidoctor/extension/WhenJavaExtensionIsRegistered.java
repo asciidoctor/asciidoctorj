@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Proxy;
@@ -397,9 +398,6 @@ public class WhenJavaExtensionIsRegistered {
     @Test
 	public void a_include_processor_should_only_handle_its_handles() {
 
-		TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb",
-				classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
-
 		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
 		javaExtensionRegistry.includeProcessor(UriIncludeProcessor.class);
@@ -418,9 +416,6 @@ public class WhenJavaExtensionIsRegistered {
 	@Test
 	public void a_include_processor_can_handle_anonymous_attrs() {
 
-		TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb",
-				classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
-
 		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
 		javaExtensionRegistry.includeProcessor(AnonymousAttrsIncludeProcessor.class);
@@ -430,8 +425,7 @@ public class WhenJavaExtensionIsRegistered {
 
 		org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
-		Element contentElement = doc.getElementsByAttributeValue("class", "paragraph").last();
-
+		Element contentElement = doc.getElementsByAttributeValue("class", "paragraph IncludeBlock").first();
 
 		assertThat(contentElement.text(), startsWith("My,Anonym,Attribute List"));
 
@@ -561,7 +555,7 @@ public class WhenJavaExtensionIsRegistered {
         javaExtensionRegistry.blockMacro("gist", GistMacro.class);
 
         String content = asciidoctor.renderFile(
-                classpath.getResource("sample-with-gist-macro.ad"), 
+                classpath.getResource("sample-with-gist-macro.ad"),
                 options().toFile(false).get());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
