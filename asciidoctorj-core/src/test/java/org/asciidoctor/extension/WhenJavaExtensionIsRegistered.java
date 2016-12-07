@@ -395,6 +395,49 @@ public class WhenJavaExtensionIsRegistered {
     }
 
     @Test
+	public void a_include_processor_should_only_handle_its_handles() {
+
+		TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb",
+				classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
+
+		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+		javaExtensionRegistry.includeProcessor(UriIncludeProcessor.class);
+
+		String content = asciidoctor.renderFile(classpath.getResource("sample-with-include.ad"),
+				options().toFile(false).get());
+
+		org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
+
+		Element contentElement = doc.getElementsByAttributeValue("class", "bare").first();
+
+		assertThat(contentElement.text(), startsWith("sample-book.adoc"));
+
+	}
+
+	@Test
+	public void a_include_processor_can_handle_anonymous_attrs() {
+
+		TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb",
+				classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
+
+		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+		javaExtensionRegistry.includeProcessor(AnonymousAttrsIncludeProcessor.class);
+
+		String content = asciidoctor.renderFile(classpath.getResource("sample-with-include-anonym-attrs.ad"),
+				options().toFile(false).get());
+
+		org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
+
+		Element contentElement = doc.getElementsByAttributeValue("class", "paragraph").last();
+
+
+		assertThat(contentElement.text(), startsWith("My,Anonym,Attribute List"));
+
+	}
+
+	@Test
     public void a_treeprocessor_should_be_executed_in_document() {
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();

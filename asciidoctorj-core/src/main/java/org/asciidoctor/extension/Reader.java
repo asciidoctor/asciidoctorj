@@ -20,6 +20,20 @@ public interface Reader {
     int getLineNumber();
 
     /**
+	 * Get the name of the file of the current line.
+	 *
+	 * @return file name
+	 */
+	public String getFile();
+
+	/**
+	 * Get the name of the directory of the current file
+	 *
+	 * @return directory name
+	 */
+	public String getDir();
+
+    /**
      * Check whether there are any lines left to read. If a previous call to this method resulted in a value of false,
      * immediately returned the cached value. Otherwise, delegate to peek_line to determine if there is a next line
      * available.
