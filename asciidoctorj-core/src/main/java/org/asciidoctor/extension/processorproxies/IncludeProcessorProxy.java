@@ -97,7 +97,7 @@ public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcess
         return null;
     }
 
-	@JRubyMethod(name = "handles?", required = 1)
+    @JRubyMethod(name = "handles?", required = 1)
     public IRubyObject handles(ThreadContext context, IRubyObject target) {
         boolean b = getProcessor().handles(RubyUtils.rubyToJava(getRuntime(), target, String.class));
         return JavaEmbedUtils.javaToRuby(getRuntime(), b);

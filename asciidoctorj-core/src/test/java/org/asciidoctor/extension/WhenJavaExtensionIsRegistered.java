@@ -414,20 +414,20 @@ public class WhenJavaExtensionIsRegistered {
 	}
 
 	@Test
-	public void a_include_processor_can_handle_anonymous_attrs() {
+	public void a_include_processor_can_handle_positional_attrs() {
 
 		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.includeProcessor(AnonymousAttrsIncludeProcessor.class);
+		javaExtensionRegistry.includeProcessor(PositionalAttrsIncludeProcessor.class);
 
-		String content = asciidoctor.renderFile(classpath.getResource("sample-with-include-anonym-attrs.ad"),
+		String content = asciidoctor.renderFile(classpath.getResource("sample-with-include-pos-attrs.ad"),
 				options().toFile(false).get());
 
 		org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
 		Element contentElement = doc.getElementsByAttributeValue("class", "paragraph IncludeBlock").first();
 
-		assertThat(contentElement.text(), startsWith("My,Anonym,Attribute List"));
+		assertThat(contentElement.text(), startsWith("My,Positional,Attribute List"));
 
 	}
 

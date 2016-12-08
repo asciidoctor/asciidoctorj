@@ -5,11 +5,11 @@ import java.util.Map;
 
 import org.asciidoctor.ast.Document;
 
-public class AnonymousAttrsIncludeProcessor extends IncludeProcessor {
+public class PositionalAttrsIncludeProcessor extends IncludeProcessor {
 
-    public AnonymousAttrsIncludeProcessor() {}
+    public PositionalAttrsIncludeProcessor() {}
 
-    public AnonymousAttrsIncludeProcessor(Map<String, Object> config) {
+    public PositionalAttrsIncludeProcessor(Map<String, Object> config) {
         super(config);
     }
 
