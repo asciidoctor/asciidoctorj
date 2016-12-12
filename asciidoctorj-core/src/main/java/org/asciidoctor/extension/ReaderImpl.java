@@ -16,7 +16,7 @@ public class ReaderImpl extends RubyObjectWrapper implements Reader {
 
     static ReaderImpl createReader(Ruby runtime, List<String> lines) {
         RubyArray rubyLines = runtime.newArray(lines.size());
-        for (String line: lines) {
+        for (String line : lines) {
             rubyLines.add(runtime.newString(line));
         }
 
@@ -31,20 +31,20 @@ public class ReaderImpl extends RubyObjectWrapper implements Reader {
 
     @Override
     public int getLineNumber() {
-		return getInt("lineno");
+        return getInt("lineno");
     }
 
-	public String getFile() {
-		IRubyObject rObj = getRubyProperty("file");
-		return rObj.toString();
-	}
+    public String getFile() {
+        IRubyObject rObj = getRubyProperty("file");
+        return rObj.toString();
+    }
 
-	public String getDir() {
-		IRubyObject rObj = getRubyProperty("dir");
-		return rObj.toString();
-	}
+    public String getDir() {
+        IRubyObject rObj = getRubyProperty("dir");
+        return rObj.toString();
+    }
 
-	@Override
+    @Override
     public boolean hasMoreLines() {
         return getBoolean("has_more_lines?");
     }

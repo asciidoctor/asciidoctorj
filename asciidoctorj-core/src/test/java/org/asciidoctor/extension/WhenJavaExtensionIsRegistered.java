@@ -396,40 +396,40 @@ public class WhenJavaExtensionIsRegistered {
     }
 
     @Test
-	public void a_include_processor_should_only_handle_its_handles() {
+    public void a_include_processor_should_only_handle_its_handles() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.includeProcessor(UriIncludeProcessor.class);
+        javaExtensionRegistry.includeProcessor(UriIncludeProcessor.class);
 
-		String content = asciidoctor.renderFile(classpath.getResource("sample-with-include.ad"),
-				options().toFile(false).get());
+        String content = asciidoctor.renderFile(classpath.getResource("sample-with-include.ad"),
+                options().toFile(false).get());
 
-		org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
-		Element contentElement = doc.getElementsByAttributeValue("class", "bare").first();
+        Element contentElement = doc.getElementsByAttributeValue("class", "bare").first();
 
-		assertThat(contentElement.text(), startsWith("sample-book.adoc"));
+        assertThat(contentElement.text(), startsWith("sample-book.adoc"));
 
-	}
+    }
 
-	@Test
-	public void a_include_processor_can_handle_positional_attrs() {
+    @Test
+    public void a_include_processor_can_handle_positional_attrs() {
 
-		JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-		javaExtensionRegistry.includeProcessor(PositionalAttrsIncludeProcessor.class);
+        javaExtensionRegistry.includeProcessor(PositionalAttrsIncludeProcessor.class);
 
-		String content = asciidoctor.renderFile(classpath.getResource("sample-with-include-pos-attrs.ad"),
-				options().toFile(false).get());
+        String content = asciidoctor.renderFile(classpath.getResource("sample-with-include-pos-attrs.ad"),
+                options().toFile(false).get());
 
-		org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
-		Element contentElement = doc.getElementsByAttributeValue("class", "paragraph IncludeBlock").first();
+        Element contentElement = doc.getElementsByAttributeValue("class", "paragraph IncludeBlock").first();
 
-		assertThat(contentElement.text(), startsWith("My,Positional,Attribute List"));
+        assertThat(contentElement.text(), startsWith("My,Positional,Attribute List"));
 
-	}
+    }
 
 	@Test
     public void a_treeprocessor_should_be_executed_in_document() {
