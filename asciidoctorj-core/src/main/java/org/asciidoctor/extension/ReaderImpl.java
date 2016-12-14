@@ -1,12 +1,12 @@
 package org.asciidoctor.extension;
 
+import java.util.List;
+
 import org.asciidoctor.internal.RubyObjectWrapper;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
 import org.jruby.runtime.builtin.IRubyObject;
-
-import java.util.List;
 
 public class ReaderImpl extends RubyObjectWrapper implements Reader {
 
@@ -16,7 +16,7 @@ public class ReaderImpl extends RubyObjectWrapper implements Reader {
 
     static ReaderImpl createReader(Ruby runtime, List<String> lines) {
         RubyArray rubyLines = runtime.newArray(lines.size());
-        for (String line: lines) {
+        for (String line : lines) {
             rubyLines.add(runtime.newString(line));
         }
 
@@ -32,6 +32,16 @@ public class ReaderImpl extends RubyObjectWrapper implements Reader {
     @Override
     public int getLineNumber() {
         return getInt("lineno");
+    }
+
+    public String getFile() {
+        IRubyObject rObj = getRubyProperty("file");
+        return rObj.toString();
+    }
+
+    public String getDir() {
+        IRubyObject rObj = getRubyProperty("dir");
+        return rObj.toString();
     }
 
     @Override
