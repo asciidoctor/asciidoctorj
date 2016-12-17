@@ -29,25 +29,25 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class WhenAsciiDocIsRenderedToDocument {
 
-    private static final String DOCUMENT = "= Document Title\n" + 
-            "\n" + 
-            "preamble\n" + 
-            "\n" + 
-            "== Section A\n" + 
-            "\n" + 
-            "paragraph\n" + 
-            "\n" + 
-            "--\n" + 
-            "Exhibit A::\n" + 
-            "+\n" + 
-            "[#tiger.animal]\n" + 
-            "image::tiger.png[Tiger]\n" + 
-            "--\n" + 
-            "\n" + 
-            "image::cat.png[Cat]\n" + 
-            "\n" + 
-            "== Section B\n" + 
-            "\n" + 
+    private static final String DOCUMENT = "= Document Title\n" +
+            "\n" +
+            "preamble\n" +
+            "\n" +
+            "== Section A\n" +
+            "\n" +
+            "paragraph\n" +
+            "\n" +
+            "--\n" +
+            "Exhibit A::\n" +
+            "+\n" +
+            "[#tiger.animal]\n" +
+            "image::tiger.png[Tiger]\n" +
+            "--\n" +
+            "\n" +
+            "image::cat.png[Cat]\n" +
+            "\n" +
+            "== Section B\n" +
+            "\n" +
             "paragraph";
 
     private static final String ROLE = "[\"quote\", \"author\", \"source\", role=\"famous\"]\n" +
@@ -74,34 +74,34 @@ public class WhenAsciiDocIsRenderedToDocument {
         assertThat(section.sectname(), is("sect1"));
         assertThat(section.special(), is(false));
     }
-    
+
     @Test
     public void should_return_blocks_from_a_document() {
-        
+
         Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
         assertThat(document.doctitle(), is("Document Title"));
-        
+
     }
-    
+
     @Test
     public void should_return_a_document_object_from_string() {
-        
+
         Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
         assertThat(document.doctitle(), is("Document Title"));
     }
-    
+
     @Test
     public void should_find_elements_from_document() {
-        
+
         Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
         Map<Object, Object> selector = new HashMap<Object, Object>();
         selector.put("context", ":image");
         List<StructuralNode> findBy = document.findBy(selector);
         assertThat(findBy, hasSize(2));
-        
+
         assertThat((String)findBy.get(0).getAttributes().get("target"), is("tiger.png"));
         assertThat(findBy.get(0).getLevel(), greaterThan(0));
-        
+
     }
 
     @Test
@@ -139,6 +139,7 @@ public class WhenAsciiDocIsRenderedToDocument {
                                                     .compact(true).asMap();
         Document document = asciidoctor.load(DOCUMENT, options);
         assertThat(document.getAttributes(), hasKey("toc-placement"));
+        assertThat(document.hasAttr("toc-placement"), is(true));
         assertThat(document.isAttr("toc-placement", "auto", false), is(true));
         assertThat(document.getAttr("toc-placement", "", false).toString(), is("auto"));
     }
@@ -278,4 +279,61 @@ public class WhenAsciiDocIsRenderedToDocument {
         assertThat(block2.getSourceLocation().getDir(), is(file.getParent().replaceAll("\\\\", "/")));
     }
 
+    @Test
+    public void should_get_attributes() {
+
+        final String documentWithAttributes = "= Document Title\n" +
+            ":docattr: docvalue\n" +
+            "\n" +
+            "preamble\n" +
+            "\n" +
+            "== Section A\n" +
+            "\n" +
+            "paragraph\n" +
+            "\n";
+
+        Document document = asciidoctor.load(documentWithAttributes, new HashMap<String, Object>());
+        List<StructuralNode> blocks = document.getBlocks();
+
+        Section section = (Section) blocks.get(1);
+        section.setAttr("testattr", "testvalue", true);
+
+        assertThat(document.hasAttr("testattr"), is(false));
+
+        assertThat(section.hasAttr("testattr"), is(true));
+        assertThat(section.hasAttr("testattr", true), is(true));
+        assertThat(section.hasAttr("testattr", false), is(true));
+        assertThat(section.isAttr("testattr", "testvalue"), is(true));
+
+        assertThat(section.hasAttr("docattr", true), is(true));
+        assertThat(section.hasAttr("docattr", false), is(false));
+    }
+
+    @Test
+    public void should_get_content_model() {
+    	final String documentWithPreambleAndSection = ""
+    			+ "= Document Title\n"
+    			+ "\n"
+    			+ "A test document with a preamble and a section.\n"
+    			+ "\n"
+    			+ "The preamble contains multiple paragraphs to force the outer block to be compound.\n"
+    			+ "\n"
+    			+ "== First Section\n"
+    			+ "\n"
+    			+ "And herein lies the problem.\n"
+    			+ "\n";
+
+        Document document = asciidoctor.load(documentWithPreambleAndSection, new HashMap<String, Object>());
+        List<StructuralNode> blocks = document.getBlocks();
+
+        StructuralNode preambleContainer = blocks.get(0);
+        assertThat(preambleContainer.getContentModel(), is("compound"));
+
+        assertThat(preambleContainer.getBlocks().get(0).getContentModel(), is("simple"));
+        assertThat(preambleContainer.getBlocks().get(1).getContentModel(), is("simple"));
+
+        Section section = (Section) blocks.get(1);
+        assertThat(section.getContentModel(), is("compound"));
+        assertThat(section.getBlocks().get(0).getContentModel(), is("simple"));
+    }
 }

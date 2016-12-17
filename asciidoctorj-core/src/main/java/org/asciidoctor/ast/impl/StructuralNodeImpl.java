@@ -4,6 +4,7 @@ import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.internal.RubyBlockListDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
+import org.asciidoctor.internal.RubyUtils;
 import org.jruby.RubyArray;
 import org.jruby.runtime.builtin.IRubyObject;
 
@@ -14,7 +15,7 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
 
     private static final String BLOCK_CLASS = "Block";
     private static final String SECTION_CLASS = "Section";
-    
+
     public StructuralNodeImpl(IRubyObject blockDelegate) {
         super(blockDelegate);
     }
@@ -42,6 +43,11 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
     @Override
     public String getStyle() {
         return getString("style");
+    }
+
+    @Override
+    public void setStyle(String style) {
+        setString("style", style);
     }
 
     @Override
@@ -88,6 +94,49 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
             return null;
         }
         return new CursorImpl(object);
+    }
+
+    @Override
+    public String getContentModel() {
+    	return getString("content_model");
+    }
+
+    @Override
+    public List<String> getSubstitutions() {
+        return getList("subs", String.class);
+    }
+
+    @Override
+    public boolean isSubstitutionEnabled(String substitution) {
+        return getBoolean("sub?", RubyUtils.toSymbol(getRuntime(), substitution));
+    }
+
+    @Override
+    public void removeSubstitution(String substitution) {
+        getRubyProperty("remove_sub", RubyUtils.toSymbol(getRuntime(), substitution));
+    }
+
+    @Override
+    public void addSubstitution(String substitution) {
+        RubyArray subs = (RubyArray) getRubyProperty("@subs");
+        subs.add(RubyUtils.toSymbol(getRuntime(), substitution));
+    }
+
+    @Override
+    public void prependSubstitution(String substitution) {
+        RubyArray subs = (RubyArray) getRubyProperty("@subs");
+        subs.insert(getRuntime().newFixnum(0), RubyUtils.toSymbol(getRuntime(), substitution));
+    }
+
+    @Override
+    public void setSubstitutions(String... substitutions) {
+        RubyArray subs = (RubyArray) getRubyProperty("@subs");
+        subs.clear();
+        if (substitutions != null) {
+            for (String substitution : substitutions) {
+                subs.add(RubyUtils.toSymbol(getRuntime(), substitution));
+            }
+        }
     }
 
     @Override

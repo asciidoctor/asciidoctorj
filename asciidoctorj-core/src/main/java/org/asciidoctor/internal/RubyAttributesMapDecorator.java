@@ -106,6 +106,8 @@ public class RubyAttributesMapDecorator implements Map<String, Object> {
                 key = ((RubyString) rubyKey).asJavaString();
             } else if (rubyKey instanceof String) {
                 key = (String) rubyKey;
+            } else if (rubyKey instanceof Number) {
+                key = String.valueOf(rubyKey);
             } else {
                 continue;
             }

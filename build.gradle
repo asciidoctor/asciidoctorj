@@ -9,10 +9,14 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.github.jruby-gradle:jruby-gradle-plugin:1.1.4"
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6"
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7"
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
     }
+}
+
+// modern plugins config
+plugins {
+  id 'com.github.jruby-gradle.base' version '1.3.0'
 }
 
 // TIP use -PpublishRelease=true to active release behavior regardless of the version
@@ -34,7 +38,7 @@ ext {
   guavaVersion = '18.0'
   hamcrestVersion = '1.3'
   jcommanderVersion = '1.35'
-  jrubyVersion = '9.1.2.0'
+  jrubyVersion = '9.1.5.0'
   jsoupVersion = '1.8.1'
   junitVersion = '4.12'
   nettyVersion = '4.0.33.Final'
@@ -43,7 +47,7 @@ ext {
   pdfboxVersion = '1.8.10'
 
   // gem versions
-  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.4'
+  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.5'
   asciidoctorEpub3GemVersion = project(':asciidoctorj-epub3').version.replace('-', '.')
   asciidoctorPdfGemVersion = project.hasProperty('asciidoctorPdfGemVersion') ? project.asciidoctorPdfGemVersion : project(':asciidoctorj-pdf').version.replace('-', '.')
   asciidoctorDiagramGemVersion = project(':asciidoctorj-diagram').version.replace('-', '.')
@@ -147,6 +151,10 @@ subprojects {
     }
   }
 
+}
+
+configure(subprojects.findAll { !it.isDistribution() && it.name != 'asciidoctorj-documentation' && it.name != 'asciidoctorj-test-support' && it.name != 'asciidoctorj-arquillian-extension' }) {
+  apply from: rootProject.file('gradle/versioncheck.gradle')
 }
 
 // apply JRuby and sources/javadocs packaging stuff for all subprojects except the distribution

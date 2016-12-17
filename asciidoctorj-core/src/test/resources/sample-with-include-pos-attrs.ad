@@ -1,0 +1,6 @@
+= Example of Include
+
+Some text
+
+[role=IncludeBlock]
+include::sample-book.adoc[My,Positional,"Attribute List"]

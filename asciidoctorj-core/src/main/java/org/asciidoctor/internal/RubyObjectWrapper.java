@@ -108,7 +108,7 @@ public class RubyObjectWrapper {
 
         IRubyObject result = null;
         if (propertyName.startsWith("@")) {
-            if (args != null) {
+            if (args != null && args.length > 0) {
                 throw new IllegalArgumentException("No args allowed for direct field access");
             }
             result = rubyNode.getInstanceVariables().getInstanceVariable(propertyName);

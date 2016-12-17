@@ -10,7 +10,7 @@ require 'asciidoctor'
 require 'asciidoctor/extensions'
 
 class AsciidoctorModule
-	java_implements Java::Asciidoctor
+    java_implements Java::Asciidoctor
 
     def unregister_all_extensions()
         Asciidoctor::Extensions.unregister_all
@@ -64,16 +64,16 @@ class AsciidoctorModule
         end
     end
 
-    def convert_file(content, options = {})
-        return Asciidoctor.convert_file(content, options)
+    def convert_file(filename, options = {})
+        return Asciidoctor.convert_file(filename, options)
     end
 
     def convert(content, options = {})
         return Asciidoctor.convert(content, options)
     end
 
-    def load_file(content, options = {})
-        return Asciidoctor.load_file(content, options)
+    def load_file(filename, options = {})
+        return Asciidoctor.load_file(filename, options)
     end
 
     def load(content, options = {})
@@ -88,7 +88,7 @@ class AsciidoctorModule
         return Asciidoctor::Converter::Factory.resolve backend
     end
 
-    def converters()
+    def converters
         return Asciidoctor::Converter::Factory.converters.keys
     end
 
@@ -96,19 +96,19 @@ class AsciidoctorModule
         Asciidoctor::Converter::Factory.unregister_all
     end
 
-    def asciidoctorRuntimeEnvironmentVersion()
+    def asciidoctorRuntimeEnvironmentVersion
         return Asciidoctor::VERSION
     end
 end
 
 module Asciidoctor
     class AbstractNode
-        alias :is_attr :attr? unless respond_to? :is_attr
-        alias :get_attr :attr unless respond_to? :get_attr
-        alias :is_reftext :reftext? unless respond_to? :is_reftext
+        alias :is_attr :attr? unless method_defined? :is_attr
+        alias :get_attr :attr unless method_defined? :get_attr
+        alias :is_reftext :reftext? unless method_defined? :is_reftext
     end
     
     class AbstractBlock
-        alias :append :<< unless respond_to? :append
+        alias :append :<< unless method_defined? :append
     end
 end

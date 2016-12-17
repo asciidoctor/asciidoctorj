@@ -8,7 +8,21 @@ public interface Cell extends ContentNode {
 
     int getRowspan();
 
+    /**
+     * @return The text of the cell including substitutions being applied.
+     */
     String getText();
+
+    /**
+     * @return The text of the cell without substitutions being applied.
+     */
+    String getSource();
+
+    /**
+     * Sets the source of the Cell.
+     * @param source The source of this Cell, substitutions will still be applied.
+     */
+    void setSource(String source);
 
     Object getContent();
 

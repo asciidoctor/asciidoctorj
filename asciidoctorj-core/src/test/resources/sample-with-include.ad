@@ -1,0 +1,5 @@
+= Example of Include
+
+Some text
+
+include::sample-book.adoc[]

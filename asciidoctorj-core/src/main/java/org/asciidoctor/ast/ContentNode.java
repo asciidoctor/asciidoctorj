@@ -40,6 +40,20 @@ public interface ContentNode {
     Object getAttr(Object name, Object defaultValue, boolean inherit);
     Object getAttr(Object name, Object defaultValue);
     Object getAttr(Object name);
+
+    /**
+     * @param name
+     * @return {@code true} if this node or the document has an attribute with the given name
+     */
+    boolean hasAttr(Object name);
+
+    /**
+     *
+     * @param name
+     * @param inherited
+     * @return {@code true} if the current node or depending on the inherited parameter the document has an attribute with the given name.
+     */
+    boolean hasAttr(Object name, boolean inherited);
     boolean isAttr(Object name, Object expected);
     boolean isAttr(Object name, Object expected, boolean inherit);
     boolean setAttr(Object name, Object value, boolean overwrite);

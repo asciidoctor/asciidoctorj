@@ -682,7 +682,7 @@ The AST is built from the following types:
   .. `literal`
   .. `open`
   .. `example`
-  .. `pass``
+  .. `pass`
 
 `org.asciidoctor.ast.List`::
   The list node is the container for ordered and unordered lists.

@@ -46,5 +46,5 @@ cd ../..
 #rm -rf build/maven-pdf
 cd ..
 
-$GRADLE_CMD -S -PasciidoctorGemVersion=$ASCIIDOCTOR_VERSION -PasciidoctorPdfGemVersion=$ASCIIDOCTOR_PDF_VERSION -PuseMavenLocal=true :asciidoctorj:clean :asciidoctorj-pdf:clean :asciidoctorj:check :asciidoctorj-pdf:check
+$GRADLE_CMD -S -Pskip.signing -PasciidoctorGemVersion=$ASCIIDOCTOR_VERSION -PasciidoctorPdfGemVersion=$ASCIIDOCTOR_PDF_VERSION -PuseMavenLocal=true :asciidoctorj:clean :asciidoctorj-pdf:clean :asciidoctorj:check :asciidoctorj-pdf:check
 exit $?

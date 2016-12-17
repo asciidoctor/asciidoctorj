@@ -1,4 +1,4 @@
-package org.asciidoctor.extension;
+package org.asciidoctor.ast;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -26,6 +26,24 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ContentModel {
+
+    /**
+     * This value is used as the config option key to configure how Asciidoctor should treat blocks created by
+     * this Processor.
+     * Its value must be a String constant.
+     *
+     * <p>Example to Asciidoctor know that a BlockProcessor creates zero or more child blocks:
+     * <pre>
+     * <verbatim>
+     * Map&lt;String, Object&gt; config = new HashMap&lt;&gt;();
+     * config.put(ContentModel.KEY, ContentModel.COMPOUND);
+     * BlockProcessor blockProcessor = new BlockProcessor("foo", config);
+     * asciidoctor.javaExtensionRegistry().block(blockProcessor);
+     * </verbatim>
+     * </pre>
+     * </p>
+     */
+    public static final String KEY = "content_model";
 
     /**
      * Predefined constant to let Asciidoctor know that this BlockProcessor creates zero or more child blocks.
