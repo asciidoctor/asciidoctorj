@@ -33,9 +33,11 @@ def gemFiles = fileTree(jruby.gemInstallDir) {
   exclude 'gems/rouge-*/lib/rouge/demos/**'
 }
 
-jrubyPrepare << {
-  copy { // bundles the gems inside this artifact
-    from gemFiles
-    into sourceSets.main.output.resourcesDir
+jrubyPrepare {
+  doLast {
+    copy { // bundles the gems inside this artifact
+      from gemFiles
+      into sourceSets.main.output.resourcesDir
+    }
   }
 }

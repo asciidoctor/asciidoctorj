@@ -1,18 +1,10 @@
-jar {
-    from sourceSets.test.output
-    dependsOn testClasses
+dependencies {
+    compile 'junit:junit:4.12'
 }
 
 def javaApiUrl = "https://docs.oracle.com/javase/6/docs/api"
 def junitURL = "http://junit.org/javadoc/latest/"
 
 javadoc {
-    source sourceSets.test.allSource
-    classpath = files([sourceSets.test.compileClasspath, sourceSets.test.output])
     options.links(javaApiUrl, junitURL)
-}
-
-
-sourcesJar {
-    from sourceSets.test.allSource
 }
