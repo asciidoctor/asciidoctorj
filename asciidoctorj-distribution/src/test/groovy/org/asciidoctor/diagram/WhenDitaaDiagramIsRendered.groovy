@@ -1,9 +1,12 @@
 package org.asciidoctor.diagram
 
 import org.asciidoctor.Asciidoctor
+import org.asciidoctor.AttributesBuilder
 import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.SafeMode
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
+import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import spock.lang.Specification
 
@@ -17,10 +20,17 @@ class WhenDitaaDiagramIsRendered extends Specification {
     @ArquillianResource
     private Asciidoctor asciidoctor
 
+    @ArquillianResource
+    public TemporaryFolder testFolder
+
     def 'should render ditaa diagram to HTML'() throws Exception {
 
         given:
         String imageFileName = UUID.randomUUID()
+        File imagesOutDir = testFolder.newFolder()
+        File createdImage = new File(imagesOutDir, "${imageFileName}.png")
+        def createdCacheImage = new File(testFolder.root, ".asciidoctor/diagram/${imageFileName}.png.cache")
+
         String document = """= Document Title
 
 Hello World
@@ -38,19 +48,32 @@ Hello World
         asciidoctor.requireLibrary(ASCIIDOCTOR_DIAGRAM)
 
         when:
-        String result = asciidoctor.convert(document, OptionsBuilder.options().toFile(false))
+        String result = asciidoctor.convert(document, OptionsBuilder.options()
+                .toFile(false)
+                .toDir(testFolder.root)
+                .safe(SafeMode.UNSAFE)
+                .attributes(AttributesBuilder.attributes()
+                        .attribute('imagesdir', imagesOutDir.absolutePath)
+                        .attribute('outdir', testFolder.root.absolutePath)))
+
 
         then:
-        result.contains("""src="${imageFileName}.png""")
-        new File("${imageFileName}.png").exists()
-        new File(".asciidoctor/diagram/${imageFileName}.png.cache").exists()
+        result.contains("""src="${imagesOutDir.absolutePath}/${imageFileName}.png""")
+
+        createdImage.exists()
+        createdCacheImage.exists()
+
     }
 
     def 'should render ditaa diagram to PDF'() throws Exception {
 
         given:
-        String destinationFileName = 'build/test.pdf'
+        File destinationFile = new File('test.pdf')
         String imageFileName = UUID.randomUUID()
+
+        File createdPdf = new File(testFolder.root, destinationFile.name)
+        File createdImage = new File(testFolder.root, "${imageFileName}.png")
+        File createdCacheImage = new File(testFolder.root, ".asciidoctor/diagram/${imageFileName}.png.cache")
 
         String document = """= Document Title
 
@@ -70,19 +93,17 @@ Hello World
 
         when:
         asciidoctor.convert(document, OptionsBuilder.options()
-                .toFile(new File(destinationFileName))
+                .toDir(testFolder.root)
+                .toFile(destinationFile)
+                .safe(SafeMode.UNSAFE)
                 .backend('pdf'))
 
-        then:
-        new File(destinationFileName).exists()
-        File png = new File("build/${imageFileName}.png")
-        File pngCache = new File("build/.asciidoctor/diagram/${imageFileName}.png.cache")
-        png.exists()
-        pngCache.exists()
 
-        cleanup:
-        png.delete()
-        pngCache.delete()
+        then:
+
+        createdPdf.exists()
+        createdImage.exists()
+        createdCacheImage.exists()
 
     }
 

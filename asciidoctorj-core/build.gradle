@@ -26,10 +26,12 @@ def gemFiles = fileTree(jruby.gemInstallDir) {
   include "gems/asciidoctor-${asciidoctorGemVersion}/data/**"
 }
 
-jrubyPrepare << {
-  copy { // bundles the gems inside this artifact
-    from gemFiles
-    into sourceSets.main.output.resourcesDir
+jrubyPrepare {
+  doLast {
+    copy { // bundles the gems inside this artifact
+      from gemFiles
+      into sourceSets.main.output.resourcesDir
+    }
   }
 }
 
