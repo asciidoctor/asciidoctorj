@@ -29,8 +29,10 @@ import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyFixnum;
 import org.jruby.RubyHash;
+import org.jruby.RubySymbol;
 import org.jruby.runtime.builtin.IRubyObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -333,7 +335,7 @@ public class Processor {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime,
-                options);
+                filterBlockOptions(parent, options, "subs", ContentModel.KEY));
 
         IRubyObject[] parameters = {
                 ((StructuralNodeImpl) parent).getRubyObject(),
@@ -341,6 +343,40 @@ public class Processor {
                 convertMapToRubyHashWithSymbols };
         return (Block) NodeConverter.createASTNode(rubyRuntime, BLOCK_CLASS, parameters);
     }
+
+    private Map<Object, Object> filterBlockOptions(
+        StructuralNode parent,
+        Map<Object, Object> options,
+        String... optionNames
+    ) {
+        final Map<Object, Object> copy = new HashMap<>(options);
+        final Ruby ruby = JRubyRuntimeContext.get(parent);
+        for (String optionName: optionNames) {
+            final Object optionValue = copy.get(optionName);
+            if (optionValue != null) {
+                if (optionValue instanceof String) {
+                    copy.put(optionName, getRubySymbol(ruby, (String) optionValue));
+                } else if (optionValue instanceof List) {
+                    List valueList = (List) optionValue;
+                    List newValueList = new ArrayList(valueList.size());
+                    for (Object v: valueList) {
+                        if (v instanceof String) {
+                            newValueList.add(getRubySymbol(ruby, (String) v));
+                        } else {
+                            newValueList.add(v);
+                        }
+                    }
+                    copy.put(optionName, newValueList);
+                }
+            }
+        }
+        return copy;
+    }
+
+    private RubySymbol getRubySymbol(Ruby ruby, String s) {
+        return ruby.newSymbol(s.startsWith(":") ? s.substring(1) : s);
+    }
+
 
     private Section createSection(StructuralNode parent, Integer level, boolean numbered, Map<Object, Object> options) {
 
