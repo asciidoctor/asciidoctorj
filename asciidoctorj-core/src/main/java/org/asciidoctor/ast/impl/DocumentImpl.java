@@ -54,4 +54,14 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
         return getDoctitle();
     }
 
+    @Override
+    public int getAndIncrementCounter(String name) {
+        return getInt("counter", name);
+    }
+
+    @Override
+    public int getAndIncrementCounter(String name, int initialValue) {
+        return getInt("counter", name, initialValue);
+    }
+
 }

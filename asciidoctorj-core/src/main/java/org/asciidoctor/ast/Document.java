@@ -58,4 +58,23 @@ public interface Document extends StructuralNode {
      * @return options defined in document.
      */
     Map<Object, Object> getOptions();
+
+    /**
+     * Gets the current counter with the given name and increases its value.
+     * At the first invocation the counter will return 1.
+     * After the call the value of the counter is set to the returned value plus 1.
+     * @param name
+     * @return
+     */
+    int getAndIncrementCounter(String name);
+
+    /**
+     * Gets the current counter with the given name and increases its value.
+     * At the first invocation the counter will return the given initial value.
+     * After the call the value of the counter is set to the returned value plus 1.
+     * @param name
+     * @param initialValue
+     * @return
+     */
+    int getAndIncrementCounter(String name, int initialValue);
 }
