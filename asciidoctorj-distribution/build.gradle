@@ -9,6 +9,8 @@ dependencies {
   compile project(':asciidoctorj-diagram')
   compile project(':asciidoctorj-epub3')
   compile project(':asciidoctorj-pdf')
+
+  compile 'org.jruby:jruby-complete:9.1.5.0'
 }
 
 jar.enabled = false
