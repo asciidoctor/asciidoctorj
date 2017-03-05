@@ -1,5 +1,16 @@
+
+ext {
+  jrubyVersion = '9.1.8.0'
+}
+
 dependencies {
-  compile project(':asciidoctorj')
+  compile(project(':asciidoctorj')) {
+    exclude module: 'jruby-complete'
+  }
+
+  compile "org.jruby:jruby-complete:$jrubyVersion"
+
+
   gems("rubygems:asciidoctor-pdf:$asciidoctorPdfGemVersion") {
     // Exclude gems provided by AsciidoctorJ core
     exclude module: 'asciidoctor'
@@ -32,7 +43,14 @@ def gemFiles = fileTree(jruby.gemInstallDir) {
   exclude 'gems/rouge-*/lib/rouge/demos/**'
 }
 
-jrubyPrepareGems << {
+jruby {
+  defaultRepositories = false
+  defaultVersion = jrubyVersion
+  execVersion = jrubyVersion
+  // TODO I'd like to be able to customize the name of the gemInstallDir
+}
+
+jrubyPrepare << {
   copy { // bundles the gems inside this artifact
     from gemFiles
     into sourceSets.main.output.resourcesDir
