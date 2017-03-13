@@ -3,7 +3,6 @@ jdk:
   - oraclejdk8
   - oraclejdk7
   - openjdk7
-  - openjdk6
 before_script: unset GEM_PATH GEM_HOME JRUBY_OPTS
 before_install:
   - sudo hostname "$(hostname | cut -c1-63)"
