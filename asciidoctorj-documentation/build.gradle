@@ -2,10 +2,10 @@ jar.enabled = false
 
 dependencies {
     testCompile project(':asciidoctorj')
-    testCompile project(':asciidoctorj-pdf')
     testCompile project(path: ':asciidoctorj-arquillian-extension')
     testCompile "commons-io:commons-io:$commonsioVersion"
     testCompile "org.jsoup:jsoup:$jsoupVersion"
+    testCompile "org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion"
 }
 
 task processAsciidocFiles(type: Copy) {

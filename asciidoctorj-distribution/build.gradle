@@ -3,10 +3,13 @@ apply plugin: 'application'
 dependencies {
   compile project(':asciidoctorj')
   compile project(':asciidoctorj-epub3')
-  compile project(':asciidoctorj-pdf')
   compile project(':asciidoctorj-diagram')
 
+  compile("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
+    transitive = false
+  }
   testCompile project(':asciidoctorj-arquillian-extension')
+  testCompile "org.apache.pdfbox:pdfbox:$pdfboxVersion"
 }
 
 jar.enabled = false
