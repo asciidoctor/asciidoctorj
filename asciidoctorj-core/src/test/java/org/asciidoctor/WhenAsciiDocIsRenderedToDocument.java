@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import static org.hamcrest.Matchers.either;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.nullValue;
@@ -197,7 +198,11 @@ public class WhenAsciiDocIsRenderedToDocument {
                 .attributes(AttributesBuilder.attributes().dataUri(true).icons("font"))
                 .compact(true).asMap();
         Document document = asciidoctor.load(DOCUMENT, options);
-        assertThat(document.iconUri("note"), is("data:image/png:base64,"));
+        assertThat(document.iconUri("note"),
+            either(
+                is("data:image/png:base64,") // <= Asciidoctor 1.5.5
+            )
+                .or(is("data:image/png;base64,"))); // >= Asciidoctor 1.5.6
     }
 
     @Test
