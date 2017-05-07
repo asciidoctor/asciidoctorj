@@ -102,8 +102,12 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') }) {
     else {
       jvmArgs '-XX:MaxPermSize=256m', '-XX:-UseGCOverheadLimit'
     }
-
+    
     testLogging {
+      showCauses = true
+      showExceptions = true
+      showStackTraces = true
+      exceptionFormat = 'full'
       // events 'passed', 'failed', 'skipped', 'standard_out', 'standard_error'
       // events 'standard_out', 'standard_error'
       afterSuite { desc, result ->
