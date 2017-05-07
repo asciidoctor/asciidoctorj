@@ -1,5 +1,6 @@
 package org.asciidoctor.diagram
 
+import jnr.ffi.Platform
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.AttributesBuilder
 import org.asciidoctor.OptionsBuilder
@@ -58,7 +59,10 @@ Hello World
 
 
         then:
-        result.contains("""src="${imagesOutDir.absolutePath}/${imageFileName}.png""")
+        if (Platform.getNativePlatform().OS == Platform.OS.WINDOWS)
+            result.contains("""src="${imagesOutDir.absolutePath.replaceAll("\\\\", "//")}/${imageFileName}.png""")
+        else
+            result.contains("""src="${imagesOutDir.absolutePath}/${imageFileName}.png""")
 
         createdImage.exists()
         createdCacheImage.exists()
