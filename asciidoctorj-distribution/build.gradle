@@ -8,8 +8,10 @@ dependencies {
   compile project(':asciidoctorj')
   compile project(':asciidoctorj-diagram')
   compile project(':asciidoctorj-epub3')
-  compile project(':asciidoctorj-pdf')
 
+  compile("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
+    transitive = false
+  }
   compile 'org.jruby:jruby-complete:9.1.8.0'
 }
 
