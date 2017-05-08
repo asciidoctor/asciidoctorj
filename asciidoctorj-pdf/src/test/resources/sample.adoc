@@ -1,9 +1,0 @@
-= Document Title
-:source-highlighter: rouge
-
-Content.
-
-[source,java]
-----
-System.out.println("Hello, World!");
-----

@@ -1,7 +1,8 @@
 package org.asciidoctor;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.either;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsMapContaining.hasKey;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
@@ -174,7 +175,11 @@ public class WhenAsciiDocIsRenderedToDocument {
                 .attributes(AttributesBuilder.attributes().dataUri(true).icons("font"))
                 .compact(true).asMap();
         Document document = asciidoctor.load(DOCUMENT, options);
-        assertThat(document.iconUri("note"), is("data:image/png:base64,"));
+        assertThat(document.iconUri("note"),
+            either(
+                is("data:image/png:base64,") // <= Asciidoctor 1.5.5
+            )
+                .or(is("data:image/png;base64,"))); // >= Asciidoctor 1.5.6
     }
 
     @Test
