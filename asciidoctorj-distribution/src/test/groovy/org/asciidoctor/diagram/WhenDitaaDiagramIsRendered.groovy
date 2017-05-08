@@ -27,8 +27,7 @@ class WhenDitaaDiagramIsRendered extends Specification {
 
         given:
         String imageFileName = UUID.randomUUID()
-        File imagesOutDir = testFolder.newFolder()
-        File createdImage = new File(imagesOutDir, "${imageFileName}.png")
+        File imagesOutDir = new File(testFolder.root, 'images-dir')
         def createdCacheImage = new File(testFolder.root, ".asciidoctor/diagram/${imageFileName}.png.cache")
 
         String document = """= Document Title
@@ -53,14 +52,14 @@ Hello World
                 .toDir(testFolder.root)
                 .safe(SafeMode.UNSAFE)
                 .attributes(AttributesBuilder.attributes()
-                        .attribute('imagesdir', imagesOutDir.absolutePath)
-                        .attribute('outdir', testFolder.root.absolutePath)))
+                .attribute('imagesdir', imagesOutDir.name)
+                .attribute('outdir', testFolder.root.absolutePath)))
 
 
         then:
-        result.contains("""src="${imagesOutDir.absolutePath}/${imageFileName}.png""")
+        result.contains("""src="${imagesOutDir.name}/${imageFileName}.png""")
 
-        createdImage.exists()
+        new File(imagesOutDir, "${imageFileName}.png").exists()
         createdCacheImage.exists()
 
     }
