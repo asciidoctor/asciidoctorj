@@ -87,41 +87,81 @@ public abstract class ContentNodeImpl extends RubyObjectWrapper implements Conte
 
     @Override
     public Object getAttr(Object name, Object defaultValue, boolean inherit) {
-        return JavaEmbedUtils.rubyToJava(getRubyProperty("attr", name, defaultValue, inherit));
+        return getAttribute(name, defaultValue, inherit);
     }
 
     @Override
     public Object getAttr(Object name, Object defaultValue) {
-        return JavaEmbedUtils.rubyToJava(getRubyProperty("attr", name, defaultValue));
+        return getAttribute(name, defaultValue);
     }
 
     @Override
     public Object getAttr(Object name) {
+        return getAttribute(name);
+    }
+
+    @Override
+    public Object getAttribute(Object name, Object defaultValue, boolean inherit) {
+        return JavaEmbedUtils.rubyToJava(getRubyProperty("attr", name, defaultValue, inherit));
+    }
+
+    @Override
+    public Object getAttribute(Object name, Object defaultValue) {
+        return JavaEmbedUtils.rubyToJava(getRubyProperty("attr", name, defaultValue));
+    }
+
+    @Override
+    public Object getAttribute(Object name) {
         return JavaEmbedUtils.rubyToJava(getRubyProperty("attr", name));
     }
 
     @Override
     public boolean isAttr(Object name, Object expected, boolean inherit) {
-        return getBoolean("attr?", name, expected, inherit);
-    }
-
-    @Override
-    public boolean hasAttr(Object name) {
-        return getBoolean("attr?", name);
-    }
-
-    @Override
-    public boolean hasAttr(Object name, boolean inherited) {
-        return getBoolean("attr?", name, null, inherited);
+        return isAttribute(name, expected, inherit);
     }
 
     @Override
     public boolean isAttr(Object name, Object expected) {
+        return isAttribute(name, expected);
+    }
+
+    @Override
+    public boolean isAttribute(Object name, Object expected, boolean inherit) {
+        return getBoolean("attr?", name, expected, inherit);
+    }
+
+    @Override
+    public boolean isAttribute(Object name, Object expected) {
         return getBoolean("attr?", name, expected);
     }
 
     @Override
+    public boolean hasAttr(Object name) {
+        return hasAttribute(name);
+    }
+
+    @Override
+    public boolean hasAttr(Object name, boolean inherited) {
+        return hasAttribute(name, inherited);
+    }
+
+    @Override
+    public boolean hasAttribute(Object name) {
+        return getBoolean("attr?", name);
+    }
+
+    @Override
+    public boolean hasAttribute(Object name, boolean inherited) {
+        return getBoolean("attr?", name, null, inherited);
+    }
+
+    @Override
     public boolean setAttr(Object name, Object value, boolean overwrite) {
+        return setAttribute(name, value, overwrite);
+    }
+
+    @Override
+    public boolean setAttribute(Object name, Object value, boolean overwrite) {
         return getBoolean("set_attr", name, value, overwrite);
     }
 
