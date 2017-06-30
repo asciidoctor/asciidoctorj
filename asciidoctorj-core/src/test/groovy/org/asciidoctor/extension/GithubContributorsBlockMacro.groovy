@@ -47,7 +47,7 @@ class GithubContributorsBlockMacro extends BlockMacroProcessor {
             Row row = createTableRow(table)
 
             Document document = createDocument(parent.getDocument())
-            document.blocks << createBlock(document, IMAGE, null, ['type': IMAGE, 'target': contributor.avatar_url])
+            document.blocks << createBlock(document, IMAGE, null, ['type': IMAGE, 'target': contributor.avatar_url, 'alt': "Avatar of ${contributor.login}" as String])
             Cell avatarCell = createTableCell(loginColumn, document)
             row.cells << avatarCell
             row.cells << createTableCell(loginColumn, contributor.login)
