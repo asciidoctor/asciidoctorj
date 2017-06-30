@@ -72,7 +72,7 @@ public class WhenAsciiDocIsRenderedToDocument {
         Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
         Section section = (Section) document.blocks().get(1);
         assertThat(section.index(), is(0));
-        assertThat(section.sectname(), is("sect1"));
+        assertThat(section.sectname(), either(is("sect1")).or(is("section")));
         assertThat(section.special(), is(false));
     }
 
