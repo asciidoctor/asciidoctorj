@@ -12,6 +12,7 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.converter.JavaConverterRegistry;
+import org.asciidoctor.extension.ExtensionRegistration;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.internal.JRubyAsciidoctor;
@@ -779,7 +780,13 @@ public interface Asciidoctor {
      * Unregister all registered extensions.
      */
     void unregisterAllExtensions();
-    
+
+    /**
+     * Unregisters the extension represented by the given registration instance.
+     * @param registration
+     */
+    void unregisterExtension(ExtensionRegistration registration);
+
     /**
      * This method frees all resources consumed by asciidoctorJ module. Keep in mind that if this method is called, instance becomes unusable and you should create another instance.
      */

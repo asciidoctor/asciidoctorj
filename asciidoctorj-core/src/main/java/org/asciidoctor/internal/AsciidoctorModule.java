@@ -6,44 +6,46 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.*;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
+import org.jruby.RubySymbol;
 
 
 public interface AsciidoctorModule {
 
-    void preprocessor(String preprocessorClassName);
-    void preprocessor(RubyClass preprocessorClassName);
-	void preprocessor(Preprocessor preprocessor);
+    void preprocessor(RubySymbol name, String preprocessorClassName);
+    void preprocessor(RubySymbol name, RubyClass preprocessorClassName);
+    void preprocessor(RubySymbol name, Preprocessor preprocessor);
 	
-    void postprocessor(String postprocessorClassName);
-    void postprocessor(RubyClass postprocessorClassName);
-    void postprocessor(Postprocessor postprocessor);
+    void postprocessor(RubySymbol name, String postprocessorClassName);
+    void postprocessor(RubySymbol name, RubyClass postprocessorClassName);
+    void postprocessor(RubySymbol name, Postprocessor postprocessor);
     
-    void treeprocessor(String treeprocessor);
-    void treeprocessor(RubyClass treeprocessorClassName);
-    void treeprocessor(Treeprocessor treeprocessorClassName);
+    void treeprocessor(RubySymbol name, String treeprocessor);
+    void treeprocessor(RubySymbol name, RubyClass treeprocessorClassName);
+    void treeprocessor(RubySymbol name, Treeprocessor treeprocessorClassName);
     
-    void include_processor(String includeProcessorClassName);
-    void include_processor(RubyClass includeProcessorClassName);
-    void include_processor(IncludeProcessor includeProcessor);
+    void include_processor(RubySymbol name, String includeProcessorClassName);
+    void include_processor(RubySymbol name, RubyClass includeProcessorClassName);
+    void include_processor(RubySymbol name, IncludeProcessor includeProcessor);
     
-    void block_processor(String blockClassName, Object blockName);
-    void block_processor(RubyClass blockClass, Object blockName);
-    void block_processor(BlockProcessor blockInstance, Object blockName);
+    void block_processor(RubySymbol name, String blockClassName, Object blockName);
+    void block_processor(RubySymbol name, RubyClass blockClass, Object blockName);
+    void block_processor(RubySymbol name, BlockProcessor blockInstance, Object blockName);
     
-    void block_macro(String blockMacroClassName, Object blockName);
-    void block_macro(Class<BlockMacroProcessor> blockMacroClass, Object blockName);
-    void block_macro(BlockMacroProcessor blockMacroInstance, Object blockName);
-    void block_macro(RubyClass blockClassName, Object blockSymbol);
+    void block_macro(RubySymbol name, String blockMacroClassName, Object blockName);
+    void block_macro(RubySymbol name, Class<BlockMacroProcessor> blockMacroClass, Object blockName);
+    void block_macro(RubySymbol name, BlockMacroProcessor blockMacroInstance, Object blockName);
+    void block_macro(RubySymbol name, RubyClass blockClassName, Object blockSymbol);
 
-    void inline_macro(String blockClassName, Object blockSymbol);
-    void inline_macro(RubyClass blockClassName, Object blockSymbol);
-    void inline_macro(InlineMacroProcessor blockClassName, Object blockSymbol);
+    void inline_macro(RubySymbol name, String blockClassName, Object blockSymbol);
+    void inline_macro(RubySymbol name, RubyClass blockClassName, Object blockSymbol);
+    void inline_macro(RubySymbol name, InlineMacroProcessor blockClassName, Object blockSymbol);
     
-    void docinfo_processor(String docInfoClassName);
-    void docinfo_processor(RubyClass docInfoClassName);
-    void docinfo_processor(DocinfoProcessor docInfoClassName);
+    void docinfo_processor(RubySymbol name, String docInfoClassName);
+    void docinfo_processor(RubySymbol name, RubyClass docInfoClassName);
+    void docinfo_processor(RubySymbol name, DocinfoProcessor docInfoClassName);
     
     void unregister_all_extensions();
+    void unregister_extension(RubySymbol name);
 
     Object convert(String content, Map<String, Object> options);
     Object convertFile(String filename, Map<String, Object> options);

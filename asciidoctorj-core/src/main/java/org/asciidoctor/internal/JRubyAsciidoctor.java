@@ -14,6 +14,7 @@ import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.ast.Title;
 import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.converter.internal.ConverterRegistryExecutor;
+import org.asciidoctor.extension.ExtensionRegistration;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.extension.internal.ExtensionRegistryExecutor;
@@ -402,6 +403,11 @@ public class JRubyAsciidoctor implements Asciidoctor {
     @Override
     public void unregisterAllExtensions() {
         this.asciidoctorModule.unregister_all_extensions();
+    }
+
+    @Override
+    public void unregisterExtension(ExtensionRegistration registration) {
+        this.asciidoctorModule.unregister_extension(registration.getName(getRubyRuntime()));
     }
 
     @Override

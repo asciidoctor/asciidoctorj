@@ -28,49 +28,57 @@ public class RubyExtensionRegistry {
         return this;
     }
     
-    public RubyExtensionRegistry preprocessor(String preprocessor) {
-        this.asciidoctorModule.preprocessor(preprocessor);
-        return this;
+    public ExtensionRegistration preprocessor(String preprocessor) {
+        final ExtensionRegistration registration = new ExtensionRegistration();
+        this.asciidoctorModule.preprocessor(registration.getName(rubyRuntime), preprocessor);
+        return registration;
     }
 
-    public RubyExtensionRegistry postprocessor(String postprocesor) {
-        this.asciidoctorModule.postprocessor(postprocesor);
-        return this;
+    public ExtensionRegistration postprocessor(String postprocesor) {
+        final ExtensionRegistration registration = new ExtensionRegistration();
+        this.asciidoctorModule.postprocessor(registration.getName(rubyRuntime), postprocesor);
+        return registration;
     }
 
-    public RubyExtensionRegistry docinfoProcessor(String docinfoProcessor) {
-        this.asciidoctorModule.docinfo_processor(docinfoProcessor);
-        return this;
+    public ExtensionRegistration docinfoProcessor(String docinfoProcessor) {
+        final ExtensionRegistration registration = new ExtensionRegistration();
+        this.asciidoctorModule.docinfo_processor(registration.getName(rubyRuntime), docinfoProcessor);
+        return registration;
     }
 
-    public RubyExtensionRegistry includeProcessor(String includeProcessor) {
-        this.asciidoctorModule.include_processor(includeProcessor);
-        return this;
+    public ExtensionRegistration includeProcessor(String includeProcessor) {
+        final ExtensionRegistration registration = new ExtensionRegistration();
+        this.asciidoctorModule.include_processor(registration.getName(rubyRuntime), includeProcessor);
+        return registration;
     }
 
-    public RubyExtensionRegistry treeprocessor(String treeProcessor) {
-        this.asciidoctorModule.treeprocessor(treeProcessor);
-        return this;
+    public ExtensionRegistration treeprocessor(String treeProcessor) {
+        final ExtensionRegistration registration = new ExtensionRegistration();
+        this.asciidoctorModule.treeprocessor(registration.getName(rubyRuntime), treeProcessor);
+        return registration;
     }
 
-    public RubyExtensionRegistry block(String blockName, String blockProcessor) {
-        this.asciidoctorModule.block_processor(
-                blockProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
-        return this;
+    public ExtensionRegistration block(String blockName, String blockProcessor) {
+        final ExtensionRegistration registration = new ExtensionRegistration();
+        this.asciidoctorModule.block_processor(registration.getName(rubyRuntime),
+            blockProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
+        return registration;
     }
 
-    public RubyExtensionRegistry blockMacro(String blockName, String blockMacroProcessor) {
+    public ExtensionRegistration blockMacro(String blockName, String blockMacroProcessor) {
 
-        this.asciidoctorModule.block_macro(
-                blockMacroProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
-        return this;
+        final ExtensionRegistration registration = new ExtensionRegistration();
+        this.asciidoctorModule.block_macro(registration.getName(rubyRuntime),
+            blockMacroProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
+        return registration;
     }
 
-    public RubyExtensionRegistry inlineMacro(String blockName, String inlineMacroProcessor) {
+    public ExtensionRegistration inlineMacro(String blockName, String inlineMacroProcessor) {
 
-        this.asciidoctorModule.inline_macro(
-                inlineMacroProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
-        return this;
+        final ExtensionRegistration registration = new ExtensionRegistration();
+        this.asciidoctorModule.inline_macro(registration.getName(rubyRuntime),
+            inlineMacroProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
+        return registration;
     }
 
 }

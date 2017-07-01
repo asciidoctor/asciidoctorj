@@ -734,6 +734,39 @@ public class WhenJavaExtensionIsRegistered {
     }
 
     @Test
+    public void should_unregister_postprocessor() throws IOException {
+
+        // Given: A registered Postprocessor
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+        ExtensionRegistration registration = javaExtensionRegistry.postprocessor(CustomFooterPostProcessor.class);
+
+        // When: I render a document
+        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
+                .safe(SafeMode.UNSAFE).get();
+
+        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+
+        // Then: it is invoked
+        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
+        org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        Element footer = doc.getElementById("footer-text");
+        assertThat(footer.text(), containsString("Copyright Acme, Inc."));
+
+        // When: I unregister the Postprocessor and render again with the same Asciidoctor instance
+        asciidoctor.unregisterExtension(registration);
+
+        Options options2 = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample2.html"))
+                .safe(SafeMode.UNSAFE).get();
+        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options2);
+        File renderedFile2 = new File(testFolder.getRoot(), "rendersample2.html");
+        org.jsoup.nodes.Document doc2 = Jsoup.parse(renderedFile2, "UTF-8");
+
+        Element footer2 = doc2.getElementById("footer-text");
+        assertThat(footer2.text(), not(containsString("Copyright Acme, Inc.")));
+
+    }
+
+    @Test
     public void a_block_processor_as_string_should_be_executed_when_registered_block_is_found_in_document()
             throws IOException {
 
