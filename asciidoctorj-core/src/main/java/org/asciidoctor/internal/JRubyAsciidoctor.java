@@ -299,13 +299,16 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
+        ClassLoader oldTCCL = Thread.currentThread().getContextClassLoader();
         try {
+            Thread.currentThread().setContextClassLoader(rubyRuntime.getJRubyClassLoader());
             Object object = this.asciidoctorModule.convert(content, rubyHash);
             return returnExpectedValue(object);
         } catch(RaiseException e) {
             logger.severe(e.getException().getClass().getCanonicalName());
             throw new AsciidoctorCoreException(e);
         } finally {
+            Thread.currentThread().setContextClassLoader(oldTCCL);
             // we restore current directory to its original value.
             rubyRuntime.setCurrentDirectory(currentDirectory);
         }
@@ -329,14 +332,16 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
+        ClassLoader oldTCCL = Thread.currentThread().getContextClassLoader();
         try {
+            Thread.currentThread().setContextClassLoader(rubyRuntime.getJRubyClassLoader());
             Object object = this.asciidoctorModule.convertFile(filename.getAbsolutePath(), rubyHash);
             return returnExpectedValue(object);
         } catch(RaiseException e) {
             logger.severe(e.getMessage());
-
             throw new AsciidoctorCoreException(e);
         } finally {
+            Thread.currentThread().setContextClassLoader(oldTCCL);
             // we restore current directory to its original value.
             rubyRuntime.setCurrentDirectory(currentDirectory);
         }

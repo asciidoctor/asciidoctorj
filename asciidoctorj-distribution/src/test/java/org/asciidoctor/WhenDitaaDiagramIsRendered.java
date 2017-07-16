@@ -5,9 +5,9 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.UUID;
 
+import static org.asciidoctor.AttributesBuilder.attributes;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
@@ -32,7 +32,7 @@ public class WhenDitaaDiagramIsRendered {
             document,
             OptionsBuilder.options()
                 .toFile(false)
-                .attributes(AttributesBuilder.attributes()
+                .attributes(attributes()
                     .attribute("imagesoutdir", "build")));
 
         // then:
@@ -48,7 +48,8 @@ public class WhenDitaaDiagramIsRendered {
         // given:
         final String imageFileName = UUID.randomUUID().toString();
 
-        final File destinationFile = new File("build/ditaa.pdf");
+        final File destinationDir = new File( "build");
+        final File destinationFile = new File( "ditaa.pdf");
 
         final String document = getTestDocument(imageFileName);
 
@@ -60,15 +61,22 @@ public class WhenDitaaDiagramIsRendered {
             document,
             OptionsBuilder.options()
                 .backend("pdf")
+                .toDir(destinationDir)
                 .toFile(destinationFile)
-                .attributes(AttributesBuilder.attributes()
-                    .attribute("imagesoutdir", "build")));
+                .attributes(
+                    attributes()
+                        .attribute("imagesdir", destinationDir.getPath())
+                        .attribute("imagesoutdir", destinationDir.getPath()))
+        );
 
         // then:
-        assertThat(destinationFile.exists(), is(true));
-        assertThat(destinationFile.length(), greaterThan(0L));
-        assertThat("PNG file not created!", new File("build/" + imageFileName + ".png").exists(), is(true));
-        assertThat("PNG cache file not created!", new File("build/.asciidoctor/diagram/" + imageFileName + ".png.cache").exists(), is(true));
+        final File expectedPdfFile = new File(destinationDir, "ditaa.pdf");
+        assertThat(expectedPdfFile + " does not exist", expectedPdfFile.exists(), is(true));
+        assertThat(expectedPdfFile.length(), greaterThan(0L));
+        final File imageFile = new File("build/" + imageFileName + ".png");
+        final File cacheFile = new File(destinationDir, ".asciidoctor/diagram/" + imageFileName + ".png.cache");
+        assertThat("PNG file " + imageFile + " not created!", imageFile.exists(), is(true));
+        assertThat("PNG cache file " + cacheFile + " not created!", cacheFile.exists(), is(true));
     }
 
     private String getTestDocument(String imageFileName) {
