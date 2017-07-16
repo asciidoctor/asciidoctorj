@@ -14,7 +14,7 @@ import org.junit.Ignore;
 
 public class WhenEpub3BackendIsUsed {
 
-    private Asciidoctor asciidoctor = JRubyAsciidoctor.create();
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create();
     
     @Rule
     public ClasspathResources classpath = new ClasspathResources();

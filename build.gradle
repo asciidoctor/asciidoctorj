@@ -57,7 +57,7 @@ ext {
   hamlGemVersion = '4.0.5'
   openUriCachedGemVersion = '0.0.5'
   slimGemVersion = '3.0.6'
-  threadSafeGemVersion = '0.3.5'
+  threadSafeGemVersion = '0.3.6'
   tiltGemVersion = '2.0.1'
 }
 
