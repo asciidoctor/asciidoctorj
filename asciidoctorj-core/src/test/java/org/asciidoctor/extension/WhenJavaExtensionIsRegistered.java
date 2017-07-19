@@ -20,6 +20,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
@@ -699,5 +700,70 @@ public class WhenJavaExtensionIsRegistered {
         assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
 
     }
+
+    @Test
+     public void should_unregister_postprocessor() throws IOException {
+
+        // Given: A registered Postprocessor
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+        final String registrationName = UUID.randomUUID().toString();
+        javaExtensionRegistry.postprocessor(CustomFooterPostProcessor.class, registrationName);
+
+        // When: I render a document
+        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
+            .safe(SafeMode.UNSAFE).get();
+
+        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+
+        // Then: it is invoked
+        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
+        org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
+        Element footer = doc.getElementById("footer-text");
+        assertThat(footer.text(), containsString("Copyright Acme, Inc."));
+
+        // When: I unregister the Postprocessor and render again with the same Asciidoctor instance
+        asciidoctor.unregisterExtension(registrationName);
+
+        Options options2 = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample2.html"))
+            .safe(SafeMode.UNSAFE).get();
+        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options2);
+        File renderedFile2 = new File(testFolder.getRoot(), "rendersample2.html");
+        org.jsoup.nodes.Document doc2 = Jsoup.parse(renderedFile2, "UTF-8");
+
+        Element footer2 = doc2.getElementById("footer-text");
+        assertThat(footer2.text(), not(containsString("Copyright Acme, Inc.")));
+    }
+
+    @Test
+    public void should_unregister_block_processor()
+        throws IOException {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+        final String registrationName = UUID.randomUUID().toString();
+
+        Map<String, Object> config = new HashMap<String, Object>();
+        config.put("contexts", Arrays.asList(":paragraph"));
+        config.put("content_model", ":simple");
+        YellBlock yellBlock = new YellBlock("yell", config);
+        javaExtensionRegistry.block(yellBlock, registrationName);
+        String content = asciidoctor.renderFile(
+            classpath.getResource("sample-with-yell-block.ad"),
+            options().toFile(false).get());
+        Document doc = Jsoup.parse(content, "UTF-8");
+        Elements elements = doc.getElementsByClass("paragraph");
+        assertThat(elements.size(), is(1));
+        assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
+
+        asciidoctor.unregisterExtension(registrationName);
+        String contentWithoutBlock = asciidoctor.renderFile(
+            classpath.getResource("sample-with-yell-block.ad"),
+            options().toFile(false).get());
+        Document docWithoutBlock = Jsoup.parse(contentWithoutBlock, "UTF-8");
+        Elements elementsWithoutBlock = docWithoutBlock.getElementsByClass("paragraph");
+        assertThat(elementsWithoutBlock.size(), is(1));
+        assertThat(elementsWithoutBlock.get(0).text(), not(is("THE TIME IS NOW. GET A MOVE ON.")));
+
+    }
+
 
 }

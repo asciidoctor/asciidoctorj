@@ -638,7 +638,13 @@ public interface Asciidoctor {
      * Unregister all registered extensions.
      */
     void unregisterAllExtensions();
-    
+
+    /**
+     * Unregisters the extension represented by the given registration name.
+     * @param registrationName
+     */
+    void unregisterExtension(String registrationName);
+
     /**
      * This method frees all resources consumed by asciidoctorJ module. Keep in mind that if this method is called, instance becomes unusable and you should create another instance.
      */
