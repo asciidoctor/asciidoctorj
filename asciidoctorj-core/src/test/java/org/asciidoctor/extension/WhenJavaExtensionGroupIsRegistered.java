@@ -49,7 +49,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(Arquillian.class)
-public class WhenJavaExtensionIsRegistered {
+public class WhenJavaExtensionGroupIsRegistered {
 
     @ArquillianResource
     private ClasspathResources classpath;
@@ -118,9 +118,9 @@ public class WhenJavaExtensionIsRegistered {
 
         TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.includeProcessor(new RubyIncludeSource(new HashMap<String, Object>()));
+        this.asciidoctor.createGroup()
+            .includeProcessor(new RubyIncludeSource(new HashMap<String, Object>()))
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-uri-include.ad"),
@@ -139,9 +139,8 @@ public class WhenJavaExtensionIsRegistered {
 
         TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.includeProcessor(new IncludeProcessor(new HashMap<String, Object>()) {
+        this.asciidoctor.createGroup()
+            .includeProcessor(new IncludeProcessor(new HashMap<String, Object>()) {
 
             @Override
             public void process(Document document, PreprocessorReader reader, String target,
@@ -180,7 +179,8 @@ public class WhenJavaExtensionIsRegistered {
             public boolean handles(String target) {
                 return target.startsWith("http://") || target.startsWith("https://");
             }
-        });
+        })
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-uri-include.ad"),
@@ -196,9 +196,9 @@ public class WhenJavaExtensionIsRegistered {
 
     @Test
     public void a_docinfoprocessor_should_be_executed_and_add_meta_in_header_by_default() {
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.docinfoProcessor(MetaRobotsDocinfoProcessor.class.getCanonicalName());
+        asciidoctor.createGroup()
+            .docinfoProcessor(MetaRobotsDocinfoProcessor.class.getCanonicalName())
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("simple.adoc"),
@@ -212,13 +212,14 @@ public class WhenJavaExtensionIsRegistered {
 
     @Test
     public void a_docinfoprocessor_should_be_executed_and_add_meta_in_footer() {
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("location", ":footer");
         MetaRobotsDocinfoProcessor metaRobotsDocinfoProcessor = new MetaRobotsDocinfoProcessor(options);
 
-        javaExtensionRegistry.docinfoProcessor(metaRobotsDocinfoProcessor);
+        this.asciidoctor.createGroup()
+            .docinfoProcessor(metaRobotsDocinfoProcessor)
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("simple.adoc"),
@@ -234,9 +235,9 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_preprocessor_should_be_executed_before_document_is_rendered() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.preprocessor(ChangeAttributeValuePreprocessor.class);
+        this.asciidoctor.createGroup()
+            .preprocessor(ChangeAttributeValuePreprocessor.class)
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("changeattribute.adoc"),
@@ -251,9 +252,10 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_preprocessor_as_string_should_be_executed_before_document_is_rendered() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-        javaExtensionRegistry.preprocessor("org.asciidoctor.extension.ChangeAttributeValuePreprocessor");
+        this.asciidoctor.createGroup()
+            .preprocessor("org.asciidoctor.extension.ChangeAttributeValuePreprocessor")
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("changeattribute.adoc"),
@@ -268,9 +270,9 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_preprocessor_instance_should_be_executed_before_document_is_rendered() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.preprocessor(new ChangeAttributeValuePreprocessor(new HashMap<String, Object>()));
+        this.asciidoctor.createGroup()
+            .preprocessor(new ChangeAttributeValuePreprocessor(new HashMap<String, Object>()))
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("changeattribute.adoc"),
@@ -285,9 +287,9 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_postprocessor_as_string_should_be_executed_after_document_is_rendered() throws IOException {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.postprocessor("org.asciidoctor.extension.CustomFooterPostProcessor");
+        this.asciidoctor.createGroup()
+            .postprocessor("org.asciidoctor.extension.CustomFooterPostProcessor")
+            .register();
 
         Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
                 .safe(SafeMode.UNSAFE).get();
@@ -304,9 +306,9 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_postprocessor_should_be_executed_after_document_is_rendered() throws IOException {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.postprocessor(CustomFooterPostProcessor.class);
+        this.asciidoctor.createGroup()
+            .postprocessor(CustomFooterPostProcessor.class)
+            .register();
 
         Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
                 .safe(SafeMode.UNSAFE).get();
@@ -323,9 +325,9 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_postprocessor_instance_should_be_executed_after_document_is_rendered() throws IOException {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.postprocessor(new CustomFooterPostProcessor(new HashMap<String, Object>()));
+        this.asciidoctor.createGroup()
+            .postprocessor(new CustomFooterPostProcessor(new HashMap<String, Object>()))
+            .register();
 
         Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
                 .safe(SafeMode.UNSAFE).get();
@@ -344,9 +346,9 @@ public class WhenJavaExtensionIsRegistered {
 
         TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.includeProcessor("org.asciidoctor.extension.UriIncludeProcessor");
+        this.asciidoctor.createGroup()
+            .includeProcessor("org.asciidoctor.extension.UriIncludeProcessor")
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-uri-include.ad"),
@@ -365,9 +367,9 @@ public class WhenJavaExtensionIsRegistered {
 
         TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.includeProcessor(UriIncludeProcessor.class);
+        this.asciidoctor.createGroup()
+            .includeProcessor(UriIncludeProcessor.class)
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-uri-include.ad"),
@@ -386,9 +388,9 @@ public class WhenJavaExtensionIsRegistered {
 
         TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.includeProcessor(new UriIncludeProcessor(new HashMap<String, Object>()));
+        this.asciidoctor.createGroup()
+            .includeProcessor(new UriIncludeProcessor(new HashMap<String, Object>()))
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-uri-include.ad"),
@@ -405,9 +407,9 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_include_processor_should_only_handle_its_handles() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.includeProcessor(UriIncludeProcessor.class);
+        this.asciidoctor.createGroup()
+            .includeProcessor(UriIncludeProcessor.class)
+            .register();
 
         String content = asciidoctor.renderFile(classpath.getResource("sample-with-include.ad"),
                 options().toFile(false).get());
@@ -423,9 +425,9 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_include_processor_can_handle_positional_attrs() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.includeProcessor(PositionalAttrsIncludeProcessor.class);
+        this.asciidoctor.createGroup()
+            .includeProcessor(PositionalAttrsIncludeProcessor.class)
+            .register();
 
         String content = asciidoctor.renderFile(classpath.getResource("sample-with-include-pos-attrs.ad"),
                 options().toFile(false).get());
@@ -441,37 +443,43 @@ public class WhenJavaExtensionIsRegistered {
 	@Test
     public void a_treeprocessor_should_be_executed_in_document() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+      this.asciidoctor.createGroup()
+          .treeprocessor(TerminalCommandTreeprocessor.class)
+          .register();
 
-        javaExtensionRegistry.treeprocessor(TerminalCommandTreeprocessor.class);
+      String content = asciidoctor.renderFile(
+          classpath.getResource("sample-with-terminal-command.ad"),
+          options().toFile(false).get());
 
-        String content = asciidoctor.renderFile(
-                classpath.getResource("sample-with-terminal-command.ad"),
-                options().toFile(false).get());
+      org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
-        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
+      Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
+      assertThat(contentElement.text(), is("echo \"Hello, World!\""));
 
-        Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
-        assertThat(contentElement.text(), is("echo \"Hello, World!\""));
-
-        contentElement = doc.getElementsByAttributeValue("class", "command").last();
-        assertThat(contentElement.text(), is("gem install asciidoctor"));
+      contentElement = doc.getElementsByAttributeValue("class", "command").last();
+      assertThat(contentElement.text(), is("gem install asciidoctor"));
 
     }
 
     @Test
     public void a_treeprocessor_and_blockmacroprocessor_should_be_executed_in_document() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.treeprocessor(TerminalCommandTreeprocessor.class);
-        javaExtensionRegistry.blockMacro("gist", GistMacro.class);
+        this.asciidoctor.createGroup()
+            .treeprocessor(TerminalCommandTreeprocessor.class)
+            .blockMacro("gist", GistMacro.class)
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-terminal-command-and-gist-macro.ad"),
                 options().toFile(false).get());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
+        System.out.println(content);
+
+        Element script = doc.getElementsByTag("script").first();
+
+        assertThat(script.attr("src"), is("https://gist.github.com/42.js"));
+
 
         Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
         assertThat(contentElement.text(), is("echo \"Hello, World!\""));
@@ -479,18 +487,15 @@ public class WhenJavaExtensionIsRegistered {
         contentElement = doc.getElementsByAttributeValue("class", "command").last();
         assertThat(contentElement.text(), is("gem install asciidoctor"));
 
-        Element script = doc.getElementsByTag("script").first();
-
-        assertThat(script.attr("src"), is("https://gist.github.com/42.js"));
 
     }
 
     @Test
     public void a_treeprocessor_as_string_should_be_executed_in_document() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.treeprocessor("org.asciidoctor.extension.TerminalCommandTreeprocessor");
+        this.asciidoctor.createGroup()
+            .treeprocessor("org.asciidoctor.extension.TerminalCommandTreeprocessor")
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-terminal-command.ad"),
@@ -509,9 +514,9 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_treeprocessor_instance_should_be_executed_in_document() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.treeprocessor(new TerminalCommandTreeprocessor(new HashMap<String, Object>()));
+        this.asciidoctor.createGroup()
+            .treeprocessor(new TerminalCommandTreeprocessor(new HashMap<String, Object>()))
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-terminal-command.ad"),
@@ -533,7 +538,10 @@ public class WhenJavaExtensionIsRegistered {
 
         // To avoid registering the same extension over and over for all tests,
         // service is instantiated manually.
-        new ArrowsAndBoxesExtension().register(asciidoctor);
+        this.asciidoctor.createGroup()
+            .postprocessor(ArrowsAndBoxesIncludesPostProcessor.class)
+            .block("arrowsAndBoxes", ArrowsAndBoxesBlock.class)
+            .register();
 
         Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
                 .safe(SafeMode.UNSAFE).get();
@@ -557,9 +565,10 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_block_macro_extension_should_be_executed_when_macro_is_detected() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
-        javaExtensionRegistry.blockMacro("gist", GistMacro.class);
+        this.asciidoctor.createGroup()
+            .blockMacro("gist", GistMacro.class)
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-gist-macro.ad"),
@@ -574,9 +583,9 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_block_macro_extension_instance_should_be_executed_when_macro_is_detected() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.blockMacro(new GistMacro("gist", new HashMap<String, Object>()));
+        this.asciidoctor.createGroup()
+            .blockMacro(new GistMacro("gist", new HashMap<String, Object>()))
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-gist-macro.ad"),
@@ -591,9 +600,9 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_block_macro_as_string_extension_should_be_executed_when_macro_is_detected() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.blockMacro("gist", "org.asciidoctor.extension.GistMacro");
+        this.asciidoctor.createGroup()
+            .blockMacro("gist", "org.asciidoctor.extension.GistMacro")
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-gist-macro.ad"),
@@ -608,12 +617,12 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_block_macro_as_instance_extension_should_be_executed_when_macro_is_detected() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
         Map<String, Object> options = new HashMap<String, Object>();
         options.put(BlockMacroProcessor.CONTENT_MODEL, BlockMacroProcessor.CONTENT_MODEL_RAW);
 
-        javaExtensionRegistry.blockMacro(new GistMacro("gist", options));
+        this.asciidoctor.createGroup()
+            .blockMacro(new GistMacro("gist", options))
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-gist-macro.ad"),
@@ -628,9 +637,9 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void an_inline_macro_as_string_extension_should_be_executed_when_an_inline_macro_is_detected() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.inlineMacro("man", "org.asciidoctor.extension.ManpageMacro");
+        this.asciidoctor.createGroup()
+            .inlineMacro("man", "org.asciidoctor.extension.ManpageMacro")
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-man-link.ad"),
@@ -644,9 +653,9 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void an_inline_macro_extension_should_be_executed_when_an_inline_macro_is_detected() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.inlineMacro("man", ManpageMacro.class);
+        this.asciidoctor.createGroup()
+            .inlineMacro("man", ManpageMacro.class)
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-man-link.ad"),
@@ -661,13 +670,13 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void an_inline_macro_as_instance_extension_should_be_executed_when_regexp_is_set_as_option_inline_macro_is_detected() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
         Map<String, Object> options = new HashMap<String, Object>();
         options.put(InlineMacroProcessor.REGEXP, "man(?:page)?:(\\S+?)\\[(.*?)\\]");
 
         ManpageMacro inlineMacroProcessor = new ManpageMacro("man", options);
-        javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
+        this.asciidoctor.createGroup()
+            .inlineMacro(inlineMacroProcessor)
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-man-link.ad"),
@@ -683,13 +692,13 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void an_inline_macro_as_instance_extension_should_not_be_executed_when_regexp_is_set_and_does_not_match() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
         Map<String, Object> options = new HashMap<String, Object>();
         options.put(InlineMacroProcessor.REGEXP, "man(?:page)?:(ThisDoesNotMatch)\\[(.*?)\\]");
 
         ManpageMacro inlineMacroProcessor = new ManpageMacro("man", options);
-        javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
+        this.asciidoctor.createGroup()
+            .inlineMacro(inlineMacroProcessor)
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-man-link.ad"),
@@ -703,12 +712,12 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void an_inline_macro_as_instance_extension_should_be_executed_when_an_inline_macro_is_detected() {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
         Map<String, Object> options = new HashMap<String, Object>();
 
         ManpageMacro inlineMacroProcessor = new ManpageMacro("man", options);
-        javaExtensionRegistry.inlineMacro(inlineMacroProcessor);
+        this.asciidoctor.createGroup()
+            .inlineMacro(inlineMacroProcessor)
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-man-link.ad"),
@@ -724,9 +733,9 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void should_unregister_all_current_registered_extensions() throws IOException {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.postprocessor(CustomFooterPostProcessor.class);
+        this.asciidoctor.createGroup()
+            .postprocessor(CustomFooterPostProcessor.class)
+            .register();
 
         Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
                 .safe(SafeMode.UNSAFE).get();
@@ -745,9 +754,9 @@ public class WhenJavaExtensionIsRegistered {
     public void a_block_processor_as_string_should_be_executed_when_registered_block_is_found_in_document()
             throws IOException {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.block("yell", "org.asciidoctor.extension.YellStaticBlock");
+        this.asciidoctor.createGroup()
+            .block("yell", "org.asciidoctor.extension.YellStaticBlock")
+            .register();
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-yell-block.ad"),
                 options().toFile(false).get());
@@ -762,9 +771,9 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_block_processor_should_be_executed_when_registered_block_is_found_in_document() throws IOException {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.block("yell", YellStaticBlock.class);
+        this.asciidoctor.createGroup()
+            .block("yell", YellStaticBlock.class)
+            .register();
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-yell-block.ad"),
                 options().toFile(false).get());
@@ -774,37 +783,19 @@ public class WhenJavaExtensionIsRegistered {
         assertThat(elements.size(), is(1));
         assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
 
-    }
-
-    @Test
-    public void a_block_processor_class_should_be_executed_twice() throws IOException {
-
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.block("yell", YellStaticBlock.class);
-        for (int i = 0; i < 2; i++) {
-            String content = asciidoctor.renderFile(
-                classpath.getResource("sample-with-yell-block.ad"),
-                options().toFile(false).get());
-
-            org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
-            Elements elements = doc.getElementsByClass("paragraph");
-            assertThat(elements.size(), is(1));
-            assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
-        }
     }
 
     @Test
     public void a_block_processor_instance_should_be_executed_when_registered_block_is_found_in_document()
             throws IOException {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
         Map<String, Object> config = new HashMap<String, Object>();
         config.put(BlockProcessor.CONTEXTS, Arrays.asList(BlockProcessor.CONTEXT_PARAGRAPH));
         config.put(Processor.CONTENT_MODEL, Processor.CONTENT_MODEL_SIMPLE);
         YellBlock yellBlock = new YellBlock("yell", config);
-        javaExtensionRegistry.block(yellBlock);
+        this.asciidoctor.createGroup()
+            .block(yellBlock)
+            .register();
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-yell-block.ad"),
                 options().toFile(false).get());
@@ -816,34 +807,11 @@ public class WhenJavaExtensionIsRegistered {
     }
 
     @Test
-    public void a_block_processor_instance_should_be_executed_twice()
-            throws IOException {
-
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        Map<String, Object> config = new HashMap<String, Object>();
-        config.put(BlockProcessor.CONTEXTS, Arrays.asList(BlockProcessor.CONTEXT_PARAGRAPH));
-        config.put(Processor.CONTENT_MODEL, Processor.CONTENT_MODEL_SIMPLE);
-        YellBlock yellBlock = new YellBlock("yell", config);
-        javaExtensionRegistry.block(yellBlock);
-
-        for (int i = 0; i < 2; i++){
-            String content = asciidoctor.renderFile(
-                classpath.getResource("sample-with-yell-block.ad"),
-                options().toFile(false).get());
-            org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
-            Elements elements = doc.getElementsByClass("paragraph");
-            assertThat(elements.size(), is(1));
-            assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
-        }
-    }
-
-    @Test
     public void a_block_processor_should_be_executed_when_registered_listing_block_is_found_in_document() throws IOException {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.block("yell", YellStaticListingBlock.class);
+        this.asciidoctor.createGroup()
+            .block("yell", YellStaticListingBlock.class)
+            .register();
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-yell-listing-block.ad"),
                 options().toFile(false).get());
@@ -859,13 +827,13 @@ public class WhenJavaExtensionIsRegistered {
     public void a_block_processor_instance_should_be_executed_when_registered_listing_block_is_found_in_document()
             throws IOException {
 
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
         Map<String, Object> config = new HashMap<String, Object>();
         config.put(BlockProcessor.CONTEXTS, Arrays.asList(BlockProcessor.CONTEXT_LISTING));
         config.put(Processor.CONTENT_MODEL, Processor.CONTENT_MODEL_SIMPLE);
         YellBlock yellBlock = new YellBlock("yell", config);
-        javaExtensionRegistry.block(yellBlock);
+        this.asciidoctor.createGroup()
+            .block(yellBlock)
+            .register();
         String content = asciidoctor.renderFile(
                 classpath.getResource("sample-with-yell-listing-block.ad"),
                 options().toFile(false).get());
@@ -878,19 +846,21 @@ public class WhenJavaExtensionIsRegistered {
 
     @Test
     public void should_create_toc_with_treeprocessor() throws Exception {
-        asciidoctor.javaExtensionRegistry().treeprocessor(new Treeprocessor() {
-            @Override
-            public org.asciidoctor.ast.Document process(org.asciidoctor.ast.Document document) {
-                List<StructuralNode> blocks=document.getBlocks();
-                for (StructuralNode block : blocks) {
-                    for (StructuralNode block2 : block.getBlocks()) {
-                        if(block2 instanceof Section)
-                            System.out.println(((Section) block2).id());
+        this.asciidoctor.createGroup()
+            .treeprocessor(new Treeprocessor() {
+                @Override
+                public Document process(Document document) {
+                    List<StructuralNode> blocks=document.getBlocks();
+                    for (StructuralNode block : blocks) {
+                        for (StructuralNode block2 : block.getBlocks()) {
+                            if(block2 instanceof Section)
+                                System.out.println(((Section) block2).id());
+                        }
                     }
+                    return document;
                 }
-                return document;
-            }
-        });
+            })
+            .register();
 
         String content = asciidoctor.renderFile(
                 classpath.getResource("documentwithtoc.adoc"),

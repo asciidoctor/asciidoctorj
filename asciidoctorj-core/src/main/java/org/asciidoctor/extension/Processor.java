@@ -147,6 +147,10 @@ public class Processor {
         this.config = config;
     }
 
+    public final void updateConfig(Map<String, Object> config) {
+        this.config.putAll(config);
+    }
+
     /**
      * Lock the config of this processor so that it is no longer allowed to invoke {@link #setConfig(Map)}.
      */

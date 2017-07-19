@@ -75,7 +75,7 @@ public class BlockProcessorProxy extends AbstractProcessorProxy<BlockProcessor> 
                             RubyHashUtil.convertMapToRubyHashWithSymbols(getRuntime(), getProcessor().getConfig())},
                     Block.NULL_BLOCK);
             // The extension config in the Java extension is just a view on the @config member of the Ruby part
-            getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
+            getProcessor().updateConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
         } else {
 
             String macroName = RubyUtils.rubyToJava(getRuntime(), args[0], String.class);
