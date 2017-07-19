@@ -9,6 +9,7 @@ import org.jruby.Ruby;
 public class RubyExtensionRegistry {
 
     private AsciidoctorModule asciidoctorModule;
+
     private Ruby rubyRuntime;
 
     public RubyExtensionRegistry(AsciidoctorModule asciidoctorModule,
@@ -33,8 +34,8 @@ public class RubyExtensionRegistry {
         return this;
     }
 
-    public RubyExtensionRegistry postprocessor(String postprocesor) {
-        this.asciidoctorModule.postprocessor(postprocesor);
+    public RubyExtensionRegistry postprocessor(String postprocessor) {
+        this.asciidoctorModule.postprocessor(postprocessor);
         return this;
     }
 
@@ -72,5 +73,4 @@ public class RubyExtensionRegistry {
                 inlineMacroProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
         return this;
     }
-
 }

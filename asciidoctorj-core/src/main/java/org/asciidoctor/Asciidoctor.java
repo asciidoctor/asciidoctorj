@@ -13,6 +13,7 @@ import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.DocumentRuby;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.converter.JavaConverterRegistry;
+import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.internal.JRubyAsciidoctor;
@@ -633,12 +634,23 @@ public interface Asciidoctor {
      * @return Converter Registry object.
      */
     JavaConverterRegistry javaConverterRegistry();
-    
+
+    /**
+     * Creates an ExtensionGroup that can be used to register and unregister a group of extensions.
+     * @return
+     */
+    ExtensionGroup createGroup();
+
+    /**
+     * Creates an ExtensionGroup that can be used to register and unregister a group of extensions.
+     * @return
+     */
+    ExtensionGroup createGroup(String groupName);
     /**
      * Unregister all registered extensions.
      */
     void unregisterAllExtensions();
-    
+
     /**
      * This method frees all resources consumed by asciidoctorJ module. Keep in mind that if this method is called, instance becomes unusable and you should create another instance.
      */

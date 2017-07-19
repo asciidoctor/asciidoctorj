@@ -14,6 +14,7 @@ import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.ast.Title;
 import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.converter.internal.ConverterRegistryExecutor;
+import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.extension.internal.ExtensionRegistryExecutor;
@@ -37,6 +38,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class JRubyAsciidoctor implements Asciidoctor {
@@ -599,6 +601,23 @@ public class JRubyAsciidoctor implements Asciidoctor {
     public Document loadFile(File file, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
         return new Document(this.asciidoctorModule.load_file(file.getAbsolutePath(), rubyHash), this.rubyRuntime);
+    }
 
+    Ruby getRubyRuntime() {
+        return this.rubyRuntime;
+    }
+
+    AsciidoctorModule getAsciidoctorModule() {
+        return asciidoctorModule;
+    }
+
+    @Override
+    public ExtensionGroup createGroup() {
+        return new ExtensionGroupImpl(UUID.randomUUID().toString(), this);
+    }
+
+    @Override
+    public ExtensionGroup createGroup(String groupName) {
+        return new ExtensionGroupImpl(groupName, this);
     }
 }
