@@ -1380,6 +1380,30 @@ String content = asciidoctor.convertFile(new File(
 
 You can unregister all extensions by calling the `org.asciidoctor.Asciidoctor.unregisterAllExtensions()` method.
 
+Additionally, since AsciidoctorJ 1.5.6.1 it is possible to unregister specific extensions when using the ExtensionGroup API.
+This allows to register and unregister a group of extensions as a whole:
+
+[source,java]
+----
+BlockProcessor extension1 = ...
+Treeprocessor extension2 = ...
+ExtensionGroup extensionGroup =
+  asciidoctor.createGroup()
+    .block(extension1)
+    .treeprocessor(extension2);
+
+asciidoctor.convert(...) // <1>
+
+extensionGroup.register();
+asciidoctor.convert(); // <2>
+
+extensionGroup.register();
+asciidoctor.convert(); // <3>
+----
+<1> Convert a document without the extensions active because they were not registered yet.
+<2> Convert with extensions active after registration.
+<3> Convert without extensions active after the extensions were unregistered.
+
 === Ruby extensions
 
 You can even register extensions written in Ruby using AsciidoctorJ.

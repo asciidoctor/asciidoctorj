@@ -1,26 +1,5 @@
 package org.asciidoctor.extension;
 
-import static org.asciidoctor.OptionsBuilder.options;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.Options;
@@ -36,6 +15,28 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import static org.asciidoctor.OptionsBuilder.options;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.startsWith;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class WhenJavaExtensionIsRegistered {
 
@@ -699,5 +700,100 @@ public class WhenJavaExtensionIsRegistered {
         assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
 
     }
+
+    @Test
+     public void should_unregister_postprocessor() throws IOException {
+
+        // Given: A registered Postprocessor
+        ExtensionGroup extensionGroup = asciidoctor.createGroup(UUID.randomUUID().toString())
+            .postprocessor(CustomFooterPostProcessor.class);
+
+        // When: I render a document without registering the ExtensionGroup
+        {
+            Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
+                .safe(SafeMode.UNSAFE).get();
+
+            asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+
+            // Then: it is invoked
+            File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
+            org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
+            Element footer = doc.getElementById("footer-text");
+            assertThat(footer.text(), not(containsString("Copyright Acme, Inc.")));
+        }
+
+        // When: I register the ExtensionGroup and render a document
+        {
+            extensionGroup.register();
+            Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
+                .safe(SafeMode.UNSAFE).get();
+
+            asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+
+            // Then: it is invoked
+            File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
+            org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
+            Element footer = doc.getElementById("footer-text");
+            assertThat(footer.text(), containsString("Copyright Acme, Inc."));
+        }
+        // When: I unregister the Postprocessor and render again with the same Asciidoctor instance
+        {
+            extensionGroup.unregister();;
+
+            Options options2 = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample2.html"))
+                .safe(SafeMode.UNSAFE).get();
+            asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options2);
+            File renderedFile2 = new File(testFolder.getRoot(), "rendersample2.html");
+            org.jsoup.nodes.Document doc2 = Jsoup.parse(renderedFile2, "UTF-8");
+
+            Element footer2 = doc2.getElementById("footer-text");
+            assertThat(footer2.text(), not(containsString("Copyright Acme, Inc.")));
+        }
+    }
+
+    @Test
+    public void should_unregister_block_processor()
+        throws IOException {
+
+        Map<String, Object> config = new HashMap<String, Object>();
+        config.put("contexts", Arrays.asList(":paragraph"));
+        config.put("content_model", ":simple");
+        YellBlock yellBlock = new YellBlock("yell", config);
+
+        ExtensionGroup extensionGroup = this.asciidoctor.createGroup().block(yellBlock);
+
+        {
+            String contentWithoutBlock = asciidoctor.renderFile(
+                classpath.getResource("sample-with-yell-block.ad"),
+                options().toFile(false).get());
+            Document docWithoutBlock = Jsoup.parse(contentWithoutBlock, "UTF-8");
+            Elements elementsWithoutBlock = docWithoutBlock.getElementsByClass("paragraph");
+            assertThat(elementsWithoutBlock.size(), is(1));
+            assertThat(elementsWithoutBlock.get(0).text(), not(is("THE TIME IS NOW. GET A MOVE ON.")));
+        }
+
+        {
+            extensionGroup.register();
+            String content = asciidoctor.renderFile(
+                classpath.getResource("sample-with-yell-block.ad"),
+                options().toFile(false).get());
+            Document doc = Jsoup.parse(content, "UTF-8");
+            Elements elements = doc.getElementsByClass("paragraph");
+            assertThat(elements.size(), is(1));
+            assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
+        }
+
+        {
+            extensionGroup.unregister();
+            String contentWithoutBlock = asciidoctor.renderFile(
+                classpath.getResource("sample-with-yell-block.ad"),
+                options().toFile(false).get());
+            Document docWithoutBlock = Jsoup.parse(contentWithoutBlock, "UTF-8");
+            Elements elementsWithoutBlock = docWithoutBlock.getElementsByClass("paragraph");
+            assertThat(elementsWithoutBlock.size(), is(1));
+            assertThat(elementsWithoutBlock.get(0).text(), not(is("THE TIME IS NOW. GET A MOVE ON.")));
+        }
+    }
+
 
 }
