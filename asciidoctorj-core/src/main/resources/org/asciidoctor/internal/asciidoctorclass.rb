@@ -25,50 +25,50 @@ class AsciidoctorModule
         Asciidoctor::Extensions.unregister name
     end
 
-    def docinfo_processor(extensionName, registrationName = nil)
-        Asciidoctor::Extensions.register (registrationName != nil ? registrationName.to_sym : nil) do
+    def docinfo_processor(extensionName, groupName = nil)
+        Asciidoctor::Extensions.register (groupName != nil ? groupName.to_sym : nil) do
             docinfo_processor extensionName
         end
     end
 
-    def treeprocessor(extensionName, registrationName = nil)
-        Asciidoctor::Extensions.register (registrationName != nil ? registrationName.to_sym : nil) do
+    def treeprocessor(extensionName, groupName = nil)
+        Asciidoctor::Extensions.register (groupName != nil ? groupName.to_sym : nil) do
             treeprocessor extensionName
         end
     end
     
-    def include_processor(extensionName, registrationName = nil)
-        Asciidoctor::Extensions.register (registrationName != nil ? registrationName.to_sym : nil) do
+    def include_processor(extensionName, groupName = nil)
+        Asciidoctor::Extensions.register (groupName != nil ? groupName.to_sym : nil) do
             include_processor extensionName
         end
     end
 
-    def preprocessor(extensionName, registrationName = nil)
-        Asciidoctor::Extensions.register (registrationName != nil ? registrationName.to_sym : nil) do
+    def preprocessor(extensionName, groupName = nil)
+        Asciidoctor::Extensions.register (groupName != nil ? groupName.to_sym : nil) do
             preprocessor extensionName
         end
     end
     
-    def postprocessor(extensionName, registrationName = nil)
-        Asciidoctor::Extensions.register (registrationName != nil ? registrationName.to_sym : nil) do
+    def postprocessor(extensionName, groupName = nil)
+        Asciidoctor::Extensions.register (groupName != nil ? groupName.to_sym : nil) do
             postprocessor extensionName
         end
     end
 
-    def block_processor(extensionName, blockSymbol, registrationName = nil)
-        Asciidoctor::Extensions.register (registrationName != nil ? registrationName.to_sym : nil) do
+    def block_processor(extensionName, blockSymbol, groupName = nil)
+        Asciidoctor::Extensions.register (groupName != nil ? groupName.to_sym : nil) do
             block extensionName, blockSymbol
         end
     end
 
-    def block_macro(extensionName, blockSymbol, registrationName = nil)
-        Asciidoctor::Extensions.register (registrationName != nil ? registrationName.to_sym : nil) do
+    def block_macro(extensionName, blockSymbol, groupName = nil)
+        Asciidoctor::Extensions.register (groupName != nil ? groupName.to_sym : nil) do
             block_macro extensionName, blockSymbol
         end
     end
 
-    def inline_macro(extensionName, blockSymbol, registrationName = nil)
-        Asciidoctor::Extensions.register (registrationName != nil ? registrationName.to_sym : nil) do
+    def inline_macro(extensionName, blockSymbol, groupName = nil)
+        Asciidoctor::Extensions.register (groupName != nil ? groupName.to_sym : nil) do
             inline_macro extensionName, blockSymbol
         end
     end

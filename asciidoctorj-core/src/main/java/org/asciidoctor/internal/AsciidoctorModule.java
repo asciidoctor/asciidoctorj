@@ -69,7 +69,7 @@ public interface AsciidoctorModule {
     void docinfo_processor(DocinfoProcessor docInfoClassName, String registrationName);
 
     void unregister_all_extensions();
-    void unregister_extension(String registrationName);
+    void unregister_extension(String groupName);
 
     Object convert(String content, Map<String, Object> options);
     Object convertFile(String filename, Map<String, Object> options);
