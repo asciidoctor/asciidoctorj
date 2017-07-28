@@ -498,11 +498,6 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     @Override
-    public void unregisterExtension(String registrationName) {
-        this.asciidoctorModule.unregister_extension(registrationName);
-    }
-
-    @Override
     public void shutdown() {
         this.rubyRuntime.tearDown();
     }
