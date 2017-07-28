@@ -24,49 +24,49 @@ class AsciidoctorModule
     end
 
     def docinfo_processor(extensionName, groupName = nil)
-        Asciidoctor::Extensions.register(groupName != nil ? groupName.to_sym : nil) do
+        Asciidoctor::Extensions.register groupName do
             docinfo_processor extensionName
         end
     end
 
     def treeprocessor(extensionName, groupName = nil)
-        Asciidoctor::Extensions.register(groupName != nil ? groupName.to_sym : nil) do
+        Asciidoctor::Extensions.register groupName do
             treeprocessor extensionName
         end
     end
     
     def include_processor(extensionName, groupName = nil)
-        Asciidoctor::Extensions.register(groupName != nil ? groupName.to_sym : nil) do
+        Asciidoctor::Extensions.register groupName do
             include_processor extensionName
         end
     end
 
     def preprocessor(extensionName, groupName = nil)
-        Asciidoctor::Extensions.register(groupName != nil ? groupName.to_sym : nil) do
+        Asciidoctor::Extensions.register groupName do
             preprocessor extensionName
         end
     end
     
     def postprocessor(extensionName, groupName = nil)
-        Asciidoctor::Extensions.register(groupName != nil ? groupName.to_sym : nil) do
+        Asciidoctor::Extensions.register groupName do
             postprocessor extensionName
         end
     end
 
     def block_processor(extensionName, blockSymbol, groupName = nil)
-        Asciidoctor::Extensions.register(groupName != nil ? groupName.to_sym : nil) do
+        Asciidoctor::Extensions.register groupName do
             block extensionName, blockSymbol
         end
     end
 
     def block_macro(extensionName, blockSymbol, groupName = nil)
-        Asciidoctor::Extensions.register(groupName != nil ? groupName.to_sym : nil) do
+        Asciidoctor::Extensions.register groupName do
             block_macro extensionName, blockSymbol
         end
     end
 
     def inline_macro(extensionName, blockSymbol, groupName = nil)
-        Asciidoctor::Extensions.register(groupName != nil ? groupName.to_sym : nil) do
+        Asciidoctor::Extensions.register groupName do
             inline_macro extensionName, blockSymbol
         end
     end
