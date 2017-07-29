@@ -26,9 +26,17 @@ import org.jruby.embed.ScriptingContainer;
 import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
 
-import java.io.*;
-import java.util.*;
-import java.util.logging.Level;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class JRubyAsciidoctor implements Asciidoctor {
@@ -299,16 +307,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
-        ClassLoader oldTCCL = Thread.currentThread().getContextClassLoader();
         try {
-            Thread.currentThread().setContextClassLoader(rubyRuntime.getJRubyClassLoader());
             Object object = this.asciidoctorModule.convert(content, rubyHash);
             return returnExpectedValue(object);
         } catch(RaiseException e) {
             logger.severe(e.getException().getClass().getCanonicalName());
             throw new AsciidoctorCoreException(e);
         } finally {
-            Thread.currentThread().setContextClassLoader(oldTCCL);
             // we restore current directory to its original value.
             rubyRuntime.setCurrentDirectory(currentDirectory);
         }
@@ -332,16 +337,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
-        ClassLoader oldTCCL = Thread.currentThread().getContextClassLoader();
         try {
-            Thread.currentThread().setContextClassLoader(rubyRuntime.getJRubyClassLoader());
             Object object = this.asciidoctorModule.convertFile(filename.getAbsolutePath(), rubyHash);
             return returnExpectedValue(object);
         } catch(RaiseException e) {
             logger.severe(e.getMessage());
             throw new AsciidoctorCoreException(e);
         } finally {
-            Thread.currentThread().setContextClassLoader(oldTCCL);
             // we restore current directory to its original value.
             rubyRuntime.setCurrentDirectory(currentDirectory);
         }
