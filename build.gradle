@@ -34,7 +34,7 @@ ext {
   statusIsRelease = (status == 'release')
 
   // jar versions
-  asciidoctorjPdfVersion = '1.5.0-alpha.15'
+  asciidoctorjPdfVersion = '1.5.0-alpha.16'
   guavaVersion = '18.0'
   hamcrestVersion = '1.3'
   jcommanderVersion = '1.35'
