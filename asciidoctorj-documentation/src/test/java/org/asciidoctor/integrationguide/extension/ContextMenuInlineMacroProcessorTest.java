@@ -28,7 +28,7 @@ public class ContextMenuInlineMacroProcessorTest {
         assertThat(
                 result,
                 containsString(
-                        "<span class=\"menuseq\"><span class=\"menu\">Right click</span>&#160;&#9656; <span class=\"submenu\">New</span>&#160;&#9656; <span class=\"menuitem\">Class</span></span>"));
+                        "<span class=\"menuseq\"><b class=\"menu\">Right click</b>&#160;<b class=\"caret\">&#8250;</b> <b class=\"submenu\">New</b>&#160;<b class=\"caret\">&#8250;</b> <b class=\"menuitem\">Class</b></span>"));
 
     }
 }
