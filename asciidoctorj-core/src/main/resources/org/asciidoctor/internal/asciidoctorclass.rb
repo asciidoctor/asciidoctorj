@@ -19,50 +19,54 @@ class AsciidoctorModule
         Asciidoctor::Extensions.unregister_all
     end
 
-    def docinfo_processor(extensionName)
-        Asciidoctor::Extensions.register do
+    def unregister_extension name
+        Asciidoctor::Extensions.unregister name
+    end
+
+    def docinfo_processor name, extensionName
+        Asciidoctor::Extensions.register name do
             docinfo_processor extensionName
         end
     end
 
-    def treeprocessor(extensionName)
-        Asciidoctor::Extensions.register do 
+    def treeprocessor name, extensionName
+        Asciidoctor::Extensions.register name do
             treeprocessor extensionName
         end
     end
     
-    def include_processor(extensionName)
-        Asciidoctor::Extensions.register do
+    def include_processor name, extensionName
+        Asciidoctor::Extensions.register name do
             include_processor extensionName
         end
     end
 
-    def preprocessor(extensionName)
-        Asciidoctor::Extensions.register do
+    def preprocessor name, extensionName
+        Asciidoctor::Extensions.register name do
             preprocessor extensionName
         end
     end
     
-    def postprocessor(extensionName)
-        Asciidoctor::Extensions.register do
+    def postprocessor name, extensionName
+        Asciidoctor::Extensions.register name do
             postprocessor extensionName
         end
     end
 
-    def block_processor(extensionName, blockSymbol)
-        Asciidoctor::Extensions.register do
+    def block_processor name, extensionName, blockSymbol
+        Asciidoctor::Extensions.register name do
             block extensionName, blockSymbol
         end
     end
 
-    def block_macro(extensionName, blockSymbol)
-        Asciidoctor::Extensions.register do
+    def block_macro name, extensionName, blockSymbol
+        Asciidoctor::Extensions.register name do
             block_macro extensionName, blockSymbol
         end
     end
 
-    def inline_macro(extensionName, blockSymbol)
-        Asciidoctor::Extensions.register do
+    def inline_macro name, extensionName, blockSymbol
+        Asciidoctor::Extensions.register name do
             inline_macro extensionName, blockSymbol
         end
     end
