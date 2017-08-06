@@ -11,64 +11,39 @@ import org.jruby.RubyClass;
 public interface AsciidoctorModule {
 
     void preprocessor(String preprocessorClassName);
-    void preprocessor(String preprocessorClassName, String registrationName);
     void preprocessor(RubyClass preprocessorClassName);
-    void preprocessor(RubyClass preprocessorClassName, String registrationName);
-	  void preprocessor(Preprocessor preprocessor);
-	  void preprocessor(Preprocessor preprocessor, String registrationName);
+    void preprocessor(Preprocessor preprocessor);
 
     void postprocessor(String postprocessorClassName);
-    void postprocessor(String postprocessorClassName, String registrationName);
     void postprocessor(RubyClass postprocessorClassName);
-    void postprocessor(RubyClass postprocessorClassName, String registrationName);
     void postprocessor(Postprocessor postprocessor);
-    void postprocessor(Postprocessor postprocessor, String registrationName);
 
     void treeprocessor(String treeprocessor);
-    void treeprocessor(String treeprocessor, String registrationName);
     void treeprocessor(RubyClass treeprocessorClassName);
-    void treeprocessor(RubyClass treeprocessorClassName, String registrationName);
     void treeprocessor(Treeprocessor treeprocessorClassName);
-    void treeprocessor(Treeprocessor treeprocessorClassName, String registrationName);
 
     void include_processor(String includeProcessorClassName);
-    void include_processor(String includeProcessorClassName, String registrationName);
     void include_processor(RubyClass includeProcessorClassName);
-    void include_processor(RubyClass includeProcessorClassName, String registrationName);
     void include_processor(IncludeProcessor includeProcessor);
-    void include_processor(IncludeProcessor includeProcessor, String registrationName);
 
     void block_processor(String blockClassName, Object blockName);
-    void block_processor(String blockClassName, Object blockName, String registrationName);
     void block_processor(RubyClass blockClass, Object blockName);
-    void block_processor(RubyClass blockClass, Object blockName, String registrationName);
     void block_processor(BlockProcessor blockInstance, Object blockName);
-    void block_processor(BlockProcessor blockInstance, Object blockName, String registrationName);
 
     void block_macro(String blockMacroClassName, Object blockName);
-    void block_macro(String blockMacroClassName, Object blockName, String registrationName);
     void block_macro(Class<BlockMacroProcessor> blockMacroClass, Object blockName);
-    void block_macro(Class<BlockMacroProcessor> blockMacroClass, Object blockName, String registrationName);
     void block_macro(BlockMacroProcessor blockMacroInstance, Object blockName);
-    void block_macro(BlockMacroProcessor blockMacroInstance, Object blockName, String registrationName);
     void block_macro(RubyClass blockClassName, Object blockSymbol);
-    void block_macro(RubyClass blockClassName, Object blockSymbol, String registrationName);
 
     void inline_macro(String blockClassName, Object blockSymbol);
-    void inline_macro(String blockClassName, Object blockSymbol, String registrationName);
     void inline_macro(RubyClass blockClassName, Object blockSymbol);
-    void inline_macro(RubyClass blockClassName, Object blockSymbol, String registrationName);
     void inline_macro(InlineMacroProcessor blockClassName, Object blockSymbol);
-    void inline_macro(InlineMacroProcessor blockClassName, Object blockSymbol, String registrationName);
 
     void docinfo_processor(String docInfoClassName);
-    void docinfo_processor(String docInfoClassName, String registrationName);
     void docinfo_processor(RubyClass docInfoClassName);
-    void docinfo_processor(RubyClass docInfoClassName, String registrationName);
     void docinfo_processor(DocinfoProcessor docInfoClassName);
-    void docinfo_processor(DocinfoProcessor docInfoClassName, String registrationName);
 
-    void register_extension_group(ExtensionGroupImpl extensionGroup);
+    void register_extension_group(final String groupName, ExtensionGroupImpl extensionGroup);
 
     void unregister_all_extensions();
     void unregister_extension(String groupName);
@@ -85,6 +60,6 @@ public interface AsciidoctorModule {
     RubyArray converters();
     void unregister_all_converters();
 
-	String asciidoctorRuntimeEnvironmentVersion();
-	
+    String asciidoctorRuntimeEnvironmentVersion();
+
 }

@@ -20,12 +20,11 @@ import org.asciidoctor.extension.processorproxies.PreprocessorProxy;
 import org.asciidoctor.extension.processorproxies.TreeprocessorProxy;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
+import org.jruby.RubySymbol;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by robertpanzer on 21.07.17.
@@ -38,15 +37,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   private final String groupName;
 
-  private List<Object> docinfoProcessors = new ArrayList<>();
-  private List<Object> preprocessors = new ArrayList<>();
-  private List<Object> postprocessors = new ArrayList<>();
-  private List<Object> includeProcessors = new ArrayList<>();
-  private List<Object> treeProcessors = new ArrayList<>();
-  private Map<String, Object> blockprocessors = new HashMap<>();
-  private Map<String, Object> blockMacros = new HashMap<>();
-  private Map<String, Object> inlineMacros = new HashMap<>();
-  private List<String> requiredRubyLibraries = new ArrayList<>();
+  private List<Registrator> registrators = new ArrayList<>();
 
   public ExtensionGroupImpl(String groupName, JRubyAsciidoctor asciidoctor) {
     this.groupName = groupName;
@@ -60,43 +51,13 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public void register() {
-    asciidoctorModule.register_extension_group(this);
+    asciidoctorModule.register_extension_group(this.groupName, this);
   }
 
-  public List<Object> getDocinfoProcessors() {
-    return docinfoProcessors;
-  }
-
-  public List<Object> getPreprocessors() {
-    return preprocessors;
-  }
-
-  public List<Object> getPostprocessors() {
-    return postprocessors;
-  }
-
-  public List<Object> getIncludeProcessors() {
-    return includeProcessors;
-  }
-
-  public List<Object> getTreeProcessors() {
-    return treeProcessors;
-  }
-
-  public Map<String, Object> getBlockprocessors() {
-    return blockprocessors;
-  }
-
-  public Map<String, Object> getBlockMacros() {
-    return blockMacros;
-  }
-
-  public Map<String, Object> getInlineMacros() {
-    return inlineMacros;
-  }
-
-  public List<String> getRequiredRubyLibraries() {
-    return requiredRubyLibraries;
+  public void registerExtensions(Registry registry) {
+    for (Registrator registrator: registrators) {
+      registrator.register(registry);
+    }
   }
 
   @Override
@@ -106,15 +67,25 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup docinfoProcessor(final Class<? extends DocinfoProcessor> docInfoProcessor) {
-    RubyClass rubyClass = DocinfoProcessorProxy.register(rubyRuntime, docInfoProcessor);
-    docinfoProcessors.add(rubyClass);
+    final RubyClass rubyClass = DocinfoProcessorProxy.register(rubyRuntime, docInfoProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.docinfo_processor(rubyClass);
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup docinfoProcessor(final DocinfoProcessor docInfoProcessor) {
-    RubyClass rubyClass = DocinfoProcessorProxy.register(rubyRuntime, docInfoProcessor);
-    docinfoProcessors.add(rubyClass);
+    final RubyClass rubyClass = DocinfoProcessorProxy.register(rubyRuntime, docInfoProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.docinfo_processor(rubyClass);
+      }
+    });
     return this;
   }
 
@@ -131,15 +102,25 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup preprocessor(final Class<? extends Preprocessor> preprocessor) {
-    RubyClass rubyClass = PreprocessorProxy.register(rubyRuntime, preprocessor);
-    preprocessors.add(rubyClass);
+    final RubyClass rubyClass = PreprocessorProxy.register(rubyRuntime, preprocessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.preprocessor(rubyClass);
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup preprocessor(final Preprocessor preprocessor) {
-    RubyClass rubyClass = PreprocessorProxy.register(rubyRuntime, preprocessor);
-    preprocessors.add(rubyClass);
+    final RubyClass rubyClass = PreprocessorProxy.register(rubyRuntime, preprocessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.preprocessor(rubyClass);
+      }
+    });
     return this;
   }
 
@@ -167,15 +148,25 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup postprocessor(final Class<? extends Postprocessor> postprocessor) {
-    RubyClass rubyClass = PostprocessorProxy.register(rubyRuntime, postprocessor);
-    postprocessors.add(rubyClass);
+    final RubyClass rubyClass = PostprocessorProxy.register(rubyRuntime, postprocessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.postprocessor(rubyClass);
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup postprocessor(final Postprocessor postprocessor) {
-    RubyClass rubyClass = PostprocessorProxy.register(rubyRuntime, postprocessor);
-    postprocessors.add(rubyClass);
+    final RubyClass rubyClass = PostprocessorProxy.register(rubyRuntime, postprocessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.postprocessor(rubyClass);
+      }
+    });
     return this;
   }
 
@@ -192,29 +183,49 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup includeProcessor(final Class<? extends IncludeProcessor> includeProcessor) {
-    RubyClass rubyClass = IncludeProcessorProxy.register(rubyRuntime, includeProcessor);
-    includeProcessors.add(rubyClass);
+    final RubyClass rubyClass = IncludeProcessorProxy.register(rubyRuntime, includeProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.include_processor(rubyClass);
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup includeProcessor(final IncludeProcessor includeProcessor) {
-    RubyClass rubyClass = IncludeProcessorProxy.register(rubyRuntime, includeProcessor);
-    includeProcessors.add(rubyClass);
+    final RubyClass rubyClass = IncludeProcessorProxy.register(rubyRuntime, includeProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.include_processor(rubyClass);
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup treeprocessor(final Treeprocessor treeprocessor) {
-    RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, treeprocessor);
-    treeProcessors.add(rubyClass);
+    final RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, treeprocessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.tree_processor(rubyClass);
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup treeprocessor(final Class<? extends Treeprocessor> treeProcessor) {
-    RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, treeProcessor);
-    treeProcessors.add(rubyClass);
+    final RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, treeProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.tree_processor(rubyClass);
+      }
+    });
     return this;
   }
 
@@ -251,43 +262,73 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup block(final String blockName, final Class<? extends BlockProcessor> blockProcessor) {
-    RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
-    blockprocessors.put(blockName, rubyClass);
+    final RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.block(rubyClass, rubyRuntime.newSymbol(blockName));
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup block(final Class<? extends BlockProcessor> blockProcessor) {
-    RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
-    blockprocessors.put(BlockProcessorProxy.getName(blockProcessor), rubyClass);
+    final RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.block(rubyClass, rubyRuntime.newSymbol(BlockProcessorProxy.getName(blockProcessor)));
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup block(final BlockProcessor blockProcessor) {
-    RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
-    blockprocessors.put(blockProcessor.getName(), rubyClass);
+    final RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.block(rubyClass, rubyRuntime.newSymbol(blockProcessor.getName()));
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup block(final String blockName, final BlockProcessor blockProcessor) {
-    RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
-    blockprocessors.put(blockName, rubyClass);
+    final RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.block(rubyClass, rubyRuntime.newSymbol(blockName));
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup blockMacro(final String blockName, final Class<? extends BlockMacroProcessor> blockMacroProcessor) {
-    RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
-    blockMacros.put(blockName, rubyClass);
+    final RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.block_macro(rubyClass, rubyRuntime.newSymbol(blockName));
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup blockMacro(final Class<? extends BlockMacroProcessor> blockMacroProcessor) {
-    RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
-    blockMacros.put(AbstractProcessorProxy.getName(blockMacroProcessor), rubyClass);
+    final RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.block_macro(rubyClass, rubyRuntime.newSymbol(AbstractProcessorProxy.getName(blockMacroProcessor)));
+      }
+    });
     return this;
   }
 
@@ -313,29 +354,49 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup blockMacro(final BlockMacroProcessor blockMacroProcessor) {
-    RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
-    blockMacros.put(blockMacroProcessor.getName(), rubyClass);
+    final RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.block_macro(rubyClass, rubyRuntime.newSymbol(blockMacroProcessor.getName()));
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup inlineMacro(final InlineMacroProcessor inlineMacroProcessor) {
-    RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
-    inlineMacros.put(inlineMacroProcessor.getName(), rubyClass);
+    final RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.inline_macro(rubyClass, rubyRuntime.newSymbol(inlineMacroProcessor.getName()));
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup inlineMacro(final String name, final Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
-    RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
-    inlineMacros.put(name, rubyClass);
+    final RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.inline_macro(rubyClass, rubyRuntime.newSymbol(name));
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup inlineMacro(final Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
-    RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
-    inlineMacros.put(AbstractProcessorProxy.getName(inlineMacroProcessor), rubyClass);
+    final RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.inline_macro(rubyClass, rubyRuntime.newSymbol(AbstractProcessorProxy.getName(inlineMacroProcessor)));
+      }
+    });
     return this;
   }
 
@@ -361,7 +422,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup requireRubyLibrary(final String requiredLibrary) {
-    requiredRubyLibraries.add(requiredLibrary);
+    RubyUtils.requireLibrary(rubyRuntime, requiredLibrary);
     return this;
   }
 
@@ -373,63 +434,120 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup rubyPreprocessor(final String preprocessor) {
-    preprocessors.add(preprocessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.preprocessor(preprocessor);
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup rubyPostprocessor(final String postprocessor) {
-    postprocessors.add(postprocessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.postprocessor(postprocessor);
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup rubyDocinfoProcessor(final String docinfoProcessor) {
-    docinfoProcessors.add(docinfoProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.docinfo_processor(docinfoProcessor);
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup rubyIncludeProcessor(final String includeProcessor) {
-    includeProcessors.add(includeProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.include_processor(includeProcessor);
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup rubyTreeprocessor(final String treeProcessor) {
-    treeProcessors.add(treeProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.tree_processor(treeProcessor);
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup rubyBlock(final String blockName, final String blockProcessor) {
-    blockprocessors.put(blockName, blockProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.block(blockProcessor, rubyRuntime.newSymbol(blockName));
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup rubyBlockMacro(final String blockName, final String blockMacroProcessor) {
-    blockMacros.put(blockName, blockMacroProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.block_macro(blockMacroProcessor, rubyRuntime.newSymbol(blockName));
+      }
+    });
     return this;
   }
 
   @Override
   public ExtensionGroup rubyInlineMacro(final String macroName, final String inlineMacroProcessor) {
-    inlineMacros.put(macroName, inlineMacroProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(Registry registry) {
+        registry.inline_macro(inlineMacroProcessor, rubyRuntime.newSymbol(macroName));
+      }
+    });
     return this;
   }
 
-  private String getImportLine(Class<?> extensionClass) {
-    int dollarPosition = -1;
-    String className = extensionClass.getName();
-    if ((dollarPosition = className.indexOf("$")) != -1) {
-      className = className.substring(0, dollarPosition);
-    }
-    return className;
+  public interface Registry {
+
+    void docinfo_processor(RubyClass rubyClass);
+    void docinfo_processor(String className);
+
+    void preprocessor(RubyClass rubyClass);
+    void preprocessor(String className);
+
+    void postprocessor(RubyClass rubyClass);
+    void postprocessor(String className);
+
+    void include_processor(RubyClass rubyClass);
+    void include_processor(String className);
+
+    void tree_processor(RubyClass rubyClass);
+    void tree_processor(String className);
+
+    void block(RubyClass rubyClass, RubySymbol name);
+    void block(String className, RubySymbol name);
+
+    void block_macro(RubyClass rubyClass, RubySymbol name);
+    void block_macro(String className, RubySymbol name);
+
+    void inline_macro(RubyClass rubyClass, RubySymbol name);
+    void inline_macro(String className, RubySymbol name);
   }
 
-  private String getClassName(String clazz) {
-    return clazz.substring(clazz.lastIndexOf(".")+1);
+  public interface Registrator {
+    void register(Registry registry);
   }
-
 }
