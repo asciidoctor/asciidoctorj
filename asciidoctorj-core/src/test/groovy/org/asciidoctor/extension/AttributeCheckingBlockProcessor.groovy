@@ -2,7 +2,7 @@ package org.asciidoctor.extension
 
 import org.asciidoctor.ast.StructuralNode
 
-@Contexts([Contexts.CONTEXT_PARAGRAPH])
+@Contexts([Contexts.PARAGRAPH])
 @Name('checkattributes')
 class AttributeCheckingBlockProcessor extends BlockProcessor {
 

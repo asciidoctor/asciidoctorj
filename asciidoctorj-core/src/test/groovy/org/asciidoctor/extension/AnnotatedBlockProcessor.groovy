@@ -6,7 +6,7 @@ import org.asciidoctor.ast.StructuralNode
 
 @CompileStatic
 @Name('yell')
-@Contexts([Contexts.CONTEXT_LISTING, Contexts.CONTEXT_OPEN])
+@Contexts([Contexts.LISTING, Contexts.OPEN])
 @ContentModel(ContentModel.SIMPLE)
 @DefaultAttributes([
     @DefaultAttribute(key = 'key', value = 'value')

@@ -17,7 +17,7 @@ import spock.lang.Specification
 class WhenABlockProcessorCreatesABlockThatATreeProcessorVisits extends Specification {
 
 	@Name('tst')
-	@Contexts(Contexts.CONTEXT_OPEN)
+	@Contexts(Contexts.OPEN)
 	@ContentModel(ContentModel.COMPOUND)
 	static class BlockCreator extends BlockProcessor {
 

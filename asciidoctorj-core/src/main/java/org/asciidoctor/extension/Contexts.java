@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * Example for a BlockProcessor that transforms all open blocks with the name {@code yell} to upper case:
  * <pre><code>
  * &#64;Name("yell")
- * &#64;Contexts(Contexts.CONTEXT_OPEN)
+ * &#64;Contexts(Contexts.OPEN)
  * &#64;ContentModel(ContentModel.SIMPLE)
  * class YellBlockProcessor extends BlockProcessor {
  *     public YellBlockProcessor(String blockName) {
@@ -58,7 +58,7 @@ public @interface Contexts {
      * --
      * </pre>
      */
-    public static final String CONTEXT_OPEN = ":open";
+    public static final String OPEN = ":open";
 
     /**
      * Predefined constant for making a Processor work on example blocks.
@@ -69,7 +69,7 @@ public @interface Contexts {
      * ====
      * </pre>
      */
-    public static final String CONTEXT_EXAMPLE = ":example";
+    public static final String EXAMPLE = ":example";
 
     /**
      * Predefined constant for making a Processor work on sidebar blocks.
@@ -80,7 +80,7 @@ public @interface Contexts {
      * ****
      * </pre>
      */
-    public static final String CONTEXT_SIDEBAR = ":sidebar";
+    public static final String SIDEBAR = ":sidebar";
 
     /**
      * Predefined constant for making a Processor work on literal blocks.
@@ -91,7 +91,7 @@ public @interface Contexts {
      * ....
      * </pre>
      */
-    public static final String CONTEXT_LITERAL = ":literal";
+    public static final String LITERAL = ":literal";
 
     /**
      * Predefined constant for making a Processor work on source blocks.
@@ -102,7 +102,7 @@ public @interface Contexts {
      * ....
      * </pre>
      */
-    public static final String CONTEXT_LISTING = ":listing";
+    public static final String LISTING = ":listing";
 
     /**
      * Predefined constant for making a Processor work on quote blocks.
@@ -113,7 +113,7 @@ public @interface Contexts {
      * ____
      * </pre>
      */
-    public static final String CONTEXT_QUOTE = ":quote";
+    public static final String QUOTE = ":quote";
 
     /**
      * Predefined constant for making a Processor work on passthrough blocks.
@@ -125,7 +125,7 @@ public @interface Contexts {
      * ++++
      * </pre>
      */
-    public static final String CONTEXT_PASS = ":pass";
+    public static final String PASS = ":pass";
 
     /**
      * Predefined constant for making a Processor work on paragraph blocks.
@@ -137,7 +137,7 @@ public @interface Contexts {
      * And don't process this.
      * </pre>
      */
-    public static final String CONTEXT_PARAGRAPH = ":paragraph";
+    public static final String PARAGRAPH = ":paragraph";
 
 
     String[] value();
