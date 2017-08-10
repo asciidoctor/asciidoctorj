@@ -10,13 +10,16 @@ import org.asciidoctor.extension.Location;
 import org.asciidoctor.extension.Name;
 import org.asciidoctor.extension.PositionalAttributes;
 import org.asciidoctor.extension.Processor;
+import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
 import org.jruby.RubyHash;
 import org.jruby.RubyObject;
 import org.jruby.RubyRegexp;
+import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
+import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.jruby.util.RegexpOptions;
 
@@ -251,4 +254,11 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
         return RubyRegexp.newRegexp(runtime, regexp.toString(), RegexpOptions.NULL_OPTIONS);
     }
 
+    public static String getName(Class<? extends Processor> processor) {
+        if (processor.isAnnotationPresent(Name.class)) {
+            Name name = processor.getAnnotation(Name.class);
+            return name.value();
+        }
+        throw new IllegalArgumentException("Processor " + processor + " has no @Name annotation!");
+    }
 }

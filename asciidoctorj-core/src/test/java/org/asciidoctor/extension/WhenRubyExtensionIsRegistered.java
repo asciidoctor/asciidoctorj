@@ -1,9 +1,5 @@
 package org.asciidoctor.extension;
 
-import static org.asciidoctor.OptionsBuilder.options;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.util.ClasspathResources;
@@ -14,6 +10,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.asciidoctor.OptionsBuilder.options;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertThat;
 
 @RunWith(Arquillian.class)
 public class WhenRubyExtensionIsRegistered {
@@ -40,5 +41,4 @@ public class WhenRubyExtensionIsRegistered {
         assertThat(elements.get(1).text(), is("THE TIME IS NOW! GET A MOVE ON!"));
         
     }
-
 }

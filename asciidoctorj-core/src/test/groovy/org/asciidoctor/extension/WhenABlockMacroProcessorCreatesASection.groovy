@@ -14,6 +14,11 @@ import spock.lang.Specification
 class WhenABlockMacroProcessorCreatesASection extends Specification {
 
     public static final String BLOCKMACRO_NAME = 'section'
+    public static final String UTF_8 = 'UTF-8'
+    public static final String H2 = 'h2'
+    public static final String HELLO_WORLD = '1. HelloWorld'
+    public static final String SECT1_SELECTOR = 'div.sect1'
+    public static final String PARAGRAPH_SELECTOR = 'div.paragraph'
 
     @ArquillianResource
     private Asciidoctor asciidoctor
@@ -34,11 +39,28 @@ section::HelloWorld[]
 
         then:
         noExceptionThrown()
-        Document htmlDocument = Jsoup.parse(result, 'UTF-8')
+        Document htmlDocument = Jsoup.parse(result, UTF_8)
 
-        htmlDocument.select('h2').text() == '1. HelloWorld'
+        htmlDocument.select(H2).text() == HELLO_WORLD
 
-        htmlDocument.select('div.sect1').select('div.paragraph').text() == SectionCreatorBlockMacro.CONTENT
+        htmlDocument.select(SECT1_SELECTOR).select(PARAGRAPH_SELECTOR).text() == SectionCreatorBlockMacro.CONTENT
+    }
+
+    def "the section should appear in the resulting document when the extension is registered with an extension group"() {
+
+        given:
+        asciidoctor.createGroup().blockMacro(BLOCKMACRO_NAME, SectionCreatorBlockMacro).register()
+
+        when:
+        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).headerFooter(true))
+
+        then:
+        noExceptionThrown()
+        Document htmlDocument = Jsoup.parse(result, UTF_8)
+
+        htmlDocument.select(H2).text() == HELLO_WORLD
+
+        htmlDocument.select(SECT1_SELECTOR).select(PARAGRAPH_SELECTOR).text() == SectionCreatorBlockMacro.CONTENT
     }
 
 

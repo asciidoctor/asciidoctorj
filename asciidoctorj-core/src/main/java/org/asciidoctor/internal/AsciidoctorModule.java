@@ -12,24 +12,24 @@ public interface AsciidoctorModule {
 
     void preprocessor(String preprocessorClassName);
     void preprocessor(RubyClass preprocessorClassName);
-	void preprocessor(Preprocessor preprocessor);
-	
+    void preprocessor(Preprocessor preprocessor);
+
     void postprocessor(String postprocessorClassName);
     void postprocessor(RubyClass postprocessorClassName);
     void postprocessor(Postprocessor postprocessor);
-    
+
     void treeprocessor(String treeprocessor);
     void treeprocessor(RubyClass treeprocessorClassName);
     void treeprocessor(Treeprocessor treeprocessorClassName);
-    
+
     void include_processor(String includeProcessorClassName);
     void include_processor(RubyClass includeProcessorClassName);
     void include_processor(IncludeProcessor includeProcessor);
-    
+
     void block_processor(String blockClassName, Object blockName);
     void block_processor(RubyClass blockClass, Object blockName);
     void block_processor(BlockProcessor blockInstance, Object blockName);
-    
+
     void block_macro(String blockMacroClassName, Object blockName);
     void block_macro(Class<BlockMacroProcessor> blockMacroClass, Object blockName);
     void block_macro(BlockMacroProcessor blockMacroInstance, Object blockName);
@@ -38,12 +38,15 @@ public interface AsciidoctorModule {
     void inline_macro(String blockClassName, Object blockSymbol);
     void inline_macro(RubyClass blockClassName, Object blockSymbol);
     void inline_macro(InlineMacroProcessor blockClassName, Object blockSymbol);
-    
+
     void docinfo_processor(String docInfoClassName);
     void docinfo_processor(RubyClass docInfoClassName);
     void docinfo_processor(DocinfoProcessor docInfoClassName);
-    
+
+    void register_extension_group(final String groupName, ExtensionGroupImpl extensionGroup);
+
     void unregister_all_extensions();
+    void unregister_extension(String groupName);
 
     Object convert(String content, Map<String, Object> options);
     Object convertFile(String filename, Map<String, Object> options);
@@ -57,6 +60,6 @@ public interface AsciidoctorModule {
     RubyArray converters();
     void unregister_all_converters();
 
-	String asciidoctorRuntimeEnvironmentVersion();
-	
+    String asciidoctorRuntimeEnvironmentVersion();
+
 }

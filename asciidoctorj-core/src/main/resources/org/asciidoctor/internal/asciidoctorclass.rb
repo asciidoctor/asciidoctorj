@@ -4,7 +4,7 @@ module AsciidoctorJ
         include_package 'org.asciidoctor.extension'
         # Treeprocessor was renamed in to TreeProcessor in https://github.com/asciidoctor/asciidoctor/commit/f1dd816ade9db457b899581841e4cf7b788aa26d
         # This is necessary to run against both Asciidoctor 1.5.5 and 1.5.6
-        TreeProcessor = Treeprocessor
+        TreeProcessor = Treeprocessor unless defined? TreeProcessor
     end
 end
 
@@ -19,6 +19,10 @@ class AsciidoctorModule
         Asciidoctor::Extensions.unregister_all
     end
 
+    def unregister_extension name
+        Asciidoctor::Extensions.unregister name
+    end
+
     def docinfo_processor(extensionName)
         Asciidoctor::Extensions.register do
             docinfo_processor extensionName
@@ -26,7 +30,7 @@ class AsciidoctorModule
     end
 
     def treeprocessor(extensionName)
-        Asciidoctor::Extensions.register do 
+        Asciidoctor::Extensions.register do
             treeprocessor extensionName
         end
     end
@@ -64,6 +68,12 @@ class AsciidoctorModule
     def inline_macro(extensionName, blockSymbol)
         Asciidoctor::Extensions.register do
             inline_macro extensionName, blockSymbol
+        end
+    end
+
+    def register_extension_group(groupName, callback)
+        Asciidoctor::Extensions.register groupName do
+            callback.registerExtensions self
         end
     end
 

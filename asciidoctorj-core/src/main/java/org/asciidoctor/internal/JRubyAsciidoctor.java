@@ -5,15 +5,16 @@ import org.asciidoctor.Attributes;
 import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.ContentPart;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.ast.Title;
 import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.converter.internal.ConverterRegistryExecutor;
+import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.extension.internal.ExtensionRegistryExecutor;
@@ -24,8 +25,18 @@ import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class JRubyAsciidoctor implements Asciidoctor {
@@ -587,6 +598,19 @@ public class JRubyAsciidoctor implements Asciidoctor {
     public Document loadFile(File file, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
         return (Document) NodeConverter.createASTNode(this.asciidoctorModule.load_file(file.getAbsolutePath(), rubyHash));
+    }
 
+    AsciidoctorModule getAsciidoctorModule() {
+        return asciidoctorModule;
+    }
+
+    @Override
+    public ExtensionGroup createGroup() {
+        return new ExtensionGroupImpl(UUID.randomUUID().toString(), this);
+    }
+
+    @Override
+    public ExtensionGroup createGroup(String groupName) {
+        return new ExtensionGroupImpl(groupName, this);
     }
 }
