@@ -121,7 +121,7 @@ testmacro::countera[]
 
     @CompileStatic
     @Name('testmacro')
-    @Contexts(Contexts.CONTEXT_PARAGRAPH)
+    @Contexts(Contexts.PARAGRAPH)
     @ContentModel(SIMPLE)
     static class TestBlockMacroProcessor extends BlockMacroProcessor {
 
@@ -138,7 +138,7 @@ testmacro::countera[]
 
     @CompileStatic
     @Name('testmacro')
-    @Contexts(Contexts.CONTEXT_PARAGRAPH)
+    @Contexts(Contexts.PARAGRAPH)
     @ContentModel(SIMPLE)
     static class TestBlockMacroWithInitialCounterProcessor extends BlockMacroProcessor {
 

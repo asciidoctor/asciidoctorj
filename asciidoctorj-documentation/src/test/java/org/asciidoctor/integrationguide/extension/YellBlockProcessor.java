@@ -11,7 +11,7 @@ import java.util.Map;
 
 //tag::include[]
 @Name("yell")                                              // <1>
-@Contexts({Contexts.CONTEXT_PARAGRAPH})                    // <2>
+@Contexts({Contexts.PARAGRAPH})                            // <2>
 @ContentModel(ContentModel.SIMPLE)                         // <3>
 public class YellBlockProcessor extends BlockProcessor {   // <4>
 

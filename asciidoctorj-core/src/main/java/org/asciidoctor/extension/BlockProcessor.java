@@ -16,7 +16,7 @@ public abstract class BlockProcessor extends Processor {
      * <pre>
      * <verbatim>
      * Map&lt;String, Object&gt; config = new HashMap&lt;&gt;();
-     * config.put(CONTEXTS, Arrays.asList(CONTEXT_EXAMPLE, CONTEXT_LISTING));
+     * config.put(CONTEXTS, Arrays.asList(EXAMPLE, LISTING));
      * BlockProcessor blockProcessor = new BlockProcessor("foo", config);
      * asciidoctor.javaExtensionRegistry().block(blockProcessor);
      * </verbatim>
