@@ -33,6 +33,7 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-tilt: https://github.com/rtomayko/tilt
 :uri-font-awesome: http://fortawesome.github.io/Font-Awesome
 :uri-gradle: https://gradle.org
+:uri-chocolatey: https://chocolatey.org
 
 {uri-repo}[AsciidoctorJ] is the official library for running {uri-asciidoctor}[Asciidoctor] on the JVM.
 Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of a parsed AsciiDoc document from Java and other JVM languages.
@@ -153,6 +154,20 @@ In addition to using AsciidoctorJ directly, you can invoke it as part of your bu
 - {uri-maven-guide}[How to Install and Use the Asciidoctor Maven Plugin]
 - {uri-gradle-guide}[How to Install and Use the Asciidoctor Gradle Plugin]
 ====
+
+=== Windows Installation
+
+A {uri-chocolatey}[Chocolatey] package is available which installs the
+ascidoctorj-{artifact-version}-bin.zip Bintray artifact along with a
+binary shim in %ChocolateyInstall%\bin which lets you run AsciidoctorJ
+from the command line.
+
+----
+C:\> choco install asciidoctorj
+C:\> where asciidoctorj
+C:\ProgramData\chocolatey\bin\asciidoctorj.exe
+C:\> asciidoctorj -b pdf README.adoc
+----
 
 == Converting documents
 
@@ -1063,7 +1078,7 @@ String content = asciidoctor.convertFile(new File(
 
 === DocinfoProcessor
 
-This extension inserts custom content on header or footer of the document. 
+This extension inserts custom content on header or footer of the document.
 For example can be used for adding `meta` tags on `<head>` tags.
 
 [source]
@@ -1717,8 +1732,8 @@ Follow the steps below:
     </dependencies>
 </module>
 ----
-. Copy the jar files into the same folder as the _module.xml_ file. 
-. Make sure the version numbers of the jar files agree with what's in the current set. 
+. Copy the jar files into the same folder as the _module.xml_ file.
+. Make sure the version numbers of the jar files agree with what's in the current set.
 Restart WildFly for the new module to take effect.
 
 . Add a dependency on your Java archive to this WildFly module using one of the following options:

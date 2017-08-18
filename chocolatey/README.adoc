@@ -1,0 +1,32 @@
+= AsciidoctorJ Chocolatey package.
+
+This directory contains the necessary configuration files for
+creating a https://chocolatey.org/[Chocolatey] package based on a
+designated "asciidoctorj-x.y.z-bin.zip" bintray file.
+
+Complete instructions on creating Chocolatey packages can be found at
+https://chocolatey.org/docs/create-packages .
+
+== Quick Instructions
+
+. Set the desired package version in 'asciidoctorj.nuspec' and
+  'tools\chocolateyinstall.ps1'.
+
+. Run the following commands:
+
+----
+# Create the package
+> cd c:\to\this\directory
+> cpack
+
+# Test the package. You'll probably have to run this as administrator.
+> choco install .\asciidoctorj.x.y.z.nupkg -dv -s .
+> where asciidoctorj
+> asciidoctorj --help
+> asciidoctorj ...other test commands
+
+# Log into https://chocolatey.org/account and copy your API key.
+# (This assumes you don't have a key set in your Chocolatey config.)
+# Push the package to chocolatey.org.
+> choco push --api-key=you-api-key asciidoctorj.x.y.z.nupkg
+----
