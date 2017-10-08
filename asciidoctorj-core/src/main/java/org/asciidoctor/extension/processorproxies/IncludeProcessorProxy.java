@@ -77,7 +77,7 @@ public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcess
                             RubyHashUtil.convertMapToRubyHashWithSymbols(getRuntime(), getProcessor().getConfig())},
                     Block.NULL_BLOCK);
             // The extension config in the Java extension is just a view on the @config member of the Ruby part
-            getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
+            getProcessor().updateConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
         } else {
             // First create only the instance passing in the block name
             setProcessor(instantiateProcessor(new HashMap<String, Object>()));
