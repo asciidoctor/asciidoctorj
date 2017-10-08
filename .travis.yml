@@ -12,8 +12,3 @@ before_install:
   - sudo apt-get install -y graphviz
 install: ./gradlew -S -Pskip.signing assemble
 script: ./gradlew -S -Pskip.signing check && bash test-asciidoctor-upstream.sh
-notifications:
-  email: false
-  irc:
-    channels:
-      - "irc.freenode.org#asciidoctor"
