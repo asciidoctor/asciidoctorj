@@ -86,7 +86,7 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
                     Block.NULL_BLOCK);
             // The Ruby initialize method may have changed the config, therefore copy it back
             // because the accessor is routed to the Java Processor.config
-            getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
+            getProcessor().updateConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
         } else {
             String macroName = RubyUtils.rubyToJava(getRuntime(), args[0], String.class);
             // First create only the instance passing in the block name

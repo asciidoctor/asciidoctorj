@@ -839,6 +839,52 @@ public class WhenJavaExtensionIsRegistered {
     }
 
     @Test
+    public void a_include_processor_class_should_be_executed_twice()
+            throws IOException {
+
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+        javaExtensionRegistry.includeProcessor(UriIncludeProcessor.class);
+
+        for (int i = 0; i < 2; i++){
+            String content = asciidoctor.renderFile(
+                classpath.getResource("sample-with-uri-include.ad"),
+                options().toFile(false).get());
+
+            org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
+
+            Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
+
+            assertThat(contentElement.text(), startsWith("module AsciidoctorJ"));
+        }
+    }
+
+    @Test
+    public void a_include_processor_instance_should_be_executed_twice()
+            throws IOException {
+
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/internal/asciidoctorclass.rb")));
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+        javaExtensionRegistry.includeProcessor(new UriIncludeProcessor(new HashMap<String, Object>()));
+
+        for (int i = 0; i < 2; i++){
+            String content = asciidoctor.renderFile(
+                classpath.getResource("sample-with-uri-include.ad"),
+                options().toFile(false).get());
+
+            org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
+
+            Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
+
+            assertThat(contentElement.text(), startsWith("module AsciidoctorJ"));
+        }
+    }
+
+    @Test
     public void a_block_processor_should_be_executed_when_registered_listing_block_is_found_in_document() throws IOException {
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
