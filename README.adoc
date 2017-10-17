@@ -830,6 +830,11 @@ assertThat(findBy, hasSize(2)); //<3>
 
 == Extension API
 
+NOTE: If you plan to write extensions for Asciidoctor you should seriously consider using the latest version of the 1.6.0 family.
+      While the current version is an alpha version it contains the same solid version of Asciidoctor.
+      The Extension API has changed a bit, in an incompatible way though, but is much more solid when it comes to extensions.
+      To not break compatibility with existing users of the Extension API it is not possible to bring these stabilization efforts to the current 1.5 family.
+
 One of the major improvements to Asciidoctor recently is the extensions API.
 AsciidoctorJ brings this extension API to the JVM environment.
 {uri-repo}[AsciidoctorJ] allows us to write extensions in Java instead of Ruby.
