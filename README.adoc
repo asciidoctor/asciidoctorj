@@ -5,7 +5,7 @@ Alex Soto <https://github.com/lordofthejars[@lordofthejars]>; Dan Allen <https:/
 :page-layout: base
 :toc: macro
 :toclevels: 2
-ifdef::env-site[:toclevels: 1]
+ifdef::env-github[:toclevels: 1]
 :experimental:
 //:table-caption!:
 :source-language: java
