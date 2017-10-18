@@ -95,7 +95,7 @@ The artifact information can be found in the tables below.
 |{empty}
 |===
 
-CAUTION: The artifactId changed to `asciidoctorj` starting in 1.5.0.
+CAUTION: The artifactId changed from *asciidoctor-java-integration* to *asciidoctorj* starting with version 1.5.0.
 
 == Installation
 
@@ -318,7 +318,8 @@ StringBuffer htmlBuffer = writer.getBuffer();
 System.out.println(htmlBuffer.toString());
 ----
 
-==== Safe mode and file system access
+=== Safe mode and file system access
+
 Asciidoctor provides security levels that control the read and write access of attributes, the include directive, macros, and scripts while a document is processing. Each level includes the restrictions enabled in the prior security level.
 
 When Asciidoctor (and AsciidoctorJ) is used as _API_, it uses `SECURE` safe mode by default.
@@ -611,7 +612,7 @@ for (File file : directoryWalker.scan()) {
 <1> Converts all files in the `docs` folder and its subfolders.
 
 You can also load the document inside a `Document` object.
-This object represents the whole document, including its headers.
+This object represents the whole document, including its headings.
 You can use it to navigate through the internals of a parsed document.
 To load a document, use the `load` or `loadFile` methods.
 
@@ -1068,7 +1069,7 @@ String content = asciidoctor.convertFile(new File(
 
 === DocinfoProcessor
 
-This extension inserts custom content on header or footer of the document. 
+This extension inserts custom content on header or footer of the document.
 For example can be used for adding `meta` tags on `<head>` tags.
 
 [source]
@@ -1355,7 +1356,7 @@ public class UriIncludeProcessor extends IncludeProcessor { // <1>
 <3> `push_include` method inserts new content (retrieved from the url) in current position of document.
 
 [source]
-.Register an Inline macro processor
+.Register an include processor
 ----
 JavaExtensionRegistry extensionRegistry = this.asciidoctor.javaExtensionRegistry(); // <1>
 
@@ -1722,8 +1723,8 @@ Follow the steps below:
     </dependencies>
 </module>
 ----
-. Copy the jar files into the same folder as the _module.xml_ file. 
-. Make sure the version numbers of the jar files agree with what's in the current set. 
+. Copy the jar files into the same folder as the _module.xml_ file.
+. Make sure the version numbers of the jar files agree with what's in the current set.
 Restart WildFly for the new module to take effect.
 
 . Add a dependency on your Java archive to this WildFly module using one of the following options:
