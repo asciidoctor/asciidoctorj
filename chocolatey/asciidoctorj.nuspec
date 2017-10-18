@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
+    <id>asciidoctorj</id>
+    <title>AsciidoctorJ (Install)</title>
+    <version>1.5.6</version>
+    <!--
+      https://github.com/asciidoctor/asciidoctorj/graphs/contributors
+      https://github.com/asciidoctor/asciidoctor/graphs/contributors
+    -->
+    <authors>Dan Allen, Alex Soto, Ryan Waldron, et al</authors>
+    <owners>Gerald Combs</owners>
+    <summary>Java wrapper for AsciiDoctor.</summary>
+    <description>Java wrapper and bindings for the Asciidoctor markup processor.
+    Converts AsciiDoc to HTML5, EPUB3, PDF, DocBook, and other formats. To use, run
+    "asciidoctorj" along with any Asciidoctor command line flags, e.g. "asciidoctorj
+    -b pdf mydocument.adoc".
+    </description>
+    <projectUrl>http://asciidoctor.org/</projectUrl>
+    <packageSourceUrl>https://github.com/geraldcombs/chocolatey-packages</packageSourceUrl>
+    <projectSourceUrl>https://github.com/asciidoctor/asciidoctorj</projectSourceUrl>
+    <docsUrl>http://asciidoctor.org/docs/user-manual/</docsUrl>
+    <mailingListUrl>http://discuss.asciidoctor.org/</mailingListUrl>
+    <bugTrackerUrl>https://github.com/asciidoctor/asciidoctorj/issues</bugTrackerUrl>
+    <tags>asciidoctor asciidoc docbook pdf</tags>
+    <copyright>2012-2017 Dan Allen, Ryan Waldron and the Asciidoctor Project</copyright>
+    <licenseUrl>https://raw.githubusercontent.com/asciidoctor/asciidoctorj/master/LICENSE.txt</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <!-- https://github.com/asciidoctor/asciidoctor/issues/48
+    <iconUrl></iconUrl>
+    -->
+    <dependencies>
+      <dependency id="jre8" />
+    </dependencies>
+    <releaseNotes>Initial Chocolatey package</releaseNotes>
+    <!--<provides></provides>-->
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
