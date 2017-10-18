@@ -1792,6 +1792,7 @@ Here's how to use a pre-release version in Maven:
 </repositories>
 ----
 
+ifndef::env-site[]
 == Development
 
 AsciidoctorJ is built using {uri-gradle}[Gradle].
@@ -1941,6 +1942,7 @@ NOTE: The `-x pMNPTML` is necessary to work around a bug in the publishing plugi
 IMPORTANT: Bintray does not allow you to publish snapshots.
 You have to first update the version in [path]_gradle.properties_ to a release (or pre-release) version number.
 Currently, Gradle is not configured to automatically tag a release, so *you have to create the git tag manually*.
+endif::[]
 
 == Resources
 
