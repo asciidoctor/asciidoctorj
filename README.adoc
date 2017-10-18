@@ -20,7 +20,7 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-discuss: http://discuss.asciidoctor.org
-:artifact-version: 1.5.4
+:artifact-version: 1.5.6
 :uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
 :uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
@@ -40,7 +40,7 @@ Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of
 ifdef::badges[]
 image:https://img.shields.io/travis/asciidoctor/asciidoctorj/master.svg[Build Status (Travis CI), link=https://travis-ci.org/asciidoctor/asciidoctorj]
 image:https://ci.appveyor.com/api/projects/status/syxrlv047esal4n0/branch/master?svg=true[Build Status (AppVeyor), link=https://ci.appveyor.com/project/asciidoctor/asciidoctorj]
-image:https://img.shields.io/badge/javadoc.io-1.5.4-blue.svg[Javadoc, link=http://www.javadoc.io/doc/org.asciidoctor/asciidoctorj/1.5.4]
+image:https://img.shields.io/badge/javadoc.io-{artifact-version}-blue.svg[Javadoc, link=http://www.javadoc.io/doc/org.asciidoctor/asciidoctorj/{artifact-version}]
 endif::[]
 
 ifdef::awestruct,env-browser[]
@@ -1606,7 +1606,7 @@ Asciidoctor asciidoctor = create();
 
 In an OSGi context it will not work because JRuby needs some paths to find the gems (the Asciidoctor ones and the Ruby themselves ones). In order to make it work, you will need two more classes (RubyInstanceConfig and JavaEmbedUtils) and a small modification of the previous snippet of code. The modifications take care of the class loaders because in OSGi, which are a key point in OSGi:
 
-[source,java]
+[source,java,subs=attributes+]
 ----
 import static org.asciidoctor.Asciidoctor.Factory.create;
 import org.asciidoctor.Asciidoctor;
@@ -1614,7 +1614,7 @@ import org.asciidoctor.Asciidoctor;
 RubyInstanceConfig config = new RubyInstanceConfig();
 config.setLoader(this.getClass().getClassLoader()); <1>
 
-JavaEmbedUtils.initialize(Arrays.asList("META-INF/jruby.home/lib/ruby/2.0", "gems/asciidoctor-1.5.4/lib"), config); <2><3><4>
+JavaEmbedUtils.initialize(Arrays.asList("META-INF/jruby.home/lib/ruby/2.0", "gems/asciidoctor-{artifact-version}/lib"), config); <2><3><4>
 
 Asciidoctor asciidoctor = create(this.getClass().getClassLoader()); <5>
 ----
@@ -1700,15 +1700,15 @@ Follow the steps below:
 . Create the following folder tree: [path]_$JBOSS_HOME/modules/org/asciidoctor/main_.
 . Create the module descriptor file [path]_module.xml_.
 +
-[source,xml]
+[source,xml,subs=attributes+]
 .Asciidoctor module descriptor for WildFly AS
 ----
 <?xml version="1.0" encoding="UTF-8"?>
 <module xmlns="urn:jboss:module:1.0" name="org.asciidoctor">
     <resources>
-        <resource-root path="asciidoctorj-1.5.4.jar"/>
+        <resource-root path="asciidoctorj-{artifact-version}.jar"/>
         <resource-root path="jcommander-1.35.jar"/>
-        <resource-root path="jruby-complete-1.7.21.jar"/>
+        <resource-root path="jruby-complete-1.7.26.jar"/>
     </resources>
     <dependencies>
         <module name="sun.jdk" export="true">
