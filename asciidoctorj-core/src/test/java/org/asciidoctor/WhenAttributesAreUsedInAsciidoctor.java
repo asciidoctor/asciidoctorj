@@ -457,7 +457,9 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Attributes attributes = attributes().stylesDir("./styles")
                 .linkCss(true).styleSheetName("mycustom.css").get();
         Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
-                .toDir(testFolder.getRoot()).attributes(attributes).get();
+                .toDir(testFolder.getRoot())
+                .mkDirs(true)
+                .attributes(attributes).get();
 
         asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
 
