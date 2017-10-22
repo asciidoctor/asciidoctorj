@@ -12,7 +12,7 @@ dependencies {
   compile("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
     transitive = false
   }
-  compile 'org.jruby:jruby-complete:9.1.8.0'
+  compile 'org.jruby:jruby-complete:9.1.13.0'
 }
 
 jar.enabled = false
