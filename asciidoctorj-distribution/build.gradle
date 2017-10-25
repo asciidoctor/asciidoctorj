@@ -4,8 +4,7 @@ dependencies {
   compile project(':asciidoctorj')
   compile project(':asciidoctorj-epub3')
   compile project(':asciidoctorj-diagram')
-  // jruby 9.1.12.0 doesn't work on Windows with prawn
-  compile "org.jruby:jruby-complete:9.1.8.0"
+  compile "org.jruby:jruby-complete:9.1.13.0"
 
   compile("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
     transitive = false
