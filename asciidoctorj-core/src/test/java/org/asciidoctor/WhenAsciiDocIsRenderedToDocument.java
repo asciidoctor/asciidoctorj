@@ -235,7 +235,7 @@ public class WhenAsciiDocIsRenderedToDocument {
         Document document = asciidoctor.load(DOCUMENT, options);
         File inputFile = classpath.getResource("rendersample.asciidoc");
         String content = document.readAsset(inputFile.getAbsolutePath(), new HashMap<Object, Object>());
-        assertThat(content, is(IOUtils.readFull(new FileReader(inputFile))));
+        assertThat(content.replace("\r", ""), is(IOUtils.readFull(new FileReader(inputFile)).replace("\r", "")));
     }
 
     @Test
