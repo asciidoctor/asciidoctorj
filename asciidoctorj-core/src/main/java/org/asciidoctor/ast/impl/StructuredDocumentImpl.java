@@ -1,8 +1,12 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.asciidoctor.ast.ContentPart;
+import org.asciidoctor.ast.DocumentHeader;
+import org.asciidoctor.ast.StructuredDocument;
 
 /**
  * Structure document containing header and content chunks
@@ -10,13 +14,13 @@ import java.util.List;
  * @author marek
  * 
  */
-public class StructuredDocument {
+public class StructuredDocumentImpl implements StructuredDocument {
 
     private DocumentHeader header;
 
     private List<ContentPart> parts;
 
-    private StructuredDocument() {
+    private StructuredDocumentImpl() {
         super();
     }
 
@@ -143,7 +147,7 @@ public class StructuredDocument {
     }
 
     public static StructuredDocument createStructuredDocument(DocumentHeader header, List<ContentPart> parts) {
-        StructuredDocument document = new StructuredDocument();
+        StructuredDocumentImpl document = new StructuredDocumentImpl();
         document.header = header;
         document.parts = parts;
 

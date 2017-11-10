@@ -1,10 +1,12 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Author {
+import org.asciidoctor.ast.Author;
+
+public class AuthorImpl implements Author {
 
     private static final String AUTHOR_ATTRIBUTE_NAME = "author";
     private static final String LASTNAME_ATTRIBUTE_NAME = "lastname";
@@ -48,7 +50,7 @@ public class Author {
     }
 
     private static Author getAuthor(Map<String, Object> attributes, String suffix) {
-        Author author = new Author();
+        AuthorImpl author = new AuthorImpl();
 
         if (attributes.containsKey(AUTHOR_ATTRIBUTE_NAME + suffix)) {
             author.setFullName((String) attributes.get(AUTHOR_ATTRIBUTE_NAME + suffix));

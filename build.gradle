@@ -153,7 +153,7 @@ subprojects {
 
 }
 
-configure(subprojects.findAll { !it.isDistribution() && it.name != 'asciidoctorj-documentation' && it.name != 'asciidoctorj-test-support' && it.name != 'asciidoctorj-arquillian-extension' }) {
+configure(subprojects.findAll { !it.isDistribution() && it.name != 'asciidoctorj-api' && it.name != 'asciidoctorj-documentation' && it.name != 'asciidoctorj-test-support' && it.name != 'asciidoctorj-arquillian-extension' }) {
   apply from: rootProject.file('gradle/versioncheck.gradle')
 }
 

@@ -12,6 +12,9 @@ import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.ast.Title;
+import org.asciidoctor.ast.impl.ContentPartImpl;
+import org.asciidoctor.ast.impl.DocumentHeaderImpl;
+import org.asciidoctor.ast.impl.StructuredDocumentImpl;
 import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.converter.internal.ConverterRegistryExecutor;
 import org.asciidoctor.extension.ExtensionGroup;
@@ -135,7 +138,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         Document documentImpl = (Document) NodeConverter.createASTNode(document);
 
-        return DocumentHeader.createDocumentHeader((Title) documentImpl.getStructuredDoctitle(), documentImpl.getDoctitle(),
+        return DocumentHeaderImpl.createDocumentHeader((Title) documentImpl.getStructuredDoctitle(), documentImpl.getDoctitle(),
                 documentImpl.getAttributes());
     }
 
@@ -143,7 +146,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         Document documentImpl = (Document) NodeConverter.createASTNode(document);
         List<ContentPart> contentParts = getContents(documentImpl.getBlocks(), 1, maxDeepLevel);
-        return StructuredDocument.createStructuredDocument(toDocumentHeader(documentImpl), contentParts);
+        return StructuredDocumentImpl.createStructuredDocument(toDocumentHeader(documentImpl), contentParts);
     }
 
     private List<ContentPart> getContents(List<StructuralNode> blocks, int level, int maxDeepLevel) {
@@ -174,7 +177,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         } else {
             textContent = child.convert();
         }
-        ContentPart contentPart = ContentPart.createContentPart(child.id(), level, child.context(), child.title(),
+        ContentPartImpl contentPart = ContentPartImpl.createContentPart(child.id(), level, child.context(), child.title(),
                 child.style(), child.role(), child.getAttributes(), textContent);
         contentPart.setParts(getContents(child.blocks(), level + 1, maxDeepLevel));
         return contentPart;
