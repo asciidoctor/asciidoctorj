@@ -1,8 +1,10 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
 import java.util.Map;
 
-public class RevisionInfo {
+import org.asciidoctor.ast.RevisionInfo;
+
+public class RevisionInfoImpl implements RevisionInfo {
 
     private static String REV_DATE_ATTRIBUTE_NAME = "revdate";
     private static String REV_NUMBER_ATTRIBUTE_NAME = "revnumber";
@@ -14,7 +16,7 @@ public class RevisionInfo {
 
     public static RevisionInfo getInstance(Map<String, Object> attributes) {
 
-        RevisionInfo revisionInfo = new RevisionInfo();
+        RevisionInfoImpl revisionInfo = new RevisionInfoImpl();
 
         if (attributes.containsKey(REV_DATE_ATTRIBUTE_NAME)) {
             revisionInfo.setDate((String) attributes.get(REV_DATE_ATTRIBUTE_NAME));

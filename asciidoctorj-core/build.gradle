@@ -1,6 +1,7 @@
 apply plugin: 'osgi'
 
 dependencies {
+  compile project(path: ':asciidoctorj-api')
   compile "org.jruby:jruby:$jrubyVersion"
   compile "com.beust:jcommander:$jcommanderVersion"
   gems "rubygems:asciidoctor:$asciidoctorGemVersion"

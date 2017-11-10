@@ -44,7 +44,7 @@ public class WhenStructuredDocumentIsRequired {
 		StructuredDocument structuredDocument = asciidoctor
 				.readDocumentStructure(s, new java.util.HashMap<String, Object>());
 		
-		List<ContentPart> parts = structuredDocument.getParts();
+		List<? extends ContentPart> parts = structuredDocument.getParts();
 		assertThat(parts, hasSize(1));
 
 		DocumentHeader header = structuredDocument.getHeader();
@@ -79,7 +79,7 @@ public class WhenStructuredDocumentIsRequired {
 		assertThat((String) attributes.get("email"),
 				is("doc.writer@asciidoc.org"));
 
-		List<ContentPart> parts = document.getParts();
+		List<? extends ContentPart> parts = document.getParts();
 
 		assertThat(parts, notNullValue());
 		assertThat(parts, hasSize(3));
@@ -122,7 +122,7 @@ public class WhenStructuredDocumentIsRequired {
 		assertThat(header.getDocumentTitle().getMain(), is("TODO"));
 		assertThat(header.getDocumentTitle().getSubtitle(), is("Document Title"));
 		
-		List<ContentPart> parts = document.getParts();
+		List<? extends ContentPart> parts = document.getParts();
 
 		assertThat(parts, notNullValue());
 		assertThat(parts, hasSize(4));
@@ -130,7 +130,7 @@ public class WhenStructuredDocumentIsRequired {
 		assertThat(document.getPartByStyle("literal").getContent(),
 				is("TODO: This is description"));
 
-		List<ContentPart> images = document.getPartsByContext("image");
+		List<? extends ContentPart> images = document.getPartsByContext("image");
 		assertThat(images, hasSize(2));
 		for (int i = 0; i < 2; i++) {
 			assertThat((String) images.get(i).getAttributes().get("target"),
@@ -154,7 +154,7 @@ public class WhenStructuredDocumentIsRequired {
 
 		assertThat(header.getDocumentTitle().getMain(), is("Sample Document"));
 
-		List<ContentPart> parts = document.getParts();
+		List<? extends ContentPart> parts = document.getParts();
 
 		assertThat(parts, notNullValue());
 		assertThat(parts, hasSize(0));
@@ -171,7 +171,7 @@ public class WhenStructuredDocumentIsRequired {
 
 		assertThat(header, notNullValue());
 
-		List<ContentPart> parts = document.getParts();
+		List<? extends ContentPart> parts = document.getParts();
 
 		assertThat(parts, notNullValue());
 		assertThat(parts, hasSize(1));
@@ -189,7 +189,7 @@ public class WhenStructuredDocumentIsRequired {
 
 		assertThat(header, notNullValue());
 
-		List<ContentPart> parts = document.getParts();
+		List<? extends ContentPart> parts = document.getParts();
 
 		assertThat(parts, notNullValue());
 		assertThat(parts, hasSize(0));

@@ -1,9 +1,11 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
 import java.util.List;
 import java.util.Map;
 
-public class ContentPart {
+import org.asciidoctor.ast.ContentPart;
+
+public class ContentPartImpl implements ContentPart {
     private String id;
     private int level;
     private String context;
@@ -14,7 +16,7 @@ public class ContentPart {
     private String content;
     private List<ContentPart> parts;
 
-    private ContentPart() {
+    private ContentPartImpl() {
         super();
     }
 
@@ -58,9 +60,9 @@ public class ContentPart {
         this.parts = parts;
     }
 
-    public static ContentPart createContentPart(String id, int level, String context, String title, String style,
+    public static ContentPartImpl createContentPart(String id, int level, String context, String title, String style,
             String role, Map<String, Object> attributes, String textContent) {
-        ContentPart contentPart = new ContentPart();
+        ContentPartImpl contentPart = new ContentPartImpl();
         contentPart.level = level;
         contentPart.id = id;
         contentPart.context = context;

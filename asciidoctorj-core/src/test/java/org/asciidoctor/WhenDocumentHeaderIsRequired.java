@@ -84,7 +84,7 @@ public class WhenDocumentHeaderIsRequired {
 		
 		DocumentHeader header = asciidoctor.readDocumentHeader(classpath.getResource("documentheaders.asciidoc"));
 		
-		List<Author> authors = header.getAuthors();
+		List<? extends Author> authors = header.getAuthors();
 		assertThat(authors, hasSize(2));
 		
 		Author author1 = authors.get(0);

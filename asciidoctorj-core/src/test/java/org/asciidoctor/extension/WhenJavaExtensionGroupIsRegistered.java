@@ -854,7 +854,7 @@ public class WhenJavaExtensionGroupIsRegistered {
                     for (StructuralNode block : blocks) {
                         for (StructuralNode block2 : block.getBlocks()) {
                             if(block2 instanceof Section)
-                                System.out.println(((Section) block2).id());
+                                System.out.println(((Section) block2).getId());
                         }
                     }
                     return document;

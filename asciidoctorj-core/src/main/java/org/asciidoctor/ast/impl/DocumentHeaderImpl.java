@@ -1,12 +1,16 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.asciidoctor.ast.Author;
+import org.asciidoctor.ast.DocumentHeader;
+import org.asciidoctor.ast.RevisionInfo;
+import org.asciidoctor.ast.Title;
 import org.asciidoctor.internal.CaseInsensitiveMap;
 
-public class DocumentHeader {
+public class DocumentHeaderImpl implements DocumentHeader {
 
     private Title documentTitle;
     private String pageTitle;
@@ -16,7 +20,7 @@ public class DocumentHeader {
 
     private Map<String, Object> attributes;
 
-    private DocumentHeader() {
+    private DocumentHeaderImpl() {
         super();
     }
 
@@ -44,32 +48,32 @@ public class DocumentHeader {
         return attributes;
     }
 
-    public static DocumentHeader createDocumentHeader(Title documentTitle, String pageTitle,
+    public static DocumentHeaderImpl createDocumentHeader(Title documentTitle, String pageTitle,
             Map<String, Object> attributes) {
 
-        DocumentHeader documentHeader = new DocumentHeader();
+        DocumentHeaderImpl documentHeader = new DocumentHeaderImpl();
 
         documentHeader.documentTitle = documentTitle;
         documentHeader.pageTitle = pageTitle;
         documentHeader.attributes = new CaseInsensitiveMap<String, Object>(attributes);
 
         documentHeader.author = getAuthor(attributes);
-        documentHeader.revisionInfo = geRevisionInfo(attributes);
+        documentHeader.revisionInfo = getRevisionInfo(attributes);
         documentHeader.authors.addAll(getAuthors(attributes));
 
         return documentHeader;
     }
 
     private static List<Author> getAuthors(Map<String, Object> attributes) {
-        return Author.getAuthors(attributes);
+        return AuthorImpl.getAuthors(attributes);
     }
 
     private static Author getAuthor(Map<String, Object> attributes) {
-        return Author.getInstance(attributes);
+        return AuthorImpl.getInstance(attributes);
     }
 
-    private static RevisionInfo geRevisionInfo(Map<String, Object> attributes) {
-        return RevisionInfo.getInstance(attributes);
+    private static RevisionInfo getRevisionInfo(Map<String, Object> attributes) {
+        return RevisionInfoImpl.getInstance(attributes);
     }
 
 }

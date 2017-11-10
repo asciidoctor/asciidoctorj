@@ -70,17 +70,17 @@ public class WhenAsciiDocIsRenderedToDocument {
     @Test
     public void should_return_section_blocks() {
         Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
-        Section section = (Section) document.blocks().get(1);
-        assertThat(section.index(), is(0));
-        assertThat(section.sectname(), either(is("sect1")).or(is("section")));
-        assertThat(section.special(), is(false));
+        Section section = (Section) document.getBlocks().get(1);
+        assertThat(section.getIndex(), is(0));
+        assertThat(section.getSectionName(), either(is("sect1")).or(is("section")));
+        assertThat(section.isSpecial(), is(false));
     }
 
     @Test
     public void should_return_blocks_from_a_document() {
 
         Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
-        assertThat(document.doctitle(), is("Document Title"));
+        assertThat(document.getDoctitle(), is("Document Title"));
 
     }
 
@@ -88,7 +88,7 @@ public class WhenAsciiDocIsRenderedToDocument {
     public void should_return_a_document_object_from_string() {
 
         Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
-        assertThat(document.doctitle(), is("Document Title"));
+        assertThat(document.getDoctitle(), is("Document Title"));
     }
 
     @Test
@@ -140,15 +140,15 @@ public class WhenAsciiDocIsRenderedToDocument {
                                                     .compact(true).asMap();
         Document document = asciidoctor.load(DOCUMENT, options);
         assertThat(document.getAttributes(), hasKey("toc-placement"));
-        assertThat(document.hasAttr("toc-placement"), is(true));
-        assertThat(document.isAttr("toc-placement", "auto", false), is(true));
-        assertThat(document.getAttr("toc-placement", "", false).toString(), is("auto"));
+        assertThat(document.hasAttribute("toc-placement"), is(true));
+        assertThat(document.isAttribute("toc-placement", "auto", false), is(true));
+        assertThat(document.getAttribute("toc-placement", "", false).toString(), is("auto"));
     }
 
     @Test
     public void should_be_able_to_get_roles() {
         Document document = asciidoctor.load(ROLE, new HashMap<String, Object>());
-        StructuralNode abstractBlock = document.blocks().get(0);
+        StructuralNode abstractBlock = document.getBlocks().get(0);
         assertThat(abstractBlock.getRole(), is("famous"));
         assertThat(abstractBlock.hasRole("famous"), is(true));
         assertThat(abstractBlock.isRole(), is(true));
@@ -159,7 +159,7 @@ public class WhenAsciiDocIsRenderedToDocument {
     public void should_be_able_to_add_role() {
         final String tmpRole = "tmpRole";
         Document document = asciidoctor.load(ROLE, new HashMap<String, Object>());
-        StructuralNode abstractBlock = document.blocks().get(0);
+        StructuralNode abstractBlock = document.getBlocks().get(0);
         assertThat(abstractBlock.hasRole(tmpRole), is(false));
         abstractBlock.addRole(tmpRole);
         assertThat(abstractBlock.hasRole(tmpRole), is(true));
@@ -169,7 +169,7 @@ public class WhenAsciiDocIsRenderedToDocument {
     public void should_be_able_to_remove_role() {
         final String famousRole = "famous";
         Document document = asciidoctor.load(ROLE, new HashMap<String, Object>());
-        StructuralNode abstractBlock = document.blocks().get(0);
+        StructuralNode abstractBlock = document.getBlocks().get(0);
         assertThat(abstractBlock.hasRole(famousRole), is(true));
         abstractBlock.removeRole(famousRole);
         assertThat(abstractBlock.hasRole(famousRole), is(false));
@@ -178,7 +178,7 @@ public class WhenAsciiDocIsRenderedToDocument {
     @Test
     public void should_be_able_to_get_reftext() {
         Document document = asciidoctor.load(REFTEXT, new HashMap<String, Object>());
-        StructuralNode abstractBlock = document.blocks().get(0);
+        StructuralNode abstractBlock = document.getBlocks().get(0);
         assertThat(abstractBlock.getReftext(), is("the first section"));
         assertThat(abstractBlock.isReftext(), is(true));
     }
@@ -243,8 +243,8 @@ public class WhenAsciiDocIsRenderedToDocument {
         final Object attributeName = "testattribute";
         final Object attributeValue = "testvalue";
         Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
-        assertThat(document.setAttr(attributeName, attributeValue, true), is(true));
-        assertThat(document.getAttr(attributeName), is(attributeValue));
+        assertThat(document.setAttribute(attributeName, attributeValue, true), is(true));
+        assertThat(document.getAttribute(attributeName), is(attributeValue));
         assertThat(document.getAttributes().get(attributeName), is(attributeValue));
     }
 
@@ -254,7 +254,7 @@ public class WhenAsciiDocIsRenderedToDocument {
         final Object attributeValue = "testvalue";
         Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
         document.getAttributes().put(attributeName, attributeValue);
-        assertThat(document.getAttr(attributeName), is(attributeValue));
+        assertThat(document.getAttribute(attributeName), is(attributeValue));
         assertThat(document.getAttributes().get(attributeName), is(attributeValue));
     }
 
@@ -301,17 +301,17 @@ public class WhenAsciiDocIsRenderedToDocument {
         List<StructuralNode> blocks = document.getBlocks();
 
         Section section = (Section) blocks.get(1);
-        section.setAttr("testattr", "testvalue", true);
+        section.setAttribute("testattr", "testvalue", true);
 
-        assertThat(document.hasAttr("testattr"), is(false));
+        assertThat(document.hasAttribute("testattr"), is(false));
 
-        assertThat(section.hasAttr("testattr"), is(true));
-        assertThat(section.hasAttr("testattr", true), is(true));
-        assertThat(section.hasAttr("testattr", false), is(true));
-        assertThat(section.isAttr("testattr", "testvalue"), is(true));
+        assertThat(section.hasAttribute("testattr"), is(true));
+        assertThat(section.hasAttribute("testattr", true), is(true));
+        assertThat(section.hasAttribute("testattr", false), is(true));
+        assertThat(section.isAttribute("testattr", "testvalue"), is(true));
 
-        assertThat(section.hasAttr("docattr", true), is(true));
-        assertThat(section.hasAttr("docattr", false), is(false));
+        assertThat(section.hasAttribute("docattr", true), is(true));
+        assertThat(section.hasAttribute("docattr", false), is(false));
     }
 
     @Test
