@@ -3,13 +3,13 @@ package org.asciidoctor.ast;
 public interface PhraseNode extends ContentNode {
 
     @Deprecated
-    public String render();
+    String render();
     
-    public String convert();
+    String convert();
 
-    public String getType();
+    String getType();
 
-    public String getText();
+    String getText();
 
-    public String getTarget();
+    String getTarget();
 }
