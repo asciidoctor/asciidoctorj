@@ -38,7 +38,7 @@ public class TextConverter extends StringConverter {
                     .append(section.getContent()).toString();
         } else if (transform.equals("paragraph")) {
             StructuralNode block = (StructuralNode) node;
-            String content = (String) block.content();
+            String content = (String) block.getContent();
             return new StringBuilder(content.replaceAll(LINE_SEPARATOR, " ")).append(LINE_SEPARATOR).toString();
         } else if (node instanceof List) {
             StringBuilder sb = new StringBuilder();

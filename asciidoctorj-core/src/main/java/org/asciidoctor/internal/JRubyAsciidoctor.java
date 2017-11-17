@@ -170,16 +170,16 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     private ContentPart getContentPartFromBlock(StructuralNode child, int level, int maxDeepLevel) {
-        Object content = child.content();
+        Object content = child.getContent();
         String textContent;
         if (content instanceof String) {
             textContent = (String) content;
         } else {
             textContent = child.convert();
         }
-        ContentPartImpl contentPart = ContentPartImpl.createContentPart(child.id(), level, child.context(), child.title(),
-                child.style(), child.role(), child.getAttributes(), textContent);
-        contentPart.setParts(getContents(child.blocks(), level + 1, maxDeepLevel));
+        ContentPartImpl contentPart = ContentPartImpl.createContentPart(child.getId(), level, child.getContext(), child.getTitle(),
+                child.getStyle(), child.getRole(), child.getAttributes(), textContent);
+        contentPart.setParts(getContents(child.getBlocks(), level + 1, maxDeepLevel));
         return contentPart;
     }
 
