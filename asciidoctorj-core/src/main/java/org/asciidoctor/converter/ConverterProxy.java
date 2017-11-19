@@ -4,6 +4,7 @@ import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
+import org.asciidoctor.internal.RubyOutputStreamWrapper;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyHash;
@@ -162,6 +163,8 @@ public class ConverterProxy<T> extends RubyObject {
         } else if (target instanceof RubyString) {
             File f = new File(((RubyString) target).asJavaString());
             out = new FileOutputStream(f);
+        } else if (target instanceof RubyOutputStreamWrapper) {
+            out = ((RubyOutputStreamWrapper)target).getOut();
         } else {
             throw new IllegalArgumentException("Can't write to a " + target);
         }

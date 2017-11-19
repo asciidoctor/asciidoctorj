@@ -9,3 +9,6 @@ target/
 *.ipr
 *.iws
 .idea/
+
+# Strange directories that IntelliJ seems to create now 
+out/

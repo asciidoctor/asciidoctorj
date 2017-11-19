@@ -30,6 +30,7 @@ import org.jruby.runtime.builtin.IRubyObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -447,6 +448,11 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         if (options.containsKey(Options.BASEDIR)) {
             rubyRuntime.setCurrentDirectory((String) options.get(Options.BASEDIR));
+        }
+
+        final Object toFileOption = options.get(Options.TO_FILE);
+        if (toFileOption instanceof OutputStream) {
+            options.put(Options.TO_FILE, RubyOutputStreamWrapper.wrap(getRubyRuntime(), (OutputStream) toFileOption));
         }
 
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
