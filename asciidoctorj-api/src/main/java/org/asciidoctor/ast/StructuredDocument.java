@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface StructuredDocument {
 
-    List<ContentPart> getParts();
+    List<? extends ContentPart> getParts();
 
     DocumentHeader getHeader();
 
@@ -48,7 +48,7 @@ public interface StructuredDocument {
      * @return A list of ContentPart items that match the context if the
      *         context is not null or an empty collection.
      */
-    List<ContentPart> getPartsByContext(String context);
+    List<? extends ContentPart> getPartsByContext(String context);
 
     /**
      * Return all parts that match specified style
@@ -57,7 +57,7 @@ public interface StructuredDocument {
      * @return A list of ContentPart items that match the style if the
      *         style is not null or an empty collection.
      */
-    List<ContentPart> getPartsByStyle(String style);
+    List<? extends ContentPart> getPartsByStyle(String style);
 
     /**
      * Return all parts that match specified role
@@ -66,5 +66,5 @@ public interface StructuredDocument {
      * @return A list of ContentPart items that match the role if the
      *         role is not null or an empty collection.
      */
-    List<ContentPart> getPartsByRole(String role);
+    List<? extends ContentPart> getPartsByRole(String role);
 }
