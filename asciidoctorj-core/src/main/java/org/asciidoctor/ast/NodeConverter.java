@@ -126,15 +126,16 @@ public final class NodeConverter {
 
         if (object instanceof IRubyObject || object instanceof RubyObjectHolderProxy) {
             IRubyObject rubyObject = asRubyObject(object);
+            if (rubyObject.isNil()) {
+                return null;
+            }
             NodeCache nodeCache = NodeCache.get(rubyObject);
             ContentNode cachedNode = nodeCache.getASTNode();
             if (cachedNode != null) {
                 return cachedNode;
             }
 
-            Ruby runtime = rubyObject.getRuntime();
-
-            ContentNode ret = null;
+            ContentNode ret;
 
             switch (NodeType.getNodeType(rubyObject)) {
                 case BLOCK_CLASS:
