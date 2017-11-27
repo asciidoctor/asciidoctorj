@@ -1,13 +1,15 @@
 package org.asciidoctor;
 
-import static org.hamcrest.Matchers.either;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsMapContaining.hasKey;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.junit.Assert.assertThat;
+import org.asciidoctor.arquillian.api.Unshared;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.Section;
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.internal.IOUtils;
+import org.asciidoctor.util.ClasspathResources;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,16 +18,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.Section;
-import org.asciidoctor.internal.IOUtils;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.hamcrest.Matchers.either;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.hamcrest.collection.IsMapContaining.hasKey;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
 @RunWith(Arquillian.class)
 public class WhenAsciiDocIsRenderedToDocument {
@@ -341,4 +341,15 @@ public class WhenAsciiDocIsRenderedToDocument {
         assertThat(section.getContentModel(), is("compound"));
         assertThat(section.getBlocks().get(0).getContentModel(), is("simple"));
     }
+
+    @Test
+    public void should_be_able_to_get_parent_from_document() {
+        String s = "== A small Example\n" +
+            "\n" +
+            "Lorem ipsum dolor sit amet:\n";
+
+        Document document = asciidoctor.load(s, new HashMap<String, Object>());
+        assertNull(document.getParent());
+    }
+
 }
