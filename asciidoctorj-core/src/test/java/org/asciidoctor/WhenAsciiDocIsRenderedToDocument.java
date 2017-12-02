@@ -247,7 +247,9 @@ public class WhenAsciiDocIsRenderedToDocument {
             "| E\n" +
             "| F\n" +
             "\n" +
-            "| G | H\n" +
+            "2+| G\n" +
+            "\n" +
+            "| H | I\n" +
             "|===\n";
 
         Document document = asciidoctor.load(doc, OptionsBuilder.options().asMap());
@@ -267,21 +269,29 @@ public class WhenAsciiDocIsRenderedToDocument {
 
         Row footerRow = footer.get(0);
         assertThat(footerRow.getCells(), hasSize(2));
-        assertThat(footerRow.getCells().get(0).getText(), is("G"));
-        assertThat(footerRow.getCells().get(1).getText(), is("H"));
+        assertThat(footerRow.getCells().get(0).getText(), is("H"));
+        assertThat(footerRow.getCells().get(1).getText(), is("I"));
 
         List<Row> body = table.getBody();
-        assertThat(body, hasSize(2));
+        assertThat(body, hasSize(3));
 
         Row firstBodyRow = body.get(0);
         assertThat(firstBodyRow.getCells(), hasSize(2));
         assertThat(firstBodyRow.getCells().get(0).getText(), is("C"));
+
         assertThat(firstBodyRow.getCells().get(1).getText(), is("D"));
 
         Row secondBodyRow = body.get(1);
         assertThat(secondBodyRow.getCells(), hasSize(2));
         assertThat(secondBodyRow.getCells().get(0).getText(), is("E"));
         assertThat(secondBodyRow.getCells().get(1).getText(), is("F"));
+        assertThat(secondBodyRow.getCells().get(0).getColspan(), is(0));
+
+        Row thirdBodyRow = body.get(2);
+        assertThat(thirdBodyRow.getCells(), hasSize(1));
+        assertThat(thirdBodyRow.getCells().get(0).getText(), is("G"));
+        assertThat(thirdBodyRow.getCells().get(0).getColspan(), is(2));
+        assertThat(thirdBodyRow.getCells().get(0).getRowspan(), is(0));
 
         List<Column> columns = table.getColumns();
         assertThat(columns, hasSize(2));
