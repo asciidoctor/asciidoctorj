@@ -24,7 +24,7 @@ public class CellImpl extends AbstractNodeImpl implements Cell {
 
     @Override
     public int getRowspan() {
-        return getRowspan();
+        return delegate.getRowspan();
     }
 
     @Override
