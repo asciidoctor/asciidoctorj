@@ -83,7 +83,7 @@ subprojects {
 
   // NOTE sourceCompatibility & targetCompatibility are set in gradle.properties to meet requirements of Gradle
   // Must redefine here to work around a bug in the Eclipse plugin
-  sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_6
+  sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_7
 
   plugins.withType(JavaPlugin) {
     project.tasks.withType(JavaCompile) { task ->
