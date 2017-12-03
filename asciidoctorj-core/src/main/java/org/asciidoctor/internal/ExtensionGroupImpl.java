@@ -491,7 +491,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
   }
 
   private String getImportLine(Class<?> extensionClass) {
-    int dollarPosition = -1;
+    int dollarPosition;
     String className = extensionClass.getName();
     if ((dollarPosition = className.indexOf("$")) != -1) {
       className = className.substring(0, dollarPosition);

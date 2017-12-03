@@ -41,7 +41,7 @@ public class UriIncludeProcessor extends IncludeProcessor {
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(openStream));
 
-            String line = null;
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
                 content.append(line);
             }

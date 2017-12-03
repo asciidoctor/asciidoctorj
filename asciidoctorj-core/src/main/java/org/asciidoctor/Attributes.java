@@ -237,7 +237,6 @@ public class Attributes {
     /**
      * Enables or disables rendering of the URI scheme when rendering URLs.
      * @see <a href="http://asciidoctor.org/docs/user-manual/#url">Asciidoctor User Manual</a>
-     * @param hideUriScheme
      */
     public void setHideUriScheme(boolean hideUriScheme) {
         this.attributes.put(HIDE_URI_SCHEME, toAsciidoctorFlag(hideUriScheme));
@@ -487,8 +486,6 @@ public class Attributes {
 
     /**
      * Sets icons directory.
-     * 
-     * @param iconsDir
      */
     public void setIconsDir(String iconsDir) {
         this.attributes.put(ICONS_DIR, iconsDir);
@@ -496,8 +493,6 @@ public class Attributes {
 
     /**
      * auto-number section titles in the HTML backend
-     * 
-     * @param sectionNumbers
      */
     public void setSectionNumbers(boolean sectionNumbers) {
         this.attributes.put(SECTION_NUMBERS, toAsciidoctorFlag(sectionNumbers));
@@ -579,7 +574,7 @@ public class Attributes {
 
     private void addAttributes(String[] allAttributes) {
         for (String attribute : allAttributes) {
-            int equalsIndex = -1;
+            int equalsIndex;
             if ((equalsIndex = attribute.indexOf(ATTRIBUTE_SEPARATOR)) > -1) {
                 extractAttributeNameAndValue(attribute, equalsIndex);
             } else {

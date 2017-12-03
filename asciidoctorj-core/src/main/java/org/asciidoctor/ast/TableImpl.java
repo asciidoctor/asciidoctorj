@@ -58,8 +58,8 @@ public class TableImpl extends AbstractBlockImpl implements Table {
         List<Column> rubyColumns = delegate.getColumns();
         List<Column> result = new ArrayList<Column>(rubyColumns.size());
 
-        for (int i = 0; i < rubyColumns.size(); i++) {
-            IRubyObject rubyColumn = (IRubyObject) rubyColumns.get(i);
+        for (Column column : rubyColumns) {
+            IRubyObject rubyColumn = (IRubyObject) column;
             result.add((Column) NodeConverter.createASTNode(rubyColumn));
         }
 
@@ -114,8 +114,8 @@ public class TableImpl extends AbstractBlockImpl implements Table {
 
         private List<Row> convertRows(List<?> rows) {
             List<Row> result = new ArrayList<Row>(rows.size());
-            for (int i = 0; i < rows.size(); i++) {
-                List<? extends IRubyObject> rubyRow = (List<? extends IRubyObject>) rows.get(i);
+            for (Object row : rows) {
+                List<? extends IRubyObject> rubyRow = (List<? extends IRubyObject>) row;
                 result.add(convertRow(rubyRow));
             }
             return result;
@@ -123,8 +123,7 @@ public class TableImpl extends AbstractBlockImpl implements Table {
 
         private Row convertRow(List<? extends IRubyObject> rubyRow) {
             List<Cell> cells = new ArrayList<Cell>(rubyRow.size());
-            for (int j = 0; j < rubyRow.size(); j++) {
-                IRubyObject rubyCell = rubyRow.get(j);
+            for (IRubyObject rubyCell : rubyRow) {
                 cells.add((Cell) NodeConverter.createASTNode(rubyCell));
             }
             return new RowImpl(cells, rubyRuntime);

@@ -14,7 +14,6 @@ import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
-import org.jruby.RubySymbol;
 
 import com.beust.jcommander.JCommander;
 
@@ -31,7 +30,7 @@ public class AsciidoctorInvoker {
             jCommander.usage();
         } else {
 
-            Asciidoctor asciidoctor = null;
+            Asciidoctor asciidoctor;
             
             asciidoctor = buildAsciidoctorJInstance(asciidoctorCliOptions);
             

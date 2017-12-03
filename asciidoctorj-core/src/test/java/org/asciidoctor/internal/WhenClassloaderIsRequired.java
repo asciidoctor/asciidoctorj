@@ -9,7 +9,7 @@ import org.junit.Test;
     public AsciiDoctorJClassloaderTestRunnable(Asciidoctor.Factory instance){
         asciidoctorfactory = instance;
     }
-    private Asciidoctor.Factory asciidoctorfactory = null;
+    private Asciidoctor.Factory asciidoctorfactory;
 
     private boolean loadingsucceeded = false;
     private ClassLoader classloader = null;

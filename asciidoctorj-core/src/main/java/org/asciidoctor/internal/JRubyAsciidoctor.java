@@ -126,7 +126,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         RubyInstanceConfig config = createOptimizedConfiguration();
         injectEnvironmentVariables(config, environmentVars);
 
-        Ruby rubyRuntime = JavaEmbedUtils.initialize(Collections.EMPTY_LIST, config);
+        Ruby rubyRuntime = JavaEmbedUtils.initialize(Collections.<String>emptyList(), config);
 
         JRubyRuntimeContext.set(rubyRuntime);
 
@@ -134,8 +134,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory.createAsciidoctorModule();
 
-        JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
-        return jRubyAsciidoctor;
+        return new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
     }
 
     private static Asciidoctor createJRubyAsciidoctorInstance(ClassLoader classloader, String gemPath) {
@@ -153,9 +152,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
         JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(rubyRuntime);
 
         AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory.createAsciidoctorModule();
-        JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
 
-        return jRubyAsciidoctor;
+        return new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
     }
 
     private static void injectEnvironmentVariables(RubyInstanceConfig config, Map<String, Object> environmentVars) {
@@ -355,9 +353,6 @@ public class JRubyAsciidoctor implements Asciidoctor {
      * This method has been added to deal with the fact that asciidoctor 0.1.2 can return an Asciidoctor::Document or a
      * String depending if content is write to disk or not. This may change in the future
      * (https://github.com/asciidoctor/asciidoctor/issues/286)
-     * 
-     * @param object
-     * @return
      */
     private String returnExpectedValue(Object object) {
         if (object instanceof String) {

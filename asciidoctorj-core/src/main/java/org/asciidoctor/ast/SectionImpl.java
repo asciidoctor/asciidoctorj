@@ -3,8 +3,6 @@ package org.asciidoctor.ast;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 
-import java.util.List;
-
 public class SectionImpl extends AbstractBlockImpl implements Section {
 
     private Section delegate;

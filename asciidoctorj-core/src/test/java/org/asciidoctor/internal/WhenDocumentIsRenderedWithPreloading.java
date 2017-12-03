@@ -10,7 +10,6 @@ import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.OptionsBuilder;
 import org.jruby.RubyBoolean;
 import org.junit.Test;
-import org.junit.Ignore;
 
 public class WhenDocumentIsRenderedWithPreloading {
 

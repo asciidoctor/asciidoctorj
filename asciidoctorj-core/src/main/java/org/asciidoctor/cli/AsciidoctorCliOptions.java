@@ -108,7 +108,7 @@ public class AsciidoctorCliOptions {
     }
 
     public boolean isRequire() {
-        return this.require != null && this.require.size() > 0;
+        return this.require != null && !this.require.isEmpty();
     }
 
     public List<String> getRequire() {
@@ -116,7 +116,7 @@ public class AsciidoctorCliOptions {
     }
 
     public boolean isLoadPaths() {
-        return this.loadPaths != null && this.loadPaths.size() > 0;
+        return this.loadPaths != null && !this.loadPaths.isEmpty();
     }
 
     public List<String> getLoadPaths() {
@@ -294,7 +294,7 @@ public class AsciidoctorCliOptions {
         Map<String, Object> attributeValues = new HashMap<String, Object>();
 
         for (String attribute : this.attributes) {
-            int equalsIndex = -1;
+            int equalsIndex;
             if ((equalsIndex = attribute.indexOf(ATTRIBUTE_SEPARATOR)) > -1) {
                 extractAttributeNameAndValue(attributeValues, attribute, equalsIndex);
             } else {

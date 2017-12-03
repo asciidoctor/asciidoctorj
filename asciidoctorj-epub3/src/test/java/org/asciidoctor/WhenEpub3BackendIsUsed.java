@@ -6,11 +6,9 @@ import static org.junit.Assert.assertThat;
 
 import java.io.File;
 
-import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.Ignore;
 
 public class WhenEpub3BackendIsUsed {
 

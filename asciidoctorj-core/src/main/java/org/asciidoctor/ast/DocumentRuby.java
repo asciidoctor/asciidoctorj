@@ -1,7 +1,5 @@
 package org.asciidoctor.ast;
 
-import org.jruby.RubySymbol;
-
 import java.util.List;
 import java.util.Map;
 

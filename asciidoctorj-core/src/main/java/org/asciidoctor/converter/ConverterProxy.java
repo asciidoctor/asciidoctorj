@@ -1,21 +1,7 @@
 package org.asciidoctor.converter;
 
-import org.asciidoctor.ast.AbstractBlock;
 import org.asciidoctor.ast.AbstractNode;
-import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.BlockImpl;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.DocumentRuby;
-import org.asciidoctor.ast.Inline;
-import org.asciidoctor.ast.InlineImpl;
-import org.asciidoctor.ast.ListImpl;
-import org.asciidoctor.ast.ListItem;
-import org.asciidoctor.ast.ListItemImpl;
-import org.asciidoctor.ast.ListNode;
 import org.asciidoctor.ast.NodeConverter;
-import org.asciidoctor.ast.Section;
-import org.asciidoctor.ast.SectionImpl;
-import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyObject;
@@ -28,7 +14,6 @@ import org.jruby.runtime.builtin.IRubyObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 public class ConverterProxy extends RubyObject {

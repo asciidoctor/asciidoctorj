@@ -46,9 +46,7 @@ public class DefaultCssResolver {
         if (attributes != null && isCopyCssPresent(attributes)) {
             // if linkcss is not present by default is considered as true.
             if (isLinkCssWithValidValue(attributes)) {
-                if (isStylesheetWithValidValue(attributes)) {
-                    return true;
-                }
+                return isStylesheetWithValidValue(attributes);
             }
         }
 
