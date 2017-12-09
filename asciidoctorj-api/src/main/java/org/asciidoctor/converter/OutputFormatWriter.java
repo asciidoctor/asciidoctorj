@@ -1,6 +1,5 @@
 package org.asciidoctor.converter;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
