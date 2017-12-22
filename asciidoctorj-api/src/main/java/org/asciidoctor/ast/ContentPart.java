@@ -21,5 +21,5 @@ public interface ContentPart {
 
     String getContent();
 
-    List<? extends ContentPart> getParts();
+    List<ContentPart> getParts();
 }

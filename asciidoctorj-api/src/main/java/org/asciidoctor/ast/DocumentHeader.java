@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface DocumentHeader {
 
-    List<? extends Author> getAuthors();
+    List<Author> getAuthors();
 
     Title getDocumentTitle();
 
