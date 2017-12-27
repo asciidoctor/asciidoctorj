@@ -8,6 +8,7 @@ jar {
   manifest {
     symbolicName = 'org.asciidoctor'
     instruction 'Export-Package',
+      "org.asciidoctor;version=\"${version}\"",
       "org.asciidoctor.ast;version=\"${version}\"",
       "org.asciidoctor.converter;version=\"${version}\""
   }
