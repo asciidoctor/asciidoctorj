@@ -2,7 +2,6 @@ package org.asciidoctor.internal;
 
 import org.jruby.RubyHash;
 import org.jruby.RubyString;
-import org.jruby.RubySymbol;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 
@@ -34,7 +33,7 @@ public class RubyAttributesMapDecorator implements Map<String, Object> {
         if (!(key instanceof String)) {
             return false;
         }
-        return rubyHash.containsKey(key);
+        return rubyHash.containsKey(convertJavaToRubyKey((String) key));
     }
 
     @Override
@@ -47,14 +46,15 @@ public class RubyAttributesMapDecorator implements Map<String, Object> {
         if (!(key instanceof String)) {
             return false;
         }
-        Object value = rubyHash.get(key);
+        Object value = rubyHash.get(convertJavaToRubyKey((String) key));
         return convertRubyValue(value);
     }
 
     @Override
     public Object put(String key, Object value) {
-        Object oldValue = get(key);
-        rubyHash.put(key, convertJavaValue(value));
+        final Object convertedKey = convertJavaToRubyKey(key);
+        Object oldValue = rubyHash.get(convertedKey);
+        rubyHash.put(convertedKey, convertJavaValue(value));
         return oldValue;
     }
 
@@ -63,8 +63,9 @@ public class RubyAttributesMapDecorator implements Map<String, Object> {
         if (!(key instanceof String)) {
             return null;
         }
-        Object oldValue = get(key);
-        rubyHash.remove(key);
+        Object convertedKey = convertJavaToRubyKey((String) key);
+        Object oldValue = rubyHash.get(convertedKey);
+        rubyHash.remove(convertedKey);
         return convertRubyValue(oldValue);
     }
 
@@ -135,6 +136,29 @@ public class RubyAttributesMapDecorator implements Map<String, Object> {
         } else {
             return JavaEmbedUtils.javaToRuby(rubyHash.getRuntime(), value);
         }
+    }
+
+    private Object convertJavaToRubyKey(String keyString) {
+        Object convertedKey;
+        if (isDigits(keyString)) {
+            convertedKey = Long.parseLong(keyString);
+        } else {
+            convertedKey = keyString;
+        }
+        return convertedKey;
+    }
+
+    private boolean isDigits(final String arg) {
+        if (arg.length() == 0) {
+            return false;
+        }
+        for (int i = 0; i < arg.length(); i++) {
+            final char c = arg.charAt(i);
+            if (c < '0' || '9' < c) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
