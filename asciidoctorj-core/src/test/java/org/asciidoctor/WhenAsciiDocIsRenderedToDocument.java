@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.collection.IsMapContaining.hasKey;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
@@ -350,6 +351,21 @@ public class WhenAsciiDocIsRenderedToDocument {
 
         Document document = asciidoctor.load(s, new HashMap<String, Object>());
         assertNull(document.getParent());
+    }
+
+    @Test
+    public void should_read_caption() {
+        String s = "[caption=\"Table A. \"]\n" + 
+                ".A formal table\n" + 
+                "|===\n" + 
+                "|Cell in column 1, row 1\n" + 
+                "|Cell in column 2, row 1\n" + 
+                "|===";
+
+        Document document = asciidoctor.load(s, new HashMap<String, Object>());
+        assertNotNull(document.getBlocks());
+        assertThat(document.getBlocks().size(), is(1));
+        assertThat(document.getBlocks().get(0).getCaption(), is("Table A. "));
     }
 
 }
