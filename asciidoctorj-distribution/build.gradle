@@ -21,10 +21,6 @@ if ( !project.hasProperty('skip.signing') ) {
   signPom.enabled = false
 }
 
-configurations.all {
-  artifacts.clear()
-}
-
 tasks.withType(AbstractArchiveTask) {
   baseName rootProject.name
   classifier 'bin' // use classifier for identification in repository list
