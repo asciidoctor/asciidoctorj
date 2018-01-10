@@ -1,9 +1,14 @@
 dist: precise
 language: java
-jdk:
-  - oraclejdk8
-  - oraclejdk7
-  - openjdk7
+matrix:
+  include:
+    - jdk: oraclejdk9
+      dist: trusty
+    - jdk: oraclejdk8
+    - jdk: oraclejdk7
+    - jdk: openjdk7
+  allow_failures:
+    - jdk: oraclejdk9
 before_script: unset GEM_PATH GEM_HOME JRUBY_OPTS
 before_install:
   - sudo hostname "$(hostname | cut -c1-63)"
