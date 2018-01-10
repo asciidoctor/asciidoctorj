@@ -22,7 +22,10 @@ ASCIIDOCTOR_VERSION=`grep 'VERSION' ./lib/asciidoctor/version.rb | sed "s/.*'\(.
 # we don't use sed -i here for compatibility with OSX
 sed "s;<version></version>;<version>$ASCIIDOCTOR_VERSION</version>;" pom.xml > pom.xml.sedtmp && \
   mv -f pom.xml.sedtmp pom.xml
-mvn install -Dgemspec=asciidoctor.gemspec
+
+#we override the jruby version here with one supported by java9, additionally java9 needs some add-opens arguments that need to be ignored on older jvms
+mvn install -Dgemspec=asciidoctor.gemspec -Djruby.version=9.1.14.0 -Djruby.jvmargs="-XX:+IgnoreUnrecognizedVMOptions --add-opens=java.base/java.security.cert=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util.zip=ALL-UNNAMED"
+
 cd ../..
 #rm -rf maven
 cd ..

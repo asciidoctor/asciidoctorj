@@ -57,7 +57,7 @@ ext {
   coderayGemVersion = '1.1.0'
 
   codenarcVersion = '0.24.1'
-  groovyVersion = '2.4.7'
+  groovyVersion = '2.4.13'
   erubisGemVersion = '2.7.0'
   hamlGemVersion = '4.0.5'
   openUriCachedGemVersion = '0.0.5'
