@@ -170,7 +170,6 @@ configure(subprojects.findAll { !it.isDistribution() && it.name != 'asciidoctorj
 configure(subprojects.findAll { !it.isDistribution() }) {
 
   apply plugin: 'com.github.jruby-gradle.base'
-  apply from: rootProject.file('gradle/eclipse.gradle')
   apply plugin: 'idea'
 
   repositories {
