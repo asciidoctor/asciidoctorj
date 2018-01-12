@@ -36,6 +36,16 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
     }
 
     @Override
+    public String getCaption() {
+        return getString("caption");
+    }
+
+    @Override
+    public void setCaption(String caption) {
+        setString("caption", caption);
+    }
+
+    @Override
     public String style() {
         return getStyle();
     }

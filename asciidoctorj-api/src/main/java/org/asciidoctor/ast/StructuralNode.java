@@ -47,6 +47,10 @@ public interface StructuralNode extends ContentNode {
     String title();
     String getTitle();
     void setTitle(String title);
+
+    String getCaption();
+    void setCaption(String caption);
+
     /**
      * @deprecated Please use {@linkplain #getStyle()} instead
      */
