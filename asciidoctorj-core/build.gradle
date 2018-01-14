@@ -31,7 +31,7 @@ jrubyPrepare {
   doLast {
     copy { // bundles the gems inside this artifact
       from gemFiles
-      into sourceSets.main.output.resourcesDir
+      into preparedGems
     }
   }
 }
