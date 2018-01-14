@@ -10,6 +10,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.xmlmatchers.xpath.HasXPath.hasXPath;
 
@@ -181,6 +182,103 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
     }
     
+    @Test
+    public void show_title_true_attribute_should_show_title_on_embedded_document() {
+        final Options options = options()
+            .attributes(attributes().showTitle(true).get())
+            .toFile(false)
+            .headerFooter(false)
+            .get();
+
+        final Document doc = Jsoup.parse(asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options));
+
+        assertEquals(1, doc.getElementsByTag("h1").size());
+        assertEquals("Document Title", doc.getElementsByTag("h1").get(0).text());
+    }
+
+    @Test
+    public void show_title_false_then_true_attribute_should_show_title_on_embedded_document() {
+        final Options options = options()
+            .attributes(attributes().showTitle(false).showTitle(true).get())
+            .toFile(false)
+            .headerFooter(false)
+            .get();
+
+        final Document doc = Jsoup.parse(asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options));
+
+        assertEquals(1, doc.getElementsByTag("h1").size());
+        assertEquals("Document Title", doc.getElementsByTag("h1").get(0).text());
+    }
+
+    @Test
+    public void show_title_false_attribute_should_hide_title_on_embedded_document() {
+        final Options options = options()
+            .attributes(attributes().showTitle(false).get())
+            .toFile(false)
+            .headerFooter(false)
+            .get();
+
+        final Document doc = Jsoup.parse(asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options));
+
+        assertEquals(0, doc.getElementsByTag("h1").size());
+    }
+
+    @Test
+    public void show_title_true_then_false_attribute_should_hide_title_on_embedded_document() {
+        final Options options = options()
+            .attributes(attributes().showTitle(true).showTitle(false).get())
+            .toFile(false)
+            .headerFooter(false)
+            .get();
+
+        final Document doc = Jsoup.parse(asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options));
+
+        assertEquals(0, doc.getElementsByTag("h1").size());
+    }
+
+    @Test
+    public void show_title_true_attribute_should_show_title_on_standalone_document() {
+
+        final Options options = options()
+            .attributes(attributes().showTitle(true).get())
+            .toFile(false)
+            .headerFooter(true)
+            .get();
+
+        final Document doc = Jsoup.parse(asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options));
+
+        assertEquals(1, doc.getElementsByTag("h1").size());
+        assertEquals("Document Title", doc.getElementsByTag("h1").get(0).text());
+    }
+
+    @Test
+    public void show_title_false_attribute_should_hide_title_on_standalone_document() {
+
+        final Options options = options()
+            .attributes(attributes().showTitle(false).get())
+            .toFile(false)
+            .headerFooter(true)
+            .get();
+
+        final Document doc = Jsoup.parse(asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options));
+
+        assertEquals(0, doc.getElementsByTag("h1").size());
+    }
+
+    @Test
+    public void show_title_true_then_false_attribute_should_hide_title_on_standalone_document() {
+
+        final Options options = options()
+            .attributes(attributes().showTitle(false).get())
+            .toFile(false)
+            .headerFooter(true)
+            .get();
+
+        final Document doc = Jsoup.parse(asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options));
+
+        assertEquals(0, doc.getElementsByTag("h1").size());
+    }
+
     @Test
     public void source_highlighter_attribute_should_add_required_javascript_libraries_as_highlighter() throws IOException {
         
