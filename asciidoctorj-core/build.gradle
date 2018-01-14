@@ -24,18 +24,20 @@ def gemFiles = fileTree(jruby.gemInstallDir) {
   include "gems/asciidoctor-${asciidoctorGemVersion}/data/**"
 }
 
-jrubyPrepare << {
-  copy { // bundles the gems inside this artifact
-    from gemFiles
-    eachFile {
-      // See https://github.com/asciidoctor/asciidoctorj/issues/497
-      if (it.path ==~ /gems\/asciidoctor-.+\/lib\/asciidoctor\/abstract_block.rb/) {
-        it.filter { line ->
-          line.replaceAll(/block.context == :section/, 'block.context.to_sym == :section')
+jrubyPrepare {
+  doLast {
+    copy { // bundles the gems inside this artifact
+      from gemFiles
+      eachFile {
+        // See https://github.com/asciidoctor/asciidoctorj/issues/497
+        if (it.path ==~ /gems\/asciidoctor-.+\/lib\/asciidoctor\/abstract_block.rb/) {
+          it.filter { line ->
+            line.replaceAll(/block.context == :section/, 'block.context.to_sym == :section')
+          }
         }
       }
+      into preparedGems
     }
-    into sourceSets.main.output.resourcesDir
   }
 }
 

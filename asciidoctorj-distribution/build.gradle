@@ -21,8 +21,9 @@ if ( !project.hasProperty('skip.signing') ) {
   signPom.enabled = false
 }
 
-configurations.all {
-  artifacts.clear()
+configurations.archives.with {
+  //We need to remove the (non-existing) jar artifact, otherwise signing will fail
+  artifacts.removeAll{ it.type.equals("jar") }
 }
 
 tasks.withType(AbstractArchiveTask) {

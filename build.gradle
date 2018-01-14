@@ -192,6 +192,19 @@ configure(subprojects.findAll { !it.isDistribution() }) {
     // TODO I'd like to be able to customize the name of the gemInstallDir
   }
 
+  ext {
+    // path to use for the prepared jruby gems
+    preparedGems = new File("$buildDir/preparedGems")
+  }
+
+  sourceSets {
+    main {
+      //let's register an output folder on the main SourceSet:
+      output.dir(preparedGems, builtBy: 'jrubyPrepare')
+      //it is now a part of the 'main' classpath and will be a part of the jar
+    }
+  }
+
   // QUESTION is this the right place to insert this task dependency in the lifecycle?
   // IMPORTANT The TMP or TEMP environment variable must be set for the gem install command to work on Windows
   processResources.dependsOn jrubyPrepare
