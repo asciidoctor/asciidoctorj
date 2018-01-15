@@ -1,14 +1,29 @@
-dist: precise
+os: linux
+dist: trusty
 language: java
-jdk:
-  - oraclejdk8
-  - oraclejdk7
-  - openjdk7
-before_script: unset GEM_PATH GEM_HOME JRUBY_OPTS
+matrix:
+  include:
+    - jdk: oraclejdk8
+    - jdk: oraclejdk7
+      dist: precise
+    - jdk: openjdk7
+      dist: precise
+    - os: osx
+
+addons:
+  hosts:
+    - asciidoctorj-builder
+  hostname: asciidoctorj-builder
+  apt:
+    packages:
+      - graphviz
+
 before_install:
-  - sudo hostname "$(hostname | cut -c1-63)"
-  - (cat /etc/hosts ; echo 127.0.0.1 $(hostname)) | sudo tee /etc/hosts
-  - sudo apt-get -qq update
-  - sudo apt-get install -y graphviz
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install graphviz; fi
+
 install: ./gradlew -S -Pskip.signing assemble
+
+before_script: unset GEM_PATH GEM_HOME JRUBY_OPTS
+
 script: ./gradlew -S -Pskip.signing check && bash test-asciidoctor-upstream.sh
