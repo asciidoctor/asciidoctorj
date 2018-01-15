@@ -1,4 +1,5 @@
-dist: precise
+os: linux
+dist: trusty
 language: java
 matrix:
   include:
@@ -6,14 +7,28 @@ matrix:
       dist: trusty
     - jdk: oraclejdk8
     - jdk: oraclejdk7
+      dist: precise
     - jdk: openjdk7
+      dist: precise
+    - os: osx
 before_script: unset GEM_PATH GEM_HOME JRUBY_OPTS
+
+addons:
+  hosts:
+    - asciidoctorj-builder
+  hostname: asciidoctorj-builder
+  apt:
+    packages:
+      - graphviz
+
 before_install:
-  - sudo hostname "$(hostname | cut -c1-63)"
-  - (cat /etc/hosts ; echo 127.0.0.1 $(hostname)) | sudo tee /etc/hosts
-  - sudo apt-get -qq update
-  - sudo apt-get install -y graphviz
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install graphviz; fi
+
 install: ./gradlew -S -Pskip.signing assemble
+
+before_script: unset GEM_PATH GEM_HOME JRUBY_OPTS
+
 script: ./gradlew -S -Pskip.signing check && bash test-asciidoctor-upstream.sh
 after_success: if [ "${TRAVIS_BRANCH}" = "asciidoctorj-1.6.0" -a "${TRAVIS_PULL_REQUEST}" = "false" -a "${TRAVIS_JDK_VERSION}" = "oraclejdk8" ]; then ./gradlew clean build artifactoryPublish -x test ; fi
 notifications:
