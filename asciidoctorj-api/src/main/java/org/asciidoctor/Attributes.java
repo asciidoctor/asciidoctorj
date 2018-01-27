@@ -41,6 +41,7 @@ public class Attributes {
     public static final String LINK_ATTRS = "linkattrs";
     public static final String EXPERIMENTAL = "experimental";
     public static final String SHOW_TITLE = "showtitle";
+    public static final String NOTITLE = "notitle";
     public static final String ALLOW_URI_READ = "allow-uri-read";
     public static final String TOC_POSITION = "toc-position";
     public static final String TOC_2 = "toc2";
@@ -332,7 +333,13 @@ public class Attributes {
      *            value.
      */
     public void setShowTitle(boolean showTitle) {
-        this.attributes.put(SHOW_TITLE, showTitle);
+        if (showTitle) {
+            this.attributes.put(SHOW_TITLE, true);
+            this.attributes.remove(NOTITLE);
+        } else {
+            this.attributes.put(NOTITLE, true);
+            this.attributes.remove(SHOW_TITLE);
+        }
     }
 
     /**
