@@ -3,6 +3,7 @@ package org.asciidoctor.internal;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.asciidoctor.Asciidoctor;
+import org.junit.Ignore;
 import org.junit.Test;
 
  class AsciiDoctorJClassloaderTestRunnable implements Runnable {
@@ -46,6 +47,7 @@ public class WhenClassloaderIsRequired {
         inside the runnable to verify we have created the same error as happens inside sbt.
      */
     @Test
+    @Ignore("Behavior changed in JRuby 9000. It no longer only uses the TCCL by default")
     public void contentsOfJRubyCompleteShouldFailToLoadWithoutPassingClassloader() throws Exception{
         ClassLoader currentclassloader =  this.getClass().getClassLoader();
         ClassLoader rootclassloader =  currentclassloader.getParent();
