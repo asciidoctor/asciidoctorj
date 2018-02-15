@@ -1,9 +1,6 @@
 package org.asciidoctor.extension;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.asciidoctor.ast.AbstractBlock;
 
@@ -26,7 +23,7 @@ public class YellBlock extends BlockProcessor {
             }
         }
 
-		return createBlock(parent, "paragraph", Arrays.asList(upperLines), attributes, new HashMap<Object, Object>());
+        return createBlock(parent, "paragraph", Arrays.asList(upperLines), attributes, new HashMap<Object, Object>());
     }
 
 }

@@ -6,8 +6,6 @@ import org.jruby.RubyArray;
 import org.jruby.RubyClass;
 import org.jruby.RubyModule;
 import org.jruby.RubyString;
-import org.jruby.runtime.ObjectAllocator;
-import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.HashMap;
 import java.util.Map;

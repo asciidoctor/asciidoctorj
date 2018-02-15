@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.asciidoctor.ast.Document;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
 
 public class CustomFooterPostProcessor extends Postprocessor {
 
@@ -17,17 +16,15 @@ public class CustomFooterPostProcessor extends Postprocessor {
         
         String copyright  = "Copyright Acme, Inc.";
         
-        if(document.basebackend("html")) {
+        if (document.basebackend("html")) {
             org.jsoup.nodes.Document doc = Jsoup.parse(output, "UTF-8");
 
-            Element contentElement = doc.getElementById("footer-text");
-            contentElement.append(copyright);
+            doc.getElementById("footer-text")
+                    .append(copyright);
             
-            output = doc.html();
-            
+            return doc.html();
         }
 
-        
         return output;
     }
 

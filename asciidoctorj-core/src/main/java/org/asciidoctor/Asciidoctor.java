@@ -605,15 +605,11 @@ public interface Asciidoctor {
 
     /**
      * Require the given Ruby libraries by name when rendering.
-     *
-     * @param requiredLibraries
      */
     void requireLibrary(String... requiredLibraries);
 
     /**
      * Require the given Ruby libraries by name when rendering.
-     *
-     * @param requiredLibraries
      */
     void requireLibraries(Collection<String> requiredLibraries);
 
@@ -637,15 +633,14 @@ public interface Asciidoctor {
 
     /**
      * Creates an ExtensionGroup that can be used to register and unregister a group of extensions.
-     * @return
      */
     ExtensionGroup createGroup();
 
     /**
      * Creates an ExtensionGroup that can be used to register and unregister a group of extensions.
-     * @return
      */
     ExtensionGroup createGroup(String groupName);
+
     /**
      * Unregister all registered extensions.
      */
@@ -664,9 +659,6 @@ public interface Asciidoctor {
     
     /**
      * Factory for creating a new instance of Asciidoctor interface.
-     * 
-     * @author lordofthejars
-     * 
      */
     class Factory {
 
@@ -713,7 +705,6 @@ public interface Asciidoctor {
          * Creates a new instance of Asciidoctor and sets a specific classloader for the  JRuby runtime to use. This method is mostly
          * used in environments where different threads may have different classloaders, like build tools sbt or ANT.
          *
-         * @param classloader
          * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
          *         Ruby calls.
          */
@@ -723,8 +714,6 @@ public interface Asciidoctor {
 
         /**
          * Cerates a new instance of Asciidoctor and sets a specific classloader and gempath for the JRuby runtime to use.
-         * @param classloader
-         * @param gemPath
          * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
          */
         public static Asciidoctor create(ClassLoader classloader, String gemPath) {
@@ -736,7 +725,6 @@ public interface Asciidoctor {
     /**
      * Loads AsciiDoc content and returns the Document object.
      * @param content to be parsed.
-     * @param options 
      * @return Document of given content.
      */
     Document load(String content, Map<String, Object> options);
@@ -744,10 +732,8 @@ public interface Asciidoctor {
     /**
      * Loads AsciiDoc content from file and returns the Document object.
      * @param file to be loaded.
-     * @param options 
      * @return Document of given content.
      */
     Document loadFile(File file, Map<String, Object> options);
-
 
 }

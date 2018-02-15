@@ -7,11 +7,7 @@ import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.java.proxies.RubyObjectHolderProxy;
-import org.jruby.javasupport.JavaEmbedUtils;
-import org.jruby.runtime.Helpers;
 import org.jruby.runtime.builtin.IRubyObject;
-import org.jruby.runtime.builtin.InstanceVariables;
-import org.jruby.runtime.builtin.Variable;
 
 public abstract class AbstractNodeImpl implements AbstractNode {
 

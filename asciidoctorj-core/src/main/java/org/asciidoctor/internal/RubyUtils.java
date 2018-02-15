@@ -4,13 +4,10 @@ import java.io.InputStream;
 
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
-import org.jruby.RubyObject;
 import org.jruby.RubySymbol;
-import org.jruby.internal.runtime.GlobalVariable.Scope;
 import org.jruby.java.proxies.RubyObjectHolderProxy;
 import org.jruby.javasupport.JavaClass;
 import org.jruby.javasupport.JavaEmbedUtils;
-import org.jruby.runtime.GlobalVariable;
 import org.jruby.runtime.builtin.IRubyObject;
 
 public class RubyUtils {

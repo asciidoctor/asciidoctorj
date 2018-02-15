@@ -29,7 +29,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
             if(currentBlock instanceof Block) {
                 Block block = (Block)currentBlock;
                 List<String> lines = block.lines();
-                if (lines.size() > 0 && lines.get(0).startsWith("$")) {
+                if (!lines.isEmpty() && lines.get(0).startsWith("$")) {
                     blocks.set(
                             i, convertToTerminalListing(block));
                             

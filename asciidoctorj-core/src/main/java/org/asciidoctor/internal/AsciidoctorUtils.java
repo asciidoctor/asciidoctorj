@@ -24,13 +24,9 @@ public class AsciidoctorUtils {
             
             if(attributes.containsKey(attributeName)) {
                 String configuredAttributeValue = (String) attributes.get(attributeName);
-                
-                if(configuredAttributeValue.equals(attributeValue)) {
-                    return true;
-                }
-                
+
+                return configuredAttributeValue.equals(attributeValue);
             }
-            
         }
         
         return false;

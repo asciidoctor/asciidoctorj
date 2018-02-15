@@ -47,7 +47,7 @@ public interface Table extends AbstractBlock {
     String getGrid();
 
     /**
-     * Sets the value of the {@grid} attribute.
+     * Sets the value of the {@literal grid} attribute.
      * @see #getGrid()
      * @param grid usually either {@code all}, {@code cols}, {@code rows} or {@code none}
      */

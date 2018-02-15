@@ -209,11 +209,11 @@ public class GlobDirectoryWalker implements DirectoryWalker {
         private int index;
 
         Pattern(String pattern) {
-            pattern = pattern.replace('\\', '/');
-            pattern = pattern.replaceAll("\\*\\*[^/]", "**/*");
-            pattern = pattern.replaceAll("[^/]\\*\\*", "*/**");
-
-            values = pattern.split("/");
+            values = pattern
+                    .replace('\\', '/')
+                    .replaceAll("\\*\\*[^/]", "**/*")
+                    .replaceAll("[^/]\\*\\*", "*/**")
+                    .split("/");
             value = values[0];
         }
 

@@ -1,7 +1,6 @@
 package unusual.extension;
 
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.extension.Postprocessor;
 import org.asciidoctor.extension.Treeprocessor;
 
 /**

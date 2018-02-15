@@ -71,7 +71,7 @@ public class WhenJavaExtensionIsRegistered {
 
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(openStream));
 
-                String line = null;
+                String line;
                 while ((line = bufferedReader.readLine()) != null) {
                     content.append(line);
                 }
@@ -136,7 +136,7 @@ public class WhenJavaExtensionIsRegistered {
 
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(openStream));
 
-                    String line = null;
+                    String line;
                     while ((line = bufferedReader.readLine()) != null) {
                         content.append(line);
                     }
@@ -738,7 +738,7 @@ public class WhenJavaExtensionIsRegistered {
         }
         // When: I unregister the Postprocessor and render again with the same Asciidoctor instance
         {
-            extensionGroup.unregister();;
+            extensionGroup.unregister();
 
             Options options2 = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample2.html"))
                 .safe(SafeMode.UNSAFE).get();

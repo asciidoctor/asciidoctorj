@@ -29,10 +29,9 @@ public class TextConverter extends AbstractConverter {
             return document.getContent();
         } else if (node instanceof Section) {
             Section section = (Section) node;
-            return new StringBuilder()
-                    .append("== ").append(section.getTitle()).append(" ==")
-                    .append(LINE_SEPARATOR).append(LINE_SEPARATOR)
-                    .append(section.getContent()).toString();
+            return "== " + section.getTitle() + " ==" +
+                    LINE_SEPARATOR + LINE_SEPARATOR +
+                    section.getContent();
         } else if (transform.equals("paragraph")) {
             AbstractBlock block = (AbstractBlock) node;
             String content = (String) block.getContent();

@@ -8,9 +8,7 @@ import static org.junit.Assert.assertThat;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.StringWriter;
 
 import org.asciidoctor.util.ClasspathResources;
 import org.jsoup.Jsoup;

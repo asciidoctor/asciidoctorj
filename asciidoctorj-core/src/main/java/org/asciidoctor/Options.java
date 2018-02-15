@@ -78,9 +78,8 @@ public class Options {
      * Enable writing output to a file. The file includes header and footer by default.
      *
      * @param toFile The path to the output file. If the path is not absolute, it is
-     *               interpreted relative to what was set via {@link #setToDir()}
-     *               or {@link #setBaseDir()}, in that order.
-     *
+     *               interpreted relative to what was set via {@link #setToDir(String)} }
+     *               or {@link #setBaseDir(String)}, in that order.
      */
     public void setToFile(String toFile) {
         this.options.put(TO_FILE, toFile);
@@ -93,8 +92,7 @@ public class Options {
      *               as the input file, including header and footer into the output. If
      *               <code>false</code>, return output as a string without any header or
      *               footer. The default header and footer visibility can be overridden
-     *               using {@link #setHeaderFooter()}.
-     *
+     *               using {@link #setHeaderFooter(boolean)}.
      */
     public void setToFile(boolean toFile) {
         this.options.put(TO_FILE, toFile);
@@ -154,7 +152,6 @@ public class Options {
         this.options.put(optionName, optionValue);
     }
 
-    
     public Map<String, Object> map() {
         return this.options;
     }

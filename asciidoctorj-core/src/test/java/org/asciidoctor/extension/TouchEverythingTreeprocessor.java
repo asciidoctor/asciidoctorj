@@ -1,12 +1,8 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
