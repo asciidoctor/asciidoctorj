@@ -1896,6 +1896,10 @@ To create the distribution, run:
 
 You can find the distribution in the [path]_asciidoctorj-distribution/build/distributions_ folder.
 
+To install a built project (e.g. asciidoctorj-epub3) into your local M2 repository, run:
+
+ $ ./gradlew asciidoctorj-epub3:publishToMavenLocal -Pskip.signing
+
 === Develop in an IDE
 
 ==== IntelliJ IDEA
