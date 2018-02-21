@@ -1,5 +1,19 @@
 package org.asciidoctor.internal;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Logger;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.DirectoryWalker;
@@ -27,20 +41,6 @@ import org.jruby.embed.ScriptingContainer;
 import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.logging.Logger;
-
 public class JRubyAsciidoctor implements Asciidoctor {
 
     private static final Logger logger = Logger.getLogger(JRubyAsciidoctor.class.getName());
@@ -65,7 +65,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     public static Asciidoctor create(String gemPath) {
-        Map<String, Object> env = new HashMap<String, Object>();
+        Map<String, String> env = new HashMap<String, String>();
         // a null value will clear the GEM_PATH and GEM_HOME
         env.put(GEM_PATH, gemPath);
 
@@ -121,7 +121,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return jRubyAsciidoctor;
     }
 
-    private static Asciidoctor createJRubyAsciidoctorInstance(Map<String, Object> environmentVars) {
+    private static Asciidoctor createJRubyAsciidoctorInstance(Map<String, String> environmentVars) {
 
         RubyInstanceConfig config = createOptimizedConfiguration();
         injectEnvironmentVariables(config, environmentVars);
@@ -140,7 +140,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
     private static Asciidoctor createJRubyAsciidoctorInstance(ClassLoader classloader, String gemPath) {
 
-        Map<String, Object> env = new HashMap<String, Object>();
+        Map<String, String> env = new HashMap<String, String>();
         env.put(GEM_PATH, gemPath);
 
         ScriptingContainer container = new ScriptingContainer();
@@ -158,7 +158,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return jRubyAsciidoctor;
     }
 
-    private static void injectEnvironmentVariables(RubyInstanceConfig config, Map<String, Object> environmentVars) {
+    private static void injectEnvironmentVariables(RubyInstanceConfig config, Map<String, String> environmentVars) {
         EnvironmentInjector environmentInjector = new EnvironmentInjector(config);
         environmentInjector.inject(environmentVars);
     }

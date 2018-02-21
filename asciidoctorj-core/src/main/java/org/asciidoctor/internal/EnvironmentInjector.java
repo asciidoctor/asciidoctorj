@@ -14,12 +14,12 @@ class EnvironmentInjector {
         this.config = config;
     }
 
-    void inject(Map<String, Object> environmentVars) {
+    void inject(Map<String, String> environmentVars) {
         if (!environmentVars.isEmpty()) {
-            Map<String, Object> replacementEnv = new HashMap<String, Object>(System.getenv());
-            for (Map.Entry<String, Object> envVar : environmentVars.entrySet()) {
+            Map<String, String> replacementEnv = new HashMap<String, String>(System.getenv());
+            for (Map.Entry<String, String> envVar : environmentVars.entrySet()) {
                 String key = envVar.getKey();
-                Object val = envVar.getValue();
+                String val = envVar.getValue();
                 if (val == null || "".equals(val)) {
                     replacementEnv.remove(envVar.getKey());
                     if ("GEM_PATH".equals(key) && !environmentVars.containsKey("GEM_HOME")) {
