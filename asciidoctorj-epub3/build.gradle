@@ -1,3 +1,9 @@
+ext {
+  //asciidoctorEpub3GemVersion = project(':asciidoctorj-epub3').version.replace('-', '.')
+  asciidoctorEpub3GemVersion = '1.5.0-alpha.8'.replace('-', '.')
+}
+
+
 dependencies {
   compile project(':asciidoctorj')
   gems("rubygems:asciidoctor-epub3:$asciidoctorEpub3GemVersion") {
