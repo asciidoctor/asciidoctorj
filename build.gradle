@@ -128,6 +128,11 @@ subprojects {
       logger.lifecycle("Test: $descriptor produced standard out/err: " + event.message?"\n${event.message}":"" )
     }
 
+    systemProperty "http.proxyHost", System.getProperty("http.proxyHost")
+    systemProperty "http.proxyPort", System.getProperty("http.proxyPort")
+    systemProperty "https.proxyHost", System.getProperty("https.proxyHost")
+    systemProperty "https.proxyPort", System.getProperty("https.proxyPort")
+
     testLogging {
       showCauses = true
       showExceptions = true
