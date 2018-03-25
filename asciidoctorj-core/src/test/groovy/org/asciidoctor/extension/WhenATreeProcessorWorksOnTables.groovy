@@ -59,4 +59,26 @@ class WhenATreeProcessorWorksOnTables extends Specification {
 
     }
 
+    def 'then it should be able to update the text of a cell'() {
+
+        given: 'an document with a table and a tree processor that updates tables'
+        asciidoctor.javaExtensionRegistry().treeprocessor(TableUpdaterTreeProcessor)
+
+        when: 'the document is rendered'
+        String content = asciidoctor.convert('''=== Test
+
+|===
+| Hello | World
+| World | Hello 
+|===
+
+''', OptionsBuilder.options().headerFooter(false))
+
+        def htmlDocument = Jsoup.parse(content)
+
+        then:
+        def replacedElements = htmlDocument.select('td p strong')
+        replacedElements.size() == 4
+        replacedElements.every { it.text() == 'Replaced' }
+    }
 }
