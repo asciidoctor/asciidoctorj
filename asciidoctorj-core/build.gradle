@@ -24,7 +24,7 @@ dependencies {
 def gemFiles = fileTree(jruby.gemInstallDir) {
   include 'specifications/*.gemspec'
   include 'gems/*/lib/**'
-  include "gems/asciidoctor-${asciidoctorGemVersion}/data/**"
+  include "gems/asciidoctor-*/data/**"
 }
 
 jrubyPrepare {
