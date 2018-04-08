@@ -4,6 +4,8 @@ language: java
 matrix:
   include:
     - jdk: oraclejdk8
+    - jdk: oraclejdk9
+      dist: trusty
     - jdk: oraclejdk7
       dist: precise
     - jdk: openjdk7

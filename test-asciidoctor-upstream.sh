@@ -18,7 +18,7 @@ wget --quiet -O $SRC_DIR.zip https://github.com/asciidoctor/asciidoctor/archive/
 unzip -q $SRC_DIR.zip
 cp ../../asciidoctor-gem-installer.pom $SRC_DIR/pom.xml
 cd $SRC_DIR
-ASCIIDOCTOR_VERSION=`grep 'VERSION' ./lib/asciidoctor/version.rb | sed "s/.*'\(.*\)'.*/\1/"`
+ASCIIDOCTOR_VERSION=`grep 'VERSION' ./lib/asciidoctor/version.rb | sed "s/.*'\(.*\)'.*/\1/" | sed "s/[.]dev$/.dev-SNAPSHOT/"`
 # we don't use sed -i here for compatibility with OSX
 sed "s;<version></version>;<version>$ASCIIDOCTOR_VERSION</version>;" pom.xml > pom.xml.sedtmp && \
   mv -f pom.xml.sedtmp pom.xml
