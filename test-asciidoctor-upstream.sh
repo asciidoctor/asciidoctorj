@@ -4,8 +4,10 @@
 
 GRADLE_CMD=./gradlew
 if [ ! -z $TRAVIS_JOB_NUMBER ] && [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "${TRAVIS_JOB_NUMBER##*.}" != '1' ]; then
+  echo "Skip upstream build since TRAVIS_JOB_NUMBER is '$TRAVIS_JOB_NUMBER', TRAVIS_PULL_REQUEST is '$TRAVIS_PULL_REQUEST' and TRAVIS_JOB_NUMBER##*. is '${TRAVIS_JOB_NUMBER##*.}'"
   exit 0
 fi
+echo "Run upstream build since TRAVIS_JOB_NUMBER is '$TRAVIS_JOB_NUMBER', TRAVIS_PULL_REQUEST is '$TRAVIS_PULL_REQUEST' and TRAVIS_JOB_NUMBER##*. is '${TRAVIS_JOB_NUMBER##*.}'"
 # to build against a tag, set TAG to a git tag name (e.g., v1.5.2)
 TAG=master
 if [ "$TAG" == "master" ]; then
