@@ -45,7 +45,7 @@ ext {
   xmlMatchersVersion = '1.0-RC1'
 
   // gem versions
-  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.6.1'
+  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.7'
   asciidoctorEpub3GemVersion = project(':asciidoctorj-epub3').version.replace('-', '.')
 
   asciidoctorDiagramGemVersion = project(':asciidoctorj-diagram').version.replace('-', '.')
@@ -83,7 +83,7 @@ subprojects {
 
   // NOTE sourceCompatibility & targetCompatibility are set in gradle.properties to meet requirements of Gradle
   // Must redefine here to work around a bug in the Eclipse plugin
-  sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_6
+  sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_7
 
   plugins.withType(JavaPlugin) {
     project.tasks.withType(JavaCompile) { task ->
