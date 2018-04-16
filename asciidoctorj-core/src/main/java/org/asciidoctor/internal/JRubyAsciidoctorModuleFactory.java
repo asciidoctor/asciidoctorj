@@ -1,10 +1,10 @@
 package org.asciidoctor.internal;
 
-import java.io.InputStream;
-
 import org.jruby.Ruby;
 import org.jruby.RubyRuntimeAdapter;
 import org.jruby.javasupport.JavaEmbedUtils;
+
+import java.io.InputStream;
 
 class JRubyAsciidoctorModuleFactory {
 
@@ -21,6 +21,8 @@ class JRubyAsciidoctorModuleFactory {
         // This piece of code will be changed in future when asciidoctor gem implements a class instead of a module.
         String script = loadAsciidoctorRubyClass();
         evaler.eval(runtime, script);
+
+        JavaLogger.install(runtime);
 
         Object rfj = evaler.eval(runtime, "AsciidoctorModule.new()");
 

@@ -30,4 +30,8 @@ public class CursorImpl extends RubyObjectWrapper implements Cursor {
         return getString("file");
     }
 
+    @Override
+    public String toString() {
+        return getString("to_s");
+    }
 }
