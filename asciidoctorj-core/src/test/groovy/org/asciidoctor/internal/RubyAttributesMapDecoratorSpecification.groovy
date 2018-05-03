@@ -19,7 +19,8 @@ class RubyAttributesMapDecoratorSpecification extends Specification {
     @ArquillianResource
     private Asciidoctor asciidoctor
 
-    String attrValue = '''#idname.rolename'''
+    String attrValue = 'example#idname.rolename'
+    String blockStyle = 'example'
 
     String documentWithPositionalAttribute = """
 [${attrValue}]
@@ -38,7 +39,7 @@ Lorem ipsum dolor
         !attributes.containsKey(1L)
         attributes.containsKey(ATTR_ONE)
         attributes.keySet().contains(ATTR_ONE)
-        attributes.get(ATTR_ONE) == attrValue
+        attributes.get(ATTR_ONE).startsWith(blockStyle)
 
     }
 
@@ -57,7 +58,7 @@ Lorem ipsum dolor
         !attributes.containsKey(ATTR_ONE)
 
         and: 'remove returned the previous attribute value'
-        oldValue == attrValue
+        oldValue.startsWith(blockStyle)
 
         and: 'The attributes derived from the positional attribute are still there'
         attributes.containsKey(ATTR_NAME_ROLE)
@@ -76,7 +77,7 @@ Lorem ipsum dolor
         def previousValue = attributes.put(ATTR_ONE, newValue)
 
         then: 'put returned the previous value'
-        previousValue == attrValue
+        previousValue.startsWith(blockStyle)
 
         and: 'the block has the new attribute value'
         attributes.get(ATTR_ONE) == newValue
