@@ -1,6 +1,7 @@
 package org.asciidoctor;
 
 import org.asciidoctor.arquillian.api.Unshared;
+import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -18,8 +19,10 @@ import java.util.logging.Logger;
 import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.Matchers.both;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.hasItemInArray;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -56,6 +59,11 @@ public class WhenAsciidoctorLogsToConsole {
         assertThat(memoryLogHandler.getLogRecords().get(0).getMessage(),
             both(containsString("include file not found"))
                 .and(containsString("documentwithnotexistingfile.adoc: line 3")));
+        assertThat(memoryLogHandler.getLogRecords().get(0).getParameters()[0], instanceOf(Cursor.class));
+        final Cursor cursor = (Cursor) memoryLogHandler.getLogRecords().get(0).getParameters()[0];
+        assertThat(cursor.getDir(), is(inputFile.getParent()));
+        assertThat(cursor.getFile(), is(inputFile.getName()));
+        assertThat(cursor.getLineNumber(), is(3));
     }
 
     private MemoryLogHandler getMemoryLogHandler() {

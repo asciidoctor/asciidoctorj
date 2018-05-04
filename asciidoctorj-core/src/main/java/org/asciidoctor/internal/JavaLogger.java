@@ -1,5 +1,6 @@
 package org.asciidoctor.internal;
 
+import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.ast.impl.CursorImpl;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
@@ -88,10 +89,11 @@ public class JavaLogger extends RubyObject {
       rubyMessage = args[2];
       progname = this.getInstanceVariable("@progname").asJavaString();
     }
-    final String message = formatMessage(rubyMessage);
-
+    final Cursor cursor = getSourceLocation(rubyMessage);
+    final String message = formatMessage(cursor, rubyMessage);
     final Level javaLogLevel = mapRubyLogLevel(args[0]);
-    final LogRecord record = createLogRecord(threadContext, javaLogLevel, message);
+
+    final LogRecord record = createLogRecord(threadContext, javaLogLevel, cursor, message);
 
     Logger logger = Logger.getLogger(progname);
     logger.log(record);
@@ -100,11 +102,13 @@ public class JavaLogger extends RubyObject {
 
   private LogRecord createLogRecord(final ThreadContext threadContext,
                                     final Level logLevel,
+                                    final Cursor cursor,
                                     final String message) {
     final LogRecord record = new LogRecord(logLevel, message);
     BacktraceElement[] backtrace = threadContext.getBacktrace();
     record.setSourceClassName(backtrace[2].getFilename());
     record.setSourceMethodName(backtrace[2].getMethod());
+    record.setParameters(new Object[] { cursor });
     return record;
   }
 
@@ -135,17 +139,23 @@ public class JavaLogger extends RubyObject {
     return javaLevel;
   }
 
-  private String formatMessage(IRubyObject msg) {
+  private String formatMessage(final Cursor cursor, final IRubyObject msg) {
     if (getRuntime().getString().equals(msg.getType())) {
       return msg.asJavaString();
     } else if (getRuntime().getHash().equals(msg.getType())) {
       final RubyHash hash = (RubyHash) msg;
-      final Object sourceLocation = hash.get(getRuntime().newSymbol(LOG_PROPERTY_SOURCE_LOCATION));
       final String text = Objects.toString(hash.get(getRuntime().newSymbol(LOG_PROPERTY_TEXT)));
-      return sourceLocation != null
-          ? new CursorImpl((IRubyObject) sourceLocation).toString() + ": " + text
-          : text;
+      return cursor != null ? cursor.toString() + ": " + text : text;
     }
     throw new IllegalArgumentException(Objects.toString(msg));
+  }
+
+  private Cursor getSourceLocation(IRubyObject msg) {
+    if (getRuntime().getHash().equals(msg.getType())) {
+      final RubyHash hash = (RubyHash) msg;
+      final Object sourceLocation = hash.get(getRuntime().newSymbol(LOG_PROPERTY_SOURCE_LOCATION));
+      return new CursorImpl((IRubyObject) sourceLocation);
+    }
+    return null;
   }
 }
