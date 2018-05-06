@@ -1,3 +1,9 @@
 = My Document
 
 include::unexistingdoc.adoc[]
+
+include::unexistingdoc.adoc[]
+
+include::https://raw.githubusercontent.com/asciidoctor/asciidoctor-maven-plugin/master/src/test/resources/src/asciidoctor/github-include.adoc[]
+
+include::unexistingdoc.adoc[]

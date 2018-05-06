@@ -1,19 +1,5 @@
 package org.asciidoctor.internal;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.logging.Logger;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.DirectoryWalker;
@@ -32,6 +18,10 @@ import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.extension.internal.ExtensionRegistryExecutor;
+import org.asciidoctor.log.LogHandler;
+import org.asciidoctor.log.LogRecord;
+import org.asciidoctor.log.internal.JULLogHandler;
+import org.asciidoctor.log.internal.JavaLogger;
 import org.jruby.CompatVersion;
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
@@ -41,7 +31,22 @@ import org.jruby.embed.ScriptingContainer;
 import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
 
-public class JRubyAsciidoctor implements Asciidoctor {
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
     private static final Logger logger = Logger.getLogger(JRubyAsciidoctor.class.getName());
 
@@ -53,11 +58,16 @@ public class JRubyAsciidoctor implements Asciidoctor {
     protected RubyGemsPreloader rubyGemsPreloader;
     protected Ruby rubyRuntime;
 
+    private List<LogHandler> logHandlers = new ArrayList<>();
+
+    private final static Logger LOGGER = Logger.getLogger("asciidoctorj");
+
     private JRubyAsciidoctor(AsciidoctorModule asciidoctorModule, Ruby rubyRuntime) {
         super();
         this.asciidoctorModule = asciidoctorModule;
         this.rubyRuntime = rubyRuntime;
         this.rubyGemsPreloader = new RubyGemsPreloader(this.rubyRuntime);
+        this.logHandlers.add(new JULLogHandler());
     }
 
     public static Asciidoctor create() {
@@ -118,6 +128,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
         AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory.createAsciidoctorModule();
         JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
 
+        JavaLogger.install(rubyRuntime, jRubyAsciidoctor);
+
         return jRubyAsciidoctor;
     }
 
@@ -126,7 +138,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         RubyInstanceConfig config = createOptimizedConfiguration();
         injectEnvironmentVariables(config, environmentVars);
 
-        Ruby rubyRuntime = JavaEmbedUtils.initialize(Collections.EMPTY_LIST, config);
+        Ruby rubyRuntime = JavaEmbedUtils.initialize(Collections.<String>emptyList(), config);
 
         JRubyRuntimeContext.set(rubyRuntime);
 
@@ -134,7 +146,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory.createAsciidoctorModule();
 
+
         JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
+
+        JavaLogger.install(rubyRuntime, jRubyAsciidoctor);
         return jRubyAsciidoctor;
     }
 
@@ -154,6 +169,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory.createAsciidoctorModule();
         JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
+
+        JavaLogger.install(rubyRuntime, jRubyAsciidoctor);
 
         return jRubyAsciidoctor;
     }
@@ -603,6 +620,18 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return new Document(this.asciidoctorModule.load_file(file.getAbsolutePath(), rubyHash), this.rubyRuntime);
     }
 
+    @Override
+    public void registerLogHandler(final LogHandler logHandler) {
+        if (!this.logHandlers.contains(logHandler)) {
+            this.logHandlers.add(logHandler);
+        }
+    }
+
+    @Override
+    public void unregisterLogHandler(final LogHandler logHandler) {
+        this.logHandlers.remove(logHandler);
+    }
+
     Ruby getRubyRuntime() {
         return this.rubyRuntime;
     }
@@ -619,5 +648,16 @@ public class JRubyAsciidoctor implements Asciidoctor {
     @Override
     public ExtensionGroup createGroup(String groupName) {
         return new ExtensionGroupImpl(groupName, this);
+    }
+
+    @Override
+    public void log(LogRecord logRecord) {
+        for (LogHandler logHandler: logHandlers) {
+            try {
+                logHandler.log(logRecord);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Unexpected exception while logging Asciidoctor log entry", e);
+            }
+        }
     }
 }

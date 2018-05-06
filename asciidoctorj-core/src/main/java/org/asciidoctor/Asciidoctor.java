@@ -17,6 +17,7 @@ import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.log.LogHandler;
 
 /**
  * 
@@ -749,5 +750,8 @@ public interface Asciidoctor {
      */
     Document loadFile(File file, Map<String, Object> options);
 
+    void registerLogHandler(LogHandler logHandler);
+
+    void unregisterLogHandler(LogHandler logHandler);
 
 }

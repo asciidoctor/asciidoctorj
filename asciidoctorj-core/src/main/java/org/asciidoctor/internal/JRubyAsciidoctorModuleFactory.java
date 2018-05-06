@@ -22,8 +22,6 @@ class JRubyAsciidoctorModuleFactory {
         String script = loadAsciidoctorRubyClass();
         evaler.eval(runtime, script);
 
-        JavaLogger.install(runtime);
-
         Object rfj = evaler.eval(runtime, "AsciidoctorModule.new()");
 
         return RubyUtils.rubyToJava(runtime, (org.jruby.runtime.builtin.IRubyObject) rfj, AsciidoctorModule.class);

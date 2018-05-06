@@ -8,3 +8,9 @@ target/
 *.ipr
 *.iws
 .idea/
+*/out/production/
+*/out/test/
+*/.asciidoctor
+
+
+

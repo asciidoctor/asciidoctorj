@@ -1,7 +1,10 @@
-package org.asciidoctor.internal;
+package org.asciidoctor.log.internal;
 
+import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.ast.impl.CursorImpl;
+import org.asciidoctor.log.LogRecord;
+import org.asciidoctor.log.Severity;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyHash;
@@ -16,24 +19,15 @@ import org.jruby.runtime.backtrace.BacktraceElement;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 public class JavaLogger extends RubyObject {
 
-
-  private static final int DEBUG = 0;
-  private static final int INFO = 1;
-  private static final int WARN = 2;
-  private static final int ERROR = 3;
-  private static final int FATAL = 4;
-  private static final int UNKNOWN = 5;
+  private final LogHandler rootLogHandler;
 
   private static final String LOG_PROPERTY_SOURCE_LOCATION = "source_location";
   private static final String LOG_PROPERTY_TEXT = "text";
 
-  static void install(final Ruby runtime) {
+  public static void install(final Ruby runtime, final LogHandler logHandler) {
 
     final RubyModule asciidoctorModule = runtime.getModule("Asciidoctor");
     final RubyModule loggerManager = asciidoctorModule.defineOrGetModuleUnder("LoggerManager");
@@ -44,7 +38,7 @@ public class JavaLogger extends RubyObject {
         .defineClassUnder("JavaLogger", loggerBaseClass, new ObjectAllocator() {
           @Override
           public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-            return new JavaLogger(runtime, klazz);
+            return new JavaLogger(runtime, klazz, logHandler);
           }
         });
 
@@ -56,8 +50,9 @@ public class JavaLogger extends RubyObject {
 
   }
 
-  private JavaLogger(final Ruby runtime, final RubyClass metaClass) {
+  private JavaLogger(final Ruby runtime, final RubyClass metaClass, final LogHandler rootLogHandler) {
     super(runtime, metaClass);
+    this.rootLogHandler = rootLogHandler;
   }
 
   @JRubyMethod(name = "initialize", required = 1, optional = 2)
@@ -84,68 +79,46 @@ public class JavaLogger extends RubyObject {
       progname = args[2].asJavaString();
     } else if (block.isGiven()) {
       rubyMessage = block.yield(threadContext, getRuntime().getNil());
-      progname = this.getInstanceVariable("@progname").asJavaString();
     } else {
       rubyMessage = args[2];
-      progname = this.getInstanceVariable("@progname").asJavaString();
     }
     final Cursor cursor = getSourceLocation(rubyMessage);
-    final String message = formatMessage(cursor, rubyMessage);
-    final Level javaLogLevel = mapRubyLogLevel(args[0]);
+    final String message = formatMessage(rubyMessage);
+    final Severity severity = mapRubyLogLevel(args[0]);
 
-    final LogRecord record = createLogRecord(threadContext, javaLogLevel, cursor, message);
+    final LogRecord record = createLogRecord(threadContext, severity, cursor, message);
 
-    Logger logger = Logger.getLogger(progname);
-    logger.log(record);
+    rootLogHandler.log(record);
     return getRuntime().getNil();
   }
 
   private LogRecord createLogRecord(final ThreadContext threadContext,
-                                    final Level logLevel,
+                                    final Severity severity,
                                     final Cursor cursor,
                                     final String message) {
-    final LogRecord record = new LogRecord(logLevel, message);
     BacktraceElement[] backtrace = threadContext.getBacktrace();
-    record.setSourceClassName(backtrace[2].getFilename());
-    record.setSourceMethodName(backtrace[2].getMethod());
-    record.setParameters(new Object[] { cursor });
+    final String sourceFileName = backtrace[2].getFilename();
+    final String sourceMethodName = backtrace[2].getMethod();
+    final LogRecord record = new LogRecord(severity, cursor, message, sourceFileName, sourceMethodName);
     return record;
   }
 
-  private Level mapRubyLogLevel(IRubyObject arg) {
-    final Level javaLevel;
-    final int level = arg.convertToInteger().getIntValue();
-    switch (level) {
-      case DEBUG:
-        javaLevel = Level.FINEST;
-        break;
-      case INFO:
-        javaLevel = Level.INFO;
-        break;
-      case WARN:
-        javaLevel = Level.WARNING;
-        break;
-      case ERROR:
-        javaLevel = Level.SEVERE;
-        break;
-      case FATAL:
-        javaLevel = Level.SEVERE;
-        break;
-      case UNKNOWN:
-      default:
-        javaLevel = Level.INFO;
-        break;
+  private Severity mapRubyLogLevel(IRubyObject arg) {
+    final int rubyId = arg.convertToInteger().getIntValue();
+    for (Severity severity: Severity.values()) {
+      if (severity.getRubyId() == rubyId) {
+        return severity;
+      }
     }
-    return javaLevel;
+    return Severity.UNKNOWN;
   }
 
-  private String formatMessage(final Cursor cursor, final IRubyObject msg) {
+  private String formatMessage(final IRubyObject msg) {
     if (getRuntime().getString().equals(msg.getType())) {
       return msg.asJavaString();
     } else if (getRuntime().getHash().equals(msg.getType())) {
       final RubyHash hash = (RubyHash) msg;
-      final String text = Objects.toString(hash.get(getRuntime().newSymbol(LOG_PROPERTY_TEXT)));
-      return cursor != null ? cursor.toString() + ": " + text : text;
+      return Objects.toString(hash.get(getRuntime().newSymbol(LOG_PROPERTY_TEXT)));
     }
     throw new IllegalArgumentException(Objects.toString(msg));
   }
