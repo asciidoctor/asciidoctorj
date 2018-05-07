@@ -73,10 +73,8 @@ public class JavaLogger extends RubyObject {
   @JRubyMethod(name = "add", required = 1, optional = 2)
   public IRubyObject add(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
     final IRubyObject rubyMessage;
-    final String progname;
     if (args.length >= 2 && !args[1].isNil()) {
       rubyMessage = args[1];
-      progname = args[2].asJavaString();
     } else if (block.isGiven()) {
       rubyMessage = block.yield(threadContext, getRuntime().getNil());
     } else {

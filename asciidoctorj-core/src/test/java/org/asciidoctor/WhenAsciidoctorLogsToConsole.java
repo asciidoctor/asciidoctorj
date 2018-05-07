@@ -22,6 +22,8 @@ import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.Matchers.both;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -106,6 +108,13 @@ public class WhenAsciidoctorLogsToConsole {
         assertThat(cursor.getDir().replace('\\', '/'), is(inputFile.getParent().replace('\\', '/')));
         assertThat(cursor.getFile(), is(inputFile.getName()));
         assertThat(cursor.getLineNumber(), is(3));
+
+        for (LogRecord logRecord: logRecords) {
+            assertThat(logRecord.getCursor(), not(nullValue()));
+            assertThat(logRecord.getCursor().getFile(), not(nullValue()));
+            assertThat(logRecord.getCursor().getDir(), not(nullValue()));
+        }
+
     }
 
     @Test

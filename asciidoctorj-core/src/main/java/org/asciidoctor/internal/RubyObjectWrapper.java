@@ -14,6 +14,7 @@ import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RubyObjectWrapper {
 
@@ -40,8 +41,10 @@ public class RubyObjectWrapper {
             return null;
         } else if (result instanceof RubySymbol) {
             return ((RubySymbol) result).asJavaString();
-        } else {
+        } else if (result instanceof RubyString){
             return ((RubyString) result).asJavaString();
+        } else {
+            return Objects.toString(result);
         }
     }
 

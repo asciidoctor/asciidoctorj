@@ -20,7 +20,7 @@ public class JULLogHandler implements LogHandler {
 
         julLogRecord.setSourceClassName(logRecord.getSourceFileName());
         julLogRecord.setSourceMethodName(logRecord.getSourceMethodName());
-
+        julLogRecord.setParameters(new Object[] { logRecord.getCursor() });
         LOGGER.log(julLogRecord);
     }
 
