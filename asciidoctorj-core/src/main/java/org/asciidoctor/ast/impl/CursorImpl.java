@@ -4,6 +4,8 @@ import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.internal.RubyObjectWrapper;
 import org.jruby.runtime.builtin.IRubyObject;
 
+import java.util.Objects;
+
 public class CursorImpl extends RubyObjectWrapper implements Cursor {
 
     public CursorImpl(IRubyObject rubyNode) {
@@ -17,17 +19,20 @@ public class CursorImpl extends RubyObjectWrapper implements Cursor {
 
     @Override
     public String getPath() {
-        return getString("path");
+        final Object result = getProperty("path");
+        return result == null ? null : result.toString();
     }
 
     @Override
     public String getDir() {
-        return getString("dir");
+        final Object result = getProperty("dir");
+        return result == null ? null : result.toString();
     }
 
     @Override
     public String getFile() {
-        return getString("file");
+        final Object result = getProperty("file");
+        return result == null ? null : result.toString();
     }
 
     @Override

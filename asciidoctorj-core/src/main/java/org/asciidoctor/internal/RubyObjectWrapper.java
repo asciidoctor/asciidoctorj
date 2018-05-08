@@ -41,10 +41,8 @@ public class RubyObjectWrapper {
             return null;
         } else if (result instanceof RubySymbol) {
             return ((RubySymbol) result).asJavaString();
-        } else if (result instanceof RubyString){
-            return ((RubyString) result).asJavaString();
         } else {
-            return Objects.toString(result);
+            return ((RubyString) result).asJavaString();
         }
     }
 
