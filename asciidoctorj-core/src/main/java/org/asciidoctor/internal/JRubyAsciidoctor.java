@@ -22,6 +22,7 @@ import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.internal.JULLogHandler;
 import org.asciidoctor.log.internal.JavaLogger;
+import org.asciidoctor.log.internal.LogHandlerRegistryExecutor;
 import org.jruby.CompatVersion;
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
@@ -82,7 +83,7 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
         Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(env);
         registerExtensions(asciidoctor);
         registerConverters(asciidoctor);
-
+        registerLogHandlers(asciidoctor);
         return asciidoctor;
     }
 
@@ -100,6 +101,7 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
         return asciidoctor;
     }
+
     public static Asciidoctor create(ClassLoader classloader, String gemPath) {
         Asciidoctor asciidoctor = createJRubyAsciidoctorInstance(classloader, gemPath);
         registerExtensions(asciidoctor);
@@ -114,6 +116,10 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
     private static void registerExtensions(Asciidoctor asciidoctor) {
         new ExtensionRegistryExecutor(asciidoctor).registerAllExtensions();
+    }
+
+    private static void registerLogHandlers(Asciidoctor asciidoctor) {
+        new LogHandlerRegistryExecutor(asciidoctor).registerAllLogHandlers();
     }
 
     private static Asciidoctor createJRubyAsciidoctorInstance(List<String> loadPaths) {
@@ -150,6 +156,7 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
         JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
 
         JavaLogger.install(rubyRuntime, jRubyAsciidoctor);
+
         return jRubyAsciidoctor;
     }
 
