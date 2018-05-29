@@ -1,21 +1,16 @@
 package org.asciidoctor.extension;
 
-import java.io.InputStream;
-
-import org.asciidoctor.internal.AsciidoctorModule;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 
+import java.io.InputStream;
+
 public class RubyExtensionRegistry {
 
-    private AsciidoctorModule asciidoctorModule;
 
     private Ruby rubyRuntime;
 
-    public RubyExtensionRegistry(AsciidoctorModule asciidoctorModule,
-            Ruby rubyRuntime) {
-        super();
-        this.asciidoctorModule = asciidoctorModule;
+    public RubyExtensionRegistry(final Ruby rubyRuntime) {
         this.rubyRuntime = rubyRuntime;
     }
 
@@ -30,47 +25,50 @@ public class RubyExtensionRegistry {
     }
     
     public RubyExtensionRegistry preprocessor(String preprocessor) {
-        this.asciidoctorModule.preprocessor(preprocessor);
+        rubyRuntime.getModule("AsciidoctorModule")
+            .callMethod( "preprocessor", rubyRuntime.newString(preprocessor));
         return this;
     }
 
     public RubyExtensionRegistry postprocessor(String postprocessor) {
-        this.asciidoctorModule.postprocessor(postprocessor);
+        rubyRuntime.getModule("AsciidoctorModule")
+            .callMethod( "postprocessor", rubyRuntime.newString(postprocessor));
         return this;
     }
 
     public RubyExtensionRegistry docinfoProcessor(String docinfoProcessor) {
-        this.asciidoctorModule.docinfo_processor(docinfoProcessor);
+        rubyRuntime.getModule("AsciidoctorModule")
+            .callMethod( "docinfo_processor", rubyRuntime.newString(docinfoProcessor));
         return this;
     }
 
     public RubyExtensionRegistry includeProcessor(String includeProcessor) {
-        this.asciidoctorModule.include_processor(includeProcessor);
+        rubyRuntime.getModule("AsciidoctorModule")
+            .callMethod( "include_processor", rubyRuntime.newString(includeProcessor));
         return this;
     }
 
     public RubyExtensionRegistry treeprocessor(String treeProcessor) {
-        this.asciidoctorModule.treeprocessor(treeProcessor);
+        rubyRuntime.getModule("AsciidoctorModule")
+            .callMethod( "treeprocessor", rubyRuntime.newString(treeProcessor));
         return this;
     }
 
     public RubyExtensionRegistry block(String blockName, String blockProcessor) {
-        this.asciidoctorModule.block_processor(
-                blockProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
+        rubyRuntime.getModule("AsciidoctorModule")
+            .callMethod( "block_processor", rubyRuntime.newString(blockProcessor), RubyUtils.toSymbol(rubyRuntime, blockName));
         return this;
     }
 
     public RubyExtensionRegistry blockMacro(String blockName, String blockMacroProcessor) {
-
-        this.asciidoctorModule.block_macro(
-                blockMacroProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
+        rubyRuntime.getModule("AsciidoctorModule")
+            .callMethod( "block_macro", rubyRuntime.newString(blockMacroProcessor), RubyUtils.toSymbol(rubyRuntime, blockName));
         return this;
     }
 
     public RubyExtensionRegistry inlineMacro(String blockName, String inlineMacroProcessor) {
-
-        this.asciidoctorModule.inline_macro(
-                inlineMacroProcessor, RubyUtils.toSymbol(rubyRuntime, blockName));
+        rubyRuntime.getModule("AsciidoctorModule")
+            .callMethod( "inline_macro", rubyRuntime.newString(inlineMacroProcessor), RubyUtils.toSymbol(rubyRuntime, blockName));
         return this;
     }
 }

@@ -22,14 +22,17 @@ import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.extension.internal.ExtensionRegistryExecutor;
 import org.jruby.Ruby;
+import org.jruby.RubyClass;
 import org.jruby.RubyHash;
 import org.jruby.RubyInstanceConfig;
+import org.jruby.RubyModule;
 import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
@@ -51,14 +54,18 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
     private static final int DEFAULT_MAX_LEVEL = 1;
 
-    private AsciidoctorModule asciidoctorModule;
     protected RubyGemsPreloader rubyGemsPreloader;
     protected Ruby rubyRuntime;
 
-    private JRubyAsciidoctor(AsciidoctorModule asciidoctorModule, Ruby rubyRuntime) {
-        super();
-        this.asciidoctorModule = asciidoctorModule;
+    private RubyClass extensionGroupClass;
+
+    private JRubyAsciidoctor(final Ruby rubyRuntime) {
         this.rubyRuntime = rubyRuntime;
+
+        InputStream inputStream = getClass().getResourceAsStream("asciidoctorclass.rb");
+        final String script = IOUtils.readFull(inputStream);
+        this.rubyRuntime.evalScriptlet(script);
+
         this.rubyGemsPreloader = new RubyGemsPreloader(this.rubyRuntime);
     }
 
@@ -113,12 +120,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         Ruby rubyRuntime = JavaEmbedUtils.initialize(loadPaths, config);
 
-        JRubyAsciidoctorModuleFactory jRubyAsciidoctorModuleFactory = new JRubyAsciidoctorModuleFactory(rubyRuntime);
-
-        AsciidoctorModule asciidoctorModule = jRubyAsciidoctorModuleFactory.createAsciidoctorModule();
-        JRubyAsciidoctor jRubyAsciidoctor = new JRubyAsciidoctor(asciidoctorModule, rubyRuntime);
-
-        return jRubyAsciidoctor;
+        return new JRubyAsciidoctor(rubyRuntime);
     }
 
     private static void injectEnvironmentVariables(RubyInstanceConfig config, Map<String, String> environmentVars) {
@@ -127,8 +129,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
     }
 
     private static RubyInstanceConfig createOptimizedConfiguration() {
-        RubyInstanceConfig config = new RubyInstanceConfig();
-        return config;
+        return new RubyInstanceConfig();
     }
 
     public Ruby getRubyRuntime() {
@@ -191,7 +192,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        Document document = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
+        Document document = (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load_file", rubyRuntime.newString(filename.getAbsolutePath()), rubyHash));
         int maxDeepLevel = options.containsKey(STRUCTURE_MAX_LEVEL) ? (Integer) (options.get(STRUCTURE_MAX_LEVEL))
                 : DEFAULT_MAX_LEVEL;
         return toDocument(document, rubyRuntime, maxDeepLevel);
@@ -205,7 +206,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
-        Document document = this.asciidoctorModule.load(content, rubyHash);
+        Document document = (Document) NodeConverter.createASTNode(
+            getAsciidoctorModule().callMethod("load", rubyRuntime.newString(content), rubyHash));
         int maxDeepLevel = options.containsKey(STRUCTURE_MAX_LEVEL) ? (Integer) (options.get(STRUCTURE_MAX_LEVEL))
                 : DEFAULT_MAX_LEVEL;
         return toDocument(document, rubyRuntime, maxDeepLevel);
@@ -223,7 +225,8 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = getParseHeaderOnlyOption();
 
-        Document document = this.asciidoctorModule.load_file(filename.getAbsolutePath(), rubyHash);
+        Document document = (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load_file", rubyRuntime.newString(filename.getAbsolutePath()), rubyHash));
+
         return toDocumentHeader(document);
     }
 
@@ -233,7 +236,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         RubyHash rubyHash = getParseHeaderOnlyOption();
 
-        Document document = this.asciidoctorModule.load(content, rubyHash);
+        Document document = (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load", rubyRuntime.newString(content), rubyHash));
         return toDocumentHeader(document);
     }
 
@@ -246,8 +249,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
     private RubyHash getParseHeaderOnlyOption() {
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("parse_header_only", true);
-        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        return rubyHash;
+        return RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
     }
 
     @SuppressWarnings("unchecked")
@@ -401,22 +403,22 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
     @Override
     public JavaExtensionRegistry javaExtensionRegistry() {
-        return new JavaExtensionRegistry(asciidoctorModule, rubyRuntime);
+        return new JavaExtensionRegistry(rubyRuntime);
     }
 
     @Override
     public RubyExtensionRegistry rubyExtensionRegistry() {
-        return new RubyExtensionRegistry(asciidoctorModule, rubyRuntime);
+        return new RubyExtensionRegistry(rubyRuntime);
     }
 
     @Override
     public JavaConverterRegistry javaConverterRegistry() {
-        return new JavaConverterRegistry(asciidoctorModule, rubyRuntime);
+        return new JavaConverterRegistry(rubyRuntime);
     }
 
     @Override
     public void unregisterAllExtensions() {
-        this.asciidoctorModule.unregister_all_extensions();
+        getExtensionsModule().callMethod("unregister_all");
     }
 
     @Override
@@ -426,7 +428,16 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
     @Override
     public String asciidoctorVersion() {
-        return this.asciidoctorModule.asciidoctorRuntimeEnvironmentVersion();
+        return RubyUtils.rubyToJava(rubyRuntime, getAsciidoctorModule().getConstant("VERSION"), String.class);
+    }
+
+    private RubyModule getExtensionsModule() {
+        return getAsciidoctorModule()
+            .defineOrGetModuleUnder("Extensions");
+    }
+
+    private RubyModule getAsciidoctorModule() {
+        return rubyRuntime.getModule("Asciidoctor");
     }
 
     @Override
@@ -458,12 +469,14 @@ public class JRubyAsciidoctor implements Asciidoctor {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
         try {
-            Object object = this.asciidoctorModule.convert(content, rubyHash);
-            if (object instanceof IRubyObject && NodeConverter.NodeType.DOCUMENT_CLASS.isInstance((IRubyObject) object)) {
+
+            IRubyObject object = getAsciidoctorModule().callMethod("convert",
+                rubyRuntime.newString(content), rubyHash);
+            if (NodeConverter.NodeType.DOCUMENT_CLASS.isInstance(object)) {
                 // If a document is rendered to a file Asciidoctor returns the document, we return null
                 return null;
             }
-            return (T) object;
+            return RubyUtils.rubyToJava(rubyRuntime, object, expectedResult);
         } catch(RaiseException e) {
             logger.severe(e.getException().getClass().getCanonicalName());
             throw new AsciidoctorCoreException(e);
@@ -531,12 +544,13 @@ public class JRubyAsciidoctor implements Asciidoctor {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
         try {
-            Object object = this.asciidoctorModule.convertFile(filename.getAbsolutePath(), rubyHash);
-            if (object instanceof IRubyObject && NodeConverter.NodeType.DOCUMENT_CLASS.isInstance((IRubyObject) object)) {
+            IRubyObject object = getAsciidoctorModule().callMethod("convert_file",
+                rubyRuntime.newString(filename.getAbsolutePath()), rubyHash);
+            if (NodeConverter.NodeType.DOCUMENT_CLASS.isInstance(object)) {
                 // If a document is rendered to a file Asciidoctor returns the document, we return null
                 return null;
             }
-            return (T) object;
+            return RubyUtils.rubyToJava(rubyRuntime, object, expectedResult);
         } catch(RaiseException e) {
             logger.severe(e.getMessage());
 
@@ -600,26 +614,32 @@ public class JRubyAsciidoctor implements Asciidoctor {
     @Override
     public Document load(String content, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        return (Document) NodeConverter.createASTNode(this.asciidoctorModule.load(content, rubyHash));
+        return (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load",
+            rubyRuntime.newString(content), rubyHash));
     }
 
     @Override
     public Document loadFile(File file, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        return (Document) NodeConverter.createASTNode(this.asciidoctorModule.load_file(file.getAbsolutePath(), rubyHash));
-    }
 
-    AsciidoctorModule getAsciidoctorModule() {
-        return asciidoctorModule;
+        return (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load_file",
+            rubyRuntime.newString(file.getAbsolutePath()), rubyHash));
     }
 
     @Override
     public ExtensionGroup createGroup() {
-        return new ExtensionGroupImpl(UUID.randomUUID().toString(), this);
+        return createGroup(UUID.randomUUID().toString());
     }
 
     @Override
     public ExtensionGroup createGroup(String groupName) {
-        return new ExtensionGroupImpl(groupName, this);
+        return new ExtensionGroupImpl(groupName, this, getExtensionGroupClass());
+    }
+
+    private RubyClass getExtensionGroupClass() {
+        if (this.extensionGroupClass == null) {
+            extensionGroupClass = ExtensionGroupImpl.createExtensionGroupClass(rubyRuntime);
+        }
+        return extensionGroupClass;
     }
 }
