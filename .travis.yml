@@ -5,11 +5,6 @@ matrix:
   include:
     - jdk: oraclejdk9
       dist: trusty
-    - jdk: oraclejdk8
-    - jdk: oraclejdk7
-      dist: precise
-    - jdk: openjdk7
-      dist: precise
     - os: osx
 
 addons:
