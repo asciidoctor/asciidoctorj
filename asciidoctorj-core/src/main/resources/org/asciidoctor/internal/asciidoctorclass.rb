@@ -52,21 +52,21 @@ module AsciidoctorModule
         end
     end
 
-    def self.block_processor(extensionName, blockSymbol)
+    def self.block_processor *args
         Asciidoctor::Extensions.register do
-            block extensionName, blockSymbol
+            block *args
         end
     end
 
-    def self.block_macro(extensionName, blockSymbol)
+    def self.block_macro *args
         Asciidoctor::Extensions.register do
-            block_macro extensionName, blockSymbol
+            block_macro *args
         end
     end
 
-    def self.inline_macro(extensionName, blockSymbol)
+    def self.inline_macro *args
         Asciidoctor::Extensions.register do
-            inline_macro extensionName, blockSymbol
+            inline_macro *args
         end
     end
 

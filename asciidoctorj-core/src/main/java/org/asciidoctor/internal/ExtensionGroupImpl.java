@@ -539,6 +539,17 @@ public class ExtensionGroupImpl implements ExtensionGroup {
   }
 
   @Override
+  public ExtensionGroup rubyBlock(final String blockProcessor) {
+    registrators.add(new Registrator() {
+      @Override
+      public void register(IRubyObject registry) {
+        registry.callMethod(rubyRuntime.getCurrentContext(), "block", new IRubyObject[]{rubyRuntime.newString(blockProcessor)});
+      }
+    });
+    return this;
+  }
+
+  @Override
   public ExtensionGroup rubyBlockMacro(final String blockName, final String blockMacroProcessor) {
     registrators.add(new Registrator() {
       @Override
@@ -550,11 +561,33 @@ public class ExtensionGroupImpl implements ExtensionGroup {
   }
 
   @Override
+  public ExtensionGroup rubyBlockMacro(final String blockMacroProcessor) {
+    registrators.add(new Registrator() {
+      @Override
+      public void register(IRubyObject registry) {
+        registry.callMethod(rubyRuntime.getCurrentContext(), "block_macro", new IRubyObject[]{rubyRuntime.newString(blockMacroProcessor)});
+      }
+    });
+    return this;
+  }
+
+  @Override
   public ExtensionGroup rubyInlineMacro(final String macroName, final String inlineMacroProcessor) {
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
         registry.callMethod(rubyRuntime.getCurrentContext(), "inline_macro", new IRubyObject[]{rubyRuntime.newString(inlineMacroProcessor), rubyRuntime.newSymbol(macroName)});
+      }
+    });
+    return this;
+  }
+
+  @Override
+  public ExtensionGroup rubyInlineMacro(final String inlineMacroProcessor) {
+    registrators.add(new Registrator() {
+      @Override
+      public void register(IRubyObject registry) {
+        registry.callMethod(rubyRuntime.getCurrentContext(), "inline_macro", new IRubyObject[]{rubyRuntime.newString(inlineMacroProcessor)});
       }
     });
     return this;

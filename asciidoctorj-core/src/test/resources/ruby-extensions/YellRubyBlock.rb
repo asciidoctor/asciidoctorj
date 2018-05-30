@@ -2,6 +2,7 @@ require 'asciidoctor'
 require 'asciidoctor/extensions'
 
 class YellRubyBlock < Asciidoctor::Extensions::BlockProcessor
+  option :name, :yell
   option :contexts, [:paragraph]
   option :content_model, :simple
 
