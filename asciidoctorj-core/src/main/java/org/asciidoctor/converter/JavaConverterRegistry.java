@@ -1,12 +1,8 @@
 package org.asciidoctor.converter;
 
-import org.asciidoctor.internal.AsciidoctorModule;
-import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
-import org.jruby.RubyString;
-import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,16 +23,12 @@ public class JavaConverterRegistry {
         if (converterForAnnotation != null) {
             // Backend annotation present => Register with name given in annotation
             String backend = !ConverterFor.UNDEFINED.equals(converterForAnnotation.format()) ? converterForAnnotation.format() : converterForAnnotation.value();
-            rubyRuntime.getModule("Asciidoctor")
-                .defineOrGetModuleUnder("Converter")
-                .getClass("Factory")
+            getConverterFactory()
                 .callMethod("register", clazz, rubyRuntime.newArray(rubyRuntime.newString(backend)));
 
         } else if (backends.length == 0) {
             // No backend annotation and no backend defined => register as default backend
-            rubyRuntime.getModule("Asciidoctor")
-                .defineOrGetModuleUnder("Converter")
-                .getClass("Factory")
+            getConverterFactory()
                 .callMethod("register", clazz);
         }
         if (backends.length > 0) {
@@ -45,17 +37,13 @@ public class JavaConverterRegistry {
             for (String backend: backends) {
                 rubyBackendNames.add(rubyRuntime.newString(backend));
             }
-            rubyRuntime.getModule("Asciidoctor")
-                .defineOrGetModuleUnder("Converter")
-                .getClass("Factory")
+            getConverterFactory()
                 .callMethod("register", clazz, rubyBackendNames);
         }
     }
 
     public Class<?> resolve(String backend) {
-        RubyClass rubyClass = (RubyClass) rubyRuntime.getModule("Asciidoctor")
-            .defineOrGetModuleUnder("Converter")
-            .getClass("Factory")
+        RubyClass rubyClass = (RubyClass) getConverterFactory()
             .callMethod("resolve", rubyRuntime.newString(backend));
 
         Class<?> clazz = rubyClass.getReifiedClass();
@@ -69,16 +57,18 @@ public class JavaConverterRegistry {
     }
 
     public void unregisterAll() {
-        rubyRuntime.getModule("Asciidoctor")
-            .defineOrGetModuleUnder("Converter")
-            .getClass("Factory")
+        getConverterFactory()
             .callMethod("unregister_all");
     }
 
-    public Map<String, Class<?>> converters() {
-        final RubyArray rubyKeys = (RubyArray) rubyRuntime.getModule("Asciidoctor")
+    private RubyClass getConverterFactory() {
+        return rubyRuntime.getModule("Asciidoctor")
             .defineOrGetModuleUnder("Converter")
-            .getClass("Factory")
+            .getClass("Factory");
+    }
+
+    public Map<String, Class<?>> converters() {
+        final RubyArray rubyKeys = (RubyArray) getConverterFactory()
             .callMethod("converters")
             .callMethod(rubyRuntime.getCurrentContext(), "keys");
 

@@ -1,22 +1,27 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Arrays;
+import java.util.Iterator;
 
+import static java.util.Collections.singletonList;
 import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Arquillian.class)
 public class WhenRubyExtensionIsRegistered {
@@ -130,7 +135,8 @@ public class WhenRubyExtensionIsRegistered {
     public void ruby_inline_macro_processor_should_be_registered_with_implicit_macro_name() {
 
         RubyExtensionRegistry rubyExtensionRegistry = this.asciidoctor.rubyExtensionRegistry();
-        rubyExtensionRegistry.loadClass(getClass().getResourceAsStream("/ruby-extensions/man-inline-macro.rb")).inlineMacro("ManInlineMacro");
+        rubyExtensionRegistry.loadClass(getClass().getResourceAsStream("/ruby-extensions/man-inline-macro.rb"))
+            .inlineMacro("ManInlineMacro");
 
         String content = asciidoctor.render(
             "= Man Inline Macro Extension\n" +
@@ -146,11 +152,52 @@ public class WhenRubyExtensionIsRegistered {
     }
 
     @Test
+    public void ruby_treeprocessor_should_be_registered() {
+
+        final String rubyExtPath = classpath.getResource("ruby-extensions").getAbsolutePath();
+        final Asciidoctor asciidoctor = Asciidoctor.Factory.create(singletonList(rubyExtPath));
+        asciidoctor.rubyExtensionRegistry()
+            .requireLibrary("shell-session-tree-processor.rb")
+            .treeprocessor("ShellSessionTreeProcessor");
+
+        String content = asciidoctor.render(
+            " $ echo \"Hello, World!\"\n" +
+                " > Hello, World!\n" +
+                "\n" +
+                " $ gem install asciidoctor",
+                options().toFile(false).get());
+
+        final Document document = Jsoup.parse(content);
+        final TextNode commandElement = document.getElementsByClass("command").get(0).textNodes().get(0);
+        assertThat(commandElement.getWholeText(), is("echo \"Hello, World!\""));
+        final TextNode commandElement2 = document.getElementsByClass("command").get(1).textNodes().get(0);
+        assertThat(commandElement2.getWholeText(), is("gem install asciidoctor"));
+    }
+
+    @Test
+    public void ruby_includeprocessor_should_be_registered() {
+        asciidoctor.rubyExtensionRegistry()
+            .loadClass(getClass().getResourceAsStream("/ruby-extensions/response-include-processor.rb"))
+            .includeProcessor("ResponseIncludeProcessor");
+
+        String content = asciidoctor.render(
+            "The response to everything is\n" +
+                "\n" +
+                "include::response[]" +
+                "",
+            options().toFile(false).safe(SafeMode.SAFE).get());
+
+        final Document document = Jsoup.parse(content);
+        assertThat(
+            document.getElementsByClass("paragraph").get(1).getElementsByTag("p").get(0).toString(),
+            is("<p>42</p>"));
+    }
+
+    @Test
     public void ruby_postprocessor_should_be_registered() {
 
         final String rubyExtPath = classpath.getResource("ruby-extensions").getAbsolutePath();
-        final Asciidoctor asciidoctor = Asciidoctor.Factory.create(Arrays.asList(rubyExtPath));
-        RubyExtensionRegistry rubyExtensionRegistry = this.asciidoctor.rubyExtensionRegistry();
+        final Asciidoctor asciidoctor = Asciidoctor.Factory.create(singletonList(rubyExtPath));
         asciidoctor.rubyExtensionRegistry()
             .requireLibrary("xml-entity-postprocessor.rb")
             .postprocessor("XmlEntityPostprocessor");
@@ -159,7 +206,78 @@ public class WhenRubyExtensionIsRegistered {
             "Read &sect;2 and it&apos;ll all be clear.",
                 options().toFile(false).get());
 
-        System.out.println(content);
         assertThat(content, containsString("Read &#167;2 and it&#39;ll all be clear."));
+    }
+
+    @Test
+    public void ruby_preprocessor_should_be_registered() {
+
+        final String rubyExtPath = classpath.getResource("ruby-extensions").getAbsolutePath();
+        final Asciidoctor asciidoctor = Asciidoctor.Factory.create(singletonList(rubyExtPath));
+        asciidoctor.rubyExtensionRegistry()
+            .requireLibrary("front-matter-preprocessor.rb")
+            .preprocessor("FrontMatterPreprocessor");
+
+        String content = asciidoctor.render(
+            "---\n" +
+                "tags: [announcement, website]\n" +
+                "---\n" +
+                "= Document Title\n" +
+                "\n" +
+                "content\n" +
+                "\n" +
+                "[subs=\"attributes,specialcharacters\"]\n" +
+                ".Captured front matter\n" +
+                "....\n" +
+                "---\n" +
+                "{front-matter}\n" +
+                "---\n" +
+                "....",
+                options().toFile(false).get());
+
+        final Document document = Jsoup.parse(content);
+        final Element contentElement = document.getElementsByClass("content").get(0);
+        final Element literalElement = contentElement.getElementsByTag("pre").get(0);
+        assertThat(literalElement.toString().replace("\r", ""),
+            containsString("---\n" +
+                "tags: [announcement, website]\n" +
+                "---"));
+    }
+
+    @Test
+    public void ruby_docinfoprocessor_should_be_registered() {
+
+        final String rubyExtPath = classpath.getResource("ruby-extensions").getAbsolutePath();
+        final Asciidoctor asciidoctor = Asciidoctor.Factory.create(singletonList(rubyExtPath));
+        asciidoctor.rubyExtensionRegistry()
+            .requireLibrary("view-result-docinfoprocessor.rb")
+            .docinfoProcessor("ViewResultDocinfoProcessor");
+
+        String content = asciidoctor.render(
+            "= View Result Sample             \n" +
+                "                                 \n" +
+                ".This will have a link next to it\n" +
+                "----                             \n" +
+                "* always displayed               \n" +
+                "* always displayed 2             \n" +
+                "----                             \n" +
+                "                                 \n" +
+                "[.result]                        \n" +
+                "====                             \n" +
+                "* hidden till clicked            \n" +
+                "* hidden till clicked 2          \n" +
+                "====                             ",
+                options().toFile(false).safe(SafeMode.SAFE).headerFooter(true).get());
+
+        final Document document = Jsoup.parse(content);
+        final Iterator<Element> elems = document.getElementsByTag("style").iterator();
+        boolean found = false;
+        while (elems.hasNext()) {
+            final Element styleElem = elems.next();
+            if (styleElem.toString().contains(".listingblock a.view-result")) {
+                found = true;
+            }
+        }
+        assertTrue("Could not find style element that should have been added by docinfo processor:\n" + document, found);
     }
 }
