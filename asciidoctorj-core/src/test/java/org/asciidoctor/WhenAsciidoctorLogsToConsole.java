@@ -120,37 +120,6 @@ public class WhenAsciidoctorLogsToConsole {
     }
 
     @Test
-    public void shouldNotifyLogHandlerService() throws Exception {
-
-        File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
-        String renderContent = asciidoctor.renderFile(inputFile,
-            options()
-                .inPlace(true)
-                .safe(SafeMode.SERVER)
-                .attributes(
-                    AttributesBuilder.attributes().allowUriRead(true))
-                .asMap());
-
-        File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
-        expectedFile.delete();
-
-        final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
-        assertEquals(4, logRecords.size());
-        assertThat(logRecords.get(0).getMessage(), containsString("include file not found"));
-        final Cursor cursor = (Cursor) logRecords.get(0).getCursor();
-        assertThat(cursor.getDir().replace('\\', '/'), is(inputFile.getParent().replace('\\', '/')));
-        assertThat(cursor.getFile(), is(inputFile.getName()));
-        assertThat(cursor.getLineNumber(), is(3));
-
-        for (LogRecord logRecord: logRecords) {
-            assertThat(logRecord.getCursor(), not(nullValue()));
-            assertThat(logRecord.getCursor().getFile(), not(nullValue()));
-            assertThat(logRecord.getCursor().getDir(), not(nullValue()));
-        }
-
-    }
-
-    @Test
     public void shouldOnlyNotifyFromRegisteredAsciidoctor() throws Exception {
 
         final List<LogRecord> logRecords = new ArrayList<>();
