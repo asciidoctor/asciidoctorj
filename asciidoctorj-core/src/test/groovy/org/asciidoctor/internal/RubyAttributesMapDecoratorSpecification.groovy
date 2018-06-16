@@ -39,7 +39,8 @@ Lorem ipsum dolor
         !attributes.containsKey(1L)
         attributes.containsKey(ATTR_ONE)
         attributes.keySet().contains(ATTR_ONE)
-        attributes.get(ATTR_ONE).startsWith(blockStyle)
+        attributes.get(ATTR_ONE) == blockStyle
+
 
     }
 
@@ -58,7 +59,7 @@ Lorem ipsum dolor
         !attributes.containsKey(ATTR_ONE)
 
         and: 'remove returned the previous attribute value'
-        oldValue.startsWith(blockStyle)
+        oldValue == blockStyle
 
         and: 'The attributes derived from the positional attribute are still there'
         attributes.containsKey(ATTR_NAME_ROLE)

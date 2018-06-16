@@ -11,7 +11,6 @@ import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.StructuredDocument;
-import org.asciidoctor.ast.Title;
 import org.asciidoctor.ast.impl.ContentPartImpl;
 import org.asciidoctor.ast.impl.DocumentHeaderImpl;
 import org.asciidoctor.ast.impl.StructuredDocumentImpl;
@@ -21,6 +20,11 @@ import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.extension.internal.ExtensionRegistryExecutor;
+import org.asciidoctor.log.LogHandler;
+import org.asciidoctor.log.LogRecord;
+import org.asciidoctor.log.internal.JULLogHandler;
+import org.asciidoctor.log.internal.JavaLogger;
+import org.asciidoctor.log.internal.LogHandlerRegistryExecutor;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyHash;
@@ -44,9 +48,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class JRubyAsciidoctor implements Asciidoctor {
+public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
     private static final Logger logger = Logger.getLogger(JRubyAsciidoctor.class.getName());
 
@@ -59,6 +64,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
     private RubyClass extensionGroupClass;
 
+    private List<LogHandler> logHandlers = new ArrayList<>();
+
+    private final static Logger LOGGER = Logger.getLogger("asciidoctorj");
+
     private JRubyAsciidoctor(final Ruby rubyRuntime) {
         this.rubyRuntime = rubyRuntime;
 
@@ -67,6 +76,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
         this.rubyRuntime.evalScriptlet(script);
 
         this.rubyGemsPreloader = new RubyGemsPreloader(this.rubyRuntime);
+        this.logHandlers.add(new JULLogHandler());
     }
 
     public static JRubyAsciidoctor create() {
@@ -96,6 +106,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
     private static JRubyAsciidoctor processRegistrations(JRubyAsciidoctor asciidoctor) {
         registerExtensions(asciidoctor);
         registerConverters(asciidoctor);
+        registerLogHandlers(asciidoctor);
         return asciidoctor;
     }
 
@@ -105,6 +116,10 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
     private static void registerExtensions(Asciidoctor asciidoctor) {
         new ExtensionRegistryExecutor(asciidoctor).registerAllExtensions();
+    }
+
+    private static void registerLogHandlers(Asciidoctor asciidoctor) {
+        new LogHandlerRegistryExecutor(asciidoctor).registerAllLogHandlers();
     }
 
     private static JRubyAsciidoctor createJRubyAsciidoctorInstance(Map<String, String> environmentVars, List<String> loadPaths, ClassLoader classloader) {
@@ -120,7 +135,11 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         Ruby rubyRuntime = JavaEmbedUtils.initialize(loadPaths, config);
 
-        return new JRubyAsciidoctor(rubyRuntime);
+        JRubyAsciidoctor jrubyAsciidoctor = new JRubyAsciidoctor(rubyRuntime);
+
+        JavaLogger.install(rubyRuntime, jrubyAsciidoctor);
+
+        return jrubyAsciidoctor;
     }
 
     private static void injectEnvironmentVariables(RubyInstanceConfig config, Map<String, String> environmentVars) {
@@ -132,6 +151,18 @@ public class JRubyAsciidoctor implements Asciidoctor {
         return new RubyInstanceConfig();
     }
 
+    @Override
+    public void registerLogHandler(final LogHandler logHandler) {
+        if (!this.logHandlers.contains(logHandler)) {
+            this.logHandlers.add(logHandler);
+        }
+    }
+
+    @Override
+    public void unregisterLogHandler(final LogHandler logHandler) {
+        this.logHandlers.remove(logHandler);
+    }
+
     public Ruby getRubyRuntime() {
         return rubyRuntime;
     }
@@ -140,7 +171,7 @@ public class JRubyAsciidoctor implements Asciidoctor {
 
         Document documentImpl = (Document) NodeConverter.createASTNode(document);
 
-        return DocumentHeaderImpl.createDocumentHeader((Title) documentImpl.getStructuredDoctitle(), documentImpl.getDoctitle(),
+        return DocumentHeaderImpl.createDocumentHeader(documentImpl.getStructuredDoctitle(), documentImpl.getDoctitle(),
                 documentImpl.getAttributes());
     }
 
@@ -641,5 +672,16 @@ public class JRubyAsciidoctor implements Asciidoctor {
             extensionGroupClass = ExtensionGroupImpl.createExtensionGroupClass(rubyRuntime);
         }
         return extensionGroupClass;
+    }
+
+    @Override
+    public void log(LogRecord logRecord) {
+        for (LogHandler logHandler: logHandlers) {
+            try {
+                logHandler.log(logRecord);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Unexpected exception while logging Asciidoctor log entry", e);
+            }
+        }
     }
 }
