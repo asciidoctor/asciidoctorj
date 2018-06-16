@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.Matchers.both;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
@@ -41,12 +42,12 @@ public class WhenAsciidoctorLogsToConsole {
     @Before
     public void before() {
         asciidoctor = JRubyAsciidoctor.create();
+        TestLogHandlerService.clear();
     }
 
     @After
     public void cleanup() throws IOException {
         LogManager.getLogManager().readConfiguration();
-        TestLogHandlerService.clear();
     }
 
     @Test
@@ -106,7 +107,7 @@ public class WhenAsciidoctorLogsToConsole {
 
         assertEquals(4, logRecords.size());
         assertThat(logRecords.get(0).getMessage(), containsString("include file not found"));
-        final Cursor cursor = (Cursor) logRecords.get(0).getCursor();
+        final Cursor cursor = logRecords.get(0).getCursor();
         assertThat(cursor.getDir().replace('\\', '/'), is(inputFile.getParent().replace('\\', '/')));
         assertThat(cursor.getFile(), is(inputFile.getName()));
         assertThat(cursor.getLineNumber(), is(3));
@@ -117,6 +118,35 @@ public class WhenAsciidoctorLogsToConsole {
             assertThat(logRecord.getCursor().getDir(), not(nullValue()));
         }
 
+    }
+
+    @Test
+    public void shouldLogInvalidRefs() throws Exception {
+
+        final List<LogRecord> logRecords = new ArrayList<>();
+
+        final LogHandler logHandler = new LogHandler() {
+            @Override
+            public void log(LogRecord logRecord) {
+                logRecords.add(logRecord);
+            }
+        };
+        asciidoctor.registerLogHandler(logHandler);
+
+        File inputFile = classpath.getResource("documentwithinvalidrefs.adoc");
+        String renderContent = asciidoctor.renderFile(inputFile,
+            options()
+                .inPlace(true)
+                .safe(SafeMode.SERVER)
+                .toFile(false)
+                .attributes(
+                    AttributesBuilder.attributes().allowUriRead(true))
+                .asMap());
+
+        assertThat(logRecords, hasSize(1));
+        assertThat(logRecords.get(0).getMessage(), containsString("invalid reference: invalidref"));
+        final Cursor cursor = logRecords.get(0).getCursor();
+        assertThat(cursor, is(nullValue()));
     }
 
     @Test
@@ -214,4 +244,33 @@ public class WhenAsciidoctorLogsToConsole {
 
     }
 
+    @Test
+    public void shouldNotifyLogHandlerService() throws Exception {
+
+        File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
+        String renderContent = asciidoctor.renderFile(inputFile,
+            options()
+                .inPlace(true)
+                .safe(SafeMode.SERVER)
+                .attributes(
+                    AttributesBuilder.attributes().allowUriRead(true))
+                .asMap());
+
+        File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
+        expectedFile.delete();
+
+        final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
+        assertThat(logRecords, hasSize(4));
+        assertThat(logRecords.get(0).getMessage(), containsString("include file not found"));
+        final Cursor cursor = logRecords.get(0).getCursor();
+        assertThat(cursor.getDir().replace('\\', '/'), is(inputFile.getParent().replace('\\', '/')));
+        assertThat(cursor.getFile(), is(inputFile.getName()));
+        assertThat(cursor.getLineNumber(), is(3));
+
+        for (LogRecord logRecord: logRecords) {
+            assertThat(logRecord.getCursor(), not(nullValue()));
+            assertThat(logRecord.getCursor().getFile(), not(nullValue()));
+            assertThat(logRecord.getCursor().getDir(), not(nullValue()));
+        }
+    }
 }
