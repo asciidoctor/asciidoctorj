@@ -58,7 +58,7 @@ ext {
   openUriCachedGemVersion = '0.0.5'
   slimGemVersion = '3.0.6'
   threadSafeGemVersion = '0.3.6'
-  tiltGemVersion = '2.0.1'
+  tiltGemVersion = '2.0.8'
 }
 
 allprojects {
