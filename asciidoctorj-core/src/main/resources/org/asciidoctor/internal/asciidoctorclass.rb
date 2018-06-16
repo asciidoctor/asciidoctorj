@@ -12,106 +12,70 @@ require 'java'
 require 'asciidoctor'
 require 'asciidoctor/extensions'
 
-class AsciidoctorModule
-    java_implements Java::Asciidoctor
+module AsciidoctorModule
 
-    def unregister_all_extensions()
+    def self.unregister_all_extensions()
         Asciidoctor::Extensions.unregister_all
     end
 
-    def unregister_extension name
+    def self.unregister_extension name
         Asciidoctor::Extensions.unregister name
     end
 
-    def docinfo_processor(extensionName)
+    def self.docinfo_processor(extensionName)
         Asciidoctor::Extensions.register do
             docinfo_processor extensionName
         end
     end
 
-    def treeprocessor(extensionName)
+    def self.treeprocessor(extensionName)
         Asciidoctor::Extensions.register do
             treeprocessor extensionName
         end
     end
     
-    def include_processor(extensionName)
+    def self.include_processor(extensionName)
         Asciidoctor::Extensions.register do
             include_processor extensionName
         end
     end
 
-    def preprocessor(extensionName)
+    def self.preprocessor(extensionName)
         Asciidoctor::Extensions.register do
             preprocessor extensionName
         end
     end
     
-    def postprocessor(extensionName)
+    def self.postprocessor(extensionName)
         Asciidoctor::Extensions.register do
             postprocessor extensionName
         end
     end
 
-    def block_processor(extensionName, blockSymbol)
+    def self.block_processor *args
         Asciidoctor::Extensions.register do
-            block extensionName, blockSymbol
+            block *args
         end
     end
 
-    def block_macro(extensionName, blockSymbol)
+    def self.block_macro *args
         Asciidoctor::Extensions.register do
-            block_macro extensionName, blockSymbol
+            block_macro *args
         end
     end
 
-    def inline_macro(extensionName, blockSymbol)
+    def self.inline_macro *args
         Asciidoctor::Extensions.register do
-            inline_macro extensionName, blockSymbol
+            inline_macro *args
         end
     end
 
-    def register_extension_group(groupName, callback)
+    def self.register_extension_group(groupName, callback, registrators)
         Asciidoctor::Extensions.register groupName do
-            callback.registerExtensions self
+            callback.register_extensions self, registrators
         end
     end
 
-    def convert_file(filename, options = {})
-        return Asciidoctor.convert_file(filename, options)
-    end
-
-    def convert(content, options = {})
-        return Asciidoctor.convert(content, options)
-    end
-
-    def load_file(filename, options = {})
-        return Asciidoctor.load_file(filename, options)
-    end
-
-    def load(content, options = {})
-        return Asciidoctor.load(content, options)
-    end
-
-    def register_converter(converter, backends = ['*'])
-        Asciidoctor::Converter::Factory.register converter, backends
-    end
-
-    def resolve_converter(backend)
-        return Asciidoctor::Converter::Factory.resolve backend
-    end
-
-    def converters
-        return Asciidoctor::Converter::Factory.converters.keys
-    end
-
-    def unregister_all_converters
-        Asciidoctor::Converter::Factory.unregister_all
-    end
-
-    def asciidoctorRuntimeEnvironmentVersion
-        return Asciidoctor::VERSION
-    end
 end
 
 module Asciidoctor

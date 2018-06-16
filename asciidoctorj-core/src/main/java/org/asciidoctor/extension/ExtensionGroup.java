@@ -74,7 +74,13 @@ public interface ExtensionGroup {
   public ExtensionGroup rubyDocinfoProcessor(String docinfoProcessor);
   public ExtensionGroup rubyIncludeProcessor(String includeProcessor);
   public ExtensionGroup rubyTreeprocessor(String treeProcessor);
+
   public ExtensionGroup rubyBlock(String blockName, String blockProcessor);
+  public ExtensionGroup rubyBlock(String blockProcessor);
+
   public ExtensionGroup rubyBlockMacro(String blockName, String blockMacroProcessor);
-  public ExtensionGroup rubyInlineMacro(String blockName, String inlineMacroProcessor);
+  public ExtensionGroup rubyBlockMacro(String blockMacroProcessor);
+
+  public ExtensionGroup rubyInlineMacro(String macroName, String inlineMacroProcessor);
+  public ExtensionGroup rubyInlineMacro(String inlineMacroProcessor);
 }

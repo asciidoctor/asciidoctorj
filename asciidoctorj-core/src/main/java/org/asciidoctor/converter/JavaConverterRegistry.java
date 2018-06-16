@@ -1,22 +1,17 @@
 package org.asciidoctor.converter;
 
-import org.asciidoctor.internal.AsciidoctorModule;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
-import org.jruby.RubyString;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class JavaConverterRegistry {
 
-    private AsciidoctorModule asciidoctorModule;
     private Ruby rubyRuntime;
 
-    public JavaConverterRegistry(AsciidoctorModule asciidoctorModule, Ruby rubyRuntime) {
-        super();
-        this.asciidoctorModule = asciidoctorModule;
+    public JavaConverterRegistry(Ruby rubyRuntime) {
         this.rubyRuntime = rubyRuntime;
     }
 
@@ -28,19 +23,29 @@ public class JavaConverterRegistry {
         if (converterForAnnotation != null) {
             // Backend annotation present => Register with name given in annotation
             String backend = !ConverterFor.UNDEFINED.equals(converterForAnnotation.format()) ? converterForAnnotation.format() : converterForAnnotation.value();
-            this.asciidoctorModule.register_converter(clazz, new String[] { backend });
+            getConverterFactory()
+                .callMethod("register", clazz, rubyRuntime.newArray(rubyRuntime.newString(backend)));
+
         } else if (backends.length == 0) {
             // No backend annotation and no backend defined => register as default backend
-            this.asciidoctorModule.register_converter(clazz);
+            getConverterFactory()
+                .callMethod("register", clazz);
         }
         if (backends.length > 0) {
             // Always additionally register with names passed to this method
-            this.asciidoctorModule.register_converter(clazz, backends);
+            final RubyArray rubyBackendNames = new RubyArray(rubyRuntime, backends.length);
+            for (String backend: backends) {
+                rubyBackendNames.add(rubyRuntime.newString(backend));
+            }
+            getConverterFactory()
+                .callMethod("register", clazz, rubyBackendNames);
         }
     }
 
     public Class<?> resolve(String backend) {
-        RubyClass rubyClass = this.asciidoctorModule.resolve_converter(backend);
+        RubyClass rubyClass = (RubyClass) getConverterFactory()
+            .callMethod("resolve", rubyRuntime.newString(backend));
+
         Class<?> clazz = rubyClass.getReifiedClass();
         if (clazz != null) {
             return clazz;
@@ -52,15 +57,24 @@ public class JavaConverterRegistry {
     }
 
     public void unregisterAll() {
-        this.asciidoctorModule.unregister_all_converters();
+        getConverterFactory()
+            .callMethod("unregister_all");
+    }
+
+    private RubyClass getConverterFactory() {
+        return rubyRuntime.getModule("Asciidoctor")
+            .defineOrGetModuleUnder("Converter")
+            .getClass("Factory");
     }
 
     public Map<String, Class<?>> converters() {
-        RubyArray rubyKeys = this.asciidoctorModule.converters();
+        final RubyArray rubyKeys = (RubyArray) getConverterFactory()
+            .callMethod("converters")
+            .callMethod(rubyRuntime.getCurrentContext(), "keys");
 
         Map<String, Class<?>> converters = new HashMap<String, Class<?>>();
-        for (Object rubyBackend : rubyKeys.getList()) {
-            String backend = ((RubyString) rubyBackend).asJavaString();
+        for (Object rubyBackend : rubyKeys) {
+            String backend = rubyBackend.toString();
             converters.put(backend, resolve(backend));
         }
         return converters;
