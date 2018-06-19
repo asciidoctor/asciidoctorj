@@ -1,10 +1,10 @@
 package org.asciidoctor.internal;
 
-import java.io.InputStream;
-
 import org.jruby.Ruby;
 import org.jruby.RubyRuntimeAdapter;
 import org.jruby.javasupport.JavaEmbedUtils;
+
+import java.io.InputStream;
 
 class JRubyAsciidoctorModuleFactory {
 
