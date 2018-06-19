@@ -5,7 +5,7 @@ Alex Soto <https://github.com/lordofthejars[@lordofthejars]>; Dan Allen <https:/
 :page-layout: base
 :toc: macro
 :toclevels: 2
-ifdef::awestruct[:toclevels: 1]
+ifdef::env-github[:toclevels: 1]
 :experimental:
 //:table-caption!:
 :source-language: java
@@ -14,13 +14,13 @@ ifdef::env-github[:badges:]
 // Aliases:
 :dagger: &#8224;
 // URIs:
-ifdef::awestruct[:uri-docs: link:/docs]
-ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
+:uri-docs: http://asciidoctor.org/docs
+ifdef::env-site[:uri-docs: link:/docs]
 :uri-asciidoctor: {uri-docs}/what-is-asciidoctor
 :uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-discuss: http://discuss.asciidoctor.org
-:artifact-version: 1.5.4
+:artifact-version: 1.5.6
 :uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
 :uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
@@ -33,6 +33,7 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-tilt: https://github.com/rtomayko/tilt
 :uri-font-awesome: http://fortawesome.github.io/Font-Awesome
 :uri-gradle: https://gradle.org
+:uri-chocolatey: https://chocolatey.org
 
 {uri-repo}[AsciidoctorJ] is the official library for running {uri-asciidoctor}[Asciidoctor] on the JVM.
 Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of a parsed AsciiDoc document from Java and other JVM languages.
@@ -40,10 +41,10 @@ Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of
 ifdef::badges[]
 image:https://img.shields.io/travis/asciidoctor/asciidoctorj/master.svg[Build Status (Travis CI), link=https://travis-ci.org/asciidoctor/asciidoctorj]
 image:https://ci.appveyor.com/api/projects/status/syxrlv047esal4n0/branch/master?svg=true[Build Status (AppVeyor), link=https://ci.appveyor.com/project/asciidoctor/asciidoctorj]
-image:https://img.shields.io/badge/javadoc.io-1.6.0-blue.svg[Javadoc, link=http://www.javadoc.io/doc/org.asciidoctor/asciidoctorj/1.6.0-alpha.1]
+image:https://img.shields.io/badge/javadoc.io-{artifact-version}-blue.svg[Javadoc, link=http://www.javadoc.io/doc/org.asciidoctor/asciidoctorj/{artifact-version}]
 endif::[]
 
-ifdef::awestruct,env-browser[]
+ifdef::env-github,env-browser[]
 toc::[]
 endif::[]
 
@@ -95,12 +96,14 @@ The artifact information can be found in the tables below.
 |{empty}
 |===
 
-CAUTION: The artifactId changed to `asciidoctorj` starting in 1.5.0.
+CAUTION: The artifactId changed from *asciidoctor-java-integration* to *asciidoctorj* starting with version 1.5.0.
 
 == Installation
 
 AsciidoctorJ is a standard `.jar` file.
 To start using it, you need to add the library to your project's classpath.
+To start using it under WildFly AS, you can't just use it, you also have to _modify your WildFly installation_
+due to classpath loading issues; see <<wildfly-kludge>>.
 
 // SW: Need functional tests for a java maven project and a java gradle project
 
@@ -151,6 +154,20 @@ In addition to using AsciidoctorJ directly, you can invoke it as part of your bu
 - {uri-maven-guide}[How to Install and Use the Asciidoctor Maven Plugin]
 - {uri-gradle-guide}[How to Install and Use the Asciidoctor Gradle Plugin]
 ====
+
+=== Windows Installation
+
+A {uri-chocolatey}[Chocolatey] package is available which installs the
+ascidoctorj-{artifact-version}-bin.zip Bintray artifact along with a
+binary shim in %ChocolateyInstall%\bin which lets you run AsciidoctorJ
+from the command line.
+
+----
+C:\> choco install asciidoctorj
+C:\> where asciidoctorj
+C:\ProgramData\chocolatey\bin\asciidoctorj.exe
+C:\> asciidoctorj -b pdf README.adoc
+----
 
 == Converting documents
 
@@ -317,6 +334,7 @@ System.out.println(htmlBuffer.toString());
 ----
 
 === Safe mode and file system access
+
 Asciidoctor provides security levels that control the read and write access of attributes, the include directive, macros, and scripts while a document is processing. Each level includes the restrictions enabled in the prior security level.
 
 When Asciidoctor (and AsciidoctorJ) is used as _API_, it uses `SECURE` safe mode by default.
@@ -609,7 +627,7 @@ for (File file : directoryWalker.scan()) {
 <1> Converts all files in the `docs` folder and its subfolders.
 
 You can also load the document inside a `Document` object.
-This object represents the whole document, including its headers.
+This object represents the whole document, including its headings.
 You can use it to navigate through the internals of a parsed document.
 To load a document, use the `load` or `loadFile` methods.
 
@@ -828,6 +846,11 @@ assertThat(findBy, hasSize(2)); //<3>
 
 == Extension API
 
+NOTE: If you plan to write extensions for Asciidoctor you should seriously consider using the latest version of the 1.6.0 family.
+      While the current version is an alpha version it contains the same solid version of Asciidoctor.
+      The Extension API has changed a bit, in an incompatible way though, but is much more solid when it comes to extensions.
+      To not break compatibility with existing users of the Extension API it is not possible to bring these stabilization efforts to the current 1.5 family.
+
 One of the major improvements to Asciidoctor recently is the extensions API.
 AsciidoctorJ brings this extension API to the JVM environment.
 {uri-repo}[AsciidoctorJ] allows us to write extensions in Java instead of Ruby.
@@ -860,6 +883,9 @@ Each extension point has an abstract class in Java that maps to the extension AP
 
 |Include processor
 |org.asciidoctor.extension.IncludeProcessor
+
+|Docinfo processor
+|org.asciidoctor.extension.DocinfoProcessor
 |===
 
 To create an extension two things are required:
@@ -960,7 +986,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor { // <1>
 
   public Block convertToTerminalListing(Block block) {
 
-    Map<String, Object> attributes = block.attributes();
+    Map<String, Object> attributes = block.getAttributes();
     attributes.put("role", "terminal");
     StringBuilder resultLines = new StringBuilder();
 
@@ -970,7 +996,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor { // <1>
         if (line.startsWith("$")) {
             resultLines.append("<span class=\"command\">")
                        .append(line.substring(2, line.length()))
-                       .append("</command");
+                       .append("</span>");
         }
         else {
             resultLines.append(line);
@@ -1057,7 +1083,7 @@ String content = asciidoctor.convertFile(new File(
 
 === DocinfoProcessor
 
-This extension inserts custom content on header or footer of the document. 
+This extension inserts custom content on header or footer of the document.
 For example can be used for adding `meta` tags on `<head>` tags.
 
 [source]
@@ -1344,7 +1370,7 @@ public class UriIncludeProcessor extends IncludeProcessor { // <1>
 <3> `push_include` method inserts new content (retrieved from the url) in current position of document.
 
 [source]
-.Register an Inline macro processor
+.Register an include processor
 ----
 JavaExtensionRegistry extensionRegistry = this.asciidoctor.javaExtensionRegistry(); // <1>
 
@@ -1678,7 +1704,7 @@ To get this instance you can use `org.asciidoctor.internal.JRubyRuntimeContext.g
 == GEM_PATH
 
 By default, AsciidoctorJ comes with all required gems bundled within the jar.
-But in some circumstances like OSGi environments you may require to store gems in an external folder and be loaded by AsciidoctorJ.
+In certain circumstances, you may want to load gems from an external folder.
 To accomplish this scenario, `create` method provides a parameter to set folder where gems are present.
 Internally, AsciidoctorJ will set `GEM_PATH` environment variable to given path.
 
@@ -1706,7 +1732,7 @@ Asciidoctor asciidoctor = create();
 
 In an OSGi context it will not work because JRuby needs some paths to find the gems (the Asciidoctor ones and the Ruby themselves ones). In order to make it work, you will need two more classes (RubyInstanceConfig and JavaEmbedUtils) and a small modification of the previous snippet of code. The modifications take care of the class loaders because in OSGi, which are a key point in OSGi:
 
-[source,java]
+[source,java,subs=attributes+]
 ----
 import static org.asciidoctor.Asciidoctor.Factory.create;
 import org.asciidoctor.Asciidoctor;
@@ -1714,7 +1740,7 @@ import org.asciidoctor.Asciidoctor;
 RubyInstanceConfig config = new RubyInstanceConfig();
 config.setLoader(this.getClass().getClassLoader()); <1>
 
-JavaEmbedUtils.initialize(Arrays.asList("META-INF/jruby.home/lib/ruby/2.0", "gems/asciidoctor-1.5.4/lib"), config); <2><3><4>
+JavaEmbedUtils.initialize(Arrays.asList("META-INF/jruby.home/lib/ruby/2.0", "gems/asciidoctor-{artifact-version}/lib"), config); <2><3><4>
 
 Asciidoctor asciidoctor = create(this.getClass().getClassLoader()); <5>
 ----
@@ -1818,23 +1844,26 @@ export JAVA_OPTS="-Xverify:none -client"
 
 You can find a full explanation on how to improve the start time of JRuby applications in <<Optimization>>.
 
+[[wildfly-kludge]]
 == Running AsciidoctorJ on WildFly AS
 
-If you want to use AsciidoctorJ in an application deployed on [app]_WildFly AS_, you have to follow the instruction below:
+If you want to use AsciidoctorJ in an application deployed on [app]_WildFly AS_, you have to install AsciidoctorJ as a JBoss Module.
+
+Follow the steps below:
 
 . Create an *Asciidoctor module* for [app]_WildFly AS_.
 . Create the following folder tree: [path]_$JBOSS_HOME/modules/org/asciidoctor/main_.
 . Create the module descriptor file [path]_module.xml_.
 +
-[source,xml]
+[source,xml,subs=attributes+]
 .Asciidoctor module descriptor for WildFly AS
 ----
 <?xml version="1.0" encoding="UTF-8"?>
 <module xmlns="urn:jboss:module:1.0" name="org.asciidoctor">
     <resources>
-        <resource-root path="asciidoctorj-1.5.4.jar"/>
+        <resource-root path="asciidoctorj-{artifact-version}.jar"/>
         <resource-root path="jcommander-1.35.jar"/>
-        <resource-root path="jruby-complete-1.7.21.jar"/>
+        <resource-root path="jruby-complete-1.7.26.jar"/>
     </resources>
     <dependencies>
         <module name="sun.jdk" export="true">
@@ -1848,6 +1877,9 @@ If you want to use AsciidoctorJ in an application deployed on [app]_WildFly AS_,
     </dependencies>
 </module>
 ----
+. Copy the jar files into the same folder as the _module.xml_ file.
+. Make sure the version numbers of the jar files agree with what's in the current set.
+Restart WildFly for the new module to take effect.
 
 . Add a dependency on your Java archive to this WildFly module using one of the following options:
 .. Add the dependency just into the [path]_MANIFEST.MF_ file.
@@ -1948,6 +1980,7 @@ repositories {
 
 You can also download a snapshot version of the distribution from here: https://oss.jfrog.org/oss-snapshot-local/org/asciidoctor/asciidoctorj-distribution
 
+ifndef::env-site[]
 == Development
 
 AsciidoctorJ is built using {uri-gradle}[Gradle].
@@ -2113,6 +2146,7 @@ NOTE: The `-x pMNPTML` is necessary to work around a bug in the publishing plugi
 IMPORTANT: Bintray does not allow you to publish snapshots.
 You have to first update the version in [path]_gradle.properties_ to a release (or pre-release) version number.
 Currently, Gradle is not configured to automatically tag a release, so *you have to create the git tag manually*.
+endif::[]
 
 === Publish snapshot versions
 
