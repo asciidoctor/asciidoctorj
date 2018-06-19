@@ -74,6 +74,7 @@ c
         def attrs = AttributesBuilder.attributes()
                 .attribute('docdatetime', dateTimeFormatter.format(now))
                 .attribute('localdatetime', dateTimeFormatter.format(now))
+                .attribute('reproducible', 'true')
 
         when:
         asciidoctor.convert(testDoc,
