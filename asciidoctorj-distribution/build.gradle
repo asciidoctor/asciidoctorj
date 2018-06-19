@@ -4,7 +4,6 @@ dependencies {
   compile project(':asciidoctorj')
   compile project(':asciidoctorj-epub3')
   compile project(':asciidoctorj-diagram')
-  compile "org.jruby:jruby-complete:9.1.13.0"
 
   compile("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
     transitive = false
@@ -36,7 +35,7 @@ startScripts {
   mainClassName = 'org.asciidoctor.cli.AsciidoctorInvoker'
   defaultJvmOpts = [
     '-client', '-Xmn128m', '-Xms256m', '-Xmx256m',
-    '-Xverify:none', '-XX:+UseFastAccessorMethods', '-XX:+TieredCompilation', '-XX:TieredStopAtLevel=1', '-XX:+DisableExplicitGC'
+    '-Xverify:none', '-XX:+TieredCompilation', '-XX:TieredStopAtLevel=1', '-XX:+DisableExplicitGC', '-Djruby.compile.mode=OFF'
   ]
 }
 
