@@ -51,6 +51,8 @@ import static org.junit.Assert.assertTrue;
 @RunWith(Arquillian.class)
 public class WhenJavaExtensionIsRegistered {
 
+    public static final String ASCIIDOCTORCLASS_PREFIX = "# Set the global variable VERBOSE to true to get invalid refs into the log";
+
     @ArquillianResource
     private ClasspathResources classpath;
 
@@ -130,7 +132,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith("module AsciidoctorJ"));
+        assertThat(contentElement.text(), startsWith(ASCIIDOCTORCLASS_PREFIX));
 
     }
 
@@ -190,7 +192,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith("module AsciidoctorJ"));
+        assertThat(contentElement.text(), startsWith(ASCIIDOCTORCLASS_PREFIX));
 
     }
 
@@ -356,7 +358,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith("module AsciidoctorJ"));
+        assertThat(contentElement.text(), startsWith(ASCIIDOCTORCLASS_PREFIX));
 
     }
 
@@ -377,7 +379,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith("module AsciidoctorJ"));
+        assertThat(contentElement.text(), startsWith(ASCIIDOCTORCLASS_PREFIX));
 
     }
 
@@ -398,7 +400,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith("module AsciidoctorJ"));
+        assertThat(contentElement.text(), startsWith(ASCIIDOCTORCLASS_PREFIX));
 
     }
 
@@ -857,7 +859,7 @@ public class WhenJavaExtensionIsRegistered {
 
             Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-            assertThat(contentElement.text(), startsWith("module AsciidoctorJ"));
+            assertThat(contentElement.text(), startsWith(ASCIIDOCTORCLASS_PREFIX));
         }
     }
 
@@ -880,7 +882,7 @@ public class WhenJavaExtensionIsRegistered {
 
             Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-            assertThat(contentElement.text(), startsWith("module AsciidoctorJ"));
+            assertThat(contentElement.text(), startsWith(ASCIIDOCTORCLASS_PREFIX));
         }
     }
 

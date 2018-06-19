@@ -17,17 +17,24 @@ public class CursorImpl extends RubyObjectWrapper implements Cursor {
 
     @Override
     public String getPath() {
-        return getString("path");
+        final Object result = getProperty("path");
+        return result == null ? null : result.toString();
     }
 
     @Override
     public String getDir() {
-        return getString("dir");
+        final Object result = getProperty("dir");
+        return result == null ? null : result.toString();
     }
 
     @Override
     public String getFile() {
-        return getString("file");
+        final Object result = getProperty("file");
+        return result == null ? null : result.toString();
     }
 
+    @Override
+    public String toString() {
+        return getString("to_s");
+    }
 }

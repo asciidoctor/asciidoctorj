@@ -18,9 +18,9 @@ import java.lang.annotation.Target;
  *         super(blockName);
  *     }
  *
- *     public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
- *         List<String> lines = reader.readLines();
- *         List<String> newLines = new ArrayList<>();
+ *     public Object process(StructuralNode parent, Reader reader, Map&lt;String, Object&gt; attributes) {
+ *         List&lt;String&gt; lines = reader.readLines();
+ *         List&lt;String&gt; newLines = new ArrayList<>();
  *         for (String line: lines) {
  *             newLines.add(line.toUpperCase());
  *         }
