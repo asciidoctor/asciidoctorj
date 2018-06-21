@@ -1,13 +1,24 @@
 apply plugin: 'application'
 
 dependencies {
-  compile project(':asciidoctorj')
-  compile project(':asciidoctorj-epub3')
-  compile project(':asciidoctorj-diagram')
+  compile(project(':asciidoctorj')) {
+    exclude group: 'org.jruby'
+  }
+
+  compile(project(':asciidoctorj-api')) {
+    transitive = false
+  }
+  compile(project(':asciidoctorj-epub3')) {
+    transitive = false
+  }
+  compile(project(':asciidoctorj-diagram')) {
+    transitive = false
+  }
 
   compile("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
     transitive = false
   }
+  compile "org.jruby:jruby-complete:$jrubyVersion"
   testCompile project(':asciidoctorj-arquillian-extension')
   testCompile "org.apache.pdfbox:pdfbox:$pdfboxVersion"
 }
