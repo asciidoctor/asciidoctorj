@@ -7,12 +7,14 @@ if (project.statusIsRelease) {
 dependencies {
   compile project(':asciidoctorj')
   compile project(':asciidoctorj-diagram')
-  compile project(':asciidoctorj-epub3')
 
+  compile("org.asciidoctor:asciidoctorj-epub3:1.5.0-alpha.8.1") {
+    transitive = false
+  }
   compile("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
     transitive = false
   }
-  compile 'org.jruby:jruby-complete:9.1.13.0'
+  compile 'org.jruby:jruby-complete:9.1.16.0'
 }
 
 jar.enabled = false
