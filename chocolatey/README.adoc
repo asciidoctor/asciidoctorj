@@ -5,7 +5,7 @@ creating a https://chocolatey.org/[Chocolatey] package based on a
 designated "asciidoctorj-x.y.z-bin.zip" bintray file.
 
 Complete instructions on creating Chocolatey packages can be found at
-https://chocolatey.org/docs/create-packages .
+https://chocolatey.org/docs/create-packages.
 
 == Quick Instructions
 
@@ -28,5 +28,5 @@ https://chocolatey.org/docs/create-packages .
 # Log into https://chocolatey.org/account and copy your API key.
 # (This assumes you don't have a key set in your Chocolatey config.)
 # Push the package to chocolatey.org.
-> choco push --api-key=you-api-key asciidoctorj.x.y.z.nupkg
+> choco push --api-key=your-api-key asciidoctorj.x.y.z.nupkg
 ----
