@@ -36,7 +36,8 @@ tasks.withType(AbstractArchiveTask) {
 }
 
 startScripts {
-  // QUESTION should we make the application name asciidoctor instead of asciidoctorj?
+  unixStartScriptGenerator.template = resources.text.fromFile('src/main/resources/customUnixStartScript.txt')
+
   applicationName = rootProject.name
   mainClassName = 'org.asciidoctor.cli.AsciidoctorInvoker'
   defaultJvmOpts = [
