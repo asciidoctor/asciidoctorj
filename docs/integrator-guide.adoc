@@ -18,7 +18,7 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-discuss: http://discuss.asciidoctor.org
-:artifact-version: 1.5.2
+:artifact-version: 1.5.7
 :uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
 :uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
@@ -50,11 +50,12 @@ Additionally there is a distribution that you can simply download, unzip and exe
 This guide will not go into details of the distribution.
 Instead you will learn how you can embed and leverage Asciidoctor by embedding it into your own code.
 
-The following sections will show
+The following sections will show:
 
 - how to render AsciiDoc content to HTML via AsciidoctorJ
 - how you can extend AsciidoctorJ to extend the AsciiDoc format and modify the way documents are rendered
-- how you can write a converter for your own custom target format.
+- how you can write a converter for your own custom target format
+- how you can capture Asciidoctor messages to monitor the rendering process
 
 == Integrate AsciidoctorJ: Render documents via the API
 
@@ -1680,3 +1681,103 @@ asciidoctor.convertFile(adocFile, OptionsBuilder.options().backend("text"));
 It is also possible to provide converters for binary formats.
 In this case the converter should extend the generic class `org.asciidoctor.converter.AbstractConverter<T>` where `T` is the return type of the method `convert()`.
 `StringConverter` is actually a concrete subclass for the type `String`.
+
+
+== Logs handling API
+
+[NOTE]
+====
+This API is inspired by Java Logging API (JUL).
+If you are familiar with `java.util.logging.*` you will see familiar analogies with some of its components.
+====
+
+AciidoctorJ (v1.5.7+) offers the possibility to capture messages generated during document rendering.
+These messages correspond to logging information and are organized in 6 severity levels:
+
+. DEBUG
+. INFO
+. WARN
+. ERROR
+. FATAL
+. UNKNOWN
+
+The easiest way to capture messages is registering a `LogHandler` through the `Asciidoctor` instance.
+
+[source,java]
+.Registering a LogHandler
+----
+Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+
+asciidoctor.registerLogHandler(new LogHandler() { // <1>
+    @Override
+    public void log(LogRecord logRecord) {
+        System.out.println(logRecord.getMessage());
+    }
+});
+----
+<1> Use `registerLogHandler` to register one or more handlers.
+
+The `log` method in the `org.asciidoctor.log.LogHandler` interface provides a `org.asciidoctor.log.LogRecord` that exposes the following information:
+
+[horizontal]
+Severity severity::
+Severity level of the current record.
+
+Cursor cursor::
+Information about the location of the event, contains:
+* LineNumber: relative to the file where the message occurred.
+* Path: source file simple name, or `<stdin>` value when rending from a String.
+* Dir: absolute path to the source file parent directory, or the execution path when rending from a String.
+* File: absolute path to the source file, or `null` when rending from a String. +
+These will point to the correct source file, even when this is included from another.
+
+String message::
+Descriptive message about the event.
+
+String sourceFileName::
+Contains the value `<script>`. +
+For the source filename see `Cursor` above.
+
+String sourceMethodName::
+The Asciidoctor Ruby engine method used to render the file; `convertFile` or `convert` whether you are rending a File or a String.
+
+=== Logs Handling SPI
+
+Similarly to AsciidoctorJ extensions, the Log Handling API provides an alternate method to register Handlers without accessing `Asciidoctor` instance.
+
+Start creating a normal LogHandler implementation.
+
+[source,Java]
+----
+package my.asciidoctor.log.MemoryLogHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.asciidoctor.log.LogHandler;
+import org.asciidoctor.log.LogRecord;
+
+/**
+ * Stores LogRecords in memory for later analysis.
+ */
+public class MemoryLogHandler extends LogHandler {
+
+  private List<LogRecord> logRecords = new ArrayList<>();
+
+  @Override
+  public void log(LogRecord logRecord) {
+    logRecords.add(record);
+  }
+
+  public List<LogRecord> getLogRecords() {
+    return logRecords;
+  }
+}
+----
+
+Next, create a file called `org.asciidoctor.log.LogHandler` inside `META-INF/services` with the implementation’s full qualified name.
+
+.META-INF/services/org.asciidoctor.log.LogHandler
+ my.asciidoctor.log.MemoryLogHandler
+
+And that’s all.
+Now when a .jar file containing the previous structure is dropped inside classpath of AsciidoctorJ, the handler will be registered automatically.
