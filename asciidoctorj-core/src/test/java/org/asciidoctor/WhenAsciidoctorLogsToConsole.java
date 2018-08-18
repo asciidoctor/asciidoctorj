@@ -8,6 +8,7 @@ import org.asciidoctor.log.TestLogHandlerService;
 import org.asciidoctor.util.ClasspathResources;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -121,6 +122,7 @@ public class WhenAsciidoctorLogsToConsole {
     }
 
     @Test
+    @Ignore("Until invalid refs are logged by default")
     public void shouldLogInvalidRefs() throws Exception {
 
         final List<LogRecord> logRecords = new ArrayList<>();
