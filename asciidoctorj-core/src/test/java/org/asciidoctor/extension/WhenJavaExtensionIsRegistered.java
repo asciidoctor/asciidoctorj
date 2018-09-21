@@ -51,7 +51,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(Arquillian.class)
 public class WhenJavaExtensionIsRegistered {
 
-    public static final String ASCIIDOCTORCLASS_PREFIX = "# Set the global variable VERBOSE to true to get invalid refs into the log";
+    public static final String ASCIIDOCTORCLASS_PREFIX = "module AsciidoctorJ    include_package 'org.asciidoctor'";
 
     @ArquillianResource
     private ClasspathResources classpath;
