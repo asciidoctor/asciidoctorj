@@ -1,5 +1,5 @@
 # Set the global variable VERBOSE to true to get invalid refs into the log
-$VERBOSE=true
+#$VERBOSE=true
 
 module AsciidoctorJ
     include_package 'org.asciidoctor'
