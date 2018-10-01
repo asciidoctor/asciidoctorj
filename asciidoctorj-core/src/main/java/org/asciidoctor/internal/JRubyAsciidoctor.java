@@ -178,31 +178,25 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
     private StructuredDocument toDocument(Document document, Ruby rubyRuntime, int maxDeepLevel) {
 
         Document documentImpl = (Document) NodeConverter.createASTNode(document);
-        List<ContentPart> contentParts = getContents(documentImpl.getBlocks(), 1, maxDeepLevel);
+        List<ContentPart> contentParts = getContents(documentImpl.getBlocks(), maxDeepLevel);
         return StructuredDocumentImpl.createStructuredDocument(toDocumentHeader(documentImpl), contentParts);
     }
 
-    private List<ContentPart> getContents(List<StructuralNode> blocks, int level, int maxDeepLevel) {
-        // finish getting childs if max structure level was riched
-        if (level > maxDeepLevel) {
+    private List<ContentPart> getContents(List<StructuralNode> blocks, int maxDeepLevel) {
+        if (blocks == null) {
             return null;
         }
-        // if document has only one child don't treat as actual contentpart
-        // unless
-        // it has no childs
-        /*
-         * if (blocks.size() == 1 && blocks.get(0).blocks().size() > 0) { return getContents(blocks.get(0).blocks(), 0,
-         * maxDeepLevel); }
-         */
-        // add next level of contentParts
-        List<ContentPart> parts = new ArrayList<ContentPart>();
+        List<ContentPart> parts = new ArrayList<>();
         for (StructuralNode block : blocks) {
-            parts.add(getContentPartFromBlock(block, level, maxDeepLevel));
+            if (block.getLevel() > maxDeepLevel) {
+                continue;
+            }
+            parts.add(getContentPartFromBlock(block, maxDeepLevel));
         }
         return parts;
     }
 
-    private ContentPart getContentPartFromBlock(StructuralNode child, int level, int maxDeepLevel) {
+    private ContentPart getContentPartFromBlock(StructuralNode child, int maxDeepLevel) {
         Object content = child.getContent();
         String textContent;
         if (content instanceof String) {
@@ -210,9 +204,9 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
         } else {
             textContent = child.convert();
         }
-        ContentPartImpl contentPart = ContentPartImpl.createContentPart(child.getId(), level, child.getContext(), child.getTitle(),
+        ContentPartImpl contentPart = ContentPartImpl.createContentPart(child.getId(), child.getLevel(), child.getContext(), child.getTitle(),
                 child.getStyle(), child.getRole(), child.getAttributes(), textContent);
-        contentPart.setParts(getContents(child.getBlocks(), level + 1, maxDeepLevel));
+        contentPart.setParts(getContents(child.getBlocks(), maxDeepLevel));
         return contentPart;
     }
 
@@ -278,7 +272,7 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
     }
 
     private RubyHash getParseHeaderOnlyOption() {
-        Map<String, Object> options = new HashMap<String, Object>();
+        Map<String, Object> options = new HashMap<>();
         options.put("parse_header_only", true);
         return RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
     }
