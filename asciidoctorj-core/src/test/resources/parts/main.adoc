@@ -1,0 +1,10 @@
+= Include other files
+:sectnums:
+
+:leveloffset: +1
+
+include::chapter1.adoc[]
+
+:leveloffset: -1
+
+include::chapter2.adoc[leveloffset=-1]
