@@ -2,6 +2,7 @@ package org.asciidoctor;
 
 import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.TestLogHandlerService;
@@ -135,6 +136,9 @@ public class WhenAsciidoctorLogsToConsole {
         };
         asciidoctor.registerLogHandler(logHandler);
 
+        // Asciidoctor currently only logs invalid refs if this global var is set
+        JRubyRuntimeContext.get().evalScriptlet("$VERBOSE=true");
+        
         File inputFile = classpath.getResource("documentwithinvalidrefs.adoc");
         String renderContent = asciidoctor.renderFile(inputFile,
             options()
