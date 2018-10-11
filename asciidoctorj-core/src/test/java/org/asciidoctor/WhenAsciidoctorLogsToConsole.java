@@ -9,10 +9,12 @@ import org.asciidoctor.log.TestLogHandlerService;
 import org.asciidoctor.util.ClasspathResources;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runners.MethodSorters;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +33,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class WhenAsciidoctorLogsToConsole {
 
     @Rule
@@ -123,7 +126,6 @@ public class WhenAsciidoctorLogsToConsole {
     }
 
     @Test
-    @Ignore("Until invalid refs are logged by default")
     public void shouldLogInvalidRefs() throws Exception {
 
         final List<LogRecord> logRecords = new ArrayList<>();
@@ -153,6 +155,32 @@ public class WhenAsciidoctorLogsToConsole {
         assertThat(logRecords.get(0).getMessage(), containsString("invalid reference: invalidref"));
         final Cursor cursor = logRecords.get(0).getCursor();
         assertThat(cursor, is(nullValue()));
+    }
+
+    @Test
+    public void shouldNotLogInvalidRefsWithoutVerbose() throws Exception {
+
+        final List<LogRecord> logRecords = new ArrayList<>();
+
+        final LogHandler logHandler = new LogHandler() {
+            @Override
+            public void log(LogRecord logRecord) {
+                logRecords.add(logRecord);
+            }
+        };
+        asciidoctor.registerLogHandler(logHandler);
+
+        File inputFile = classpath.getResource("documentwithinvalidrefs.adoc");
+        String renderContent = asciidoctor.renderFile(inputFile,
+            options()
+                .inPlace(true)
+                .safe(SafeMode.SERVER)
+                .toFile(false)
+                .attributes(
+                    AttributesBuilder.attributes().allowUriRead(true))
+                .asMap());
+
+        assertThat(logRecords, hasSize(0));
     }
 
     @Test
