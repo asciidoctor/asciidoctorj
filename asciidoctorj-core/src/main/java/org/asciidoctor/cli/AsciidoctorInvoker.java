@@ -39,7 +39,11 @@ public class AsciidoctorInvoker {
                 System.out.println("Asciidoctor " + asciidoctor.asciidoctorVersion() + " [http://asciidoctor.org]");
                 return;
             }
-            
+
+            if (asciidoctorCliOptions.isVerbose()) {
+                JRubyRuntimeContext.get().evalScriptlet("$VERBOSE=true");
+            }
+
             List<File> inputFiles = getInputFiles(asciidoctorCliOptions);
 
             if (inputFiles.isEmpty()) {
