@@ -38,6 +38,8 @@ jrubyPrepare {
 
 javadoc {
   classpath = sourceSets.main.output + sourceSets.main.compileClasspath + project(':asciidoctorj-test-support').sourceSets.test.output
+
+  source(project(':asciidoctorj-api').sourceSets.main.allJava)
 }
 
 //jruby {
