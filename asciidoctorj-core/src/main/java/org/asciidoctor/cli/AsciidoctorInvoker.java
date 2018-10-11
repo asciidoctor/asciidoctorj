@@ -44,7 +44,11 @@ public class AsciidoctorInvoker {
                 System.out.println("Runtime Environment: jruby " + rubyVersionString);
                 return;
             }
-            
+
+            if (asciidoctorCliOptions.isVerbose()) {
+                JRubyRuntimeContext.get(asciidoctor).evalScriptlet("$VERBOSE=true");
+            }
+
             List<File> inputFiles = getInputFiles(asciidoctorCliOptions);
 
             if (inputFiles.isEmpty()) {

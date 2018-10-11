@@ -3,12 +3,14 @@ package org.asciidoctor;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.TestLogHandlerService;
 import org.asciidoctor.util.ClasspathResources;
 import org.hamcrest.Matchers;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit.InSequence;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.After;
 import org.junit.Before;
@@ -129,8 +131,41 @@ public class WhenAsciidoctorLogsToConsole {
     }
 
     @Test
-    @Ignore("Until logging of invalid refs is enabled by default")
+    @InSequence(0)
     public void shouldLogInvalidRefs() throws Exception {
+
+        final List<LogRecord> logRecords = new ArrayList<>();
+
+        final LogHandler logHandler = new LogHandler() {
+            @Override
+            public void log(LogRecord logRecord) {
+                logRecords.add(logRecord);
+            }
+        };
+        asciidoctor.registerLogHandler(logHandler);
+
+        // Asciidoctor currently only logs invalid refs if this global var is set
+        JRubyRuntimeContext.get(asciidoctor).evalScriptlet("$VERBOSE=true");
+
+        File inputFile = classpath.getResource("documentwithinvalidrefs.adoc");
+        String renderContent = asciidoctor.renderFile(inputFile,
+            options()
+                .inPlace(true)
+                .safe(SafeMode.SERVER)
+                .toFile(false)
+                .attributes(
+                    AttributesBuilder.attributes().allowUriRead(true))
+                .asMap());
+
+        assertThat(logRecords, hasSize(1));
+        assertThat(logRecords.get(0).getMessage(), containsString("invalid reference: invalidref"));
+        final Cursor cursor = logRecords.get(0).getCursor();
+        assertThat(cursor, is(nullValue()));
+    }
+
+    @Test
+    @InSequence(1)
+    public void shouldNotLogInvalidRefsWithoutVerbose() throws Exception {
 
         final List<LogRecord> logRecords = new ArrayList<>();
 
@@ -152,10 +187,7 @@ public class WhenAsciidoctorLogsToConsole {
                     AttributesBuilder.attributes().allowUriRead(true))
                 .asMap());
 
-        assertThat(logRecords, hasSize(1));
-        assertThat(logRecords.get(0).getMessage(), containsString("invalid reference: invalidref"));
-        final Cursor cursor = logRecords.get(0).getCursor();
-        assertThat(cursor, is(nullValue()));
+        assertThat(logRecords, hasSize(0));
     }
 
     @Test
