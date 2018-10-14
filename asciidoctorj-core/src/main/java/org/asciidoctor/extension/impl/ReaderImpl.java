@@ -1,7 +1,8 @@
-package org.asciidoctor.extension;
+package org.asciidoctor.extension.impl;
 
 import java.util.List;
 
+import org.asciidoctor.extension.Reader;
 import org.asciidoctor.internal.RubyObjectWrapper;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;

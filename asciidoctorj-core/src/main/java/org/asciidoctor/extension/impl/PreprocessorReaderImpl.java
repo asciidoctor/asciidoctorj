@@ -1,7 +1,8 @@
-package org.asciidoctor.extension;
+package org.asciidoctor.extension.impl;
 
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.impl.NodeConverter;
+import org.asciidoctor.extension.PreprocessorReader;
 import org.jruby.RubyHash;
 import org.jruby.runtime.builtin.IRubyObject;
 

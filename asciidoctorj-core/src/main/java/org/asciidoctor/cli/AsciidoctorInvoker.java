@@ -1,7 +1,6 @@
 package org.asciidoctor.cli;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.Scanner;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.DirectoryWalker;
-import org.asciidoctor.GlobDirectoryWalker;
+import org.asciidoctor.internal.GlobDirectoryWalker;
 import org.asciidoctor.Options;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.internal.JRubyRuntimeContext;

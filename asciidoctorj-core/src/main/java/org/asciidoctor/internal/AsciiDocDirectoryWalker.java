@@ -1,4 +1,4 @@
-package org.asciidoctor;
+package org.asciidoctor.internal;
 
 import java.io.File;
 import java.util.regex.Pattern;

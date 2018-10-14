@@ -3,7 +3,6 @@ package org.asciidoctor.ast.impl;
 import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.Column;
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.ast.Table;
 import org.jruby.runtime.builtin.IRubyObject;
 

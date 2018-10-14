@@ -1,7 +1,7 @@
 package org.asciidoctor.extension.processorproxies;
 
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.impl.NodeConverter;
 import org.asciidoctor.extension.DocinfoProcessor;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;

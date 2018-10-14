@@ -1,6 +1,6 @@
 package org.asciidoctor.extension.processorproxies;
 
-import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.impl.NodeConverter;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.BlockMacroProcessor;
 import org.asciidoctor.internal.RubyAttributesMapDecorator;

@@ -1,13 +1,5 @@
 package org.asciidoctor;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.StructuredDocument;
@@ -15,8 +7,16 @@ import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
-import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.extension.spi.AsciidoctorFactory;
 import org.asciidoctor.log.LogHandler;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -812,6 +812,7 @@ public interface Asciidoctor {
      */
     public static final class Factory {
 
+
         private Factory() {}
         /**
          * Creates a new instance of Asciidoctor.
@@ -820,7 +821,7 @@ public interface Asciidoctor {
          *         Ruby calls.
          */
         public static Asciidoctor create() {
-            return JRubyAsciidoctor.create();
+            return AsciidoctorFactory.getFactory().create();
         }
 
         /**
@@ -835,7 +836,7 @@ public interface Asciidoctor {
          *         Ruby calls.
          */
         public static Asciidoctor create(String gemPath) {
-            return JRubyAsciidoctor.create(gemPath);
+            return AsciidoctorFactory.getFactory().create(gemPath);
         }
         
         /**
@@ -849,7 +850,7 @@ public interface Asciidoctor {
          *         Ruby calls.
          */
         public static Asciidoctor create(List<String> loadPaths) {
-            return JRubyAsciidoctor.create(loadPaths);
+            return AsciidoctorFactory.getFactory().create(loadPaths);
         }
 
         /**
@@ -863,7 +864,7 @@ public interface Asciidoctor {
          * that you would have used to create the ClassLoader.
          */
         public static Asciidoctor create(ClassLoader classloader) {
-            return JRubyAsciidoctor.create(classloader);
+            return AsciidoctorFactory.getFactory().create(classloader);
         }
 
         /**
@@ -875,7 +876,7 @@ public interface Asciidoctor {
          * passing the paths that you would have used to create the ClassLoader.
          */
         public static Asciidoctor create(ClassLoader classloader, String gemPath) {
-            return JRubyAsciidoctor.create(classloader, gemPath);
+            return AsciidoctorFactory.getFactory().create(classloader, gemPath);
         }
 
         /**
@@ -890,7 +891,7 @@ public interface Asciidoctor {
          *         Ruby calls.
          */
         public static Asciidoctor create(List<String> loadPaths, String gemPath) {
-            return JRubyAsciidoctor.create(loadPaths, gemPath);
+            return AsciidoctorFactory.getFactory().create(loadPaths, gemPath);
         }
 
     }

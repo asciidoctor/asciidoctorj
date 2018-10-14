@@ -8,17 +8,20 @@ import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.ast.ContentPart;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
-import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.impl.NodeConverter;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.StructuredDocument;
 import org.asciidoctor.ast.impl.ContentPartImpl;
 import org.asciidoctor.ast.impl.DocumentHeaderImpl;
 import org.asciidoctor.ast.impl.StructuredDocumentImpl;
 import org.asciidoctor.converter.JavaConverterRegistry;
+import org.asciidoctor.converter.impl.JavaConverterRegistryImpl;
 import org.asciidoctor.converter.internal.ConverterRegistryExecutor;
 import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
+import org.asciidoctor.extension.impl.JavaExtensionRegistryImpl;
+import org.asciidoctor.extension.impl.RubyExtensionRegistryImpl;
 import org.asciidoctor.extension.internal.ExtensionRegistryExecutor;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
@@ -428,17 +431,17 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
     @Override
     public JavaExtensionRegistry javaExtensionRegistry() {
-        return new JavaExtensionRegistry(rubyRuntime);
+        return new JavaExtensionRegistryImpl(rubyRuntime);
     }
 
     @Override
     public RubyExtensionRegistry rubyExtensionRegistry() {
-        return new RubyExtensionRegistry(rubyRuntime);
+        return new RubyExtensionRegistryImpl(rubyRuntime);
     }
 
     @Override
     public JavaConverterRegistry javaConverterRegistry() {
-        return new JavaConverterRegistry(rubyRuntime);
+        return new JavaConverterRegistryImpl(rubyRuntime);
     }
 
     @Override

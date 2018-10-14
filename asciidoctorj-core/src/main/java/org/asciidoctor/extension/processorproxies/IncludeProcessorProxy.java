@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.impl.NodeConverter;
 import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.PreprocessorReader;
-import org.asciidoctor.extension.PreprocessorReaderImpl;
+import org.asciidoctor.extension.impl.PreprocessorReaderImpl;
 import org.asciidoctor.internal.RubyAttributesMapDecorator;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;

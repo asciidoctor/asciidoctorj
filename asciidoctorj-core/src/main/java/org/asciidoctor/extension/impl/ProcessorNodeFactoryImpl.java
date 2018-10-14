@@ -1,4 +1,4 @@
-package org.asciidoctor.extension;
+package org.asciidoctor.extension.impl;
 
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.Block;
@@ -8,7 +8,7 @@ import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
-import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.impl.NodeConverter;
 import org.asciidoctor.ast.PhraseNode;
 import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.Section;
@@ -21,6 +21,8 @@ import org.asciidoctor.ast.impl.DocumentImpl;
 import org.asciidoctor.ast.impl.ListImpl;
 import org.asciidoctor.ast.impl.RowImpl;
 import org.asciidoctor.ast.impl.StructuralNodeImpl;
+import org.asciidoctor.extension.Reader;
+import org.asciidoctor.extension.spi.ProcessorNodeFactory;
 import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyObjectWrapper;
@@ -37,127 +39,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.asciidoctor.ast.NodeConverter.NodeType.BLOCK_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.DOCUMENT_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.INLINE_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.LIST_ITEM_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.SECTION_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.TABLE_CELL_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.TABLE_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.TABLE_COLUMN_CLASS;
+import static org.asciidoctor.ast.impl.NodeConverter.NodeType.BLOCK_CLASS;
+import static org.asciidoctor.ast.impl.NodeConverter.NodeType.DOCUMENT_CLASS;
+import static org.asciidoctor.ast.impl.NodeConverter.NodeType.INLINE_CLASS;
+import static org.asciidoctor.ast.impl.NodeConverter.NodeType.LIST_ITEM_CLASS;
+import static org.asciidoctor.ast.impl.NodeConverter.NodeType.SECTION_CLASS;
+import static org.asciidoctor.ast.impl.NodeConverter.NodeType.TABLE_CELL_CLASS;
+import static org.asciidoctor.ast.impl.NodeConverter.NodeType.TABLE_CLASS;
+import static org.asciidoctor.ast.impl.NodeConverter.NodeType.TABLE_COLUMN_CLASS;
 
-public class Processor {
-
-    /**
-     * This value is used as the config option key to configure how Asciidoctor should treat blocks created by
-     * this Processor.
-     * Its value must be a String constant.
-     *
-     * <p>Example to Asciidoctor know that a BlockProcessor creates zero or more child blocks:
-     * <pre>
-     * <verbatim>
-     * Map&lt;String, Object&gt; config = new HashMap&lt;&gt;();
-     * config.put(CONTENT_MODEL, ContentModel.COMPOUND);
-     * BlockProcessor blockProcessor = new BlockProcessor("foo", config);
-     * asciidoctor.javaExtensionRegistry().block(blockProcessor);
-     * </verbatim>
-     * </pre>
-     * </p>
-     *
-     * @deprecated Use the constant {@link ContentModel#KEY} instead or the annotation {@link ContentModel} to describe this Processor
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL = "content_model";
-
-    /**
-     * Predefined constant to let Asciidoctor know that this BlockProcessor creates zero or more child blocks.
-     * @deprecated Use {@link ContentModel#COMPOUND} instead.
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL_COMPOUND = ":compound";
-
-    /**
-     * Predefined constant to let Asciidoctor know that this BlockProcessor creates simple paragraph content.
-     * @deprecated Use {@link ContentModel#SIMPLE} instead.
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL_SIMPLE =":simple";
-
-    /**
-     * Predefined constant to let Asciidoctor know that this BlockProcessor creates literal content.
-     * @deprecated Use {@link ContentModel#VERBATIM} instead.
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL_VERBATIM =":verbatim";
-
-    /**
-     * Predefined constant to make Asciidoctor pass through the content unprocessed.
-     * @deprecated Use {@link ContentModel#RAW} instead.
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL_RAW =":raw";
-
-    /**
-     * Predefined constant to make Asciidoctor drop the content.
-     * @deprecated Use {@link ContentModel#SKIP} instead.
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL_SKIP =":skip";
-
-    /**
-     * Predefined constant to make Asciidoctor not expect any content.
-     * @deprecated Use {@link ContentModel#EMPTY} instead.
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL_EMPTY =":empty";
-
-    /**
-     * Predefined constant to make Asciidoctor parse content as attributes.
-     * @deprecated Use {@link ContentModel#ATTRIBUTES} instead.
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL_ATTRIBUTES =":attributes";
-
-
-    protected Map<String, Object> config;
-
-    /**
-     * The config map must not be reset once configFinalized is true.
-     * With the Asciidoctor Ruby implementation this flag will be set to
-     * true after the Ruby part of the extension is initialized.
-     */
-    private boolean configFinalized = false;
-
-    public Processor() {
-        this(new HashMap<String, Object>());
-    }
-
-    public Processor(Map<String, Object> config) {
-        this.config = new HashMap<String, Object>(config);
-    }
-
-    public Map<String, Object> getConfig() {
-    	return this.config;
-    }
-
-    public final void setConfig(Map<String, Object> config) {
-        if (configFinalized) {
-            throw new IllegalStateException("It is only allowed to set the config in the constructor!");
-        }
-        this.config = config;
-    }
-
-    public final void updateConfig(Map<String, Object> config) {
-        this.config.putAll(config);
-    }
-
-    /**
-     * Lock the config of this processor so that it is no longer allowed to invoke {@link #setConfig(Map)}.
-     */
-    public final void setConfigFinalized() {
-        this.configFinalized = true;
-    }
-
+public class ProcessorNodeFactoryImpl implements ProcessorNodeFactory {
 
     public Table createTable(StructuralNode parent) {
         return createTable(parent, new HashMap<String, Object>());
@@ -173,7 +64,7 @@ public class Processor {
                 ((StructuralNodeImpl) parent).getRubyObject(),
                 rubyAttributes};
         Table ret = (Table) NodeConverter.createASTNode(rubyRuntime, TABLE_CLASS, parameters);
-        ret.setAttr("rowcount", 0, false);
+        ret.setAttribute("rowcount", 0, false);
         return ret;
     }
 
@@ -185,7 +76,7 @@ public class Processor {
     }
 
     public Column createTableColumn(Table parent, int index) {
-        return createTableColumn(parent, index, new HashMap<String, Object>());
+        return createTableColumn(parent, index, new HashMap<>());
     }
 
     public Column createTableColumn(Table parent, int index, Map<String, Object> attributes) {
@@ -203,11 +94,11 @@ public class Processor {
     }
 
     public Cell createTableCell(Column column, String text) {
-        return createTableCell(column, text, new HashMap<String, Object>());
+        return createTableCell(column, text, new HashMap<>());
     }
 
     public Cell createTableCell(Column column, Document innerDocument) {
-        return createTableCell(column, innerDocument, new HashMap<String, Object>());
+        return createTableCell(column, innerDocument, new HashMap<>());
     }
 
     public Cell createTableCell(Column column, Document innerDocument, Map<String, Object> attributes) {
@@ -232,11 +123,11 @@ public class Processor {
     }
 
     public Block createBlock(StructuralNode parent, String context, String content) {
-        return createBlock(parent, context, content, new HashMap<String, Object>(), new HashMap<Object, Object>());
+        return createBlock(parent, context, content, new HashMap<>(), new HashMap<>());
     }
 
     public Block createBlock(StructuralNode parent, String context, String content, Map<String, Object> attributes) {
-        return createBlock(parent, context, content, attributes, new HashMap<Object, Object>());
+        return createBlock(parent, context, content, attributes, new HashMap<>());
     }
 
     public Block createBlock(StructuralNode parent, String context, String content, Map<String, Object> attributes,
@@ -249,24 +140,24 @@ public class Processor {
     }
 
     public Block createBlock(StructuralNode parent, String context, List<String> content) {
-        return createBlock(parent, context, content, new HashMap<String, Object>(), new HashMap<Object, Object>());
+        return createBlock(parent, context, content, new HashMap<>(), new HashMap<>());
     }
 
     public Block createBlock(StructuralNode parent, String context, List<String> content, Map<String, Object> attributes) {
-        return createBlock(parent, context, content, attributes, new HashMap<Object, Object>());
+        return createBlock(parent, context, content, attributes, new HashMap<>());
     }
 
     public Block createBlock(StructuralNode parent, String context, List<String> content, Map<String, Object> attributes,
             Map<Object, Object> options) {
 
         options.put(Options.SOURCE, content);
-        options.put(Options.ATTRIBUTES, new HashMap<String, Object>(attributes));
+        options.put(Options.ATTRIBUTES, new HashMap<>(attributes));
         
         return createBlock(parent, context, options);
     }
 
     public Section createSection(StructuralNode parent) {
-        return createSection(parent, null, true, new HashMap<Object, Object>());
+        return createSection(parent, null, true, new HashMap<>());
     }
 
     public Section createSection(StructuralNode parent, Map<Object, Object> options) {
@@ -282,11 +173,11 @@ public class Processor {
     }
 
     public PhraseNode createPhraseNode(ContentNode parent, String context, List<String> text) {
-        return createPhraseNode(parent, context, text, new HashMap<String, Object>());
+        return createPhraseNode(parent, context, text, new HashMap<>());
     }
 
     public PhraseNode createPhraseNode(ContentNode parent, String context, List<String> text, Map<String, Object> attributes) {
-        return createPhraseNode(parent, context, text, attributes, new HashMap<Object, Object>());
+        return createPhraseNode(parent, context, text, attributes, new HashMap<>());
     }
 
     public PhraseNode createPhraseNode(ContentNode parent, String context, List<String> text, Map<String, Object> attributes, Map<Object, Object> options) {
@@ -310,11 +201,11 @@ public class Processor {
     }
 
     public PhraseNode createPhraseNode(ContentNode parent, String context, String text) {
-        return createPhraseNode(parent, context, text, new HashMap<String, Object>());
+        return createPhraseNode(parent, context, text, new HashMap<>());
     }
 
     public PhraseNode createPhraseNode(ContentNode parent, String context, String text, Map<String, Object> attributes) {
-        return createPhraseNode(parent, context, text, attributes, new HashMap<String, Object>());
+        return createPhraseNode(parent, context, text, attributes, new HashMap<>());
     }
 
     public PhraseNode createPhraseNode(ContentNode parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {
@@ -416,13 +307,13 @@ public class Processor {
     public ListItem createListItem(final org.asciidoctor.ast.List parent, final String text) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
-        return (ListItem) NodeConverter.createASTNode(rubyRuntime, LIST_ITEM_CLASS, ListImpl.class.cast(parent).getRubyObject(), rubyRuntime.newString(text));
+        return (ListItem) NodeConverter.createASTNode(rubyRuntime, LIST_ITEM_CLASS, ((ListImpl) parent).getRubyObject(), rubyRuntime.newString(text));
     }
 
     public ListItem createListItem(final org.asciidoctor.ast.DescriptionList parent, final String text) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
-        return (ListItem) NodeConverter.createASTNode(rubyRuntime, LIST_ITEM_CLASS, DescriptionListImpl.class.cast(parent).getRubyObject(), rubyRuntime.newString(text));
+        return (ListItem) NodeConverter.createASTNode(rubyRuntime, LIST_ITEM_CLASS, ((DescriptionListImpl) parent).getRubyObject(), rubyRuntime.newString(text));
     }
 
     /**

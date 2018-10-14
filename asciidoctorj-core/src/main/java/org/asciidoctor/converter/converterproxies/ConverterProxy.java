@@ -1,7 +1,10 @@
-package org.asciidoctor.converter;
+package org.asciidoctor.converter.converterproxies;
 
 import org.asciidoctor.ast.ContentNode;
-import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.impl.NodeConverter;
+import org.asciidoctor.converter.Converter;
+import org.asciidoctor.converter.ConverterFor;
+import org.asciidoctor.converter.OutputFormatWriter;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyOutputStreamWrapper;

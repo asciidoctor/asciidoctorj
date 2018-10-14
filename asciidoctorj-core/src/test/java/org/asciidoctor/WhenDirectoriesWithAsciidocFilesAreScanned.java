@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.asciidoctor.arquillian.api.Shared;
+import org.asciidoctor.internal.AsciiDocDirectoryWalker;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;

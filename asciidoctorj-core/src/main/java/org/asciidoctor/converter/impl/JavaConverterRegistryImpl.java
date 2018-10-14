@@ -1,5 +1,10 @@
-package org.asciidoctor.converter;
+package org.asciidoctor.converter.impl;
 
+import org.asciidoctor.converter.Converter;
+import org.asciidoctor.converter.ConverterFor;
+import org.asciidoctor.converter.JavaConverterRegistry;
+import org.asciidoctor.converter.OutputFormatWriter;
+import org.asciidoctor.converter.converterproxies.ConverterProxy;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
@@ -7,11 +12,11 @@ import org.jruby.RubyClass;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JavaConverterRegistry {
+public class JavaConverterRegistryImpl implements JavaConverterRegistry {
 
     private Ruby rubyRuntime;
 
-    public JavaConverterRegistry(Ruby rubyRuntime) {
+    public JavaConverterRegistryImpl(Ruby rubyRuntime) {
         this.rubyRuntime = rubyRuntime;
     }
 

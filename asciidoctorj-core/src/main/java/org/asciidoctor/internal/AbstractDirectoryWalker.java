@@ -1,4 +1,6 @@
-package org.asciidoctor;
+package org.asciidoctor.internal;
+
+import org.asciidoctor.DirectoryWalker;
 
 import java.io.File;
 import java.util.ArrayList;
