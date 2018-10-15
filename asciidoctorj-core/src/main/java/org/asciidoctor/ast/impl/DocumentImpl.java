@@ -64,4 +64,13 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
         return getInt("counter", name, initialValue);
     }
 
+    @Override
+    public boolean isSourcemap() {
+        return getBoolean("sourcemap");
+    }
+
+    @Override
+    public void setSourcemap(boolean state) {
+        setBoolean("sourcemap", state);
+    }
 }
