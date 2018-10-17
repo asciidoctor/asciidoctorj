@@ -36,11 +36,15 @@ public class AsciidoctorCliOptions {
     public static final String BACKEND = "-b";
     public static final String VERSION = "-V";
     public static final String VERBOSE = "-v";
+    public static final String TIMINGS = "-t";
     public static final char ATTRIBUTE_SEPARATOR = '=';
-    public static final String MONITOR_OPTION_NAME = "monitor";
+    public static final String TIMINGS_OPTION_NAME = "timings";
 
     @Parameter(names = { VERBOSE, "--verbose" }, description = "enable verbose mode (default: false)")
     private boolean verbose = false;
+
+    @Parameter(names = { TIMINGS, "--timings" }, description = "enable timings mode (default: false)")
+    private boolean timings = false;
 
     @Parameter(names = { VERSION, "--version" }, description = "display the version and runtime environment")
     private boolean version = false;
@@ -142,6 +146,10 @@ public class AsciidoctorCliOptions {
 
     public boolean isVerbose() {
         return this.verbose;
+    }
+
+    public boolean isTimings() {
+        return this.timings;
     }
 
     public String getBackend() {
@@ -290,10 +298,6 @@ public class AsciidoctorCliOptions {
 
         if (isInPlaceRequired()) {
             optionsBuilder.inPlace(true);
-        }
-
-        if (this.verbose) {
-            optionsBuilder.option(MONITOR_OPTION_NAME, new HashMap<Object, Object>());
         }
 
         attributesBuilder.attributes(getAttributes());
