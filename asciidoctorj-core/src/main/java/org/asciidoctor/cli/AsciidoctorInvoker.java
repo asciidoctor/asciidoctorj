@@ -79,8 +79,10 @@ public class AsciidoctorInvoker {
     }
 
     private void setTimingsMode(AsciidoctorCliOptions asciidoctorCliOptions, Options options) {
-        options.setOption("timings",
-            JRubyRuntimeContext.get().evalScriptlet("Asciidoctor::Timings.new"));
+        if (asciidoctorCliOptions.isTimings()) {
+            options.setOption("timings",
+                JRubyRuntimeContext.get().evalScriptlet("Asciidoctor::Timings.new"));
+        }
     }
 
     private void setVerboseLevel(AsciidoctorCliOptions asciidoctorCliOptions) {
