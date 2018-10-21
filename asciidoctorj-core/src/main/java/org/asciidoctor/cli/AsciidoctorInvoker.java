@@ -20,6 +20,7 @@ import org.asciidoctor.internal.RubyUtils;
 
 import com.beust.jcommander.JCommander;
 import org.jruby.Main;
+import org.jruby.runtime.builtin.IRubyObject;
 
 public class AsciidoctorInvoker {
 
@@ -34,9 +35,7 @@ public class AsciidoctorInvoker {
             jCommander.usage();
         } else {
 
-            JRubyAsciidoctor asciidoctor = null;
-            
-            asciidoctor = buildAsciidoctorJInstance(asciidoctorCliOptions);
+            JRubyAsciidoctor asciidoctor = buildAsciidoctorJInstance(asciidoctorCliOptions);
             
             if (asciidoctorCliOptions.isVersion()) {
                 System.out.println("AsciidoctorJ " + asciidoctor.asciidoctorVersion() + " [http://asciidoctor.org]");
@@ -64,33 +63,29 @@ public class AsciidoctorInvoker {
                     RubyUtils.requireLibrary(asciidoctor.getRubyRuntime(), require);
                 }
             }
+
+            setTimingsMode(asciidoctor, asciidoctorCliOptions, options);
             
             setVerboseLevel(asciidoctor, asciidoctorCliOptions);
 
             String output = renderInput(asciidoctor, options, inputFiles);
 
-            if (asciidoctorCliOptions.isVerbose()) {
-
+            if (asciidoctorCliOptions.isTimings()) {
                 Map<String, Object> optionsMap = options.map();
-                Map<Object, Object> monitor = RubyHashUtil
-                        .convertRubyHashMapToMap((Map<Object, Object>) optionsMap
-                                .get(AsciidoctorCliOptions.MONITOR_OPTION_NAME));
-
-                System.out.println(String.format(
-                        "Time to read and parse source: %05.5f",
-                        monitor.get("parse")));
-                System.out.println(String.format(
-                        "Time to render document: %05.5f",
-                        monitor.get("render")));
-                System.out.println(String.format(
-                        "Total time to read, parse and render: %05.5f",
-                        monitor.get("load_render")));
-
+                IRubyObject timings = (IRubyObject) optionsMap.get("timings");
+                timings.callMethod(JRubyRuntimeContext.get(asciidoctor).getCurrentContext(), "print_report");
             }
 
             if (!"".equals(output.trim())) {
                 System.out.println(output);
             }
+        }
+    }
+
+    private void setTimingsMode(Asciidoctor asciidoctor, AsciidoctorCliOptions asciidoctorCliOptions, Options options) {
+        if (asciidoctorCliOptions.isTimings()) {
+            options.setOption("timings",
+                JRubyRuntimeContext.get(asciidoctor).evalScriptlet("Asciidoctor::Timings.new"));
         }
     }
 

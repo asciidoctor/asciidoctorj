@@ -1,6 +1,7 @@
 package org.asciidoctor.cli;
 
-import static org.hamcrest.core.StringStartsWith.startsWith; 
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
@@ -113,11 +114,11 @@ public class WhenAsciidoctorIsCalledUsingCli {
 	public void destination_dir_should_render_files_to_ouput_directory() {
 		File outputDirectory = temporaryFolder.getRoot();
 		
-        File inputFile = classpath.getResource("rendersample.asciidoc");
-        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+		File inputFile = classpath.getResource("rendersample.asciidoc");
+		String inputPath = inputFile.getPath().substring(pwd.length() + 1);
 		new AsciidoctorInvoker().invoke("-D", outputDirectory.getAbsolutePath(), inputPath);
 
-		File expectedFile = new File(inputPath.replaceFirst("\\.asciidoc$", ".html"));
+		File expectedFile = new File(outputDirectory, inputFile.getName().replaceFirst("\\.asciidoc$", ".html"));
 		assertThat(expectedFile.exists(), is(true));
 		
 	}
@@ -231,11 +232,11 @@ public class WhenAsciidoctorIsCalledUsingCli {
 		
         File inputFile = classpath.getResource("rendersample.asciidoc");
         String inputPath = inputFile.getPath().substring(pwd.length() + 1);
-		new AsciidoctorInvoker().invoke("--verbose", inputPath);
+		new AsciidoctorInvoker().invoke("--timings", inputPath);
 		
 		String outputConsole = output.toString();
-		assertThat(outputConsole, startsWith("Time to read and parse source"));
-		
+		assertThat(outputConsole, startsWith("  Time to read and parse source:"));
+		assertThat(outputConsole, not(containsString("null")));
 	}
 	
 	@Test
