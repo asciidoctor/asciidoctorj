@@ -1,5 +1,14 @@
 package org.asciidoctor;
 
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.DocumentHeader;
+import org.asciidoctor.converter.JavaConverterRegistry;
+import org.asciidoctor.extension.ExtensionGroup;
+import org.asciidoctor.extension.JavaExtensionRegistry;
+import org.asciidoctor.extension.RubyExtensionRegistry;
+import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.log.LogHandler;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -7,16 +16,6 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.DocumentHeader;
-import org.asciidoctor.ast.StructuredDocument;
-import org.asciidoctor.converter.JavaConverterRegistry;
-import org.asciidoctor.extension.ExtensionGroup;
-import org.asciidoctor.extension.JavaExtensionRegistry;
-import org.asciidoctor.extension.RubyExtensionRegistry;
-import org.asciidoctor.internal.JRubyAsciidoctor;
-import org.asciidoctor.log.LogHandler;
 
 /**
  * 
@@ -675,47 +674,6 @@ public interface Asciidoctor {
      */
     String[] convertFiles(Collection<File> asciidoctorFiles,
             OptionsBuilder options);
-    
-    /**
-     * Reads and creates structured document containing header and content chunks.
-     * By default it dig only one level down but it can be tweak by setting STRUCTURE_MAX_LEVEL
-     * option.
-     * 
-     * @param filename
-     *            to read the attributes.
-     * @param options
-     *            a Hash of options to control processing (default: {}).
-     * @return structured document.
-     */
-    StructuredDocument readDocumentStructure(File filename,Map<String,Object> options);
-    
-    /**
-     * Reads and creates structured document containing header and content chunks.
-     * By default it dig only one level down but it can be tweak by setting STRUCTURE_MAX_LEVEL
-     * option.
-     * 
-     * @param content
-     *            where rendered content is written. Writer is flushed, but not
-     *            closed.
-     * @param options
-     *            a Hash of options to control processing (default: {}).
-     * @return structured document.
-     */
-    StructuredDocument readDocumentStructure(String content,Map<String,Object> options);
-
-    /**
-     * Reads and creates structured document containing header and content chunks.
-     * By default it dig only one level down but it can be tweak by setting STRUCTURE_MAX_LEVEL
-     * option.
-     * 
-     * @param contentReader
-     *            where asciidoc content is read.
-     * @param options
-     *            a Hash of options to control processing (default: {}).
-     * @return structured document.
-     */
-    StructuredDocument readDocumentStructure(Reader contentReader,Map<String,Object> options);
-
     
     /**
      * Reads only header parameters instead of all document.
