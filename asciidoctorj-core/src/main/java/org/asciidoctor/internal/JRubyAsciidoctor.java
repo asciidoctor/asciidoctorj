@@ -428,17 +428,17 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
     @Override
     public JavaExtensionRegistry javaExtensionRegistry() {
-        return new JavaExtensionRegistry(rubyRuntime);
+        return new JavaExtensionRegistryImpl(rubyRuntime);
     }
 
     @Override
     public RubyExtensionRegistry rubyExtensionRegistry() {
-        return new RubyExtensionRegistry(rubyRuntime);
+        return new RubyExtensionRegistryImpl(rubyRuntime);
     }
 
     @Override
     public JavaConverterRegistry javaConverterRegistry() {
-        return new JavaConverterRegistry(rubyRuntime);
+        return new JavaConverterRegistryImpl(rubyRuntime);
     }
 
     @Override

@@ -1,13 +1,5 @@
 package org.asciidoctor;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.StructuredDocument;
@@ -17,6 +9,14 @@ import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.log.LogHandler;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 

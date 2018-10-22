@@ -1,86 +1,33 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.internal.RubyUtils;
-import org.jruby.Ruby;
-import org.jruby.RubyModule;
+import org.asciidoctor.internal.RubyExtensionRegistryImpl;
 
 import java.io.InputStream;
 
-public class RubyExtensionRegistry {
+public interface RubyExtensionRegistry {
+    RubyExtensionRegistryImpl requireLibrary(String requiredLibrary);
 
+    RubyExtensionRegistryImpl loadClass(InputStream rubyClassStream);
 
-    private Ruby rubyRuntime;
+    RubyExtensionRegistryImpl preprocessor(String preprocessor);
 
-    public RubyExtensionRegistry(final Ruby rubyRuntime) {
-        this.rubyRuntime = rubyRuntime;
-    }
+    RubyExtensionRegistryImpl postprocessor(String postprocessor);
 
-    public RubyExtensionRegistry requireLibrary(String requiredLibrary) {
-        RubyUtils.requireLibrary(rubyRuntime, requiredLibrary);
-        return this;
-    }
-    
-    public RubyExtensionRegistry loadClass(InputStream rubyClassStream) {
-        RubyUtils.loadRubyClass(rubyRuntime, rubyClassStream);
-        return this;
-    }
+    RubyExtensionRegistryImpl docinfoProcessor(String docinfoProcessor);
 
-    public RubyExtensionRegistry preprocessor(String preprocessor) {
-        getAsciidoctorModule().callMethod( "preprocessor", rubyRuntime.newString(preprocessor));
-        return this;
-    }
+    RubyExtensionRegistryImpl includeProcessor(String includeProcessor);
 
-    public RubyExtensionRegistry postprocessor(String postprocessor) {
-        getAsciidoctorModule().callMethod( "postprocessor", rubyRuntime.newString(postprocessor));
-        return this;
-    }
+    RubyExtensionRegistryImpl treeprocessor(String treeProcessor);
 
-    public RubyExtensionRegistry docinfoProcessor(String docinfoProcessor) {
-        getAsciidoctorModule().callMethod( "docinfo_processor", rubyRuntime.newString(docinfoProcessor));
-        return this;
-    }
+    RubyExtensionRegistryImpl block(String blockName, String blockProcessor);
 
-    public RubyExtensionRegistry includeProcessor(String includeProcessor) {
-        getAsciidoctorModule().callMethod( "include_processor", rubyRuntime.newString(includeProcessor));
-        return this;
-    }
+    RubyExtensionRegistryImpl block(String blockProcessor);
 
-    public RubyExtensionRegistry treeprocessor(String treeProcessor) {
-        getAsciidoctorModule().callMethod( "treeprocessor", rubyRuntime.newString(treeProcessor));
-        return this;
-    }
+    RubyExtensionRegistryImpl blockMacro(String blockName, String blockMacroProcessor);
 
-    public RubyExtensionRegistry block(String blockName, String blockProcessor) {
-        getAsciidoctorModule().callMethod( "block_processor", rubyRuntime.newString(blockProcessor), RubyUtils.toSymbol(rubyRuntime, blockName));
-        return this;
-    }
+    RubyExtensionRegistryImpl blockMacro(String blockMacroProcessor);
 
-    public RubyExtensionRegistry block(String blockProcessor) {
-        getAsciidoctorModule().callMethod( "block_processor", rubyRuntime.newString(blockProcessor));
-        return this;
-    }
+    RubyExtensionRegistryImpl inlineMacro(String blockName, String inlineMacroProcessor);
 
-    public RubyExtensionRegistry blockMacro(String blockName, String blockMacroProcessor) {
-        getAsciidoctorModule().callMethod( "block_macro", rubyRuntime.newString(blockMacroProcessor), RubyUtils.toSymbol(rubyRuntime, blockName));
-        return this;
-    }
-
-    public RubyExtensionRegistry blockMacro(String blockMacroProcessor) {
-        getAsciidoctorModule().callMethod( "block_macro", rubyRuntime.newString(blockMacroProcessor));
-        return this;
-    }
-
-    public RubyExtensionRegistry inlineMacro(String blockName, String inlineMacroProcessor) {
-        getAsciidoctorModule().callMethod( "inline_macro", rubyRuntime.newString(inlineMacroProcessor), RubyUtils.toSymbol(rubyRuntime, blockName));
-        return this;
-    }
-
-    public RubyExtensionRegistry inlineMacro(String inlineMacroProcessor) {
-        getAsciidoctorModule().callMethod( "inline_macro", rubyRuntime.newString(inlineMacroProcessor));
-        return this;
-    }
-
-    private RubyModule getAsciidoctorModule() {
-        return rubyRuntime.getModule("AsciidoctorModule");
-    }
+    RubyExtensionRegistryImpl inlineMacro(String inlineMacroProcessor);
 }
