@@ -79,6 +79,10 @@ public class RubyObjectWrapper {
         }
     }
 
+    public void setBoolean(String propertyName, boolean value) {
+        setRubyProperty(propertyName, runtime.newBoolean(value));
+    }
+
     public int getInt(String propertyName, Object... args) {
         IRubyObject result = getRubyProperty(propertyName, args);
         if (result instanceof RubyNil) {

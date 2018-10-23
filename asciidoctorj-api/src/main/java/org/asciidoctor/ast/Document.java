@@ -58,4 +58,19 @@ public interface Document extends StructuralNode {
      * @return
      */
     int getAndIncrementCounter(String name, int initialValue);
+
+    /**
+     * @return Whether the sourcemap is enabled.
+     */
+    boolean isSourcemap();
+
+    /**
+     * Toggles the sourcemap option.
+     *
+     * This method must be called before the document is parsed, such as
+     * from a Preprocessor extension. Otherwise, it has no effect.
+     *
+     * @param state The state in which to put the sourcemap (true = on, false = off).
+     */
+    void setSourcemap(boolean state);
 }
