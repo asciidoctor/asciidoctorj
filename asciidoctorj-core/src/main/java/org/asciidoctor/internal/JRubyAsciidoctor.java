@@ -5,15 +5,10 @@ import org.asciidoctor.Attributes;
 import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.ast.ContentPart;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.NodeConverter;
-import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.ast.StructuredDocument;
-import org.asciidoctor.ast.impl.ContentPartImpl;
 import org.asciidoctor.ast.impl.DocumentHeaderImpl;
-import org.asciidoctor.ast.impl.StructuredDocumentImpl;
 import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.converter.internal.ConverterRegistryExecutor;
 import org.asciidoctor.extension.ExtensionGroup;
@@ -173,75 +168,6 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
         return DocumentHeaderImpl.createDocumentHeader(documentImpl.getStructuredDoctitle(), documentImpl.getDoctitle(),
                 documentImpl.getAttributes());
-    }
-
-    private StructuredDocument toDocument(Document document, Ruby rubyRuntime, int maxDeepLevel) {
-
-        Document documentImpl = (Document) NodeConverter.createASTNode(document);
-        List<ContentPart> contentParts = getContents(documentImpl.getBlocks(), maxDeepLevel);
-        return StructuredDocumentImpl.createStructuredDocument(toDocumentHeader(documentImpl), contentParts);
-    }
-
-    private List<ContentPart> getContents(List<StructuralNode> blocks, int maxDeepLevel) {
-        if (blocks == null) {
-            return null;
-        }
-        List<ContentPart> parts = new ArrayList<>();
-        for (StructuralNode block : blocks) {
-            if (block.getLevel() > maxDeepLevel) {
-                continue;
-            }
-            parts.add(getContentPartFromBlock(block, maxDeepLevel));
-        }
-        return parts;
-    }
-
-    private ContentPart getContentPartFromBlock(StructuralNode child, int maxDeepLevel) {
-        Object content = child.getContent();
-        String textContent;
-        if (content instanceof String) {
-            textContent = (String) content;
-        } else {
-            textContent = child.convert();
-        }
-        ContentPartImpl contentPart = ContentPartImpl.createContentPart(child.getId(), child.getLevel(), child.getContext(), child.getTitle(),
-                child.getStyle(), child.getRole(), child.getAttributes(), textContent);
-        contentPart.setParts(getContents(child.getBlocks(), maxDeepLevel));
-        return contentPart;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public StructuredDocument readDocumentStructure(File filename, Map<String, Object> options) {
-
-        this.rubyGemsPreloader.preloadRequiredLibraries(options);
-
-        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        Document document = (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load_file", rubyRuntime.newString(filename.getAbsolutePath()), rubyHash));
-        int maxDeepLevel = options.containsKey(STRUCTURE_MAX_LEVEL) ? (Integer) (options.get(STRUCTURE_MAX_LEVEL))
-                : DEFAULT_MAX_LEVEL;
-        return toDocument(document, rubyRuntime, maxDeepLevel);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public StructuredDocument readDocumentStructure(String content, Map<String, Object> options) {
-
-        this.rubyGemsPreloader.preloadRequiredLibraries(options);
-
-        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-
-        Document document = (Document) NodeConverter.createASTNode(
-            getAsciidoctorModule().callMethod("load", rubyRuntime.newString(content), rubyHash));
-        int maxDeepLevel = options.containsKey(STRUCTURE_MAX_LEVEL) ? (Integer) (options.get(STRUCTURE_MAX_LEVEL))
-                : DEFAULT_MAX_LEVEL;
-        return toDocument(document, rubyRuntime, maxDeepLevel);
-    }
-
-    @Override
-    public StructuredDocument readDocumentStructure(Reader contentReader, Map<String, Object> options) {
-        String content = IOUtils.readFull(contentReader);
-        return readDocumentStructure(content, options);
     }
 
     @SuppressWarnings("unchecked")
