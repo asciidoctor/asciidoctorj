@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.0" name="org.asciidoctor.asciidoctorj">
+  <resources>
+    <resource-root path="asciidoctorj-api-@@version@@.jar"/>
+    <resource-root path="asciidoctorj-@@version@@.jar"/>
+    <!--resource-root path="asciidoctorj-pdf-1.5.0-alpha.6.jar"/-->
+    <resource-root path="jruby-complete-@@jrubyVersion@@.jar"/>
+
+    <!-- EPUB3 doesn't work with this configuration for now -->
+    <!--resource-root path="asciidoctorj-epub3-1.5.0-alpha.4.jar"/-->
+  </resources>
+
+  <dependencies>
+    <module name="sun.jdk" export="true" >
+      <imports>
+        <include path="sun/misc/Unsafe" />
+      </imports>
+    </module>
+    <module name="org.slf4j"/>
+  </dependencies>
+</module>

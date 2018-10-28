@@ -122,23 +122,27 @@ subprojects {
     configFile = rootProject.file('config/codenarc/codenarc.groovy')
   }
 
-  dependencies {
-    testCompile "junit:junit:$junitVersion"
-    testCompile "org.hamcrest:hamcrest-library:$hamcrestVersion"
-    testCompile("org.spockframework:spock-core:$spockVersion") {
-      exclude group: 'org.hamcrest', module: 'hamcrest-core'
-    }
-    testCompile "org.codehaus.groovy:groovy-all:$groovyVersion"
-    testCompile "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
-    testCompile "org.jboss.arquillian.spock:arquillian-spock-container:$arquillianSpockVersion"
+  if (it.name != 'asciidoctorj-wildfly-integration-test') {
 
-    codenarc "org.codehaus.groovy:groovy:$groovyVersion"
-    codenarc "org.codehaus.groovy:groovy-xml:$groovyVersion"
-    codenarc "org.codehaus.groovy:groovy-ant:$groovyVersion"
-    codenarc("org.codenarc:CodeNarc:$codenarcVersion") {
-      exclude group: 'org.codehaus.groovy'
+    dependencies {
+      testCompile "junit:junit:$junitVersion"
+      testCompile "org.hamcrest:hamcrest-library:$hamcrestVersion"
+      testCompile("org.spockframework:spock-core:$spockVersion") {
+        exclude group: 'org.hamcrest', module: 'hamcrest-core'
+      }
+      testCompile "org.codehaus.groovy:groovy-all:$groovyVersion"
+      testCompile "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
+      testCompile "org.jboss.arquillian.spock:arquillian-spock-container:$arquillianSpockVersion"
+
+      codenarc "org.codehaus.groovy:groovy:$groovyVersion"
+      codenarc "org.codehaus.groovy:groovy-xml:$groovyVersion"
+      codenarc "org.codehaus.groovy:groovy-ant:$groovyVersion"
+      codenarc("org.codenarc:CodeNarc:$codenarcVersion") {
+        exclude group: 'org.codehaus.groovy'
+      }
     }
   }
+
 
   test {
     forkEvery = 10
@@ -163,7 +167,7 @@ subprojects {
 
 }
 
-configure(subprojects.findAll { !it.isDistribution() && it.name != 'asciidoctorj-api' && it.name != 'asciidoctorj-documentation' && it.name != 'asciidoctorj-test-support' && it.name != 'asciidoctorj-arquillian-extension' }) {
+configure(subprojects.findAll { !it.isDistribution() && it.name != 'asciidoctorj-api' && it.name != 'asciidoctorj-documentation' && it.name != 'asciidoctorj-test-support' && it.name != 'asciidoctorj-arquillian-extension' && it.name != 'asciidoctorj-wildfly-integration-test' }) {
   apply from: rootProject.file('gradle/versioncheck.gradle')
 }
 
