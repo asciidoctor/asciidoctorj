@@ -12,7 +12,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7"
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
         classpath "gradle.plugin.io.sdkman:gradle-sdkvendor-plugin:1.1.0"
     }
 }
@@ -45,7 +45,7 @@ ext {
   xmlMatchersVersion = '1.0-RC1'
 
   // gem versions
-  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.7.1'
+  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.8'
   asciidoctorEpub3GemVersion = project(':asciidoctorj-epub3').version.replace('-', '.')
 
   asciidoctorDiagramGemVersion = project(':asciidoctorj-diagram').version.replace('-', '.')
