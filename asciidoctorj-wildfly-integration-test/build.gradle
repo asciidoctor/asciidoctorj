@@ -54,37 +54,43 @@ test {
 
 }
 
-if (project.hasProperty('jboss.home')) {
 
-    task integrationTest(type: Test) {
-        useJUnit {
-            includeCategories 'org.asciidoctor.categories.Wildfly'
+test {
+    useJUnit {
+        if (!project.hasProperty('jboss.home')) {
+            excludeCategories 'org.asciidoctor.categories.Wildfly'
         }
+    }
 
-        testLogging {
-            // events 'passed', 'failed', 'skipped', 'standard_out', 'standard_error'
-            // events 'standard_out', 'standard_error'
-            afterSuite { desc, result ->
-                if (!desc.parent && logger.infoEnabled) {
-                    logger.info "Test results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)"
-                }
+    testLogging {
+        // events 'passed', 'failed', 'skipped', 'standard_out', 'standard_error'
+        // events 'standard_out', 'standard_error'
+        afterSuite { desc, result ->
+            if (!desc.parent && logger.infoEnabled) {
+                logger.info "Test results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)"
             }
         }
+    }
 
-        reports {
-            html {
-                destination file("$buildDir/reports/integrationTest")
-            }
-            junitXml {
-                destination file("$buildDir/integrationTest")
-            }
+    reports {
+        html {
+            destination file("$buildDir/reports/integrationTest")
         }
+        junitXml {
+            destination file("$buildDir/integrationTest")
+        }
+    }
 
+    if (project.hasProperty('jboss.home')) {
         systemProperty('jboss.home', project.getProperty("jboss.home"))
         systemProperty('module.path', project.getProperty("jboss.home") + "/modules" + File.pathSeparator + file('build/modules').absolutePath)
     }
 
-    integrationTest.dependsOn createModule
-    integrationTest.dependsOn configurations.jbossmodule
+    dependsOn createModule
+    dependsOn configurations.jbossmodule
+}
 
+
+configurations.all {
+    artifacts.clear()
 }
