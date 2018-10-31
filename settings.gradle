@@ -4,7 +4,6 @@ include \
   'asciidoctorj',
   'asciidoctorj-arquillian-extension',
   'asciidoctorj-api',
-  'asciidoctorj-diagram',
   'asciidoctorj-epub3',
   'asciidoctorj-distribution',
   'asciidoctorj-documentation',

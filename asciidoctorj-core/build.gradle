@@ -12,6 +12,7 @@ dependencies {
   gems "rubygems:slim:$slimGemVersion"
   gems "rubygems:thread_safe:$threadSafeGemVersion"
   gems "rubygems:tilt:$tiltGemVersion"
+  gems "rubygems:concurrent-ruby:$concurrentRubyGemVersion"
   // TODO could use dependency replacement feature to fix version of Saxon-HE
   testCompile("org.xmlmatchers:xml-matchers:$xmlMatchersVersion") { exclude module: 'Saxon-HE' }
   testCompile "net.sf.saxon:Saxon-HE:$saxonVersion"

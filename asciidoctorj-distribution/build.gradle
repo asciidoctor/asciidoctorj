@@ -15,10 +15,10 @@ dependencies {
   compile(project(':asciidoctorj-epub3')) {
     transitive = false
   }
-  compile(project(':asciidoctorj-diagram')) {
+
+  compile("org.asciidoctor:asciidoctorj-diagram:$asciidoctorjDiagramVersion") {
     transitive = false
   }
-
   compile("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
     transitive = false
   }
