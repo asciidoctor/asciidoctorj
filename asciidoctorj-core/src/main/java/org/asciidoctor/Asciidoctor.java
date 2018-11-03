@@ -811,32 +811,6 @@ public interface Asciidoctor {
         }
 
         /**
-         * Creates a new instance of Asciidoctor and sets a specific classloader for the  JRuby runtime to use. This method is mostly
-         * used in environments where different threads may have different classloaders, like build tools sbt or ANT.
-         *
-         * @param classloader
-         * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
-         *         Ruby calls.
-         * @deprecated Please use {@link #create()} and set the TCCL before or {@link #create(List)} passing the paths
-         * that you would have used to create the ClassLoader.
-         */
-        public static Asciidoctor create(ClassLoader classloader) {
-            return JRubyAsciidoctor.create(classloader);
-        }
-
-        /**
-         * Cerates a new instance of Asciidoctor and sets a specific classloader and gempath for the JRuby runtime to use.
-         * @param classloader
-         * @param gemPath
-         * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
-         * @deprecated Please use {@link #create(String)} and set the TCCL before or {@link #create(List, String)}
-         * passing the paths that you would have used to create the ClassLoader.
-         */
-        public static Asciidoctor create(ClassLoader classloader, String gemPath) {
-            return JRubyAsciidoctor.create(classloader, gemPath);
-        }
-
-        /**
          * Creates a new instance of Asciidoctor and sets loadPath to provided paths.
          * The gem path of the Ruby instance is set to the gemPath parameter.
          *
