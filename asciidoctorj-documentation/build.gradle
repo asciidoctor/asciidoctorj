@@ -5,7 +5,9 @@ dependencies {
     testCompile project(path: ':asciidoctorj-arquillian-extension')
     testCompile "commons-io:commons-io:$commonsioVersion"
     testCompile "org.jsoup:jsoup:$jsoupVersion"
-    testCompile "org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion"
+    testCompile("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
+        transitive = false
+    }
 }
 
 task processAsciidocFiles(type: Copy) {
