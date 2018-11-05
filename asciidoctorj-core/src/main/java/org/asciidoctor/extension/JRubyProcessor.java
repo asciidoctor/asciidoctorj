@@ -1,35 +1,13 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Options;
-import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.Cell;
-import org.asciidoctor.ast.Column;
-import org.asciidoctor.ast.ContentModel;
-import org.asciidoctor.ast.ContentNode;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.ListItem;
-import org.asciidoctor.ast.NodeConverter;
-import org.asciidoctor.ast.PhraseNode;
-import org.asciidoctor.ast.Row;
-import org.asciidoctor.ast.Section;
-import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.ast.Table;
-import org.asciidoctor.ast.impl.ColumnImpl;
-import org.asciidoctor.ast.impl.ContentNodeImpl;
-import org.asciidoctor.ast.impl.DescriptionListImpl;
-import org.asciidoctor.ast.impl.DocumentImpl;
-import org.asciidoctor.ast.impl.ListImpl;
-import org.asciidoctor.ast.impl.RowImpl;
-import org.asciidoctor.ast.impl.StructuralNodeImpl;
+import org.asciidoctor.ast.*;
+import org.asciidoctor.ast.impl.*;
 import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyObjectWrapper;
 import org.asciidoctor.internal.RubyUtils;
-import org.jruby.Ruby;
-import org.jruby.RubyArray;
-import org.jruby.RubyFixnum;
-import org.jruby.RubyHash;
-import org.jruby.RubySymbol;
+import org.jruby.*;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.ArrayList;
@@ -37,87 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.asciidoctor.ast.NodeConverter.NodeType.BLOCK_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.DOCUMENT_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.INLINE_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.LIST_ITEM_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.SECTION_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.TABLE_CELL_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.TABLE_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.TABLE_COLUMN_CLASS;
+import static org.asciidoctor.ast.NodeConverter.NodeType.*;
 
-public class Processor {
-
-    /**
-     * This value is used as the config option key to configure how Asciidoctor should treat blocks created by
-     * this Processor.
-     * Its value must be a String constant.
-     *
-     * <p>Example to Asciidoctor know that a BlockProcessor creates zero or more child blocks:
-     * <pre>
-     * <verbatim>
-     * Map&lt;String, Object&gt; config = new HashMap&lt;&gt;();
-     * config.put(CONTENT_MODEL, ContentModel.COMPOUND);
-     * BlockProcessor blockProcessor = new BlockProcessor("foo", config);
-     * asciidoctor.javaExtensionRegistry().block(blockProcessor);
-     * </verbatim>
-     * </pre>
-     * </p>
-     *
-     * @deprecated Use the constant {@link ContentModel#KEY} instead or the annotation {@link ContentModel} to describe this Processor
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL = "content_model";
-
-    /**
-     * Predefined constant to let Asciidoctor know that this BlockProcessor creates zero or more child blocks.
-     * @deprecated Use {@link ContentModel#COMPOUND} instead.
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL_COMPOUND = ":compound";
-
-    /**
-     * Predefined constant to let Asciidoctor know that this BlockProcessor creates simple paragraph content.
-     * @deprecated Use {@link ContentModel#SIMPLE} instead.
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL_SIMPLE =":simple";
-
-    /**
-     * Predefined constant to let Asciidoctor know that this BlockProcessor creates literal content.
-     * @deprecated Use {@link ContentModel#VERBATIM} instead.
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL_VERBATIM =":verbatim";
-
-    /**
-     * Predefined constant to make Asciidoctor pass through the content unprocessed.
-     * @deprecated Use {@link ContentModel#RAW} instead.
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL_RAW =":raw";
-
-    /**
-     * Predefined constant to make Asciidoctor drop the content.
-     * @deprecated Use {@link ContentModel#SKIP} instead.
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL_SKIP =":skip";
-
-    /**
-     * Predefined constant to make Asciidoctor not expect any content.
-     * @deprecated Use {@link ContentModel#EMPTY} instead.
-     */
-    @Deprecated
+public class JRubyProcessor implements Processor {
     public static final String CONTENT_MODEL_EMPTY =":empty";
-
-    /**
-     * Predefined constant to make Asciidoctor parse content as attributes.
-     * @deprecated Use {@link ContentModel#ATTRIBUTES} instead.
-     */
-    @Deprecated
-    public static final String CONTENT_MODEL_ATTRIBUTES =":attributes";
-
 
     protected Map<String, Object> config;
 
@@ -128,18 +29,20 @@ public class Processor {
      */
     private boolean configFinalized = false;
 
-    public Processor() {
+    public JRubyProcessor() {
         this(new HashMap<>());
     }
 
-    public Processor(Map<String, Object> config) {
+    public JRubyProcessor(Map<String, Object> config) {
         this.config = new HashMap<>(config);
     }
 
+    @Override
     public Map<String, Object> getConfig() {
-    	return this.config;
+        return this.config;
     }
 
+    @Override
     public final void setConfig(Map<String, Object> config) {
         if (configFinalized) {
             throw new IllegalStateException("It is only allowed to set the config in the constructor!");
@@ -147,22 +50,22 @@ public class Processor {
         this.config = config;
     }
 
+    @Override
     public final void updateConfig(Map<String, Object> config) {
         this.config.putAll(config);
     }
 
-    /**
-     * Lock the config of this processor so that it is no longer allowed to invoke {@link #setConfig(Map)}.
-     */
+    @Override
     public final void setConfigFinalized() {
         this.configFinalized = true;
     }
 
-
+    @Override
     public Table createTable(StructuralNode parent) {
         return createTable(parent, new HashMap<>());
     }
 
+    @Override
     public Table createTable(StructuralNode parent, Map<String, Object> attributes) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
@@ -177,6 +80,7 @@ public class Processor {
         return ret;
     }
 
+    @Override
     public Row createTableRow(Table parent) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
@@ -184,10 +88,7 @@ public class Processor {
         return new RowImpl(rubyRow);
     }
 
-    public Column createTableColumn(Table parent, int index) {
-        return createTableColumn(parent, index, new HashMap<>());
-    }
-
+    @Override
     public Column createTableColumn(Table parent, int index, Map<String, Object> attributes) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
@@ -202,14 +103,7 @@ public class Processor {
         return (Column) NodeConverter.createASTNode(rubyRuntime, TABLE_COLUMN_CLASS, parameters);
     }
 
-    public Cell createTableCell(Column column, String text) {
-        return createTableCell(column, text, new HashMap<>());
-    }
-
-    public Cell createTableCell(Column column, Document innerDocument) {
-        return createTableCell(column, innerDocument, new HashMap<>());
-    }
-
+    @Override
     public Cell createTableCell(Column column, Document innerDocument, Map<String, Object> attributes) {
         Cell cell = createTableCell(column, (String) null, attributes);
         cell.setStyle("asciidoc");
@@ -217,6 +111,7 @@ public class Processor {
         return cell;
     }
 
+    @Override
     public Cell createTableCell(Column column, String text, Map<String, Object> attributes) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(column);
 
@@ -231,70 +126,32 @@ public class Processor {
         return (Cell) NodeConverter.createASTNode(rubyRuntime, TABLE_CELL_CLASS, parameters);
     }
 
-    public Block createBlock(StructuralNode parent, String context, String content) {
-        return createBlock(parent, context, content, new HashMap<>(), new HashMap<>());
-    }
-
-    public Block createBlock(StructuralNode parent, String context, String content, Map<String, Object> attributes) {
-        return createBlock(parent, context, content, attributes, new HashMap<>());
-    }
-
+    @Override
     public Block createBlock(StructuralNode parent, String context, String content, Map<String, Object> attributes,
-            Map<Object, Object> options) {
+                             Map<Object, Object> options) {
 
         options.put(Options.SOURCE, content);
-        options.put(Options.ATTRIBUTES, attributes);        
-        
+        options.put(Options.ATTRIBUTES, attributes);
+
         return createBlock(parent, context, options);
     }
 
-    public Block createBlock(StructuralNode parent, String context, List<String> content) {
-        return createBlock(parent, context, content, new HashMap<>(), new HashMap<>());
-    }
-
-    public Block createBlock(StructuralNode parent, String context, List<String> content, Map<String, Object> attributes) {
-        return createBlock(parent, context, content, attributes, new HashMap<>());
-    }
-
+    @Override
     public Block createBlock(StructuralNode parent, String context, List<String> content, Map<String, Object> attributes,
-            Map<Object, Object> options) {
+                             Map<Object, Object> options) {
 
         options.put(Options.SOURCE, content);
         options.put(Options.ATTRIBUTES, new HashMap<>(attributes));
-        
         return createBlock(parent, context, options);
     }
 
-    public Section createSection(StructuralNode parent) {
-        return createSection(parent, null, true, new HashMap<>());
-    }
-
-    public Section createSection(StructuralNode parent, Map<Object, Object> options) {
-        return createSection(parent, null, true, options);
-    }
-
-    public Section createSection(StructuralNode parent, boolean numbered, Map<Object, Object> options) {
-        return createSection(parent, null, numbered, options);
-    }
-
-    public Section createSection(StructuralNode parent, int level, boolean numbered, Map<Object, Object> options) {
-        return createSection(parent, Integer.valueOf(level), numbered, options);
-    }
-
-    public PhraseNode createPhraseNode(ContentNode parent, String context, List<String> text) {
-        return createPhraseNode(parent, context, text, new HashMap<>());
-    }
-
-    public PhraseNode createPhraseNode(ContentNode parent, String context, List<String> text, Map<String, Object> attributes) {
-        return createPhraseNode(parent, context, text, attributes, new HashMap<>());
-    }
-
+    @Override
     public PhraseNode createPhraseNode(ContentNode parent, String context, List<String> text, Map<String, Object> attributes, Map<Object, Object> options) {
 
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         options.put(Options.ATTRIBUTES, attributes);
-        
+
         RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime,
                 options);
 
@@ -305,20 +162,13 @@ public class Processor {
                 ((ContentNodeImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
                 rubyText,
-                convertMapToRubyHashWithSymbols };
+                convertMapToRubyHashWithSymbols};
         return (PhraseNode) NodeConverter.createASTNode(rubyRuntime, INLINE_CLASS, parameters);
     }
 
-    public PhraseNode createPhraseNode(ContentNode parent, String context, String text) {
-        return createPhraseNode(parent, context, text, new HashMap<>());
-    }
-
-    public PhraseNode createPhraseNode(ContentNode parent, String context, String text, Map<String, Object> attributes) {
-        return createPhraseNode(parent, context, text, attributes, new HashMap<>());
-    }
-
+    @Override
     public PhraseNode createPhraseNode(ContentNode parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {
-        
+
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         options.put(Options.ATTRIBUTES, RubyHashUtil.convertMapToRubyHashWithStrings(rubyRuntime, attributes));
@@ -329,12 +179,13 @@ public class Processor {
                 ((ContentNodeImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
                 text == null ? rubyRuntime.getNil() : rubyRuntime.newString(text),
-                convertedOptions };
+                convertedOptions};
         return (PhraseNode) NodeConverter.createASTNode(rubyRuntime, INLINE_CLASS, parameters);
     }
-    
-    private Block createBlock(StructuralNode parent, String context,
-            Map<Object, Object> options) {
+
+    @Override
+    public Block createBlock(StructuralNode parent, String context,
+                             Map<Object, Object> options) {
 
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
@@ -344,18 +195,17 @@ public class Processor {
         IRubyObject[] parameters = {
                 ((StructuralNodeImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, context),
-                convertMapToRubyHashWithSymbols };
+                convertMapToRubyHashWithSymbols};
         return (Block) NodeConverter.createASTNode(rubyRuntime, BLOCK_CLASS, parameters);
     }
 
     private Map<Object, Object> filterBlockOptions(
-        StructuralNode parent,
-        Map<Object, Object> options,
-        String... optionNames
-    ) {
+            StructuralNode parent,
+            Map<Object, Object> options,
+            String... optionNames) {
         final Map<Object, Object> copy = new HashMap<>(options);
         final Ruby ruby = JRubyRuntimeContext.get(parent);
-        for (String optionName: optionNames) {
+        for (String optionName : optionNames) {
             final Object optionValue = copy.get(optionName);
             if (optionValue != null) {
                 if (optionValue instanceof String) {
@@ -363,7 +213,7 @@ public class Processor {
                 } else if (optionValue instanceof List) {
                     List valueList = (List) optionValue;
                     List newValueList = new ArrayList(valueList.size());
-                    for (Object v: valueList) {
+                    for (Object v : valueList) {
                         if (v instanceof String) {
                             newValueList.add(getRubySymbol(ruby, (String) v));
                         } else {
@@ -381,8 +231,8 @@ public class Processor {
         return ruby.newSymbol(s.startsWith(":") ? s.substring(1) : s);
     }
 
-
-    private Section createSection(StructuralNode parent, Integer level, boolean numbered, Map<Object, Object> options) {
+    @Override
+    public Section createSection(StructuralNode parent, Integer level, boolean numbered, Map<Object, Object> options) {
 
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
@@ -393,16 +243,18 @@ public class Processor {
                 ((StructuralNodeImpl) parent).getRubyObject(),
                 level == null ? rubyRuntime.getNil() : rubyRuntime.newFixnum(level),
                 rubyRuntime.newBoolean(numbered),
-                convertMapToRubyHashWithSymbols };
+                convertMapToRubyHashWithSymbols};
         return (Section) NodeConverter.createASTNode(rubyRuntime, SECTION_CLASS, parameters);
     }
 
     /**
      * Creates an inner document for the given parent document.
      * Inner documents are used for tables cells with style {@code asciidoc}.
+     *
      * @param parentDocument The parent document of the new document.
      * @return A new inner document.
      */
+    @Override
     public Document createDocument(Document parentDocument) {
         Ruby runtime = JRubyRuntimeContext.get(parentDocument);
         RubyHash options = RubyHash.newHash(runtime);
@@ -413,12 +265,14 @@ public class Processor {
         return (Document) NodeConverter.createASTNode(runtime, DOCUMENT_CLASS, runtime.getNil(), options);
     }
 
+    @Override
     public ListItem createListItem(final org.asciidoctor.ast.List parent, final String text) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         return (ListItem) NodeConverter.createASTNode(rubyRuntime, LIST_ITEM_CLASS, ListImpl.class.cast(parent).getRubyObject(), rubyRuntime.newString(text));
     }
 
+    @Override
     public ListItem createListItem(final org.asciidoctor.ast.DescriptionList parent, final String text) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
@@ -450,8 +304,9 @@ public class Processor {
      * </pre>
      *
      * @param parent The block to which the parsed content should be added as children.
-     * @param lines Raw asciidoctor content
+     * @param lines  Raw asciidoctor content
      */
+    @Override
     public void parseContent(StructuralNode parent, List<String> lines) {
         Ruby runtime = JRubyRuntimeContext.get(parent);
         Parser parser = new Parser(runtime, parent, ReaderImpl.createReader(runtime, lines));
@@ -479,7 +334,7 @@ public class Processor {
             if (!reader.hasMoreLines()) {
                 return null;
             }
-            IRubyObject nextBlock = getRubyProperty("next_block", reader, ((StructuralNodeImpl)parent).getRubyObject());
+            IRubyObject nextBlock = getRubyProperty("next_block", reader, ((StructuralNodeImpl) parent).getRubyObject());
             if (nextBlock.isNil()) {
                 return null;
             } else {
@@ -487,4 +342,81 @@ public class Processor {
             }
         }
     }
+
+
+    @Override
+    public Column createTableColumn(Table parent, int index) {
+        return createTableColumn(parent, index, new HashMap<>());
+    }
+
+    @Override
+    public Cell createTableCell(Column column, String text) {
+        return createTableCell(column, text, new HashMap<>());
+    }
+
+    @Override
+    public Cell createTableCell(Column column, Document innerDocument) {
+        return createTableCell(column, innerDocument, new HashMap<>());
+    }
+
+    @Override
+    public Block createBlock(StructuralNode parent, String context, String content) {
+        return createBlock(parent, context, content, new HashMap<>(), new HashMap<>());
+    }
+
+    @Override
+    public Block createBlock(StructuralNode parent, String context, String content, Map<String, Object> attributes) {
+        return createBlock(parent, context, content, attributes, new HashMap<>());
+    }
+
+    @Override
+    public Block createBlock(StructuralNode parent, String context, List<String> content) {
+        return createBlock(parent, context, content, new HashMap<>(), new HashMap<>());
+    }
+
+    @Override
+    public Block createBlock(StructuralNode parent, String context, List<String> content, Map<String, Object> attributes) {
+        return createBlock(parent, context, content, attributes, new HashMap<>());
+    }
+
+    @Override
+    public Section createSection(StructuralNode parent) {
+        return createSection(parent, null, true, new HashMap<>());
+    }
+
+    @Override
+    public Section createSection(StructuralNode parent, Map<Object, Object> options) {
+        return createSection(parent, null, true, options);
+    }
+
+    @Override
+    public Section createSection(StructuralNode parent, boolean numbered, Map<Object, Object> options) {
+        return createSection(parent, null, numbered, options);
+    }
+
+    @Override
+    public Section createSection(StructuralNode parent, int level, boolean numbered, Map<Object, Object> options) {
+        return createSection(parent, Integer.valueOf(level), numbered, options);
+    }
+
+    @Override
+    public PhraseNode createPhraseNode(ContentNode parent, String context, List<String> text) {
+        return createPhraseNode(parent, context, text, new HashMap<>());
+    }
+
+    @Override
+    public PhraseNode createPhraseNode(ContentNode parent, String context, List<String> text, Map<String, Object> attributes) {
+        return createPhraseNode(parent, context, text, attributes, new HashMap<>());
+    }
+
+    @Override
+    public PhraseNode createPhraseNode(ContentNode parent, String context, String text) {
+        return createPhraseNode(parent, context, text, new HashMap<>());
+    }
+
+    @Override
+    public PhraseNode createPhraseNode(ContentNode parent, String context, String text, Map<String, Object> attributes) {
+        return createPhraseNode(parent, context, text, attributes, new HashMap<>());
+    }
+
 }

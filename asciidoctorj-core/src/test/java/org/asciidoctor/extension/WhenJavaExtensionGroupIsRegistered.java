@@ -620,7 +620,7 @@ public class WhenJavaExtensionGroupIsRegistered {
     @Test
     public void a_block_macro_as_instance_extension_should_be_executed_when_macro_is_detected() {
 
-        Map<String, Object> options = new HashMap<String, Object>();
+        Map<String, Object> options = new HashMap<>();
         options.put(ContentModel.KEY, ContentModel.RAW);
 
         this.asciidoctor.createGroup()

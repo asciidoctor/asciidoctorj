@@ -5,12 +5,12 @@ import java.util.Map;
 
 import org.asciidoctor.ast.Document;
 
-public abstract class Treeprocessor extends Processor {
+public abstract class Treeprocessor extends BaseProcessor {
 
     public Treeprocessor() {
         this(new HashMap<>());
     }
-    
+
     public Treeprocessor(Map<String, Object> config) {
         super(config);
     }

@@ -59,7 +59,6 @@ public class DocinfoProcessorProxy extends AbstractProcessorProxy<DocinfoProcess
 
     @JRubyMethod(name = "initialize", required = 1)
     public IRubyObject initialize(ThreadContext context, IRubyObject options) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-
         if (getProcessor() != null) {
             // Instance was created in Java and has options set, so we pass these
             // instead of those passed by asciidoctor
@@ -68,8 +67,7 @@ public class DocinfoProcessorProxy extends AbstractProcessorProxy<DocinfoProcess
                     this,
                     getMetaClass(),
                     METHOD_NAME_INITIALIZE,
-                    new IRubyObject[]{
-                            RubyHashUtil.convertMapToRubyHashWithSymbols(getRuntime(), getProcessor().getConfig())},
+                    new IRubyObject[]{RubyHashUtil.convertMapToRubyHashWithSymbols(getRuntime(), getProcessor().getConfig())},
                     Block.NULL_BLOCK);
             // The extension config in the Java extension is just a view on the @config member of the Ruby part
             getProcessor().updateConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
@@ -85,7 +83,6 @@ public class DocinfoProcessorProxy extends AbstractProcessorProxy<DocinfoProcess
 
             // Reset the Java config options to the decorated Ruby hash, so that Java and Ruby work on the same config map
             getProcessor().setConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
-
         }
 
         finalizeJavaConfig();

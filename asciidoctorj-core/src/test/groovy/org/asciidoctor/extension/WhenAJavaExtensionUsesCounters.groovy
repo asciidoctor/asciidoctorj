@@ -155,7 +155,6 @@ testmacro::countera[]
 
         @Override
         org.asciidoctor.ast.Document process(org.asciidoctor.ast.Document document) {
-
             List<StructuralNode> newNodes = document.blocks.collect {
                 if (it instanceof Section) {
                     processSection((Section) it)
@@ -165,7 +164,6 @@ testmacro::countera[]
             }
             document.blocks.clear()
             document.blocks.addAll(newNodes)
-
             document
         }
 

@@ -5,7 +5,7 @@ import org.asciidoctor.ast.Document;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class DocinfoProcessor extends Processor {
+public abstract class DocinfoProcessor extends BaseProcessor {
 
     public DocinfoProcessor() {
         super(new HashMap<>());

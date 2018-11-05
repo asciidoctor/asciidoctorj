@@ -24,14 +24,14 @@ public interface Reader {
      *
      * @return file name
      */
-    public String getFile();
+    String getFile();
 
     /**
      * Get the name of the directory of the current file
      *
      * @return directory name
      */
-    public String getDir();
+    String getDir();
 
     /**
      * Check whether there are any lines left to read. If a previous call to this method resulted in a value of false,

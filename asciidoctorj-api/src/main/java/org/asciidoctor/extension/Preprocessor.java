@@ -5,12 +5,12 @@ import java.util.Map;
 
 import org.asciidoctor.ast.Document;
 
-public abstract class Preprocessor extends Processor {
+public abstract class Preprocessor extends BaseProcessor {
 
     public Preprocessor() {
         this(new HashMap<>());
     }
-    
+
     public Preprocessor(Map<String, Object> config) {
         super(config);
     }
