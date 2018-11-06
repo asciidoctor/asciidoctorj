@@ -22,7 +22,9 @@ public abstract class BlockProcessor extends Processor {
      * </verbatim>
      * </pre>
      * </p>
+     * @deprecated Please use {@link Contexts#KEY}
      */
+    @Deprecated
     public static final String CONTEXTS = "contexts";
 
     /**
@@ -35,7 +37,9 @@ public abstract class BlockProcessor extends Processor {
      * or it can masquerade as any other block.
      * --
      * </pre>
+     * @deprecated Please use {@link Contexts#OPEN}
      */
+    @Deprecated
     public static final String CONTEXT_OPEN = ":open";
 
     /**
@@ -47,7 +51,9 @@ public abstract class BlockProcessor extends Processor {
      * This is just a neat example.
      * ====
      * </pre>
+     * @deprecated Please use {@link Contexts#EXAMPLE}
      */
+    @Deprecated
     public static final String CONTEXT_EXAMPLE = ":example";
 
     /**
@@ -59,7 +65,9 @@ public abstract class BlockProcessor extends Processor {
      * This is just a sidebar.
      * ****
      * </pre>
+     * @deprecated Please use {@link Contexts#SIDEBAR}
      */
+    @Deprecated
     public static final String CONTEXT_SIDEBAR = ":sidebar";
 
     /**
@@ -71,7 +79,9 @@ public abstract class BlockProcessor extends Processor {
      * This is just a literal block.
      * ....
      * </pre>
+     * @deprecated Please use {@link Contexts#LITERAL}
      */
+    @Deprecated
     public static final String CONTEXT_LITERAL = ":literal";
 
     /**
@@ -83,7 +93,9 @@ public abstract class BlockProcessor extends Processor {
      * This is just a literal block.
      * ....
      * </pre>
+     * @deprecated Please use {@link Contexts#LISTING}
      */
+    @Deprecated
     public static final String CONTEXT_LISTING = ":listing";
 
     /**
@@ -95,7 +107,9 @@ public abstract class BlockProcessor extends Processor {
      * To be or not to be...
      * ____
      * </pre>
+     * @deprecated Please use {@link Contexts#QUOTE}
      */
+    @Deprecated
     public static final String CONTEXT_QUOTE = ":quote";
 
     /**
@@ -108,7 +122,9 @@ public abstract class BlockProcessor extends Processor {
      * &lt;h1&gt;Big text&lt;/h1&gt;
      * ++++
      * </pre>
+     * @deprecated Please use {@link Contexts#PASS}
      */
+    @Deprecated
     public static final String CONTEXT_PASS = ":pass";
 
     /**
@@ -122,7 +138,9 @@ public abstract class BlockProcessor extends Processor {
      *
      * And don't process this.
      * </pre>
+     * @deprecated Please use {@link Contexts#PARAGRAPH}
      */
+    @Deprecated
     public static final String CONTEXT_PARAGRAPH = ":paragraph";
 
     protected String name;
@@ -132,7 +150,7 @@ public abstract class BlockProcessor extends Processor {
     }
 
     public BlockProcessor(String name) {
-        this(name, new HashMap<String, Object>());
+        this(name, new HashMap<>());
     }
     
     public BlockProcessor(String name, Map<String, Object> config) {

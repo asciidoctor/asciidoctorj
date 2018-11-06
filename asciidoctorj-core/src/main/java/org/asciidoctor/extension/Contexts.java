@@ -49,6 +49,23 @@ import java.lang.annotation.Target;
 public @interface Contexts {
 
     /**
+     * This value is used as the config option key when defining the block type
+     * a Processor should process.
+     * Its value must be a list of String constants:
+     *
+     * <p>Example to make a BlockProcessor work on listings and examples named foo:
+     * <pre>
+     * <verbatim>
+     * Map&lt;String, Object&gt; config = new HashMap&lt;&gt;();
+     * config.put(Contexts.KEY, Arrays.asList(Contexts.EXAMPLE, Contexts.LISTING));
+     * BlockProcessor blockProcessor = new BlockProcessor("foo", config);
+     * asciidoctor.javaExtensionRegistry().block(blockProcessor);
+     * </verbatim>
+     * </pre>
+     * </p>
+     */
+    String KEY = "contexts";
+    /**
      * Predefined constant for making a Processor work on open blocks.
      * <pre>
      * [foo]
@@ -58,7 +75,7 @@ public @interface Contexts {
      * --
      * </pre>
      */
-    public static final String OPEN = ":open";
+    String OPEN = ":open";
 
     /**
      * Predefined constant for making a Processor work on example blocks.
@@ -69,7 +86,7 @@ public @interface Contexts {
      * ====
      * </pre>
      */
-    public static final String EXAMPLE = ":example";
+    String EXAMPLE = ":example";
 
     /**
      * Predefined constant for making a Processor work on sidebar blocks.
@@ -80,7 +97,7 @@ public @interface Contexts {
      * ****
      * </pre>
      */
-    public static final String SIDEBAR = ":sidebar";
+    String SIDEBAR = ":sidebar";
 
     /**
      * Predefined constant for making a Processor work on literal blocks.
@@ -91,7 +108,7 @@ public @interface Contexts {
      * ....
      * </pre>
      */
-    public static final String LITERAL = ":literal";
+    String LITERAL = ":literal";
 
     /**
      * Predefined constant for making a Processor work on source blocks.
@@ -102,7 +119,7 @@ public @interface Contexts {
      * ....
      * </pre>
      */
-    public static final String LISTING = ":listing";
+    String LISTING = ":listing";
 
     /**
      * Predefined constant for making a Processor work on quote blocks.
@@ -113,7 +130,7 @@ public @interface Contexts {
      * ____
      * </pre>
      */
-    public static final String QUOTE = ":quote";
+    String QUOTE = ":quote";
 
     /**
      * Predefined constant for making a Processor work on passthrough blocks.
@@ -125,7 +142,7 @@ public @interface Contexts {
      * ++++
      * </pre>
      */
-    public static final String PASS = ":pass";
+    String PASS = ":pass";
 
     /**
      * Predefined constant for making a Processor work on paragraph blocks.
@@ -137,7 +154,7 @@ public @interface Contexts {
      * And don't process this.
      * </pre>
      */
-    public static final String PARAGRAPH = ":paragraph";
+    String PARAGRAPH = ":paragraph";
 
 
     String[] value();
