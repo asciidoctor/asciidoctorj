@@ -8,7 +8,7 @@ import java.util.Map;
 public abstract class DocinfoProcessor extends Processor {
 
     public DocinfoProcessor() {
-        super(new HashMap<String, Object>());
+        super(new HashMap<>());
     }
 
     public DocinfoProcessor(Map<String, Object> config) {

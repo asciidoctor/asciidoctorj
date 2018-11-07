@@ -8,7 +8,7 @@ import org.asciidoctor.ast.Document;
 public abstract class IncludeProcessor extends Processor {
 
     public IncludeProcessor() {
-        this(new HashMap<String, Object>());
+        this(new HashMap<>());
     }
     
     public IncludeProcessor(Map<String, Object> config) {

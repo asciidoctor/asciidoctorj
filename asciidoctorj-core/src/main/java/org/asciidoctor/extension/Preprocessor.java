@@ -8,7 +8,7 @@ import org.asciidoctor.ast.Document;
 public abstract class Preprocessor extends Processor {
 
     public Preprocessor() {
-        this(new HashMap<String, Object>());
+        this(new HashMap<>());
     }
     
     public Preprocessor(Map<String, Object> config) {

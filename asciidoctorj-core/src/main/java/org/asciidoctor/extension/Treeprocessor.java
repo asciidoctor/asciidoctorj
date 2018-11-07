@@ -8,7 +8,7 @@ import org.asciidoctor.ast.Document;
 public abstract class Treeprocessor extends Processor {
 
     public Treeprocessor() {
-        this(new HashMap<String, Object>());
+        this(new HashMap<>());
     }
     
     public Treeprocessor(Map<String, Object> config) {

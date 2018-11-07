@@ -8,7 +8,7 @@ import org.asciidoctor.ast.Document;
 public abstract class Postprocessor extends Processor {
 
     public Postprocessor() {
-        this(new HashMap<String, Object>());
+        this(new HashMap<>());
     }
     
     public Postprocessor(Map<String, Object> config) {

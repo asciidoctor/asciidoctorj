@@ -10,7 +10,7 @@ public abstract class MacroProcessor<T extends ContentNode> extends Processor {
     protected String name;
     
     public MacroProcessor(String name) {
-        this(name, new HashMap<String, Object>());
+        this(name, new HashMap<>());
     }
     
     public MacroProcessor(String name, Map<String, Object> config) {
