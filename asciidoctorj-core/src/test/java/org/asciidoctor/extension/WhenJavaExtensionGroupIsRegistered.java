@@ -4,6 +4,7 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
+import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
@@ -620,7 +621,7 @@ public class WhenJavaExtensionGroupIsRegistered {
     public void a_block_macro_as_instance_extension_should_be_executed_when_macro_is_detected() {
 
         Map<String, Object> options = new HashMap<String, Object>();
-        options.put(BlockMacroProcessor.CONTENT_MODEL, BlockMacroProcessor.CONTENT_MODEL_RAW);
+        options.put(ContentModel.KEY, ContentModel.RAW);
 
         this.asciidoctor.createGroup()
             .blockMacro(new GistMacro("gist", options))
@@ -792,8 +793,8 @@ public class WhenJavaExtensionGroupIsRegistered {
             throws IOException {
 
         Map<String, Object> config = new HashMap<String, Object>();
-        config.put(BlockProcessor.CONTEXTS, Arrays.asList(BlockProcessor.CONTEXT_PARAGRAPH));
-        config.put(Processor.CONTENT_MODEL, Processor.CONTENT_MODEL_SIMPLE);
+        config.put(Contexts.KEY, Arrays.asList(Contexts.PARAGRAPH));
+        config.put(ContentModel.KEY, ContentModel.SIMPLE);
         YellBlock yellBlock = new YellBlock("yell", config);
         this.asciidoctor.createGroup()
             .block(yellBlock)
@@ -830,8 +831,8 @@ public class WhenJavaExtensionGroupIsRegistered {
             throws IOException {
 
         Map<String, Object> config = new HashMap<String, Object>();
-        config.put(BlockProcessor.CONTEXTS, Arrays.asList(BlockProcessor.CONTEXT_LISTING));
-        config.put(Processor.CONTENT_MODEL, Processor.CONTENT_MODEL_SIMPLE);
+        config.put(Contexts.KEY, Arrays.asList(Contexts.LISTING));
+        config.put(ContentModel.KEY, ContentModel.SIMPLE);
         YellBlock yellBlock = new YellBlock("yell", config);
         this.asciidoctor.createGroup()
             .block(yellBlock)

@@ -129,11 +129,11 @@ public class Processor {
     private boolean configFinalized = false;
 
     public Processor() {
-        this(new HashMap<String, Object>());
+        this(new HashMap<>());
     }
 
     public Processor(Map<String, Object> config) {
-        this.config = new HashMap<String, Object>(config);
+        this.config = new HashMap<>(config);
     }
 
     public Map<String, Object> getConfig() {
@@ -160,7 +160,7 @@ public class Processor {
 
 
     public Table createTable(StructuralNode parent) {
-        return createTable(parent, new HashMap<String, Object>());
+        return createTable(parent, new HashMap<>());
     }
 
     public Table createTable(StructuralNode parent, Map<String, Object> attributes) {
@@ -173,7 +173,7 @@ public class Processor {
                 ((StructuralNodeImpl) parent).getRubyObject(),
                 rubyAttributes};
         Table ret = (Table) NodeConverter.createASTNode(rubyRuntime, TABLE_CLASS, parameters);
-        ret.setAttr("rowcount", 0, false);
+        ret.setAttribute("rowcount", 0, false);
         return ret;
     }
 
@@ -185,7 +185,7 @@ public class Processor {
     }
 
     public Column createTableColumn(Table parent, int index) {
-        return createTableColumn(parent, index, new HashMap<String, Object>());
+        return createTableColumn(parent, index, new HashMap<>());
     }
 
     public Column createTableColumn(Table parent, int index, Map<String, Object> attributes) {
@@ -203,11 +203,11 @@ public class Processor {
     }
 
     public Cell createTableCell(Column column, String text) {
-        return createTableCell(column, text, new HashMap<String, Object>());
+        return createTableCell(column, text, new HashMap<>());
     }
 
     public Cell createTableCell(Column column, Document innerDocument) {
-        return createTableCell(column, innerDocument, new HashMap<String, Object>());
+        return createTableCell(column, innerDocument, new HashMap<>());
     }
 
     public Cell createTableCell(Column column, Document innerDocument, Map<String, Object> attributes) {
@@ -232,11 +232,11 @@ public class Processor {
     }
 
     public Block createBlock(StructuralNode parent, String context, String content) {
-        return createBlock(parent, context, content, new HashMap<String, Object>(), new HashMap<Object, Object>());
+        return createBlock(parent, context, content, new HashMap<>(), new HashMap<>());
     }
 
     public Block createBlock(StructuralNode parent, String context, String content, Map<String, Object> attributes) {
-        return createBlock(parent, context, content, attributes, new HashMap<Object, Object>());
+        return createBlock(parent, context, content, attributes, new HashMap<>());
     }
 
     public Block createBlock(StructuralNode parent, String context, String content, Map<String, Object> attributes,
@@ -249,24 +249,24 @@ public class Processor {
     }
 
     public Block createBlock(StructuralNode parent, String context, List<String> content) {
-        return createBlock(parent, context, content, new HashMap<String, Object>(), new HashMap<Object, Object>());
+        return createBlock(parent, context, content, new HashMap<>(), new HashMap<>());
     }
 
     public Block createBlock(StructuralNode parent, String context, List<String> content, Map<String, Object> attributes) {
-        return createBlock(parent, context, content, attributes, new HashMap<Object, Object>());
+        return createBlock(parent, context, content, attributes, new HashMap<>());
     }
 
     public Block createBlock(StructuralNode parent, String context, List<String> content, Map<String, Object> attributes,
             Map<Object, Object> options) {
 
         options.put(Options.SOURCE, content);
-        options.put(Options.ATTRIBUTES, new HashMap<String, Object>(attributes));
+        options.put(Options.ATTRIBUTES, new HashMap<>(attributes));
         
         return createBlock(parent, context, options);
     }
 
     public Section createSection(StructuralNode parent) {
-        return createSection(parent, null, true, new HashMap<Object, Object>());
+        return createSection(parent, null, true, new HashMap<>());
     }
 
     public Section createSection(StructuralNode parent, Map<Object, Object> options) {
@@ -282,11 +282,11 @@ public class Processor {
     }
 
     public PhraseNode createPhraseNode(ContentNode parent, String context, List<String> text) {
-        return createPhraseNode(parent, context, text, new HashMap<String, Object>());
+        return createPhraseNode(parent, context, text, new HashMap<>());
     }
 
     public PhraseNode createPhraseNode(ContentNode parent, String context, List<String> text, Map<String, Object> attributes) {
-        return createPhraseNode(parent, context, text, attributes, new HashMap<Object, Object>());
+        return createPhraseNode(parent, context, text, attributes, new HashMap<>());
     }
 
     public PhraseNode createPhraseNode(ContentNode parent, String context, List<String> text, Map<String, Object> attributes, Map<Object, Object> options) {
@@ -310,11 +310,11 @@ public class Processor {
     }
 
     public PhraseNode createPhraseNode(ContentNode parent, String context, String text) {
-        return createPhraseNode(parent, context, text, new HashMap<String, Object>());
+        return createPhraseNode(parent, context, text, new HashMap<>());
     }
 
     public PhraseNode createPhraseNode(ContentNode parent, String context, String text, Map<String, Object> attributes) {
-        return createPhraseNode(parent, context, text, attributes, new HashMap<String, Object>());
+        return createPhraseNode(parent, context, text, attributes, new HashMap<>());
     }
 
     public PhraseNode createPhraseNode(ContentNode parent, String context, String text, Map<String, Object> attributes, Map<String, Object> options) {

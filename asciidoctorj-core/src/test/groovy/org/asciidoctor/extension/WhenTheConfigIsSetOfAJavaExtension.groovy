@@ -2,6 +2,7 @@ package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.ast.ContentModel
 import org.asciidoctor.internal.AsciidoctorCoreException
 import spock.lang.Specification
 
@@ -16,12 +17,12 @@ Parsing will crash when processing this block
         given:
         BlockProcessor blockProcessor = new ConfigModifyingBlockProcessor()
         Map<String, Object> config = [:]
-        config[BlockProcessor.CONTEXTS] = [BlockProcessor.CONTEXT_PARAGRAPH]
-        config[Processor.CONTENT_MODEL] = Processor.CONTENT_MODEL_SIMPLE
+        config[Contexts.KEY] = [Contexts.PARAGRAPH]
+        config[ContentModel.KEY] = ContentModel.SIMPLE
         blockProcessor.config = config
 
         expect:
-        blockProcessor.config[Processor.CONTENT_MODEL] == Processor.CONTENT_MODEL_SIMPLE
+        blockProcessor.config[ContentModel.KEY] == ContentModel.SIMPLE
     }
 
     def 'setConfig should throw an IllegalStateException in Processor_process when a processor instance is registered'() {
@@ -31,8 +32,8 @@ Parsing will crash when processing this block
 
         BlockProcessor blockProcessor = new ConfigModifyingBlockProcessor()
         Map<String, Object> config = [:]
-        config[BlockProcessor.CONTEXTS] = [BlockProcessor.CONTEXT_PARAGRAPH]
-        config[Processor.CONTENT_MODEL] = Processor.CONTENT_MODEL_SIMPLE
+        config[Contexts.KEY] = [Contexts.PARAGRAPH]
+        config[ContentModel.KEY] = ContentModel.SIMPLE
         blockProcessor.config = config
 
         asciidoctor.javaExtensionRegistry().block(blockProcessor)

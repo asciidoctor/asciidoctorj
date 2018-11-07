@@ -1,5 +1,6 @@
 package org.asciidoctor.extension
 
+import org.asciidoctor.ast.ContentModel
 import org.asciidoctor.ast.StructuralNode
 
 class ConfigModifyingBlockProcessor extends BlockProcessor {
@@ -12,8 +13,8 @@ class ConfigModifyingBlockProcessor extends BlockProcessor {
         super(name)
 
         Map<String, Object> config = [:]
-        config[BlockProcessor.CONTEXTS] = [BlockProcessor.CONTEXT_PARAGRAPH]
-        config[Processor.CONTENT_MODEL] = Processor.CONTENT_MODEL_SIMPLE
+        config[Contexts.KEY] = [Contexts.PARAGRAPH]
+        config[ContentModel.KEY] = ContentModel.SIMPLE
         this.config = config
     }
 

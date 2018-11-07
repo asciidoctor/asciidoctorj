@@ -4,6 +4,7 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
+import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
@@ -613,7 +614,7 @@ public class WhenJavaExtensionIsRegistered {
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
         Map<String, Object> options = new HashMap<String, Object>();
-        options.put(BlockMacroProcessor.CONTENT_MODEL, BlockMacroProcessor.CONTENT_MODEL_RAW);
+        options.put(ContentModel.KEY, ContentModel.RAW);
 
         javaExtensionRegistry.blockMacro(new GistMacro("gist", options));
 
@@ -803,8 +804,8 @@ public class WhenJavaExtensionIsRegistered {
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
         Map<String, Object> config = new HashMap<String, Object>();
-        config.put(BlockProcessor.CONTEXTS, Arrays.asList(BlockProcessor.CONTEXT_PARAGRAPH));
-        config.put(Processor.CONTENT_MODEL, Processor.CONTENT_MODEL_SIMPLE);
+        config.put(BlockProcessor.CONTEXTS, Arrays.asList(Contexts.PARAGRAPH));
+        config.put(ContentModel.KEY, ContentModel.SIMPLE);
         YellBlock yellBlock = new YellBlock("yell", config);
         javaExtensionRegistry.block(yellBlock);
         String content = asciidoctor.renderFile(
@@ -824,8 +825,8 @@ public class WhenJavaExtensionIsRegistered {
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
         Map<String, Object> config = new HashMap<String, Object>();
-        config.put(BlockProcessor.CONTEXTS, Arrays.asList(BlockProcessor.CONTEXT_PARAGRAPH));
-        config.put(Processor.CONTENT_MODEL, Processor.CONTENT_MODEL_SIMPLE);
+        config.put(Contexts.KEY, Arrays.asList(Contexts.PARAGRAPH));
+        config.put(ContentModel.KEY, ContentModel.SIMPLE);
         YellBlock yellBlock = new YellBlock("yell", config);
         javaExtensionRegistry.block(yellBlock);
 
@@ -910,8 +911,8 @@ public class WhenJavaExtensionIsRegistered {
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
         Map<String, Object> config = new HashMap<String, Object>();
-        config.put(BlockProcessor.CONTEXTS, Arrays.asList(BlockProcessor.CONTEXT_LISTING));
-        config.put(Processor.CONTENT_MODEL, Processor.CONTENT_MODEL_SIMPLE);
+        config.put(Contexts.KEY, Arrays.asList(Contexts.LISTING));
+        config.put(ContentModel.KEY, ContentModel.SIMPLE);
         YellBlock yellBlock = new YellBlock("yell", config);
         javaExtensionRegistry.block(yellBlock);
         String content = asciidoctor.renderFile(
