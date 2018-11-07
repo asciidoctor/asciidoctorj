@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation defines how an {@link InlineMacroProcessor} is applied.
+ * This annotation defines how an InlineMacroProcessor is applied.
  * Possible values are:
  * <dl>
  *  <dt>{@link FormatType#LONG}</dt>
@@ -36,8 +36,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Format {
 
-    public FormatType value() default FormatType.CUSTOM;
+    FormatType value() default FormatType.CUSTOM;
 
-    public String regexp() default "";
+    String regexp() default "";
 
 }
