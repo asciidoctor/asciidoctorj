@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation defines the location where the content created by a {@link DocinfoProcessor} will be added.
+ * This annotation defines the location where the content created by a DocinfoProcessor will be added.
  * <p>The following example will add a robots meta tag to the head element of the resulting HTML document:
  * <pre>
  * <ode>
@@ -40,6 +40,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Location {
 
-    public LocationType value() default LocationType.HEADER;
+    LocationType value() default LocationType.HEADER;
 
 }

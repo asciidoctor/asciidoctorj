@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation allows to define multiple {@link DefaultAttribute} annotations for one type.
+ * Defines default attributes passed to the {@code process()} method of a processor.
  * <p>Applicable for:
  * <table>
  * <tr><td>BlockMacroProcessor</td><td>&#10003;</td></tr>
@@ -24,8 +24,10 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface DefaultAttributes {
+public @interface DefaultAttribute {
 
-    public DefaultAttribute[] value();
+    String key();
+
+    String value();
 
 }

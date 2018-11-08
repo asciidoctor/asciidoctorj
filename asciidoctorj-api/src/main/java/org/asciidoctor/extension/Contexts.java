@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation defines what type of blocks a {@link BlockProcessor} processes.
+ * This annotation defines what type of blocks a BlockProcessor processes.
  * Example for a BlockProcessor that transforms all open blocks with the name {@code yell} to upper case:
  * <pre><code>
  * &#64;Name("yell")

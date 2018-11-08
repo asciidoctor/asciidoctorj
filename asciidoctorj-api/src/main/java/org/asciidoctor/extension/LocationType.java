@@ -1,16 +1,16 @@
 package org.asciidoctor.extension;
 
 /**
- * Inline macro format used by the {@link Format} annotation.
+ * Location used by the {@link Location} annotation.
  */
-public enum FormatType {
-    LONG(":long"),
-    SHORT(":short"),
-    CUSTOM(":regexp");
+public enum LocationType {
+
+    HEADER(":head"),
+    FOOTER(":footer");
 
     private final String optionValue;
 
-    private FormatType(String optionValue) {
+    LocationType(String optionValue) {
         this.optionValue = optionValue;
     }
 

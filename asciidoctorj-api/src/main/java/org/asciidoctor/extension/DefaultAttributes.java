@@ -7,16 +7,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Use this annotation to define the block name handled by a {@link BlockProcessor}, or the macro name of a
- * {@link BlockMacroProcessor} or {@link InlineMacroProcessor}.
+ * This annotation allows to define multiple {@link DefaultAttribute} annotations for one type.
  * <p>Applicable for:
  * <table>
  * <tr><td>BlockMacroProcessor</td><td>&#10003;</td></tr>
  * <tr><td>BlockProcessor</td><td>&#10003;</td></tr>
  * <tr><td>BlockProcessor</td><td>&#10003;</td></tr>
  * <tr><td>DocInfoProcessor</td><td></td></tr>
- * <tr><td>IncludeProcessor</td><td></td></tr>
- * <tr><td>InlineMacroProcessor</td><td></td></tr>
+ * <tr><td>IncludeProcessor</td><td>&#10003;</td></tr>
+ * <tr><td>InlineMacroProcessor</td><td>&#10003;</td></tr>
  * <tr><td>Postprocessor</td><td></td></tr>
  * <tr><td>Preprocessor</td><td></td></tr>
  * <tr><td>Treeprocessor</td><td></td></tr>
@@ -25,8 +24,8 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Name {
+public @interface DefaultAttributes {
 
-    String value();
+    DefaultAttribute[] value();
 
 }
