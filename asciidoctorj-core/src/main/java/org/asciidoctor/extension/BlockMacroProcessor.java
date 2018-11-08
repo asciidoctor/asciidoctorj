@@ -8,11 +8,11 @@ import java.util.Map;
 public abstract class BlockMacroProcessor extends MacroProcessor<StructuralNode> {
 
     public BlockMacroProcessor() {
-        this(null, new HashMap<String, Object>());
+        this(null, new HashMap<>());
     }
 
     public BlockMacroProcessor(String macroName) {
-        this(macroName, new HashMap<String, Object>());
+        this(macroName, new HashMap<>());
     }
     
     public BlockMacroProcessor(String macroName, Map<String, Object> config) {
