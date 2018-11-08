@@ -28,10 +28,12 @@ class WhenAPdfDocumentIsRenderedToStream extends Specification {
     def 'should render PDF to ByteArrayOutputStream'() throws Exception {
 
         given:
+        String imageFileName = UUID.randomUUID()
+
         File referenceFile = new File('build/stream-test-file.pdf')
         File streamFile = new File('build/stream-test-stream.pdf')
-
-        String imageFileName = UUID.randomUUID()
+        File imagesOutDir = new File(testFolder.root, 'images-dir')
+        def createdCacheImage = new File(testFolder.root, ".asciidoctor/diagram/${imageFileName}.png.cache")
 
         String testDoc = """= Test
 
@@ -72,6 +74,8 @@ c
         def now = new Date()
 
         def attrs = AttributesBuilder.attributes()
+                .attribute('outdir', testFolder.root.absolutePath)
+                .attribute('imagesdir', imagesOutDir.name)
                 .attribute('docdatetime', dateTimeFormatter.format(now))
                 .attribute('localdatetime', dateTimeFormatter.format(now))
                 .attribute('reproducible', 'true')
@@ -99,6 +103,7 @@ c
         def toFileBytes = referenceFile.bytes
 
         then:
+        createdCacheImage.exists()
         toStreamBytes.length == toFileBytes.length
         Arrays.equals(toStreamBytes, toFileBytes)
     }
