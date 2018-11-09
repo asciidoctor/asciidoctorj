@@ -79,15 +79,23 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
     }
 
     public static JRubyAsciidoctor create(String gemPath) {
-        return processRegistrations(createJRubyAsciidoctorInstance(Collections.singletonMap(GEM_PATH, gemPath), new ArrayList<>()));
+        return processRegistrations(createJRubyAsciidoctorInstance(Collections.singletonMap(GEM_PATH, gemPath), new ArrayList<String>(), null));
     }
 
     public static JRubyAsciidoctor create(List<String> loadPaths) {
-        return processRegistrations(createJRubyAsciidoctorInstance(null, loadPaths));
+        return processRegistrations(createJRubyAsciidoctorInstance(null, loadPaths, null));
+    }
+
+    public static JRubyAsciidoctor create(ClassLoader classloader) {
+        return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<String>(), classloader));
+    }
+
+    public static JRubyAsciidoctor create(ClassLoader classloader, String gemPath) {
+        return processRegistrations(createJRubyAsciidoctorInstance(Collections.singletonMap(GEM_PATH, gemPath), new ArrayList<String>(), classloader));
     }
 
     public static JRubyAsciidoctor create(List<String> loadPaths, String gemPath) {
-        return processRegistrations(createJRubyAsciidoctorInstance(Collections.singletonMap(GEM_PATH, gemPath), loadPaths));
+        return processRegistrations(createJRubyAsciidoctorInstance(Collections.singletonMap(GEM_PATH, gemPath), loadPaths, null));
     }
 
     private static JRubyAsciidoctor processRegistrations(JRubyAsciidoctor asciidoctor) {
@@ -109,11 +117,15 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
         new LogHandlerRegistryExecutor(asciidoctor).registerAllLogHandlers();
     }
 
-    private static JRubyAsciidoctor createJRubyAsciidoctorInstance(Map<String, String> environmentVars, List<String> loadPaths) {
+    private static JRubyAsciidoctor createJRubyAsciidoctorInstance(Map<String, String> environmentVars, List<String> loadPaths, ClassLoader classloader) {
 
-        Map<String, String> env = environmentVars != null ? new HashMap<>(environmentVars) : new HashMap<>();
+        Map<String, String> env = environmentVars != null ?
+                new HashMap<String, String>(environmentVars) : new HashMap<String, String>();
 
         RubyInstanceConfig config = createOptimizedConfiguration();
+        if (classloader != null) {
+            config.setLoader(classloader);
+        }
         injectEnvironmentVariables(config, env);
 
         Ruby rubyRuntime = JavaEmbedUtils.initialize(loadPaths, config);
