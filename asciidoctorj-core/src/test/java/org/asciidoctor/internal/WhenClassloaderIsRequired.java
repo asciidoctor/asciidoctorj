@@ -1,34 +1,32 @@
 package org.asciidoctor.internal;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import org.asciidoctor.Asciidoctor;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-class AsciiDoctorJClassloaderTestRunnable implements Runnable {
+ class AsciiDoctorJClassloaderTestRunnable implements Runnable {
     private boolean loadingsucceeded = false;
     private ClassLoader classloader = null;
 
-    public boolean getLoadingsucceeded() {
+    public boolean getLoadingsucceeded(){
         return loadingsucceeded;
     }
 
-    public void setClassloader(ClassLoader newclassloader) {
-        classloader = newclassloader;
-    }
+     public void setClassloader(ClassLoader newclassloader){
+         classloader = newclassloader;
+     }
 
     public void run() {
-        try {
-            if (classloader == null) {
+        try{
+            if(classloader == null) {
                 Asciidoctor.Factory.create();
             } else {
-                Thread.currentThread().setContextClassLoader(classloader);
-                Asciidoctor.Factory.create();
+                Asciidoctor.Factory.create(classloader);
             }
             loadingsucceeded = true;
-        } catch (org.jruby.exceptions.RaiseException exp) {
+        } catch(org.jruby.exceptions.RaiseException exp) {
             loadingsucceeded = false;
         }
     }
@@ -45,11 +43,11 @@ public class WhenClassloaderIsRequired {
      */
     @Test
     @Ignore("Behavior changed in JRuby 9000. It no longer only uses the TCCL by default")
-    public void contentsOfJRubyCompleteShouldFailToLoadWithoutPassingClassloader() throws Exception {
-        ClassLoader currentclassloader = this.getClass().getClassLoader();
-        ClassLoader rootclassloader = currentclassloader.getParent();
+    public void contentsOfJRubyCompleteShouldFailToLoadWithoutPassingClassloader() throws Exception{
+        ClassLoader currentclassloader =  this.getClass().getClassLoader();
+        ClassLoader rootclassloader =  currentclassloader.getParent();
         AsciiDoctorJClassloaderTestRunnable runnable = new AsciiDoctorJClassloaderTestRunnable();
-        final Thread thread = new Thread(runnable);
+        final Thread thread = new Thread( runnable );
         // make the thread use  classloader context  without JRuby and all
         thread.setContextClassLoader(rootclassloader);
         thread.start();
@@ -58,12 +56,12 @@ public class WhenClassloaderIsRequired {
     }
 
     @Test
-    public void contentsOfJRubyCompleteShouldSucceedWhenPassingTheCorrectClassloader() throws Exception {
-        ClassLoader currentclassloader = this.getClass().getClassLoader();
-        ClassLoader rootclassloader = currentclassloader.getParent();
+    public void contentsOfJRubyCompleteShouldSucceedWhenPassingTheCorrectClassloader() throws Exception{
+        ClassLoader currentclassloader =  this.getClass().getClassLoader();
+        ClassLoader rootclassloader =  currentclassloader.getParent();
         AsciiDoctorJClassloaderTestRunnable runnable = new AsciiDoctorJClassloaderTestRunnable();
         runnable.setClassloader(currentclassloader);
-        final Thread thread = new Thread(runnable);
+        final Thread thread = new Thread( runnable );
         // make the thread use  classloader context  without JRuby and all
         thread.setContextClassLoader(rootclassloader);
         thread.start();
