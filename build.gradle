@@ -39,6 +39,7 @@ ext {
   arquillianVersion = '1.1.10.Final'
   arquillianSpockVersion = '1.0.0.Beta3'
   asciidoctorjPdfVersion = '1.5.0-alpha.16'
+  asciidoctorjEpub3Version = '1.5.0-alpha.8.1'
   asciidoctorjDiagramVersion = '1.5.10'
   commonsioVersion = '2.4'
   guavaVersion = '18.0'
@@ -54,7 +55,6 @@ ext {
 
   // gem versions
   asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.8'
-  asciidoctorEpub3GemVersion = project(':asciidoctorj-epub3').version.replace('-', '.')
   coderayGemVersion = '1.1.0'
 
   codenarcVersion = '0.24.1'

@@ -1,5 +1,0 @@
-= Book Title
-Author Name
-:imagesdir: images
-
-include::content-document.adoc[]
