@@ -811,6 +811,42 @@ public interface Asciidoctor {
         }
 
         /**
+         * Creates a new instance of Asciidoctor and sets a specific classloader for the  JRuby runtime to use.
+         * This method is for use in environments like OSGi.
+         * To initialize Asciidoctor in OSGi create the Asciidoctor instance like this:
+         *
+         * <pre>
+         * org.jruby.javasupport.JavaEmbedUtils.initialize(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib"));
+         * Asciidoctor asciidoctor = Asciidoctor.Factory.create(this.getClass().getClassLoader()); <3>
+         * </pre>
+         *
+         * @param classloader
+         * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
+         *         Ruby calls.
+         */
+        public static Asciidoctor create(ClassLoader classloader) {
+            return JRubyAsciidoctor.create(classloader);
+        }
+
+        /**
+         * Creates a new instance of Asciidoctor and sets a specific classloader and gempath for the JRuby runtime to use.
+         * This method is for use in environments like OSGi.
+         * To initialize Asciidoctor in OSGi create the Asciidoctor instance like this:
+         *
+         * <pre>
+         * org.jruby.javasupport.JavaEmbedUtils.initialize(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib"));
+         * Asciidoctor asciidoctor = Asciidoctor.Factory.create(this.getClass().getClassLoader()); <3>
+         * </pre>
+         * 
+         * @param classloader
+         * @param gemPath
+         * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
+         */
+        public static Asciidoctor create(ClassLoader classloader, String gemPath) {
+            return JRubyAsciidoctor.create(classloader, gemPath);
+        }
+
+        /**
          * Creates a new instance of Asciidoctor and sets loadPath to provided paths.
          * The gem path of the Ruby instance is set to the gemPath parameter.
          *
