@@ -63,7 +63,7 @@ public class WhenAsciidoctorLogsToConsole {
         final MemoryLogHandler memoryLogHandler = registerMemoryLogHandler();
 
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
-        String renderContent = asciidoctor.renderFile(inputFile,
+        String renderContent = asciidoctor.convertFile(inputFile,
             options()
                 .inPlace(true)
                 .safe(SafeMode.SERVER)
@@ -102,7 +102,7 @@ public class WhenAsciidoctorLogsToConsole {
         asciidoctor.registerLogHandler(logHandler);
 
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
-        String renderContent = asciidoctor.renderFile(inputFile,
+        String renderContent = asciidoctor.convertFile(inputFile,
             options()
                 .inPlace(true)
                 .safe(SafeMode.SERVER)
@@ -143,7 +143,7 @@ public class WhenAsciidoctorLogsToConsole {
         asciidoctor.registerLogHandler(logHandler);
 
         File inputFile = classpath.getResource("documentwithinvalidrefs.adoc");
-        String renderContent = asciidoctor.renderFile(inputFile,
+        String renderContent = asciidoctor.convertFile(inputFile,
             options()
                 .inPlace(true)
                 .safe(SafeMode.SERVER)
@@ -176,7 +176,7 @@ public class WhenAsciidoctorLogsToConsole {
 
         // Now render via second instance and check that there is no notification
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
-        String renderContent1 = secondInstance.renderFile(inputFile,
+        String renderContent1 = secondInstance.convertFile(inputFile,
             options()
                 .inPlace(true)
                 .safe(SafeMode.SERVER)
@@ -190,7 +190,7 @@ public class WhenAsciidoctorLogsToConsole {
         assertEquals(0, logRecords.size());
 
         // Now render via first instance and check that notifications appeared.
-        String renderContent = asciidoctor.renderFile(inputFile,
+        String renderContent = asciidoctor.convertFile(inputFile,
             options()
                 .inPlace(true)
                 .safe(SafeMode.SERVER)
@@ -223,7 +223,7 @@ public class WhenAsciidoctorLogsToConsole {
         asciidoctor.registerLogHandler(logHandler);
 
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
-        String renderContent = asciidoctor.renderFile(inputFile,
+        String renderContent = asciidoctor.convertFile(inputFile,
             options()
                 .inPlace(true)
                 .safe(SafeMode.SERVER)
@@ -239,7 +239,7 @@ public class WhenAsciidoctorLogsToConsole {
 
         asciidoctor.unregisterLogHandler(logHandler);
 
-        asciidoctor.renderFile(inputFile,
+        asciidoctor.convertFile(inputFile,
             options()
                 .inPlace(true)
                 .safe(SafeMode.SERVER)
@@ -257,7 +257,7 @@ public class WhenAsciidoctorLogsToConsole {
     public void shouldNotifyLogHandlerService() throws Exception {
 
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
-        String renderContent = asciidoctor.renderFile(inputFile,
+        String renderContent = asciidoctor.convertFile(inputFile,
             options()
                 .inPlace(true)
                 .safe(SafeMode.SERVER)

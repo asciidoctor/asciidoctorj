@@ -40,7 +40,7 @@ public class WhenRubyExtensionGroupIsRegistered {
             .loadRubyClass(getClass().getResourceAsStream("/ruby-extensions/YellRubyBlock.rb")).rubyBlock("rubyyell", "YellRubyBlock")
             .register();
 
-        String content = asciidoctor.render(
+        String content = asciidoctor.convert(
             "= Block Yell Example\n" +
                 "\n" +
                 "content\n" +
@@ -62,7 +62,7 @@ public class WhenRubyExtensionGroupIsRegistered {
             .loadRubyClass(getClass().getResourceAsStream("/ruby-extensions/YellRubyBlock.rb")).rubyBlock("YellRubyBlock")
             .register();
 
-        String content = asciidoctor.render(
+        String content = asciidoctor.convert(
             "= Block Yell Example\n" +
                 "\n" +
                 "content\n" +
@@ -85,7 +85,7 @@ public class WhenRubyExtensionGroupIsRegistered {
             .rubyBlock("rubyyell", "YellRubyBlock");
 
         {
-            String contentWithoutBlock = asciidoctor.renderFile(
+            String contentWithoutBlock = asciidoctor.convertFile(
                 classpath.getResource("sample-with-ruby-yell-block.ad"),
                 options().toFile(false).get());
 
@@ -96,7 +96,7 @@ public class WhenRubyExtensionGroupIsRegistered {
         }
         {
             extensionGroup.register();
-            String content = asciidoctor.renderFile(
+            String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-ruby-yell-block.ad"),
                 options().toFile(false).get());
 
@@ -108,7 +108,7 @@ public class WhenRubyExtensionGroupIsRegistered {
         {
             extensionGroup.unregister();
 
-            String contentWithoutBlock = asciidoctor.renderFile(
+            String contentWithoutBlock = asciidoctor.convertFile(
                 classpath.getResource("sample-with-ruby-yell-block.ad"),
                 options().toFile(false).get());
 
@@ -127,7 +127,7 @@ public class WhenRubyExtensionGroupIsRegistered {
             .loadRubyClass(getClass().getResourceAsStream("/ruby-extensions/gist-block-macro.rb")).rubyBlockMacro("mygist", "GistBlockMacro")
             .register();
 
-        String content = asciidoctor.render(
+        String content = asciidoctor.convert(
             ".My Gist\n" +
                 "mygist::123456[]",
             options().toFile(false).get());
@@ -146,7 +146,7 @@ public class WhenRubyExtensionGroupIsRegistered {
             .loadRubyClass(getClass().getResourceAsStream("/ruby-extensions/gist-block-macro.rb")).rubyBlockMacro("GistBlockMacro")
             .register();
 
-        String content = asciidoctor.render(
+        String content = asciidoctor.convert(
             ".My Gist\n" +
                 "gist::42[]",
             options().toFile(false).get());
@@ -165,7 +165,7 @@ public class WhenRubyExtensionGroupIsRegistered {
             .loadRubyClass(getClass().getResourceAsStream("/ruby-extensions/man-inline-macro.rb")).rubyInlineMacro("myman", "ManInlineMacro")
             .register();
 
-        String content = asciidoctor.render(
+        String content = asciidoctor.convert(
             "= Man Inline Macro Extension\n" +
                 "\n" +
                 "See myman:gittutorial[7] to get started.",
@@ -185,7 +185,7 @@ public class WhenRubyExtensionGroupIsRegistered {
             .loadRubyClass(getClass().getResourceAsStream("/ruby-extensions/man-inline-macro.rb")).rubyInlineMacro("ManInlineMacro")
             .register();
 
-        String content = asciidoctor.render(
+        String content = asciidoctor.convert(
             "= Man Inline Macro Extension\n" +
                 "\n" +
                 "See man:dockertutorial[7] to get started.",
@@ -206,7 +206,7 @@ public class WhenRubyExtensionGroupIsRegistered {
             .rubyTreeprocessor("ShellSessionTreeProcessor")
             .register();
 
-        String content = this.asciidoctor.render(
+        String content = this.asciidoctor.convert(
             " $ echo \"Hello, World!\"\n" +
                 " > Hello, World!\n" +
                 "\n" +
@@ -230,7 +230,7 @@ public class WhenRubyExtensionGroupIsRegistered {
             .rubyPostprocessor("XmlEntityPostprocessor")
             .register();
 
-        String content = asciidoctor.render(
+        String content = asciidoctor.convert(
             "Read &sect;2 and it&apos;ll all be clear.",
             options().toFile(false).get());
 
@@ -245,7 +245,7 @@ public class WhenRubyExtensionGroupIsRegistered {
             .rubyIncludeProcessor("ResponseIncludeProcessor")
             .register();
 
-        String content = asciidoctor.render(
+        String content = asciidoctor.convert(
             "The response to everything is\n" +
                 "\n" +
                 "include::response[]" +
@@ -268,7 +268,7 @@ public class WhenRubyExtensionGroupIsRegistered {
             .rubyPreprocessor("FrontMatterPreprocessor")
             .register();
 
-        String content = this.asciidoctor.render(
+        String content = this.asciidoctor.convert(
             "---\n" +
                 "tags: [announcement, website]\n" +
                 "---\n" +
@@ -304,7 +304,7 @@ public class WhenRubyExtensionGroupIsRegistered {
             .rubyDocinfoProcessor("ViewResultDocinfoProcessor")
             .register();
 
-        String content = asciidoctor.render(
+        String content = asciidoctor.convert(
             "= View Result Sample             \n" +
                 "                                 \n" +
                 ".This will have a link next to it\n" +

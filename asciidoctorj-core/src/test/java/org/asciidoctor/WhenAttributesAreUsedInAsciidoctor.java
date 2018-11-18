@@ -62,7 +62,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         
         Attributes attributes = attributes().hiddenUriScheme(true).get();
         
-        String content = asciidoctor.render("The AsciiDoc project is located at http://asciidoc.org.", OptionsBuilder.options().attributes(attributes));
+        String content = asciidoctor.convert("The AsciiDoc project is located at http://asciidoc.org.", OptionsBuilder.options().attributes(attributes));
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
@@ -75,7 +75,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         
         Attributes attributes = attributes().attribute("version", "1.0.0").compatMode(CompatMode.LEGACY).get();
         
-        String content = asciidoctor.render("The `AsciiDoc {version}` project.", OptionsBuilder.options().attributes(attributes));
+        String content = asciidoctor.convert("The `AsciiDoc {version}` project.", OptionsBuilder.options().attributes(attributes));
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element code = doc.getElementsByTag("code").first();
@@ -88,7 +88,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         
         Attributes attributes = attributes().attribute("version", "1.0.0").get();
         
-        String content = asciidoctor.render("The `AsciiDoc {version}` project.", OptionsBuilder.options().attributes(attributes));
+        String content = asciidoctor.convert("The `AsciiDoc {version}` project.", OptionsBuilder.options().attributes(attributes));
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element code = doc.getElementsByTag("code").first();
@@ -101,7 +101,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         
         Attributes attributes = attributes().cacheUri(true).get();
         
-        String content = asciidoctor.render("read my lips", OptionsBuilder.options().attributes(attributes));
+        String content = asciidoctor.convert("read my lips", OptionsBuilder.options().attributes(attributes));
 
         assertThat(content, is(notNullValue()));
         
@@ -115,7 +115,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
                 .toDir(testFolder.getRoot()).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("math.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("math.asciidoc"), options);
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(), "math.html"), "UTF-8");
         
@@ -130,7 +130,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
                 .toDir(testFolder.getRoot()).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("appendix.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("appendix.asciidoc"), options);
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(),
                 "appendix.html"), "UTF-8");
@@ -144,7 +144,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         
         Attributes attributes = attributes().hardbreaks(true).get();
         
-        String content = asciidoctor.render("read\nmy\nlips", OptionsBuilder.options().attributes(attributes));
+        String content = asciidoctor.convert("read\nmy\nlips", OptionsBuilder.options().attributes(attributes));
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element paragraph = doc.getElementsByAttributeValue("class","paragraph").first();
@@ -160,7 +160,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
                 .toDir(testFolder.getRoot()).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("multiple_levels.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("multiple_levels.asciidoc"), options);
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(), "multiple_levels.html"), "UTF-8");
         
@@ -178,7 +178,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
                 .toDir(testFolder.getRoot()).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(), "rendersample.html"), "UTF-8");
         
@@ -195,7 +195,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
             .headerFooter(false)
             .get();
 
-        final Document doc = Jsoup.parse(asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options));
+        final Document doc = Jsoup.parse(asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options));
 
         assertEquals(1, doc.getElementsByTag("h1").size());
         assertEquals("Document Title", doc.getElementsByTag("h1").get(0).text());
@@ -209,7 +209,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
             .headerFooter(false)
             .get();
 
-        final Document doc = Jsoup.parse(asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options));
+        final Document doc = Jsoup.parse(asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options));
 
         assertEquals(1, doc.getElementsByTag("h1").size());
         assertEquals("Document Title", doc.getElementsByTag("h1").get(0).text());
@@ -223,7 +223,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
             .headerFooter(false)
             .get();
 
-        final Document doc = Jsoup.parse(asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options));
+        final Document doc = Jsoup.parse(asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options));
 
         assertEquals(0, doc.getElementsByTag("h1").size());
     }
@@ -236,7 +236,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
             .headerFooter(false)
             .get();
 
-        final Document doc = Jsoup.parse(asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options));
+        final Document doc = Jsoup.parse(asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options));
 
         assertEquals(0, doc.getElementsByTag("h1").size());
     }
@@ -249,7 +249,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
             .headerFooter(true)
             .get();
 
-        final Document doc = Jsoup.parse(asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options));
+        final Document doc = Jsoup.parse(asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options));
 
         assertEquals(1, doc.getElementsByTag("h1").size());
         assertEquals("Document Title", doc.getElementsByTag("h1").get(0).text());
@@ -264,7 +264,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
             .headerFooter(true)
             .get();
 
-        final Document doc = Jsoup.parse(asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options));
+        final Document doc = Jsoup.parse(asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options));
 
         assertEquals(0, doc.getElementsByTag("h1").size());
     }
@@ -278,7 +278,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
             .headerFooter(true)
             .get();
 
-        final Document doc = Jsoup.parse(asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options));
+        final Document doc = Jsoup.parse(asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options));
 
         assertEquals(0, doc.getElementsByTag("h1").size());
     }
@@ -292,7 +292,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
                 .toDir(testFolder.getRoot()).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(),
                 "rendersample.html"), "UTF-8");
@@ -307,7 +307,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
                 .toDir(testFolder.getRoot()).get();
 
-        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(),
                 "rendersample.html"), "UTF-8");
@@ -326,7 +326,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Attributes attributes = attributes().skipFrontMatter(true).get();
         Options options = options().toFile(false).inPlace(false).attributes(attributes).get();
 
-        String content = asciidoctor.renderFile(classpath.getResource("renderwithfrontmatter.adoc"), options);
+        String content = asciidoctor.convertFile(classpath.getResource("renderwithfrontmatter.adoc"), options);
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements hrElements = doc.getElementsByTag("hr");
 
@@ -340,7 +340,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Attributes attributes = attributes().setAnchors(true).get();
         Options options = options().inPlace(false).toFile(false).attributes(attributes).get();
 
-        String content = asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+        String content = asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element anchorElement = doc.select("a[class=anchor]").first();
@@ -355,7 +355,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Attributes attributes = attributes().ignoreUndefinedAttributes(true).get();
         Options options = options().toFile(false).attributes(attributes).get();
 
-        String renderContent = asciidoctor.renderFile(
+        String renderContent = asciidoctor.convertFile(
                 classpath.getResource("documentwithundefinedattribute.asciidoc"),
                 options);
         assertThat(renderContent, containsString("{bogus-attribute}"));
@@ -367,7 +367,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Attributes attributes = attributes().tableOfContents(true).get();
         Options options = options().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("tocsample.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("tocsample.asciidoc"), options);
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(),
                 "tocsample.html"), "UTF-8");
@@ -382,7 +382,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Attributes attributes = attributes().attributeMissing("drop-line").get();
         Options options = options().attributes(attributes).get();
 
-        String renderContent = asciidoctor.render("This is\n"
+        String renderContent = asciidoctor.convert("This is\n"
                 + "blah blah {foobarbaz}\n" + "all there is.", options);
 
         assertThat(renderContent, not(containsString("{foobarbaz}")));
@@ -395,7 +395,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Attributes attributes = attributes().attributeUndefined("drop").get();
         Options options = options().attributes(attributes).get();
         
-        String renderContent = asciidoctor.render(":foo:\n\n{set:foo!}\n{foo}yes", options);
+        String renderContent = asciidoctor.convert(":foo:\n\n{set:foo!}\n{foo}yes", options);
 
         Document doc = Jsoup.parse(renderContent, "UTF-8");
         Element paragraph = doc.getElementsByTag("p").first();
@@ -410,7 +410,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .toFile(new File(testFolder.getRoot(), "toc2sample.html"))
                 .safe(SafeMode.UNSAFE).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("toc2sample.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("toc2sample.asciidoc"), options);
 
         File renderedFile = new File(testFolder.getRoot(), "toc2sample.html");
         Document doc = Jsoup.parse(renderedFile, "UTF-8");
@@ -431,7 +431,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .toFile(new File(testFolder.getRoot(), "toc2sample.html"))
                 .safe(SafeMode.UNSAFE).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("toc2sample.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("toc2sample.asciidoc"), options);
 
         File renderedFile = new File(testFolder.getRoot(), "toc2sample.html");
         Document doc = Jsoup.parse(renderedFile, "UTF-8");
@@ -451,7 +451,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
                 .toDir(testFolder.getRoot()).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
         // String readFull = IOUtils.readFull(new FileInputStream(new
         // File(testFolder.getRoot(), "rendersample.html")));
@@ -472,7 +472,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Attributes attributes = attributes("toc numbered").get();
         Options options = options().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("tocsample.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("tocsample.asciidoc"), options);
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(),
                 "tocsample.html"), "UTF-8");
@@ -490,7 +490,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .get();
         Options options = options().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).get();
 
-       asciidoctor.renderFile(classpath.getResource("tocsample.asciidoc"), options);
+       asciidoctor.convertFile(classpath.getResource("tocsample.asciidoc"), options);
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(),
                 "tocsample.html"), "UTF-8");
@@ -507,7 +507,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Attributes attributes = attributes().tableOfContents(false).get();
         Options options = options().toFile(false).attributes(attributes).get();
 
-        String renderContent = asciidoctor.renderFile(
+        String renderContent = asciidoctor.convertFile(
                 classpath.getResource("tocsample.asciidoc"), options);
 
         Document doc = Jsoup.parse(renderContent, "UTF-8");
@@ -525,7 +525,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
                 .toDir(testFolder.getRoot()).attributes(attributes).get();
 
-        asciidoctor.renderFile(
+        asciidoctor.convertFile(
                 classpath.getResource("rendersample.asciidoc"), options);
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(),
@@ -544,7 +544,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
                 .toDir(testFolder.getRoot()).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(),
                 "rendersample.html"), "UTF-8");
@@ -564,7 +564,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .mkDirs(true)
                 .attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(),
                 "rendersample.html"), "UTF-8");
@@ -581,7 +581,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
                 .toDir(testFolder.getRoot()).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
         // String readFull = IOUtils.readFull(new FileInputStream(new
         // File(testFolder.getRoot(), "rendersample.html")));
@@ -603,7 +603,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
                 .toDir(testFolder.getRoot()).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
         Document doc = Jsoup.parse(new File(testFolder.getRoot(),
                 "rendersample.html"), "UTF-8");
@@ -620,7 +620,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .attributes(attributes).get();
 
         File inputFile = classpath.getResource("rendersample.asciidoc");
-        asciidoctor.renderFile(inputFile, options);
+        asciidoctor.convertFile(inputFile, options);
 
         File cssFile =  new File(inputFile.getParent(),"asciidoctor.css");
         assertThat(cssFile.exists(), is(true));
@@ -635,7 +635,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .attributes(attributes).get();
 
         File inputFile = classpath.getResource("rendersample.asciidoc");
-        asciidoctor.renderFile(inputFile, options);
+        asciidoctor.convertFile(inputFile, options);
 
         try {
             File cssFile = new File(inputFile.getParent(), "asciidoctor.css");
@@ -654,7 +654,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .attributes(attributes).get();
 
         File inputFile = classpath.getResource("rendersample.asciidoc");
-        asciidoctor.renderFile(inputFile, options);
+        asciidoctor.convertFile(inputFile, options);
 
         try {
             File cssFile = new File(inputFile.getParent(), "asciidoctor.css");
@@ -673,7 +673,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .toFile(new File(testFolder.getRoot(), "output.html"))
                 .safe(SafeMode.UNSAFE).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
         File cssFile = new File(testFolder.getRoot(), "asciidoctor.css");
         assertThat(cssFile.exists(), is(true));
@@ -687,7 +687,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Options options = options().inPlace(false).toDir(testFolder.getRoot())
                 .safe(SafeMode.UNSAFE).attributes(attributes).get();
 
-        asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+        asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
         File cssFile = new File(testFolder.getRoot(), "asciidoctor.css");
         assertThat(cssFile.exists(), is(true));
@@ -702,7 +702,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .toFile(new File(testFolder.getRoot(), "output.html"))
                 .safe(SafeMode.UNSAFE).attributes(attributes).get();
 
-        asciidoctor.render("This is Asciidoctor", options);
+        asciidoctor.convert("This is Asciidoctor", options);
 
         File cssFile = new File(testFolder.getRoot(), "asciidoctor.css");
         assertThat(cssFile.exists(), is(true));
@@ -716,7 +716,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Options options = options().inPlace(false).toDir(testFolder.getRoot())
                 .safe(SafeMode.UNSAFE).attributes(attributes).get();
 
-        asciidoctor.render("This is Asciidoctor", options);
+        asciidoctor.convert("This is Asciidoctor", options);
 
         File cssFile = new File(testFolder.getRoot(), "asciidoctor.css");
         assertThat(cssFile.exists(), is(true));
@@ -734,7 +734,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 Attributes.IMAGE_ICONS).asMap();
         Map<String, Object> options = options().attributes(attributes).asMap();
 
-        String result = asciidoctor.render(toString(content), options);
+        String result = asciidoctor.convert(toString(content), options);
         result = result.replaceAll("<img(.*?)>", "<img$1/>");
         assertRenderedAdmonitionIcon(result);
 
@@ -751,7 +751,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 Attributes.FONT_ICONS).asMap();
         Map<String, Object> options = options().attributes(attributes).asMap();
 
-        String result = asciidoctor.render(toString(content), options);
+        String result = asciidoctor.convert(toString(content), options);
         assertRenderedFontAwesomeAdmonitionIcon(result);
 
     }
@@ -767,7 +767,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .icons(Attributes.IMAGE_ICONS).iconsDir("icons").asMap();
         Map<String, Object> options = options().attributes(attributes).asMap();
 
-        String renderContent = asciidoctor.render(toString(content), options);
+        String renderContent = asciidoctor.convert(toString(content), options);
 
         Document doc = Jsoup.parse(renderContent, "UTF-8");
         Elements image = doc.select("img[src]");
@@ -782,7 +782,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Attributes attributes = attributes().linkAttrs(true).get();
         Options options = options().attributes(attributes).get();
 
-        String content = asciidoctor.render(
+        String content = asciidoctor.convert(
                 "http://google.com[Google, window=\"_blank\"]", options);
 
         Document doc = Jsoup.parse(content);
@@ -799,7 +799,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Attributes attributes = attributes().experimental(true).get();
         Options options = options().attributes(attributes).get();
 
-        String content = asciidoctor.render("kbd:[F11]", options);
+        String content = asciidoctor.convert("kbd:[F11]", options);
 
         Document doc = Jsoup.parse(content);
         Elements image = doc.select("kbd");
@@ -816,7 +816,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Options options = options().inPlace(true).attributes(attributes).get();
 
         File inputFile = classpath.getResource("documentwithnote.asciidoc");
-        asciidoctor.renderFile(inputFile, options);
+        asciidoctor.convertFile(inputFile, options);
 
         File expectedFile = new File(inputFile.getParent(), "documentwithnote.html");
         Document doc = Jsoup.parse(expectedFile, "UTF-8");

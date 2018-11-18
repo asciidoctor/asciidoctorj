@@ -50,7 +50,7 @@ public class WhenConverterIsRegistered {
     public void shouldRegisterAndExecuteGivenConverter() {
         asciidoctor.javaConverterRegistry().register(TextConverter.class, "test");
 
-        String result = asciidoctor.render("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend("test"));
+        String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend("test"));
 
         assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
     }
@@ -61,7 +61,7 @@ public class WhenConverterIsRegistered {
         asciidoctor.javaConverterRegistry().register(TextConverter.class);
         asciidoctor.javaConverterRegistry().register(DummyConverter.class);
 
-        String result = asciidoctor.render("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend(TextConverter.DEFAULT_FORMAT));
+        String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend(TextConverter.DEFAULT_FORMAT));
 
         assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
     }
@@ -71,7 +71,7 @@ public class WhenConverterIsRegistered {
         // Register as default converter
         asciidoctor.javaConverterRegistry().register(DummyConverter.class);
 
-        String result = asciidoctor.render("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options());
+        String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options());
 
         assertThat(result, is("Dummy"));
     }
@@ -97,7 +97,7 @@ public class WhenConverterIsRegistered {
         try {
             Thread.currentThread().setContextClassLoader(new URLClassLoader(new URL[]{classpath.getResource("serviceloadertest/3").toURI().toURL()}));
             asciidoctor = JRubyAsciidoctor.create();
-            String result = asciidoctor.render("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend("extensiontext"));
+            String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend("extensiontext"));
 
             assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
         } finally {

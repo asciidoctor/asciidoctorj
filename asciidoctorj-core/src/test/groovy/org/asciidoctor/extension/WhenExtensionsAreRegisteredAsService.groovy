@@ -55,7 +55,7 @@ class WhenExtensionsAreRegisteredAsService extends Specification {
                 .toFile(new File(testFolder.getRoot(), FILENAME_HTML))
                 .safe(SafeMode.UNSAFE).get()
 
-        asciidoctor.renderFile(classpath.getResource('arrows-and-boxes-example.ad'), options)
+        asciidoctor.convertFile(classpath.getResource('arrows-and-boxes-example.ad'), options)
 
         then:
         File renderedFile = new File(testFolder.getRoot(), FILENAME_HTML)

@@ -39,7 +39,7 @@ Parsing will crash when processing this block
         asciidoctor.javaExtensionRegistry().block(blockProcessor)
 
         when:
-        asciidoctor.render(document, OptionsBuilder.options().toFile(false))
+        asciidoctor.convert(document, OptionsBuilder.options().toFile(false))
 
         then:
         Exception e = thrown()
@@ -54,7 +54,7 @@ Parsing will crash when processing this block
         asciidoctor.javaExtensionRegistry().block('modify', ConfigModifyingBlockProcessor)
 
         when:
-        asciidoctor.render(document, OptionsBuilder.options().toFile(false))
+        asciidoctor.convert(document, OptionsBuilder.options().toFile(false))
 
         then:
         Exception e = thrown()
