@@ -137,9 +137,11 @@ public class AsciidoctorInvoker {
         
 
         // jcommander bug makes this code not working.
-        // if("-".equals(inputFile)) {
-        // return asciidoctor.render(readInputFromStdIn(), options);
-        // }
+        /*
+        if("-".equals(inputFile)) {
+            return asciidoctor.convert(readInputFromStdIn(), options);
+        }
+        */
 
         StringBuilder output = new StringBuilder();
 
@@ -148,7 +150,7 @@ public class AsciidoctorInvoker {
             if (inputFile.canRead()) {
 
                 String renderedFile = asciidoctor
-                        .renderFile(inputFile, options);
+                        .convertFile(inputFile, options);
                 if (renderedFile != null) {
                     output.append(renderedFile).append(
                             System.getProperty("line.separator"));

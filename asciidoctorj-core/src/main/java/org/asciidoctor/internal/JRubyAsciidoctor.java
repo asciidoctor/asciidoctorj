@@ -236,106 +236,94 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
     @Override
     @Deprecated
     public void render(Reader contentReader, Writer rendererWriter, Map<String, Object> options) throws IOException {
-        String content = IOUtils.readFull(contentReader);
-        String renderedContent = render(content, options);
-        IOUtils.writeFull(rendererWriter, renderedContent);
+       convert(contentReader, rendererWriter, options);
     }
 
     @Override
     @Deprecated
     public String[] renderFiles(Collection<File> asciidoctorFiles, Map<String, Object> options) {
-        List<String> asciidoctorContent = renderAllFiles(options, asciidoctorFiles);
-        return asciidoctorContent.toArray(new String[asciidoctorContent.size()]);
+        return convertFiles(asciidoctorFiles, options);
     }
 
     @Override
     @Deprecated
     public String[] renderFiles(Collection<File> asciidoctorFiles, Options options) {
-        return this.renderFiles(asciidoctorFiles, options.map());
+        return this.convertFiles(asciidoctorFiles, options.map());
     }
 
     @Override
     @Deprecated
     public String[] renderDirectory(DirectoryWalker directoryWalker, Map<String, Object> options) {
-
-        final List<File> asciidoctorFiles = scanForAsciiDocFiles(directoryWalker);
-        List<String> asciidoctorContent = renderAllFiles(options, asciidoctorFiles);
-
-        return asciidoctorContent.toArray(new String[asciidoctorContent.size()]);
+        return convertDirectory(directoryWalker, options);
     }
 
-    private List<String> renderAllFiles(Map<String, Object> options, final Collection<File> asciidoctorFiles) {
-        List<String> asciidoctorContent = new ArrayList<String>();
-
+    private List<String> convertAllFiles(Map<String, Object> options, final Collection<File> asciidoctorFiles) {
+        List<String> asciidoctorContent = new ArrayList<>();
         for (File asciidoctorFile : asciidoctorFiles) {
-            String renderedFile = renderFile(asciidoctorFile, options);
-
+            String renderedFile = convertFile(asciidoctorFile, options);
             if (renderedFile != null) {
                 asciidoctorContent.add(renderedFile);
             }
-
         }
-
         return asciidoctorContent;
     }
 
     private List<File> scanForAsciiDocFiles(DirectoryWalker directoryWalker) {
-        final List<File> asciidoctorFiles = directoryWalker.scan();
-        return asciidoctorFiles;
+        return directoryWalker.scan();
     }
 
     @Override
     @Deprecated
     public String render(String content, Options options) {
-        return this.render(content, options.map());
+        return convert(content, options.map());
     }
 
     @Override
     @Deprecated
     public void render(Reader contentReader, Writer rendererWriter, Options options) throws IOException {
-        this.render(contentReader, rendererWriter, options.map());
+        convert(contentReader, rendererWriter, options.map());
     }
 
     @Override
     @Deprecated
     public String renderFile(File filename, Options options) {
-        return this.renderFile(filename, options.map());
+        return convertFile(filename, options.map());
     }
 
     @Override
     @Deprecated
     public String[] renderDirectory(DirectoryWalker directoryWalker, Options options) {
-        return this.renderDirectory(directoryWalker, options.map());
+        return convertDirectory(directoryWalker, options.map());
     }
 
     @Override
     @Deprecated
     public String render(String content, OptionsBuilder options) {
-        return this.render(content, options.asMap());
+        return convert(content, options.asMap());
     }
 
     @Override
     @Deprecated
     public void render(Reader contentReader, Writer rendererWriter, OptionsBuilder options) throws IOException {
-        this.render(contentReader, rendererWriter, options.asMap());
+        convert(contentReader, rendererWriter, options.asMap());
     }
 
     @Override
     @Deprecated
     public String renderFile(File filename, OptionsBuilder options) {
-        return this.renderFile(filename, options.asMap());
+        return convertFile(filename, options.asMap());
     }
 
     @Override
     @Deprecated
     public String[] renderDirectory(DirectoryWalker directoryWalker, OptionsBuilder options) {
-        return this.renderDirectory(directoryWalker, options.asMap());
+        return convertDirectory(directoryWalker, options.asMap());
     }
 
     @Override
     @Deprecated
     public String[] renderFiles(Collection<File> asciidoctorFiles, OptionsBuilder options) {
-        return this.renderFiles(asciidoctorFiles, options.asMap());
+        return convertFiles(asciidoctorFiles, options.asMap());
     }
 
     @Override
@@ -461,17 +449,19 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
     @Override
     public void convert(Reader contentReader, Writer rendererWriter, Map<String, Object> options) throws IOException {
-        this.render(contentReader, rendererWriter, options);
+        String content = IOUtils.readFull(contentReader);
+        String renderedContent = convert(content, options);
+        IOUtils.writeFull(rendererWriter, renderedContent);
     }
 
     @Override
     public void convert(Reader contentReader, Writer rendererWriter, Options options) throws IOException {
-        this.render(contentReader, rendererWriter, options);
+        this.convert(contentReader, rendererWriter, options.map());
     }
 
     @Override
     public void convert(Reader contentReader, Writer rendererWriter, OptionsBuilder options) throws IOException {
-        this.render(contentReader, rendererWriter, options);
+        this.convert(contentReader, rendererWriter, options.asMap());
     }
 
     @Override
@@ -534,32 +524,35 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
     @Override
     public String[] convertDirectory(DirectoryWalker directoryWalker, Map<String, Object> options) {
-        return renderDirectory(directoryWalker, options);
+        final List<File> asciidoctorFiles = scanForAsciiDocFiles(directoryWalker);
+        List<String> asciidoctorContent = convertAllFiles(options, asciidoctorFiles);
+        return asciidoctorContent.toArray(new String[0]);
     }
 
     @Override
     public String[] convertDirectory(DirectoryWalker directoryWalker, Options options) {
-        return renderDirectory(directoryWalker, options);
+        return convertDirectory(directoryWalker, options.map());
     }
 
     @Override
     public String[] convertDirectory(DirectoryWalker directoryWalker, OptionsBuilder options) {
-        return renderDirectory(directoryWalker, options);
+        return convertDirectory(directoryWalker, options.asMap());
     }
 
     @Override
     public String[] convertFiles(Collection<File> asciidoctorFiles, Map<String, Object> options) {
-        return renderFiles(asciidoctorFiles, options);
+        List<String> asciidoctorContent = convertAllFiles(options, asciidoctorFiles);
+        return asciidoctorContent.toArray(new String[0]);
     }
 
     @Override
     public String[] convertFiles(Collection<File> asciidoctorFiles, Options options) {
-        return renderFiles(asciidoctorFiles, options);
+        return convertFiles(asciidoctorFiles, options.map());
     }
 
     @Override
     public String[] convertFiles(Collection<File> asciidoctorFiles, OptionsBuilder options) {
-        return renderFiles(asciidoctorFiles, options);
+        return convertFiles(asciidoctorFiles, options.asMap());
     }
 
     @Override

@@ -28,7 +28,7 @@ This will be replaced by static content from the template
 '''
 
         when:
-        String renderContent = asciidoctor.render(sourceDocument, options)
+        String renderContent = asciidoctor.convert(sourceDocument, options)
 
         then:
         Document doc = Jsoup.parse(renderContent, 'UTF-8')

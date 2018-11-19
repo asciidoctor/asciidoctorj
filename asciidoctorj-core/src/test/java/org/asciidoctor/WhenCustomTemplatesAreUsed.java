@@ -27,7 +27,7 @@ public class WhenCustomTemplatesAreUsed {
     public void document_should_be_rendered_using_given_template_dir() {
         
         Options options = options().templateDir(classpath.getResource("src/custom-backends/haml/html5-tweaks")).toFile(false).get();
-        String renderContent = asciidoctor.renderFile(classpath.getResource("rendersample.asciidoc"), options);
+        String renderContent = asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
         
         Document doc = Jsoup.parse(renderContent, "UTF-8");
         Element paragraph = doc.select("div.content").first();
