@@ -1,7 +1,6 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.ast.DescriptionList;
-import org.asciidoctor.ast.DescriptionListEntry;
 import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.ContentNode;

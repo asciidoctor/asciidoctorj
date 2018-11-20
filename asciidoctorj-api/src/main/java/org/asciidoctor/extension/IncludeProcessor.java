@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.asciidoctor.ast.Document;
 
-public abstract class IncludeProcessor extends Processor {
+public abstract class IncludeProcessor extends BaseProcessor {
 
     public IncludeProcessor() {
         this(new HashMap<>());

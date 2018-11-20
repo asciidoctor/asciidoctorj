@@ -1,7 +1,7 @@
 package org.asciidoctor.extension.processorproxies;
 
-import org.asciidoctor.ast.impl.ContentNodeImpl;
 import org.asciidoctor.ast.ContentModel;
+import org.asciidoctor.ast.impl.ContentNodeImpl;
 import org.asciidoctor.extension.Contexts;
 import org.asciidoctor.extension.DefaultAttribute;
 import org.asciidoctor.extension.DefaultAttributes;
@@ -10,16 +10,13 @@ import org.asciidoctor.extension.Location;
 import org.asciidoctor.extension.Name;
 import org.asciidoctor.extension.PositionalAttributes;
 import org.asciidoctor.extension.Processor;
-import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
 import org.jruby.RubyHash;
 import org.jruby.RubyObject;
 import org.jruby.RubyRegexp;
-import org.jruby.anno.JRubyMethod;
 import org.jruby.javasupport.JavaEmbedUtils;
-import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.jruby.util.RegexpOptions;
 
@@ -72,7 +69,7 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
     private Constructor<T> findConstructorWithMostMatchingArguments(Object... args) {
         int numberOfMatchingArguments = -1;
         Constructor<?> bestConstructor = null;
-        for (Constructor<?> constructor: getProcessorClass().getConstructors()) {
+        for (Constructor<?> constructor : getProcessorClass().getConstructors()) {
             int currentNumberOfArguments = constructor.getParameterTypes().length;
             if (currentNumberOfArguments > numberOfMatchingArguments && isConstructorCandidate(constructor, args)) {
                 numberOfMatchingArguments = currentNumberOfArguments;
@@ -83,7 +80,7 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
             return (Constructor<T>) bestConstructor;
         } else {
             List<Class<?>> expectedTypes = new ArrayList<Class<?>>(args.length);
-            for (Object arg: args) {
+            for (Object arg : args) {
                 if (arg == null) {
                     expectedTypes.add(Void.class);
                 } else {
@@ -145,12 +142,12 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
             Format format = processor.getAnnotation(Format.class);
             switch (format.value()) {
                 case CUSTOM:
-                    rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[] {
+                    rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[]{
                             rubyRuntime.newSymbol("regexp"),
                             convertRegexp(rubyRuntime, format.regexp())
                     });
                 default:
-                    rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[] {
+                    rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[]{
                             rubyRuntime.newSymbol("format"),
                             rubyRuntime.newSymbol(format.value().optionValue().substring(1))
                     });
@@ -163,10 +160,10 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
         if (processor.isAnnotationPresent(Contexts.class)) {
             Contexts contexts = processor.getAnnotation(Contexts.class);
             RubyArray contextList = rubyRuntime.newArray();
-            for (String value: contexts.value()) {
+            for (String value : contexts.value()) {
                 contextList.add(rubyRuntime.newSymbol(value.substring(1)));
             }
-            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[] {
+            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[]{
                     rubyRuntime.newSymbol("contexts"),
                     contextList
             });
@@ -179,10 +176,10 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
         if (processor.isAnnotationPresent(DefaultAttributes.class)) {
             DefaultAttributes defaultAttributes = processor.getAnnotation(DefaultAttributes.class);
             RubyHash defaultAttrs = RubyHash.newHash(rubyRuntime);
-            for (DefaultAttribute defaultAttribute: defaultAttributes.value()) {
+            for (DefaultAttribute defaultAttribute : defaultAttributes.value()) {
                 defaultAttrs.put(defaultAttribute.key(), defaultAttribute.value());
             }
-            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[] {
+            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[]{
                     rubyRuntime.newSymbol("default_attrs"),
                     defaultAttrs
             });
@@ -195,7 +192,7 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
             DefaultAttribute defaultAttribute = processor.getAnnotation(DefaultAttribute.class);
             RubyHash defaultAttrs = RubyHash.newHash(rubyRuntime);
             defaultAttrs.put(defaultAttribute.key(), defaultAttribute.value());
-            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[] {
+            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[]{
                     rubyRuntime.newSymbol("default_attrs"),
                     defaultAttrs
             });
@@ -207,10 +204,10 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
         if (processor.isAnnotationPresent(PositionalAttributes.class)) {
             PositionalAttributes positionalAttributes = processor.getAnnotation(PositionalAttributes.class);
             RubyArray positionalAttrs = RubyArray.newArray(rubyRuntime);
-            for (String positionalAttribute: positionalAttributes.value()) {
+            for (String positionalAttribute : positionalAttributes.value()) {
                 positionalAttrs.add(positionalAttribute);
             }
-            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[] {
+            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[]{
                     rubyRuntime.newSymbol("pos_attrs"),
                     positionalAttrs
             });
@@ -221,7 +218,7 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
         Ruby rubyRuntime = rubyClass.getRuntime();
         if (processor.isAnnotationPresent(ContentModel.class)) {
             ContentModel contentModel = processor.getAnnotation(ContentModel.class);
-            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[] {
+            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[]{
                     rubyRuntime.newSymbol("content_model"),
                     rubyRuntime.newSymbol(contentModel.value().substring(1))
             });
@@ -232,7 +229,7 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
         Ruby rubyRuntime = rubyClass.getRuntime();
         if (processor.isAnnotationPresent(Name.class)) {
             Name name = processor.getAnnotation(Name.class);
-            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[] {
+            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[]{
                     rubyRuntime.newSymbol("name"),
                     rubyRuntime.newString(name.value())
             });
@@ -243,7 +240,7 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
         Ruby rubyRuntime = rubyClass.getRuntime();
         if (processor.isAnnotationPresent(Location.class)) {
             Location location = processor.getAnnotation(Location.class);
-            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[] {
+            rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[]{
                     rubyRuntime.newSymbol("location"),
                     rubyRuntime.newSymbol(location.value().optionValue().substring(1))
             });

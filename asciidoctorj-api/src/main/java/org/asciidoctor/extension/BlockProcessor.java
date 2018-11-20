@@ -1,11 +1,11 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.ast.StructuralNode;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.ast.StructuralNode;
-
-public abstract class BlockProcessor extends Processor {
+public abstract class BlockProcessor extends BaseProcessor {
 
     /**
      * This value is used as the config option key when defining the block type
@@ -22,6 +22,7 @@ public abstract class BlockProcessor extends Processor {
      * </verbatim>
      * </pre>
      * </p>
+     *
      * @deprecated Please use {@link Contexts#KEY}
      */
     @Deprecated
@@ -37,6 +38,7 @@ public abstract class BlockProcessor extends Processor {
      * or it can masquerade as any other block.
      * --
      * </pre>
+     *
      * @deprecated Please use {@link Contexts#OPEN}
      */
     @Deprecated
@@ -51,6 +53,7 @@ public abstract class BlockProcessor extends Processor {
      * This is just a neat example.
      * ====
      * </pre>
+     *
      * @deprecated Please use {@link Contexts#EXAMPLE}
      */
     @Deprecated
@@ -65,6 +68,7 @@ public abstract class BlockProcessor extends Processor {
      * This is just a sidebar.
      * ****
      * </pre>
+     *
      * @deprecated Please use {@link Contexts#SIDEBAR}
      */
     @Deprecated
@@ -79,6 +83,7 @@ public abstract class BlockProcessor extends Processor {
      * This is just a literal block.
      * ....
      * </pre>
+     *
      * @deprecated Please use {@link Contexts#LITERAL}
      */
     @Deprecated
@@ -93,6 +98,7 @@ public abstract class BlockProcessor extends Processor {
      * This is just a literal block.
      * ....
      * </pre>
+     *
      * @deprecated Please use {@link Contexts#LISTING}
      */
     @Deprecated
@@ -107,6 +113,7 @@ public abstract class BlockProcessor extends Processor {
      * To be or not to be...
      * ____
      * </pre>
+     *
      * @deprecated Please use {@link Contexts#QUOTE}
      */
     @Deprecated
@@ -122,6 +129,7 @@ public abstract class BlockProcessor extends Processor {
      * &lt;h1&gt;Big text&lt;/h1&gt;
      * ++++
      * </pre>
+     *
      * @deprecated Please use {@link Contexts#PASS}
      */
     @Deprecated
@@ -138,6 +146,7 @@ public abstract class BlockProcessor extends Processor {
      *
      * And don't process this.
      * </pre>
+     *
      * @deprecated Please use {@link Contexts#PARAGRAPH}
      */
     @Deprecated
@@ -152,7 +161,7 @@ public abstract class BlockProcessor extends Processor {
     public BlockProcessor(String name) {
         this(name, new HashMap<>());
     }
-    
+
     public BlockProcessor(String name, Map<String, Object> config) {
         super(config);
         this.name = name;
@@ -165,6 +174,6 @@ public abstract class BlockProcessor extends Processor {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public abstract Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes);
 }

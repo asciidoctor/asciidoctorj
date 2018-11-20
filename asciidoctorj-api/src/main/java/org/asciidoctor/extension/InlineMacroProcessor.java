@@ -34,7 +34,7 @@ public abstract class InlineMacroProcessor extends MacroProcessor<ContentNode> {
     public InlineMacroProcessor(String macroName) {
         this(macroName, new HashMap<>());
     }
-    
+
     public InlineMacroProcessor(String macroName, Map<String, Object> config) {
         super(macroName, config);
     }

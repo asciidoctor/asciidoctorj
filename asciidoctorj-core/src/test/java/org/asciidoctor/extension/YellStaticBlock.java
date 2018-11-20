@@ -1,18 +1,19 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.ast.ContentModel;
+import org.asciidoctor.ast.StructuralNode;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.ast.StructuralNode;
-
 public class YellStaticBlock extends BlockProcessor {
 
-	private static Map<String, Object> configs = new HashMap<String, Object>() {{
-		put(CONTEXTS, Arrays.asList(CONTEXT_PARAGRAPH));
-        put(CONTENT_MODEL, CONTENT_MODEL_SIMPLE);
-	}};
+    private static Map<String, Object> configs = new HashMap<String, Object>() {{
+        put(CONTEXTS, Arrays.asList(CONTEXT_PARAGRAPH));
+        put(ContentModel.KEY, ContentModel.SIMPLE);
+    }};
 
     public YellStaticBlock(String name) {
         super(name, configs);
@@ -29,13 +30,12 @@ public class YellStaticBlock extends BlockProcessor {
         for (String line : lines) {
             if (upperLines == null) {
                 upperLines = line.toUpperCase();
-            }
-            else {
+            } else {
                 upperLines = upperLines + "\n" + line.toUpperCase();
             }
         }
 
-		return createBlock(parent, "paragraph", Arrays.asList(upperLines), attributes, new HashMap<Object, Object>());
+        return createBlock(parent, "paragraph", Arrays.asList(upperLines), attributes, new HashMap<Object, Object>());
     }
 
 }

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.asciidoctor.ast.Document;
 
-public abstract class Postprocessor extends Processor {
+public abstract class Postprocessor extends BaseProcessor {
 
     public Postprocessor() {
         this(new HashMap<>());
