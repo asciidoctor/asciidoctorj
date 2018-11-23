@@ -5,267 +5,27 @@ import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
-import org.asciidoctor.extension.RubyExtensionRegistry;
-import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.log.LogHandler;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 /**
  * @author lordofthejars
  */
 public interface Asciidoctor {
 
-    public static final String STRUCTURE_MAX_LEVEL = "STRUCTURE_MAX_LEVEL";
-
-    /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
-     * <p>
-     * Accepts input as String object.
-     *
-     * @param content the AsciiDoc source as String.
-     * @param options a Hash of options to control processing (default: {}).
-     * @return the rendered output String is returned
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convert(String, Map)}.
-     */
-    @Deprecated
-    String render(String content, Map<String, Object> options);
-
-    /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
-     * <p>
-     * Accepts input as String object.
-     *
-     * @param content the AsciiDoc source as String.
-     * @param options a Hash of options to control processing (default: {}).
-     * @return the rendered output String is returned
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convert(String, Options)}.
-     */
-    @Deprecated
-    String render(String content, Options options);
-
-    /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
-     * <p>
-     * Accepts input as String object.
-     *
-     * @param content the AsciiDoc source as String.
-     * @param options a Hash of options to control processing (default: {}).
-     * @return the rendered output String is returned
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convert(String, OptionsBuilder)}.
-     */
-    @Deprecated
-    String render(String content, OptionsBuilder options);
-
-    /**
-     * Parse the document read from reader, and rendered result is sent to
-     * writer.
-     *
-     * @param contentReader  where asciidoc content is read.
-     * @param rendererWriter where rendered content is written. Writer is flushed, but not
-     *                       closed.
-     * @param options        a Hash of options to control processing (default: {}).
-     * @throws IOException if an error occurs while writing rendered content, this
-     *                     exception is thrown.
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convert(Reader, Writer, Map)}.
-     */
-    @Deprecated
-    void render(Reader contentReader, Writer rendererWriter, Map<String, Object> options) throws IOException;
-
-    /**
-     * Parse the document read from reader, and rendered result is sent to
-     * writer.
-     *
-     * @param contentReader  where asciidoc content is read.
-     * @param rendererWriter where rendered content is written. Writer is flushed, but not
-     *                       closed.
-     * @param options        a Hash of options to control processing (default: {}).
-     * @throws IOException if an error occurs while writing rendered content, this
-     *                     exception is thrown.
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convert(Reader, Writer, Map)}.
-     */
-    @Deprecated
-    void render(Reader contentReader, Writer rendererWriter, Options options) throws IOException;
-
-    /**
-     * Parse the document read from reader, and rendered result is sent to
-     * writer.
-     *
-     * @param contentReader  where asciidoc content is read.
-     * @param rendererWriter where rendered content is written. Writer is flushed, but not
-     *                       closed.
-     * @param options        a Hash of options to control processing (default: {}).
-     * @throws IOException if an error occurs while writing rendered content, this
-     *                     exception is thrown.
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convert(Reader, Writer, OptionsBuilder)}.
-     */
-    @Deprecated
-    void render(Reader contentReader, Writer rendererWriter, OptionsBuilder options) throws IOException;
-
-    /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
-     * <p>
-     * Accepts input as File path.
-     * <p>
-     * If the :in_place option is true, and the input is a File, the output is
-     * written to a file adjacent to the input file, having an extension that
-     * corresponds to the backend format. Otherwise, if the :to_file option is
-     * specified, the file is written to that file. If :to_file is not an
-     * absolute path, it is resolved relative to :to_dir, if given, otherwise
-     * the Document#base_dir. If the target directory does not exist, it will
-     * not be created unless the :mkdirs option is set to true. If the file
-     * cannot be written because the target directory does not exist, or because
-     * it falls outside of the Document#base_dir in safe mode, an IOError is
-     * raised.
-     *
-     * @param file    an input Asciidoctor file.
-     * @param options a Hash of options to control processing (default: {}).
-     * @return returns nothing if the rendered output String is written to a file.
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convertFile(File, Map)}.
-     */
-    @Deprecated
-    String renderFile(File file, Map<String, Object> options);
-
-    /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
-     * <p>
-     * Accepts input as File path.
-     * <p>
-     * If the :in_place option is true, and the input is a File, the output is
-     * written to a file adjacent to the input file, having an extension that
-     * corresponds to the backend format. Otherwise, if the :to_file option is
-     * specified, the file is written to that file. If :to_file is not an
-     * absolute path, it is resolved relative to :to_dir, if given, otherwise
-     * the Document#base_dir. If the target directory does not exist, it will
-     * not be created unless the :mkdirs option is set to true. If the file
-     * cannot be written because the target directory does not exist, or because
-     * it falls outside of the Document#base_dir in safe mode, an IOError is
-     * raised.
-     *
-     * @param file    an input Asciidoctor file.
-     * @param options a Hash of options to control processing (default: {}).
-     * @return returns nothing if the rendered output String is written to a file.
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convertFile(File, Options)}.
-     */
-    @Deprecated
-    String renderFile(File file, Options options);
-
-    /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
-     * <p>
-     * Accepts input as File path.
-     * <p>
-     * If the :in_place option is true, and the input is a File, the output is
-     * written to a file adjacent to the input file, having an extension that
-     * corresponds to the backend format. Otherwise, if the :to_file option is
-     * specified, the file is written to that file. If :to_file is not an
-     * absolute path, it is resolved relative to :to_dir, if given, otherwise
-     * the Document#base_dir. If the target directory does not exist, it will
-     * not be created unless the :mkdirs option is set to true. If the file
-     * cannot be written because the target directory does not exist, or because
-     * it falls outside of the Document#base_dir in safe mode, an IOError is
-     * raised.
-     *
-     * @param file    an input Asciidoctor file.
-     * @param options a Hash of options to control processing (default: {}).
-     * @return returns nothing if the rendered output String is written to a file.
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convertFile(File, OptionsBuilder)}.
-     */
-    @Deprecated
-    String renderFile(File file, OptionsBuilder options);
-
-    /**
-     * Parse all AsciiDoc files found using DirectoryWalker instance.
-     *
-     * @param directoryWalker strategy used to retrieve all files to be rendered.
-     * @param options         a Hash of options to control processing (default: {}).
-     * @return returns an array of 0 positions if the rendered output is written to a file.
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convertDirectory(DirectoryWalker, Map)}.
-     */
-    @Deprecated
-    String[] renderDirectory(DirectoryWalker directoryWalker, Map<String, Object> options);
-
-    /**
-     * Parse all AsciiDoc files found using DirectoryWalker instance.
-     *
-     * @param directoryWalker strategy used to retrieve all files to be rendered.
-     * @param options         a Hash of options to control processing (default: {}).
-     * @return returns an array of 0 positions if the rendered output is written to a file.
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convertDirectory(DirectoryWalker, Options)}.
-     */
-    @Deprecated
-    String[] renderDirectory(DirectoryWalker directoryWalker, Options options);
-
-    /**
-     * Parse all AsciiDoc files found using DirectoryWalker instance.
-     *
-     * @param directoryWalker strategy used to retrieve all files to be rendered.
-     * @param options         a Hash of options to control processing (default: {}).
-     * @return returns an array of 0 positions if the rendered output is written to a file.
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convertDirectory(DirectoryWalker, OptionsBuilder)}.
-     */
-    @Deprecated
-    String[] renderDirectory(DirectoryWalker directoryWalker, OptionsBuilder options);
-
-    /**
-     * Parses all files added inside a collection.
-     *
-     * @param asciidoctorFiles to be rendered.
-     * @param options          a Hash of options to control processing (default: {}).
-     * @return returns an array of 0 positions if the rendered output is written to a file.
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convertFiles(Collection, Map)}.
-     */
-    @Deprecated
-    String[] renderFiles(Collection<File> asciidoctorFiles, Map<String, Object> options);
-
-    /**
-     * Parses all files added inside a collection.
-     *
-     * @param asciidoctorFiles to be rendered.
-     * @param options          a Hash of options to control processing (default: {}).
-     * @return returns an array of 0 positions if the rendered output is written to a file.
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convertFiles(Collection, Options)}.
-     */
-    @Deprecated
-    String[] renderFiles(Collection<File> asciidoctorFiles, Options options);
-
-    /**
-     * Parses all files added inside a collection.
-     *
-     * @param asciidoctorFiles to be rendered.
-     * @param options          a Hash of options to control processing (default: {}).
-     * @return returns an array of 0 positions if the rendered output is written to a file.
-     * @since 1.6.0
-     * @deprecated Will be removed in the next major version (2.0.0). Please use {@link #convertFiles(Collection, OptionsBuilder)}.
-     */
-    @Deprecated
-    String[] renderFiles(Collection<File> asciidoctorFiles, OptionsBuilder options);
+    String STRUCTURE_MAX_LEVEL = "STRUCTURE_MAX_LEVEL";
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
@@ -404,12 +164,12 @@ public interface Asciidoctor {
      * it falls outside of the Document#base_dir in safe mode, an IOError is
      * raised.
      *
-     * @param filename an input Asciidoctor file.
-     * @param options  a Hash of options to control processing (default: {}).
+     * @param file    an input Asciidoctor file.
+     * @param options a Hash of options to control processing (default: {}).
      * @return returns nothing if the rendered output String is written to a
      * file.
      */
-    String convertFile(File filename, Map<String, Object> options);
+    String convertFile(File file, Map<String, Object> options);
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
@@ -428,14 +188,14 @@ public interface Asciidoctor {
      * it falls outside of the Document#base_dir in safe mode, an IOError is
      * raised.
      *
-     * @param filename       an input Asciidoctor file.
+     * @param file           an input Asciidoctor file.
      * @param options        a Hash of options to control processing (default: {}).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
      *                       In this case {@link #convertFile(File, Map)} is the same.
      * @return returns nothing if the rendered output is written to a
      * file.
      */
-    <T> T convertFile(File filename, Map<String, Object> options, Class<T> expectedResult);
+    <T> T convertFile(File file, Map<String, Object> options, Class<T> expectedResult);
 
 
     /**
@@ -455,12 +215,12 @@ public interface Asciidoctor {
      * it falls outside of the Document#base_dir in safe mode, an IOError is
      * raised.
      *
-     * @param filename an input Asciidoctor file.
-     * @param options  a Hash of options to control processing (default: {}).
+     * @param file    an input Asciidoctor file.
+     * @param options a Hash of options to control processing (default: {}).
      * @return returns nothing if the rendered output String is written to a
      * file.
      */
-    String convertFile(File filename, Options options);
+    String convertFile(File file, Options options);
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
@@ -479,14 +239,14 @@ public interface Asciidoctor {
      * it falls outside of the Document#base_dir in safe mode, an IOError is
      * raised.
      *
-     * @param filename       an input Asciidoctor file.
+     * @param file           an input Asciidoctor file.
      * @param options        a Hash of options to control processing (default: {}).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
      *                       In this case {@link #convertFile(File, Map)} is the same.
      * @return returns nothing if the rendered output is written to a
      * file.
      */
-    <T> T convertFile(File filename, Options options, Class<T> expectedResult);
+    <T> T convertFile(File file, Options options, Class<T> expectedResult);
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
@@ -505,12 +265,12 @@ public interface Asciidoctor {
      * it falls outside of the Document#base_dir in safe mode, an IOError is
      * raised.
      *
-     * @param filename an input Asciidoctor file.
-     * @param options  a Hash of options to control processing (default: {}).
+     * @param file    an input Asciidoctor file.
+     * @param options a Hash of options to control processing (default: {}).
      * @return returns nothing if the rendered output String is written to a
      * file.
      */
-    String convertFile(File filename, OptionsBuilder options);
+    String convertFile(File file, OptionsBuilder options);
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
@@ -529,14 +289,14 @@ public interface Asciidoctor {
      * it falls outside of the Document#base_dir in safe mode, an IOError is
      * raised.
      *
-     * @param filename       an input Asciidoctor file.
+     * @param file           an input Asciidoctor file.
      * @param options        a Hash of options to control processing (default: {}).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
      *                       In this case {@link #convertFile(File, Map)} is the same.
      * @return returns nothing if the rendered output is written to a
      * file.
      */
-    <T> T convertFile(File filename, OptionsBuilder options, Class<T> expectedResult);
+    <T> T convertFile(File file, OptionsBuilder options, Class<T> expectedResult);
 
     /**
      * Parse all AsciiDoc files found using DirectoryWalker instance.
@@ -546,8 +306,7 @@ public interface Asciidoctor {
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
-    String[] convertDirectory(DirectoryWalker directoryWalker,
-                              Map<String, Object> options);
+    String[] convertDirectory(DirectoryWalker directoryWalker, Map<String, Object> options);
 
     /**
      * Parse all AsciiDoc files found using DirectoryWalker instance.
@@ -567,19 +326,17 @@ public interface Asciidoctor {
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
-    String[] convertDirectory(DirectoryWalker directoryWalker,
-                              OptionsBuilder options);
+    String[] convertDirectory(DirectoryWalker directoryWalker, OptionsBuilder options);
 
     /**
      * Parses all files added inside a collection.
      *
-     * @param asciidoctorFiles to be rendered.
-     * @param options          a Hash of options to control processing (default: {}).
+     * @param files   to be rendered.
+     * @param options a Hash of options to control processing (default: {}).
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
-    String[] convertFiles(Collection<File> asciidoctorFiles,
-                          Map<String, Object> options);
+    String[] convertFiles(Collection<File> files, Map<String, Object> options);
 
     /**
      * Parses all files added inside a collection.
@@ -594,21 +351,34 @@ public interface Asciidoctor {
     /**
      * Parses all files added inside a collection.
      *
-     * @param asciidoctorFiles to be rendered.
-     * @param options          a Hash of options to control processing (default: {}).
+     * @param files   to be rendered.
+     * @param options a Hash of options to control processing (default: {}).
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
-    String[] convertFiles(Collection<File> asciidoctorFiles,
-                          OptionsBuilder options);
+    String[] convertFiles(Collection<File> files, OptionsBuilder options);
+
+    /**
+     * Require the given libraries by name when rendering.
+     *
+     * @param requiredLibraries
+     */
+    void requireLibrary(String... requiredLibraries);
+
+    /**
+     * Require the given libraries by name when rendering.
+     *
+     * @param requiredLibraries
+     */
+    void requireLibraries(Collection<String> requiredLibraries);
 
     /**
      * Reads only header parameters instead of all document.
      *
-     * @param filename to read the attributes.
+     * @param file to read the attributes.
      * @return header.
      */
-    DocumentHeader readDocumentHeader(File filename);
+    DocumentHeader readDocumentHeader(File file);
 
     /**
      * Reads only header parameters instead of all document.
@@ -628,32 +398,11 @@ public interface Asciidoctor {
     DocumentHeader readDocumentHeader(Reader contentReader);
 
     /**
-     * Require the given Ruby libraries by name when rendering.
-     *
-     * @param requiredLibraries
-     */
-    void requireLibrary(String... requiredLibraries);
-
-    /**
-     * Require the given Ruby libraries by name when rendering.
-     *
-     * @param requiredLibraries
-     */
-    void requireLibraries(Collection<String> requiredLibraries);
-
-    /**
      * Creates an extension registry ready to be used for registering all processors
      *
      * @return Extension Registry object.
      */
     JavaExtensionRegistry javaExtensionRegistry();
-
-    /**
-     * Creates an Ruby extension registry ready to be used for registering all processors
-     *
-     * @return Extension Registry object.
-     */
-    RubyExtensionRegistry rubyExtensionRegistry();
 
     /**
      * Creates a registry for registering converters.
@@ -693,12 +442,11 @@ public interface Asciidoctor {
      */
     String asciidoctorVersion();
 
+
     /**
      * Factory for creating a new instance of Asciidoctor interface.
-     *
-     * @author lordofthejars
      */
-    public static final class Factory {
+    final class Factory {
 
         private Factory() {
         }
@@ -710,81 +458,27 @@ public interface Asciidoctor {
          * Ruby calls.
          */
         public static Asciidoctor create() {
-            return JRubyAsciidoctor.create();
+            ServiceLoader<Asciidoctor> asciidoctorImpls = ServiceLoader.load(Asciidoctor.class);
+            Iterator<Asciidoctor> iterator = asciidoctorImpls.iterator();
+            if (iterator.hasNext()) {
+                Asciidoctor impl = iterator.next();
+                List<Asciidoctor> remainingImpls = new ArrayList<>();
+                while (iterator.hasNext()) {
+                    remainingImpls.add(iterator.next());
+                }
+                if (!remainingImpls.isEmpty()) {
+                    remainingImpls.add(0, impl);
+                    String remainingImplNames = remainingImpls
+                            .stream()
+                            .map(asciidoctor -> asciidoctor.getClass().getName())
+                            .collect(Collectors.joining(",", "[", "]"));
+                    throw new RuntimeException(String.format("Found multiple Asciidoctor implementations in the classpath: %s", remainingImplNames));
+                }
+                return impl;
+            } else {
+                throw new RuntimeException("Unable to find an implementation of Asciidoctor in the classpath (using ServiceLoader)");
+            }
         }
-
-        /**
-         * Creates a new instance of Asciidoctor and sets GEM_PATH environment
-         * variable to provided gemPath. This method is mostly used in OSGi
-         * environments.
-         *
-         * @param gemPath where gems are located.
-         * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
-         * Ruby calls.
-         */
-        public static Asciidoctor create(String gemPath) {
-            return JRubyAsciidoctor.create(gemPath);
-        }
-
-        /**
-         * Creates a new instance of Asciidoctor and sets loadPath to provided paths. This method is mostly used in OSGi
-         * environments.
-         *
-         * @param loadPaths where Ruby libraries are located.
-         * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
-         * Ruby calls.
-         */
-        public static Asciidoctor create(List<String> loadPaths) {
-            return JRubyAsciidoctor.create(loadPaths);
-        }
-
-        /**
-         * Creates a new instance of Asciidoctor and sets a specific classloader for the  JRuby runtime to use.
-         * This method is for use in environments like OSGi.
-         * To initialize Asciidoctor in OSGi create the Asciidoctor instance like this:
-         *
-         * <pre>
-         * Asciidoctor asciidoctor = Asciidoctor.Factory.create(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib"));
-         * </pre>
-         *
-         * @param classloader
-         * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
-         *         Ruby calls.
-         */
-        public static Asciidoctor create(ClassLoader classloader) {
-            return JRubyAsciidoctor.create(classloader);
-        }
-
-        /**
-         * Creates a new instance of Asciidoctor and sets a specific classloader and gempath for the JRuby runtime to use.
-         * This method is for use in environments like OSGi.
-         * To initialize Asciidoctor in OSGi create the Asciidoctor instance like this:
-         *
-         * <pre>
-         * Asciidoctor asciidoctor = Asciidoctor.Factory.create(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib"));
-         * </pre>
-         * 
-         * @param classloader
-         * @param gemPath
-         * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
-         */
-        public static Asciidoctor create(ClassLoader classloader, String gemPath) {
-            return JRubyAsciidoctor.create(classloader, gemPath);
-        }
-
-        /**
-         * Creates a new instance of Asciidoctor and sets loadPath to provided paths.
-         * The gem path of the Ruby instance is set to the gemPath parameter.
-         *
-         * @param loadPaths where Ruby libraries are located.
-         * @param gemPath   where gems are located.
-         * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
-         * Ruby calls.
-         */
-        public static Asciidoctor create(List<String> loadPaths, String gemPath) {
-            return JRubyAsciidoctor.create(loadPaths, gemPath);
-        }
-
     }
 
     /**

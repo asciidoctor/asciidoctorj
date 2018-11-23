@@ -52,8 +52,6 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
     private static final String GEM_PATH = "GEM_PATH";
 
-    private static final int DEFAULT_MAX_LEVEL = 1;
-
     protected RubyGemsPreloader rubyGemsPreloader;
 
     protected Ruby rubyRuntime;
@@ -63,6 +61,11 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
     private List<LogHandler> logHandlers = new ArrayList<>();
 
     private final static Logger LOGGER = Logger.getLogger("asciidoctorj");
+
+    public JRubyAsciidoctor() {
+        this(createRubyRuntime(Collections.singletonMap(GEM_PATH, null), new ArrayList<>(), null));
+        processRegistrations(this);
+    }
 
     private JRubyAsciidoctor(final Ruby rubyRuntime) {
         this.rubyRuntime = rubyRuntime;
@@ -80,7 +83,7 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
     }
 
     public static JRubyAsciidoctor create(String gemPath) {
-        return processRegistrations(createJRubyAsciidoctorInstance(Collections.singletonMap(GEM_PATH, gemPath), new ArrayList<String>(), null));
+        return processRegistrations(createJRubyAsciidoctorInstance(Collections.singletonMap(GEM_PATH, gemPath), new ArrayList<>(), null));
     }
 
     public static JRubyAsciidoctor create(List<String> loadPaths) {
@@ -88,11 +91,11 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
     }
 
     public static JRubyAsciidoctor create(ClassLoader classloader) {
-        return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<String>(), classloader));
+        return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<>(), classloader));
     }
 
     public static JRubyAsciidoctor create(ClassLoader classloader, String gemPath) {
-        return processRegistrations(createJRubyAsciidoctorInstance(Collections.singletonMap(GEM_PATH, gemPath), new ArrayList<String>(), classloader));
+        return processRegistrations(createJRubyAsciidoctorInstance(Collections.singletonMap(GEM_PATH, gemPath), new ArrayList<>(), classloader));
     }
 
     public static JRubyAsciidoctor create(List<String> loadPaths, String gemPath) {
@@ -119,9 +122,14 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
     }
 
     private static JRubyAsciidoctor createJRubyAsciidoctorInstance(Map<String, String> environmentVars, List<String> loadPaths, ClassLoader classloader) {
+        Ruby rubyRuntime = createRubyRuntime(environmentVars, loadPaths, classloader);
+        JRubyAsciidoctor jrubyAsciidoctor = new JRubyAsciidoctor(rubyRuntime);
+        JavaLogger.install(rubyRuntime, jrubyAsciidoctor);
+        return jrubyAsciidoctor;
+    }
 
-        Map<String, String> env = environmentVars != null ?
-                new HashMap<String, String>(environmentVars) : new HashMap<String, String>();
+    private static Ruby createRubyRuntime(Map<String, String> environmentVars, List<String> loadPaths, ClassLoader classloader) {
+        Map<String, String> env = environmentVars != null ? new HashMap<>(environmentVars) : new HashMap<>();
 
         RubyInstanceConfig config = createOptimizedConfiguration();
         if (classloader != null) {
@@ -129,13 +137,7 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
         }
         injectEnvironmentVariables(config, env);
 
-        Ruby rubyRuntime = JavaEmbedUtils.initialize(loadPaths, config);
-
-        JRubyAsciidoctor jrubyAsciidoctor = new JRubyAsciidoctor(rubyRuntime);
-
-        JavaLogger.install(rubyRuntime, jrubyAsciidoctor);
-
-        return jrubyAsciidoctor;
+        return JavaEmbedUtils.initialize(loadPaths, config);
     }
 
     private static void injectEnvironmentVariables(RubyInstanceConfig config, Map<String, String> environmentVars) {
@@ -167,17 +169,19 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
         Document documentImpl = (Document) NodeConverter.createASTNode(document);
 
-        return DocumentHeaderImpl.createDocumentHeader(documentImpl.getStructuredDoctitle(), documentImpl.getDoctitle(),
+        return DocumentHeaderImpl.createDocumentHeader(
+                documentImpl.getStructuredDoctitle(),
+                documentImpl.getDoctitle(),
                 documentImpl.getAttributes());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public DocumentHeader readDocumentHeader(File filename) {
+    public DocumentHeader readDocumentHeader(File file) {
 
         RubyHash rubyHash = getParseHeaderOnlyOption();
 
-        Document document = (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load_file", rubyRuntime.newString(filename.getAbsolutePath()), rubyHash));
+        Document document = (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load_file", rubyRuntime.newString(file.getAbsolutePath()), rubyHash));
 
         return toDocumentHeader(document);
     }
@@ -204,60 +208,6 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
         return RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    @Deprecated
-    public String render(String content, Map<String, Object> options) {
-        return convert(content, options);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    @Deprecated
-    public String renderFile(File filename, Map<String, Object> options) {
-        return convertFile(filename, options);
-    }
-
-    /**
-     * This method has been added to deal with the fact that asciidoctor 0.1.2 can return an Asciidoctor::Document or a
-     * String depending if content is write to disk or not. This may change in the future
-     * (https://github.com/asciidoctor/asciidoctor/issues/286)
-     * 
-     * @param object
-     * @return
-     */
-    private String returnExpectedValue(Object object) {
-        if (object instanceof String) {
-            return object.toString();
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    @Deprecated
-    public void render(Reader contentReader, Writer rendererWriter, Map<String, Object> options) throws IOException {
-       convert(contentReader, rendererWriter, options);
-    }
-
-    @Override
-    @Deprecated
-    public String[] renderFiles(Collection<File> asciidoctorFiles, Map<String, Object> options) {
-        return convertFiles(asciidoctorFiles, options);
-    }
-
-    @Override
-    @Deprecated
-    public String[] renderFiles(Collection<File> asciidoctorFiles, Options options) {
-        return this.convertFiles(asciidoctorFiles, options.map());
-    }
-
-    @Override
-    @Deprecated
-    public String[] renderDirectory(DirectoryWalker directoryWalker, Map<String, Object> options) {
-        return convertDirectory(directoryWalker, options);
-    }
-
     private List<String> convertAllFiles(Map<String, Object> options, final Collection<File> asciidoctorFiles) {
         List<String> asciidoctorContent = new ArrayList<>();
         for (File asciidoctorFile : asciidoctorFiles) {
@@ -271,60 +221,6 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
     private List<File> scanForAsciiDocFiles(DirectoryWalker directoryWalker) {
         return directoryWalker.scan();
-    }
-
-    @Override
-    @Deprecated
-    public String render(String content, Options options) {
-        return convert(content, options.map());
-    }
-
-    @Override
-    @Deprecated
-    public void render(Reader contentReader, Writer rendererWriter, Options options) throws IOException {
-        convert(contentReader, rendererWriter, options.map());
-    }
-
-    @Override
-    @Deprecated
-    public String renderFile(File filename, Options options) {
-        return convertFile(filename, options.map());
-    }
-
-    @Override
-    @Deprecated
-    public String[] renderDirectory(DirectoryWalker directoryWalker, Options options) {
-        return convertDirectory(directoryWalker, options.map());
-    }
-
-    @Override
-    @Deprecated
-    public String render(String content, OptionsBuilder options) {
-        return convert(content, options.asMap());
-    }
-
-    @Override
-    @Deprecated
-    public void render(Reader contentReader, Writer rendererWriter, OptionsBuilder options) throws IOException {
-        convert(contentReader, rendererWriter, options.asMap());
-    }
-
-    @Override
-    @Deprecated
-    public String renderFile(File filename, OptionsBuilder options) {
-        return convertFile(filename, options.asMap());
-    }
-
-    @Override
-    @Deprecated
-    public String[] renderDirectory(DirectoryWalker directoryWalker, OptionsBuilder options) {
-        return convertDirectory(directoryWalker, options.asMap());
-    }
-
-    @Override
-    @Deprecated
-    public String[] renderFiles(Collection<File> asciidoctorFiles, OptionsBuilder options) {
-        return convertFiles(asciidoctorFiles, options.asMap());
     }
 
     @Override
@@ -346,7 +242,6 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
         return new JavaExtensionRegistryImpl(this);
     }
 
-    @Override
     public RubyExtensionRegistry rubyExtensionRegistry() {
         return new RubyExtensionRegistryImpl(rubyRuntime);
     }
@@ -373,7 +268,7 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
     private RubyModule getExtensionsModule() {
         return getAsciidoctorModule()
-            .defineOrGetModuleUnder("Extensions");
+                .defineOrGetModuleUnder("Extensions");
     }
 
     private RubyModule getAsciidoctorModule() {
@@ -411,13 +306,13 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
         try {
 
             IRubyObject object = getAsciidoctorModule().callMethod("convert",
-                rubyRuntime.newString(content), rubyHash);
+                    rubyRuntime.newString(content), rubyHash);
             if (NodeConverter.NodeType.DOCUMENT_CLASS.isInstance(object)) {
                 // If a document is rendered to a file Asciidoctor returns the document, we return null
                 return null;
             }
             return RubyUtils.rubyToJava(rubyRuntime, object, expectedResult);
-        } catch(RaiseException e) {
+        } catch (RaiseException e) {
             logger.severe(e.getException().getClass().getCanonicalName());
             throw new AsciidoctorCoreException(e);
         } finally {
@@ -466,16 +361,16 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
     }
 
     @Override
-    public String convertFile(File filename, Map<String, Object> options) {
-        return convertFile(filename, options, String.class);
+    public String convertFile(File file, Map<String, Object> options) {
+        return convertFile(file, options, String.class);
     }
 
     @Override
-    public <T> T convertFile(File filename, Map<String, Object> options, Class<T> expectedResult) {
+    public <T> T convertFile(File file, Map<String, Object> options, Class<T> expectedResult) {
 
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
-        logger.fine(AsciidoctorUtils.toAsciidoctorCommand(options, filename.getAbsolutePath()));
+        logger.fine(AsciidoctorUtils.toAsciidoctorCommand(options, file.getAbsolutePath()));
 
         String currentDirectory = rubyRuntime.getCurrentDirectory();
 
@@ -487,13 +382,13 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
         try {
             IRubyObject object = getAsciidoctorModule().callMethod("convert_file",
-                rubyRuntime.newString(filename.getAbsolutePath()), rubyHash);
+                    rubyRuntime.newString(file.getAbsolutePath()), rubyHash);
             if (NodeConverter.NodeType.DOCUMENT_CLASS.isInstance(object)) {
                 // If a document is rendered to a file Asciidoctor returns the document, we return null
                 return null;
             }
             return RubyUtils.rubyToJava(rubyRuntime, object, expectedResult);
-        } catch(RaiseException e) {
+        } catch (RaiseException e) {
             logger.severe(e.getMessage());
 
             throw new AsciidoctorCoreException(e);
@@ -504,23 +399,23 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
     }
 
     @Override
-    public String convertFile(File filename, Options options) {
-        return convertFile(filename, options, String.class);
+    public String convertFile(File file, Options options) {
+        return convertFile(file, options, String.class);
     }
 
     @Override
-    public <T> T convertFile(File filename, Options options, Class<T> expectedResult) {
-        return convertFile(filename, options.map(), expectedResult);
+    public <T> T convertFile(File file, Options options, Class<T> expectedResult) {
+        return convertFile(file, options.map(), expectedResult);
     }
 
     @Override
-    public String convertFile(File filename, OptionsBuilder options) {
-        return convertFile(filename, options.asMap(), String.class);
+    public String convertFile(File file, OptionsBuilder options) {
+        return convertFile(file, options.asMap(), String.class);
     }
 
     @Override
-    public <T> T convertFile(File filename, OptionsBuilder options, Class<T> expectedResult) {
-        return convertFile(filename, options.asMap(), expectedResult);
+    public <T> T convertFile(File file, OptionsBuilder options, Class<T> expectedResult) {
+        return convertFile(file, options.asMap(), expectedResult);
     }
 
     @Override
@@ -541,8 +436,8 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
     }
 
     @Override
-    public String[] convertFiles(Collection<File> asciidoctorFiles, Map<String, Object> options) {
-        List<String> asciidoctorContent = convertAllFiles(options, asciidoctorFiles);
+    public String[] convertFiles(Collection<File> files, Map<String, Object> options) {
+        List<String> asciidoctorContent = convertAllFiles(options, files);
         return asciidoctorContent.toArray(new String[0]);
     }
 
@@ -552,15 +447,15 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
     }
 
     @Override
-    public String[] convertFiles(Collection<File> asciidoctorFiles, OptionsBuilder options) {
-        return convertFiles(asciidoctorFiles, options.asMap());
+    public String[] convertFiles(Collection<File> files, OptionsBuilder options) {
+        return convertFiles(files, options.asMap());
     }
 
     @Override
     public Document load(String content, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
         return (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load",
-            rubyRuntime.newString(content), rubyHash));
+                rubyRuntime.newString(content), rubyHash));
     }
 
     @Override
@@ -568,7 +463,7 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
         return (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load_file",
-            rubyRuntime.newString(file.getAbsolutePath()), rubyHash));
+                rubyRuntime.newString(file.getAbsolutePath()), rubyHash));
     }
 
     @Override
@@ -590,7 +485,7 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
     @Override
     public void log(LogRecord logRecord) {
-        for (LogHandler logHandler: logHandlers) {
+        for (LogHandler logHandler : logHandlers) {
             try {
                 logHandler.log(logRecord);
             } catch (Exception e) {

@@ -1,6 +1,7 @@
 package org.asciidoctor;
 
 import org.asciidoctor.categories.Polluted;
+import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.jruby.Ruby;
 import org.jruby.RubyString;
@@ -26,7 +27,7 @@ public class WhenAnAsciidoctorClassIsInstantiatedInAnEnvironmentWithGemPath {
         assertThat(System.getenv("GEM_HOME"), notNullValue());
 
         // When: A new Asciidoctor instance is created passing in a null GEM_PATH
-        Asciidoctor asciidoctor = Asciidoctor.Factory.create((String) null);
+        Asciidoctor asciidoctor = JRubyAsciidoctor.create((String) null);
 
         // Then: The org.jruby.JRuby instance does not see this variable
         Ruby rubyRuntime = JRubyRuntimeContext.get(asciidoctor);
@@ -41,7 +42,7 @@ public class WhenAnAsciidoctorClassIsInstantiatedInAnEnvironmentWithGemPath {
         assertThat(System.getenv("GEM_HOME"), notNullValue());
 
         // When: A new Asciidoctor instance is created passing in no GEM_PATH
-        Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+        Asciidoctor asciidoctor = JRubyAsciidoctor.create();
 
         // Then: The org.jruby.JRuby instance sees this variable
         Ruby rubyRuntime = JRubyRuntimeContext.get(asciidoctor);
@@ -57,7 +58,7 @@ public class WhenAnAsciidoctorClassIsInstantiatedInAnEnvironmentWithGemPath {
         assertThat(System.getenv("GEM_HOME"), notNullValue());
 
         // When: A new Asciidoctor instance is created passing in a null GEM_PATH
-        Asciidoctor asciidoctor = Asciidoctor.Factory.create(gemPath);
+        Asciidoctor asciidoctor = JRubyAsciidoctor.create(gemPath);
 
         // Then: The org.jruby.JRuby instance does not see this variable
         Ruby rubyRuntime = JRubyRuntimeContext.get(asciidoctor);
