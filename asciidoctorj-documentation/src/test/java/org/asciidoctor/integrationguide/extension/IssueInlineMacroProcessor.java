@@ -20,11 +20,12 @@ public class IssueInlineMacroProcessor extends InlineMacroProcessor {    // <2>
                 new StringBuilder()
                     .append("https://github.com/")
                     .append(attributes.containsKey("repo") ?
-                            attributes.get("repo") : parent.getDocument().getAttr("repo"))
+                            attributes.get("repo") :
+                            parent.getDocument().getAttribute("repo"))
                     .append("/issues/")
                     .append(target).toString();
 
-        Map<String, Object> options = new HashMap<String, Object>();
+        Map<String, Object> options = new HashMap<>();
         options.put("type", ":link");
         options.put("target", href);
         return createPhraseNode(parent, "anchor", target, attributes, options) // <4>

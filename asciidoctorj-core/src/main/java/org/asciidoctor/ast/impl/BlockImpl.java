@@ -15,6 +15,7 @@ public class BlockImpl extends StructuralNodeImpl implements Block {
     }
 
     @Override
+    @Deprecated
     public List<String> lines() {
         return getLines();
     }
@@ -34,6 +35,7 @@ public class BlockImpl extends StructuralNodeImpl implements Block {
     }
 
     @Override
+    @Deprecated
     public String source() {
         return getSource();
     }

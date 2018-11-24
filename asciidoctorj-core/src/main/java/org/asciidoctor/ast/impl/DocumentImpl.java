@@ -24,6 +24,7 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
     }
 
     @Override
+    @Deprecated
     public boolean basebackend(String backend) {
         return isBasebackend(backend);
     }
@@ -46,10 +47,13 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
 
     }
 
+    @Override
     public String getDoctitle() {
         return getString("doctitle");
     }
 
+    @Override
+    @Deprecated
     public String doctitle() {
         return getDoctitle();
     }

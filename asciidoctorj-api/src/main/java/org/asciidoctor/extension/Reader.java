@@ -10,6 +10,7 @@ public interface Reader {
      * @return 1-based offset.
      * @deprecated Please use {@link #getLineNumber()}
      */
+    @Deprecated
     int getLineno();
 
     /**

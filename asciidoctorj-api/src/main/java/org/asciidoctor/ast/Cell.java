@@ -83,7 +83,7 @@ public interface Cell extends ContentNode {
     Document getInnerDocument();
 
     /**
-     * @see {@link #getInnerDocument()}
+     * @see #getInnerDocument()
      */
     void setInnerDocument(Document document);
 

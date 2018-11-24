@@ -43,42 +43,42 @@ public @interface ContentModel {
      * </pre>
      * </p>
      */
-    public static final String KEY = "content_model";
+    String KEY = "content_model";
 
     /**
      * Predefined constant to let Asciidoctor know that this BlockProcessor creates zero or more child blocks.
      */
-    public static final String COMPOUND = ":compound";
+    String COMPOUND = ":compound";
 
     /**
      * Predefined constant to let Asciidoctor know that this BlockProcessor creates simple paragraph content.
      */
-    public static final String SIMPLE = ":simple";
+    String SIMPLE = ":simple";
 
     /**
      * Predefined constant to let Asciidoctor know that this BlockProcessor creates literal content.
      */
-    public static final String VERBATIM = ":verbatim";
+    String VERBATIM = ":verbatim";
 
     /**
      * Predefined constant to make Asciidoctor pass through the content unprocessed.
      */
-    public static final String RAW = ":raw";
+    String RAW = ":raw";
 
     /**
      * Predefined constant to make Asciidoctor drop the content.
      */
-    public static final String SKIP = ":skip";
+    String SKIP = ":skip";
 
     /**
      * Predefined constant to make Asciidoctor not expect any content.
      */
-    public static final String EMPTY = ":empty";
+    String EMPTY = ":empty";
 
     /**
      * Predefined constant to make Asciidoctor parse content as attributes.
      */
-    public static final String ATTRIBUTES = ":attributes";
+    String ATTRIBUTES = ":attributes";
 
     /**
      * See the constants defined in this enumeration for possible values.

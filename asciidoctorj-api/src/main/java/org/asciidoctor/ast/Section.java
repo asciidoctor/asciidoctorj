@@ -6,6 +6,7 @@ public interface Section extends StructuralNode {
      * @deprecated Please use {@link #getIndex()}
      * @return the 0-based index order of this section within the parent block
      */
+    @Deprecated
     int index();
 
     /**
@@ -17,6 +18,7 @@ public interface Section extends StructuralNode {
      * @deprecated Please use {@link #getNumber()}
      * @return the number of this section within the parent block
      */
+    @Deprecated
     int number();
 
     /**
@@ -28,6 +30,7 @@ public interface Section extends StructuralNode {
      * @deprecated Please use {@link #getSectionName()}
      * @return the section name of this section
      */
+    @Deprecated
     String sectname();
 
     /**
@@ -39,6 +42,7 @@ public interface Section extends StructuralNode {
      * @deprecated Please use {@link #isSpecial()}
      * @return Get the flag to indicate whether this is a special section or a child of one
      */
+    @Deprecated
     boolean special();
 
     /**
@@ -50,6 +54,7 @@ public interface Section extends StructuralNode {
      * @deprecated Please use {@link #isNumbered()}
      * @return the state of the numbered attribute at this section (need to preserve for creating TOC)
      */
+    @Deprecated
     boolean numbered();
 
     /**

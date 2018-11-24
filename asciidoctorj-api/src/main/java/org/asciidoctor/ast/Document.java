@@ -21,6 +21,7 @@ public interface Document extends StructuralNode {
      * @return The title as a String.
      * @see Title
      */
+    @Deprecated
     String doctitle();
 
     /**
@@ -32,6 +33,7 @@ public interface Document extends StructuralNode {
      * @deprecated Please use {@link #isBasebackend(String)}
      * @return basebackend attribute value
      */
+    @Deprecated
     boolean basebackend(String backend);
 
     /**

@@ -18,7 +18,7 @@ public class DescriptionListImpl extends StructuralNodeImpl implements Descripti
     @Override
     public java.util.List<DescriptionListEntry> getItems() {
         RubyArray rubyBlocks = (RubyArray) getRubyProperty("items");
-        return new RubyBlockListDecorator<DescriptionListEntry>(rubyBlocks);
+        return new RubyBlockListDecorator<>(rubyBlocks);
     }
 
     @Override
@@ -27,6 +27,7 @@ public class DescriptionListImpl extends StructuralNodeImpl implements Descripti
     }
 
     @Override
+    @Deprecated
     public String render() {
         return getString("render");
     }
