@@ -1,7 +1,6 @@
 package org.asciidoctor.ast.impl;
 
 import org.asciidoctor.ast.Section;
-import org.asciidoctor.ast.impl.StructuralNodeImpl;
 import org.jruby.runtime.builtin.IRubyObject;
 
 public class SectionImpl extends StructuralNodeImpl implements Section {
@@ -11,6 +10,7 @@ public class SectionImpl extends StructuralNodeImpl implements Section {
     }
 
     @Override
+    @Deprecated
     public int index() {
         return getIndex();
     }
@@ -21,6 +21,7 @@ public class SectionImpl extends StructuralNodeImpl implements Section {
     }
 
     @Override
+    @Deprecated
     public int number() {
         return getNumber();
     }
@@ -31,6 +32,7 @@ public class SectionImpl extends StructuralNodeImpl implements Section {
     }
 
     @Override
+    @Deprecated
     public String sectname() {
         return getSectionName();
     }
@@ -41,6 +43,7 @@ public class SectionImpl extends StructuralNodeImpl implements Section {
     }
 
     @Override
+    @Deprecated
     public boolean special() {
         return isSpecial();
     }
@@ -51,6 +54,7 @@ public class SectionImpl extends StructuralNodeImpl implements Section {
     }
 
     @Override
+    @Deprecated
     public boolean numbered() {
         return isNumbered();
     }

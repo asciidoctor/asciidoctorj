@@ -103,6 +103,12 @@ subprojects {
     project.tasks.withType(JavaCompile) { task ->
       task.sourceCompatibility = project.sourceCompatibility
       task.targetCompatibility = project.targetCompatibility
+      if (project.hasProperty("showDeprecation")) {
+        options.compilerArgs << "-Xlint:deprecation"
+      }
+      if (project.hasProperty("showUnchecked")) {
+        options.compilerArgs << "-Xlint:unchecked"
+      }
     }
     project.tasks.withType(GroovyCompile) { task ->
       task.sourceCompatibility = project.sourceCompatibility

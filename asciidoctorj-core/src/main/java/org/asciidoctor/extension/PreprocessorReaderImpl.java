@@ -23,6 +23,7 @@ public class PreprocessorReaderImpl extends ReaderImpl implements PreprocessorRe
     }
 
     @Override
+    @Deprecated
     public Document document() {
         return getDocument();
     }

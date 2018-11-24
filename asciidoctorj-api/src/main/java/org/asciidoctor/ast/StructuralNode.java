@@ -9,41 +9,42 @@ public interface StructuralNode extends ContentNode {
      * Constant for special character replacement substitution like {@code <} to {@code &amp;lt;}.
      * @see <a href="http://asciidoctor.org/docs/user-manual/#special-characters">Asciidoctor User Manual</a>
      */
-    public static final String SUBSTITUTION_SPECIAL_CHARACTERS = "specialcharacters";
+    String SUBSTITUTION_SPECIAL_CHARACTERS = "specialcharacters";
 
     /**
      * Constant for quote replacements like {@code *bold*} to <b>{@code bold}</b>.
      * @see <a href="http://asciidoctor.org/docs/user-manual/#quotes">Asciidoctor User Manual</a>
      */
-    public static final String SUBSTITUTION_QUOTES             = "quotes";
+    String SUBSTITUTION_QUOTES             = "quotes";
 
     /**
      * Constant for attribute replacements like {@code {foo}}.
      * @see <a href="http://asciidoctor.org/docs/user-manual/#attributes-2">Asciidoctor User Manual</a>
      */
-    public static final String SUBSTITUTION_ATTRIBUTES         = "attributes";
+    String SUBSTITUTION_ATTRIBUTES         = "attributes";
 
     /**
      * Constant for replacements like {@code (C)} to {@code &#169;}.
      * @see <a href="http://asciidoctor.org/docs/user-manual/#replacements">Asciidoctor User Manual</a>
      */
-    public static final String SUBSTITUTION_REPLACEMENTS       = "replacements";
+    String SUBSTITUTION_REPLACEMENTS       = "replacements";
 
     /**
      * Constant for macro replacements like {@code mymacro:target[]}.
      * @see <a href="http://asciidoctor.org/docs/user-manual/#subs-mac">Asciidoctor User Manual</a>
      */
-    public static final String SUBSTITUTION_MACROS             = "macros";
+    String SUBSTITUTION_MACROS             = "macros";
 
     /**
      * Constant for post replacements like creating line breaks from a trailing {@code +} in a line.
      * @see <a href="http://asciidoctor.org/docs/user-manual/#post-replacements">Asciidoctor User Manual</a>
      */
-    public static final String SUBSTITUTION_POST_REPLACEMENTS  = "post_replacements";
+    String SUBSTITUTION_POST_REPLACEMENTS  = "post_replacements";
 
     /**
      * @deprecated Please use {@linkplain #getTitle()} instead
      */
+    @Deprecated
     String title();
     String getTitle();
     void setTitle(String title);
@@ -54,6 +55,7 @@ public interface StructuralNode extends ContentNode {
     /**
      * @deprecated Please use {@linkplain #getStyle()} instead
      */
+    @Deprecated
     String style();
     String getStyle();
 
@@ -63,6 +65,7 @@ public interface StructuralNode extends ContentNode {
      * @return The list of child blocks of this block
      * @deprecated Please use {@linkplain #getBlocks()} instead
      */
+    @Deprecated
     List<StructuralNode> blocks();
 
     /**
@@ -79,6 +82,7 @@ public interface StructuralNode extends ContentNode {
     /**
      * @deprecated Please use {@linkplain #getContent()} instead
      */
+    @Deprecated
     Object content();
     Object getContent();
     String convert();

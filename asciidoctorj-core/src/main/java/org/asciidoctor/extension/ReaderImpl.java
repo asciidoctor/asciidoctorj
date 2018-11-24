@@ -25,6 +25,7 @@ public class ReaderImpl extends RubyObjectWrapper implements Reader {
     }
 
     @Override
+    @Deprecated
     public int getLineno() {
         return getLineNumber();
     }

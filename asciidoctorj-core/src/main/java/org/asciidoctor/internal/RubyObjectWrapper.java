@@ -2,11 +2,9 @@ package org.asciidoctor.internal;
 
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
-import org.jruby.RubyBoolean;
 import org.jruby.RubyFixnum;
 import org.jruby.RubyNil;
 import org.jruby.RubyNumeric;
-import org.jruby.RubyString;
 import org.jruby.RubySymbol;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.ThreadContext;
@@ -39,9 +37,9 @@ public class RubyObjectWrapper {
         if (result instanceof RubyNil) {
             return null;
         } else if (result instanceof RubySymbol) {
-            return ((RubySymbol) result).asJavaString();
+            return result.asJavaString();
         } else {
-            return ((RubyString) result).asJavaString();
+            return result.asJavaString();
         }
     }
 
@@ -59,7 +57,7 @@ public class RubyObjectWrapper {
         if (result instanceof RubyNil) {
             return null;
         }
-        return ((RubySymbol) result).asJavaString();
+        return result.asJavaString();
     }
 
     public void setSymbol(String propertyName, String value) {
@@ -75,7 +73,7 @@ public class RubyObjectWrapper {
         if (result instanceof RubyNil) {
             return false;
         } else {
-            return ((RubyBoolean) result).isTrue();
+            return result.isTrue();
         }
     }
 
@@ -110,7 +108,7 @@ public class RubyObjectWrapper {
     public IRubyObject getRubyProperty(String propertyName, Object... args) {
         ThreadContext threadContext = runtime.getThreadService().getCurrentContext();
 
-        IRubyObject result = null;
+        IRubyObject result;
         if (propertyName.startsWith("@")) {
             if (args != null && args.length > 0) {
                 throw new IllegalArgumentException("No args allowed for direct field access");
@@ -123,7 +121,7 @@ public class RubyObjectWrapper {
                 IRubyObject[] rubyArgs = new IRubyObject[args.length];
                 for (int i = 0; i < args.length; i++) {
                     if (args[i] instanceof RubyObjectWrapper) {
-                        rubyArgs[i] = ((RubyObjectWrapper)args[i]).getRubyObject();
+                        rubyArgs[i] = ((RubyObjectWrapper) args[i]).getRubyObject();
                     } else {
                         rubyArgs[i] = JavaEmbedUtils.javaToRuby(runtime, args[i]);
                     }
@@ -137,7 +135,6 @@ public class RubyObjectWrapper {
     public void setRubyProperty(String propertyName, IRubyObject arg) {
         ThreadContext threadContext = runtime.getThreadService().getCurrentContext();
 
-        IRubyObject result = null;
         if (propertyName.startsWith("@")) {
             rubyNode.getInstanceVariables().setInstanceVariable(propertyName, arg);
         } else {
@@ -160,6 +157,5 @@ public class RubyObjectWrapper {
     public <T> T toJava(IRubyObject rubyObject, Class<T> targetClass) {
         return (T) JavaEmbedUtils.rubyToJava(runtime, rubyObject, targetClass);
     }
-
 
 }

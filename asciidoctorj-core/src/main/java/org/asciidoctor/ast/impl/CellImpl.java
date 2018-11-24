@@ -60,31 +60,31 @@ public class CellImpl extends ContentNodeImpl implements Cell {
 
     @Override
     public Table.HorizontalAlignment getHorizontalAlignment() {
-        return Table.HorizontalAlignment.valueOf(((String) getAttr("halign", "left")).toUpperCase());
+        return Table.HorizontalAlignment.valueOf(((String) getAttribute("halign", "left")).toUpperCase());
     }
 
     @Override
     public void setHorizontalAlignment(Table.HorizontalAlignment halign) {
-        setAttr("halign", halign.name().toLowerCase(), true);
+        setAttribute("halign", halign.name().toLowerCase(), true);
     }
 
     @Override
     public Table.VerticalAlignment getVerticalAlignment() {
-        return Table.VerticalAlignment.valueOf(((String) getAttr("valign", "top")).toUpperCase());
+        return Table.VerticalAlignment.valueOf(((String) getAttribute("valign", "top")).toUpperCase());
     }
 
     @Override
     public void setVerticalAlignment(Table.VerticalAlignment valign) {
-        setAttr("valign", valign.name().toLowerCase(), true);
+        setAttribute("valign", valign.name().toLowerCase(), true);
     }
 
     @Override
     public Document getInnerDocument() {
         IRubyObject innerDocument = getRubyProperty("inner_document");
         if (innerDocument.isNil()) {
-        	return null;
+            return null;
         }
-		return (Document) NodeConverter.createASTNode(innerDocument);
+        return (Document) NodeConverter.createASTNode(innerDocument);
     }
 
     @Override

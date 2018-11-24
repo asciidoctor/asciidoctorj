@@ -13,14 +13,12 @@ import java.util.Map;
 
 public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNode {
 
-    private static final String BLOCK_CLASS = "Block";
-    private static final String SECTION_CLASS = "Section";
-
     public StructuralNodeImpl(IRubyObject blockDelegate) {
         super(blockDelegate);
     }
 
     @Override
+    @Deprecated
     public String title() {
         return getTitle();
     }
@@ -46,6 +44,7 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
     }
 
     @Override
+    @Deprecated
     public String style() {
         return getStyle();
     }
@@ -61,6 +60,7 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
     }
 
     @Override
+    @Deprecated
     public List<StructuralNode> blocks() {
         return getBlocks();
     }
@@ -68,16 +68,16 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
     @Override
     public List<StructuralNode> getBlocks() {
         RubyArray rubyBlocks = (RubyArray) getRubyProperty("blocks");
-        return new RubyBlockListDecorator<StructuralNode>(rubyBlocks);
+        return new RubyBlockListDecorator<>(rubyBlocks);
     }
 
     @Override
     public void append(StructuralNode block) {
-
         getRubyObject().callMethod(runtime.getCurrentContext(), "<<", ((StructuralNodeImpl) block).getRubyObject());
     }
 
     @Override
+    @Deprecated
     public Object content() {
         return getContent();
     }
@@ -151,10 +151,8 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
 
     @Override
     public List<StructuralNode> findBy(Map<Object, Object> selector) {
-
-        RubyArray rubyBlocks = (RubyArray) getRubyProperty("find_by", RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime,
-                selector));
-        return new RubyBlockListDecorator(rubyBlocks);
+        RubyArray rubyBlocks = (RubyArray) getRubyProperty("find_by", RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime, selector));
+        return new RubyBlockListDecorator<>(rubyBlocks);
     }
 
 }

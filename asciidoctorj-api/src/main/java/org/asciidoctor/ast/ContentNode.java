@@ -9,6 +9,7 @@ public interface ContentNode {
      * @deprecated Please use {@link #getId()}
      * @return A unique ID for this node
      */
+    @Deprecated
     String id();
 
     /**
@@ -22,16 +23,19 @@ public interface ContentNode {
     /**
      * @deprecated Use {@linkplain #getParent()}  instead.
      */
+    @Deprecated
     ContentNode parent();
     ContentNode getParent();
     /**
      * @deprecated Use {@linkplain #getContext()}  instead.
      */
+    @Deprecated
     String context();
     String getContext();
     /**
      * @deprecated Use {@linkplain #getDocument()}  instead.
      */
+    @Deprecated
     Document document();
     Document getDocument();
     boolean isInline();
@@ -46,6 +50,7 @@ public interface ContentNode {
      * @return
      * @deprecated Use {@link #getAttribute(Object, Object, boolean)} instead
      */
+    @Deprecated
     Object getAttr(Object name, Object defaultValue, boolean inherit);
 
     /**
@@ -55,6 +60,7 @@ public interface ContentNode {
      * @return
      * @deprecated Use {@link #getAttribute(Object, Object)} instead
      */
+    @Deprecated
     Object getAttr(Object name, Object defaultValue);
 
     /**
@@ -62,6 +68,7 @@ public interface ContentNode {
      * @return
      * @deprecated Use {@link #getAttribute(Object)} instead
      */
+    @Deprecated
     Object getAttr(Object name);
 
     Object getAttribute(Object name, Object defaultValue, boolean inherit);
@@ -75,6 +82,7 @@ public interface ContentNode {
      * @return {@code true} if this node or the document has an attribute with the given name
      * @deprecated Use {@link #hasAttribute(Object)} instead
      */
+    @Deprecated
     boolean hasAttr(Object name);
 
     /**
@@ -84,6 +92,7 @@ public interface ContentNode {
      * @return {@code true} if the current node or depending on the inherited parameter the document has an attribute with the given name.
      * @deprecated Use {@link #hasAttribute(Object, boolean)} instead
      */
+    @Deprecated
     boolean hasAttr(Object name, boolean inherited);
 
     /**
@@ -107,6 +116,7 @@ public interface ContentNode {
      * @return
      * @deprecated Use {@link #isAttribute(Object, Object)} instead.
      */
+    @Deprecated
     boolean isAttr(Object name, Object expected);
 
     /**
@@ -117,6 +127,7 @@ public interface ContentNode {
      * @return
      * @deprecated Use {@link #isAttribute(Object, Object, boolean)} instead.
      */
+    @Deprecated
     boolean isAttr(Object name, Object expected, boolean inherit);
 
     /**
@@ -144,6 +155,7 @@ public interface ContentNode {
      * @return
      * @deprecated Use {@link #setAttribute(Object, Object, boolean)} instead.
      */
+    @Deprecated
     boolean setAttr(Object name, Object value, boolean overwrite);
 
     boolean setAttribute(Object name, Object value, boolean overwrite);
@@ -158,6 +170,7 @@ public interface ContentNode {
     /**
      * @deprecated Use {@linkplain #getRole()}  instead.
      */
+    @Deprecated
     String role();
     List<String> getRoles();
 
@@ -173,6 +186,5 @@ public interface ContentNode {
     String imageUri(String targetImage, String assetDirKey);
     String readAsset(String path, Map<Object, Object> opts);
     String normalizeWebPath(String path, String start, boolean preserveUriTarget);
-
 
 }

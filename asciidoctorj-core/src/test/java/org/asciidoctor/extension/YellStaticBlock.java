@@ -11,7 +11,7 @@ import java.util.Map;
 public class YellStaticBlock extends BlockProcessor {
 
     private static Map<String, Object> configs = new HashMap<String, Object>() {{
-        put(CONTEXTS, Arrays.asList(CONTEXT_PARAGRAPH));
+        put(Contexts.KEY, Arrays.asList(Contexts.PARAGRAPH));
         put(ContentModel.KEY, ContentModel.SIMPLE);
     }};
 

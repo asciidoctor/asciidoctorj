@@ -6,7 +6,7 @@ public interface ListItem extends StructuralNode {
 
     /**
      * @return The text of the cell including substitutions being applied.
-     * @throws Exception when no text is set. Consider calling {@link #hasText()} before calling this method.
+     * @throws RuntimeException when no text is set. Consider calling {@link #hasText()} before calling this method.
      */
     String getText();
 

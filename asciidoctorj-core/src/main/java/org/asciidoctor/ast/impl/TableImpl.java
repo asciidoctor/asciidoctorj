@@ -17,7 +17,7 @@ public class TableImpl extends StructuralNodeImpl implements Table {
 
     private static final String FRAME_ATTR = "frame";
 
-    private static final String GRID_ATTR  = "grid";
+    private static final String GRID_ATTR = "grid";
 
     private Rows rows;
 
@@ -33,28 +33,28 @@ public class TableImpl extends StructuralNodeImpl implements Table {
 
     @Override
     public String getFrame() {
-        return (String)getAttr(FRAME_ATTR, "all");
+        return (String) getAttribute(FRAME_ATTR, "all");
     }
 
     @Override
     public void setFrame(String frame) {
-        setAttr(FRAME_ATTR, frame, true);
+        setAttribute(FRAME_ATTR, frame, true);
     }
 
     @Override
     public String getGrid() {
-        return (String)getAttr(GRID_ATTR, "all");
+        return (String) getAttribute(GRID_ATTR, "all");
     }
 
     @Override
     public void setGrid(String grid) {
-        setAttr(GRID_ATTR, grid, true);
+        setAttribute(GRID_ATTR, grid, true);
     }
 
     @Override
     public List<Column> getColumns() {
         RubyArray rubyBlocks = (RubyArray) getRubyProperty("columns");
-        return new RubyBlockListDecorator<Column>(rubyBlocks);
+        return new RubyBlockListDecorator<>(rubyBlocks);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class TableImpl extends StructuralNodeImpl implements Table {
         @Override
         public boolean add(Row row) {
             boolean changed = rubyArray.add(((RowImpl) row).getRubyObject());
-            TableImpl.this.setAttr("rowcount", size(), true);
+            TableImpl.this.setAttribute("rowcount", size(), true);
             return changed;
         }
 
@@ -140,7 +140,7 @@ public class TableImpl extends StructuralNodeImpl implements Table {
                 return false;
             }
             boolean changed = rubyArray.remove(((RowImpl) o).getRubyObject());
-            TableImpl.this.setAttr("rowcount", size(), true);
+            TableImpl.this.setAttribute("rowcount", size(), true);
             return changed;
         }
 
@@ -152,7 +152,7 @@ public class TableImpl extends StructuralNodeImpl implements Table {
         @Override
         public void clear() {
             rubyArray.clear();
-            TableImpl.this.setAttr("rowcount", size(), true);
+            TableImpl.this.setAttribute("rowcount", size(), true);
         }
 
         @Override
@@ -174,13 +174,13 @@ public class TableImpl extends StructuralNodeImpl implements Table {
         @Override
         public void add(int index, Row element) {
             rubyArray.add(index, ((RowImpl) element).getRubyObject());
-            TableImpl.this.setAttr("rowcount", size(), true);
+            TableImpl.this.setAttribute("rowcount", size(), true);
         }
 
         @Override
         public Row remove(int index) {
             IRubyObject rubyObject = (IRubyObject) rubyArray.remove(index);
-            TableImpl.this.setAttr("rowcount", size(), true);
+            TableImpl.this.setAttribute("rowcount", size(), true);
             return new RowImpl(rubyObject);
         }
 

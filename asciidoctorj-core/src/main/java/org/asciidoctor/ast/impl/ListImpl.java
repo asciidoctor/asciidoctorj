@@ -2,7 +2,6 @@ package org.asciidoctor.ast.impl;
 
 import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.ast.impl.StructuralNodeImpl;
 import org.asciidoctor.internal.RubyBlockListDecorator;
 import org.jruby.RubyArray;
 import org.jruby.runtime.builtin.IRubyObject;
@@ -14,9 +13,9 @@ public class ListImpl extends StructuralNodeImpl implements List {
     }
 
     @Override
-    public java.util.List getItems() {
+    public java.util.List<StructuralNode> getItems() {
         RubyArray rubyBlocks = (RubyArray) getRubyProperty("items");
-        return new RubyBlockListDecorator<StructuralNode>(rubyBlocks);
+        return new RubyBlockListDecorator<>(rubyBlocks);
     }
 
     @Override
@@ -25,6 +24,7 @@ public class ListImpl extends StructuralNodeImpl implements List {
     }
 
     @Override
+    @Deprecated
     public String render() {
         return getString("render");
     }
