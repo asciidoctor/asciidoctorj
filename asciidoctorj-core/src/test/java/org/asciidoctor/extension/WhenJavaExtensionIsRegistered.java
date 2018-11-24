@@ -464,11 +464,9 @@ public class WhenJavaExtensionIsRegistered {
 
     @Test
     public void a_treeprocessor_and_blockmacroprocessor_should_be_executed_in_document() {
-
-        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
-
-        javaExtensionRegistry.treeprocessor(TerminalCommandTreeprocessor.class);
-        javaExtensionRegistry.blockMacro("gist", GistMacro.class);
+        this.asciidoctor.javaExtensionRegistry()
+                .treeprocessor(TerminalCommandTreeprocessor.class)
+                .blockMacro("gist", GistMacro.class);
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-terminal-command-and-gist-macro.ad"),
