@@ -49,7 +49,7 @@ ext {
   jsoupVersion = '1.10.2'
   junitVersion = '4.12'
   nettyVersion = '4.0.33.Final'
-  saxonVersion = '9.5.1-6'
+  saxonVersion = '9.9.0-2'
   xmlMatchersVersion = '1.0-RC1'
   pdfboxVersion = '1.8.10'
 
