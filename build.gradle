@@ -157,8 +157,6 @@ subprojects {
     maxHeapSize = '1024m'
     if (JavaVersion.current().isJava8Compatible()) {
       jvmArgs '-XX:-UseGCOverheadLimit'
-    } else {
-      jvmArgs '-XX:MaxPermSize=256m', '-XX:-UseGCOverheadLimit'
     }
 
     testLogging {

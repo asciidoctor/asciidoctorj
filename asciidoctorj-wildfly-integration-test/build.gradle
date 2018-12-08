@@ -3,10 +3,13 @@ jar.enabled = false
 ext {
     arquillianVersion = '1.1.13.Final'
     arquillianWildflyVersion = '2.1.1.Final'
+
+    wildflyVersion = '15.0.0.Final'
 }
 
 configurations {
     jbossmodule
+    jbossdist { transitive = false }
 }
 
 dependencies {
@@ -19,6 +22,8 @@ dependencies {
     }
     jbossmodule "org.jruby:jruby-complete:$jrubyVersion"
 
+    jbossdist group: 'org.wildfly', name: 'wildfly-dist', version: wildflyVersion, ext: 'zip'
+    
     testCompile "javax:javaee-api:7.0"
     testCompileOnly project(':asciidoctorj')
     testCompile "junit:junit:$junitVersion"
@@ -27,6 +32,13 @@ dependencies {
     testCompile "org.jsoup:jsoup:$jsoupVersion"
 
     testRuntime "org.wildfly.arquillian:wildfly-arquillian-container-managed:$arquillianWildflyVersion"
+}
+
+task unpackWildfly(type: Copy) {
+    from {
+        zipTree(configurations.jbossdist.singleFile)
+    }
+    into "$buildDir"
 }
 
 task createModule << {
@@ -48,19 +60,7 @@ task createModule << {
 
 
 test {
-    useJUnit {
-        excludeCategories 'org.asciidoctor.categories.Wildfly'
-    }
-
-}
-
-
-test {
-    useJUnit {
-        if (!project.hasProperty('jboss.home')) {
-            excludeCategories 'org.asciidoctor.categories.Wildfly'
-        }
-    }
+    useJUnit()
 
     testLogging {
         // events 'passed', 'failed', 'skipped', 'standard_out', 'standard_error'
@@ -81,12 +81,17 @@ test {
         }
     }
 
-    if (project.hasProperty('jboss.home')) {
-        systemProperty('jboss.home', project.getProperty("jboss.home"))
-        systemProperty('module.path', project.getProperty("jboss.home") + "/modules" + File.pathSeparator + file('build/modules').absolutePath)
+    def jbossHome = file("build/wildfly-$wildflyVersion").absolutePath
+    systemProperty('jboss.home', jbossHome)
+    systemProperty('module.path', jbossHome + "/modules" + File.pathSeparator + file('build/modules').absolutePath)
+
+    if (JavaVersion.current().isJava11Compatible()) {
+        systemProperty('arquillian.launch', 'wildfly-java11')
     }
 
+
     dependsOn createModule
+    dependsOn unpackWildfly
     dependsOn configurations.jbossmodule
 }
 
