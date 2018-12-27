@@ -1,7 +1,9 @@
 package org.asciidoctor.extension
 
 import groovy.transform.CompileStatic
-import org.asciidoctor.ast.StructuralNode
+import org.asciidoctor.api.ast.StructuralNode
+import org.asciidoctor.api.extension.BlockMacroProcessor
+import org.asciidoctor.api.extension.Name
 
 @CompileStatic
 @Name('testmacro')

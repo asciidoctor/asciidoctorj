@@ -1,9 +1,10 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
-import org.asciidoctor.ast.Document
-import org.asciidoctor.ast.StructuralNode
+import org.asciidoctor.api.OptionsBuilder
+import org.asciidoctor.api.ast.Document
+import org.asciidoctor.api.ast.StructuralNode
+import org.asciidoctor.api.extension.Treeprocessor
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup

@@ -1,5 +1,6 @@
 package org.asciidoctor.ast;
 
+import org.asciidoctor.api.ast.ContentNode;
 import org.jruby.Ruby;
 import org.jruby.RubyHash;
 import org.jruby.runtime.builtin.IRubyObject;

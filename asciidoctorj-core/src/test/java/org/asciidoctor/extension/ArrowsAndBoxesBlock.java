@@ -3,8 +3,10 @@ package org.asciidoctor.extension;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.ast.Document;
+import org.asciidoctor.api.ast.StructuralNode;
+import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.api.extension.BlockProcessor;
+import org.asciidoctor.api.extension.Reader;
 
 public class ArrowsAndBoxesBlock extends BlockProcessor {
 

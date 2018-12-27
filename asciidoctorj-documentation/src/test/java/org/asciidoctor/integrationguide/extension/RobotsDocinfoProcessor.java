@@ -1,10 +1,10 @@
 package org.asciidoctor.integrationguide.extension;
 
 //tag::include[]
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.extension.DocinfoProcessor;
-import org.asciidoctor.extension.Location;
-import org.asciidoctor.extension.LocationType;
+import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.api.extension.DocinfoProcessor;
+import org.asciidoctor.api.extension.Location;
+import org.asciidoctor.api.extension.LocationType;
 
 @Location(LocationType.HEADER)                                    // <1>
 public class RobotsDocinfoProcessor extends DocinfoProcessor {    // <2>

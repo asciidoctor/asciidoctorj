@@ -1,6 +1,6 @@
 package org.asciidoctor.log;
 
-import org.asciidoctor.ast.Cursor;
+import org.asciidoctor.api.ast.Cursor;
 
 public class LogRecord {
 

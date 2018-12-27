@@ -2,12 +2,16 @@ package org.asciidoctor.extension
 
 import groovy.transform.CompileStatic
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
-import org.asciidoctor.SafeMode
-import org.asciidoctor.ast.Block
-import org.asciidoctor.ast.ContentModel
-import org.asciidoctor.ast.Section
-import org.asciidoctor.ast.StructuralNode
+import org.asciidoctor.api.OptionsBuilder
+import org.asciidoctor.api.SafeMode
+import org.asciidoctor.api.ast.Block
+import org.asciidoctor.api.ast.ContentModel
+import org.asciidoctor.api.ast.Section
+import org.asciidoctor.api.ast.StructuralNode
+import org.asciidoctor.api.extension.BlockMacroProcessor
+import org.asciidoctor.api.extension.Contexts
+import org.asciidoctor.api.extension.Name
+import org.asciidoctor.api.extension.Treeprocessor
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
@@ -16,7 +20,7 @@ import org.jsoup.select.Elements
 import org.junit.runner.RunWith
 import spock.lang.Specification
 
-import static org.asciidoctor.ast.ContentModel.SIMPLE
+import static org.asciidoctor.api.ast.ContentModel.SIMPLE
 
 @SuppressWarnings('DuplicateNumberLiteral')
 @RunWith(ArquillianSputnik)
@@ -154,7 +158,7 @@ testmacro::countera[]
     static class TestTreeProcessor extends Treeprocessor {
 
         @Override
-        org.asciidoctor.ast.Document process(org.asciidoctor.ast.Document document) {
+        org.asciidoctor.api.ast.Document process(org.asciidoctor.api.ast.Document document) {
             List<StructuralNode> newNodes = document.blocks.collect {
                 if (it instanceof Section) {
                     processSection((Section) it)

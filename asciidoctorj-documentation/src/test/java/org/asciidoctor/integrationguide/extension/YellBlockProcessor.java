@@ -1,11 +1,11 @@
 package org.asciidoctor.integrationguide.extension;
 
-import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.extension.BlockProcessor;
-import org.asciidoctor.ast.ContentModel;
-import org.asciidoctor.extension.Contexts;
-import org.asciidoctor.extension.Name;
-import org.asciidoctor.extension.Reader;
+import org.asciidoctor.api.ast.StructuralNode;
+import org.asciidoctor.api.extension.BlockProcessor;
+import org.asciidoctor.api.ast.ContentModel;
+import org.asciidoctor.api.extension.Contexts;
+import org.asciidoctor.api.extension.Name;
+import org.asciidoctor.api.extension.Reader;
 
 import java.util.Map;
 

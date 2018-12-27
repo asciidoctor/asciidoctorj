@@ -1,6 +1,6 @@
 package org.asciidoctor.ast.impl;
 
-import org.asciidoctor.ast.ListItem;
+import org.asciidoctor.api.ast.ListItem;
 import org.asciidoctor.ast.impl.StructuralNodeImpl;
 import org.jruby.runtime.builtin.IRubyObject;
 

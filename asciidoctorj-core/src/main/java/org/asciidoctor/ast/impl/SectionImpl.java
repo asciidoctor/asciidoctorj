@@ -1,6 +1,6 @@
 package org.asciidoctor.ast.impl;
 
-import org.asciidoctor.ast.Section;
+import org.asciidoctor.api.ast.Section;
 import org.jruby.runtime.builtin.IRubyObject;
 
 public class SectionImpl extends StructuralNodeImpl implements Section {

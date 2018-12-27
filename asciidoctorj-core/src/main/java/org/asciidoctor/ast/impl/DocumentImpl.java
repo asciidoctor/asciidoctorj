@@ -2,8 +2,8 @@ package org.asciidoctor.ast.impl;
 
 import java.util.Map;
 
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.Title;
+import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.api.ast.Title;
 import org.asciidoctor.ast.impl.StructuralNodeImpl;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.jruby.Ruby;

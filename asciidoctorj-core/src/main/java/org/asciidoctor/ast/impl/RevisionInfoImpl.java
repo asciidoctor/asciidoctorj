@@ -2,7 +2,7 @@ package org.asciidoctor.ast.impl;
 
 import java.util.Map;
 
-import org.asciidoctor.ast.RevisionInfo;
+import org.asciidoctor.api.ast.RevisionInfo;
 
 public class RevisionInfoImpl implements RevisionInfo {
 

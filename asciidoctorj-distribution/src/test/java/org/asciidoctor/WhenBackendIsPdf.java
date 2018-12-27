@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import org.asciidoctor.api.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.util.ClasspathResources;
 import org.asciidoctor.util.RougeColors;
@@ -17,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static org.asciidoctor.OptionsBuilder.options;
+import static org.asciidoctor.api.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

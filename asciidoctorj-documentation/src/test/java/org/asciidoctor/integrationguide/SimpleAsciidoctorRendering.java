@@ -3,8 +3,8 @@ package org.asciidoctor.integrationguide;
 import java.io.File;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.SafeMode;
+import org.asciidoctor.api.OptionsBuilder;
+import org.asciidoctor.api.SafeMode;
 
 public class SimpleAsciidoctorRendering {
 

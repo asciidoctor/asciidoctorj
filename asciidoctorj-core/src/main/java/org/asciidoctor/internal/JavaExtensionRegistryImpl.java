@@ -1,5 +1,6 @@
 package org.asciidoctor.internal;
 
+import org.asciidoctor.api.extension.*;
 import org.asciidoctor.extension.*;
 import org.asciidoctor.extension.processorproxies.*;
 import org.jruby.Ruby;

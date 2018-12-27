@@ -1,10 +1,11 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
-import org.asciidoctor.SafeMode
-import org.asciidoctor.ast.ContentModel
-import org.asciidoctor.ast.Document
+import org.asciidoctor.api.OptionsBuilder
+import org.asciidoctor.api.SafeMode
+import org.asciidoctor.api.ast.ContentModel
+import org.asciidoctor.api.ast.Document
+import org.asciidoctor.api.extension.Treeprocessor
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup

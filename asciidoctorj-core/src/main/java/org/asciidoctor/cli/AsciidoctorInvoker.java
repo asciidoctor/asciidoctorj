@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.Scanner;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.DirectoryWalker;
+import org.asciidoctor.api.DirectoryWalker;
 import org.asciidoctor.GlobDirectoryWalker;
-import org.asciidoctor.Options;
+import org.asciidoctor.api.Options;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyHashUtil;

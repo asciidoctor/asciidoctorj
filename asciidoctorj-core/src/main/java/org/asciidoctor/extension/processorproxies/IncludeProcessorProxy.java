@@ -4,10 +4,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.ast.Document;
+import org.asciidoctor.api.ast.Document;
 import org.asciidoctor.ast.NodeConverter;
-import org.asciidoctor.extension.IncludeProcessor;
-import org.asciidoctor.extension.PreprocessorReader;
+import org.asciidoctor.api.extension.IncludeProcessor;
+import org.asciidoctor.api.extension.PreprocessorReader;
 import org.asciidoctor.extension.PreprocessorReaderImpl;
 import org.asciidoctor.internal.RubyAttributesMapDecorator;
 import org.asciidoctor.internal.RubyHashMapDecorator;

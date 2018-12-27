@@ -1,8 +1,8 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.ast.StructuralNode
-import org.asciidoctor.ast.Document
+import org.asciidoctor.api.ast.StructuralNode
+import org.asciidoctor.api.ast.Document
 import spock.lang.Specification
 
 class WhenAstIsIterated extends Specification {

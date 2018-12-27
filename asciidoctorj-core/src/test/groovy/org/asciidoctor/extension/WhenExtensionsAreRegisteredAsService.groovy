@@ -1,8 +1,8 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.Options
-import org.asciidoctor.SafeMode
+import org.asciidoctor.api.Options
+import org.asciidoctor.api.SafeMode
 import org.asciidoctor.arquillian.api.Unshared
 import org.asciidoctor.util.ClasspathResources
 import org.jboss.arquillian.spock.ArquillianSputnik
@@ -16,7 +16,7 @@ import org.junit.runner.RunWith
 import spock.lang.Ignore
 import spock.lang.Specification
 
-import static org.asciidoctor.OptionsBuilder.options
+import static org.asciidoctor.api.OptionsBuilder.options
 
 @RunWith(ArquillianSputnik)
 class WhenExtensionsAreRegisteredAsService extends Specification {

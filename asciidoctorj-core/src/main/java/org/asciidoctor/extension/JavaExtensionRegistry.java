@@ -1,5 +1,7 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.api.extension.*;
+
 public interface JavaExtensionRegistry {
 
     JavaExtensionRegistry docinfoProcessor(Class<? extends DocinfoProcessor> docInfoProcessor);

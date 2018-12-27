@@ -1,7 +1,7 @@
 package org.asciidoctor.ast.impl;
 
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.api.ast.ContentNode;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.internal.RubyAttributesMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;

@@ -1,8 +1,9 @@
 package org.asciidoctor.extension.processorproxies;
 
+import org.asciidoctor.api.extension.InlineMacroProcessor;
 import org.asciidoctor.ast.NodeConverter;
-import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.extension.InlineMacroProcessor;
+import org.asciidoctor.api.ast.StructuralNode;
+import org.asciidoctor.api.extension.InlineMacroProcessor;
 import org.asciidoctor.internal.RubyAttributesMapDecorator;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;

@@ -11,7 +11,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
 
-import org.asciidoctor.ast.Document;
+import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.api.extension.IncludeProcessor;
+import org.asciidoctor.api.extension.PreprocessorReader;
 import org.asciidoctor.util.TestHttpServer;
 
 public class UriIncludeProcessor extends IncludeProcessor {
@@ -29,7 +31,7 @@ public class UriIncludeProcessor extends IncludeProcessor {
 
     @Override
     public void process(Document document, PreprocessorReader reader, String target,
-            Map<String, Object> attributes) {
+                        Map<String, Object> attributes) {
 
         StringBuilder content = readContent(target);
         reader.push_include(content.toString(), target, target, 1, attributes);

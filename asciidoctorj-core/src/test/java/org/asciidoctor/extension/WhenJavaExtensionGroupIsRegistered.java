@@ -1,13 +1,14 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.Options;
-import org.asciidoctor.SafeMode;
+import org.asciidoctor.api.Options;
+import org.asciidoctor.api.SafeMode;
+import org.asciidoctor.api.extension.*;
 import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.ast.ContentModel;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.Section;
-import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.api.ast.ContentModel;
+import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.api.ast.Section;
+import org.asciidoctor.api.ast.StructuralNode;
 import org.asciidoctor.util.ClasspathResources;
 import org.asciidoctor.util.TestHttpServer;
 import org.jboss.arquillian.junit.Arquillian;
@@ -38,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.asciidoctor.OptionsBuilder.options;
+import static org.asciidoctor.api.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

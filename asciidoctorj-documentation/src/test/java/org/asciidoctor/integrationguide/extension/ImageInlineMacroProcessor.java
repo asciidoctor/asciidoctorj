@@ -1,8 +1,8 @@
 package org.asciidoctor.integrationguide.extension;
 
-import org.asciidoctor.ast.ContentNode;
-import org.asciidoctor.extension.InlineMacroProcessor;
-import org.asciidoctor.extension.Name;
+import org.asciidoctor.api.ast.ContentNode;
+import org.asciidoctor.api.extension.InlineMacroProcessor;
+import org.asciidoctor.api.extension.Name;
 
 import java.util.HashMap;
 import java.util.Map;

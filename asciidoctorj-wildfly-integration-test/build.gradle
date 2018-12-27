@@ -41,20 +41,22 @@ task unpackWildfly(type: Copy) {
     into "$buildDir"
 }
 
-task createModule << {
-    copy {
-        from "src/test/resources/module.xml"
-        into "build/modules/org/asciidoctor/asciidoctorj/main"
-        filter {
-            it
-                    .replaceAll('@@version@@', project(':asciidoctorj').version)
-                    .replaceAll('@@jrubyVersion@@', jrubyVersion)
+task createModule {
+    doLast {
+        copy {
+            from "src/test/resources/module.xml"
+            into "build/modules/org/asciidoctor/asciidoctorj/main"
+            filter {
+                it
+                        .replaceAll('@@version@@', project(':asciidoctorj').version)
+                        .replaceAll('@@jrubyVersion@@', jrubyVersion)
+            }
         }
-    }
 
-    copy {
-        from configurations.jbossmodule
-        into "build/modules/org/asciidoctor/asciidoctorj/main"
+        copy {
+            from configurations.jbossmodule
+            into "build/modules/org/asciidoctor/asciidoctorj/main"
+        }
     }
 }
 

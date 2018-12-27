@@ -1,7 +1,7 @@
 package org.asciidoctor.ast.impl;
 
-import org.asciidoctor.ast.List;
-import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.api.ast.List;
+import org.asciidoctor.api.ast.StructuralNode;
 import org.asciidoctor.internal.RubyBlockListDecorator;
 import org.jruby.RubyArray;
 import org.jruby.runtime.builtin.IRubyObject;

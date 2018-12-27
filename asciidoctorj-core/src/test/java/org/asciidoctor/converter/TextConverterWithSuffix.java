@@ -1,6 +1,8 @@
 package org.asciidoctor.converter;
 
 
+import org.asciidoctor.api.converter.ConverterFor;
+
 import java.util.Map;
 
 // ConverterFor.format should have precedence over ConverterFor.value

@@ -1,6 +1,6 @@
 package org.asciidoctor.internal;
 
-import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.api.ast.ContentNode;
 import org.asciidoctor.ast.impl.ContentNodeImpl;
 import org.asciidoctor.ast.NodeConverter;
 import org.jruby.RubyArray;

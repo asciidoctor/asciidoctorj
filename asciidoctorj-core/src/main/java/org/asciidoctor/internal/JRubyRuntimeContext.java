@@ -1,7 +1,7 @@
 package org.asciidoctor.internal;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.api.ast.ContentNode;
 import org.asciidoctor.ast.impl.ContentNodeImpl;
 import org.jruby.Ruby;
 import org.jruby.java.proxies.RubyObjectHolderProxy;

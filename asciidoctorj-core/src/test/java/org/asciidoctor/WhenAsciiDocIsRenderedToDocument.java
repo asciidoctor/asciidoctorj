@@ -1,9 +1,12 @@
 package org.asciidoctor;
 
+import org.asciidoctor.api.AttributesBuilder;
+import org.asciidoctor.api.OptionsBuilder;
+import org.asciidoctor.api.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.Section;
-import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.api.ast.Section;
+import org.asciidoctor.api.ast.StructuralNode;
 import org.asciidoctor.internal.IOUtils;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;

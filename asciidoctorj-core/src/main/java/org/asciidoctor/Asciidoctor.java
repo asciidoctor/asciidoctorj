@@ -1,9 +1,15 @@
 package org.asciidoctor;
 
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.DocumentHeader;
+import org.asciidoctor.api.DirectoryWalker;
+import org.asciidoctor.api.Options;
+import org.asciidoctor.api.OptionsBuilder;
+import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.api.ast.DocumentHeader;
+import org.asciidoctor.api.extension.ExtensionGroup;
+import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.api.ast.DocumentHeader;
 import org.asciidoctor.converter.JavaConverterRegistry;
-import org.asciidoctor.extension.ExtensionGroup;
+import org.asciidoctor.api.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.internal.JRubyAsciidoctor;

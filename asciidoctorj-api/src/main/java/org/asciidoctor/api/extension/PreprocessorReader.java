@@ -1,0 +1,19 @@
+package org.asciidoctor.api.extension;
+
+import java.util.Map;
+
+import org.asciidoctor.api.ast.Document;
+
+public interface PreprocessorReader extends Reader {
+
+    void push_include(String data, String file, String path, int lineNumber, Map<String, Object> attributes);
+
+    /**
+     * @return
+     * @deprecated Please use {@link #getDocument()}
+     */
+    @Deprecated
+    Document document();
+
+    Document getDocument();
+}

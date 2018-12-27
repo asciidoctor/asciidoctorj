@@ -1,6 +1,6 @@
 package org.asciidoctor.ast.impl;
 
-import org.asciidoctor.ast.PhraseNode;
+import org.asciidoctor.api.ast.PhraseNode;
 import org.jruby.runtime.builtin.IRubyObject;
 
 public class PhraseNodeImpl extends ContentNodeImpl implements PhraseNode {

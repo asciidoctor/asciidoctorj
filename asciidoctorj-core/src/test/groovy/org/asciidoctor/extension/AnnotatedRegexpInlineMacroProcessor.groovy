@@ -1,7 +1,10 @@
 package org.asciidoctor.extension
 
 import groovy.transform.CompileStatic
-import org.asciidoctor.ast.ContentNode
+import org.asciidoctor.api.ast.ContentNode
+import org.asciidoctor.api.extension.Format
+import org.asciidoctor.api.extension.InlineMacroProcessor
+import org.asciidoctor.api.extension.Name
 
 @CompileStatic
 @Name('man')

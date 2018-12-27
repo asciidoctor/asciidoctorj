@@ -1,5 +1,6 @@
 package org.asciidoctor.ast;
 
+import org.asciidoctor.api.ast.ContentNode;
 import org.asciidoctor.ast.impl.BlockImpl;
 import org.asciidoctor.ast.impl.CellImpl;
 import org.asciidoctor.ast.impl.ColumnImpl;

@@ -1,5 +1,7 @@
 package org.asciidoctor;
 
+import org.asciidoctor.api.DirectoryWalker;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

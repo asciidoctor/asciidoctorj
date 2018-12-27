@@ -3,8 +3,9 @@ package org.asciidoctor.extension;
 import java.util.Arrays;
 import java.util.Map;
 
-import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.ast.Block;
+import org.asciidoctor.api.ast.StructuralNode;
+import org.asciidoctor.api.ast.Block;
+import org.asciidoctor.api.extension.BlockMacroProcessor;
 
 public class GistMacro extends BlockMacroProcessor {
 

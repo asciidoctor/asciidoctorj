@@ -1,6 +1,6 @@
 package org.asciidoctor.ast.impl;
 
-import org.asciidoctor.ast.Cursor;
+import org.asciidoctor.api.ast.Cursor;
 import org.asciidoctor.internal.RubyObjectWrapper;
 import org.jruby.runtime.builtin.IRubyObject;
 

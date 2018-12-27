@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.ast.Author;
-import org.asciidoctor.ast.DocumentHeader;
-import org.asciidoctor.ast.RevisionInfo;
-import org.asciidoctor.ast.Title;
+import org.asciidoctor.api.ast.Author;
+import org.asciidoctor.api.ast.DocumentHeader;
+import org.asciidoctor.api.ast.RevisionInfo;
+import org.asciidoctor.api.ast.Title;
 import org.asciidoctor.internal.CaseInsensitiveMap;
 
 public class DocumentHeaderImpl implements DocumentHeader {

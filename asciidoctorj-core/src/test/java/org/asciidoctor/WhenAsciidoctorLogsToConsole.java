@@ -1,7 +1,9 @@
 package org.asciidoctor;
 
+import org.asciidoctor.api.AttributesBuilder;
+import org.asciidoctor.api.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.ast.Cursor;
+import org.asciidoctor.api.ast.Cursor;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
@@ -24,7 +26,7 @@ import java.util.List;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import static org.asciidoctor.OptionsBuilder.options;
+import static org.asciidoctor.api.OptionsBuilder.options;
 import static org.hamcrest.Matchers.both;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;

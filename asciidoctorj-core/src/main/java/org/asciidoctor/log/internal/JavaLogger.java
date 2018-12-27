@@ -1,7 +1,7 @@
 package org.asciidoctor.log.internal;
 
 import org.asciidoctor.log.LogHandler;
-import org.asciidoctor.ast.Cursor;
+import org.asciidoctor.api.ast.Cursor;
 import org.asciidoctor.ast.impl.CursorImpl;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;

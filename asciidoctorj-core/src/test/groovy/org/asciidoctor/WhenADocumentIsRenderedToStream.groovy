@@ -1,10 +1,11 @@
 package org.asciidoctor
 
-import org.asciidoctor.ast.Block
-import org.asciidoctor.ast.ContentNode
-import org.asciidoctor.ast.Document
-import org.asciidoctor.ast.Section
-import org.asciidoctor.converter.StringConverter
+import org.asciidoctor.api.OptionsBuilder
+import org.asciidoctor.api.ast.Block
+import org.asciidoctor.api.ast.ContentNode
+import org.asciidoctor.api.ast.Document
+import org.asciidoctor.api.ast.Section
+import org.asciidoctor.api.converter.StringConverter
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
 import org.junit.runner.RunWith

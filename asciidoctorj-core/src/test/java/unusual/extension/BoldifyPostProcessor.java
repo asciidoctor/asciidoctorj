@@ -1,7 +1,7 @@
 package unusual.extension;
 
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.extension.Postprocessor;
+import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.api.extension.Postprocessor;
 
 /**
  * This processor is used only for checking we are able to load extensions from "unusual packages".

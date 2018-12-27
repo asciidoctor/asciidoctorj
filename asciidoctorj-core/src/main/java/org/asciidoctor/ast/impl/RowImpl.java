@@ -1,7 +1,7 @@
 package org.asciidoctor.ast.impl;
 
-import org.asciidoctor.ast.Cell;
-import org.asciidoctor.ast.Row;
+import org.asciidoctor.api.ast.Cell;
+import org.asciidoctor.api.ast.Row;
 import org.asciidoctor.internal.RubyBlockListDecorator;
 import org.asciidoctor.internal.RubyObjectWrapper;
 import org.jruby.RubyArray;

@@ -1,7 +1,7 @@
 package org.asciidoctor.ast.impl;
 
-import org.asciidoctor.ast.DescriptionListEntry;
-import org.asciidoctor.ast.ListItem;
+import org.asciidoctor.api.ast.DescriptionListEntry;
+import org.asciidoctor.api.ast.ListItem;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.internal.RubyBlockListDecorator;
 import org.asciidoctor.internal.RubyObjectWrapper;

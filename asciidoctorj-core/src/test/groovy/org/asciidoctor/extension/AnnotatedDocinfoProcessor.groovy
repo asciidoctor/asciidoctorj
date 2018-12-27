@@ -1,7 +1,10 @@
 package org.asciidoctor.extension
 
 import groovy.transform.CompileStatic
-import org.asciidoctor.ast.Document
+import org.asciidoctor.api.ast.Document
+import org.asciidoctor.api.extension.DocinfoProcessor
+import org.asciidoctor.api.extension.Location
+import org.asciidoctor.api.extension.LocationType
 
 @CompileStatic
 @Location(LocationType.FOOTER)

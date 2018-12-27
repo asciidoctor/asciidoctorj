@@ -1,7 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.api.OptionsBuilder;
 import org.asciidoctor.util.ClasspathResources;
 import org.hamcrest.Matcher;
 import org.jboss.arquillian.junit.Arquillian;

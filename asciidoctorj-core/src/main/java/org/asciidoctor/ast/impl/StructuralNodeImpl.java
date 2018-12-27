@@ -1,7 +1,7 @@
 package org.asciidoctor.ast.impl;
 
-import org.asciidoctor.ast.Cursor;
-import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.api.ast.Cursor;
+import org.asciidoctor.api.ast.StructuralNode;
 import org.asciidoctor.internal.RubyBlockListDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;

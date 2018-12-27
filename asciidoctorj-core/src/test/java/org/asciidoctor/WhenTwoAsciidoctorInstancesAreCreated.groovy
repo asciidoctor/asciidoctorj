@@ -1,7 +1,7 @@
 package org.asciidoctor
 
-import org.asciidoctor.ast.StructuralNode
-import org.asciidoctor.extension.BlockMacroProcessor
+import org.asciidoctor.api.ast.StructuralNode
+import org.asciidoctor.api.extension.BlockMacroProcessor
 import spock.lang.Specification
 
 class WhenTwoAsciidoctorInstancesAreCreated extends Specification {

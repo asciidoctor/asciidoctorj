@@ -2,6 +2,7 @@ package org.asciidoctor.extension;
 
 import java.util.List;
 
+import org.asciidoctor.api.extension.Reader;
 import org.asciidoctor.internal.RubyObjectWrapper;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;

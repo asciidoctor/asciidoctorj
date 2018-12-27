@@ -1,10 +1,10 @@
 package org.asciidoctor.internal;
 
-import org.asciidoctor.converter.Converter;
-import org.asciidoctor.converter.ConverterFor;
+import org.asciidoctor.api.converter.Converter;
+import org.asciidoctor.api.converter.ConverterFor;
 import org.asciidoctor.converter.ConverterProxy;
+import org.asciidoctor.api.converter.OutputFormatWriter;
 import org.asciidoctor.converter.JavaConverterRegistry;
-import org.asciidoctor.converter.OutputFormatWriter;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
