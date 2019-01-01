@@ -80,7 +80,7 @@ subprojects {
   apply plugin: 'java'
   apply plugin: 'groovy'
 
-  if (JavaVersion.current().isJava7Compatible() && !it.name.endsWith('-documentation')) {
+  if (!it.name.endsWith('-documentation') && !it.name.endsWith('-wildfly-integration-test')) {
 
     apply from: rootProject.file('gradle/signing.gradle')
     if (!it.isDistribution()){
