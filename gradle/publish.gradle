@@ -29,7 +29,7 @@ def projectMeta = {
             email 'asotobu@gmail.com'
             timezone '1'
             roles {
-                role 'Project Lead'
+                role 'Contributor'
             }
         }
         developer {
@@ -56,7 +56,7 @@ def projectMeta = {
             email 'robert.panzer.pb@gmail.com'
             timezone '1'
             roles {
-                role 'Contributor'
+                role 'Project Lead'
             }
         }
     }
