@@ -1,0 +1,297 @@
+= AsciidoctorJ: Extension Migration Guide
+Robert Panzer <https://github.com/robertpanzer[@robertpanzer]>
+:compat-mode!:
+:page-layout: base
+:toc: macro
+:toclevels: 2
+ifdef::awestruct[:toclevels: 1]
+:experimental:
+//:table-caption!:
+:source-language: java
+:language: {source-language}
+// Aliases:
+:dagger: &#8224;
+// URIs:
+ifdef::awestruct[:uri-docs: link:/docs]
+ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
+:uri-asciidoctor: {uri-docs}/what-is-asciidoctor
+:uri-repo: https://github.com/asciidoctor/asciidoctorj
+:uri-issues: {uri-repo}/issues
+:uri-discuss: http://discuss.asciidoctor.org
+:artifact-version: 1.6.0
+:uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
+:uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
+:uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
+:uri-bintray-artifact-query: https://bintray.com/asciidoctor/maven/asciidoctorj/view/general
+:uri-bintray-artifact-detail: https://bintray.com/asciidoctor/maven/asciidoctorj/{artifact-version}/view
+:uri-bintray-artifact-file: http://dl.bintray.com/asciidoctor/maven/org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
+:uri-jruby: http://jruby.org
+:uri-jruby-startup: http://github.com/jruby/jruby/wiki/Improving-startup-time
+:uri-maven-guide: {uri-docs}/install-and-use-asciidoctor-maven-plugin
+:uri-gradle-guide: {uri-docs}/install-and-use-asciidoctor-gradle-plugin
+:uri-tilt: https://github.com/rtomayko/tilt
+:uri-font-awesome: http://fortawesome.github.io/Font-Awesome
+:uri-gradle: https://gradle.org
+:url-base-1-5: https://github.com/asciidoctor/asciidoctorj/blob/v1.5.8.1
+:url-base-1-6: https://github.com/asciidoctor/asciidoctorj/blob/v1.6.0
+
+ifdef::awestruct,env-browser[]
+toc::[]
+endif::[]
+
+AsciidoctorJ 1.6.0 fixed many issues with extensions, but also brought some incompatible changes in comparison to 1.5.x.
+In fact these incompatible changes were necessary to fix some of these bugs.
+This guide explains how to migrate an existing extension for AsciidoctorJ 1.5.x to 1.6.0.
+We will take an existing extension from the 1.5.x test cases and migrate it step by step to 1.5.x.
+
+== The original extension
+
+As an example we are taking the `YellStaticBlock` extension.
+This is a BlockProcessor that transforms the contents of the corresponding block to upper case.
+
+.YellStaticBlock.java for AsciidoctorJ 1.5.x
+[source]
+----
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.asciidoctor.ast.AbstractBlock;
+import org.asciidoctor.extension.BlockProcessor;
+import org.asciidoctor.extension.Reader;
+
+import static java.util.stream.Collectors.joining;
+
+public class YellStaticBlock extends BlockProcessor {
+
+    private static Map<String, Object> configs = new HashMap<String, Object>() {{
+        put("contexts", Arrays.asList(":paragraph"));
+        put("content_model", ":simple");
+    }};
+
+    public YellStaticBlock(String name, Map<String, Object> config) {
+        super(name, configs);
+    }
+
+    @Override
+    public Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes) {
+
+        String upperLines = reader.readLines().stream()   // <1>
+            .map(String::toUpperCase)
+            .collect(joining("\n"));
+
+        return createBlock(                               // <2>
+            parent,
+            "paragraph",
+            upperLines,
+            attributes,
+            new HashMap<>());
+    }
+}
+----
+<1> Transform content to uppercase
+<2> Create new block that replaces the processed one.
+
+When you simply update your dependency on AsciidoctorJ from 1.5.x to 1.6.0 the compiler will complain with an error similar to this:
+
+----
+.../YellStaticBlock.java:8: error: cannot find symbol
+import org.asciidoctor.ast.AbstractBlock;
+                          ^
+  symbol:   class AbstractBlock
+  location: package org.asciidoctor.ast
+.../YellStaticBlock.java:24: error: cannot find symbol
+    public Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes) {
+                          ^
+  symbol:   class AbstractBlock
+  location: class YellStaticBlock
+2 errors
+----
+
+This is because the AST interfaces were renamed to better represent their purpose.
+The next section shows how these have to be updated.
+
+== Update to new AST class names
+
+The following table shows the new AST class names with their counterparts in AsciidoctorJ 1.5.x.
+See the <<integrator-guide#,Integrator Guide>> for details about the purpose of the classes.
+
+.Class names of AST nodes in AsciidoctorJ 1.6.0 and 1.5.x
+[[table-ast-class-names]]
+[opts="header"]
+[cols="m,m"]
+|===
+| Name in 1.6.0        | Name in 1.5.x
+
+| Document             | DocumentRuby
+| ContentNode          | AbstractNode
+| StructuralNode       | AbstractBlock
+| Block                | Block
+| Section              | Section
+| List                 | List
+| ListItem             | ListItem
+| DescriptionList      | N/A
+| DescriptionListEntry | N/A
+| Table                | Table
+| Column               | Column
+| Row                  | Row
+| Cell                 | Cell
+| PhraseNode           | Inline
+|===
+
+As you can see not all AST classes were renamed, but in particular those classes that appear in the signatures of the processor classes were renamed.
+
+After renaming the classes the new Processor looks like this:
+
+.YellStaticBlock.java after renaming the AST classes
+[source]
+----
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.extension.BlockProcessor;
+import org.asciidoctor.extension.Reader;
+
+public class YellStaticBlock extends BlockProcessor {
+
+    private static Map<String, Object> configs = new HashMap<String, Object>() {{
+        put("contexts", Arrays.asList(":paragraph"));
+        put("content_model", ":simple");
+    }};
+
+    public YellStaticBlock(String name, Map<String, Object> config) {
+        super(name, configs);
+    }
+
+    @Override
+    public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
+        List<String> lines = reader.readLines();
+        String upperLines = null;
+        for (String line : lines) {
+            if (upperLines == null) {
+                upperLines = line.toUpperCase();
+            }
+            else {
+                upperLines = upperLines + "\n" + line.toUpperCase();
+            }
+        }
+
+        return createBlock(parent,
+            "paragraph",
+            Arrays.asList(upperLines),
+            attributes,
+            new HashMap<Object, Object>());
+    }
+}
+----
+
+Together with the AST class names also the factory methods of the common interface of all extensions, `org.asciidoctor.extension.Processor` were renamed.
+While this isn't a problem here, for example invocations of `createInline()` have to be renamed to `createPhraseNode()` according to the <<table-ast-class-names,table above>>.
+
+This extension will already run with AsciidoctorJ 1.6.0 and the following test will pass:
+
+[source,indent="0"]
+----
+        Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+        asciidoctor.javaExtensionRegistry().block("yell", YellStaticBlock.class);
+
+        final String doc = "[yell]\nHello World";
+
+        final String result = asciidoctor.convert(doc, OptionsBuilder.options());
+        Document htmlDoc = Jsoup.parse(result);
+        assertEquals("HELLO WORLD", htmlDoc.select("p").first().text());
+----
+
+Now there's a few things you can do to further make the extension more concise.
+The extension explicitly creates a map for its configuration, stores the values in it and passes it to the base class via the constructor.
+This configuration is static and never changes.
+Also the block name is passed when registering the extension which also might never change.
+
+Finally it is rather ugly that the constructor has to take a parameter `config`, that it completely ignores.
+
+The next section shows how this can be done in a more concise way.
+
+== Instantiating and configuring extensions
+
+The configuration of an extension has to be known at the time of registration.
+With AsciidoctorJ 1.5.x the way to define the configuration was to pass it to the super constructor and every extension type had to implement one certain constructor.
+For many extension type a block or macro name also has to be passed to the registration method.
+
+This configuration is static most of the times and often extensions are registered as classes instead of instances:
+
+[source]
+----
+asciidoctor.javaExtensionRegistry().block("yell", YellStaticBlock.class);
+// instead of
+asciidoctor.javaExtensionRegistry().block("yell", new YellStaticBlock(...));
+----
+
+When you register an extension as a class, AsciidoctorJ 1.6.0 allows to remove most of the boilerplate code to create the configuration by using Java annotations.
+Also block or macro names can be configured with annotations directly at the extension implementation itself.
+
+This way the extension can become this:
+
+.YellStaticBlock.java for AsciidoctorJ 1.6.0
+[source]
+----
+import org.asciidoctor.ast.ContentModel;
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.extension.BlockProcessor;
+import org.asciidoctor.extension.Contexts;
+import org.asciidoctor.extension.Name;
+import org.asciidoctor.extension.Reader;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.stream.Collectors.joining;
+
+@Contexts(Contexts.PARAGRAPH)
+@ContentModel(ContentModel.COMPOUND)
+@Name("yell")
+public class YellStaticBlock extends BlockProcessor {
+
+    @Override
+    public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
+
+        String upperLines = reader.readLines().stream()
+            .map(String::toUpperCase)
+            .collect(joining("\n"));
+
+        return createBlock(parent, "paragraph", upperLines, attributes, new HashMap<Object, Object>());
+    }
+}
+----
+
+Now the test case can be further simplified to this:
+
+[source,indent="0"]
+----
+        Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+        asciidoctor.javaExtensionRegistry().block(YellStaticBlock.class);  // <1>
+
+        final String doc = "[yell]\nHello World";
+
+        final String result = asciidoctor.convert(doc, OptionsBuilder.options());
+        Document htmlDoc = Jsoup.parse(result);
+        assertEquals("HELLO WORLD", htmlDoc.select("p").first().text());
+----
+<1> Passing the block name was removed and is taken from the annotation of the extension.
+    If you explicitly want a different block name, e.g. `loud`, it is still possible to pass it by calling `JavaExtensionRegistry.block("loud", YellStaticBlock.class)`.
+
+And this was already it.
+The extension is now compatible to AsciidoctorJ 1.6.0.
+
+For further examples you might want to compare the following examples:
+
+|===
+| Name                | Extension Type      |                                                                                                          |
+| YellBlock           | BlockProcessor      | {url-base-1-5}/asciidoctorj-core/src/test/java/org/asciidoctor/extension/YellBlock.java[1.5.x]           | {url-base-1-6}/asciidoctorj-core/src/test/java/org/asciidoctor/extension/YellBlock.java[1.6.0]
+| ArrowsAndBoxesBlock | BlockProcessor      | {url-base-1-5}/asciidoctorj-core/src/test/java/org/asciidoctor/extension/ArrowsAndBoxesBlock.java[1.5.x] | {url-base-1-6}/asciidoctorj-core/src/test/java/org/asciidoctor/extension/ArrowsAndBoxesBlock.java[1.6.0]
+| ManpageMacro        | InlineMacro         | {url-base-1-5}/asciidoctorj-core/src/test/java/org/asciidoctor/extension/ManpageMacro.java[1.5.x]        | {url-base-1-6}/asciidoctorj-core/src/test/java/org/asciidoctor/extension/ManpageMacro.java[1.6.0]
+|
+|===
