@@ -206,7 +206,8 @@ This extension will already run with AsciidoctorJ 1.6.0 and the following test w
         assertEquals("HELLO WORLD", htmlDoc.select("p").first().text());
 ----
 
-Now there's a few things you can do to further make the extension more concise.
+There are some additional steps you can take to make this extension more concise.
+
 The extension explicitly creates a map for its configuration, stores the values in it and passes it to the base class via the constructor.
 This configuration is static and never changes.
 Also the block name is passed when registering the extension which also might never change.
