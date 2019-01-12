@@ -103,12 +103,20 @@ public class JavaLogger extends RubyObject {
 
   private Severity mapRubyLogLevel(IRubyObject arg) {
     final int rubyId = arg.convertToInteger().getIntValue();
-    for (Severity severity: Severity.values()) {
-      if (severity.getRubyId() == rubyId) {
-        return severity;
-      }
+    switch (rubyId) {
+      case 0:
+        return Severity.DEBUG;
+      case 1:
+        return Severity.INFO;
+      case 2:
+        return Severity.WARN;
+      case 3:
+        return Severity.ERROR;
+      case 4:
+        return Severity.FATAL;
+      default:
+        return Severity.UNKNOWN;
     }
-    return Severity.UNKNOWN;
   }
 
   private String formatMessage(final IRubyObject msg) {

@@ -26,6 +26,7 @@ import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyObjectWrapper;
 import org.asciidoctor.internal.RubyUtils;
+import org.asciidoctor.log.LogRecord;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyFixnum;
@@ -468,5 +469,10 @@ public class JRubyProcessor implements Processor {
             return clazz.cast(this.asciidoctor);
         }
         throw new IllegalArgumentException("Cannot unwrap to " + clazz);
+    }
+
+    @Override
+    public void log(LogRecord logRecord) {
+        unwrap(JRubyAsciidoctor.class).log(logRecord);
     }
 }

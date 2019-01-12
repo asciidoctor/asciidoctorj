@@ -2,9 +2,14 @@ package org.asciidoctor;
 
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.Cursor;
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.extension.BlockProcessor;
+import org.asciidoctor.extension.Name;
+import org.asciidoctor.extension.Reader;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
+import org.asciidoctor.log.Severity;
 import org.asciidoctor.log.TestLogHandlerService;
 import org.asciidoctor.util.ClasspathResources;
 import org.hamcrest.Matchers;
@@ -21,8 +26,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.Matchers.both;
@@ -91,7 +98,6 @@ public class WhenAsciidoctorLogsToConsole {
     public void shouldNotifyLogHandler() throws Exception {
 
         final List<LogRecord> logRecords = new ArrayList<>();
-
 
         final LogHandler logHandler = new LogHandler() {
             @Override
@@ -285,5 +291,46 @@ public class WhenAsciidoctorLogsToConsole {
             assertThat(logRecord.getCursor().getDir(), not(Matchers.nullValue()));
         }
     }
+
+    @Name("big")
+    public static class LoggingProcessor extends BlockProcessor {
+
+        @Override
+        public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
+            log(new LogRecord(Severity.INFO, parent.getSourceLocation(), "Hello Log"));
+            final List<String> strings = reader.readLines().stream()
+                .map(String::toUpperCase)
+                .collect(Collectors.toList());
+
+            return createBlock(parent, "paragraph", strings);
+        }
+    }
+
+    @Test
+    public void a_extension_should_be_able_to_log() throws Exception {
+
+        final List<LogRecord> logRecords = new ArrayList<>();
+
+        final LogHandler logHandler = new LogHandler() {
+            @Override
+            public void log(LogRecord logRecord) {
+                logRecords.add(logRecord);
+            }
+        };
+        asciidoctor.registerLogHandler(logHandler);
+        asciidoctor.javaExtensionRegistry().block(LoggingProcessor.class);
+
+        String renderContent = asciidoctor.convert("= Test\n\n== Something different\n\n[big]\nHello World",
+            options().option("sourcemap", "true").asMap());
+
+        assertEquals(1, logRecords.size());
+        assertThat(logRecords.get(0).getMessage(), is("Hello Log"));
+        final Cursor cursor = logRecords.get(0).getCursor();
+        assertThat(cursor.getLineNumber(), is(3));
+
+        assertThat(renderContent, containsString("HELLO WORLD"));
+    }
+
+
 }
 
