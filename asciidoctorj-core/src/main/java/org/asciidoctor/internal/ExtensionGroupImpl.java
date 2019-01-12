@@ -38,6 +38,8 @@ import java.util.List;
  */
 public class ExtensionGroupImpl implements ExtensionGroup {
 
+  private JRubyAsciidoctor asciidoctor;
+
   private final Ruby rubyRuntime;
 
   private final String groupName;
@@ -49,6 +51,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   public ExtensionGroupImpl(String groupName, JRubyAsciidoctor asciidoctor, RubyClass extensionGroupClass) {
     this.groupName = groupName;
+    this.asciidoctor = asciidoctor;
     this.rubyRuntime = asciidoctor.getRubyRuntime();
     this.asciidoctorModule = rubyRuntime.getModule("AsciidoctorModule");
     this.extensionGroupClass = extensionGroupClass;
@@ -105,7 +108,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup docinfoProcessor(final Class<? extends DocinfoProcessor> docInfoProcessor) {
-    final RubyClass rubyClass = DocinfoProcessorProxy.register(rubyRuntime, docInfoProcessor);
+    final RubyClass rubyClass = DocinfoProcessorProxy.register(asciidoctor, docInfoProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -117,7 +120,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup docinfoProcessor(final DocinfoProcessor docInfoProcessor) {
-    final RubyClass rubyClass = DocinfoProcessorProxy.register(rubyRuntime, docInfoProcessor);
+    final RubyClass rubyClass = DocinfoProcessorProxy.register(asciidoctor, docInfoProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -140,7 +143,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup preprocessor(final Class<? extends Preprocessor> preprocessor) {
-    final RubyClass rubyClass = PreprocessorProxy.register(rubyRuntime, preprocessor);
+    final RubyClass rubyClass = PreprocessorProxy.register(asciidoctor, preprocessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -152,7 +155,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup preprocessor(final Preprocessor preprocessor) {
-    final RubyClass rubyClass = PreprocessorProxy.register(rubyRuntime, preprocessor);
+    final RubyClass rubyClass = PreprocessorProxy.register(asciidoctor, preprocessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -186,7 +189,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup postprocessor(final Class<? extends Postprocessor> postprocessor) {
-    final RubyClass rubyClass = PostprocessorProxy.register(rubyRuntime, postprocessor);
+    final RubyClass rubyClass = PostprocessorProxy.register(asciidoctor, postprocessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -198,7 +201,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup postprocessor(final Postprocessor postprocessor) {
-    final RubyClass rubyClass = PostprocessorProxy.register(rubyRuntime, postprocessor);
+    final RubyClass rubyClass = PostprocessorProxy.register(asciidoctor, postprocessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -221,7 +224,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup includeProcessor(final Class<? extends IncludeProcessor> includeProcessor) {
-    final RubyClass rubyClass = IncludeProcessorProxy.register(rubyRuntime, includeProcessor);
+    final RubyClass rubyClass = IncludeProcessorProxy.register(asciidoctor, includeProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -233,7 +236,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup includeProcessor(final IncludeProcessor includeProcessor) {
-    final RubyClass rubyClass = IncludeProcessorProxy.register(rubyRuntime, includeProcessor);
+    final RubyClass rubyClass = IncludeProcessorProxy.register(asciidoctor, includeProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -245,7 +248,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup treeprocessor(final Treeprocessor treeprocessor) {
-    final RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, treeprocessor);
+    final RubyClass rubyClass = TreeprocessorProxy.register(asciidoctor, treeprocessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -257,7 +260,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup treeprocessor(final Class<? extends Treeprocessor> treeProcessor) {
-    final RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, treeProcessor);
+    final RubyClass rubyClass = TreeprocessorProxy.register(asciidoctor, treeProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -300,7 +303,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup block(final String blockName, final Class<? extends BlockProcessor> blockProcessor) {
-    final RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+    final RubyClass rubyClass = BlockProcessorProxy.register(asciidoctor, blockProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -312,7 +315,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup block(final Class<? extends BlockProcessor> blockProcessor) {
-    final RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+    final RubyClass rubyClass = BlockProcessorProxy.register(asciidoctor, blockProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -324,7 +327,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup block(final BlockProcessor blockProcessor) {
-    final RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+    final RubyClass rubyClass = BlockProcessorProxy.register(asciidoctor, blockProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -336,7 +339,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup block(final String blockName, final BlockProcessor blockProcessor) {
-    final RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+    final RubyClass rubyClass = BlockProcessorProxy.register(asciidoctor, blockProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -348,7 +351,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup blockMacro(final String blockName, final Class<? extends BlockMacroProcessor> blockMacroProcessor) {
-    final RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+    final RubyClass rubyClass = BlockMacroProcessorProxy.register(asciidoctor, blockMacroProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -360,7 +363,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup blockMacro(final Class<? extends BlockMacroProcessor> blockMacroProcessor) {
-    final RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+    final RubyClass rubyClass = BlockMacroProcessorProxy.register(asciidoctor, blockMacroProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -392,7 +395,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup blockMacro(final BlockMacroProcessor blockMacroProcessor) {
-    final RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+    final RubyClass rubyClass = BlockMacroProcessorProxy.register(asciidoctor, blockMacroProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -404,7 +407,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup inlineMacro(final InlineMacroProcessor inlineMacroProcessor) {
-    final RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
+    final RubyClass rubyClass = InlineMacroProcessorProxy.register(asciidoctor, inlineMacroProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -416,7 +419,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup inlineMacro(final String name, final Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
-    final RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
+    final RubyClass rubyClass = InlineMacroProcessorProxy.register(asciidoctor, inlineMacroProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
@@ -428,7 +431,7 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup inlineMacro(final Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
-    final RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
+    final RubyClass rubyClass = InlineMacroProcessorProxy.register(asciidoctor, inlineMacroProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {

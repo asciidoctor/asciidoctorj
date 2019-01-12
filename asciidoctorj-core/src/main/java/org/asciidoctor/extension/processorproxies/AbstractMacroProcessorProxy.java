@@ -1,6 +1,7 @@
 package org.asciidoctor.extension.processorproxies;
 
 import org.asciidoctor.extension.MacroProcessor;
+import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
@@ -11,12 +12,12 @@ import org.jruby.runtime.builtin.IRubyObject;
 
 public abstract class AbstractMacroProcessorProxy<T extends MacroProcessor> extends AbstractProcessorProxy<T> {
 
-    public AbstractMacroProcessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends T> processorClass) {
-        super(runtime, metaClass, processorClass);
+    public AbstractMacroProcessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, Class<? extends T> processorClass) {
+        super(asciidoctor, metaClass, processorClass);
     }
 
-    public AbstractMacroProcessorProxy(Ruby runtime, RubyClass metaClass, T processor) {
-        super(runtime, metaClass, processor);
+    public AbstractMacroProcessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, T processor) {
+        super(asciidoctor, metaClass, processor);
     }
 
     @JRubyMethod(name = "name", required = 0)

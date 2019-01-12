@@ -13,13 +13,26 @@ import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
+import org.asciidoctor.log.LogRecord;
+import org.asciidoctor.spi.ProcessorFactory;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 
 public class BaseProcessor implements Processor {
+
+    private static ProcessorFactory processorFactory;
+
+    static {
+        Iterator<ProcessorFactory> iterator = ServiceLoader.load(ProcessorFactory.class).iterator();
+        if (!iterator.hasNext()) {
+            iterator = ServiceLoader.load(ProcessorFactory.class, BaseProcessor.class.getClassLoader()).iterator();
+        }
+        processorFactory = iterator.next();
+    }
 
     private Processor delegate;
 
@@ -27,17 +40,8 @@ public class BaseProcessor implements Processor {
         this(new HashMap<>());
     }
 
-    public BaseProcessor(Processor delegate) {
-        this(delegate, new HashMap<>());
-    }
-
     public BaseProcessor(Map<String, Object> config) {
-        // FIXME: Use a strategy to resolve the processor
-        this(ServiceLoader.load(Processor.class).iterator().next(), config);
-    }
-
-    public BaseProcessor(Processor delegate, Map<String, Object> config) {
-        this.delegate = delegate;
+        this.delegate = processorFactory.createProcessorDelegate();
         this.delegate.setConfig(config);
     }
 
@@ -57,8 +61,13 @@ public class BaseProcessor implements Processor {
     }
 
     @Override
-    public final void setConfigFinalized() {
-        delegate.setConfigFinalized();
+    public final <T> T unwrap(Class<T> clazz) {
+        return delegate.unwrap(clazz);
+    }
+
+    @Override
+    public void log(LogRecord logRecord) {
+        delegate.log(logRecord);
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.PreprocessorReader;
 import org.asciidoctor.extension.PreprocessorReaderImpl;
+import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.internal.RubyAttributesMapDecorator;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
@@ -26,19 +27,19 @@ import org.jruby.runtime.builtin.IRubyObject;
 
 public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcessor> {
 
-    public IncludeProcessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends IncludeProcessor> includeProcessorClass) {
-        super(runtime, metaClass, includeProcessorClass);
+    public IncludeProcessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, Class<? extends IncludeProcessor> includeProcessorClass) {
+        super(asciidoctor, metaClass, includeProcessorClass);
     }
 
-    public IncludeProcessorProxy(Ruby runtime, RubyClass metaClass, IncludeProcessor includeProcessor) {
-        super(runtime, metaClass, includeProcessor);
+    public IncludeProcessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, IncludeProcessor includeProcessor) {
+        super(asciidoctor, metaClass, includeProcessor);
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final Class<? extends IncludeProcessor> includeProcessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "IncludeProcessor", new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final Class<? extends IncludeProcessor> includeProcessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), "IncludeProcessor", new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new IncludeProcessorProxy(runtime, klazz, includeProcessor);
+                return new IncludeProcessorProxy(asciidoctor, klazz, includeProcessor);
             }
         });
 
@@ -48,11 +49,11 @@ public class IncludeProcessorProxy extends AbstractProcessorProxy<IncludeProcess
         return rubyClass;
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final IncludeProcessor includeProcessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "IncludeProcessor", new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final IncludeProcessor includeProcessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), "IncludeProcessor", new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new IncludeProcessorProxy(runtime, klazz, includeProcessor);
+                return new IncludeProcessorProxy(asciidoctor, klazz, includeProcessor);
             }
         });
 

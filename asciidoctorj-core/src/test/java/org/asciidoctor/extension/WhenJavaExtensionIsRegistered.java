@@ -16,6 +16,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -36,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -43,8 +45,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -1028,4 +1032,68 @@ public class WhenJavaExtensionIsRegistered {
             assertThat(elementsWithoutBlock.get(0).text(), not(is("THE TIME IS NOW. GET A MOVE ON.")));
         }
     }
+
+    public static class TestBlock extends BlockProcessor {
+
+        public static Asciidoctor asciidoctor;
+
+        @Override
+        public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
+            assertSame(asciidoctor, unwrap(Asciidoctor.class));
+            List<String> processed = reader.readLines().stream()
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+
+            return createBlock(parent, "paragraph", processed, attributes, new HashMap<>());
+        }
+
+        @Override
+        public String getName() {
+            return "quiet";
+        }
+    }
+
+    @Test
+    public void a_extension_registered_as_class_can_get_its_asciidoctor_instance() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+        TestBlock.asciidoctor = asciidoctor;
+        Map<String, Object> config = new HashMap<>();
+        config.put(Contexts.KEY, Arrays.asList(Contexts.LISTING));
+        config.put(ContentModel.KEY, ContentModel.SIMPLE);
+
+        javaExtensionRegistry.block("quiet", TestBlock.class);
+        String content = asciidoctor.convert(
+            "[quiet]\nHello World",
+            options().toFile(false).get());
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
+        Elements elements = doc.getElementsByClass("paragraph");
+        assertThat(elements.size(), is(1));
+        assertThat(elements.get(0).text(), is("hello world"));
+
+        TestBlock.asciidoctor = null;
+    }
+
+    @Test
+    public void a_extension_registered_as_instance_can_get_its_asciidoctor_instance() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+        TestBlock.asciidoctor = asciidoctor;
+        Map<String, Object> config = new HashMap<>();
+        config.put(Contexts.KEY, Arrays.asList(Contexts.LISTING));
+        config.put(ContentModel.KEY, ContentModel.SIMPLE);
+
+        javaExtensionRegistry.block(new TestBlock());
+        String content = asciidoctor.convert(
+            "[quiet]\nHello Again",
+            options().toFile(false).get());
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
+        Elements elements = doc.getElementsByClass("paragraph");
+        assertThat(elements.size(), is(1));
+        assertThat(elements.get(0).text(), is("hello again"));
+
+        TestBlock.asciidoctor = null;
+    }
+
+
 }

@@ -8,22 +8,25 @@ import org.jruby.RubyModule;
 
 public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
 
+    private final JRubyAsciidoctor asciidoctor;
+
     private Ruby rubyRuntime;
 
-    public JavaExtensionRegistryImpl(final Ruby rubyRuntime) {
-        this.rubyRuntime = rubyRuntime;
+    public JavaExtensionRegistryImpl(final JRubyAsciidoctor asciidoctor) {
+        this.rubyRuntime = asciidoctor.getRubyRuntime();
+        this.asciidoctor = asciidoctor;
     }
 
     @Override
     public JavaExtensionRegistry docinfoProcessor(Class<? extends DocinfoProcessor> docInfoProcessor) {
-        RubyClass rubyClass = DocinfoProcessorProxy.register(rubyRuntime, docInfoProcessor);
+        RubyClass rubyClass = DocinfoProcessorProxy.register(asciidoctor, docInfoProcessor);
         getAsciidoctorModule().callMethod("docinfo_processor", rubyClass);
         return this;
     }
 
     @Override
     public JavaExtensionRegistry docinfoProcessor(DocinfoProcessor docInfoProcessor) {
-        RubyClass rubyClass = DocinfoProcessorProxy.register(rubyRuntime, docInfoProcessor);
+        RubyClass rubyClass = DocinfoProcessorProxy.register(asciidoctor, docInfoProcessor);
         getAsciidoctorModule().callMethod("docinfo_processor", rubyClass);
         return this;
     }
@@ -41,14 +44,14 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
 
     @Override
     public JavaExtensionRegistry preprocessor(Class<? extends Preprocessor> preprocessor) {
-        RubyClass rubyClass = PreprocessorProxy.register(rubyRuntime, preprocessor);
+        RubyClass rubyClass = PreprocessorProxy.register(asciidoctor, preprocessor);
         getAsciidoctorModule().callMethod("preprocessor", rubyClass);
         return this;
     }
 
     @Override
     public JavaExtensionRegistry preprocessor(Preprocessor preprocessor) {
-        RubyClass rubyClass = PreprocessorProxy.register(rubyRuntime, preprocessor);
+        RubyClass rubyClass = PreprocessorProxy.register(asciidoctor, preprocessor);
         getAsciidoctorModule().callMethod("preprocessor", rubyClass);
         return this;
     }
@@ -77,14 +80,14 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
 
     @Override
     public JavaExtensionRegistry postprocessor(Class<? extends Postprocessor> postprocessor) {
-        RubyClass rubyClass = PostprocessorProxy.register(rubyRuntime, postprocessor);
+        RubyClass rubyClass = PostprocessorProxy.register(asciidoctor, postprocessor);
         getAsciidoctorModule().callMethod("postprocessor", rubyClass);
         return this;
     }
 
     @Override
     public JavaExtensionRegistry postprocessor(Postprocessor postprocessor) {
-        RubyClass rubyClass = PostprocessorProxy.register(rubyRuntime, postprocessor);
+        RubyClass rubyClass = PostprocessorProxy.register(asciidoctor, postprocessor);
         getAsciidoctorModule().callMethod("postprocessor", rubyClass);
         return this;
     }
@@ -103,28 +106,28 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
     @Override
     public JavaExtensionRegistry includeProcessor(
             Class<? extends IncludeProcessor> includeProcessor) {
-        RubyClass rubyClass = IncludeProcessorProxy.register(rubyRuntime, includeProcessor);
+        RubyClass rubyClass = IncludeProcessorProxy.register(asciidoctor, includeProcessor);
         getAsciidoctorModule().callMethod("include_processor", rubyClass);
         return this;
     }
 
     @Override
     public JavaExtensionRegistry includeProcessor(IncludeProcessor includeProcessor) {
-        RubyClass rubyClass = IncludeProcessorProxy.register(rubyRuntime, includeProcessor);
+        RubyClass rubyClass = IncludeProcessorProxy.register(asciidoctor, includeProcessor);
         getAsciidoctorModule().callMethod("include_processor", rubyClass);
         return this;
     }
 
     @Override
     public JavaExtensionRegistry treeprocessor(Treeprocessor treeprocessor) {
-        RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, treeprocessor);
+        RubyClass rubyClass = TreeprocessorProxy.register(asciidoctor, treeprocessor);
         getAsciidoctorModule().callMethod("treeprocessor", rubyClass);
         return this;
     }
 
     @Override
     public JavaExtensionRegistry treeprocessor(Class<? extends Treeprocessor> abstractTreeProcessor) {
-        RubyClass rubyClass = TreeprocessorProxy.register(rubyRuntime, abstractTreeProcessor);
+        RubyClass rubyClass = TreeprocessorProxy.register(asciidoctor, abstractTreeProcessor);
         getAsciidoctorModule().callMethod("treeprocessor", rubyClass);
         return this;
     }
@@ -166,7 +169,7 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
     @Override
     public JavaExtensionRegistry block(String blockName,
                                        Class<? extends BlockProcessor> blockProcessor) {
-        RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+        RubyClass rubyClass = BlockProcessorProxy.register(asciidoctor, blockProcessor);
         getAsciidoctorModule().callMethod("block_processor", rubyClass, rubyRuntime.newString(blockName));
         return this;
     }
@@ -180,7 +183,7 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
 
     @Override
     public JavaExtensionRegistry block(BlockProcessor blockProcessor) {
-        RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+        RubyClass rubyClass = BlockProcessorProxy.register(asciidoctor, blockProcessor);
         getAsciidoctorModule().callMethod("block_processor", rubyClass);
         return this;
     }
@@ -188,7 +191,7 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
     @Override
     public JavaExtensionRegistry block(String blockName,
                                        BlockProcessor blockProcessor) {
-        RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
+        RubyClass rubyClass = BlockProcessorProxy.register(asciidoctor, blockProcessor);
         getAsciidoctorModule().callMethod("block_processor", rubyClass, rubyRuntime.newString(blockName));
         return this;
     }
@@ -196,7 +199,7 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
     @Override
     public JavaExtensionRegistry blockMacro(String blockName,
                                             Class<? extends BlockMacroProcessor> blockMacroProcessor) {
-        RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+        RubyClass rubyClass = BlockMacroProcessorProxy.register(asciidoctor, blockMacroProcessor);
         getAsciidoctorModule().callMethod("block_macro", rubyClass, rubyRuntime.newString(blockName));
         return this;
     }
@@ -204,7 +207,7 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
     @Override
     public JavaExtensionRegistry blockMacro(Class<? extends BlockMacroProcessor> blockMacroProcessor) {
         String name = getName(blockMacroProcessor);
-        RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+        RubyClass rubyClass = BlockMacroProcessorProxy.register(asciidoctor, blockMacroProcessor);
         getAsciidoctorModule().callMethod("block_macro", rubyClass, rubyRuntime.newString(name));
         return this;
     }
@@ -234,14 +237,14 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
 
     @Override
     public JavaExtensionRegistry blockMacro(BlockMacroProcessor blockMacroProcessor) {
-        RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+        RubyClass rubyClass = BlockMacroProcessorProxy.register(asciidoctor, blockMacroProcessor);
         getAsciidoctorModule().callMethod("block_macro", rubyClass);
         return this;
     }
 
     @Override
     public JavaExtensionRegistry blockMacro(String macroName, BlockMacroProcessor blockMacroProcessor) {
-        RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+        RubyClass rubyClass = BlockMacroProcessorProxy.register(asciidoctor, blockMacroProcessor);
         getAsciidoctorModule().callMethod("block_macro", rubyClass, rubyRuntime.newString(macroName));
         return this;
     }
@@ -249,14 +252,14 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
     @Override
     public JavaExtensionRegistry inlineMacro(String macroName,
                                              InlineMacroProcessor inlineMacroProcessor) {
-        RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
+        RubyClass rubyClass = InlineMacroProcessorProxy.register(asciidoctor, inlineMacroProcessor);
         getAsciidoctorModule().callMethod("inline_macro", rubyClass, rubyRuntime.newString(macroName));
         return this;
     }
 
     @Override
     public JavaExtensionRegistry inlineMacro(InlineMacroProcessor inlineMacroProcessor) {
-        RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
+        RubyClass rubyClass = InlineMacroProcessorProxy.register(asciidoctor, inlineMacroProcessor);
         getAsciidoctorModule().callMethod("inline_macro", rubyClass);
         return this;
     }
@@ -264,7 +267,7 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
     @Override
     public JavaExtensionRegistry inlineMacro(String macroName,
                                              Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
-        RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
+        RubyClass rubyClass = InlineMacroProcessorProxy.register(asciidoctor, inlineMacroProcessor);
         getAsciidoctorModule().callMethod("inline_macro", rubyClass, rubyRuntime.newString(macroName));
         return this;
     }
@@ -272,7 +275,7 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
     @Override
     public JavaExtensionRegistry inlineMacro(Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
         String name = getName(inlineMacroProcessor);
-        RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
+        RubyClass rubyClass = InlineMacroProcessorProxy.register(asciidoctor, inlineMacroProcessor);
         getAsciidoctorModule().callMethod("inline_macro", rubyClass, rubyRuntime.newString(name));
         return this;
     }
@@ -301,7 +304,7 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
 
     private String getName(Class<?> clazz) {
         Name nameAnnotation = clazz.getAnnotation(Name.class);
-        if (nameAnnotation == null || nameAnnotation.value() == null) {
+        if (nameAnnotation == null) {
             throw new IllegalArgumentException(clazz + " must be registered with a name or it must have a Name annotation!");
         }
         return nameAnnotation.value();

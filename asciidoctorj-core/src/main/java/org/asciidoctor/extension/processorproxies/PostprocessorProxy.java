@@ -3,6 +3,7 @@ package org.asciidoctor.extension.processorproxies;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.Postprocessor;
+import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.asciidoctor.internal.RubyUtils;
@@ -12,7 +13,6 @@ import org.jruby.RubyHash;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.runtime.Block;
 import org.jruby.runtime.Helpers;
-import org.jruby.runtime.ObjectAllocator;
 import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 
@@ -21,19 +21,19 @@ import java.util.HashMap;
 
 public class PostprocessorProxy extends AbstractProcessorProxy<Postprocessor> {
 
-    public PostprocessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends Postprocessor> postprocessorClass) {
-        super(runtime, metaClass, postprocessorClass);
+    public PostprocessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, Class<? extends Postprocessor> postprocessorClass) {
+        super(asciidoctor, metaClass, postprocessorClass);
     }
 
-    public PostprocessorProxy(Ruby runtime, RubyClass metaClass, Postprocessor postprocessor) {
-        super(runtime, metaClass, postprocessor);
+    public PostprocessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, Postprocessor postprocessor) {
+        super(asciidoctor, metaClass, postprocessor);
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final Class<? extends Postprocessor> postprocessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "Postprocessor", new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final Class<? extends Postprocessor> postprocessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), "Postprocessor", new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new PostprocessorProxy(runtime, klazz, postprocessor);
+                return new PostprocessorProxy(asciidoctor, klazz, postprocessor);
             }
         });
 
@@ -43,11 +43,11 @@ public class PostprocessorProxy extends AbstractProcessorProxy<Postprocessor> {
         return rubyClass;
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final Postprocessor postprocessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "Postprocessor", new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final Postprocessor postprocessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), "Postprocessor", new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new PostprocessorProxy(runtime, klazz, postprocessor);
+                return new PostprocessorProxy(asciidoctor, klazz, postprocessor);
             }
         });
 

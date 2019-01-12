@@ -3,6 +3,7 @@ package org.asciidoctor.extension.processorproxies;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.Treeprocessor;
+import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.jruby.Ruby;
@@ -20,19 +21,19 @@ import java.util.HashMap;
 
 public class TreeprocessorProxy extends AbstractProcessorProxy<Treeprocessor> {
 
-    public TreeprocessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends Treeprocessor> treeprocessorClass) {
-        super(runtime, metaClass, treeprocessorClass);
+    public TreeprocessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, Class<? extends Treeprocessor> treeprocessorClass) {
+        super(asciidoctor, metaClass, treeprocessorClass);
     }
 
-    public TreeprocessorProxy(Ruby runtime, RubyClass metaClass, Treeprocessor treeProcessor) {
-        super(runtime, metaClass, treeProcessor);
+    public TreeprocessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, Treeprocessor treeProcessor) {
+        super(asciidoctor, metaClass, treeProcessor);
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final Class<? extends Treeprocessor> treeProcessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "Treeprocessor", new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final Class<? extends Treeprocessor> treeProcessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), "Treeprocessor", new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new TreeprocessorProxy(runtime, klazz, treeProcessor);
+                return new TreeprocessorProxy(asciidoctor, klazz, treeProcessor);
             }
         });
 
@@ -42,11 +43,11 @@ public class TreeprocessorProxy extends AbstractProcessorProxy<Treeprocessor> {
         return rubyClass;
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final Treeprocessor treeProcessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "Treeprocessor", new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final Treeprocessor treeProcessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), "Treeprocessor", new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new TreeprocessorProxy(runtime, klazz, treeProcessor);
+                return new TreeprocessorProxy(this.asciidoctor, klazz, treeProcessor);
             }
         });
 

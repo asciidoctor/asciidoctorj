@@ -1,5 +1,6 @@
 package org.asciidoctor.extension.processorproxies;
 
+import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyModule;
@@ -36,7 +37,7 @@ public final class ProcessorProxyUtil {
         return asciidoctorModule.defineOrGetModuleUnder("Extensions");
     }
 
-    public static RubyClass defineProcessorClass(Ruby rubyRuntime, String baseClassName, ObjectAllocator objectAllocator) {
+    public static RubyClass defineProcessorClass(Ruby rubyRuntime, String baseClassName, JRubyAsciidoctorObjectAllocator objectAllocator) {
         RubyClass baseClass = getExtensionBaseClass(rubyRuntime, baseClassName);
         final String rubyClassName = "JavaExtensionProxy_" + extensionCounter.getAndIncrement();
         return getExtensionsModule(baseClass.getRuntime()).defineClassUnder(rubyClassName, baseClass, objectAllocator);

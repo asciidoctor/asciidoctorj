@@ -11,6 +11,7 @@ import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
+import org.asciidoctor.log.LogRecord;
 
 import java.util.List;
 import java.util.Map;
@@ -115,12 +116,11 @@ public interface Processor {
 
     Map<String, Object> getConfig();
 
+    void log(LogRecord logRecord);
+
     void setConfig(Map<String, Object> config);
 
     void updateConfig(Map<String, Object> config);
 
-    /**
-     * Lock the config of this processor so that it is no longer allowed to invoke.
-     */
-    void setConfigFinalized();
+    <T> T unwrap(Class<T> clazz);
 }
