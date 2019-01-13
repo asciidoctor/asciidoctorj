@@ -181,7 +181,7 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
     @Override
     public JavaExtensionRegistry block(BlockProcessor blockProcessor) {
         RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
-        getAsciidoctorModule().callMethod("block_processor", rubyClass, rubyRuntime.newString(blockProcessor.getName()));
+        getAsciidoctorModule().callMethod("block_processor", rubyClass);
         return this;
     }
 
