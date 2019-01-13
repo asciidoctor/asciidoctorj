@@ -30,5 +30,9 @@ cd ../..
 #rm -rf maven
 cd ..
 
+echo ">>>>> pom"
+cat ~/.m2/repository/rubygems/asciidoctor/${ASCIIDOCTOR_VERSION}/asciidoctor-${ASCIIDOCTOR_VERSION}.pom
+echo "<<<<<"
+
 $GRADLE_CMD -S -Pskip.signing -PasciidoctorGemVersion=$ASCIIDOCTOR_VERSION -PuseMavenLocal=true :asciidoctorj:clean :asciidoctorj:check
 exit $?
