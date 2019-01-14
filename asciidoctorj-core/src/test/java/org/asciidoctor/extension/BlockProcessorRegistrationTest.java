@@ -48,6 +48,26 @@ public class BlockProcessorRegistrationTest {
         }
     }
 
+    public static class TestProcessorWithName extends BlockProcessor {
+
+        public static final String NAME = "somename";
+
+        public TestProcessorWithName() {
+            super(NAME);
+        }
+
+        @Override
+        public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
+            List<String> s = reader.readLines().stream()
+                .map(line ->
+                    line.chars()
+                        .mapToObj(c -> Character.toString((char) c))
+                        .collect(joining(" ")))
+                .collect(toList());
+            return createBlock(parent, "paragraph", s);
+        }
+    }
+
     @Name(AnnotatedTestProcessor.NAME)
     public static class AnnotatedTestProcessor extends AbstractTestProcessor {
         public static final String NAME = "annotated";
@@ -114,6 +134,36 @@ public class BlockProcessorRegistrationTest {
         asciidoctor.javaExtensionRegistry().block(explicitblockname, new AbstractTestProcessor());
         final String result = asciidoctor.convert(document(explicitblockname, "Hello Explicit Instance"), OptionsBuilder.options());
         check("H e l l o E x p l i c i t I n s t a n c e", result);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRegisterClassWithNameAsClass() {
+        asciidoctor.javaExtensionRegistry().block(TestProcessorWithName.class);
+    }
+
+    @Test
+    public void testRegisterClassWithNameAsClassWithExplicitName() {
+        final String explicitblockname = "explicitblockname";
+        asciidoctor.javaExtensionRegistry().block(explicitblockname, TestProcessorWithName.class);
+        final String result = asciidoctor.convert(document(explicitblockname, "Hello Explicit"), OptionsBuilder.options());
+        check("H e l l o E x p l i c i t", result);
+    }
+
+    @Test
+    public void testRegisterClassWithNameAsInstance() {
+        asciidoctor.javaExtensionRegistry().block(new TestProcessorWithName());
+        final String result = asciidoctor.convert(document(TestProcessorWithName.NAME, "Another Test"), OptionsBuilder.options());
+        check("A n o t h e r T e s t", result);
+    }
+
+    @Test
+    public void testRegisterClassWithNameAsInstanceWithExplicitName() {
+        final String blockName = "somename";
+        asciidoctor.javaExtensionRegistry().block(blockName, new TestProcessorWithName());
+        final String result = asciidoctor.convert(document(blockName, "Yet Another Test"), OptionsBuilder.options());
+        check("Y e t A n o t h e r T e s t", result);
     }
 
 
