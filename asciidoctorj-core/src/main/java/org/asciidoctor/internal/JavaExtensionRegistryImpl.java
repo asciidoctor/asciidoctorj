@@ -235,7 +235,14 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
     @Override
     public JavaExtensionRegistry blockMacro(BlockMacroProcessor blockMacroProcessor) {
         RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
-        getAsciidoctorModule().callMethod("block_macro", rubyClass, rubyRuntime.newString(blockMacroProcessor.getName()));
+        getAsciidoctorModule().callMethod("block_macro", rubyClass);
+        return this;
+    }
+
+    @Override
+    public JavaExtensionRegistry blockMacro(String macroName, BlockMacroProcessor blockMacroProcessor) {
+        RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+        getAsciidoctorModule().callMethod("block_macro", rubyClass, rubyRuntime.newString(macroName));
         return this;
     }
 
