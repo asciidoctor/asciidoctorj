@@ -65,7 +65,10 @@ public interface JavaExtensionRegistry {
 
     JavaExtensionRegistry inlineMacro(InlineMacroProcessor inlineMacroProcessor);
 
-    JavaExtensionRegistry inlineMacro(String blockName,
+    JavaExtensionRegistry inlineMacro(String macroName,
+                                      InlineMacroProcessor inlineMacroProcessor);
+
+    JavaExtensionRegistry inlineMacro(String macroName,
                                       Class<? extends InlineMacroProcessor> inlineMacroProcessor);
 
     JavaExtensionRegistry inlineMacro(Class<? extends InlineMacroProcessor> inlineMacroProcessor);
