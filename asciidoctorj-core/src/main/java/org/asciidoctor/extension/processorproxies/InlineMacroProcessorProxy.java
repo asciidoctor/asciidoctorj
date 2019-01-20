@@ -63,6 +63,8 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
 
     @JRubyMethod(name = "initialize", required = 1, optional = 1)
     public IRubyObject initialize(ThreadContext context, IRubyObject[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        String explicitMacroName = RubyUtils.rubyToJava(getRuntime(), args[0], String.class);
+
         if (getProcessor() != null) {
             // Instance was created in Java and has options set, so we pass these
             // instead of those passed by asciidoctor
@@ -75,26 +77,36 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
                 rubyConfig.put(regexpSymbol, convertRegexp(getRuntime(), (CharSequence) regexp));
             }
 
+            String macroName = explicitMacroName != null ? explicitMacroName : getProcessor().getName();
+
             Helpers.invokeSuper(
                     context,
                     this,
                     getMetaClass(),
                     METHOD_NAME_INITIALIZE,
                     new IRubyObject[]{
-                            JavaEmbedUtils.javaToRuby(getRuntime(), getProcessor().getName()),
+                            JavaEmbedUtils.javaToRuby(getRuntime(), macroName),
                             rubyConfig},
                     Block.NULL_BLOCK);
+
+            if (explicitMacroName != null) {
+                getProcessor().setName(explicitMacroName);
+            } else if (getProcessor().getName() == null) {
+                RubyHash config = (RubyHash) this.callMethod(context, "config");
+                Object rubyName = config.get(context.getRuntime().newSymbol("name"));
+                if (rubyName != null) {
+                    getProcessor().setName(rubyName.toString());
+                }
+            }
+
             // The Ruby initialize method may have changed the config, therefore copy it back
             // because the accessor is routed to the Java Processor.config
             getProcessor().updateConfig(new RubyHashMapDecorator((RubyHash) getInstanceVariable(MEMBER_NAME_CONFIG)));
         } else {
-            String macroName = RubyUtils.rubyToJava(getRuntime(), args[0], String.class);
             // First create only the instance passing in the block name
-            setProcessor(instantiateProcessor(macroName));
+            setProcessor(instantiateProcessor(explicitMacroName));
 
-            if (getProcessor().getName() == null) {
-                getProcessor().setName(macroName);
-            }
+            getProcessor().setName(explicitMacroName);
 
             // Then create the config hash that may contain config options defined in the Java constructor
             RubyHash config = RubyHashUtil.convertMapToRubyHashWithSymbols(context.getRuntime(), getProcessor().getConfig());

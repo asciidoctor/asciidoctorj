@@ -181,7 +181,7 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
     @Override
     public JavaExtensionRegistry block(BlockProcessor blockProcessor) {
         RubyClass rubyClass = BlockProcessorProxy.register(rubyRuntime, blockProcessor);
-        getAsciidoctorModule().callMethod("block_processor", rubyClass, rubyRuntime.newString(blockProcessor.getName()));
+        getAsciidoctorModule().callMethod("block_processor", rubyClass);
         return this;
     }
 
@@ -235,22 +235,37 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
     @Override
     public JavaExtensionRegistry blockMacro(BlockMacroProcessor blockMacroProcessor) {
         RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
-        getAsciidoctorModule().callMethod("block_macro", rubyClass, rubyRuntime.newString(blockMacroProcessor.getName()));
+        getAsciidoctorModule().callMethod("block_macro", rubyClass);
+        return this;
+    }
+
+    @Override
+    public JavaExtensionRegistry blockMacro(String macroName, BlockMacroProcessor blockMacroProcessor) {
+        RubyClass rubyClass = BlockMacroProcessorProxy.register(rubyRuntime, blockMacroProcessor);
+        getAsciidoctorModule().callMethod("block_macro", rubyClass, rubyRuntime.newString(macroName));
+        return this;
+    }
+
+    @Override
+    public JavaExtensionRegistry inlineMacro(String macroName,
+                                             InlineMacroProcessor inlineMacroProcessor) {
+        RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
+        getAsciidoctorModule().callMethod("inline_macro", rubyClass, rubyRuntime.newString(macroName));
         return this;
     }
 
     @Override
     public JavaExtensionRegistry inlineMacro(InlineMacroProcessor inlineMacroProcessor) {
         RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
-        getAsciidoctorModule().callMethod("inline_macro", rubyClass, rubyRuntime.newString(inlineMacroProcessor.getName()));
+        getAsciidoctorModule().callMethod("inline_macro", rubyClass);
         return this;
     }
 
     @Override
-    public JavaExtensionRegistry inlineMacro(String blockName,
+    public JavaExtensionRegistry inlineMacro(String macroName,
                                              Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
         RubyClass rubyClass = InlineMacroProcessorProxy.register(rubyRuntime, inlineMacroProcessor);
-        getAsciidoctorModule().callMethod("inline_macro", rubyClass, rubyRuntime.newString(blockName));
+        getAsciidoctorModule().callMethod("inline_macro", rubyClass, rubyRuntime.newString(macroName));
         return this;
     }
 
@@ -263,10 +278,10 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
     }
 
     @Override
-    public JavaExtensionRegistry inlineMacro(String blockName, String inlineMacroProcessor) {
+    public JavaExtensionRegistry inlineMacro(String macroName, String inlineMacroProcessor) {
         try {
             Class<? extends InlineMacroProcessor> inlineMacroProcessorClass = (Class<? extends InlineMacroProcessor>) Class.forName(inlineMacroProcessor);
-            inlineMacro(blockName, inlineMacroProcessorClass);
+            inlineMacro(macroName, inlineMacroProcessorClass);
             return this;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
