@@ -1,7 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
 //tag::include[]
-import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.api.extension.Postprocessor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;

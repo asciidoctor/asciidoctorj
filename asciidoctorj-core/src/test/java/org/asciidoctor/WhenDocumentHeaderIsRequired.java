@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.api.ast.Author;
-import org.asciidoctor.api.ast.DocumentHeader;
-import org.asciidoctor.api.ast.RevisionInfo;
+import org.asciidoctor.ast.Author;
+import org.asciidoctor.ast.DocumentHeader;
+import org.asciidoctor.ast.RevisionInfo;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;

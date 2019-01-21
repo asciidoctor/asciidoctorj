@@ -746,7 +746,7 @@ The following block macro processor replaces such a macro with the `<script>` el
 .A BlockMacroProcessor that replaces gist block macros
 [source,java,indent=0]
 ----
-import org.asciidoctor.api.ast.StructuralNode;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.api.extension.BlockMacroProcessor;
 import org.asciidoctor.api.extension.Name;
 
@@ -853,7 +853,7 @@ The InlineMacroProcessor for these macros looks like this:
 [source,java,indent=0]
 ----
 
-import org.asciidoctor.api.ast.ContentNode;
+import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.api.extension.InlineMacroProcessor;
 import org.asciidoctor.api.extension.Name;
 
@@ -1116,7 +1116,7 @@ The processor could look like this:
 [source,java,indent=0]
 ----
 
-import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.api.extension.IncludeProcessor;
 import org.asciidoctor.api.extension.PreprocessorReader;
 
@@ -1219,7 +1219,7 @@ And this is exactly what our Preprocessor does: it fetches the raw content, modi
 .A Preprocessor that renders comments as notes
 [source,java,indent=0]
 ----
-import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.api.extension.Preprocessor;
 import org.asciidoctor.api.extension.PreprocessorReader;
 
@@ -1291,7 +1291,7 @@ A Postprocessor that adds a copyright notice would look like this:
 .A Postprocessor that inserts a copyright notice in the footer element
 [source,java]
 ----
-import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.api.extension.Postprocessor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -1397,9 +1397,9 @@ The Treeprocessor could look like this:
 .A Treeprocessor that processes terminal scripts.
 [source,java]
 ----
-import org.asciidoctor.api.ast.Block;
-import org.asciidoctor.api.ast.Document;
-import org.asciidoctor.api.ast.StructuralNode;
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.api.extension.Treeprocessor;
 
 import java.util.HashMap;
@@ -1491,7 +1491,7 @@ Our example Docinfo Processor will add a robots meta tag to the head of the gene
 .A Docinfo Processor that adds a robots meta tag
 [source,java,indent=0]
 ----
-import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.api.extension.DocinfoProcessor;
 import org.asciidoctor.api.extension.Location;
 import org.asciidoctor.api.extension.LocationType;
@@ -1556,10 +1556,10 @@ A basic converter that converts to an own text format looks like this:
 [source,java]
 .org.asciidoctor.converter.TextConverter.java
 ----
-import org.asciidoctor.api.ast.ContentNode;
-import org.asciidoctor.api.ast.Document;
-import org.asciidoctor.api.ast.Section;
-import org.asciidoctor.api.ast.StructuralNode;
+import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.Section;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.api.converter.ConverterFor;
 import org.asciidoctor.api.converter.StringConverter;
 

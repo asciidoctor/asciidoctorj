@@ -3,7 +3,7 @@ package org.asciidoctor;
 import org.asciidoctor.api.AttributesBuilder;
 import org.asciidoctor.api.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.api.ast.Cursor;
+import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;

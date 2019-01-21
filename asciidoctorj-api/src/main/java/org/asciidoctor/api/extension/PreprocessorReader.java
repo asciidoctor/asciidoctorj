@@ -2,7 +2,7 @@ package org.asciidoctor.api.extension;
 
 import java.util.Map;
 
-import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.ast.Document;
 
 public interface PreprocessorReader extends Reader {
 

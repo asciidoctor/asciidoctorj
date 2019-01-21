@@ -1,7 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
 //tag::include[]
-import org.asciidoctor.api.ast.StructuralNode;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.api.extension.BlockMacroProcessor;
 import org.asciidoctor.api.extension.Name;
 

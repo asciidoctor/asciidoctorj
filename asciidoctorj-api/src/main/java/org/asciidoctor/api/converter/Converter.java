@@ -1,6 +1,6 @@
 package org.asciidoctor.api.converter;
 
-import org.asciidoctor.api.ast.ContentNode;
+import org.asciidoctor.ast.ContentNode;
 
 import java.util.Map;
 

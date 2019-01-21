@@ -5,10 +5,10 @@ import org.asciidoctor.api.Options;
 import org.asciidoctor.api.SafeMode;
 import org.asciidoctor.api.extension.*;
 import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.api.ast.ContentModel;
-import org.asciidoctor.api.ast.Document;
-import org.asciidoctor.api.ast.Section;
-import org.asciidoctor.api.ast.StructuralNode;
+import org.asciidoctor.ast.ContentModel;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.Section;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.util.ClasspathResources;
 import org.asciidoctor.util.TestHttpServer;
 import org.jboss.arquillian.junit.Arquillian;
@@ -915,7 +915,7 @@ public class WhenJavaExtensionIsRegistered {
     public void should_create_toc_with_treeprocessor() {
         asciidoctor.javaExtensionRegistry().treeprocessor(new Treeprocessor() {
             @Override
-            public org.asciidoctor.api.ast.Document process(org.asciidoctor.api.ast.Document document) {
+            public Document process(Document document) {
                 List<StructuralNode> blocks = document.getBlocks();
                 for (StructuralNode block : blocks) {
                     for (StructuralNode block2 : block.getBlocks()) {

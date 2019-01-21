@@ -1,6 +1,6 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.api.extension.Preprocessor;
 import org.asciidoctor.api.extension.PreprocessorReader;
 

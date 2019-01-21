@@ -11,7 +11,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
 
-import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.api.extension.IncludeProcessor;
 import org.asciidoctor.api.extension.PreprocessorReader;
 import org.asciidoctor.util.TestHttpServer;

@@ -1,4 +1,4 @@
-package org.asciidoctor.api.ast;
+package org.asciidoctor.ast;
 
 import java.util.List;
 import java.util.Map;

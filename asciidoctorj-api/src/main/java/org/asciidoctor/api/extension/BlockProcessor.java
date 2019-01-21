@@ -1,6 +1,6 @@
 package org.asciidoctor.api.extension;
 
-import org.asciidoctor.api.ast.StructuralNode;
+import org.asciidoctor.ast.StructuralNode;
 
 import java.util.HashMap;
 import java.util.Map;

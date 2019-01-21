@@ -1,19 +1,19 @@
 package org.asciidoctor
 
 import org.asciidoctor.api.OptionsBuilder
-import org.asciidoctor.api.ast.Block
-import org.asciidoctor.api.ast.Document
+import org.asciidoctor.ast.Block
+import org.asciidoctor.ast.Document
 import org.asciidoctor.api.extension.Treeprocessor
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
 import org.junit.runner.RunWith
 import spock.lang.Specification
-import static org.asciidoctor.api.ast.StructuralNode.SUBSTITUTION_SPECIAL_CHARACTERS
-import static org.asciidoctor.api.ast.StructuralNode.SUBSTITUTION_QUOTES
-import static org.asciidoctor.api.ast.StructuralNode.SUBSTITUTION_ATTRIBUTES
-import static org.asciidoctor.api.ast.StructuralNode.SUBSTITUTION_REPLACEMENTS
-import static org.asciidoctor.api.ast.StructuralNode.SUBSTITUTION_MACROS
-import static org.asciidoctor.api.ast.StructuralNode.SUBSTITUTION_POST_REPLACEMENTS
+import static org.asciidoctor.ast.StructuralNode.SUBSTITUTION_SPECIAL_CHARACTERS
+import static org.asciidoctor.ast.StructuralNode.SUBSTITUTION_QUOTES
+import static org.asciidoctor.ast.StructuralNode.SUBSTITUTION_ATTRIBUTES
+import static org.asciidoctor.ast.StructuralNode.SUBSTITUTION_REPLACEMENTS
+import static org.asciidoctor.ast.StructuralNode.SUBSTITUTION_MACROS
+import static org.asciidoctor.ast.StructuralNode.SUBSTITUTION_POST_REPLACEMENTS
 
 
 @RunWith(ArquillianSputnik)

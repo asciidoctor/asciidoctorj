@@ -1,9 +1,9 @@
 package org.asciidoctor.integrationguide.extension;
 
 //tag::include[]
-import org.asciidoctor.api.ast.Block;
-import org.asciidoctor.api.ast.Document;
-import org.asciidoctor.api.ast.StructuralNode;
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.api.extension.Treeprocessor;
 
 import java.util.HashMap;

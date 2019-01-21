@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.api.ast.Author;
+import org.asciidoctor.ast.Author;
 
 public class AuthorImpl implements Author {
 

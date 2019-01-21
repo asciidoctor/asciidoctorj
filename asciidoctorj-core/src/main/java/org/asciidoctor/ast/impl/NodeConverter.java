@@ -1,17 +1,6 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.ast.impl;
 
-import org.asciidoctor.api.ast.ContentNode;
-import org.asciidoctor.ast.impl.BlockImpl;
-import org.asciidoctor.ast.impl.CellImpl;
-import org.asciidoctor.ast.impl.ColumnImpl;
-import org.asciidoctor.ast.impl.DescriptionListImpl;
-import org.asciidoctor.ast.impl.DescriptionListEntryImpl;
-import org.asciidoctor.ast.impl.DocumentImpl;
-import org.asciidoctor.ast.impl.ListImpl;
-import org.asciidoctor.ast.impl.ListItemImpl;
-import org.asciidoctor.ast.impl.PhraseNodeImpl;
-import org.asciidoctor.ast.impl.SectionImpl;
-import org.asciidoctor.ast.impl.TableImpl;
+import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.internal.RubyObjectWrapper;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;

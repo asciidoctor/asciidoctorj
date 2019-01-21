@@ -1,6 +1,6 @@
 package org.asciidoctor.api.extension;
 
-import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.ast.Document;
 
 import java.util.HashMap;
 import java.util.Map;

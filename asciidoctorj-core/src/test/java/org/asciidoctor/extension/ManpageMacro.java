@@ -1,7 +1,6 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.api.ast.ContentNode;
-import org.asciidoctor.api.ast.StructuralNode;
+import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.api.extension.InlineMacroProcessor;
 
 import java.util.HashMap;

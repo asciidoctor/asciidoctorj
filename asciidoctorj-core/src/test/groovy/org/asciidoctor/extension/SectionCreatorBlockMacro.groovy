@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
-import org.asciidoctor.api.ast.Section
-import org.asciidoctor.api.ast.StructuralNode
+import org.asciidoctor.ast.Section
+import org.asciidoctor.ast.StructuralNode
 import org.asciidoctor.api.extension.BlockMacroProcessor
 import org.asciidoctor.api.extension.Name
 

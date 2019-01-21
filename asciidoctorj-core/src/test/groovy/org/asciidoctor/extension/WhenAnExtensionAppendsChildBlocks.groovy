@@ -2,10 +2,10 @@ package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.api.OptionsBuilder
-import org.asciidoctor.api.ast.StructuralNode
-import org.asciidoctor.api.ast.Block
-import org.asciidoctor.api.ast.Document
-import org.asciidoctor.api.ast.Section
+import org.asciidoctor.ast.StructuralNode
+import org.asciidoctor.ast.Block
+import org.asciidoctor.ast.Document
+import org.asciidoctor.ast.Section
 import org.asciidoctor.api.extension.BlockMacroProcessor
 import org.asciidoctor.api.extension.Treeprocessor
 import org.jboss.arquillian.spock.ArquillianSputnik

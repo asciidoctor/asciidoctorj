@@ -1,10 +1,10 @@
 package org.asciidoctor.converter
 
-import org.asciidoctor.api.ast.ContentNode
-import org.asciidoctor.api.ast.Cell
-import org.asciidoctor.api.ast.Document
-import org.asciidoctor.api.ast.Section
-import org.asciidoctor.api.ast.Table
+import org.asciidoctor.ast.ContentNode
+import org.asciidoctor.ast.Cell
+import org.asciidoctor.ast.Document
+import org.asciidoctor.ast.Section
+import org.asciidoctor.ast.Table
 import org.asciidoctor.api.converter.StringConverter
 
 class TableTestConverter extends StringConverter {

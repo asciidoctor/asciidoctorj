@@ -1,7 +1,9 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.api.OptionsBuilder;
+import org.asciidoctor.api.extension.BlockMacroProcessor;
+import org.asciidoctor.api.extension.Name;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.internal.AsciidoctorCoreException;
 import org.jboss.arquillian.junit.Arquillian;

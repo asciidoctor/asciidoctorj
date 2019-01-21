@@ -1,11 +1,11 @@
 package org.asciidoctor
 
 import org.asciidoctor.api.OptionsBuilder
-import org.asciidoctor.api.ast.ContentNode
-import org.asciidoctor.api.ast.DescriptionList
-import org.asciidoctor.api.ast.DescriptionListEntry
-import org.asciidoctor.api.ast.Document
-import org.asciidoctor.api.ast.ListItem
+import org.asciidoctor.ast.ContentNode
+import org.asciidoctor.ast.DescriptionList
+import org.asciidoctor.ast.DescriptionListEntry
+import org.asciidoctor.ast.Document
+import org.asciidoctor.ast.ListItem
 import org.asciidoctor.api.converter.StringConverter
 import org.asciidoctor.api.extension.Treeprocessor
 import org.jboss.arquillian.spock.ArquillianSputnik

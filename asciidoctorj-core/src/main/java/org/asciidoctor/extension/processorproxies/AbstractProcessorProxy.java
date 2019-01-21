@@ -1,8 +1,6 @@
 package org.asciidoctor.extension.processorproxies;
 
-import org.asciidoctor.api.ast.ContentModel;
-import org.asciidoctor.api.extension.*;
-import org.asciidoctor.api.ast.ContentModel;
+import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.ast.impl.ContentNodeImpl;
 import org.asciidoctor.api.extension.Contexts;
 import org.asciidoctor.api.extension.DefaultAttribute;

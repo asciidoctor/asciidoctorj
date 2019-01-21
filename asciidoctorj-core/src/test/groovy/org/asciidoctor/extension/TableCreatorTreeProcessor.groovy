@@ -1,11 +1,11 @@
 package org.asciidoctor.extension
 
 import groovy.transform.CompileStatic
-import org.asciidoctor.api.ast.Cell
-import org.asciidoctor.api.ast.Column
-import org.asciidoctor.api.ast.Document
-import org.asciidoctor.api.ast.Row
-import org.asciidoctor.api.ast.Table
+import org.asciidoctor.ast.Cell
+import org.asciidoctor.ast.Column
+import org.asciidoctor.ast.Document
+import org.asciidoctor.ast.Row
+import org.asciidoctor.ast.Table
 import org.asciidoctor.api.extension.Treeprocessor
 
 @CompileStatic

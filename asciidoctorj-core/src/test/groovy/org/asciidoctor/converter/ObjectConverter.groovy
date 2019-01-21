@@ -1,7 +1,7 @@
 package org.asciidoctor.converter
 
 import groovy.transform.CompileStatic
-import org.asciidoctor.api.ast.ContentNode
+import org.asciidoctor.ast.ContentNode
 import org.asciidoctor.api.converter.AbstractConverter
 import org.asciidoctor.api.converter.ConverterFor
 import org.asciidoctor.api.converter.OutputFormatWriter

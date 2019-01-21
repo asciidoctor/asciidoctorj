@@ -3,7 +3,7 @@ package org.asciidoctor.api.extension;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.ast.Document;
 
 public abstract class Preprocessor extends BaseProcessor {
 

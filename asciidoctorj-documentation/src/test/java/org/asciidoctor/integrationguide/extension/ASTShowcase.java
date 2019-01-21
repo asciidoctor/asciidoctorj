@@ -2,7 +2,7 @@ package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.api.OptionsBuilder;
-import org.asciidoctor.api.ast.Document;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.internal.IOUtils;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;

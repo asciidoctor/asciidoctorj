@@ -1,18 +1,18 @@
 package org.asciidoctor.api.extension;
 
 import org.asciidoctor.api.Options;
-import org.asciidoctor.api.ast.Block;
-import org.asciidoctor.api.ast.Cell;
-import org.asciidoctor.api.ast.Column;
-import org.asciidoctor.api.ast.ContentNode;
-import org.asciidoctor.api.ast.DescriptionList;
-import org.asciidoctor.api.ast.Document;
-import org.asciidoctor.api.ast.ListItem;
-import org.asciidoctor.api.ast.PhraseNode;
-import org.asciidoctor.api.ast.Row;
-import org.asciidoctor.api.ast.Section;
-import org.asciidoctor.api.ast.StructuralNode;
-import org.asciidoctor.api.ast.Table;
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.Cell;
+import org.asciidoctor.ast.Column;
+import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.DescriptionList;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.ListItem;
+import org.asciidoctor.ast.PhraseNode;
+import org.asciidoctor.ast.Row;
+import org.asciidoctor.ast.Section;
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.ast.Table;
 
 import java.util.HashMap;
 import java.util.List;
@@ -117,7 +117,7 @@ public class BaseProcessor implements Processor {
     }
 
     @Override
-    public ListItem createListItem(org.asciidoctor.api.ast.List parent, String text) {
+    public ListItem createListItem(org.asciidoctor.ast.List parent, String text) {
         return delegate.createListItem(parent, text);
     }
 

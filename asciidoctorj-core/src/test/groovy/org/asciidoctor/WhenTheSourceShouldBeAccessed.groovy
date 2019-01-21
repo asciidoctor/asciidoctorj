@@ -1,12 +1,12 @@
 package org.asciidoctor
 
 import org.asciidoctor.api.OptionsBuilder
-import org.asciidoctor.api.ast.Block
-import org.asciidoctor.api.ast.Cell
-import org.asciidoctor.api.ast.Document
-import org.asciidoctor.api.ast.List
-import org.asciidoctor.api.ast.ListItem
-import org.asciidoctor.api.ast.Table
+import org.asciidoctor.ast.Block
+import org.asciidoctor.ast.Cell
+import org.asciidoctor.ast.Document
+import org.asciidoctor.ast.List
+import org.asciidoctor.ast.ListItem
+import org.asciidoctor.ast.Table
 import org.asciidoctor.api.extension.Treeprocessor
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource

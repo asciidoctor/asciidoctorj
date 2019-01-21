@@ -3,8 +3,7 @@ package org.asciidoctor.ast.impl;
 import java.util.Arrays;
 import java.util.List;
 
-import org.asciidoctor.api.ast.Block;
-import org.asciidoctor.ast.impl.StructuralNodeImpl;
+import org.asciidoctor.ast.Block;
 import org.jruby.RubyArray;
 import org.jruby.runtime.builtin.IRubyObject;
 

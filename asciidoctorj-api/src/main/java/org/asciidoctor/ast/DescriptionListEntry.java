@@ -1,4 +1,4 @@
-package org.asciidoctor.api.ast;
+package org.asciidoctor.ast;
 
 public interface DescriptionListEntry {
 

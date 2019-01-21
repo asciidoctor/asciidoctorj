@@ -1,7 +1,6 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.api.Options;
-import org.asciidoctor.api.ast.*;
 import org.asciidoctor.api.extension.Processor;
 import org.asciidoctor.api.extension.Reader;
 import org.asciidoctor.ast.*;
@@ -18,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.asciidoctor.ast.NodeConverter.NodeType.*;
+import static org.asciidoctor.ast.impl.NodeConverter.NodeType.*;
 
 public class JRubyProcessor implements Processor {
     public static final String CONTENT_MODEL_EMPTY =":empty";
@@ -269,14 +268,14 @@ public class JRubyProcessor implements Processor {
     }
 
     @Override
-    public ListItem createListItem(final org.asciidoctor.api.ast.List parent, final String text) {
+    public ListItem createListItem(final org.asciidoctor.ast.List parent, final String text) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         return (ListItem) NodeConverter.createASTNode(rubyRuntime, LIST_ITEM_CLASS, ListImpl.class.cast(parent).getRubyObject(), rubyRuntime.newString(text));
     }
 
     @Override
-    public ListItem createListItem(final org.asciidoctor.api.ast.DescriptionList parent, final String text) {
+    public ListItem createListItem(final DescriptionList parent, final String text) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         return (ListItem) NodeConverter.createASTNode(rubyRuntime, LIST_ITEM_CLASS, DescriptionListImpl.class.cast(parent).getRubyObject(), rubyRuntime.newString(text));

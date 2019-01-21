@@ -4,8 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.api.ast.Document;
-import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.impl.NodeConverter;
 import org.asciidoctor.api.extension.IncludeProcessor;
 import org.asciidoctor.api.extension.PreprocessorReader;
 import org.asciidoctor.extension.PreprocessorReaderImpl;

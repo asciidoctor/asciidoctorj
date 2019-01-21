@@ -1,8 +1,8 @@
-package org.asciidoctor.api.ast;
+package org.asciidoctor.ast;
 
-public interface DescriptionList extends StructuralNode {
+public interface List extends StructuralNode {
 
-    java.util.List<DescriptionListEntry> getItems();
+    java.util.List<StructuralNode> getItems();
 
     boolean hasItems();
 

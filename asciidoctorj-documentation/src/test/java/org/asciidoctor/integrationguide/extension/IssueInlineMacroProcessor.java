@@ -2,7 +2,7 @@ package org.asciidoctor.integrationguide.extension;
 
 //tag::include[]
 
-import org.asciidoctor.api.ast.ContentNode;
+import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.api.extension.InlineMacroProcessor;
 import org.asciidoctor.api.extension.Name;
 
