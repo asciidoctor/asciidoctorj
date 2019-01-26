@@ -1,33 +1,32 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.internal.RubyExtensionRegistryImpl;
-
 import java.io.InputStream;
 
 public interface RubyExtensionRegistry {
-    RubyExtensionRegistryImpl requireLibrary(String requiredLibrary);
 
-    RubyExtensionRegistryImpl loadClass(InputStream rubyClassStream);
+    RubyExtensionRegistry requireLibrary(String requiredLibrary);
 
-    RubyExtensionRegistryImpl preprocessor(String preprocessor);
+    RubyExtensionRegistry loadClass(InputStream rubyClassStream);
 
-    RubyExtensionRegistryImpl postprocessor(String postprocessor);
+    RubyExtensionRegistry preprocessor(String preprocessor);
 
-    RubyExtensionRegistryImpl docinfoProcessor(String docinfoProcessor);
+    RubyExtensionRegistry postprocessor(String postprocessor);
 
-    RubyExtensionRegistryImpl includeProcessor(String includeProcessor);
+    RubyExtensionRegistry docinfoProcessor(String docinfoProcessor);
 
-    RubyExtensionRegistryImpl treeprocessor(String treeProcessor);
+    RubyExtensionRegistry includeProcessor(String includeProcessor);
 
-    RubyExtensionRegistryImpl block(String blockName, String blockProcessor);
+    RubyExtensionRegistry treeprocessor(String treeProcessor);
 
-    RubyExtensionRegistryImpl block(String blockProcessor);
+    RubyExtensionRegistry block(String blockName, String blockProcessor);
 
-    RubyExtensionRegistryImpl blockMacro(String blockName, String blockMacroProcessor);
+    RubyExtensionRegistry block(String blockProcessor);
 
-    RubyExtensionRegistryImpl blockMacro(String blockMacroProcessor);
+    RubyExtensionRegistry blockMacro(String blockName, String blockMacroProcessor);
 
-    RubyExtensionRegistryImpl inlineMacro(String blockName, String inlineMacroProcessor);
+    RubyExtensionRegistry blockMacro(String blockMacroProcessor);
 
-    RubyExtensionRegistryImpl inlineMacro(String inlineMacroProcessor);
+    RubyExtensionRegistry inlineMacro(String blockName, String inlineMacroProcessor);
+
+    RubyExtensionRegistry inlineMacro(String inlineMacroProcessor);
 }
