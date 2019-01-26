@@ -6,10 +6,12 @@ import org.asciidoctor.extension.Contexts;
 import org.asciidoctor.extension.DefaultAttribute;
 import org.asciidoctor.extension.DefaultAttributes;
 import org.asciidoctor.extension.Format;
+import org.asciidoctor.extension.JRubyProcessor;
 import org.asciidoctor.extension.Location;
 import org.asciidoctor.extension.Name;
 import org.asciidoctor.extension.PositionalAttributes;
 import org.asciidoctor.extension.Processor;
+import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
@@ -31,26 +33,43 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
     protected static final String MEMBER_NAME_CONFIG = "@config";
     protected static final String METHOD_NAME_INITIALIZE = "initialize";
 
+    private JRubyAsciidoctor asciidoctor;
+
     protected T processor;
+
+    protected JRubyProcessor processorDelegate;
 
     private Class<? extends T> processorClass;
 
-    public AbstractProcessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends T> processorClass) {
-        super(runtime, metaClass);
+    public AbstractProcessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, Class<? extends T> processorClass) {
+        super(asciidoctor.getRubyRuntime(), metaClass);
+        this.asciidoctor = asciidoctor;
         this.processorClass = processorClass;
     }
 
-    public AbstractProcessorProxy(Ruby runtime, RubyClass metaClass, T processor) {
-        super(runtime, metaClass);
+    public AbstractProcessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, T processor) {
+        super(asciidoctor.getRubyRuntime(), metaClass);
+        this.asciidoctor = asciidoctor;
+        processor.unwrap(JRubyProcessor.class).setAsciidoctor(asciidoctor);
         this.processor = processor;
+        this.processorDelegate = processor.unwrap(JRubyProcessor.class);
     }
 
     protected T getProcessor() {
         return processor;
     }
 
+    protected JRubyProcessor getProcessorDelegate() {
+        return processorDelegate;
+    }
+
+    protected JRubyAsciidoctor getAsciidoctor() {
+        return asciidoctor;
+    }
+
     protected void setProcessor(T processor) {
         this.processor = processor;
+        this.processorDelegate = processor.unwrap(JRubyProcessor.class);
     }
 
     public Class<? extends T> getProcessorClass() {
@@ -63,7 +82,9 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
 
     T instantiateProcessor(Object... args) throws IllegalAccessException, InvocationTargetException, InstantiationException {
         Constructor<T> constructor = findConstructorWithMostMatchingArguments(args);
-        return constructor.newInstance(Arrays.copyOf(args, constructor.getParameterTypes().length));
+        T processor = constructor.newInstance(Arrays.copyOf(args, constructor.getParameterTypes().length));
+        processor.unwrap(JRubyProcessor.class).setAsciidoctor(this.asciidoctor);
+        return processor;
     }
 
     private Constructor<T> findConstructorWithMostMatchingArguments(Object... args) {
@@ -107,7 +128,7 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
 
 
     public void finalizeJavaConfig() {
-        getProcessor().setConfigFinalized();
+        getProcessorDelegate().setConfigFinalized();
     }
 
     protected IRubyObject convertProcessorResult(Object o) {

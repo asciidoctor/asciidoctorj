@@ -3,6 +3,7 @@ package org.asciidoctor.extension.processorproxies;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.BlockMacroProcessor;
+import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.internal.RubyAttributesMapDecorator;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
@@ -23,19 +24,19 @@ import java.util.HashMap;
 
 public class BlockMacroProcessorProxy extends AbstractMacroProcessorProxy<BlockMacroProcessor> {
 
-    public BlockMacroProcessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends BlockMacroProcessor> blockMacroProcessorClass) {
-        super(runtime, metaClass, blockMacroProcessorClass);
+    public BlockMacroProcessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, Class<? extends BlockMacroProcessor> blockMacroProcessorClass) {
+        super(asciidoctor, metaClass, blockMacroProcessorClass);
     }
 
-    public BlockMacroProcessorProxy(Ruby runtime, RubyClass metaClass, BlockMacroProcessor blockMacroProcessor) {
-        super(runtime, metaClass, blockMacroProcessor);
+    public BlockMacroProcessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, BlockMacroProcessor blockMacroProcessor) {
+        super(asciidoctor, metaClass, blockMacroProcessor);
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final Class<? extends BlockMacroProcessor> blockMacroProcessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "BlockMacroProcessor", new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final Class<? extends BlockMacroProcessor> blockMacroProcessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), "BlockMacroProcessor", new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new BlockMacroProcessorProxy(runtime, klazz, blockMacroProcessor);
+                return new BlockMacroProcessorProxy(asciidoctor, klazz, blockMacroProcessor);
             }
         });
 
@@ -45,11 +46,11 @@ public class BlockMacroProcessorProxy extends AbstractMacroProcessorProxy<BlockM
         return rubyClass;
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final BlockMacroProcessor blockMacroProcessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "BlockMacroProcessor", new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final BlockMacroProcessor blockMacroProcessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), "BlockMacroProcessor", new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new BlockMacroProcessorProxy(runtime, klazz, blockMacroProcessor);
+                return new BlockMacroProcessorProxy(asciidoctor, klazz, blockMacroProcessor);
             }
         });
 

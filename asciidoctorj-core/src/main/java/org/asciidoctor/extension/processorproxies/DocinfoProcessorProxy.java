@@ -3,6 +3,8 @@ package org.asciidoctor.extension.processorproxies;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.DocinfoProcessor;
+import org.asciidoctor.extension.JRubyProcessor;
+import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.jruby.Ruby;
@@ -21,19 +23,19 @@ import java.util.HashMap;
 
 public class DocinfoProcessorProxy extends AbstractProcessorProxy<DocinfoProcessor> {
 
-    public DocinfoProcessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends DocinfoProcessor> docinfoProcessorClass) {
-        super(runtime, metaClass, docinfoProcessorClass);
+    public DocinfoProcessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, Class<? extends DocinfoProcessor> docinfoProcessorClass) {
+        super(asciidoctor, metaClass, docinfoProcessorClass);
     }
 
-    public DocinfoProcessorProxy(Ruby runtime, RubyClass metaClass, DocinfoProcessor docinfoProcessor) {
-        super(runtime, metaClass, docinfoProcessor);
+    public DocinfoProcessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, DocinfoProcessor docinfoProcessor) {
+        super(asciidoctor, metaClass, docinfoProcessor);
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final Class<? extends DocinfoProcessor> docinfoProcessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "DocinfoProcessor", new ObjectAllocator() {
+    public static RubyClass register(JRubyAsciidoctor asciidoctor, final Class<? extends DocinfoProcessor> docinfoProcessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), "DocinfoProcessor", new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new DocinfoProcessorProxy(runtime, klazz, docinfoProcessor);
+                return new DocinfoProcessorProxy(asciidoctor, klazz, docinfoProcessor);
             }
         });
 
@@ -43,11 +45,11 @@ public class DocinfoProcessorProxy extends AbstractProcessorProxy<DocinfoProcess
         return rubyClass;
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final DocinfoProcessor docinfoProcessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "DocinfoProcessor", new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final DocinfoProcessor docinfoProcessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), "DocinfoProcessor", new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new DocinfoProcessorProxy(runtime, klazz, docinfoProcessor);
+                return new DocinfoProcessorProxy(asciidoctor, klazz, docinfoProcessor);
             }
         });
 

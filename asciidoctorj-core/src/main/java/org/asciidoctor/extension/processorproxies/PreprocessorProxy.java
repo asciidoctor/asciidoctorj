@@ -5,6 +5,7 @@ import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.extension.PreprocessorReader;
 import org.asciidoctor.extension.PreprocessorReaderImpl;
+import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
 import org.jruby.Ruby;
@@ -23,19 +24,19 @@ import java.util.HashMap;
 
 public class PreprocessorProxy extends AbstractProcessorProxy<Preprocessor> {
 
-    public PreprocessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends Preprocessor> preprocessorClass) {
-        super(runtime, metaClass, preprocessorClass);
+    public PreprocessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, Class<? extends Preprocessor> preprocessorClass) {
+        super(asciidoctor, metaClass, preprocessorClass);
     }
 
-    public PreprocessorProxy(Ruby runtime, RubyClass metaClass, Preprocessor preprocessor) {
-        super(runtime, metaClass, preprocessor);
+    public PreprocessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, Preprocessor preprocessor) {
+        super(asciidoctor, metaClass, preprocessor);
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final Class<? extends Preprocessor> preprocessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "Preprocessor", new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final Class<? extends Preprocessor> preprocessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), "Preprocessor", new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new PreprocessorProxy(runtime, klazz, preprocessor);
+                return new PreprocessorProxy(asciidoctor, klazz, preprocessor);
             }
         });
 
@@ -45,11 +46,11 @@ public class PreprocessorProxy extends AbstractProcessorProxy<Preprocessor> {
         return rubyClass;
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final Preprocessor preprocessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "Preprocessor", new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final Preprocessor preprocessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), "Preprocessor", new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new PreprocessorProxy(runtime, klazz, preprocessor);
+                return new PreprocessorProxy(asciidoctor, klazz, preprocessor);
             }
         });
 

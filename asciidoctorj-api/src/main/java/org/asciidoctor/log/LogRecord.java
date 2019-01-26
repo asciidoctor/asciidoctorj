@@ -6,13 +6,24 @@ public class LogRecord {
 
     private final Severity severity;
 
-    private final Cursor cursor;
+    private Cursor cursor;
 
     private final String message;
 
-    private final String sourceFileName;
+    private String sourceFileName;
 
-    private final String sourceMethodName;
+    private String sourceMethodName;
+
+    public LogRecord(Severity severity, String message) {
+        this.severity = severity;
+        this.message = message;
+    }
+
+    public LogRecord(Severity severity, Cursor cursor, String message) {
+        this.severity = severity;
+        this.cursor = cursor;
+        this.message = message;
+    }
 
     public LogRecord(Severity severity, Cursor cursor, String message, String sourceFileName, String sourceMethodName) {
         this.severity = severity;

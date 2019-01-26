@@ -55,6 +55,7 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
     private static final int DEFAULT_MAX_LEVEL = 1;
 
     protected RubyGemsPreloader rubyGemsPreloader;
+
     protected Ruby rubyRuntime;
 
     private RubyClass extensionGroupClass;
@@ -342,7 +343,7 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
 
     @Override
     public JavaExtensionRegistry javaExtensionRegistry() {
-        return new JavaExtensionRegistryImpl(rubyRuntime);
+        return new JavaExtensionRegistryImpl(this);
     }
 
     @Override

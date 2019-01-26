@@ -4,6 +4,7 @@ import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.extension.ReaderImpl;
+import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.internal.RubyAttributesMapDecorator;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
@@ -24,19 +25,19 @@ import java.util.HashMap;
 
 public class BlockProcessorProxy extends AbstractProcessorProxy<BlockProcessor> {
 
-    public BlockProcessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends BlockProcessor> blockProcessorClass) {
-        super(runtime, metaClass, blockProcessorClass);
+    public BlockProcessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, Class<? extends BlockProcessor> blockProcessorClass) {
+        super(asciidoctor, metaClass, blockProcessorClass);
     }
 
-    public BlockProcessorProxy(Ruby runtime, RubyClass metaClass, BlockProcessor blockProcessor) {
-        super(runtime, metaClass, blockProcessor);
+    public BlockProcessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, BlockProcessor blockProcessor) {
+        super(asciidoctor, metaClass, blockProcessor);
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final Class<? extends BlockProcessor> blockProcessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "BlockProcessor", new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final Class<? extends BlockProcessor> blockProcessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), "BlockProcessor", new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new BlockProcessorProxy(runtime, klazz, blockProcessor);
+                return new BlockProcessorProxy(asciidoctor, klazz, blockProcessor);
             }
         });
 
@@ -46,11 +47,11 @@ public class BlockProcessorProxy extends AbstractProcessorProxy<BlockProcessor> 
         return rubyClass;
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final BlockProcessor blockProcessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, "BlockProcessor", new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final BlockProcessor blockProcessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), "BlockProcessor", new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new BlockProcessorProxy(runtime, klazz, blockProcessor);
+                return new BlockProcessorProxy(asciidoctor, klazz, blockProcessor);
             }
         });
 

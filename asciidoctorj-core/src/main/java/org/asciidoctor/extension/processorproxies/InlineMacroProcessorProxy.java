@@ -3,6 +3,7 @@ package org.asciidoctor.extension.processorproxies;
 import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.InlineMacroProcessor;
+import org.asciidoctor.internal.JRubyAsciidoctor;
 import org.asciidoctor.internal.RubyAttributesMapDecorator;
 import org.asciidoctor.internal.RubyHashMapDecorator;
 import org.asciidoctor.internal.RubyHashUtil;
@@ -25,19 +26,19 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
 
     private static final String SUPER_CLASS_NAME = "InlineMacroProcessor";
 
-    public InlineMacroProcessorProxy(Ruby runtime, RubyClass metaClass, Class<? extends InlineMacroProcessor> inlineMacroProcessorClass) {
-        super(runtime, metaClass, inlineMacroProcessorClass);
+    public InlineMacroProcessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, Class<? extends InlineMacroProcessor> inlineMacroProcessorClass) {
+        super(asciidoctor, metaClass, inlineMacroProcessorClass);
     }
 
-    public InlineMacroProcessorProxy(Ruby runtime, RubyClass metaClass, InlineMacroProcessor inlineMacroProcessor) {
-        super(runtime, metaClass, inlineMacroProcessor);
+    public InlineMacroProcessorProxy(JRubyAsciidoctor asciidoctor, RubyClass metaClass, InlineMacroProcessor inlineMacroProcessor) {
+        super(asciidoctor, metaClass, inlineMacroProcessor);
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, SUPER_CLASS_NAME, new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), SUPER_CLASS_NAME, new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new InlineMacroProcessorProxy(runtime, klazz, inlineMacroProcessor);
+                return new InlineMacroProcessorProxy(asciidoctor, klazz, inlineMacroProcessor);
             }
         });
 
@@ -47,11 +48,11 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
         return rubyClass;
     }
 
-    public static RubyClass register(final Ruby rubyRuntime, final InlineMacroProcessor inlineMacroProcessor) {
-        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(rubyRuntime, SUPER_CLASS_NAME, new ObjectAllocator() {
+    public static RubyClass register(final JRubyAsciidoctor asciidoctor, final InlineMacroProcessor inlineMacroProcessor) {
+        RubyClass rubyClass = ProcessorProxyUtil.defineProcessorClass(asciidoctor.getRubyRuntime(), SUPER_CLASS_NAME, new JRubyAsciidoctorObjectAllocator(asciidoctor) {
             @Override
             public IRubyObject allocate(Ruby runtime, RubyClass klazz) {
-                return new InlineMacroProcessorProxy(runtime, klazz, inlineMacroProcessor);
+                return new InlineMacroProcessorProxy(asciidoctor, klazz, inlineMacroProcessor);
             }
         });
 
