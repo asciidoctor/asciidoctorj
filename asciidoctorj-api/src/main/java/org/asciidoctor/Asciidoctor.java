@@ -460,6 +460,10 @@ public interface Asciidoctor {
         public static Asciidoctor create() {
             ServiceLoader<Asciidoctor> asciidoctorImpls = ServiceLoader.load(Asciidoctor.class);
             Iterator<Asciidoctor> iterator = asciidoctorImpls.iterator();
+            if (!iterator.hasNext()) {
+                asciidoctorImpls = ServiceLoader.load(Asciidoctor.class, Factory.class.getClassLoader());
+                iterator = asciidoctorImpls.iterator();
+            }
             if (iterator.hasNext()) {
                 Asciidoctor impl = iterator.next();
                 List<Asciidoctor> remainingImpls = new ArrayList<>();
