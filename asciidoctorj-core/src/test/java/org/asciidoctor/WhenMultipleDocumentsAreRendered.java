@@ -1,7 +1,7 @@
 package org.asciidoctor;
 
-import org.asciidoctor.internal.IOUtils;
-import org.asciidoctor.internal.JRubyAsciidoctor;
+import org.asciidoctor.asciidoctorj.internal.IOUtils;
+import org.asciidoctor.asciidoctorj.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
 import org.junit.Before;
 import org.junit.Rule;

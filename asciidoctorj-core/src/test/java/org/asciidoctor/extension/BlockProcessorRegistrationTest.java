@@ -3,14 +3,11 @@ package org.asciidoctor.extension;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.internal.AsciidoctorCoreException;
+import org.asciidoctor.asciidoctorj.internal.AsciidoctorCoreException;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jsoup.Jsoup;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 
 import java.util.List;

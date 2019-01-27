@@ -2,7 +2,7 @@ package org.asciidoctor.extension;
 
 import java.util.List;
 
-import org.asciidoctor.internal.RubyObjectWrapper;
+import org.asciidoctor.asciidoctorj.internal.RubyObjectWrapper;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;

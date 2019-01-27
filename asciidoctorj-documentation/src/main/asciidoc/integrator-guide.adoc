@@ -1,3 +1,4 @@
+
 = AsciidoctorJ: Integrator's guide
 Alex Soto <https://github.com/lordofthejars[@lordofthejars]>; Dan Allen <https://github.com/mojavelinux[@mojavelinux]>; Robert Panzer <https://github.com/robertpanzer[@robertpanzer]>
 :compat-mode!:
@@ -1078,9 +1079,9 @@ include::src/test/java/org/asciidoctor/integrationguide/converter/TextConverterR
 
 The jar file must also contain the services file containing the fully qualified class name of the `ConverterRegistry` implementation to make this service implementation available:
 
-.META-INF/services/META-INF/services/org.asciidoctor.converter.spi.ConverterRegistry
+.META-INF/services/META-INF/services/org.asciidoctor.asciidoctorj.converter.spi.ConverterRegistry
 ----
-include::src/test/resources/converterregistry/META-INF/services/org.asciidoctor.converter.spi.ConverterRegistry[]
+include::src/test/resources/converterregistry/META-INF/services/org.asciidoctor.asciidoctorj.converter.spi.ConverterRegistry[]
 ----
 
 To render a document with this converter the target format name `text` has to be passed via the option `backend`.

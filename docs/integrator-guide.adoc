@@ -1,3 +1,4 @@
+
 = AsciidoctorJ: Integrator's guide
 Alex Soto <https://github.com/lordofthejars[@lordofthejars]>; Dan Allen <https://github.com/mojavelinux[@mojavelinux]>; Robert Panzer <https://github.com/robertpanzer[@robertpanzer]>
 :compat-mode!:
@@ -1650,7 +1651,7 @@ For the `TextConverter` this implementation could look like this:
 package org.asciidoctor.integrationguide.converter;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.converter.spi.ConverterRegistry;
+import org.asciidoctor.asciidoctorj.converter.spi.ConverterRegistry;
 
 public class TextConverterRegistry implements ConverterRegistry {
     @Override
@@ -1665,7 +1666,7 @@ public class TextConverterRegistry implements ConverterRegistry {
 
 The jar file must also contain the services file containing the fully qualified class name of the `ConverterRegistry` implementation to make this service implementation available:
 
-.META-INF/services/META-INF/services/org.asciidoctor.converter.spi.ConverterRegistry
+.META-INF/services/META-INF/services/org.asciidoctor.asciidoctorj.converter.spi.ConverterRegistry
 ----
 org.asciidoctor.integrationguide.converter.TextConverterRegistry
 ----

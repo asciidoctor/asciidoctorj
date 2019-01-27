@@ -3,7 +3,7 @@ package org.asciidoctor.extension;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.ast.ContentNode;
-import org.asciidoctor.internal.AsciidoctorCoreException;
+import org.asciidoctor.asciidoctorj.internal.AsciidoctorCoreException;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jsoup.Jsoup;

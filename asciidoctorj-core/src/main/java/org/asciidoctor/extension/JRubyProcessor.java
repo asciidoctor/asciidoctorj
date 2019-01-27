@@ -1,37 +1,12 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Options;
-import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.Cell;
-import org.asciidoctor.ast.Column;
-import org.asciidoctor.ast.ContentModel;
-import org.asciidoctor.ast.ContentNode;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.ListItem;
+import org.asciidoctor.asciidoctorj.ast.impl.*;
+import org.asciidoctor.asciidoctorj.internal.*;
+import org.asciidoctor.ast.*;
 import org.asciidoctor.ast.NodeConverter;
-import org.asciidoctor.ast.PhraseNode;
-import org.asciidoctor.ast.Row;
-import org.asciidoctor.ast.Section;
-import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.ast.Table;
-import org.asciidoctor.ast.impl.ColumnImpl;
-import org.asciidoctor.ast.impl.ContentNodeImpl;
-import org.asciidoctor.ast.impl.DescriptionListImpl;
-import org.asciidoctor.ast.impl.DocumentImpl;
-import org.asciidoctor.ast.impl.ListImpl;
-import org.asciidoctor.ast.impl.RowImpl;
-import org.asciidoctor.ast.impl.StructuralNodeImpl;
-import org.asciidoctor.internal.JRubyAsciidoctor;
-import org.asciidoctor.internal.JRubyRuntimeContext;
-import org.asciidoctor.internal.RubyHashUtil;
-import org.asciidoctor.internal.RubyObjectWrapper;
-import org.asciidoctor.internal.RubyUtils;
 import org.asciidoctor.log.LogRecord;
-import org.jruby.Ruby;
-import org.jruby.RubyArray;
-import org.jruby.RubyFixnum;
-import org.jruby.RubyHash;
-import org.jruby.RubySymbol;
+import org.jruby.*;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.ArrayList;
@@ -39,14 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.asciidoctor.ast.NodeConverter.NodeType.BLOCK_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.DOCUMENT_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.INLINE_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.LIST_ITEM_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.SECTION_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.TABLE_CELL_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.TABLE_CLASS;
-import static org.asciidoctor.ast.NodeConverter.NodeType.TABLE_COLUMN_CLASS;
+import static org.asciidoctor.ast.NodeConverter.NodeType.*;
 
 public class JRubyProcessor implements Processor {
 

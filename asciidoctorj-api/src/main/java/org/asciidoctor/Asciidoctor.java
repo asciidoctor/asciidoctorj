@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -306,7 +307,7 @@ public interface Asciidoctor {
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
-    String[] convertDirectory(DirectoryWalker directoryWalker, Map<String, Object> options);
+    String[] convertDirectory(Iterable<File> directoryWalker, Map<String, Object> options);
 
     /**
      * Parse all AsciiDoc files found using DirectoryWalker instance.
@@ -316,7 +317,7 @@ public interface Asciidoctor {
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
-    String[] convertDirectory(DirectoryWalker directoryWalker, Options options);
+    String[] convertDirectory(Iterable<File> directoryWalker, Options options);
 
     /**
      * Parse all AsciiDoc files found using DirectoryWalker instance.
@@ -326,7 +327,7 @@ public interface Asciidoctor {
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
-    String[] convertDirectory(DirectoryWalker directoryWalker, OptionsBuilder options);
+    String[] convertDirectory(Iterable<File> directoryWalker, OptionsBuilder options);
 
     /**
      * Parses all files added inside a collection.
