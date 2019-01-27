@@ -1,7 +1,7 @@
 package org.asciidoctor.ast;
 
-import org.asciidoctor.asciidoctorj.ast.impl.*;
-import org.asciidoctor.asciidoctorj.internal.RubyObjectWrapper;
+import org.asciidoctor.ruby.ast.impl.*;
+import org.asciidoctor.ruby.internal.RubyObjectWrapper;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;

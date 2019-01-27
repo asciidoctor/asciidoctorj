@@ -1,6 +1,6 @@
 package org.asciidoctor
 
-import org.asciidoctor.asciidoctorj.internal.JRubyAsciidoctor
+import org.asciidoctor.ruby.internal.JRubyAsciidoctor
 import org.asciidoctor.util.ClasspathResources
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

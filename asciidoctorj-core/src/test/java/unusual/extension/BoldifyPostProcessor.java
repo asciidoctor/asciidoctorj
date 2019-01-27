@@ -2,11 +2,12 @@ package unusual.extension;
 
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.Postprocessor;
+import org.asciidoctor.ruby.internal.WhenLoadingExtensionFromUnusualPackage;
 
 /**
  * This processor is used only for checking we are able to load extensions from "unusual packages".
  *
- * @see org.asciidoctor.asciidoctorj.internal.WhenLoadingExtensionFromUnusualPackage
+ * @see WhenLoadingExtensionFromUnusualPackage
  * @see <a href="https://github.com/asciidoctor/asciidoctorj/issues/250">Issue #250</a>
  */
 public class BoldifyPostProcessor extends Postprocessor {

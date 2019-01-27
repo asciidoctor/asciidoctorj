@@ -1,7 +1,7 @@
 package org.asciidoctor.converter;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.asciidoctorj.converter.spi.ConverterRegistry;
+import org.asciidoctor.ruby.converter.spi.ConverterRegistry;
 
 public class TextConverterRegistryExecutor implements ConverterRegistry {
 

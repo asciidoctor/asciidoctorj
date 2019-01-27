@@ -1,11 +1,11 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Options;
-import org.asciidoctor.asciidoctorj.ast.impl.*;
-import org.asciidoctor.asciidoctorj.internal.*;
-import org.asciidoctor.ast.*;
 import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ast.*;
 import org.asciidoctor.log.LogRecord;
+import org.asciidoctor.ruby.ast.impl.*;
+import org.asciidoctor.ruby.internal.*;
 import org.jruby.*;
 import org.jruby.runtime.builtin.IRubyObject;
 

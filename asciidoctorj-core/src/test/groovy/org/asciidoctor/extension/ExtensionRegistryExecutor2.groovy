@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.asciidoctorj.extension.spi.ExtensionRegistry
+import org.asciidoctor.ruby.extension.spi.ExtensionRegistry
 
 class ExtensionRegistryExecutor2 implements ExtensionRegistry {
 

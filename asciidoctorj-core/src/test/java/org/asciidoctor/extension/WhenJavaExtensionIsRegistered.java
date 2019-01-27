@@ -118,7 +118,7 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void an_inner_class_should_be_registered() {
 
-        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/asciidoctorj/internal/asciidoctorclass.rb")));
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/ruby/internal/asciidoctorclass.rb")));
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
@@ -139,7 +139,7 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void an_inner_anonymous_class_should_be_registered() {
 
-        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/asciidoctorj/internal/asciidoctorclass.rb")));
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/ruby/internal/asciidoctorclass.rb")));
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
@@ -342,7 +342,7 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_include_processor_as_string_should_be_executed_when_include_macro_is_found() {
 
-        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/asciidoctorj/internal/asciidoctorclass.rb")));
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/ruby/internal/asciidoctorclass.rb")));
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
@@ -363,7 +363,7 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_include_processor_should_be_executed_when_include_macro_is_found() {
 
-        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/asciidoctorj/internal/asciidoctorclass.rb")));
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/ruby/internal/asciidoctorclass.rb")));
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
@@ -384,7 +384,7 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_include_instance_processor_should_be_executed_when_include_macro_is_found() {
 
-        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/asciidoctorj/internal/asciidoctorclass.rb")));
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/ruby/internal/asciidoctorclass.rb")));
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
@@ -834,7 +834,7 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_include_processor_class_should_be_executed_twice() {
 
-        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/asciidoctorj/internal/asciidoctorclass.rb")));
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/ruby/internal/asciidoctorclass.rb")));
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 
@@ -856,7 +856,7 @@ public class WhenJavaExtensionIsRegistered {
     @Test
     public void a_include_processor_instance_should_be_executed_twice() {
 
-        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/asciidoctorj/internal/asciidoctorclass.rb")));
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/ruby/internal/asciidoctorclass.rb")));
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
 

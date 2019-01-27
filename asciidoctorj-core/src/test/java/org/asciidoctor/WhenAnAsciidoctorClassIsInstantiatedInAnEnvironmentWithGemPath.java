@@ -1,8 +1,8 @@
 package org.asciidoctor;
 
 import org.asciidoctor.categories.Polluted;
-import org.asciidoctor.asciidoctorj.internal.JRubyAsciidoctor;
-import org.asciidoctor.asciidoctorj.internal.JRubyRuntimeContext;
+import org.asciidoctor.ruby.internal.JRubyAsciidoctor;
+import org.asciidoctor.ruby.internal.JRubyRuntimeContext;
 import org.jruby.Ruby;
 import org.jruby.RubyString;
 import org.junit.Test;

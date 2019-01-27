@@ -1,10 +1,10 @@
 package org.asciidoctor.converter;
 
-import org.asciidoctor.asciidoctorj.internal.RubyHashMapDecorator;
-import org.asciidoctor.asciidoctorj.internal.RubyHashUtil;
-import org.asciidoctor.asciidoctorj.internal.RubyOutputStreamWrapper;
 import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.NodeConverter;
+import org.asciidoctor.ruby.internal.RubyHashMapDecorator;
+import org.asciidoctor.ruby.internal.RubyHashUtil;
+import org.asciidoctor.ruby.internal.RubyOutputStreamWrapper;
 import org.jruby.*;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.java.proxies.JavaProxy;

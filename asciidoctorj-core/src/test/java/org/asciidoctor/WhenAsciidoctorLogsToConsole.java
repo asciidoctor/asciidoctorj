@@ -6,7 +6,7 @@ import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.extension.Name;
 import org.asciidoctor.extension.Reader;
-import org.asciidoctor.asciidoctorj.internal.JRubyAsciidoctor;
+import org.asciidoctor.ruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
