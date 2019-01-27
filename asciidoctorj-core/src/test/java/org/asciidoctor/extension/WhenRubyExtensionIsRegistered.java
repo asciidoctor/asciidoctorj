@@ -1,10 +1,9 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
+import org.asciidoctor.ruby.AsciidoctorJ;
 import org.asciidoctor.ruby.RubyExtensionRegistry;
-import org.asciidoctor.ruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -32,12 +31,12 @@ public class WhenRubyExtensionIsRegistered {
     private ClasspathResources classpath;
 
     @ArquillianResource(Unshared.class)
-    private Asciidoctor asciidoctor;
+    private AsciidoctorJ asciidoctor;
 
     @Test
     public void ruby_block_processor_should_be_registered_with_explicit_block_name() {
         
-        RubyExtensionRegistry rubyExtensionRegistry = ((JRubyAsciidoctor) asciidoctor).rubyExtensionRegistry();
+        RubyExtensionRegistry rubyExtensionRegistry = asciidoctor.rubyExtensionRegistry();
         rubyExtensionRegistry.loadClass(getClass().getResourceAsStream("/ruby-extensions/YellRubyBlock.rb")).block("rubyyell", "YellRubyBlock");
 
         String content = asciidoctor.convert(
@@ -59,7 +58,7 @@ public class WhenRubyExtensionIsRegistered {
     @Test
     public void ruby_block_processor_should_be_registered_with_implicit_block_name() {
 
-        RubyExtensionRegistry rubyExtensionRegistry = ((JRubyAsciidoctor) asciidoctor).rubyExtensionRegistry();
+        RubyExtensionRegistry rubyExtensionRegistry = asciidoctor.rubyExtensionRegistry();
         rubyExtensionRegistry.loadClass(getClass().getResourceAsStream("/ruby-extensions/YellRubyBlock.rb")).block("YellRubyBlock");
 
         String content = asciidoctor.convert(
@@ -81,7 +80,7 @@ public class WhenRubyExtensionIsRegistered {
     @Test
     public void ruby_block_macro_processor_should_be_registered_with_block_name() {
 
-        RubyExtensionRegistry rubyExtensionRegistry = ((JRubyAsciidoctor) asciidoctor).rubyExtensionRegistry();
+        RubyExtensionRegistry rubyExtensionRegistry = asciidoctor.rubyExtensionRegistry();
         rubyExtensionRegistry.loadClass(getClass().getResourceAsStream("/ruby-extensions/gist-block-macro.rb")).blockMacro("mygist", "GistBlockMacro");
 
         String content = asciidoctor.convert(
@@ -99,7 +98,7 @@ public class WhenRubyExtensionIsRegistered {
     @Test
     public void ruby_block_macro_processor_should_be_registered_with_implicit_block_name() {
 
-        RubyExtensionRegistry rubyExtensionRegistry = ((JRubyAsciidoctor) asciidoctor).rubyExtensionRegistry();
+        RubyExtensionRegistry rubyExtensionRegistry = asciidoctor.rubyExtensionRegistry();
         rubyExtensionRegistry.loadClass(getClass().getResourceAsStream("/ruby-extensions/gist-block-macro.rb")).blockMacro("GistBlockMacro");
 
         String content = asciidoctor.convert(
@@ -117,7 +116,7 @@ public class WhenRubyExtensionIsRegistered {
     @Test
     public void ruby_inline_macro_processor_should_be_registered_with_macro_name() {
 
-        RubyExtensionRegistry rubyExtensionRegistry = ((JRubyAsciidoctor) asciidoctor).rubyExtensionRegistry();
+        RubyExtensionRegistry rubyExtensionRegistry = asciidoctor.rubyExtensionRegistry();
         rubyExtensionRegistry.loadClass(getClass().getResourceAsStream("/ruby-extensions/man-inline-macro.rb")).inlineMacro("myman", "ManInlineMacro");
 
         String content = asciidoctor.convert(
@@ -136,7 +135,7 @@ public class WhenRubyExtensionIsRegistered {
     @Test
     public void ruby_inline_macro_processor_should_be_registered_with_implicit_macro_name() {
 
-        RubyExtensionRegistry rubyExtensionRegistry = ((JRubyAsciidoctor) asciidoctor).rubyExtensionRegistry();
+        RubyExtensionRegistry rubyExtensionRegistry = asciidoctor.rubyExtensionRegistry();
         rubyExtensionRegistry.loadClass(getClass().getResourceAsStream("/ruby-extensions/man-inline-macro.rb"))
             .inlineMacro("ManInlineMacro");
 
@@ -157,7 +156,7 @@ public class WhenRubyExtensionIsRegistered {
     public void ruby_treeprocessor_should_be_registered() {
 
         final String rubyExtPath = classpath.getResource("ruby-extensions").getAbsolutePath();
-        final JRubyAsciidoctor asciidoctor = JRubyAsciidoctor.create(singletonList(rubyExtPath));
+        final AsciidoctorJ asciidoctor = AsciidoctorJ.Factory.create(singletonList(rubyExtPath));
         asciidoctor.rubyExtensionRegistry()
             .requireLibrary("shell-session-tree-processor.rb")
             .treeprocessor("ShellSessionTreeProcessor");
@@ -178,7 +177,7 @@ public class WhenRubyExtensionIsRegistered {
 
     @Test
     public void ruby_includeprocessor_should_be_registered() {
-        ((JRubyAsciidoctor) asciidoctor).rubyExtensionRegistry()
+        asciidoctor.rubyExtensionRegistry()
             .loadClass(getClass().getResourceAsStream("/ruby-extensions/response-include-processor.rb"))
             .includeProcessor("ResponseIncludeProcessor");
 
@@ -199,7 +198,7 @@ public class WhenRubyExtensionIsRegistered {
     public void ruby_postprocessor_should_be_registered() {
 
         final String rubyExtPath = classpath.getResource("ruby-extensions").getAbsolutePath();
-        final JRubyAsciidoctor asciidoctor = JRubyAsciidoctor.create(singletonList(rubyExtPath));
+        final AsciidoctorJ asciidoctor = AsciidoctorJ.Factory.create(singletonList(rubyExtPath));
         asciidoctor.rubyExtensionRegistry()
             .requireLibrary("xml-entity-postprocessor.rb")
             .postprocessor("XmlEntityPostprocessor");
@@ -215,7 +214,7 @@ public class WhenRubyExtensionIsRegistered {
     public void ruby_preprocessor_should_be_registered() {
 
         final String rubyExtPath = classpath.getResource("ruby-extensions").getAbsolutePath();
-        final JRubyAsciidoctor asciidoctor = JRubyAsciidoctor.create(singletonList(rubyExtPath));
+        final AsciidoctorJ asciidoctor = AsciidoctorJ.Factory.create(singletonList(rubyExtPath));
         asciidoctor.rubyExtensionRegistry()
             .requireLibrary("front-matter-preprocessor.rb")
             .preprocessor("FrontMatterPreprocessor");
@@ -250,7 +249,7 @@ public class WhenRubyExtensionIsRegistered {
     public void ruby_docinfoprocessor_should_be_registered() {
 
         final String rubyExtPath = classpath.getResource("ruby-extensions").getAbsolutePath();
-        final JRubyAsciidoctor asciidoctor = JRubyAsciidoctor.create(singletonList(rubyExtPath));
+        final AsciidoctorJ asciidoctor = AsciidoctorJ.Factory.create(singletonList(rubyExtPath));
         asciidoctor.rubyExtensionRegistry()
             .requireLibrary("view-result-docinfoprocessor.rb")
             .docinfoProcessor("ViewResultDocinfoProcessor");

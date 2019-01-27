@@ -1,6 +1,5 @@
 package org.asciidoctor.ruby.internal;
 
-import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
@@ -12,6 +11,7 @@ import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
+import org.asciidoctor.ruby.AsciidoctorJ;
 import org.asciidoctor.ruby.DirectoryWalker;
 import org.asciidoctor.ruby.RubyExtensionRegistry;
 import org.asciidoctor.ruby.ast.impl.DocumentHeaderImpl;
@@ -30,7 +30,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
+public class JRubyAsciidoctor implements AsciidoctorJ, LogHandler {
 
     private static final Logger logger = Logger.getLogger(JRubyAsciidoctor.class.getName());
 
@@ -93,15 +93,15 @@ public class JRubyAsciidoctor implements Asciidoctor, LogHandler {
         return asciidoctor;
     }
 
-    private static void registerConverters(Asciidoctor asciidoctor) {
+    private static void registerConverters(AsciidoctorJ asciidoctor) {
         new ConverterRegistryExecutor(asciidoctor).registerAllConverters();
     }
 
-    private static void registerExtensions(Asciidoctor asciidoctor) {
+    private static void registerExtensions(AsciidoctorJ asciidoctor) {
         new ExtensionRegistryExecutor(asciidoctor).registerAllExtensions();
     }
 
-    private static void registerLogHandlers(Asciidoctor asciidoctor) {
+    private static void registerLogHandlers(AsciidoctorJ asciidoctor) {
         new LogHandlerRegistryExecutor(asciidoctor).registerAllLogHandlers();
     }
 

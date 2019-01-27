@@ -1,15 +1,15 @@
 package org.asciidoctor.ruby.extension.internal;
 
-import java.util.ServiceLoader;
-
-import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.ruby.AsciidoctorJ;
 import org.asciidoctor.ruby.extension.spi.ExtensionRegistry;
+
+import java.util.ServiceLoader;
 
 public class ExtensionRegistryExecutor {
 
-    private Asciidoctor asciidoctor;
+    private AsciidoctorJ asciidoctor;
 
-    public ExtensionRegistryExecutor(Asciidoctor asciidoctor) {
+    public ExtensionRegistryExecutor(AsciidoctorJ asciidoctor) {
         this.asciidoctor = asciidoctor;
     }
 

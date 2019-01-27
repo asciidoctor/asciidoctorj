@@ -12,13 +12,11 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -507,5 +505,12 @@ public interface Asciidoctor {
     void registerLogHandler(LogHandler logHandler);
 
     void unregisterLogHandler(LogHandler logHandler);
+
+    default <T> T unwrap(Class<T> clazz) {
+        if (clazz.isAssignableFrom(getClass())) {
+            return clazz.cast(this);
+        }
+        throw new IllegalArgumentException("Cannot unwrap to " + clazz.getName());
+    }
 
 }

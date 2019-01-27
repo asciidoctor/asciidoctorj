@@ -1,7 +1,7 @@
 package org.asciidoctor.ruby.log.internal;
 
-import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.log.LogHandler;
+import org.asciidoctor.ruby.AsciidoctorJ;
 
 import java.util.ServiceLoader;
 
@@ -9,9 +9,9 @@ public class LogHandlerRegistryExecutor {
     private static ServiceLoader<LogHandler> logHandlerServiceLoader = ServiceLoader
         .load(LogHandler.class);
 
-    private Asciidoctor asciidoctor;
+    private AsciidoctorJ asciidoctor;
 
-    public LogHandlerRegistryExecutor(Asciidoctor asciidoctor) {
+    public LogHandlerRegistryExecutor(AsciidoctorJ asciidoctor) {
         this.asciidoctor = asciidoctor;
     }
 

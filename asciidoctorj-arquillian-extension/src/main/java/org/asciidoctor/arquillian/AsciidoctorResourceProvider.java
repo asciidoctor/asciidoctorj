@@ -3,6 +3,7 @@ package org.asciidoctor.arquillian;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.arquillian.api.Shared;
 import org.asciidoctor.arquillian.api.Unshared;
+import org.asciidoctor.ruby.AsciidoctorJ;
 import org.jboss.arquillian.core.api.Instance;
 import org.jboss.arquillian.core.api.annotation.ApplicationScoped;
 import org.jboss.arquillian.core.api.annotation.Inject;
@@ -18,7 +19,7 @@ public class AsciidoctorResourceProvider implements ResourceProvider {
 
     @Override
     public boolean canProvide(Class<?> type) {
-        return Asciidoctor.class == type;
+        return Asciidoctor.class == type || AsciidoctorJ.class == type;
     }
 
     @Override
