@@ -20,7 +20,7 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-discuss: http://discuss.asciidoctor.org
-:artifact-version: 1.5.8.1
+:artifact-version: 1.6.1
 :uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
 :uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
@@ -940,13 +940,9 @@ In an OSGi context it will not work because JRuby needs some paths to find the A
 import static org.asciidoctor.Asciidoctor.Factory.create;
 import org.asciidoctor.Asciidoctor;
 
-JavaEmbedUtils.initialize(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib")); <1><2>
-
-Asciidoctor asciidoctor = create(this.getClass().getClassLoader()); <3>
+Asciidoctor asciidoctor = create(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib")); <1>
 ----
-<1> The JavaEmbedUtils will specify the load paths of the required gems. If they are not specified, you will get JRuby exceptions ;
-<2> `uri:classloader:/gems/asciidoctor-<version>/lib` specifies where the gems for Asciidoctor are located. Actually this path is located inside the `asciidoctorj-<version>.jar` file ;
-<3> The factory for the Asciidoctor object also specify the class loader to use.
+<1> `uri:classloader:/gems/asciidoctor-<version>/lib` specifies where the gems for Asciidoctor are located. Actually this path is located inside the `asciidoctorj-<version>.jar` file
 
 [NOTE]
 We consider this code to be placed inside an OSGi bundle
