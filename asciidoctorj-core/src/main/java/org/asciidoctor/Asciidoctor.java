@@ -744,8 +744,7 @@ public interface Asciidoctor {
          * To initialize Asciidoctor in OSGi create the Asciidoctor instance like this:
          *
          * <pre>
-         * org.jruby.javasupport.JavaEmbedUtils.initialize(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib"));
-         * Asciidoctor asciidoctor = Asciidoctor.Factory.create(this.getClass().getClassLoader()); <3>
+         * Asciidoctor asciidoctor = Asciidoctor.Factory.create(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib"));
          * </pre>
          *
          * @param classloader
@@ -762,8 +761,7 @@ public interface Asciidoctor {
          * To initialize Asciidoctor in OSGi create the Asciidoctor instance like this:
          *
          * <pre>
-         * org.jruby.javasupport.JavaEmbedUtils.initialize(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib"));
-         * Asciidoctor asciidoctor = Asciidoctor.Factory.create(this.getClass().getClassLoader()); <3>
+         * Asciidoctor asciidoctor = Asciidoctor.Factory.create(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib"));
          * </pre>
          * 
          * @param classloader
