@@ -14,10 +14,7 @@ import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 
 public class BaseProcessor implements Processor {
 
@@ -32,13 +29,20 @@ public class BaseProcessor implements Processor {
     }
 
     public BaseProcessor(Map<String, Object> config) {
-        // FIXME: Use a strategy to resolve the processor
-        this(ServiceLoader.load(Processor.class).iterator().next(), config);
+        this(resolveProcessor(), config);
     }
 
     public BaseProcessor(Processor delegate, Map<String, Object> config) {
         this.delegate = delegate;
         this.delegate.setConfig(config);
+    }
+
+    private static Processor resolveProcessor() {
+        Iterator<Processor> iterator = ServiceLoader.load(Processor.class).iterator();
+        if (!iterator.hasNext()) {
+            iterator = ServiceLoader.load(Processor.class, BaseProcessor.class.getClassLoader()).iterator();
+        }
+        return iterator.next();
     }
 
     @Override
