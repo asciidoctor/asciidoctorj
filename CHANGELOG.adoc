@@ -1,0 +1,40 @@
+= Asciidoctor Changelog
+:uri-asciidoctor: http://asciidoctor.org
+:uri-asciidoc: {uri-asciidoctor}/docs/what-is-asciidoc
+:uri-repo: https://github.com/asciidoctor/asciidoctorj
+:icons: font
+:star: icon:star[role=red]
+ifndef::icons[]
+:star: &#9733;
+endif::[]
+
+This document provides a high-level view of the changes introduced in AsciidoctorJ by release.
+For a detailed view of what has changed, refer to the {uri-repo}/commits/master[commit history] on GitHub.
+
+== Unreleased
+
+Enhancements::
+
+Improvements::
+
+Bug Fixes::
+
+  * Fix extension initialization in OSGi environments(#754)
+
+Build / Infrastructure::
+
+
+== 1.6.1 (2018-10-28) - @mojavelinux
+
+Enhancements::
+
+  * Upgrade asciidoctorj-diagram to 1.5.12
+
+Bug Fixes::
+
+  * Fix registration of extension as instances (#754)
+
+
+Documentation::
+
+  * Add extension migration guide
