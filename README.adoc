@@ -940,9 +940,10 @@ In an OSGi context it will not work because JRuby needs some paths to find the A
 import static org.asciidoctor.Asciidoctor.Factory.create;
 import org.asciidoctor.Asciidoctor;
 
-Asciidoctor asciidoctor = create(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib")); <1>
+Asciidoctor asciidoctor = create(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib")); <1><2>
 ----
 <1> `uri:classloader:/gems/asciidoctor-<version>/lib` specifies where the gems for Asciidoctor are located. Actually this path is located inside the `asciidoctorj-<version>.jar` file
+<2> The version here differs from the AsciidoctorJ version as it corresponds to the version of Asciidoctor, not the AsciidoctorJ one.
 
 [NOTE]
 We consider this code to be placed inside an OSGi bundle
