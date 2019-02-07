@@ -1,7 +1,7 @@
 package org.asciidoctor;
 
-import org.asciidoctor.ruby.DirectoryWalker;
-import org.asciidoctor.ruby.GlobDirectoryWalker;
+import org.asciidoctor.jruby.DirectoryWalker;
+import org.asciidoctor.jruby.GlobDirectoryWalker;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;

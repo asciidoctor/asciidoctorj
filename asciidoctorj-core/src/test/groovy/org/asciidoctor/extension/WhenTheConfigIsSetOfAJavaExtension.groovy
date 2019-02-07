@@ -3,7 +3,7 @@ package org.asciidoctor.extension
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.OptionsBuilder
 import org.asciidoctor.ast.ContentModel
-import org.asciidoctor.ruby.internal.AsciidoctorCoreException
+import org.asciidoctor.jruby.internal.AsciidoctorCoreException
 import spock.lang.Specification
 
 class WhenTheConfigIsSetOfAJavaExtension extends Specification {

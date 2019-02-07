@@ -1,6 +1,6 @@
 package org.asciidoctor;
 
-import org.asciidoctor.ruby.AsciidoctorJ;
+import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.containsString;
@@ -12,7 +12,7 @@ public class WhenAnAsciidoctorJInstanceIsRequired {
 
   @Test
   public void shouldUnwrapAsciidoctorInstanceAndRegisterRubyExtension() throws Exception {
-    AsciidoctorJ asciidoctorj = Asciidoctor.Factory.create().unwrap(AsciidoctorJ.class);
+    AsciidoctorJRuby asciidoctorj = Asciidoctor.Factory.create().unwrap(AsciidoctorJRuby.class);
     asciidoctorj.rubyExtensionRegistry().loadClass(getClass().getResourceAsStream("/ruby-extensions/YellRubyBlock.rb")).block("yell", "YellRubyBlock");
 
     String html = asciidoctorj.convert(DOC, OptionsBuilder.options().headerFooter(false));

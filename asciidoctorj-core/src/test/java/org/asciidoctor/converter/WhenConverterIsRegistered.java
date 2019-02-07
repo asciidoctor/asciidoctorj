@@ -3,7 +3,7 @@ package org.asciidoctor.converter;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.ruby.internal.JRubyAsciidoctor;
+import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.jboss.arquillian.junit.Arquillian;

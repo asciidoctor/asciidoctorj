@@ -119,7 +119,7 @@ public class WhenJavaExtensionGroupIsRegistered {
     @Test
     public void an_inner_class_should_be_registered() {
 
-        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/ruby/internal/asciidoctorclass.rb")));
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/jruby/internal/asciidoctorclass.rb")));
 
         this.asciidoctor.createGroup()
             .includeProcessor(new RubyIncludeSource(new HashMap<String, Object>()))
@@ -140,7 +140,7 @@ public class WhenJavaExtensionGroupIsRegistered {
     @Test
     public void an_inner_anonymous_class_should_be_registered() {
 
-        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/ruby/internal/asciidoctorclass.rb")));
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/jruby/internal/asciidoctorclass.rb")));
 
         this.asciidoctor.createGroup()
             .includeProcessor(new IncludeProcessor(new HashMap<String, Object>()) {
@@ -347,7 +347,7 @@ public class WhenJavaExtensionGroupIsRegistered {
     @Test
     public void a_include_processor_as_string_should_be_executed_when_include_macro_is_found() {
 
-        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/ruby/internal/asciidoctorclass.rb")));
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/jruby/internal/asciidoctorclass.rb")));
 
         this.asciidoctor.createGroup()
             .includeProcessor("org.asciidoctor.extension.UriIncludeProcessor")
@@ -368,7 +368,7 @@ public class WhenJavaExtensionGroupIsRegistered {
     @Test
     public void a_include_processor_should_be_executed_when_include_macro_is_found() {
 
-        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/ruby/internal/asciidoctorclass.rb")));
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/jruby/internal/asciidoctorclass.rb")));
 
         this.asciidoctor.createGroup()
             .includeProcessor(UriIncludeProcessor.class)
@@ -389,7 +389,7 @@ public class WhenJavaExtensionGroupIsRegistered {
     @Test
     public void a_include_instance_processor_should_be_executed_when_include_macro_is_found() {
 
-        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/ruby/internal/asciidoctorclass.rb")));
+        TestHttpServer.start(Collections.singletonMap("http://example.com/asciidoctorclass.rb", classpath.getResource("org/asciidoctor/jruby/internal/asciidoctorclass.rb")));
 
         this.asciidoctor.createGroup()
             .includeProcessor(new UriIncludeProcessor(new HashMap<String, Object>()))

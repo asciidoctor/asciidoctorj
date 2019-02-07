@@ -2,7 +2,7 @@ package unusual.extension;
 
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.Postprocessor;
-import org.asciidoctor.ruby.internal.WhenLoadingExtensionFromUnusualPackage;
+import org.asciidoctor.jruby.internal.WhenLoadingExtensionFromUnusualPackage;
 
 /**
  * This processor is used only for checking we are able to load extensions from "unusual packages".

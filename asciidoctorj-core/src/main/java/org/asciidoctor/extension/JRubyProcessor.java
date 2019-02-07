@@ -1,11 +1,10 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Options;
-import org.asciidoctor.ast.NodeConverter;
 import org.asciidoctor.ast.*;
 import org.asciidoctor.log.LogRecord;
-import org.asciidoctor.ruby.ast.impl.*;
-import org.asciidoctor.ruby.internal.*;
+import org.asciidoctor.jruby.ast.impl.*;
+import org.asciidoctor.jruby.internal.*;
 import org.jruby.*;
 import org.jruby.runtime.builtin.IRubyObject;
 
@@ -14,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.asciidoctor.ast.NodeConverter.NodeType.*;
+import static org.asciidoctor.jruby.ast.impl.NodeConverter.NodeType.*;
 
 public class JRubyProcessor implements Processor {
 

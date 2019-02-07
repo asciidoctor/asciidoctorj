@@ -32,7 +32,7 @@ class WhenABlockMacroProcessorCreatesATable extends Specification {
     private TemporaryFolder tmp
 
     private static final String DOCUMENT = '''
-= AsciidoctorJ contributors
+= AsciidoctorJRuby contributors
 
 githubcontributors::asciidoctor/asciidoctorj[]
 '''

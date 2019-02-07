@@ -5,6 +5,7 @@ import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
+import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.log.LogHandler;
 
 import java.io.File;
@@ -402,6 +403,13 @@ public interface Asciidoctor {
      * @return Extension Registry object.
      */
     JavaExtensionRegistry javaExtensionRegistry();
+
+    /**
+     * Creates an Ruby extension registry ready to be used for registering all processors
+     *
+     * @return Extension Registry object.
+     */
+    RubyExtensionRegistry rubyExtensionRegistry();
 
     /**
      * Creates a registry for registering converters.

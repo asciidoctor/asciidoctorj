@@ -1,6 +1,6 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ruby.internal.RubyObjectWrapper;
+import org.asciidoctor.jruby.internal.RubyObjectWrapper;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;

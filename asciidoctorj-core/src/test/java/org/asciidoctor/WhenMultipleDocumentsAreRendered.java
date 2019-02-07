@@ -1,7 +1,7 @@
 package org.asciidoctor;
 
-import org.asciidoctor.ruby.internal.IOUtils;
-import org.asciidoctor.ruby.internal.JRubyAsciidoctor;
+import org.asciidoctor.jruby.internal.IOUtils;
+import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
 import org.junit.Before;
 import org.junit.Rule;
