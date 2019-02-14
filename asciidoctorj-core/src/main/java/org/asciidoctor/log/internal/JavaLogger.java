@@ -19,6 +19,7 @@ import org.jruby.runtime.backtrace.BacktraceElement;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class JavaLogger extends RubyObject {
 
@@ -94,9 +95,12 @@ public class JavaLogger extends RubyObject {
                                     final Severity severity,
                                     final Cursor cursor,
                                     final String message) {
-    BacktraceElement[] backtrace = threadContext.getBacktrace();
-    final String sourceFileName = backtrace[2].getFilename();
-    final String sourceMethodName = backtrace[2].getMethod();
+    final Optional<BacktraceElement> elem = threadContext.getBacktrace(0)
+        .skip(1)
+        .findFirst();
+
+    final String sourceFileName = elem.map(BacktraceElement::getFilename).orElse(null);
+    final String sourceMethodName = elem.map(BacktraceElement::getMethod).orElse(null);
     final LogRecord record = new LogRecord(severity, cursor, message, sourceFileName, sourceMethodName);
     return record;
   }
