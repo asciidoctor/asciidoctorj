@@ -3,6 +3,7 @@ package org.asciidoctor.jruby.extension.processorproxies;
 import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.extension.*;
 import org.asciidoctor.jruby.ast.impl.ContentNodeImpl;
+import org.asciidoctor.jruby.extension.internal.JRubyProcessor;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.jruby.*;
 import org.jruby.javasupport.JavaEmbedUtils;

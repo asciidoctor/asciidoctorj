@@ -4,7 +4,7 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.PreprocessorReader;
-import org.asciidoctor.extension.PreprocessorReaderImpl;
+import org.asciidoctor.jruby.extension.internal.PreprocessorReaderImpl;
 import org.asciidoctor.jruby.internal.*;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;

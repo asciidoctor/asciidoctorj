@@ -2,8 +2,8 @@ package org.asciidoctor.jruby.extension.processorproxies;
 
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.Preprocessor;
-import org.asciidoctor.extension.PreprocessorReaderImpl;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
+import org.asciidoctor.jruby.extension.internal.PreprocessorReaderImpl;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.jruby.internal.RubyHashMapDecorator;
 import org.asciidoctor.jruby.internal.RubyHashUtil;
