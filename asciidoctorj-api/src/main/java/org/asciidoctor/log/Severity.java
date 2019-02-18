@@ -7,4 +7,5 @@ public enum Severity {
     ERROR,
     FATAL,
     UNKNOWN
+
 }

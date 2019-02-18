@@ -17,7 +17,7 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpServerCodec;
-import org.asciidoctor.internal.IOUtils;
+import org.asciidoctor.jruby.internal.IOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

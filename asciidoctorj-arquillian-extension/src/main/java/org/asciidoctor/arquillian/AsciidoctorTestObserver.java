@@ -3,6 +3,7 @@ package org.asciidoctor.arquillian;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.arquillian.api.Shared;
 import org.asciidoctor.arquillian.api.Unshared;
+import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.core.api.InstanceProducer;
 import org.jboss.arquillian.core.api.annotation.ApplicationScoped;
@@ -37,7 +38,10 @@ public class AsciidoctorTestObserver {
     }
 
     public void beforeTestClassCreateSharedAsciidoctorInstance(@Observes(precedence = -100) BeforeClass beforeClass) {
-        if (isSharedInstanceRequired(beforeClass.getTestClass().getJavaClass(), Asciidoctor.class)) {
+        if (isSharedInstanceRequired(beforeClass.getTestClass().getJavaClass(), AsciidoctorJRuby.class)) {
+            scopedAsciidoctor.get().setSharedAsciidoctor(
+                    AsciidoctorJRuby.Factory.create());
+        } else if (isSharedInstanceRequired(beforeClass.getTestClass().getJavaClass(), Asciidoctor.class)) {
             scopedAsciidoctor.get().setSharedAsciidoctor(
                     Asciidoctor.Factory.create());
         }
@@ -59,7 +63,11 @@ public class AsciidoctorTestObserver {
 
     public void beforeTestCreateUnsharedAsciidoctorInstance(@Observes(precedence = 5) Before before) {
 
-        if (isUnsharedInstanceRequired(before.getTestClass().getJavaClass(), Asciidoctor.class)
+        if (isUnsharedInstanceRequired(before.getTestClass().getJavaClass(), AsciidoctorJRuby.class)
+                || isUnsharedInstanceRequired(before.getTestMethod(), Asciidoctor.class)) {
+            scopedAsciidoctor.get().setUnsharedAsciidoctor(
+                    AsciidoctorJRuby.Factory.create());
+        } else if (isUnsharedInstanceRequired(before.getTestClass().getJavaClass(), Asciidoctor.class)
                 || isUnsharedInstanceRequired(before.getTestMethod(), Asciidoctor.class)) {
             scopedAsciidoctor.get().setUnsharedAsciidoctor(
                     Asciidoctor.Factory.create());

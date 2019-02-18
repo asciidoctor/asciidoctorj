@@ -30,7 +30,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
 
 import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.internal.AsciidoctorCoreException;
+import org.asciidoctor.jruby.AsciiDocDirectoryWalker;
+import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;

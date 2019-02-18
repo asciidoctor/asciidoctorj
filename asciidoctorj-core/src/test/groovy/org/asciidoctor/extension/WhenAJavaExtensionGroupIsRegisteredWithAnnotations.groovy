@@ -110,7 +110,7 @@ And even more infos on manpage:git[7].
         footer.nextElementSibling().attr(ATTR_KEY_NAME) == ATTR_VALUE_ROBOTS
     }
 
-    @spock.lang.Ignore('Option for docinfo in header changed from :header to :head in AsciidoctorJ. Ignore as long as these tests have to run on both Asciidoctor 1.5.2 as well as 1.5.3.dev')
+    @spock.lang.Ignore('Option for docinfo in header changed from :header to :head in AsciidoctorJRuby. Ignore as long as these tests have to run on both Asciidoctor 1.5.2 as well as 1.5.3.dev')
     def "a docinfoprocessor instance can override the annotation from footer to header"() {
         when:
         asciidoctor.createGroup().docinfoProcessor(new AnnotatedDocinfoProcessor(LocationType.HEADER)).register()

@@ -3,6 +3,7 @@ package org.asciidoctor.extension;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
+import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -224,7 +225,7 @@ public class WhenRubyExtensionGroupIsRegistered {
     public void ruby_postprocessor_should_be_registered() {
 
         final String rubyExtPath = classpath.getResource("ruby-extensions").getAbsolutePath();
-        final Asciidoctor asciidoctor = Asciidoctor.Factory.create(singletonList(rubyExtPath));
+        final Asciidoctor asciidoctor = JRubyAsciidoctor.create(singletonList(rubyExtPath));
         asciidoctor.createGroup()
             .requireRubyLibrary("xml-entity-postprocessor.rb")
             .rubyPostprocessor("XmlEntityPostprocessor")
@@ -298,7 +299,7 @@ public class WhenRubyExtensionGroupIsRegistered {
     public void ruby_docinfoprocessor_should_be_registered() {
 
         final String rubyExtPath = classpath.getResource("ruby-extensions").getAbsolutePath();
-        final Asciidoctor asciidoctor = Asciidoctor.Factory.create(singletonList(rubyExtPath));
+        final Asciidoctor asciidoctor = JRubyAsciidoctor.create(singletonList(rubyExtPath));
         asciidoctor.createGroup()
             .requireRubyLibrary("view-result-docinfoprocessor.rb")
             .rubyDocinfoProcessor("ViewResultDocinfoProcessor")
