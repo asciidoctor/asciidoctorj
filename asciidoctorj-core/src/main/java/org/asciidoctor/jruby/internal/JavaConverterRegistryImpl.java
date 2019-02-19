@@ -8,6 +8,7 @@ import org.asciidoctor.jruby.converter.internal.ConverterProxy;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
+import org.jruby.RubyModule;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,28 +31,26 @@ public class JavaConverterRegistryImpl implements JavaConverterRegistry {
             // Backend annotation present => Register with name given in annotation
             String backend = !ConverterFor.UNDEFINED.equals(converterForAnnotation.format()) ? converterForAnnotation.format() : converterForAnnotation.value();
             getConverterFactory()
-                .callMethod("register", clazz, rubyRuntime.newArray(rubyRuntime.newString(backend)));
+                .callMethod("register", clazz, rubyRuntime.newString(backend));
 
         } else if (backends.length == 0) {
             // No backend annotation and no backend defined => register as default backend
             getConverterFactory()
-                .callMethod("register", clazz);
+                .callMethod("register", clazz, rubyRuntime.newString("*"));
         }
         if (backends.length > 0) {
             // Always additionally register with names passed to this method
-            final RubyArray rubyBackendNames = new RubyArray(rubyRuntime, backends.length);
             for (String backend: backends) {
-                rubyBackendNames.add(rubyRuntime.newString(backend));
+                getConverterFactory()
+                        .callMethod("register", clazz, rubyRuntime.newString(backend));
             }
-            getConverterFactory()
-                .callMethod("register", clazz, rubyBackendNames);
         }
     }
 
     @Override
     public Class<?> resolve(String backend) {
         RubyClass rubyClass = (RubyClass) getConverterFactory()
-            .callMethod("resolve", rubyRuntime.newString(backend));
+            .callMethod("for", rubyRuntime.newString(backend));
 
         Class<?> clazz = rubyClass.getReifiedClass();
         if (clazz != null) {
@@ -69,10 +68,9 @@ public class JavaConverterRegistryImpl implements JavaConverterRegistry {
             .callMethod("unregister_all");
     }
 
-    private RubyClass getConverterFactory() {
+    private RubyModule getConverterFactory() {
         return rubyRuntime.getModule("Asciidoctor")
-            .defineOrGetModuleUnder("Converter")
-            .getClass("Factory");
+            .getModule("Converter");
     }
 
     @Override
