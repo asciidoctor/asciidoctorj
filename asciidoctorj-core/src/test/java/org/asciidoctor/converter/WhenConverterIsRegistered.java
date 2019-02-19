@@ -71,7 +71,7 @@ public class WhenConverterIsRegistered {
         // Register as default converter
         asciidoctor.javaConverterRegistry().register(DummyConverter.class);
 
-        String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options());
+        String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend("Undefined"));
 
         assertThat(result, is("Dummy"));
     }
