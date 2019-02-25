@@ -26,6 +26,7 @@
             <id>rubygems-releases</id>
             <url>http://rubygems-proxy.torquebox.org/releases</url>
         </pluginRepository>
+
        <pluginRepository>
          <id>snapshots-repo</id>
          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
