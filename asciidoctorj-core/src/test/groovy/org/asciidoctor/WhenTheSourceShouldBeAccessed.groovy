@@ -2,6 +2,8 @@ package org.asciidoctor
 
 import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.Cell
+import org.asciidoctor.ast.DescriptionList
+import org.asciidoctor.ast.DescriptionListEntry
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.List
 import org.asciidoctor.ast.ListItem
@@ -71,6 +73,38 @@ This paragraph should show {foo}
 and should continue here'''
         listItem.text == '''This list item should show bar
 and should continue here'''
+        list.blocks.size() == list.items.size()
+        list.items[0].source == list.blocks[0].source
+    }
+
+    def 'it should be possible to get the raw text from a description list item'() {
+
+        given:
+        String document = '''
+= Test
+:foo: bar
+
+== Section
+
+This::
+  list item should show {foo}
+  and should continue here
+That::
+  does not interest at all
+
+'''
+        when:
+        Document doc = asciidoctor.load(document, OptionsBuilder.options().asMap())
+        DescriptionList list = doc.blocks[0].blocks[0]
+        DescriptionListEntry listItem = list.items[0]
+
+        then:
+        listItem.description.source == '''list item should show {foo}
+and should continue here'''
+        listItem.description.text == '''list item should show bar
+and should continue here'''
+        list.blocks.size() == list.items.size()
+        list.items[0].description.source == list.blocks[0].description.source
     }
 
     def 'it should be possible to get the raw text from a table cell'() {
