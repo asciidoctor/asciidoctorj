@@ -14,7 +14,6 @@ import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
 import org.asciidoctor.log.LogRecord;
-import org.asciidoctor.spi.ProcessorFactory;
 
 import java.util.HashMap;
 import java.util.Iterator;
