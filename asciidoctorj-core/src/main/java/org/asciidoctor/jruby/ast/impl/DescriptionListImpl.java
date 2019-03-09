@@ -39,6 +39,7 @@ public class DescriptionListImpl extends StructuralNodeImpl implements Descripti
 
     @Override
     public List<StructuralNode> getBlocks() {
-        return null;
+        RubyArray rubyBlocks = (RubyArray) getRubyProperty("blocks");
+        return new RubyBlockListDecorator<>(rubyBlocks);
     }
 }

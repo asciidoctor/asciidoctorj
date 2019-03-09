@@ -36,6 +36,7 @@ public class ListImpl extends StructuralNodeImpl implements List {
 
     @Override
     public java.util.List<StructuralNode> getBlocks() {
-        return null;
+        RubyArray rubyBlocks = (RubyArray) getRubyProperty("blocks");
+        return new RubyBlockListDecorator<>(rubyBlocks);
     }
 }
