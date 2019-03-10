@@ -22,8 +22,10 @@ public interface Section extends StructuralNode {
     int number();
 
     /**
+     * @deprecated Please use {@link #getNumeral()}
      * @return the number of this section within the parent block
      */
+    @Deprecated
     int getNumber();
 
     /**
