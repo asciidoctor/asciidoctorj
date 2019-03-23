@@ -217,7 +217,7 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
                 positionalAttrs.add(positionalAttribute);
             }
             rubyClass.callMethod(rubyRuntime.getCurrentContext(), "option", new IRubyObject[]{
-                    rubyRuntime.newSymbol("pos_attrs"),
+                    rubyRuntime.newSymbol("positional_attrs"),
                     positionalAttrs
             });
         }
