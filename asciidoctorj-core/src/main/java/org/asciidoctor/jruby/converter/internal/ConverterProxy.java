@@ -45,6 +45,7 @@ public class ConverterProxy<T> extends RubyObject {
                 rubyRuntime.getObject(),
                 new ConverterProxy.Allocator(converterClass));
         includeModule(clazz, "Asciidoctor", "Converter");
+        includeModule(clazz, "Asciidoctor", "Converter", "BackendTraits");
 
         clazz.defineAnnotatedMethod(ConverterProxy.class, "initialize");
         clazz.defineAnnotatedMethod(ConverterProxy.class, "convert");
@@ -186,7 +187,7 @@ public class ConverterProxy<T> extends RubyObject {
         RubyModule module = clazz.getRuntime().getModule(moduleName);
         if (moduleNames != null && moduleNames.length > 0) {
             for (String submoduleName: moduleNames) {
-                module = module.defineOrGetModuleUnder(submoduleName);
+                module = module.getModule(submoduleName);
             }
         }
         clazz.includeModule(module);

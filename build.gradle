@@ -40,7 +40,7 @@ ext {
   arquillianSpockVersion = '1.0.0.Beta3'
   asciidoctorjPdfVersion = '1.5.0-alpha.16'
   asciidoctorjEpub3Version = '1.5.0-alpha.8.1'
-  asciidoctorjDiagramVersion = '1.5.12'
+  asciidoctorjDiagramVersion = '1.5.16'
   commonsioVersion = '2.4'
   guavaVersion = '18.0'
   hamcrestVersion = '1.3'
@@ -54,19 +54,19 @@ ext {
   pdfboxVersion = '1.8.10'
 
   // gem versions
-  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '1.5.8'
+  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '2.0.0'
   coderayGemVersion = '1.1.0'
 
   codenarcVersion = '0.24.1'
   groovyVersion = '2.4.13'
   erubisGemVersion = '2.7.0'
-  hamlGemVersion = '4.0.5'
+  hamlGemVersion = '5.0.4'
   openUriCachedGemVersion = '0.0.5'
-  slimGemVersion = '3.0.6'
+  slimGemVersion = '4.0.1'
   concurrentRubyGemVersion = '1.0.5'
   spockVersion = '0.7-groovy-2.0'
   threadSafeGemVersion = '0.3.6'
-  tiltGemVersion = '2.0.8'
+  tiltGemVersion = '2.0.9'
 }
 
 allprojects {
