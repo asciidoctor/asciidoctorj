@@ -22,9 +22,21 @@ public interface Section extends StructuralNode {
     int number();
 
     /**
+     * @deprecated Please use {@link #getNumeral()}
      * @return the number of this section within the parent block
      */
+    @Deprecated
     int getNumber();
+
+    /**
+     * Section numeral.
+     *
+     * This is a roman numeral for book parts, arabic numeral for regular sections,
+     * and a letter for special sections.
+     *
+     * @return the section numeral
+     */
+    String getNumeral();
 
     /**
      * @deprecated Please use {@link #getSectionName()}

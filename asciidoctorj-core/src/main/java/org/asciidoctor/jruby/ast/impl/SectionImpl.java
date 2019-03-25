@@ -27,8 +27,14 @@ public class SectionImpl extends StructuralNodeImpl implements Section {
     }
 
     @Override
+    @Deprecated
     public int getNumber() {
         return getInt("number");
+    }
+
+    @Override
+    public String getNumeral() {
+        return getString("numeral");
     }
 
     @Override
