@@ -14,7 +14,7 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 == Unreleased
 
 
-== 1.7.0-RC.1 (2019-03-26)
+== 2.0.0-RC.1 (2019-03-27)
 
 Enhancements::
 
@@ -24,7 +24,7 @@ Enhancements::
 Improvements::
 
   * Upgrade to JRuby 9.2.6.0. This version of AsciidoctorJ is incompatible with any version of JRuby <= 9.2.5.0
-  * Upgrade to Asciidoctor 2.0.1
+  * Upgrade to Asciidoctor 2.0.2
   * Upgrade to Asciidoctor Diagram 1.5.16
 
 Bug Fixes::
