@@ -17,7 +17,6 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
@@ -99,13 +98,7 @@ public class WhenAsciidoctorLogsToConsole {
 
         final List<LogRecord> logRecords = new ArrayList<>();
 
-        final LogHandler logHandler = new LogHandler() {
-            @Override
-            public void log(LogRecord logRecord) {
-                logRecords.add(logRecord);
-            }
-        };
-        asciidoctor.registerLogHandler(logHandler);
+        asciidoctor.registerLogHandler(logRecords::add);
 
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
         String renderContent = asciidoctor.convertFile(inputFile,
@@ -135,18 +128,11 @@ public class WhenAsciidoctorLogsToConsole {
     }
 
     @Test
-    @Ignore("Until logging of invalid refs is enabled by default")
     public void shouldLogInvalidRefs() throws Exception {
 
         final List<LogRecord> logRecords = new ArrayList<>();
 
-        final LogHandler logHandler = new LogHandler() {
-            @Override
-            public void log(LogRecord logRecord) {
-                logRecords.add(logRecord);
-            }
-        };
-        asciidoctor.registerLogHandler(logHandler);
+        asciidoctor.registerLogHandler(logRecords::add);
 
         File inputFile = classpath.getResource("documentwithinvalidrefs.adoc");
         String renderContent = asciidoctor.convertFile(inputFile,
@@ -171,14 +157,7 @@ public class WhenAsciidoctorLogsToConsole {
 
         final Asciidoctor secondInstance = Asciidoctor.Factory.create();
 
-        final LogHandler logHandler = new LogHandler() {
-            @Override
-            public void log(LogRecord logRecord) {
-                logRecords.add(logRecord);
-            }
-        };
-        // Register at first instance!
-        asciidoctor.registerLogHandler(logHandler);
+        asciidoctor.registerLogHandler(logRecords::add);
 
         // Now render via second instance and check that there is no notification
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
@@ -220,12 +199,7 @@ public class WhenAsciidoctorLogsToConsole {
 
         final List<LogRecord> logRecords = new ArrayList<>();
 
-        final LogHandler logHandler = new LogHandler() {
-            @Override
-            public void log(LogRecord logRecord) {
-                logRecords.add(logRecord);
-            }
-        };
+        final LogHandler logHandler = logRecords::add;
         asciidoctor.registerLogHandler(logHandler);
 
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
@@ -311,13 +285,7 @@ public class WhenAsciidoctorLogsToConsole {
 
         final List<LogRecord> logRecords = new ArrayList<>();
 
-        final LogHandler logHandler = new LogHandler() {
-            @Override
-            public void log(LogRecord logRecord) {
-                logRecords.add(logRecord);
-            }
-        };
-        asciidoctor.registerLogHandler(logHandler);
+        asciidoctor.registerLogHandler(logRecords::add);
         asciidoctor.javaExtensionRegistry().block(LoggingProcessor.class);
 
         String renderContent = asciidoctor.convert("= Test\n\n== Something different\n\n[big]\nHello World",
