@@ -25,7 +25,7 @@ install: ./gradlew -S -Pskip.signing assemble
 before_script: unset GEM_PATH GEM_HOME JRUBY_OPTS
 
 script: ./gradlew -S -Pskip.signing check && bash test-asciidoctor-upstream.sh
-after_success: if [ "${TRAVIS_BRANCH}" = "asciidoctorj-1.6.0" -a "${TRAVIS_PULL_REQUEST}" = "false" -a "${TRAVIS_JDK_VERSION}" = "oraclejdk8" ]; then ./gradlew clean build artifactoryPublish -x test ; fi
+after_success: if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" -a "${TRAVIS_JDK_VERSION}" = "oraclejdk8" ]; then ./gradlew clean build artifactoryPublish -x test ; fi
 notifications:
   email: false
   irc:
