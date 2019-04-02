@@ -93,8 +93,7 @@ public class JavaLogger extends RubyObject {
 
   @JRubyMethod(name = "fatal", required = 1, optional = 1)
   public IRubyObject fatal(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
-    final Severity severity = Severity.FATAL;
-    return log(threadContext, args, block, severity);
+    return log(threadContext, args, block, Severity.FATAL);
   }
 
   @JRubyMethod(name = "fatal?")
@@ -104,8 +103,7 @@ public class JavaLogger extends RubyObject {
 
   @JRubyMethod(name = "error", required = 1, optional = 1)
   public IRubyObject error(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
-    final Severity severity = Severity.ERROR;
-    return log(threadContext, args, block, severity);
+    return log(threadContext, args, block, Severity.ERROR);
   }
 
   @JRubyMethod(name = "error?")
@@ -115,8 +113,7 @@ public class JavaLogger extends RubyObject {
 
   @JRubyMethod(name = "warn", required = 1, optional = 1)
   public IRubyObject warn(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
-    final Severity severity = Severity.WARN;
-    return log(threadContext, args, block, severity);
+    return log(threadContext, args, block, Severity.WARN);
   }
 
   @JRubyMethod(name = "warn?")
@@ -126,8 +123,7 @@ public class JavaLogger extends RubyObject {
 
   @JRubyMethod(name = "info", required = 1, optional = 1)
   public IRubyObject info(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
-    final Severity severity = Severity.INFO;
-    return log(threadContext, args, block, severity);
+    return log(threadContext, args, block, Severity.INFO);
   }
 
   @JRubyMethod(name = "info?")
@@ -137,8 +133,7 @@ public class JavaLogger extends RubyObject {
 
   @JRubyMethod(name = "debug", required = 1, optional = 1)
   public IRubyObject debug(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
-    final Severity severity = Severity.DEBUG;
-    return log(threadContext, args, block, severity);
+    return log(threadContext, args, block, Severity.DEBUG);
   }
 
   @JRubyMethod(name = "debug?")
