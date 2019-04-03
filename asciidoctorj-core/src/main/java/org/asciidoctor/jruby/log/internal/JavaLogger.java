@@ -91,6 +91,74 @@ public class JavaLogger extends RubyObject {
     return getRuntime().getNil();
   }
 
+  @JRubyMethod(name = "fatal", required = 1, optional = 1)
+  public IRubyObject fatal(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
+    return log(threadContext, args, block, Severity.FATAL);
+  }
+
+  @JRubyMethod(name = "fatal?")
+  public IRubyObject fatal(final ThreadContext threadContext) {
+    return getRuntime().getTrue();
+  }
+
+  @JRubyMethod(name = "error", required = 1, optional = 1)
+  public IRubyObject error(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
+    return log(threadContext, args, block, Severity.ERROR);
+  }
+
+  @JRubyMethod(name = "error?")
+  public IRubyObject error(final ThreadContext threadContext) {
+    return getRuntime().getTrue();
+  }
+
+  @JRubyMethod(name = "warn", required = 1, optional = 1)
+  public IRubyObject warn(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
+    return log(threadContext, args, block, Severity.WARN);
+  }
+
+  @JRubyMethod(name = "warn?")
+  public IRubyObject warn(final ThreadContext threadContext) {
+    return getRuntime().getTrue();
+  }
+
+  @JRubyMethod(name = "info", required = 1, optional = 1)
+  public IRubyObject info(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
+    return log(threadContext, args, block, Severity.INFO);
+  }
+
+  @JRubyMethod(name = "info?")
+  public IRubyObject info(final ThreadContext threadContext) {
+    return getRuntime().getTrue();
+  }
+
+  @JRubyMethod(name = "debug", required = 1, optional = 1)
+  public IRubyObject debug(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
+    return log(threadContext, args, block, Severity.DEBUG);
+  }
+
+  @JRubyMethod(name = "debug?")
+  public IRubyObject debug(final ThreadContext threadContext) {
+    return getRuntime().getTrue();
+  }
+
+
+  private IRubyObject log(ThreadContext threadContext, IRubyObject[] args, Block block, Severity severity) {
+    final IRubyObject rubyMessage;
+    if (block.isGiven()) {
+      rubyMessage = block.yield(threadContext, getRuntime().getNil());
+    } else {
+      rubyMessage = args[0];
+    }
+    final Cursor cursor = getSourceLocation(rubyMessage);
+    final String message = formatMessage(rubyMessage);
+
+    final LogRecord record = createLogRecord(threadContext, severity, cursor, message);
+
+    rootLogHandler.log(record);
+    return getRuntime().getNil();
+  }
+
+
   private LogRecord createLogRecord(final ThreadContext threadContext,
                                     final Severity severity,
                                     final Cursor cursor,
@@ -100,7 +168,8 @@ public class JavaLogger extends RubyObject {
             .findFirst();
 
     final String sourceFileName = elem.map(BacktraceElement::getFilename).orElse(null);
-    final String sourceMethodName = elem.map(BacktraceElement::getMethod).orElse(null);    final LogRecord record = new LogRecord(severity, cursor, message, sourceFileName, sourceMethodName);
+    final String sourceMethodName = elem.map(BacktraceElement::getMethod).orElse(null);
+    final LogRecord record = new LogRecord(severity, cursor, message, sourceFileName, sourceMethodName);
     return record;
   }
 
