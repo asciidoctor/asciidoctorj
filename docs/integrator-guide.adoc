@@ -19,7 +19,7 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-discuss: http://discuss.asciidoctor.org
-:artifact-version: 1.6.0
+:artifact-version: 2.0.0-RC.1
 :uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
 :uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
@@ -1538,6 +1538,43 @@ To make AsciidoctorJ use our processor it also has to be registered at the `Java
 <3> Docinfo Processors will only be called by Asciidoctor if the safe mode is at least `SECURE`.
 <4> Test via the Jsoup HTML parsing library that our meta tag was correctly added to the resulting document.
 
+=== Extension SPI
+
+In previous examples, the extensions were registered manually.
+However, AsciidoctorJ provides another way to register extensions.
+If any implementation of the SPI interface is present on the classpath, it will be executed.
+
+To create an autoloadable extension you should do the next steps:
+
+Create a class that implements `org.asciidoctor.jruby.extension.spi.ExtensionRegistry`.
+
+[source]
+.org.asciidoctor.extension.integratorguide.TerminalCommandExtension.java
+----
+import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
+
+public class TerminalCommandExtension implements ExtensionRegistry { // <1>
+  @Override
+  public void register(Asciidoctor asciidoctor) { // <2>
+    JavaExtensionRegistry javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
+    javaExtensionRegistry.treeprocessor(TerminalCommandTreeprocessor.class); // <3>
+  }
+}
+----
+<1> To autoload extensions you need to implement `ExtensionRegistry`.
+<2> AsciidoctorJ will automatically run the `register` method. The method is responsible for registering all extensions.
+<3> All required Java extensions are registered.
+
+Next, you need to create a file called `org.asciidoctor.jruby.extension.spi.ExtensionRegistry` inside `META-INF/services` with the implementation's full qualified name.
+
+[source]
+.META-INF/services/org.asciidoctor.jruby.extension.spi.ExtensionRegistry
+----
+org.asciidoctor.integrationguide.extension.TerminalCommandExtension
+----
+
+And that's all.
+Now when a `.jar` file containing the previous structure is dropped inside classpath of AsciidoctorJ, the `register` method will be executed automatically and the extensions will be registered.
 
 
 == Publish everywhere: Adapt Asciidoctor to your own target format
