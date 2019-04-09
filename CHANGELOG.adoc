@@ -14,6 +14,22 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 == Unreleased
 
 
+== 2.0.0-RC.2 (2019-04-09)
+
+Enhancements::
+
+  * Add section numeral API (@vmj) (#785)
+
+Improvements::
+
+  * Upgrade to Asciidoctor 2.0.6
+  * Upgrade to Asciidoctor ePub3 1.5.9
+
+Bug Fixes::
+
+  * Fix logger implementation (#786)
+
+
 == 2.0.0-RC.1 (2019-03-27)
 
 Enhancements::
