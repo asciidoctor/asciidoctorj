@@ -62,7 +62,7 @@ public class LogRecord {
     }
 
     /**
-     * @return The Asciidoctor Ruby engine method used to render the file; <code>convertFile</code> or <code>convert</code> whether you are rending a File or a String.
+     * @return The Asciidoctor Ruby engine method used to convert the file; <code>convertFile</code> or <code>convert</code> whether you are converting a File or a String.
      */
     public String getSourceMethodName() {
         return sourceMethodName;

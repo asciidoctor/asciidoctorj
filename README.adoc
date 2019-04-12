@@ -752,9 +752,9 @@ Severity level of the current record.
 Cursor cursor::
 Information about the location of the event, contains:
 * LineNumber: relative to the file where the message occurred.
-* Path: source file simple name, or `<stdin>` value when rending from a String.
-* Dir: absolute path to the source file parent directory, or the execution path when rending from a String.
-* File: absolute path to the source file, or `null` when rending from a String. +
+* Path: source file simple name, or `<stdin>` value when converting from a String.
+* Dir: absolute path to the source file parent directory, or the execution path when converting from a String.
+* File: absolute path to the source file, or `null` when converting from a String. +
 These will point to the correct source file, even when this is included from another.
 
 String message::
@@ -765,7 +765,7 @@ Contains the value `<script>`. +
 For the source filename see `Cursor` above.
 
 String sourceMethodName::
-The Asciidoctor Ruby engine method used to render the file; `convertFile` or `convert` whether you are rending a File or a String.
+The Asciidoctor Ruby engine method used to convert the file; `convertFile` or `convert` whether you are converting a File or a String.
 
 === Logs Handling SPI
 
