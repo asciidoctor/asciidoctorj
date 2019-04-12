@@ -19,6 +19,7 @@ Enhancements::
 
 Improvements::
 
+  * Upgrade to JRuby 9.2.7.0 (#796)
 
 Bug Fixes::
 
