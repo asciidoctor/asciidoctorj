@@ -198,6 +198,7 @@ configure(subprojects.findAll { !it.isDistribution() }) {
     javadoc {
       // Oracle JDK8 likes to fail the build over spoiled HTML
       options.addStringOption('Xdoclint:none', '-quiet')
+      options.source('8')
     }
   }
 }
