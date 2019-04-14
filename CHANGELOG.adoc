@@ -13,6 +13,15 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == Unreleased
 
+Enhancements::
+
+  * Extended version info printed by `asciidoctorj --version` to show versions of Asciidoctor and AsciidoctorJ separately (@abelsromero) (#791)
+
+Improvements::
+
+
+Bug Fixes::
+
 
 == 2.0.0-RC.2 (2019-04-09)
 

@@ -56,6 +56,7 @@ jar {
       'com.beust.jcommander;resolution:=optional',
       '*'
   }
+  metaInf { from "$buildDir/version-info/" }
 }
 
 test {
@@ -63,6 +64,20 @@ test {
     excludeCategories 'org.asciidoctor.categories.Polluted'
   }
 }
+
+task createVersionFile {
+  inputs.property('version.asciidoctor', asciidoctorGemVersion)
+  inputs.property('version.asciidoctorj', project.version)
+  outputs.dir("$buildDir/version-info")
+
+  doLast {
+    file("$buildDir/version-info/asciidoctorj-version.properties").text = """
+version.asciidoctorj: ${project.version}
+version.asciidoctor: $asciidoctorGemVersion
+"""
+  }
+}
+jar.dependsOn createVersionFile
 
 task pollutedTest(type: Test) {
   useJUnit {
