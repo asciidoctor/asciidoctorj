@@ -1538,6 +1538,7 @@ To make AsciidoctorJ use our processor it also has to be registered at the `Java
 <3> Docinfo Processors will only be called by Asciidoctor if the safe mode is at least `SECURE`.
 <4> Test via the Jsoup HTML parsing library that our meta tag was correctly added to the resulting document.
 
+[[ExtensionSPI]]
 === Extension SPI
 
 In previous examples, the extensions were registered manually.
