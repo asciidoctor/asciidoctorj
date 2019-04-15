@@ -23,6 +23,8 @@ Improvements::
 
 Bug Fixes::
 
+  * Fix logger registration when creating AsciidoctorJ instance with Asciidoctor.Factory.create(@ahus1) (#790)
+
 
 == 2.0.0-RC.2 (2019-04-09)
 

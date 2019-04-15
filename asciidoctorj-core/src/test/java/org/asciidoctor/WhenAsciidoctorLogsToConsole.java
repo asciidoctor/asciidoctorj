@@ -1,12 +1,10 @@
 package org.asciidoctor;
 
-import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.extension.Name;
 import org.asciidoctor.extension.Reader;
-import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
@@ -49,12 +47,11 @@ public class WhenAsciidoctorLogsToConsole {
     @ArquillianResource
     private TemporaryFolder testFolder;
 
-    @ArquillianResource(Unshared.class)
     private Asciidoctor asciidoctor;
 
     @Before
     public void before() {
-        asciidoctor = JRubyAsciidoctor.create();
+        asciidoctor = Asciidoctor.Factory.create();
         TestLogHandlerService.clear();
     }
 
