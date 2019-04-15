@@ -91,7 +91,7 @@ public class JavaLogger extends RubyObject {
     return getRuntime().getNil();
   }
 
-  @JRubyMethod(name = "fatal", required = 1, optional = 1)
+  @JRubyMethod(name = "fatal", required = 0, optional = 2)
   public IRubyObject fatal(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
     return log(threadContext, args, block, Severity.FATAL);
   }
@@ -101,7 +101,7 @@ public class JavaLogger extends RubyObject {
     return getRuntime().getTrue();
   }
 
-  @JRubyMethod(name = "error", required = 1, optional = 1)
+  @JRubyMethod(name = "error", required = 0, optional = 2)
   public IRubyObject error(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
     return log(threadContext, args, block, Severity.ERROR);
   }
@@ -111,7 +111,7 @@ public class JavaLogger extends RubyObject {
     return getRuntime().getTrue();
   }
 
-  @JRubyMethod(name = "warn", required = 1, optional = 1)
+  @JRubyMethod(name = "warn", required = 0, optional = 2)
   public IRubyObject warn(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
     return log(threadContext, args, block, Severity.WARN);
   }
@@ -121,7 +121,7 @@ public class JavaLogger extends RubyObject {
     return getRuntime().getTrue();
   }
 
-  @JRubyMethod(name = "info", required = 1, optional = 1)
+  @JRubyMethod(name = "info", required = 0, optional = 2)
   public IRubyObject info(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
     return log(threadContext, args, block, Severity.INFO);
   }
@@ -131,7 +131,7 @@ public class JavaLogger extends RubyObject {
     return getRuntime().getTrue();
   }
 
-  @JRubyMethod(name = "debug", required = 1, optional = 1)
+  @JRubyMethod(name = "debug", required = 0, optional = 2)
   public IRubyObject debug(final ThreadContext threadContext, final IRubyObject[] args, Block block) {
     return log(threadContext, args, block, Severity.DEBUG);
   }
