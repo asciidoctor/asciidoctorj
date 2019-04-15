@@ -597,6 +597,9 @@ assertThat(findBy, hasSize(2)); //<3>
 
 == Extension API
 
+[NOTE]
+If you are migrating existing extensions to a newer version of AsciidoctorJ please read the <<docs/extension-migration-guide#,Extension Migration Guide>>
+
 One of the major improvements to Asciidoctor recently is the extensions API.
 AsciidoctorJ brings this extension API to the JVM environment.
 {uri-repo}[AsciidoctorJ] allows us to write extensions in Java instead of Ruby.
