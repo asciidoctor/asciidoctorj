@@ -39,7 +39,7 @@ public class AsciidoctorInvoker {
             JRubyAsciidoctor asciidoctor = buildAsciidoctorJInstance(asciidoctorCliOptions);
             
             if (asciidoctorCliOptions.isVersion()) {
-                System.out.println("AsciidoctorJRuby " + getAsciidoctorJVersion() + " (Asciidoctor " + asciidoctor.asciidoctorVersion() + ") [https://asciidoctor.org]");
+                System.out.println("AsciidoctorJ " + getAsciidoctorJVersion() + " (Asciidoctor " + asciidoctor.asciidoctorVersion() + ") [https://asciidoctor.org]");
                 Object rubyVersionString = JRubyRuntimeContext.get(asciidoctor).evalScriptlet("\"#{JRUBY_VERSION} (#{RUBY_VERSION})\"");
                 System.out.println("Runtime Environment: jruby " + rubyVersionString);
                 return;
