@@ -90,6 +90,9 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
         registerExtensions(asciidoctor);
         registerConverters(asciidoctor);
         registerLogHandlers(asciidoctor);
+
+        JavaLogger.install(asciidoctor.getRubyRuntime(), asciidoctor);
+
         return asciidoctor;
     }
 
@@ -107,9 +110,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
     private static JRubyAsciidoctor createJRubyAsciidoctorInstance(Map<String, String> environmentVars, List<String> loadPaths, ClassLoader classloader) {
         Ruby rubyRuntime = createRubyRuntime(environmentVars, loadPaths, classloader);
-        JRubyAsciidoctor jrubyAsciidoctor = new JRubyAsciidoctor(rubyRuntime);
-        JavaLogger.install(rubyRuntime, jrubyAsciidoctor);
-        return jrubyAsciidoctor;
+        return new JRubyAsciidoctor(rubyRuntime);
     }
 
     private static Ruby createRubyRuntime(Map<String, String> environmentVars, List<String> loadPaths, ClassLoader classloader) {
