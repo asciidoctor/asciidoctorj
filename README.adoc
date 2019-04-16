@@ -20,7 +20,7 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-discuss: http://discuss.asciidoctor.org
-:artifact-version: 1.6.1
+:artifact-version: 2.0.0-RC.1
 :uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
 :uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
@@ -597,6 +597,9 @@ assertThat(findBy, hasSize(2)); //<3>
 
 == Extension API
 
+[NOTE]
+If you are migrating existing extensions to a newer version of AsciidoctorJ please read the <<docs/extension-migration-guide#,Extension Migration Guide>>
+
 One of the major improvements to Asciidoctor recently is the extensions API.
 AsciidoctorJ brings this extension API to the JVM environment.
 {uri-repo}[AsciidoctorJ] allows us to write extensions in Java instead of Ruby.
@@ -667,47 +670,6 @@ class YellRubyBlock < Asciidoctor::Extensions::BlockProcessor
   end
 end
 ----
-
-=== Extension SPI
-
-In previous examples, the extensions were registered manually.
-However, AsciidoctorJ provides another way to register extensions.
-If any implementation of the SPI interface is present on the classpath, it will be executed.
-
-To create an autoloadable extension you should do next steps.
-
-Create a class that implements `org.asciidoctor.extension.spi.ExtensionRegistry`.
-
-[source]
-.org.asciidoctor.extension.ArrowsAndBoxesExtension.java
-----
-public class ArrowsAndBoxesExtension implements ExtensionRegistry { // <1>
-
-  @Override
-  public void register(Asciidoctor asciidoctor) { // <2>
-
-    JavaExtensionRegistry javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
-    javaExtensionRegistry.postprocessor(ArrowsAndBoxesIncludesPostProcessor.class); // <3>
-    javaExtensionRegistry.block("arrowsAndBoxes", ArrowsAndBoxesBlock.class);
-
-  }
-
-}
-----
-<1> To autoload extensions you need to implement `ExtensionRegistry`.
-<2> AsciidoctorJ will automatically run the `register` method. The method is responsible for registering all extensions.
-<3> All required Java extensions are registered.
-
-Next, you need to create a file called `org.asciidoctor.extension.spi.ExtensionRegistry` inside `META-INF/services` with the implementation's full qualified name.
-
-[source]
-.META-INF/services/org.asciidoctor.extension.spi.ExtensionRegistry
-----
-org.asciidoctor.extension.ArrowsAndBoxesExtension
-----
-
-And that's all.
-Now when a `.jar` file containing the previous structure is dropped inside classpath of AsciidoctorJ, the `register` method will be executed automatically and the extensions will be registered.
 
 == Logs handling API
 
@@ -1046,13 +1008,15 @@ If you want to use AsciidoctorJ in an application deployed on [app]_WildFly AS_,
 . Create the following folder tree: [path]_$JBOSS_HOME/modules/org/asciidoctor/main_.
 . Create the module descriptor file [path]_module.xml_.
 +
+[subs="+attributes"]
 [source,xml]
 .Asciidoctor module descriptor for WildFly AS
 ----
 <?xml version="1.0" encoding="UTF-8"?>
 <module xmlns="urn:jboss:module:1.0" name="org.asciidoctor">
     <resources>
-        <resource-root path="asciidoctorj-1.5.4.jar"/>
+        <resource-root path="asciidoctorj-api-{artifact-version}.jar"/>
+        <resource-root path="asciidoctorj-{artifact-version}.jar"/>
         <resource-root path="jcommander-1.35.jar"/>
         <resource-root path="jruby-complete-1.7.21.jar"/>
     </resources>
@@ -1184,8 +1148,13 @@ Each subproject produces a primary artifact (e.g., jar or zip) and its supportin
 
 The subprojects are as follows:
 
+asciidoctorj-api::
+  The common API for AsciidoctorJ.
+  Other implementations for different platforms than JRuby may reuse and implement this API.
+  Produces the asciidoctorj-api.jar
+
 asciidoctorj::
-  The main Java bindings for the Asciidoctor RubyGem (asciidoctor).
+  The main Java bindings for the Asciidoctor RubyGem (asciidoctor) running on JRuby.
   Also bundles optional RubyGems needed at runtime, such as coderay, tilt, haml and slim.
   Produces the asciidoctorj jar.
 
@@ -1223,6 +1192,8 @@ gradle/
   publish.gradle
   sign.gradle
 asciidoctorj-arquillian-extension/
+  build.gradle
+asciidoctorj-api/
   build.gradle
 asciidoctorj-core/
   build.gradle
@@ -1324,13 +1295,13 @@ To build, assemble (but not sign) and install the archives (jars and distributio
 To build, assemble, sign and publish the archives (jars and distribution zip) to Bintray, run:
 
  $ ./gradlew clean
-   ./gradlew -i -x pMNPTML bintrayUpload
+   ./gradlew -i -x pMNPTML asciidoctorj-api:bintrayUpload asciidoctorj:bintrayUpload asciidoctorj-distribution:bintrayUpload
 
 CAUTION: Don't run the `clean` task in the same execution as the `bintrayUpload` because it will not upload one of the signatures.
 
 If you want to first perform a dry run of the upload, add the `dryRun=true` property.
 
- $ ./gradlew -i -PdryRun=true -x pMNPTML bintrayUpload
+ $ ./gradlew -i -PdryRun=true -x pMNPTML asciidoctorj-api:bintrayUpload asciidoctorj:bintrayUpload asciidoctorj-distribution:bintrayUpload
 
 NOTE: The `-x pMNPTML` is necessary to work around a bug in the publishing plugin that prevents it from signing the archives.
 
@@ -1342,7 +1313,7 @@ Currently, Gradle is not configured to automatically tag a release, so *you have
 
 To publish a snapshot version simply run:
 
- $ ./gradlew artifactoryPublish
+ $ ./gradlew asciidoctorj-api:artifactoryPublish asciidoctorj:artifactoryPublish asciidoctorj-distribution:artifactoryPublish
 
 This will publish the all artifacts that have a snapshot version number to https://oss.jfrog.org.
 
