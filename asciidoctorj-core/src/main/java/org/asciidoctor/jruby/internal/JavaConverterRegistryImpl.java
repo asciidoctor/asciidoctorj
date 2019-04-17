@@ -17,14 +17,17 @@ public class JavaConverterRegistryImpl implements JavaConverterRegistry {
 
     private Ruby rubyRuntime;
 
-    public JavaConverterRegistryImpl(Ruby rubyRuntime) {
-        this.rubyRuntime = rubyRuntime;
+    private JRubyAsciidoctor asciidoctor;
+
+    public JavaConverterRegistryImpl(JRubyAsciidoctor asciidoctor) {
+        this.asciidoctor = asciidoctor;
+        this.rubyRuntime = asciidoctor.getRubyRuntime();
     }
 
     @Override
     public <U, T  extends Converter<U> & OutputFormatWriter<U>> void register(final Class<T> converterClass, String... backends) {
 
-        RubyClass clazz = ConverterProxy.register(rubyRuntime, converterClass);
+        RubyClass clazz = ConverterProxy.register(asciidoctor, converterClass);
 
         ConverterFor converterForAnnotation = converterClass.getAnnotation(ConverterFor.class);
         if (converterForAnnotation != null) {

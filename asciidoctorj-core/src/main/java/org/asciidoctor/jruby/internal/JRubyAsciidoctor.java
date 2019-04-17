@@ -233,7 +233,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
     @Override
     public JavaConverterRegistry javaConverterRegistry() {
-        return new JavaConverterRegistryImpl(rubyRuntime);
+        return new JavaConverterRegistryImpl(this);
     }
 
     @Override
