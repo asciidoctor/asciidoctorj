@@ -15,7 +15,17 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 Enhancements::
 
+Improvements::
+
+Bug Fixes::
+
+
+== 2.0.0-RC.3 (2019-04-18)
+
+Enhancements::
+
   * Extended version info printed by `asciidoctorj --version` to show versions of Asciidoctor and AsciidoctorJ separately (@abelsromero) (#791)
+  * Allow custom converters to log (#801)
 
 Improvements::
 
