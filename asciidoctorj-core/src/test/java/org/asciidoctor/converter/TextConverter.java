@@ -6,6 +6,8 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.Section;
+import org.asciidoctor.log.LogRecord;
+import org.asciidoctor.log.Severity;
 
 import java.util.Map;
 
@@ -23,11 +25,13 @@ public class TextConverter extends StringConverter {
     @Override
     public String convert(ContentNode node, String transform, Map<Object, Object> o) {
 
+
         if (transform == null) {
             transform = node.getNodeName();
         }
  
         if (node instanceof Document) {
+            log(new LogRecord(Severity.INFO, "Now we're logging"));
             Document document = (Document) node;
             return (String) document.getContent();
         } else if (node instanceof Section) {

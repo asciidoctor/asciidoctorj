@@ -1,13 +1,15 @@
 package org.asciidoctor.jruby.converter.internal;
 
 import org.asciidoctor.ast.ContentNode;
-import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.converter.Converter;
 import org.asciidoctor.converter.ConverterFor;
 import org.asciidoctor.converter.OutputFormatWriter;
+import org.asciidoctor.jruby.ast.impl.NodeConverter;
+import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.jruby.internal.RubyHashMapDecorator;
 import org.asciidoctor.jruby.internal.RubyHashUtil;
 import org.asciidoctor.jruby.internal.RubyOutputStreamWrapper;
+import org.asciidoctor.log.Logging;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyHash;
@@ -35,15 +37,17 @@ import java.util.Map;
 public class ConverterProxy<T> extends RubyObject {
 
     protected static final String METHOD_NAME_INITIALIZE = "initialize";
+    private final JRubyAsciidoctor asciidoctor;
 
     private T output;
 
-    public static <U, T  extends Converter<U> & OutputFormatWriter<U>> RubyClass register(Ruby rubyRuntime, final Class<T> converterClass) {
+    public static <U, T  extends Converter<U> & OutputFormatWriter<U>> RubyClass register(JRubyAsciidoctor asciidoctor, final Class<T> converterClass) {
+        Ruby rubyRuntime = asciidoctor.getRubyRuntime();
         RubyModule module = rubyRuntime.defineModule(getModuleName(converterClass));
         RubyClass clazz = module.defineClassUnder(
                 converterClass.getSimpleName(),
                 rubyRuntime.getObject(),
-                new ConverterProxy.Allocator(converterClass));
+                new ConverterProxy.Allocator(converterClass, asciidoctor));
         includeModule(clazz, "Asciidoctor", "Converter");
         includeModule(clazz, "Asciidoctor", "Converter", "BackendTraits");
 
@@ -59,13 +63,15 @@ public class ConverterProxy<T> extends RubyObject {
 
     public static class Allocator implements ObjectAllocator {
         private final Class<? extends Converter> converterClass;
+        private final JRubyAsciidoctor asciidoctor;
 
-        public Allocator(Class<? extends Converter> converterClass) {
+        public Allocator(Class<? extends Converter> converterClass, JRubyAsciidoctor asciidoctor) {
             this.converterClass = converterClass;
+            this.asciidoctor = asciidoctor;
         }
         @Override
         public IRubyObject allocate(Ruby runtime, RubyClass rubyClass) {
-            return new ConverterProxy(runtime, rubyClass, converterClass);
+            return new ConverterProxy(runtime, rubyClass, converterClass, asciidoctor);
         }
 
         public Class<? extends Converter> getConverterClass() {
@@ -77,9 +83,10 @@ public class ConverterProxy<T> extends RubyObject {
 
     private Converter<T> delegate;
 
-    public ConverterProxy(Ruby runtime, RubyClass metaClass, Class<? extends Converter> converterClass) {
+    public ConverterProxy(Ruby runtime, RubyClass metaClass, Class<? extends Converter> converterClass, JRubyAsciidoctor asciidoctor) {
         super(runtime, metaClass);
         this.converterClass = converterClass;
+        this.asciidoctor = asciidoctor;
     }
 
     @JRubyMethod(required = 1, optional = 1)
@@ -92,7 +99,9 @@ public class ConverterProxy<T> extends RubyObject {
                     backend,
                     args.length < 2  ? Collections.emptyMap() : new RubyHashMapDecorator((RubyHash) args[1])
             );
-
+            if (this.delegate instanceof Logging) {
+                ((Logging) this.delegate).setLogHandler(asciidoctor);
+            }
             // Initialize the Ruby part and pass in the config options
             RubyHash options = RubyHashUtil.convertMapToRubyHashWithSymbols(context.getRuntime(), this.delegate.getOptions());
             Helpers.invokeSuper(context, this, getMetaClass(), METHOD_NAME_INITIALIZE, new IRubyObject[]{args[0], options}, Block.NULL_BLOCK);

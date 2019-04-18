@@ -1,11 +1,12 @@
 package org.asciidoctor.converter;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.MemoryLogHandler;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
+import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
-import org.asciidoctor.arquillian.api.Unshared;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.After;
@@ -16,9 +17,11 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.logging.Logger;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -74,6 +77,29 @@ public class WhenConverterIsRegistered {
         String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend("Undefined"));
 
         assertThat(result, is("Dummy"));
+    }
+
+    private MemoryLogHandler registerMemoryLogHandler() {
+        final Logger logger = Logger.getLogger("asciidoctor");
+        final MemoryLogHandler handler = new MemoryLogHandler();
+        logger.addHandler(handler);
+        return handler;
+    }
+
+    @Test
+    public void shouldBeAbleToLog() {
+        MemoryLogHandler handler = registerMemoryLogHandler();
+        try {
+            asciidoctor.javaConverterRegistry().register(TextConverter.class);
+
+            String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend(TextConverter.DEFAULT_FORMAT));
+
+            assertThat(handler.getLogRecords(), hasSize(1));
+            assertThat(handler.getLogRecords().get(0).getMessage(), is("Now we're logging"));
+        } finally {
+            final Logger logger = Logger.getLogger("asciidoctor");
+            logger.removeHandler(handler);
+        }
     }
 
 
