@@ -50,7 +50,6 @@ endif::[]
 
 == Distribution
 
-The version of AsciidoctorJ matches the version of Asciidoctor RubyGem it bundles.
 AsciidoctorJ is published to Maven Central and Bintray.
 The artifact information can be found in the tables below.
 
@@ -100,8 +99,8 @@ CAUTION: The artifactId changed to `asciidoctorj` starting in 1.5.0.
 
 == Installation
 
-AsciidoctorJ is a standard `.jar` file.
-To start using it, you need to add the library to your project's classpath.
+To start using AsciidoctorJ, you need to add the required dependency to the dependency management system of your choice, Maven, Gradle or Apache Ivy.
+If you don't use a Dependency Management system please check the dependency graph and add all jars in it to your classpath.
 
 // SW: Need functional tests for a java maven project and a java gradle project
 
@@ -152,6 +151,12 @@ In addition to using AsciidoctorJ directly, you can invoke it as part of your bu
 - {uri-maven-guide}[How to Install and Use the Asciidoctor Maven Plugin]
 - {uri-gradle-guide}[How to Install and Use the Asciidoctor Gradle Plugin]
 ====
+
+[NOTE]
+The versions of Asciidoctor and AsciidoctorJ no longer align since version 1.6.0 of AsciidoctorJ.
+Please check the corresponding release notes to find out which version of Asciidoctor is packaged if you are embedding the library.
+If you use the distribution you can call `asciidoctorj --version` to get the version of Asciidoctor that is embedded in AsciidoctorJ.
+
 
 === Windows Installation
 
