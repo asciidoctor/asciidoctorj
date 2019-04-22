@@ -17,6 +17,8 @@ Enhancements::
 
 Improvements::
 
+  * Upgrade to Asciidoctor 2.0.8
+
 Bug Fixes::
 
 
