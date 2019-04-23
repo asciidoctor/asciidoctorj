@@ -39,7 +39,7 @@ public class WhenBackendIsPdf {
         // If the result should be written to a file the write method will convert to a PDF stream
         // Therefore, if the result should not be written to a file the PDF converter should be returned.
         IRubyObject o = asciidoctor.convert(DOCUMENT, options().backend("pdf").get(), IRubyObject.class);
-        assertThat(o.getMetaClass().getRealClass().getName(), is("Asciidoctor::Pdf::Converter"));
+        assertThat(o.getMetaClass().getRealClass().getName(), is("Asciidoctor::PDF::Converter"));
     }
 
     @Test
