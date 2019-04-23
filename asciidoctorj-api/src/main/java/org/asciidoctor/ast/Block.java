@@ -34,8 +34,8 @@ public interface Block extends StructuralNode {
     String getSource();
 
     /**
-     * Sets the source of the ListItem.
-     * @param source The source of this ListItem, substitutions will still be applied.
+     * Sets the source of the Block.
+     * @param source The source of this Block, substitutions will still be applied.
      */
     void setSource(String source);
 
