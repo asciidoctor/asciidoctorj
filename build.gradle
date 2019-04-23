@@ -55,7 +55,8 @@ ext {
 
   // gem versions
   asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '2.0.8'
-  coderayGemVersion = '1.1.0'
+  coderayGemVersion = '1.1.2'
+  rougeGemVersion = '3.3.0'
 
   codenarcVersion = '0.24.1'
   groovyVersion = '2.4.13'
