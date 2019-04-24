@@ -13,12 +13,15 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == Unreleased
 
+== 2.0.0 (2019-04-24)
+
 Enhancements::
 
 Improvements::
 
   * Upgrade to Asciidoctor 2.0.8
-  * Upgrade to asciidoctor-pdf 1.5.0-alpha.17 (#796)
+  * Upgrade to asciidoctor-pdf 1.5.0-alpha.17 (#809)
+  * Add Rouge source highlighter to asciidoctor.jar (#806)
 
 Bug Fixes::
 
