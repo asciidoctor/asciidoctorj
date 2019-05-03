@@ -20,12 +20,12 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install graphviz; fi
 
-install: ./gradlew -S -Pskip.signing assemble
+install: ./gradlew -S -Pskip.signing assemble --scan
 
 before_script: unset GEM_PATH GEM_HOME JRUBY_OPTS
 
-script: ./gradlew -S -Pskip.signing check && bash test-asciidoctor-upstream.sh
-after_success: if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" -a "${TRAVIS_JDK_VERSION}" = "oraclejdk8" ]; then ./gradlew clean build artifactoryPublish -x test ; fi
+script: ./gradlew -S -Pskip.signing check --scan && bash test-asciidoctor-upstream.sh
+after_success: if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" -a "${TRAVIS_JDK_VERSION}" = "oraclejdk8" ]; then ./gradlew clean build artifactoryPublish -x test --scan; fi
 notifications:
   email: false
   irc:
