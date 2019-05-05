@@ -512,19 +512,20 @@ a|Processes an arbitary block based on it's style such as
 
 |<<treeprocessor,Treeprocessor>>
 |org.asciidoctor.extension.Treeprocessor
-|Modify the AST after parsing
+|Modify the AST after parsing.
 
 |<<inlineprocessor,Inline macro processor>>
 |org.asciidoctor.extension.InlineMacroProcessor
-|Processes inline macros like `btn:[]`
+|Processes inline macros like `btn:[]`.
 
 |<<postprocessor,Postprocessor>>
 |org.asciidoctor.extension.Postprocessor
-|Modifies the backend-specific output document
+|Modifies the backend-specific output document.
 
 |<<docinfoprocessor,DocinfoProcessor>>
 |org.asciidoctor.extension.DocinfoProcessor
-|Insert content into the `header` element (html) or `docinfo` element (docbook)
+|Insert content into the `header` element or the end of the body element (html), or the `info` element or at the end of the document (docbook).
+
 |===
 
 [NOTE]
@@ -1107,7 +1108,7 @@ If you have installed AsciidoctorJ as recommended, the asciidoctorj command will
 
 If you have downloaded the distribution jars only, use a command like:
 
- java -cp lib/asciidoctor-api-2.0.0.jar;lib/asciidoctor-core-2.0.0.jar;lib/jcommander-1.35.jar;lib/myextension.jar  org.asciidoctor.jruby.cli.AsciidoctorInvoker  test.adoc
+ java -cp lib/jruby-complete-9.2.7.0.jar;lib/asciidoctor-api-2.0.0.jar;lib/asciidoctor-core-2.0.0.jar;lib/jcommander-1.35.jar;lib/myextension.jar org.asciidoctor.jruby.cli.AsciidoctorInvoker test.adoc
 --
 
 == Publish everywhere: Adapt Asciidoctor to your own target format

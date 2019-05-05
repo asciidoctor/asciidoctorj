@@ -1588,7 +1588,7 @@ To make AsciidoctorJ use our processor it also has to be registered at the `Java
 <4> Test via the Jsoup HTML parsing library that our meta tag was correctly added to the resulting document.
 
 [[ExtensionSPI]]
-===Automatically loading extensions
+=== Automatically loading extensions
 
 In previous examples, the extensions were registered manually.
 However, AsciidoctorJ provides another way to register extensions.
