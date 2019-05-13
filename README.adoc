@@ -177,7 +177,7 @@ If you use the distribution you can call `asciidoctorj --version` to get the ver
 === Windows Installation
 
 A {uri-chocolatey}[Chocolatey] package is available which installs the
-ascidoctorj-{artifact-version}-bin.zip Bintray artifact along with a
+asciidoctorj-{artifact-version}-bin.zip Bintray artifact along with a
 binary shim in %ChocolateyInstall%\bin which lets you run AsciidoctorJ
 from the command line.
 
@@ -700,7 +700,7 @@ This API is inspired by Java Logging API (JUL).
 If you are familiar with `java.util.logging.*` you will see familiar analogies with some of its components.
 ====
 
-AciidoctorJ (v1.5.7+) offers the possibility to capture messages generated during document rendering.
+AsciidoctorJ (v1.5.7+) offers the possibility to capture messages generated during document rendering.
 These messages correspond to logging information and are organized in 6 severity levels:
 
 . DEBUG
@@ -916,7 +916,7 @@ import org.asciidoctor.Asciidoctor;
 Asciidoctor asciidoctor = create();
 ----
 
-In an OSGi context it will not work because JRuby needs some paths to find the Asciidoctor gems. In order to make it work, you will need to specify the Asiciidoctor gems path using the JavaEmbedUtils class. We will update the previous snippet of code to specify this path:
+In an OSGi context it will not work because JRuby needs some paths to find the Asciidoctor gems. In order to make it work, you will need to specify the Asciidoctor gems path using the JavaEmbedUtils class. We will update the previous snippet of code to specify this path:
 
 [source,java]
 ----
