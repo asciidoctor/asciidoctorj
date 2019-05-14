@@ -1,3 +1,4 @@
+
 = AsciidoctorJ: Integrator's guide
 Alex Soto <https://github.com/lordofthejars[@lordofthejars]>; Dan Allen <https://github.com/mojavelinux[@mojavelinux]>; Robert Panzer <https://github.com/robertpanzer[@robertpanzer]>
 :compat-mode!:
@@ -144,7 +145,6 @@ public class SimpleAsciidoctorRendering {
 <3> The conversion options define via `toFile(true)` that the result should be written to a new file.
     The option `safe` imposes security constraints on the rendering process.
     `safe(SafeMode.UNSAFE)` defines the least restricting constraints and allows for example inserting the beautiful `asciidoctor.css` stylesheet into the resulting document.
-
 
 === The Asciidoctor interface
 
@@ -299,7 +299,6 @@ for (String html : result) {
     System.out.println(html);
 }
 ----
-
 
 [[options]]
 === Conversion options
@@ -507,7 +506,6 @@ From the API this is done like this:
 <2> Define the attribute supported by Asciidoctor to use the font awesome icons.
 <3> Define the custom attribute `foo` to the value `bar`.
 
-
 === Ruby runtime
 
 Asciidoctor itself is implemented in Ruby and AsciidoctorJ is a wrapper that encapsulates Asciidoctor in a JRuby runtime.
@@ -584,19 +582,20 @@ a|Processes an arbitary block based on it's style such as
 
 |<<treeprocessor,Treeprocessor>>
 |org.asciidoctor.extension.Treeprocessor
-|Modify the AST after parsing
+|Modify the AST after parsing.
 
 |<<inlineprocessor,Inline macro processor>>
 |org.asciidoctor.extension.InlineMacroProcessor
-|Processes inline macros like `btn:[]`
+|Processes inline macros like `btn:[]`.
 
 |<<postprocessor,Postprocessor>>
 |org.asciidoctor.extension.Postprocessor
-|Modifies the backend-specific output document
+|Modifies the backend-specific output document.
 
 |<<docinfoprocessor,DocinfoProcessor>>
 |org.asciidoctor.extension.DocinfoProcessor
-|Insert content into the `header` element (html) or `docinfo` element (docbook)
+|Insert content into the `header` element or the end of the body element (html), or the `info` element or at the end of the document (docbook).
+
 |===
 
 [NOTE]
@@ -621,7 +620,6 @@ To create an extension two things are required:
 But before starting to write your first extension it is essential to understand how Asciidoctor treats the document:
 The raw text content is parsed into a tree structure which is then transformed into the target format.
 Therefore this section first goes into the details of this tree structure before explaining what extensions are possible and how to implement them.
-
 
 === Understanding the AST classes
 
@@ -1049,7 +1047,7 @@ public class ImageInlineMacroProcessor extends InlineMacroProcessor {
 
 // #506
 
-It was noted at the start of this section that the target (the x in `\menu:x[]`) is optional. 
+We said at the start of this section that the target (the x in `\menu:x[]`) is optional. 
 If you want a macro that does not have a target (for example `cite:[brown79]`) add the following annotation to your class:
 
 [source,java,indent=0]
@@ -1062,7 +1060,6 @@ class CiteInlineMacroProcessor extends InlineMacroProcessor {
 ----
 
 With the SHORT format, the attributes are not parsed, and the 'target' that is passed to your macro is the value between the brackets ("brown79").
-
 
 [[blockprocessor]]
 === Block Processors
@@ -1136,7 +1133,6 @@ To make AsciidoctorJ use our processor it also has to be registered at the `Java
 ----
 <1> The block processor is registered at the `JavaExtensionRegistry` of the Asciidoctor instance.
 <2> Check that the resulting HTML contains the text as upper-case letters.
-
 
 [[includeprocessor]]
 === Include Processors
@@ -1390,7 +1386,6 @@ To make AsciidoctorJ use our processor it also has to be registered at the `Java
 <1> The postprocessor is registered at the `JavaExtensionRegistry` of the Asciidoctor instance.
 <2> To make Asciidoctor generate the footer element the option <<options,`headerFooter`>> must be activated.
 
-
 [[treeprocessor]]
 === Treeprocessors
 
@@ -1624,24 +1619,20 @@ org.asciidoctor.integrationguide.extension.TerminalCommandExtension
 ----
 
 And that's all.
-Now when a `.jar` file containing the previous structure is dropped inside classpath of AsciidoctorJ, the `register` method will be executed automatically and the extensions will be registered.
-
-// From an issue somewhere but I cant find it
+Now when a `.jar` file containing the previous structure is dropped into the classpath of AsciidoctorJ, the `register` method will be executed automatically and the extensions will be registered.
 
 [NOTE]
 --
-If you have installed AsciidoctorJ as recommended, asciidoctorj will be on the path, and you can use:
+If you have installed AsciidoctorJ as recommended, the asciidoctorj command will be on the path, and you can use:
 
  asciidoctorj -cp=lib/myextension.jar test.adoc
 
 If you have downloaded the distribution jars only, use a command like:
 
- java -cp lib/asciidoctor-api-2.0.0.jar;lib/asciidoctor-core-2.0.0.jar;lib/jcommander-1.35.jar;lib/myextension.jar  org.asciidoctor.jruby.cli.AsciidoctorInvoker  test.adoc
- 
+ java -cp lib/jruby-complete-9.2.7.0.jar;lib/asciidoctor-api-2.0.0.jar;lib/asciidoctor-core-2.0.0.jar;lib/jcommander-1.35.jar;lib/myextension.jar org.asciidoctor.jruby.cli.AsciidoctorInvoker test.adoc
 --
 
 == Publish everywhere: Adapt Asciidoctor to your own target format
-
 
 For output formats that are not natively supported by Asciidoctor it is possible to write an own converter in Java.
 To get your own converter that creates string content running in {uri-repo}[AsciidoctorJ] these steps are required:
@@ -1784,7 +1775,6 @@ It is also possible to provide converters for binary formats.
 In this case the converter should extend the generic class `org.asciidoctor.converter.AbstractConverter<T>` where `T` is the return type of the method `convert()`.
 `StringConverter` is actually a concrete subclass for the type `String`.
 
-
 == Logs handling API
 
 [NOTE]
@@ -1843,7 +1833,7 @@ For the source filename see `Cursor` above.
 String sourceMethodName::
 The Asciidoctor Ruby engine method used to render the file; `convertFile` or `convert` whether you are rending a File or a String.
 
-=== Logs Handling SPI
+=== Log Handling SPI
 
 Similarly to AsciidoctorJ extensions, the Log Handling API provides an alternate method to register Handlers without accessing `Asciidoctor` instance.
 
