@@ -123,7 +123,7 @@ public class RubyHashUtil {
 
     }
 
-    public static Map<String, Object> convertRubyHashMapToStringObjectMap(Map<Object, Object> rubyHashMap) {
+    public static Map<String, Object> convertRubyHashMapToStringObjectMap(RubyHash rubyHashMap) {
 
         Map<String, Object> map = new HashMap<String, Object>();
 

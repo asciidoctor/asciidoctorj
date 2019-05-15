@@ -20,6 +20,7 @@ import org.asciidoctor.jruby.extension.internal.ExtensionRegistryExecutor;
 import org.asciidoctor.jruby.log.internal.JULLogHandler;
 import org.asciidoctor.jruby.log.internal.JavaLogger;
 import org.asciidoctor.jruby.log.internal.LogHandlerRegistryExecutor;
+import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterRegistry;
 import org.jruby.*;
 import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
@@ -234,6 +235,11 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     @Override
     public JavaConverterRegistry javaConverterRegistry() {
         return new JavaConverterRegistryImpl(this);
+    }
+
+    @Override
+    public SyntaxHighlighterRegistry syntaxHighlighterRegistry() {
+        return new SyntaxHighlighterRegistryImpl(this);
     }
 
     @Override

@@ -23,6 +23,7 @@ ruleset {
     }
     ruleset('rulesets/naming.xml') {
         exclude 'PropertyName'
+        exclude 'MethodName'
         'ClassName' {
             regex = '^[A-Z][a-zA-Z0-9$]*$'
         }
@@ -30,14 +31,13 @@ ruleset {
             finalRegex = '^_?[a-z][a-zA-Z0-9]*$'
             staticFinalRegex = '^[A-Z][A-Z_0-9]*$'
         }
-        'MethodName' {
-            regex = '^[a-z][a-zA-Z0-9_ ]*$'
-        }
         'VariableName' {
             finalRegex = '^_?[a-z][a-zA-Z0-9]*$'
         }
     }
-    ruleset('rulesets/unused.xml')
+    ruleset('rulesets/unused.xml') {
+        exclude 'UnusedMethodParameter'
+    }
     ruleset('rulesets/exceptions.xml')
     ruleset('rulesets/logging.xml')
     ruleset('rulesets/braces.xml') {
