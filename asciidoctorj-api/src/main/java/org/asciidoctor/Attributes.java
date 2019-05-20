@@ -586,8 +586,8 @@ public class Attributes {
 
     private void addAttributes(String[] allAttributes) {
         for (String attribute : allAttributes) {
-            int equalsIndex = -1;
-            if ((equalsIndex = attribute.indexOf(ATTRIBUTE_SEPARATOR)) > -1) {
+            int equalsIndex = attribute.indexOf(ATTRIBUTE_SEPARATOR);
+            if (equalsIndex > -1) {
                 extractAttributeNameAndValue(attribute, equalsIndex);
             } else {
                 this.attributes.put(attribute, "");
