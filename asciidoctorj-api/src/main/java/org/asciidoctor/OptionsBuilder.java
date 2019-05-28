@@ -272,6 +272,20 @@ public class OptionsBuilder {
     }
 
     /**
+     * Source directory.
+     *
+     * This must be used alongside {@link #destinationDir(File)}.
+     *
+     * @param srcDir
+     *            source directory.
+     * @return this instance.
+     */
+    public OptionsBuilder sourceDir(File srcDir) {
+        this.options.setSourceDir(srcDir.getAbsolutePath());
+        return this;
+    }
+
+    /**
      * Sets a custom or unlisted option.
      * 
      * @param option

@@ -23,6 +23,7 @@ public class AsciidoctorCliOptions {
     public static final String ATTRIBUTE = "-a";
     public static final String HELP = "-h";
     public static final String DESTINATION_DIR = "-D";
+    public static final String SOURCE_DIR = "-R";
     public static final String BASE_DIR = "-B";
     public static final String TEMPLATE_DIR = "-T";
     public static final String TEMPLATE_ENGINE = "-E";
@@ -87,6 +88,9 @@ public class AsciidoctorCliOptions {
 
     @Parameter(names = { DESTINATION_DIR, "--destination-dir" }, description = "destination output directory (default: directory of source file)")
     private String destinationDir;
+
+    @Parameter(names = { SOURCE_DIR, "--source-dir" }, description = "source directory (requires destination directory)")
+    private String sourceDir;
 
     @Parameter(names = { "--trace" }, description = "include backtrace information on errors (default: false)")
     private boolean trace = false;
@@ -216,8 +220,16 @@ public class AsciidoctorCliOptions {
         return this.destinationDir;
     }
 
+    public String getSourceDir() {
+        return this.sourceDir;
+    }
+
     public boolean isDestinationDirOption() {
         return this.destinationDir != null;
+    }
+
+    public boolean isSourceDirOption() {
+        return this.sourceDir != null;
     }
 
     public boolean isTemplateEngineOption() {
@@ -294,6 +306,10 @@ public class AsciidoctorCliOptions {
 
         if (isDestinationDirOption() && !isOutputStdout()) {
             optionsBuilder.toDir(new File(this.destinationDir));
+
+            if(isSourceDirOption()) {
+                optionsBuilder.sourceDir(new File(this.sourceDir));
+            }
         }
 
         if (isInPlaceRequired()) {
