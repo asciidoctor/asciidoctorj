@@ -13,6 +13,14 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == Unreleased
 
+Improvements::
+
+  * Add the command line option -R to specify the source root directory (@4lber10 & @ysb33r) (#822)
+
+Documentation:
+
+  * Clarify that an InlineMacroProcessor should return a PhraseNode and that Strings are deprecated. (@jmini) (#823)
+
 == 2.0.0 (2019-04-24)
 
 Enhancements::
