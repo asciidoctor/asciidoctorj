@@ -17,7 +17,7 @@ public class ContextMenuInlineMacroProcessor extends InlineMacroProcessor {
     public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
         String[] items = target.split("\\|");
         Map<String, Object> attrs = new HashMap<String, Object>();
-        attrs.put("menu", "Right click");                         // <1>
+        attrs.put("menu", "Right click");                              // <1>
         List<String> submenus = new ArrayList<String>();
         for (int i = 0; i < items.length - 1; i++) {
             submenus.add(items[i]);
@@ -25,8 +25,7 @@ public class ContextMenuInlineMacroProcessor extends InlineMacroProcessor {
         attrs.put("submenus", submenus);
         attrs.put("menuitem", items[items.length - 1]);
 
-        return createPhraseNode(parent, "menu", (String) null, attrs) // <2>
-                .convert();                                       // <3>
+        return createPhraseNode(parent, "menu", (String) null, attrs); // <2>
     }
 }
 //end::include[]

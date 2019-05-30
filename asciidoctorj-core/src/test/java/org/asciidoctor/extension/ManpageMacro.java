@@ -17,12 +17,12 @@ public class ManpageMacro extends InlineMacroProcessor {
     }
 
     @Override
-    public String process(ContentNode parent, String target,
+    public Object process(ContentNode parent, String target,
             Map<String, Object> attributes) {
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("type", ":link");
         options.put("target", target + ".html");
-        return createPhraseNode(parent, "anchor", target, attributes, options).convert();
+        return createPhraseNode(parent, "anchor", target, attributes, options);
     }
 
 }

@@ -17,6 +17,6 @@ class AnnotatedRegexpInlineMacroProcessor extends InlineMacroProcessor {
         Map<String, Object> options = new HashMap<String, Object>()
         options['type'] = ':link'
         options['target'] = "${target}.html"
-        createPhraseNode(parent, 'anchor', target, attributes, options).convert()
+        createPhraseNode(parent, 'anchor', target, attributes, options)
     }
 }
