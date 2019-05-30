@@ -105,6 +105,52 @@ Additionally the file `/META-INF/services/org.asciidoctor.extension.spi.Extensio
 com.example.MyExtension
 ----
 
+=== InlineMacroProcessor expect a PhraseNode instead of a String  
+
+A really simple extension `yell` can be implemented as `InlineMacroProcessor`.
+It just write the target value as upper-case string.
+For example `yell&#58;yes&#91;&#93;` is replaced by `YES` in the generated document. 
+
+[source,java]
+.YellMacroProcessor.java for AsciidoctorJ 1.5.x or 1.6.x
+----
+public class YellMacroProcessor extends InlineMacroProcessor {
+
+  public YellMacroProcessor(String macroName, Map<String, Object> config) {
+    super(macroName, config);
+  }
+
+  @Override
+  public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
+    return target.toUpperCase();
+  }
+}
+----
+
+The implementation also works with Asciidcotor `2.0.x` but since version `2.0.0.rc.3` of Asciidoctor, when a String is returned, following entry is logged:
+
+====
+INFO: expected substitution value for custom inline macro to be of type Inline; got String: yell&#58;yes&#91;&#93;
+====
+
+The correct implementation with Asciidcotor `2.0.x` is to return a `PhraseNode`:
+
+[source,java]
+.YellMacroProcessor.java for AsciidoctorJ 2.0.x
+----
+public class YellMacroProcessor extends InlineMacroProcessor {
+
+  public YellMacroProcessor(String macroName, Map<String, Object> config) {
+    super(macroName, config);
+  }
+
+  @Override
+  public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
+    return createPhraseNode(parent, "quoted", target.toUpperCase(), attributes, new HashMap<>());
+  }
+}
+----
+
 
 [[Migrate15x-16x]]
 == Migrating from AsciidoctorJ 1.5.x to 1.6.x
