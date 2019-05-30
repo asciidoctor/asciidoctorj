@@ -3,11 +3,12 @@ package org.asciidoctor.extension;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.log.LogRecord;
+import org.asciidoctor.log.TestLogHandlerService;
 import org.asciidoctor.util.ClasspathResources;
 import org.asciidoctor.util.TestHttpServer;
 import org.jboss.arquillian.junit.Arquillian;
@@ -16,6 +17,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -36,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 
 import static org.asciidoctor.OptionsBuilder.options;
@@ -44,6 +47,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
@@ -61,14 +65,21 @@ public class WhenJavaExtensionIsRegistered {
     @ArquillianResource
     public TemporaryFolder testFolder;
 
-    @ArquillianResource(Unshared.class)
     private Asciidoctor asciidoctor;
 
+    @Before
+    public void before() {
+        asciidoctor = Asciidoctor.Factory.create();
+        TestLogHandlerService.clear();
+    }
+
     @After
-    public void tearDown() {
+    public void tearDown() throws IOException {
         if (TestHttpServer.getInstance() != null) {
             TestHttpServer.getInstance().stop();
         }
+        LogManager.getLogManager().readConfiguration();
+        TestLogHandlerService.clear();
     }
 
     class RubyIncludeSource extends IncludeProcessor {
@@ -635,6 +646,9 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
         assertThat(link.attr("href"), is("gittutorial.html"));
+
+        final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
+        assertThat(logRecords, hasSize(0));
     }
 
     @Test
@@ -652,6 +666,8 @@ public class WhenJavaExtensionIsRegistered {
         Element link = doc.getElementsByTag("a").first();
         assertThat(link.attr("href"), is("gittutorial.html"));
 
+        final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
+        assertThat(logRecords, hasSize(0));
     }
 
     @Test
@@ -674,6 +690,8 @@ public class WhenJavaExtensionIsRegistered {
         assertNotNull(link);
         assertThat(link.attr("href"), is("gittutorial.html"));
 
+        final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
+        assertThat(logRecords, hasSize(0));
     }
 
     @Test
@@ -694,6 +712,9 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
         assertNull(link);
+
+        final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
+        assertThat(logRecords, hasSize(0));
     }
 
     @Test
@@ -715,6 +736,8 @@ public class WhenJavaExtensionIsRegistered {
         assertNotNull(link);
         assertThat(link.attr("href"), is("gittutorial.html"));
 
+        final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
+        assertThat(logRecords, hasSize(0));
     }
 
     @Test

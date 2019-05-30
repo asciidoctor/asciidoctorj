@@ -728,12 +728,10 @@ include::src/test/java/org/asciidoctor/integrationguide/extension/IssueInlineMac
 <2> All InlineMacroProcessors must extend the class `org.asciidoctor.extension.InlineMacroProcessor`.
 <3> A InlineMacroProcessor must implement the abstract method `process` that is called by Asciidoctor.
     The method must return the rendered result of this macro.
-<4> The implementation constructs a new phrase node that is a link, i.e. an `anchor` via the method `createPhraseNode()`.
+<4> The implementation constructs and returns a new phrase node that is a link, i.e. an `anchor` via the method `createPhraseNode()`.
     The third parameter `target` defines that the text to render this link is the target of the macro, that means that the link will be rendered as  `333` or `2`.
     The last parameter, the options, must contain the target of the line, i.e. the referenced URL, and that the type of the anchor is a link.
     It could also be a ':xref', a ':ref', or a ':bibref'.
-<5> Instead of returning the created AST node, the converted result is returned.
-    The method `convert()` will invoke the correct converter, so that this also works when rendering to PDF.
 
 To make AsciidoctorJ use our processor it has to be registered at the `JavaExtensionRegistry`:
 
@@ -773,8 +771,7 @@ The following processor would render the macro `rightclick:New|Class[]` like thi
 include::src/test/java/org/asciidoctor/integrationguide/extension/ContextMenuInlineMacroProcessor.java[tags=include]
 ----
 <1> The attributes of the PhraseNode must contain the key `menu` referring to the first menu selection, `submenus` referring to a possibly empty list of submenu selections, and finally the key `menuitem` referring to the final menu item selection.
-<2> Create an PhraseNode with context `menu` and no text.
-<3> The macro processor has to return the converted PhraseNode.
+<2> Create and return an PhraseNode with context `menu` and no text.
 
 To create an inline image the PhraseNode must have the context `image`.
 The following example assumes that there is a site \http://foo.bar that serves images given as the target of the macro.
@@ -792,8 +789,7 @@ include::src/test/java/org/asciidoctor/integrationguide/extension/ImageInlineMac
 <3> Optional attributes `alt` for alternative text, `width` and `height` are set in the node attributes.
     Other possible attributes include `title` to define the title attribute of the `img` element when rendering to HTML.
     When setting the attribute `link` to any value the node will be converted to a link to that image, where the window can be defined via the attribute `window`.
-<4> Create a PhraseNode with context `image` and no text.
-<5> The macro processor has to return the converted PhraseNode.
+<4> Create and return a PhraseNode with context `image` and no text.
 
 // #506
 

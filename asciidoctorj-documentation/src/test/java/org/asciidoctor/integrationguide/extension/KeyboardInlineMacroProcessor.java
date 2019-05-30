@@ -15,9 +15,8 @@ public class KeyboardInlineMacroProcessor extends InlineMacroProcessor {
     @Override
     public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
         Map<String, Object> attrs = new HashMap<String, Object>();
-        attrs.put("keys", Arrays.asList("Ctrl", target));            // <1>
-        return createPhraseNode(parent, "kbd", (String) null, attrs) // <2>
-                .convert();                                          // <3>
+        attrs.put("keys", Arrays.asList("Ctrl", target));             // <1>
+        return createPhraseNode(parent, "kbd", (String) null, attrs); // <2>
     }
 }
 //end::include[]

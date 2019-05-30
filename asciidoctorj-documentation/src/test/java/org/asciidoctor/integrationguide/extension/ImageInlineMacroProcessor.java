@@ -15,17 +15,16 @@ public class ImageInlineMacroProcessor extends InlineMacroProcessor {
     public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
 
         Map<String, Object> options = new HashMap<String, Object>();
-        options.put("type", "image");                                           // <1>
-        options.put("target", "http://foo.bar/" + target);                      // <2>
+        options.put("type", "image");                                            // <1>
+        options.put("target", "http://foo.bar/" + target);                       // <2>
 
         String[] items = target.split("\\|");
         Map<String, Object> attrs = new HashMap<String, Object>();
-        attrs.put("alt", "Image not available");                                // <3>
+        attrs.put("alt", "Image not available");                                 // <3>
         attrs.put("width", "64");
         attrs.put("height", "64");
 
-        return createPhraseNode(parent, "image", (String) null, attrs, options) // <4>
-                .convert();                                                     // <5>
+        return createPhraseNode(parent, "image", (String) null, attrs, options); // <4>
     }
 }
 //end::include[]

@@ -28,8 +28,7 @@ public class IssueInlineMacroProcessor extends InlineMacroProcessor {    // <2>
         Map<String, Object> options = new HashMap<>();
         options.put("type", ":link");
         options.put("target", href);
-        return createPhraseNode(parent, "anchor", target, attributes, options) // <4>
-                .convert();                                                // <5>
+        return createPhraseNode(parent, "anchor", target, attributes, options); // <4>
     }
 
 }

@@ -906,8 +906,7 @@ public class IssueInlineMacroProcessor extends InlineMacroProcessor {    // <2>
         Map<String, Object> options = new HashMap<>();
         options.put("type", ":link");
         options.put("target", href);
-        return createPhraseNode(parent, "anchor", target, attributes, options) // <4>
-                .convert();                                                // <5>
+        return createPhraseNode(parent, "anchor", target, attributes, options); // <4>
     }
 
 }
@@ -917,12 +916,10 @@ public class IssueInlineMacroProcessor extends InlineMacroProcessor {    // <2>
 <2> All InlineMacroProcessors must extend the class `org.asciidoctor.extension.InlineMacroProcessor`.
 <3> A InlineMacroProcessor must implement the abstract method `process` that is called by Asciidoctor.
     The method must return the rendered result of this macro.
-<4> The implementation constructs a new phrase node that is a link, i.e. an `anchor` via the method `createPhraseNode()`.
+<4> The implementation constructs and returns a new phrase node that is a link, i.e. an `anchor` via the method `createPhraseNode()`.
     The third parameter `target` defines that the text to render this link is the target of the macro, that means that the link will be rendered as  `333` or `2`.
     The last parameter, the options, must contain the target of the line, i.e. the referenced URL, and that the type of the anchor is a link.
     It could also be a ':xref', a ':ref', or a ':bibref'.
-<5> Instead of returning the created AST node, the converted result is returned.
-    The method `convert()` will invoke the correct converter, so that this also works when rendering to PDF.
 
 To make AsciidoctorJ use our processor it has to be registered at the `JavaExtensionRegistry`:
 
@@ -966,9 +963,8 @@ public class KeyboardInlineMacroProcessor extends InlineMacroProcessor {
     @Override
     public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
         Map<String, Object> attrs = new HashMap<String, Object>();
-        attrs.put("keys", Arrays.asList("Ctrl", target));            // <1>
-        return createPhraseNode(parent, "kbd", (String) null, attrs) // <2>
-                .convert();                                          // <3>
+        attrs.put("keys", Arrays.asList("Ctrl", target));             // <1>
+        return createPhraseNode(parent, "kbd", (String) null, attrs); // <2>
     }
 }
 ----
@@ -990,7 +986,7 @@ public class ContextMenuInlineMacroProcessor extends InlineMacroProcessor {
     public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
         String[] items = target.split("\\|");
         Map<String, Object> attrs = new HashMap<String, Object>();
-        attrs.put("menu", "Right click");                         // <1>
+        attrs.put("menu", "Right click");                              // <1>
         List<String> submenus = new ArrayList<String>();
         for (int i = 0; i < items.length - 1; i++) {
             submenus.add(items[i]);
@@ -998,14 +994,12 @@ public class ContextMenuInlineMacroProcessor extends InlineMacroProcessor {
         attrs.put("submenus", submenus);
         attrs.put("menuitem", items[items.length - 1]);
 
-        return createPhraseNode(parent, "menu", (String) null, attrs) // <2>
-                .convert();                                       // <3>
+        return createPhraseNode(parent, "menu", (String) null, attrs); // <2>
     }
 }
 ----
 <1> The attributes of the PhraseNode must contain the key `menu` referring to the first menu selection, `submenus` referring to a possibly empty list of submenu selections, and finally the key `menuitem` referring to the final menu item selection.
-<2> Create an PhraseNode with context `menu` and no text.
-<3> The macro processor has to return the converted PhraseNode.
+<2> Create and return an PhraseNode with context `menu` and no text.
 
 To create an inline image the PhraseNode must have the context `image`.
 The following example assumes that there is a site \http://foo.bar that serves images given as the target of the macro.
@@ -1023,17 +1017,16 @@ public class ImageInlineMacroProcessor extends InlineMacroProcessor {
     public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
 
         Map<String, Object> options = new HashMap<String, Object>();
-        options.put("type", "image");                                           // <1>
-        options.put("target", "http://foo.bar/" + target);                      // <2>
+        options.put("type", "image");                                            // <1>
+        options.put("target", "http://foo.bar/" + target);                       // <2>
 
         String[] items = target.split("\\|");
         Map<String, Object> attrs = new HashMap<String, Object>();
-        attrs.put("alt", "Image not available");                                // <3>
+        attrs.put("alt", "Image not available");                                 // <3>
         attrs.put("width", "64");
         attrs.put("height", "64");
 
-        return createPhraseNode(parent, "image", (String) null, attrs, options) // <4>
-                .convert();                                                     // <5>
+        return createPhraseNode(parent, "image", (String) null, attrs, options); // <4>
     }
 }
 ----
@@ -1042,8 +1035,7 @@ public class ImageInlineMacroProcessor extends InlineMacroProcessor {
 <3> Optional attributes `alt` for alternative text, `width` and `height` are set in the node attributes.
     Other possible attributes include `title` to define the title attribute of the `img` element when rendering to HTML.
     When setting the attribute `link` to any value the node will be converted to a link to that image, where the window can be defined via the attribute `window`.
-<4> Create a PhraseNode with context `image` and no text.
-<5> The macro processor has to return the converted PhraseNode.
+<4> Create and return a PhraseNode with context `image` and no text.
 
 // #506
 
