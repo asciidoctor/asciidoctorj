@@ -18,7 +18,9 @@ public class Options {
     public static final String TO_DIR = "to_dir";
     public static final String MKDIRS = "mkdirs";
     public static final String SAFE = "safe";
+    public static final String SOURCEMAP = "sourcemap";
     public static final String ERUBY = "eruby";
+    public static final String CATALOG_ASSETS = "catalog_assets";
     public static final String COMPACT = "compact";
     public static final String DESTINATION_DIR = "destination_dir";
     public static final String SOURCE_DIR = "source_dir";
@@ -27,6 +29,7 @@ public class Options {
     public static final String BASEDIR = "base_dir";
     public static final String TEMPLATE_CACHE = "template_cache";
     public static final String SOURCE = "source";
+    public static final String PARSE = "parse";
     public static final String PARSE_HEADER_ONLY = "parse_header_only";
 
     private Map<String, Object> options = new HashMap<String, Object>();
@@ -124,8 +127,28 @@ public class Options {
         this.options.put(SAFE, safeMode.getLevel());
     }
 
+    /**
+     * Keeps track of the file and line number for each parsed block. (Useful for tooling applications where the association between the converted output and the source file is important).
+     * 
+     * @param sourcemap
+     *            value.
+     */
+    public void setSourcemap(boolean sourcemap) {
+        this.options.put(SOURCEMAP, sourcemap);
+    }
+
     public void setEruby(String eruby) {
         this.options.put(ERUBY, eruby);
+    }
+
+    /**
+     * If true, tells the parser to capture images and links in the reference table. (Normally only IDs, footnotes and indexterms are included). The reference table is available via the references property on the document AST object. (Experimental).
+     * 
+     * @param catalogAssets
+     *            value.
+     */
+    public void setCatalogAssets(boolean catalogAssets) {
+        this.options.put(CATALOG_ASSETS, catalogAssets);
     }
 
     public void setCompact(boolean compact) {
@@ -156,15 +179,24 @@ public class Options {
         this.options.put(TEMPLATE_CACHE, templateCache);
     }
 
+    /**
+     * If true, the source is parsed eagerly (i.e., as soon as the source is passed to the load or load_file API). If false, parsing is deferred until the parse method is explicitly invoked.
+     * 
+     * @param parse
+     *            value.
+     */
+    public void setParse(boolean parse) {
+        this.options.put(PARSE, parse);
+    }
+
     public void setParseHeaderOnly(boolean parseHeaderOnly) {
         this.options.put(PARSE_HEADER_ONLY, parseHeaderOnly);
     }
-    
+
     public void setOption(String optionName, Object optionValue) {
         this.options.put(optionName, optionValue);
     }
 
-    
     public Map<String, Object> map() {
         return this.options;
     }

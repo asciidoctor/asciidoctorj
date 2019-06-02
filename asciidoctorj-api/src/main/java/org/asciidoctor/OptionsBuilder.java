@@ -224,6 +224,18 @@ public class OptionsBuilder {
     }
 
     /**
+     * Keeps track of the file and line number for each parsed block. (Useful for tooling applications where the association between the converted output and the source file is important).
+     * 
+     * @param sourcemap
+     *            value.
+     * @return this instance.
+     */
+    public OptionsBuilder sourcemap(boolean sourcemap) {
+        this.options.setSourcemap(sourcemap);
+        return this;
+    }
+
+    /**
      * Sets eruby implementation.
      * 
      * @param eruby
@@ -232,6 +244,18 @@ public class OptionsBuilder {
      */
     public OptionsBuilder eruby(String eruby) {
         this.options.setEruby(eruby);
+        return this;
+    }
+    
+    /**
+     * If true, tells the parser to capture images and links in the reference table. (Normally only IDs, footnotes and indexterms are included). The reference table is available via the references property on the document AST object. (Experimental).
+     * 
+     * @param catalogAssets
+     *            value.
+     * @return this instance.
+     */
+    public OptionsBuilder catalogAssets(boolean catalogAssets) {
+        this.options.setCatalogAssets(catalogAssets);
         return this;
     }
 
@@ -246,7 +270,19 @@ public class OptionsBuilder {
         this.options.setCompact(compact);
         return this;
     }
-    
+
+    /**
+     * If true, the source is parsed eagerly (i.e., as soon as the source is passed to the load or load_file API). If false, parsing is deferred until the parse method is explicitly invoked.
+     * 
+     * @param parse
+     *            value.
+     * @return this instance.
+     */
+    public OptionsBuilder parse(boolean parse) {
+        this.options.setParse(parse);
+        return this;
+    }
+
     /**
      * Sets parse header only falg.
      * 
