@@ -54,7 +54,7 @@ ext {
   pdfboxVersion = '1.8.10'
 
   // gem versions
-  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '2.0.8'
+  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '2.0.10'
   coderayGemVersion = '1.1.2'
   rougeGemVersion = '3.3.0'
 
