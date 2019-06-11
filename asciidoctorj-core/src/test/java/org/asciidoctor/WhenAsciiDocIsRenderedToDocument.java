@@ -265,11 +265,10 @@ public class WhenAsciiDocIsRenderedToDocument {
         File file = classpath.getResource("sourcelocation.adoc");
 
         // When
-        Document document = asciidoctor.loadFile(file, OptionsBuilder.options().option("sourcemap", "true").docType("book").asMap());
+        Document document = asciidoctor.loadFile(file, OptionsBuilder.options().sourcemap(true).docType("book").asMap());
         Map<Object, Object> selector = new HashMap<Object, Object>();
         selector.put("context", ":paragraph");
         List<StructuralNode> findBy = document.findBy(selector);
-        StructuralNode block = findBy.get(0);
 
         // Then
         StructuralNode block1 = findBy.get(0);
