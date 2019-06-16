@@ -12,6 +12,8 @@ import java.util.Map;
  *
  * <p>If a {@link SyntaxHighlighterAdapter} also implements this interface, the
  * method {@link #highlight(Block, String, String, Map)} will be called for every source block.</p>
+ *
+ * <p>This API is experimental and might change in an incompatible way in a minor version update!</p>
  */
 public interface Highlighter extends SyntaxHighlighterAdapter {
 

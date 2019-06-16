@@ -422,6 +422,8 @@ public interface Asciidoctor {
     /**
      * Creates a registry for registering converters.
      *
+     * <p>This API is experimental and might change in an incompatible way in a minor version update!</p>
+     *
      * @return Converter Registry object.
      */
     SyntaxHighlighterRegistry syntaxHighlighterRegistry();

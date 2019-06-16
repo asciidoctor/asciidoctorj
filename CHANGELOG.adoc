@@ -20,6 +20,7 @@ Improvements::
   * Upgrade to Asciidoctor 2.0.10
   * Upgrade to Asciidoctor Diagram 1.5.0-alpha.18
   * Upgrade to Asciidoctor PDF 1.5.0-alpha.18
+  * Added an experimental API to write Syntax Highlighters in Java (#826)
 
 Documentation:
 

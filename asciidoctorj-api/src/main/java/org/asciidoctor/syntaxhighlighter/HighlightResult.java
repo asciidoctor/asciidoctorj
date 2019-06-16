@@ -1,5 +1,8 @@
 package org.asciidoctor.syntaxhighlighter;
 
+/**
+ * <p>This API is experimental and might change in an incompatible way in a minor version update!</p>
+ */
 public class HighlightResult {
 
     private String highlightedSource;

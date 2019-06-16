@@ -12,6 +12,8 @@ import java.util.Map;
  *
  * <p>This only happens if the output is written to file and the attributes <code>:linkcss</code>
  * and <code>:copycss</code> are set.</p>
+ *
+ * <p>This API is experimental and might change in an incompatible way in a minor version update!</p>
  */
 public interface StylesheetWriter {
 

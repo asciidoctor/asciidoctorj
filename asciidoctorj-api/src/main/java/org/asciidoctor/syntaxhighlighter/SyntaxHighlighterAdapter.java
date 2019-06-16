@@ -58,6 +58,8 @@ import java.util.Map;
  * </p>
  * <p>The lifecycle of a SyntaxHighlighter is that one instance is created for every document that
  * is converted.</p>
+ *
+ * <p>This API is experimental and might change in an incompatible way in a minor version update!</p>
  */
 public interface SyntaxHighlighterAdapter {
 

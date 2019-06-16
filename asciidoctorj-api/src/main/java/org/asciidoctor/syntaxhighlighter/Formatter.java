@@ -11,6 +11,8 @@ import java.util.Map;
  * This way it is able to assign custom classes to these elements.
  * <p>A client side renderer will usually implement this interface so that it can certain marker
  * classes including an indicator for the language of the source.</p>
+ *
+ * <p>This API is experimental and might change in an incompatible way in a minor version update!</p>
  */
 public interface Formatter {
 
