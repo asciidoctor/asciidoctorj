@@ -35,6 +35,7 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-font-awesome: http://fortawesome.github.io/Font-Awesome
 :uri-gradle: https://gradle.org
 :uri-highlightjs: https://highlightjs.org
+:uri-prismjs: https://prismjs.com
 
 ifdef::awestruct,env-browser[]
 toc::[]
@@ -2160,3 +2161,147 @@ This highlighter writes the css and js resources to files in the same directory 
         }
 ----
 <1> External stylesheets are only written when converting to a file, not when converting to a stream or a string, and when the attributes `:linkcss` and `:copycss` are set.
+
+=== Static syntax highlighting during conversion
+
+The examples we looked at until now did the actual syntax highlighting in the browser.
+But there are also cases where it is desirable to highlight the source during conversion, either because the syntax highlighter is implemented in Java, or syntax highlighting should also work when Javascript is not enabled at the client.
+The following example uses {uri-prismjs}[prism.js] to show how to achieve this:
+
+When a `SyntaxHighlighterAdapter` also implements the interface `org.asciidoctor.syntaxhighlighter.Highlighter` it will be called to convert the raw source text to HTML.
+The example uses {uri-prismjs}[prism.js] which is also a Javascript library.
+But now we will call this library during document conversion and only add the css part in the resulting HTML, so that the highlighted source will appear correctly even if Javascript is disabled on the client.
+
+[source,java]
+----
+public class PrismJsHighlighter implements SyntaxHighlighterAdapter, Formatter, StylesheetWriter, Highlighter { // <1>
+
+    private final ScriptEngine scriptEngine;
+
+    public PrismJsHighlighter() {
+        ScriptEngineFactory engine = new NashornScriptEngineFactory(); // <2>
+        this.scriptEngine = engine.getScriptEngine();
+        try {
+            this.scriptEngine.eval(new InputStreamReader(getClass().getResourceAsStream("/prismjs/prism.js")));
+        } catch (ScriptException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean hasDocInfo(LocationType location) {
+        return location == LocationType.HEADER;
+    }
+
+    @Override
+    public String getDocinfo(LocationType location, Document document, Map<String, Object> options) {
+        if (document.hasAttribute("linkcss") && document.hasAttribute("copycss")) { // <3>
+            return "<link href=\"prism.css\" rel=\"stylesheet\" />";
+        } else {
+            try (InputStream in = getClass().getResourceAsStream("/prismjs/prism.css")) {
+                String css = IOUtils.toString(in);
+                return "<style>\n" + css + "\n</style>";
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Override
+    public String format(Block node, String lang, Map<String, Object> opts) {
+        return "<pre class='highlight'><code>"  // <3>
+            + node.getContent()
+            + "</code></pre>";
+    }
+
+    @Override
+    public boolean isWriteStylesheet(Document doc) {
+        return doc.hasAttribute("linkcss") && doc.hasAttribute("copycss");     // <3>
+    }
+
+    @Override
+    public void writeStylesheet(Document doc, File toDir) {
+        try (InputStream in1 = getClass().getResourceAsStream("/prismjs/prism.css"); // <3>
+             OutputStream fout1 = new FileOutputStream(new File(toDir, "prism.css"))) {
+            IOUtils.copy(in1, fout1);
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
+    }
+
+    @Override
+    public HighlightResult highlight(Block node,
+                                     String source,
+                                     String lang,
+                                     Map<String, Object> options) {
+        ScriptContext ctx = scriptEngine.getContext();                                     // <4>
+        Bindings bindings = ctx.getBindings(ScriptContext.ENGINE_SCOPE);
+        bindings.put("text", source);
+        bindings.put("language", lang);
+
+        try {
+            String result = (String) scriptEngine.eval(
+                "Prism.highlight(text, Prism.languages[language], language)", bindings);
+            return new HighlightResult(result);
+        } catch (ScriptException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+----
+<1> A syntax highlighter that wants to statically convert the source text has to implement the interface `org.asciidoctor.syntaxhighlighter.Highlighter`.
+<2> We use the Nashorn Javascript engine to run prism.js.
+<3> When rendering to a file and the attributes `:linkcss` and `:copycss` are set the css file of prism.js should be written to disk.
+    Otherwise we include the content in a `<style/>` element.
+<4> `highlight()` is the only method required by the `Highlighter` interface.
+    It gets the node to be converted, the source, the language and additional options.
+    Here we invoke the prism.js API to convert the plain source text to static HTML, that uses the classes defined in the css.
+    This is returned in a `HighlightResult`.
+
+// TODO: Explain what the index is, I don't fully understand it myself yet.
+
+Then we can use the highlighter just like in the previous examples.
+We just have to register it and use the correct value for the attribute `:source-highlighter`:
+
+[source,java]
+----
+        File sources_adoc = //...
+        File toDir = // ...
+
+        asciidoctor.syntaxHighlighterRegistry()
+            .register(PrismJsHighlighter.class, "prismjs"); // <1>
+
+        asciidoctor.convertFile(sources_adoc,
+            OptionsBuilder.options()
+                .headerFooter(true)
+                .toDir(toDir)
+                .safe(SafeMode.UNSAFE)
+                .attributes(AttributesBuilder.attributes()
+                    .sourceHighlighter("prismjs")           // <1>
+                    .copyCss(true)
+                    .linkCss(true)));
+
+        File docFile = new File(toDir, "sources.html");
+
+        Document document = Jsoup.parse(new File(toDir, "sources.html"), "UTF-8");
+        Elements keywords = document.select("div.content pre.highlight code span.token.keyword"); // <2>
+        assertThat(keywords, not(empty()));
+        assertThat(keywords.first().text(), is("public"));
+----
+<1> Register our prism.js highlighter and set the attribute `:source-highlighter` to its name to use it.
+<2> Test that the source code has been formatted statically to `<span/>` elements.
+
+=== Invocation order
+
+// TODO: Generate content of this chapter by a test
+The order of method invocations is:
+
+1. `hasDocInfo(HEADER)`
+2. `getDocInfo(HEADER)`
+3. `format()`
+4. `highlight()`
+5. `hasDocInfo(FOOTER)`
+6. `getDocInfo(FOOTER)`
+7. `isWriteStylesheet()`
+8. `writeStylesheet()`
+
