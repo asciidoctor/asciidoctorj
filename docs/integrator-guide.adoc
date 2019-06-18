@@ -2293,15 +2293,39 @@ We just have to register it and use the correct value for the attribute `:source
 
 === Invocation order
 
-// TODO: Generate content of this chapter by a test
-The order of method invocations is:
+This section explains the order of method invocations on a syntax highlighter.
+For a concrete example we use this document:
 
-1. `hasDocInfo(HEADER)`
-2. `getDocInfo(HEADER)`
-3. `format()`
-4. `highlight()`
-5. `hasDocInfo(FOOTER)`
-6. `getDocInfo(FOOTER)`
-7. `isWriteStylesheet()`
-8. `writeStylesheet()`
+[source,asciidoc]
+-----
+= Syntax Highlighter Test
+
+== Some sources
+
+[source,java]
+----
+System.out.println("Hello Java");
+----
+
+[source,go]
+----
+fmt.Println("Hello Go")
+----
+
+-----
+
+For this document the calls to a syntax highlighter will happen in this order:
+
+. New SyntaxHighlighter
+. hasDocInfo for HEADER
+. getDocInfo for HEADER
+. format `java`
+. highlight `System.out.println("Hello Java");`
+. format `go`
+. highlight `fmt.Println("Hello Go")`
+. hasDocInfo for FOOTER
+. getDocInfo for FOOTER
+. isWriteStylesheet
+. writeStylesheet
+
 

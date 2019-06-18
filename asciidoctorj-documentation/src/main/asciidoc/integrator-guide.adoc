@@ -1461,15 +1461,15 @@ include::src/test/java/org/asciidoctor/integrationguide/syntaxhighlighter/PrismJ
 
 === Invocation order
 
-// TODO: Generate content of this chapter by a test
-The order of method invocations is:
+This section explains the order of method invocations on a syntax highlighter.
+For a concrete example we use this document:
 
-1. `hasDocInfo(HEADER)`
-2. `getDocInfo(HEADER)`
-3. `format()`
-4. `highlight()`
-5. `hasDocInfo(FOOTER)`
-6. `getDocInfo(FOOTER)`
-7. `isWriteStylesheet()`
-8. `writeStylesheet()`
+[source,asciidoc]
+-----
+include::src/test/resources/syntax-highlighting-order.adoc[]
+-----
+
+For this document the calls to a syntax highlighter will happen in this order:
+
+include::build/resources/test/order.txt[]
 
