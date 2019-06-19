@@ -1,6 +1,6 @@
 package org.asciidoctor.jruby.internal;
 
-import org.asciidoctor.jruby.sourcehighlighter.internal.SyntaxHighlighterProxy;
+import org.asciidoctor.jruby.syntaxhighlighter.internal.SyntaxHighlighterProxy;
 import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterRegistry;
 import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterAdapter;
 import org.jruby.Ruby;

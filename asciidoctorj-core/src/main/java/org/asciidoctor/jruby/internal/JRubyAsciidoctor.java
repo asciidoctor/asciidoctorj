@@ -10,6 +10,7 @@ import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
+import org.asciidoctor.jruby.syntaxhighlighter.internal.SyntaxHighlighterRegistryExecutor;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.jruby.DirectoryWalker;
@@ -90,6 +91,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     private static JRubyAsciidoctor processRegistrations(JRubyAsciidoctor asciidoctor) {
         registerExtensions(asciidoctor);
         registerConverters(asciidoctor);
+        registerSyntaxHighlighters(asciidoctor);
         registerLogHandlers(asciidoctor);
 
         JavaLogger.install(asciidoctor.getRubyRuntime(), asciidoctor);
@@ -103,6 +105,10 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
     private static void registerExtensions(AsciidoctorJRuby asciidoctor) {
         new ExtensionRegistryExecutor(asciidoctor).registerAllExtensions();
+    }
+
+    private static void registerSyntaxHighlighters(AsciidoctorJRuby asciidoctor) {
+        new SyntaxHighlighterRegistryExecutor(asciidoctor).registerAllSyntaxHighlighter();
     }
 
     private static void registerLogHandlers(AsciidoctorJRuby asciidoctor) {

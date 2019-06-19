@@ -1,4 +1,4 @@
-package org.asciidoctor.jruby.sourcehighlighter.internal;
+package org.asciidoctor.jruby.syntaxhighlighter.internal;
 
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;

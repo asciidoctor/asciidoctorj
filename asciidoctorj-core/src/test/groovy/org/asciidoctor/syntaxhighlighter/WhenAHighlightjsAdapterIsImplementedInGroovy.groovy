@@ -14,14 +14,12 @@ import static junit.framework.Assert.assertEquals
 @RunWith(ArquillianSputnik)
 class WhenAHighlightjsAdapterIsImplementedInGroovy extends Specification {
 
-  public static final String NAME_SYNTAXHIGHLIGHTER = 'highlight4J'
+    public static final String NAME_SYNTAXHIGHLIGHTER = 'highlight4J'
+    public static final String HIGHLIGHTJS = 'highlightjs'
 
-  @ArquillianResource
-  private Asciidoctor asciidoctor
+    @ArquillianResource
+    private Asciidoctor asciidoctor
 
-  def 'should highlight with highlightjs'() {
-
-    given:
     def doc = '''= Test Document
 :nofooter:
 
@@ -38,21 +36,43 @@ func main() {
 ----
 '''
 
-    asciidoctor.syntaxHighlighterRegistry().register(HighlightJsHighlighter, NAME_SYNTAXHIGHLIGHTER)
+    def 'should highlight with highlightjs'() {
 
-    when:
-    String htmlJava = asciidoctor.convert(doc, OptionsBuilder.options()
-            .safe(SafeMode.UNSAFE)
-            .headerFooter(true)
-            .attributes(AttributesBuilder.attributes().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER)))
+        given:
 
-    String htmlRuby = asciidoctor.convert(doc, OptionsBuilder.options()
-            .safe(SafeMode.UNSAFE)
-            .headerFooter(true)
-            .attributes(AttributesBuilder.attributes().sourceHighlighter('highlightjs')))
+        asciidoctor.syntaxHighlighterRegistry().register(HighlightJsHighlighter, NAME_SYNTAXHIGHLIGHTER)
 
-    then:
-    // Cannot use `htmlRuby == htmlJava` because it fails with OOM
-    assertEquals(htmlRuby, htmlJava)
-  }
+        when:
+        String htmlJava = asciidoctor.convert(doc, OptionsBuilder.options()
+                .safe(SafeMode.UNSAFE)
+                .headerFooter(true)
+                .attributes(AttributesBuilder.attributes().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER)))
+
+        String htmlRuby = asciidoctor.convert(doc, OptionsBuilder.options()
+                .safe(SafeMode.UNSAFE)
+                .headerFooter(true)
+                .attributes(AttributesBuilder.attributes().sourceHighlighter(HIGHLIGHTJS)))
+
+        then:
+        // Cannot use `htmlRuby == htmlJava` because it fails with OOM
+        assertEquals(htmlRuby, htmlJava)
+    }
+
+    def 'should autoregister from extension'() {
+
+        when:
+        String htmlJava = asciidoctor.convert(doc, OptionsBuilder.options()
+                .safe(SafeMode.UNSAFE)
+                .headerFooter(true)
+                .attributes(AttributesBuilder.attributes().sourceHighlighter(HighlightJsExtension.NAME_HIGHLIGHTER)))
+
+        String htmlRuby = asciidoctor.convert(doc, OptionsBuilder.options()
+                .safe(SafeMode.UNSAFE)
+                .headerFooter(true)
+                .attributes(AttributesBuilder.attributes().sourceHighlighter(HIGHLIGHTJS)))
+
+        then:
+        // Cannot use `htmlRuby == htmlJava` because it fails with OOM
+        assertEquals(htmlRuby, htmlJava)
+    }
 }
