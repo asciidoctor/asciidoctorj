@@ -10,6 +10,7 @@ import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
+import org.asciidoctor.jruby.syntaxhighlighter.internal.SyntaxHighlighterRegistryExecutor;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.jruby.DirectoryWalker;
@@ -20,6 +21,7 @@ import org.asciidoctor.jruby.extension.internal.ExtensionRegistryExecutor;
 import org.asciidoctor.jruby.log.internal.JULLogHandler;
 import org.asciidoctor.jruby.log.internal.JavaLogger;
 import org.asciidoctor.jruby.log.internal.LogHandlerRegistryExecutor;
+import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterRegistry;
 import org.jruby.*;
 import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
@@ -89,6 +91,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     private static JRubyAsciidoctor processRegistrations(JRubyAsciidoctor asciidoctor) {
         registerExtensions(asciidoctor);
         registerConverters(asciidoctor);
+        registerSyntaxHighlighters(asciidoctor);
         registerLogHandlers(asciidoctor);
 
         JavaLogger.install(asciidoctor.getRubyRuntime(), asciidoctor);
@@ -102,6 +105,10 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
     private static void registerExtensions(AsciidoctorJRuby asciidoctor) {
         new ExtensionRegistryExecutor(asciidoctor).registerAllExtensions();
+    }
+
+    private static void registerSyntaxHighlighters(AsciidoctorJRuby asciidoctor) {
+        new SyntaxHighlighterRegistryExecutor(asciidoctor).registerAllSyntaxHighlighter();
     }
 
     private static void registerLogHandlers(AsciidoctorJRuby asciidoctor) {
@@ -234,6 +241,11 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     @Override
     public JavaConverterRegistry javaConverterRegistry() {
         return new JavaConverterRegistryImpl(this);
+    }
+
+    @Override
+    public SyntaxHighlighterRegistry syntaxHighlighterRegistry() {
+        return new SyntaxHighlighterRegistryImpl(this);
     }
 
     @Override

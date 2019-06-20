@@ -1,19 +1,26 @@
 package org.asciidoctor.jruby.internal;
+
+import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.jruby.Ruby;
+import org.jruby.RubyClass;
 import org.jruby.RubyHash;
 import org.jruby.RubyString;
 import org.jruby.RubySymbol;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 public class RubyHashMapDecorator implements Map<String, Object> {
 
     private final RubyHash rubyHash;
 
     private final Ruby rubyRuntime;
+
+    private RubyClass abstractNodeClass;
 
     public RubyHashMapDecorator(RubyHash rubyHash) {
         this.rubyRuntime = rubyHash.getRuntime();
@@ -131,10 +138,27 @@ public class RubyHashMapDecorator implements Map<String, Object> {
         if (rubyValue == null) {
             return null;
         } else if (rubyValue instanceof IRubyObject) {
+            IRubyObject rubyObject = (IRubyObject) rubyValue;
+
+            if (RubyClass.KindOf.DEFAULT_KIND_OF.isKindOf(rubyObject, getAbstractNodeClass())) {
+                return NodeConverter.createASTNode(rubyObject);
+            }
+            if (rubyObject instanceof RubySymbol) {
+                return ((RubySymbol) rubyObject).asJavaString();
+            }
             return JavaEmbedUtils.rubyToJava((IRubyObject) rubyValue);
         } else {
             return rubyValue;
         }
+    }
+
+    private RubyClass getAbstractNodeClass() {
+        RubyClass ret = abstractNodeClass;
+        if (ret == null) {
+            ret = rubyRuntime.getModule("Asciidoctor").getClass("AbstractNode");
+            abstractNodeClass = ret;
+        }
+        return ret;
     }
 
     private IRubyObject convertJavaValue(Object value) {

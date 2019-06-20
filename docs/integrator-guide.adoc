@@ -5,6 +5,7 @@ Alex Soto <https://github.com/lordofthejars[@lordofthejars]>; Dan Allen <https:/
 :page-layout: base
 :toc: macro
 :toclevels: 2
+:icons: font
 ifdef::awestruct[:toclevels: 1]
 :experimental:
 //:table-caption!:
@@ -19,7 +20,7 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-discuss: http://discuss.asciidoctor.org
-:artifact-version: 2.0.0-RC.1
+:artifact-version: 2.0.0
 :uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
 :uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
@@ -33,6 +34,8 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-tilt: https://github.com/rtomayko/tilt
 :uri-font-awesome: http://fortawesome.github.io/Font-Awesome
 :uri-gradle: https://gradle.org
+:uri-highlightjs: https://highlightjs.org
+:uri-prismjs: https://prismjs.com
 
 ifdef::awestruct,env-browser[]
 toc::[]
@@ -969,8 +972,7 @@ public class KeyboardInlineMacroProcessor extends InlineMacroProcessor {
 }
 ----
 <1> The attributes of the PhraseNode must contain the keys to be shown as a list for the attribute key `keys`.
-<2> Create a PhraseNode with context `kbd` and no text.
-<3> The macro processor has to return the converted PhraseNode.
+<2> Create a PhraseNode with context `kbd` and no text and return it.
 
 To create a menu selection as described at http://asciidoctor.org/docs/user-manual/#menu-selections a processor would create a PhraseNode with the `menu` context.
 The following processor would render the macro `rightclick:New|Class[]` like this: menu:New[Class].
@@ -1865,3 +1867,515 @@ Next, create a file called `org.asciidoctor.log.LogHandler` inside `META-INF/ser
 
 And that’s all.
 Now when a .jar file containing the previous structure is dropped inside classpath of AsciidoctorJ, the handler will be registered automatically.
+
+
+== Syntax Highlighter API
+
+Asciidoctor supports a range of different syntax highlighters: Coderay, HighlightJs, Rouge, Pygments and Prettify.
+Since version 2.0.0 Asciidoctor also supports to adapt and plug in other syntax highlighters when rendering to HTML.
+
+AsciidoctorJ offers this as well since version 2.1.0.
+
+Adapting a syntax highlighter to Asciidoctor involves a subset of the following tasks:
+
+- Include certain stylesheets and scripts into the resulting HTML document.
+- Create stylesheet and script resources in the filesystem in case the document is rendered to a file and it's converted with the attributes ':linkcss' and ':copycss'.
+- Format the source block element, by wrapping it into `<pre/>` and `<code/>` elements with certain attributes.
+  This means to convert the source text `puts "Hello World"` to the HTML `<pre class="highlightme"><code>puts "Hello World"</code></pre>`.
+- Format the source text itself by mapping it to span elements.
+  This means to convert the source text `puts "Hello World"` to the HTML `<span class="id">puts</span> <span class="stringliteral">"Hello World"</span>`.
+  This result still has to be formatted, which usually means to wrap it in `<pre/>` and `<code/>` elements.
+
+To adapt to a certain syntax highlighter some of these tasks have to be implemented.
+The following sections show how to write an adapter for a custom syntax highlighter.
+
+[[syntax-highlighter-adapter]]
+=== Implement a syntax highlighter adapter
+
+A syntax highlighter must implement the interface `org.asciidoctor.syntaxhighlighter.SyntaxHighlighterAdapter`.
+This has to be registered at the Asciidoctor instance, so that it can be used by using the corresponding value for the attribute `:source-highlighter`.
+
+A `SyntaxHighlighterAdapter` must implement methods to add stylesheets and scripts to the resulting HTML document.
+This is considered as a core functionality that every syntax highlighter requires.
+
+The following example shows a very simplistic syntax highlighter that uses {uri-highlightjs}[highlight.js]:
+
+[source,java]
+----
+import org.asciidoctor.extension.LocationType;
+import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterAdapter;
+
+import java.util.Map;
+
+public class HighlightJsHighlighter implements SyntaxHighlighterAdapter { // <1>
+
+    @Override
+    public boolean hasDocInfo(LocationType location) {
+        return location == LocationType.FOOTER;         // <2>
+    }
+
+    @Override
+    public String getDocinfo(LocationType location, Document document, Map<String, Object> options) { // <3>
+        return "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css\">\n" +
+            "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js\"></script>\n" +
+            "<script>hljs.initHighlighting()</script>";
+    }
+
+}
+----
+<1> Every syntax highlighter must implement the interface `org.asciidoctor.syntaxhighlighter.SyntaxHighlighterAdapter`.
+<2> The method `hasDocInfo` indicates that this highlighter only wants to add DocInfo to the footer of the document.
+<3> The method `getDocInfo` is only called to return the DocInfo for the footer of the document.
+    It returns references to the required css and js sources and starts highlight.js.
+
+Let's say we want to convert this document:
+
+.sources.adoc
+[source,adoc]
+-----
+= Syntax Highlighter Test
+
+== Some sources
+
+[source,java]
+----
+public static class Test {
+  public static void main(String[] args) {
+    System.out.println("Hello World");
+  }
+}
+----
+-----
+
+Now this document can be converted using our highlighter after registering it with Asciidoctor:
+
+[source,java]
+----
+        File sources_adoc = //...
+
+        asciidoctor.syntaxHighlighterRegistry()
+            .register(HighlightJsHighlighter.class, "myhighlightjs"); // <1>
+
+        String result = asciidoctor.convertFile(sources_adoc,
+            OptionsBuilder.options()
+                .headerFooter(true) // <2>
+                .toFile(false)
+                .attributes(AttributesBuilder.attributes().sourceHighlighter("myhighlightjs"))); // <3>
+
+        assertThat(result,
+            containsString("<script>hljs.initHighlighting()</script>"));
+----
+<1> Register the adapter class using a well defined name.
+<2> Docinfo is only written if the document is converted with the option `:header_footer`.
+<3> The well defined name that was used to register the syntax highlighter must be used in the attribute `:source-highlighter`.
+
+
+=== Lifecycle of a SyntaxHighlighterAdapter
+
+AsciidoctorJ will create an own instance for every document that it converts.
+
+It will try to instantiate the class by calling a constructor that has three parameters:
+
+`name`::
+  The name of the syntax highlighter as it was referenced by the `:source-highlighter` attribute.
+  In the previous example this was `"myhighlightjs"`.
+
+`backend`::
+  The name of the backend used to convert the document.
+  This is for example `"html5"`.
+  Note that SyntaxHighlighters can only be used for HTML based backends.
+
+`options`::
+  A map containing options for this syntax highlighter.
+  Currently this contains the current `org.asciidoctor.ast.Document` for the key `"document"`.
+
+This means the syntax highlighter class could also have this constructor:
+
+[source,java]
+----
+    public HighlightJsHighlighter(String name, String backend, Map<String, Object> options) {
+        assertEquals("myhighlightjs", name);
+        assertEquals("html5", backend);
+        Document document = (Document) options.get("document");
+        assertEquals("Syntax Highlighter Test", document.getDoctitle());
+    }
+----
+
+A constructor with only the first two, or only the first parameter is also allowed.
+AsciidoctorJ will call the constructor with the most matching parameters.
+
+=== Formatting the source block element
+
+{uri-highlightjs}[highlight.js] tries to automatically determine the source language, which might fail or result in wrong matches.
+To help highlight.js in identifying the correct source language the `<code/>` element can be annotated with the language as a class.
+
+That means instead of simply wrapping the code in `<pre/>` and `<code/>` elements we want to wrap it inside `<pre>` and `<code class="java"/>`.
+To allow Asciidoctor to apply the styles to properly embed a source block inside the document, the `<pre/>` element should also have the class `highlight`.
+Therefore we want to wrap the source text inside this construct:
+
+[source,html]
+----
+<pre class="highlight">
+  <code class="java">
+    ...
+  </code>
+</pre>
+----
+
+To allow a syntax highlighter to create this construct it also has to implement the interface `org.asciidoctor.syntaxhighlighter.Formatter`:
+
+[source,java]
+----
+import org.asciidoctor.syntaxhighlighter.Formatter;
+import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterAdapter;
+
+import java.util.Map;
+
+public class HighlightJsWithLanguageHighlighter implements SyntaxHighlighterAdapter, Formatter { // <1>
+
+    // Methods hasDocInfo() and getDocInfo()
+
+    @Override
+    public String format(Block node, String lang, Map<String, Object> opts) {
+        return "<pre class='highlight'><code class='" + lang + "'>" // <2>
+            + node.getContent()                                     // <3>
+            + "</code></pre>";
+    }
+}
+----
+<1> The `SyntaxHighlighterAdapter` also has to implement the interface `Formatter`.
+    This interface only requires the implementation of the method `format()` that receives the `org.asciidoctor.ast.Block` that is highlighted, the source language, and additional options.
+<2> The implementation of `format()` wraps everything in a `<pre/>` and `<code/>` element with the required classes.
+    The value for the class of the `<code/>` element is the source language which is passed as an argument to the method.
+<3> The source text to be nested into the `<pre/>` and `<code/>` elements has to be obtained using `node.getContent()`.
+    This guarantees that further processing like substitutions work properly.
+
+=== Link and copy external resources
+
+In <<syntax-highlighter-adapter>> we have seen how to implement a basic syntax highlighter that embeds all required resources as DocInfo in the document.
+When the document is converted with the attributes `:linkcss` and `:copycss` we expect though that these resources are also written to disk next to the document, and that the document only references them.
+
+Looking at our current example of the highlight.js adapter we referenced the resources from the internet.
+For scenarios where it should also be possible to read the document while offline, the syntax highlighter can implement the interface `org.asciidoctor.syntaxhighlighter.StylesheetWriter`:
+
+[source,java]
+----
+
+public class HighlightJsWithOfflineStylesHighlighter implements SyntaxHighlighterAdapter, Formatter, StylesheetWriter { // <1>
+
+    @Override
+    public boolean hasDocInfo(LocationType location) {
+        return location == LocationType.FOOTER;
+    }
+
+    @Override
+    public String getDocinfo(LocationType location, Document document, Map<String, Object> options) {
+        if (document.hasAttribute("linkcss") && document.hasAttribute("copycss")) { // <2>
+            return "<link rel=\"stylesheet\" href=\"github.min.css\">\n" +
+                "<script src=\"highlight.min.js\"></script>\n" +
+                "<script>hljs.initHighlighting()</script>";
+        } else {
+            return "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css\">\n" +
+                "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js\"></script>\n" +
+                "<script>hljs.initHighlighting()</script>";
+        }
+    }
+
+    @Override
+    public String format(Block node, String lang, Map<String, Object> opts) {
+        return "<pre class='highlight'><code class='" + lang + "'>"
+            + node.getContent()
+            + "</code></pre>";
+    }
+
+    @Override
+    public boolean isWriteStylesheet(Document doc) {
+        return true; // <3>
+    }
+
+    @Override
+    public void writeStylesheet(Document doc, File toDir) {
+        try {    // <4>
+            URL url1 = new URL("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css");
+            URL url2 = new URL("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js");
+
+            try (InputStream in1 = url1.openStream();
+                 OutputStream fout1 = new FileOutputStream(new File(toDir, "github.min.css"))) {
+                IOUtils.copy(in1, fout1);
+            } catch (IOException ioe) {
+                throw new RuntimeException(ioe);
+            }
+
+            try (InputStream in2 = url2.openStream();
+                 OutputStream fout2 = new FileOutputStream(new File(toDir, "highlight.min.js"))) {
+                IOUtils.copy(in2, fout2);
+            } catch (IOException ioe) {
+                throw new RuntimeException(ioe);
+            }
+
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+----
+<1> A syntax highlighter that writes additional resources to the filesystem next to the document must implement the interface `org.asciidoctor.syntaxhighlighter.StylesheetWriter`.
+<2> If the document is converted with the attributes `:copycss` and `:linkcss` the DocInfo that is added to the converted document should link to the local resources.
+<3> The syntax highlighter should return if it wants to write stylesheets in `isWriteStylesheet()`.
+    This method could for example examine the document if it really needs external resources and return the corresponding result.
+<4> The method `writeStylesheet()` gets the `org.asciidoctor.ast.Document` and the File for the target directory where the document should be written.
+    External resources should be written to this directory as well.
+
+This highlighter writes the css and js resources to files in the same directory as the document if it is converted with the attributes `:linkcss` and `:copycss`:
+
+[source,java]
+----
+        File toDir = // ...
+
+        asciidoctor.syntaxHighlighterRegistry()
+            .register(HighlightJsWithOfflineStylesHighlighter.class, "myhighlightjs");
+
+        asciidoctor.convertFile(sources_adoc,
+            OptionsBuilder.options()
+                .headerFooter(true)
+                .toDir(toDir)              // <1>
+                .safe(SafeMode.UNSAFE)
+                .attributes(AttributesBuilder.attributes()
+                    .sourceHighlighter("myhighlightjs")
+                    .copyCss(true)         // <1>
+                    .linkCss(true)));
+
+        File docFile = new File(toDir, "sources.html");
+        assertTrue(docFile.exists());
+
+        File cssFile = new File(toDir, "github.min.css");
+        assertTrue(cssFile.exists());
+
+        File jsFile = new File(toDir, "highlight.min.js");
+        assertTrue(jsFile.exists());
+
+        try (FileReader docReader = new FileReader(new File(toDir, "sources.html"))) {
+            String html = IOUtils.toString(docReader);
+            assertThat(html, containsString("<link rel=\"stylesheet\" href=\"github.min.css\">"));
+            assertThat(html, containsString("<script src=\"highlight.min.js\"></script>"));
+        }
+----
+<1> External stylesheets are only written when converting to a file, not when converting to a stream or a string, and when the attributes `:linkcss` and `:copycss` are set.
+
+=== Static syntax highlighting during conversion
+
+The examples we looked at until now did the actual syntax highlighting in the browser.
+But there are also cases where it is desirable to highlight the source during conversion, either because the syntax highlighter is implemented in Java, or syntax highlighting should also work when Javascript is not enabled at the client.
+The following example uses {uri-prismjs}[prism.js] to show how to achieve this:
+
+When a `SyntaxHighlighterAdapter` also implements the interface `org.asciidoctor.syntaxhighlighter.Highlighter` it will be called to convert the raw source text to HTML.
+The example uses {uri-prismjs}[prism.js] which is also a Javascript library.
+But now we will call this library during document conversion and only add the css part in the resulting HTML, so that the highlighted source will appear correctly even if Javascript is disabled on the client.
+
+[source,java]
+----
+public class PrismJsHighlighter implements SyntaxHighlighterAdapter, Formatter, StylesheetWriter, Highlighter { // <1>
+
+    private final ScriptEngine scriptEngine;
+
+    public PrismJsHighlighter() {
+        ScriptEngineFactory engine = new NashornScriptEngineFactory(); // <2>
+        this.scriptEngine = engine.getScriptEngine();
+        try {
+            this.scriptEngine.eval(new InputStreamReader(getClass().getResourceAsStream("/prismjs/prism.js")));
+        } catch (ScriptException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean hasDocInfo(LocationType location) {
+        return location == LocationType.HEADER;
+    }
+
+    @Override
+    public String getDocinfo(LocationType location, Document document, Map<String, Object> options) {
+        if (document.hasAttribute("linkcss") && document.hasAttribute("copycss")) { // <3>
+            return "<link href=\"prism.css\" rel=\"stylesheet\" />";
+        } else {
+            try (InputStream in = getClass().getResourceAsStream("/prismjs/prism.css")) {
+                String css = IOUtils.toString(in);
+                return "<style>\n" + css + "\n</style>";
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Override
+    public String format(Block node, String lang, Map<String, Object> opts) {
+        return "<pre class='highlight'><code>"  // <3>
+            + node.getContent()
+            + "</code></pre>";
+    }
+
+    @Override
+    public boolean isWriteStylesheet(Document doc) {
+        return doc.hasAttribute("linkcss") && doc.hasAttribute("copycss");     // <3>
+    }
+
+    @Override
+    public void writeStylesheet(Document doc, File toDir) {
+        try (InputStream in1 = getClass().getResourceAsStream("/prismjs/prism.css"); // <3>
+             OutputStream fout1 = new FileOutputStream(new File(toDir, "prism.css"))) {
+            IOUtils.copy(in1, fout1);
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
+    }
+
+    @Override
+    public HighlightResult highlight(Block node,
+                                     String source,
+                                     String lang,
+                                     Map<String, Object> options) {
+        ScriptContext ctx = scriptEngine.getContext();                                     // <4>
+        Bindings bindings = ctx.getBindings(ScriptContext.ENGINE_SCOPE);
+        bindings.put("text", source);
+        bindings.put("language", lang);
+
+        try {
+            String result = (String) scriptEngine.eval(
+                "Prism.highlight(text, Prism.languages[language], language)", bindings);
+            return new HighlightResult(result);
+        } catch (ScriptException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+----
+<1> A syntax highlighter that wants to statically convert the source text has to implement the interface `org.asciidoctor.syntaxhighlighter.Highlighter`.
+<2> We use the Nashorn Javascript engine to run prism.js.
+<3> When rendering to a file and the attributes `:linkcss` and `:copycss` are set the css file of prism.js should be written to disk.
+    Otherwise we include the content in a `<style/>` element.
+<4> `highlight()` is the only method required by the `Highlighter` interface.
+    It gets the node to be converted, the source, the language and additional options.
+    Here we invoke the prism.js API to convert the plain source text to static HTML, that uses the classes defined in the css.
+    This is returned in a `HighlightResult`.
+
+// TODO: Explain what the index is, I don't fully understand it myself yet.
+
+Then we can use the highlighter just like in the previous examples.
+We just have to register it and use the correct value for the attribute `:source-highlighter`:
+
+[source,java]
+----
+        File sources_adoc = //...
+        File toDir = // ...
+
+        asciidoctor.syntaxHighlighterRegistry()
+            .register(PrismJsHighlighter.class, "prismjs"); // <1>
+
+        asciidoctor.convertFile(sources_adoc,
+            OptionsBuilder.options()
+                .headerFooter(true)
+                .toDir(toDir)
+                .safe(SafeMode.UNSAFE)
+                .attributes(AttributesBuilder.attributes()
+                    .sourceHighlighter("prismjs")           // <1>
+                    .copyCss(true)
+                    .linkCss(true)));
+
+        File docFile = new File(toDir, "sources.html");
+
+        Document document = Jsoup.parse(new File(toDir, "sources.html"), "UTF-8");
+        Elements keywords = document.select("div.content pre.highlight code span.token.keyword"); // <2>
+        assertThat(keywords, not(empty()));
+        assertThat(keywords.first().text(), is("public"));
+----
+<1> Register our prism.js highlighter and set the attribute `:source-highlighter` to its name to use it.
+<2> Test that the source code has been formatted statically to `<span/>` elements.
+
+=== Invocation order
+
+This section explains the order of method invocations on a syntax highlighter.
+For a concrete example we use this document:
+
+[source,asciidoc]
+-----
+= Syntax Highlighter Test
+
+== Some sources
+
+[source,java]
+----
+System.out.println("Hello Java");
+----
+
+[source,go]
+----
+fmt.Println("Hello Go")
+----
+
+-----
+
+For this document the calls to a syntax highlighter will happen in this order:
+
+. New SyntaxHighlighter
+. hasDocInfo for HEADER
+. getDocInfo for HEADER
+. format `java`
+. highlight `System.out.println("Hello Java");`
+. format `go`
+. highlight `fmt.Println("Hello Go")`
+. hasDocInfo for FOOTER
+. getDocInfo for FOOTER
+. isWriteStylesheet
+. writeStylesheet
+
+
+=== Automatically loading syntax highlighters
+
+In previous examples, the syntax highlighters were registered manually.
+However, AsciidoctorJ provides another way to register syntax highlighters.
+If any implementation of the SPI interface is present on the classpath, it will be executed.
+
+To create an autoloadable extension you should do the next steps:
+
+Create a class that implements `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry`.
+
+[source]
+.org.asciidoctor.integrationguide.syntaxhighlighter.HighlightJsExtension.java
+----
+import org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry;
+
+public class HighlightJsExtension implements SyntaxHighlighterRegistry { // <1>
+    @Override
+    public void register(Asciidoctor asciidoctor) { // <2>
+        asciidoctor.syntaxHighlighterRegistry()     // <3>
+            .register(HighlightJsHighlighter.class, "autoloadedHighlightJs");
+    }
+}
+----
+<1> To autoload extensions you need to implement `SyntaxHighlighterRegistry`.
+<2> AsciidoctorJ will automatically run the `register` method.
+    The method is responsible for registering all extensions.
+<3> All required syntax highlighters are registered.
+
+Next, you need to create a file called `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry` inside `META-INF/services` with the implementation's full qualified name.
+
+[source]
+.META-INF/services/org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry
+----
+org.asciidoctor.integrationguide.syntaxhighlighter.HighlightJsExtension
+
+----
+
+And that's all.
+Now when a `.jar` file containing the previous structure is dropped into the classpath of AsciidoctorJ, the `register` method will be executed automatically and the extensions will be registered.
+
+[NOTE]
+--
+If you have installed AsciidoctorJ as recommended, the asciidoctorj command will be on the path, and you can use:
+
+ asciidoctorj -cp=lib/myextension.jar test.adoc
+
+If you have downloaded the distribution jars only, use a command like:
+
+ java -cp lib/jruby-complete-9.2.7.0.jar;lib/asciidoctor-api-2.0.0.jar;lib/asciidoctor-core-2.0.0.jar;lib/jcommander-1.35.jar;lib/myextension.jar org.asciidoctor.jruby.cli.AsciidoctorInvoker test.adoc
+--

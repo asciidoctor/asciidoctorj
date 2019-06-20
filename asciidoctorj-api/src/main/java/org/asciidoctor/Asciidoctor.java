@@ -7,6 +7,7 @@ import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.log.LogHandler;
+import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterRegistry;
 
 import java.io.File;
 import java.io.IOException;
@@ -417,6 +418,15 @@ public interface Asciidoctor {
      * @return Converter Registry object.
      */
     JavaConverterRegistry javaConverterRegistry();
+
+    /**
+     * Creates a registry for registering converters.
+     *
+     * <p>This API is experimental and might change in an incompatible way in a minor version update!</p>
+     *
+     * @return Converter Registry object.
+     */
+    SyntaxHighlighterRegistry syntaxHighlighterRegistry();
 
     /**
      * Creates an ExtensionGroup that can be used to register and unregister a group of extensions.
