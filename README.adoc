@@ -20,7 +20,7 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-discuss: http://discuss.asciidoctor.org
-:artifact-version: 2.0.0
+:artifact-version: 2.1.0
 :uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
 :uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
@@ -67,7 +67,7 @@ The artifact information can be found in the tables below.
 |org.asciidoctor
 |{uri-bintray-artifact-query}[asciidoctorj]
 |{uri-bintray-artifact-detail}[{artifact-version}]
-|{uri-bintray-artifact-file}.pom[pom] {uri-bintray-artifact-file}.jar[jar] {uri-bintray-artifact-file}-javadoc.jar[javadoc (jar)] {uri-bintray-artifact-file}-sources.jar[sources (jar)]
+|{uri-bintray-artifact-file}.pom[pom] {uri-bintray-artifact-file}.jar[jar] {uri-bintray-artifact-file}-javadoc.jar[javadoc (jar)] {uri-bintray-artifact-file}-sources.jar[sources (jar)] {uri-bintray-artifact-file}-bin.zip[distribution (zip)]
 
 |org.asciidoctor
 |{uri-bintray-artifact-api-query}[asciidoctorj-api]
@@ -76,12 +76,12 @@ The artifact information can be found in the tables below.
 
 |org.asciidoctor
 |asciidoctorj-epub3
-|1.5.0-alpha.8.1
+|1.5.0-alpha.9
 |{empty}
 
 |org.asciidoctor
 |asciidoctorj-pdf
-|1.5.0-alpha.16
+|1.5.0-alpha.18
 |{empty}
 |===
 
@@ -93,7 +93,7 @@ The artifact information can be found in the tables below.
 |org.asciidoctor
 |{uri-maven-artifact-query}[asciidoctorj]
 |{uri-maven-artifact-detail}[{artifact-version}]
-|{uri-maven-artifact-file}.pom[pom] {uri-maven-artifact-file}.jar[jar] {uri-maven-artifact-file}-javadoc.jar[javadoc (jar)] {uri-maven-artifact-file}-sources.jar[sources (jar)]
+|{uri-maven-artifact-file}.pom[pom] {uri-maven-artifact-file}.jar[jar] {uri-maven-artifact-file}-javadoc.jar[javadoc (jar)] {uri-maven-artifact-file}-sources.jar[sources (jar)] {uri-maven-artifact-file}-bin.zip[distribution (zip)]
 
 |org.asciidoctor
 |{uri-maven-artifact-api-query}[asciidoctorj-api]
@@ -102,12 +102,12 @@ The artifact information can be found in the tables below.
 
 |org.asciidoctor
 |asciidoctorj-epub3
-|1.5.0-alpha.8.1
+|1.5.0-alpha.9
 |{empty}
 
 |org.asciidoctor
 |asciidoctorj-pdf
-|1.5.0-alpha.16
+|1.5.0-alpha.18
 |{empty}
 |===
 

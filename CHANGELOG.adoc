@@ -13,10 +13,12 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == Unreleased
 
+== 2.1.0 (2019-06-22)
+
 Improvements::
 
   * Add the command line option -R to specify the source root directory (@4lber10 & @ysb33r) (#822)
-  * Add sourcemap, catalog_assets and parse to OptionBuilder (#825)
+  * Add sourcemap, catalog_assets and parse to OptionBuilder (@jmini) (#825)
   * Upgrade to Asciidoctor 2.0.10
   * Upgrade to Asciidoctor Diagram 1.5.0-alpha.18
   * Upgrade to Asciidoctor PDF 1.5.0-alpha.18
