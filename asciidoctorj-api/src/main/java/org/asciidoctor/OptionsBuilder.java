@@ -71,7 +71,9 @@ public class OptionsBuilder {
 
     /**
      * Sets template directory.
-     * 
+     *
+     * @deprecated Use {@link #templateDirs(File...)} instead.
+     *
      * @param templateDir
      *            directory where templates are stored.
      * @return this instance.
