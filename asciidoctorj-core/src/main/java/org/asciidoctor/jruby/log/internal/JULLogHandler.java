@@ -9,7 +9,8 @@ import java.util.logging.Logger;
 
 public class JULLogHandler implements LogHandler {
 
-    private final static Logger LOGGER = Logger.getLogger("asciidoctor");
+    private final static String LOGGER_NAME = "asciidoctor";
+    private final static Logger LOGGER = Logger.getLogger(LOGGER_NAME);
 
     @Override
     public void log(LogRecord logRecord) {
@@ -21,6 +22,7 @@ public class JULLogHandler implements LogHandler {
         julLogRecord.setSourceClassName(logRecord.getSourceFileName());
         julLogRecord.setSourceMethodName(logRecord.getSourceMethodName());
         julLogRecord.setParameters(new Object[] { logRecord.getCursor() });
+        julLogRecord.setLoggerName(LOGGER_NAME);
         LOGGER.log(julLogRecord);
     }
 
