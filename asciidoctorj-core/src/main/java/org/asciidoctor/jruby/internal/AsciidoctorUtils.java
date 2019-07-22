@@ -1,5 +1,6 @@
 package org.asciidoctor.jruby.internal;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -36,121 +37,120 @@ public class AsciidoctorUtils {
         return false;
     }
     
-    public static String toAsciidoctorCommand(Map<String, Object> options,
-            String inputPath) {
+    public static List<String> toAsciidoctorCommand(Map<String, Object> options,
+                                                    String inputPath) {
 
-        String command = RUNNER +" "+ getOptions(options) + inputPath;
+        List<String> command = new ArrayList<>();
+        command.add(RUNNER);
+        command.addAll(getOptions(options));
+        command.add(inputPath);
 
         return command;
 
     }
 
-    private static String getOptions(Map<String, Object> options) {
+    private static List<String> getOptions(Map<String, Object> options) {
 
-        StringBuilder optionsAndAttributes = new StringBuilder();
+        List<String> optionsAndAttributes = new ArrayList<>();
 
         if (options.containsKey(Options.DESTINATION_DIR)) {
-            optionsAndAttributes.append(AsciidoctorCliOptions.DESTINATION_DIR)
-                    .append(" ").append(options.get(Options.DESTINATION_DIR))
-                    .append(" ");
+            optionsAndAttributes.add(AsciidoctorCliOptions.DESTINATION_DIR);
+            optionsAndAttributes.add(options.get(Options.DESTINATION_DIR).toString());
         }
 
         if (options.containsKey(Options.BASEDIR)) {
-            optionsAndAttributes.append(AsciidoctorCliOptions.BASE_DIR)
-            .append(" ").append(options.get(Options.BASEDIR))
-            .append(" ");
+            optionsAndAttributes.add(AsciidoctorCliOptions.BASE_DIR);
+            optionsAndAttributes.add(options.get(Options.BASEDIR).toString());
         }
 
         if (options.containsKey(Options.TEMPLATE_DIRS)) {
             List<String> templates = (List<String>) options.get(Options.TEMPLATE_DIRS);
             
             for (String template : templates) {
-                optionsAndAttributes.append(AsciidoctorCliOptions.TEMPLATE_DIR)
-                .append(" ").append(template)
-                .append(" ");
+                optionsAndAttributes.add(AsciidoctorCliOptions.TEMPLATE_DIR);
+                optionsAndAttributes.add(template);
             }
         }
 
         if (options.containsKey(Options.TEMPLATE_ENGINE)) {
-            optionsAndAttributes.append(AsciidoctorCliOptions.TEMPLATE_ENGINE)
-            .append(" ").append(options.get(Options.TEMPLATE_ENGINE))
-            .append(" ");
+            optionsAndAttributes.add(AsciidoctorCliOptions.TEMPLATE_ENGINE);
+            optionsAndAttributes.add(options.get(Options.TEMPLATE_ENGINE).toString());
         }
 
         if (options.containsKey(Options.COMPACT)) {
-            optionsAndAttributes.append(AsciidoctorCliOptions.COMPACT).append(" ");
+            optionsAndAttributes.add(AsciidoctorCliOptions.COMPACT);
         }
 
         if (options.containsKey(Options.ERUBY)) {
-            optionsAndAttributes.append(AsciidoctorCliOptions.ERUBY)
-            .append(" ").append(options.get(Options.ERUBY))
-            .append(" ");
+            optionsAndAttributes.add(AsciidoctorCliOptions.ERUBY);
+            optionsAndAttributes.add(options.get(Options.ERUBY).toString());
         }
 
         if (options.containsKey(Options.HEADER_FOOTER)) {
-            optionsAndAttributes.append(AsciidoctorCliOptions.NO_HEADER_FOOTER).append(" ");
+            optionsAndAttributes.add(AsciidoctorCliOptions.NO_HEADER_FOOTER);
         }
 
         if (options.containsKey(Options.SAFE)) {
             Integer level = (Integer) options.get(Options.SAFE);
             SafeMode getSafeMode = SafeMode.safeMode(level);
-            optionsAndAttributes.append(AsciidoctorCliOptions.SAFE)
-            .append(" ").append(getSafeMode)
-            .append(" ");
+            optionsAndAttributes.add(AsciidoctorCliOptions.SAFE);
+            optionsAndAttributes.add(getSafeMode.toString());
         }
 
         if (options.containsKey(Options.TO_FILE)) {
-            optionsAndAttributes.append(AsciidoctorCliOptions.OUTFILE)
-            .append(" ").append(options.get(Options.TO_FILE))
-            .append(" ");
+            optionsAndAttributes.add(AsciidoctorCliOptions.OUTFILE);
+            optionsAndAttributes.add(options.get(Options.TO_FILE).toString());
         }
 
         if (options.containsKey(Options.DOCTYPE)) {
-            optionsAndAttributes.append(AsciidoctorCliOptions.DOCTYPE)
-            .append(" ").append(options.get(Options.DOCTYPE))
-            .append(" ");
+            optionsAndAttributes.add(AsciidoctorCliOptions.DOCTYPE);
+            optionsAndAttributes.add(options.get(Options.DOCTYPE).toString());
         }
 
         if (options.containsKey(Options.BACKEND)) {
-            optionsAndAttributes.append(AsciidoctorCliOptions.BACKEND)
-            .append(" ").append(options.get(Options.BACKEND))
-            .append(" ");
+            optionsAndAttributes.add(AsciidoctorCliOptions.BACKEND);
+            optionsAndAttributes.add(options.get(Options.BACKEND).toString());
         }
 
         if (options.containsKey(Options.ATTRIBUTES)) {
-            optionsAndAttributes.append(getAttributesSyntax((Map<String, Object>) options.get(Options.ATTRIBUTES)));
+            optionsAndAttributes.addAll(getAttributesSyntax((Map<String, Object>) options.get(Options.ATTRIBUTES)));
         }
 
-        return optionsAndAttributes.toString();
+        return optionsAndAttributes;
         
     }
     
-    private static String getAttributesSyntax(Map<String, Object> attributes) {
-        StringBuilder attributesOutput = new StringBuilder();
+    private static List<String> getAttributesSyntax(Map<String, Object> attributes) {
+        List<String> attributesOutput = new ArrayList<>();
 
         Set<Entry<String, Object>> entrySet = attributes.entrySet();
 
         for (Entry<String, Object> entry : entrySet) {
-            attributesOutput.append(
-                    getAttributeSyntax(entry.getKey(), entry.getValue())).append(" ");
+            attributesOutput.addAll(
+                    getAttributeSyntax(entry.getKey(), entry.getValue()));
         }
 
-        return attributesOutput.toString();
+        return attributesOutput;
 
     }
 
-    private static String getAttributeSyntax(String attributeName,
+    private static List<String> getAttributeSyntax(String attributeName,
             Object attributeValue) {
 
-        String attribute = "-a " + attributeName;
+        List<String> attribute = new ArrayList<>();
+        attribute.add("-a");
+
+        StringBuilder argument = new StringBuilder(attributeName);
 
         if (attributeValue != null && !"".equals(attributeValue.toString().trim())) {
-            attribute += "=" + attributeValue.toString();
+            argument.append("=");
+            argument.append(attributeValue.toString());
         }
         
         if(attributeValue == null) {
-            attribute += "!";
+            argument.append("!");
         }
+        attribute.add(argument.toString());
 
         return attribute;
 
