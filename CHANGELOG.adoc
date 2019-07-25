@@ -13,6 +13,14 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == Unreleased
 
+Improvement::
+
+  * Set logger name on logged log records (@lread) (#834)
+
+Build::
+
+  * Support build on Windows from paths with whitespace (@Fiouz) (#836)
+
 == 2.1.0 (2019-06-22)
 
 Improvements::
