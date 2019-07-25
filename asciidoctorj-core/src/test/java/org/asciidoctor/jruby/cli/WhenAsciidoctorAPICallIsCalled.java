@@ -7,6 +7,7 @@ import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.collection.IsMapContaining.hasKey;
 
 import java.io.File;
+import java.util.List;
 
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.OptionsBuilder;
@@ -29,14 +30,12 @@ public class WhenAsciidoctorAPICallIsCalled {
                 .backend("docbook").templateDirs(new File("a"), new File("b"))
                 .safe(SafeMode.UNSAFE).attributes(attributesBuilder.get());
 
-        String command = AsciidoctorUtils.toAsciidoctorCommand(
+        List<String> command = AsciidoctorUtils.toAsciidoctorCommand(
                 optionsBuilder.asMap(), "file.adoc");
 
         String currentDirectory = new File( "" ).getAbsolutePath() + File.separator;
 
-        String parametersString = command.substring(command.indexOf(" "), command.length());
-        
-        String[] parameters = parametersString.split(" ");
+        String[] parameters = command.subList(1, command.size()).toArray(new String[0]);
         
         AsciidoctorCliOptions asciidoctorCliOptions = new AsciidoctorCliOptions();
         new JCommander(asciidoctorCliOptions,
