@@ -54,7 +54,3 @@ startScripts {
     '-Xverify:none', '-XX:+TieredCompilation', '-XX:TieredStopAtLevel=1', '-XX:+DisableExplicitGC', '-Djruby.compile.mode=OFF'
   ]
 }
-
-artifacts {
-  archives distZip
-}
