@@ -19,7 +19,7 @@ Improvement::
 
 Build::
 
-  * Support build on Windows from paths with whitespace (@Fiouz) (#836)
+  * Support build from paths with whitespace (@Fiouz) (#836)
 
 == 2.1.0 (2019-06-22)
 
