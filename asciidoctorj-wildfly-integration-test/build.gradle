@@ -41,7 +41,7 @@ task unpackWildfly(type: Copy) {
     into "$buildDir"
 }
 
-task createModule << {
+tasks.create("createModule").doLast {
     copy {
         from "src/test/resources/module.xml"
         into "build/modules/org/asciidoctor/asciidoctorj/main"
