@@ -19,6 +19,7 @@ Improvement::
 
 Build::
 
+  * Upgrade to Gradle 5.5.1 (@Fiouz) (#747)
   * Support build from paths with whitespace (@Fiouz) (#836)
 
 == 2.1.0 (2019-06-22)
