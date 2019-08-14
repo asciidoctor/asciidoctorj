@@ -17,7 +17,7 @@ https://chocolatey.org/docs/create-packages .
 ----
 # Create the package
 > cd c:\to\this\directory
-> cpack
+> choco pack
 
 # Test the package. You'll probably have to run this as administrator.
 > choco install .\asciidoctorj.x.y.z.nupkg -dv -s .
