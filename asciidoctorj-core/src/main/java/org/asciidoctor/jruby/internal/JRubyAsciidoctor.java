@@ -8,19 +8,19 @@ import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
-import org.asciidoctor.jruby.AsciidoctorJRuby;
-import org.asciidoctor.jruby.ast.impl.NodeConverter;
-import org.asciidoctor.jruby.syntaxhighlighter.internal.SyntaxHighlighterRegistryExecutor;
-import org.asciidoctor.log.LogHandler;
-import org.asciidoctor.log.LogRecord;
-import org.asciidoctor.jruby.DirectoryWalker;
 import org.asciidoctor.extension.RubyExtensionRegistry;
+import org.asciidoctor.jruby.AsciidoctorJRuby;
+import org.asciidoctor.jruby.DirectoryWalker;
 import org.asciidoctor.jruby.ast.impl.DocumentHeaderImpl;
+import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.jruby.converter.internal.ConverterRegistryExecutor;
 import org.asciidoctor.jruby.extension.internal.ExtensionRegistryExecutor;
 import org.asciidoctor.jruby.log.internal.JULLogHandler;
 import org.asciidoctor.jruby.log.internal.JavaLogger;
 import org.asciidoctor.jruby.log.internal.LogHandlerRegistryExecutor;
+import org.asciidoctor.jruby.syntaxhighlighter.internal.SyntaxHighlighterRegistryExecutor;
+import org.asciidoctor.log.LogHandler;
+import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterRegistry;
 import org.jruby.*;
 import org.jruby.exceptions.RaiseException;
@@ -29,7 +29,6 @@ import org.jruby.runtime.builtin.IRubyObject;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
@@ -482,11 +481,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     @Override
     public void log(LogRecord logRecord) {
         for (LogHandler logHandler : logHandlers) {
-            try {
-                logHandler.log(logRecord);
-            } catch (Exception e) {
-                LOGGER.log(Level.WARNING, "Unexpected exception while logging Asciidoctor log entry", e);
-            }
+            logHandler.log(logRecord);
         }
     }
 }

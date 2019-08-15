@@ -29,11 +29,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static org.asciidoctor.OptionsBuilder.options;
-import static org.hamcrest.Matchers.both;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -67,20 +63,20 @@ public class WhenAsciidoctorLogsToConsole {
 
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
         String renderContent = asciidoctor.convertFile(inputFile,
-            options()
-                .inPlace(true)
-                .safe(SafeMode.SERVER)
-                .attributes(
-                    AttributesBuilder.attributes().allowUriRead(true))
-                .asMap());
+                options()
+                        .inPlace(true)
+                        .safe(SafeMode.SERVER)
+                        .attributes(
+                                AttributesBuilder.attributes().allowUriRead(true))
+                        .asMap());
 
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
 
         assertEquals(4, memoryLogHandler.getLogRecords().size());
         assertThat(memoryLogHandler.getLogRecords().get(0).getMessage(),
-            both(containsString("include file not found"))
-                .and(containsString("documentwithnotexistingfile.adoc: line 3")));
+                both(containsString("include file not found"))
+                        .and(containsString("documentwithnotexistingfile.adoc: line 3")));
     }
 
     private MemoryLogHandler registerMemoryLogHandler() {
@@ -99,12 +95,12 @@ public class WhenAsciidoctorLogsToConsole {
 
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
         String renderContent = asciidoctor.convertFile(inputFile,
-            options()
-                .inPlace(true)
-                .safe(SafeMode.SERVER)
-                .attributes(
-                    AttributesBuilder.attributes().allowUriRead(true))
-                .asMap());
+                options()
+                        .inPlace(true)
+                        .safe(SafeMode.SERVER)
+                        .attributes(
+                                AttributesBuilder.attributes().allowUriRead(true))
+                        .asMap());
 
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
@@ -116,7 +112,7 @@ public class WhenAsciidoctorLogsToConsole {
         assertThat(cursor.getFile(), is(inputFile.getName()));
         assertThat(cursor.getLineNumber(), is(3));
 
-        for (LogRecord logRecord: logRecords) {
+        for (LogRecord logRecord : logRecords) {
             assertThat(logRecord.getCursor(), not(nullValue()));
             assertThat(logRecord.getCursor().getFile(), not(nullValue()));
             assertThat(logRecord.getCursor().getDir(), not(nullValue()));
@@ -133,13 +129,13 @@ public class WhenAsciidoctorLogsToConsole {
 
         File inputFile = classpath.getResource("documentwithinvalidrefs.adoc");
         String renderContent = asciidoctor.convertFile(inputFile,
-            options()
-                .inPlace(true)
-                .safe(SafeMode.SERVER)
-                .toFile(false)
-                .attributes(
-                    AttributesBuilder.attributes().allowUriRead(true))
-                .asMap());
+                options()
+                        .inPlace(true)
+                        .safe(SafeMode.SERVER)
+                        .toFile(false)
+                        .attributes(
+                                AttributesBuilder.attributes().allowUriRead(true))
+                        .asMap());
 
         assertThat(logRecords, hasSize(1));
         assertThat(logRecords.get(0).getMessage(), containsString("invalid reference: invalidref"));
@@ -159,12 +155,12 @@ public class WhenAsciidoctorLogsToConsole {
         // Now render via second instance and check that there is no notification
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
         String renderContent1 = secondInstance.convertFile(inputFile,
-            options()
-                .inPlace(true)
-                .safe(SafeMode.SERVER)
-                .attributes(
-                    AttributesBuilder.attributes().allowUriRead(true))
-                .asMap());
+                options()
+                        .inPlace(true)
+                        .safe(SafeMode.SERVER)
+                        .attributes(
+                                AttributesBuilder.attributes().allowUriRead(true))
+                        .asMap());
 
         File expectedFile1 = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile1.delete();
@@ -173,12 +169,12 @@ public class WhenAsciidoctorLogsToConsole {
 
         // Now render via first instance and check that notifications appeared.
         String renderContent = asciidoctor.convertFile(inputFile,
-            options()
-                .inPlace(true)
-                .safe(SafeMode.SERVER)
-                .attributes(
-                    AttributesBuilder.attributes().allowUriRead(true))
-                .asMap());
+                options()
+                        .inPlace(true)
+                        .safe(SafeMode.SERVER)
+                        .attributes(
+                                AttributesBuilder.attributes().allowUriRead(true))
+                        .asMap());
 
         File expectedFile2 = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile2.delete();
@@ -201,12 +197,12 @@ public class WhenAsciidoctorLogsToConsole {
 
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
         String renderContent = asciidoctor.convertFile(inputFile,
-            options()
-                .inPlace(true)
-                .safe(SafeMode.SERVER)
-                .attributes(
-                    AttributesBuilder.attributes().allowUriRead(true))
-                .asMap());
+                options()
+                        .inPlace(true)
+                        .safe(SafeMode.SERVER)
+                        .attributes(
+                                AttributesBuilder.attributes().allowUriRead(true))
+                        .asMap());
 
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
@@ -217,12 +213,12 @@ public class WhenAsciidoctorLogsToConsole {
         asciidoctor.unregisterLogHandler(logHandler);
 
         asciidoctor.convertFile(inputFile,
-            options()
-                .inPlace(true)
-                .safe(SafeMode.SERVER)
-                .attributes(
-                    AttributesBuilder.attributes().allowUriRead(true))
-                .asMap());
+                options()
+                        .inPlace(true)
+                        .safe(SafeMode.SERVER)
+                        .attributes(
+                                AttributesBuilder.attributes().allowUriRead(true))
+                        .asMap());
 
         File expectedFile2 = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile2.delete();
@@ -235,12 +231,12 @@ public class WhenAsciidoctorLogsToConsole {
 
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
         String renderContent = asciidoctor.convertFile(inputFile,
-            options()
-                .inPlace(true)
-                .safe(SafeMode.SERVER)
-                .attributes(
-                    AttributesBuilder.attributes().allowUriRead(true))
-                .asMap());
+                options()
+                        .inPlace(true)
+                        .safe(SafeMode.SERVER)
+                        .attributes(
+                                AttributesBuilder.attributes().allowUriRead(true))
+                        .asMap());
 
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
@@ -256,7 +252,7 @@ public class WhenAsciidoctorLogsToConsole {
         assertThat(cursor.getFile(), is(inputFile.getName()));
         assertThat(cursor.getLineNumber(), is(3));
 
-        for (LogRecord logRecord: logRecords) {
+        for (LogRecord logRecord : logRecords) {
             assertThat(logRecord.getCursor(), not(Matchers.nullValue()));
             assertThat(logRecord.getCursor().getFile(), not(Matchers.nullValue()));
             assertThat(logRecord.getCursor().getDir(), not(Matchers.nullValue()));
@@ -270,8 +266,8 @@ public class WhenAsciidoctorLogsToConsole {
         public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
             log(new LogRecord(Severity.INFO, parent.getSourceLocation(), "Hello Log"));
             final List<String> strings = reader.readLines().stream()
-                .map(String::toUpperCase)
-                .collect(Collectors.toList());
+                    .map(String::toUpperCase)
+                    .collect(Collectors.toList());
 
             return createBlock(parent, "paragraph", strings);
         }
@@ -286,7 +282,7 @@ public class WhenAsciidoctorLogsToConsole {
         asciidoctor.javaExtensionRegistry().block(LoggingProcessor.class);
 
         String renderContent = asciidoctor.convert("= Test\n\n== Something different\n\n[big]\nHello World",
-            options().option("sourcemap", "true").asMap());
+                options().option("sourcemap", "true").asMap());
 
         assertEquals(1, logRecords.size());
         assertThat(logRecords.get(0).getMessage(), is("Hello Log"));
@@ -296,6 +292,26 @@ public class WhenAsciidoctorLogsToConsole {
         assertThat(renderContent, containsString("HELLO WORLD"));
     }
 
+    @Test
+    public void should_fail_convert_when_logHandler_throws_an_exception() {
+        // given
+        final String errorMessage = "Conversion aborted by LogHandler";
+        asciidoctor.registerLogHandler(logRecord -> {
+            throw new RuntimeException(errorMessage);
+        });
+        // when
+        try {
+            asciidoctor.convert(
+                    "= Test\n\n== Something different\n\n[big]\nHello World",
+                    options().option("sourcemap", "true").asMap());
+        } catch (Throwable t) {
+            // then
+            assertThat(t.getMessage(), containsString("Failed to load AsciiDoc document"));
+            final Throwable cause = t.getCause();
+            assertThat(cause.getClass(), equalTo(RuntimeException.class));
+            assertThat(cause.getMessage(), is(errorMessage));
+        }
+    }
 
 }
 
