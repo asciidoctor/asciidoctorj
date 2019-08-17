@@ -17,6 +17,10 @@ Improvement::
 
   * Set logger name on logged log records (@lread) (#834)
 
+Bug Fixes::
+
+  * Remove exception protection from LogHandler in `JRubyAsciidoctor` to align behaviour with `AbstractConverter`  (@abelsromero) (#844)
+
 Build::
 
   * Upgrade to Gradle 5.5.1 (@Fiouz) (#747)
@@ -33,7 +37,7 @@ Improvements::
   * Upgrade to Asciidoctor PDF 1.5.0-alpha.18
   * Added an experimental API to write Syntax Highlighters in Java (#826)
 
-Documentation:
+Documentation::
 
   * Clarify that an InlineMacroProcessor should return a PhraseNode and that Strings are deprecated. (@jmini) (#823)
 
@@ -49,6 +53,7 @@ Improvements::
 
 Bug Fixes::
 
+  {nbsp}
 
 == 2.0.0-RC.3 (2019-04-18)
 
@@ -63,8 +68,7 @@ Improvements::
 
 Bug Fixes::
 
-  * Fix logger registration when creating AsciidoctorJ instance with Asciidoctor.Factory.create(@ahus1) (#790)
-
+  * Fix logger registration when creating AsciidoctorJ instance with Asciidoctor.Factory.create (@ahus1) (#790)
 
 == 2.0.0-RC.2 (2019-04-09)
 
@@ -80,7 +84,6 @@ Improvements::
 Bug Fixes::
 
   * Fix logger implementation (#786)
-
 
 == 2.0.0-RC.1 (2019-03-27)
 
@@ -102,7 +105,7 @@ Bug Fixes::
   * Don't return null from List.blocks() and DefinitionList.blocks() (@jensnerche) (#761)
   * Move org.asciidoctor.spi.ProcessorFactory to org.asciidoctor.extension (@jensnerche) (#762)
 
-Documentation:
+Documentation::
 
   * Update documentation for running AsciidoctorJ in OSGi (@twasyl) (#765)
 
@@ -119,7 +122,6 @@ Enhancements::
 Bug Fixes::
 
   * Fix registration of extension as instances (#754)
-
 
 Documentation::
 
