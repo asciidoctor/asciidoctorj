@@ -122,7 +122,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
 	
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void no_input_file_should_throw_an_exception() {
+	public void empty_input_file_name_should_throw_an_exception() {
 		new AsciidoctorInvoker().invoke("");
 	}
 	

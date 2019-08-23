@@ -197,10 +197,10 @@ public class AsciidoctorInvoker {
 
         List<String> parameters = asciidoctorCliOptions.getParameters();
 
-        if (parameters.isEmpty()) {
-            System.err.println("asciidoctor: FAILED: input file missing");
+        if (parameters.stream().anyMatch(String::isEmpty)) {
+            System.err.println("asciidoctor: FAILED: empty input file name");
             throw new IllegalArgumentException(
-                    "asciidoctor: FAILED: input file missing");
+                    "asciidoctor: FAILED: empty input file name");
         }
 
         if (parameters.contains("-")) {

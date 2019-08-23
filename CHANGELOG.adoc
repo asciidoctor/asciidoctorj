@@ -15,6 +15,7 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 Improvement::
 
+  * Upgrade to JCommander 1.72 (@Fiouz) (#782)
   * Set logger name on logged log records (@lread) (#834)
 
 Bug Fixes::
