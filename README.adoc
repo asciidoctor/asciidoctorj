@@ -576,7 +576,7 @@ import org.asciidoctor.ast.Document;
 Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>()); // <1>
 assertThat(document.doctitle(), is("Document Title")); // <2>
 ----
-<1> Document from an String is loaded into `Document` object.
+<1> Document from a String is loaded into `Document` object.
 <2> Title of the document is retrieved.
 
 But also all blocks that conforms the document can be retrieved.
@@ -597,7 +597,7 @@ assertThat(section.index(), is(0)); // <3>
 assertThat(section.sectname(), is("sect1"));
 assertThat(section.special(), is(false));
 ----
-<1> Document from an String is loaded into `Document` object.
+<1> Document from a String is loaded into `Document` object.
 <2> All blocks are get and because in this example the first block is a Section block, we cast it directly.
 <3> Concrete methods for sections can be called.
 
