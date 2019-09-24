@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * @author lordofthejars
  */
-public interface Asciidoctor {
+public interface Asciidoctor extends AutoCloseable {
 
     String STRUCTURE_MAX_LEVEL = "STRUCTURE_MAX_LEVEL";
 
@@ -531,4 +531,8 @@ public interface Asciidoctor {
         throw new IllegalArgumentException("Cannot unwrap to " + clazz.getName());
     }
 
+    @Override
+    default void close() {
+        // no-op
+    }
 }

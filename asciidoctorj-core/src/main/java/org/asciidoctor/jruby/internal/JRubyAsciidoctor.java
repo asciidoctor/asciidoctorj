@@ -45,8 +45,6 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
     private List<LogHandler> logHandlers = new ArrayList<>();
 
-    private final static Logger LOGGER = Logger.getLogger("asciidoctorj");
-
     public JRubyAsciidoctor() {
         this(createRubyRuntime(Collections.singletonMap(GEM_PATH, null), new ArrayList<>(), null));
         processRegistrations(this);
@@ -138,6 +136,13 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
     private static RubyInstanceConfig createOptimizedConfiguration() {
         return new RubyInstanceConfig();
+    }
+
+    @Override
+    public void close() {
+        if (rubyRuntime != null) {
+            rubyRuntime.tearDown();
+        }
     }
 
     @Override
