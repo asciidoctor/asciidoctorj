@@ -1021,25 +1021,25 @@ export JAVA_OPTS="-Xverify:none -client"
 
 You can find a full explanation on how to improve the start time of JRuby applications in <<Optimization>>.
 
-== Running AsciidoctorJ on WildFly AS
+== Running AsciidoctorJ on WildFly
 
-If you want to use AsciidoctorJ in an application deployed on [app]_WildFly AS_, you have to follow the instruction below:
+If you want to use AsciidoctorJ in an application deployed on [app]_WildFly_, you have to follow the instruction below:
 
-. Create an *Asciidoctor module* for [app]_WildFly AS_.
+. Create an *Asciidoctor module* for [app]_WildFly_.
 . Create the following folder tree: [path]_$JBOSS_HOME/modules/org/asciidoctor/main_.
 . Create the module descriptor file [path]_module.xml_.
 +
 [subs="+attributes"]
 [source,xml]
-.Asciidoctor module descriptor for WildFly AS
+.Asciidoctor module descriptor for WildFly
 ----
 <?xml version="1.0" encoding="UTF-8"?>
 <module xmlns="urn:jboss:module:1.0" name="org.asciidoctor">
     <resources>
         <resource-root path="asciidoctorj-api-{artifact-version}.jar"/>
         <resource-root path="asciidoctorj-{artifact-version}.jar"/>
-        <resource-root path="jcommander-1.35.jar"/>
-        <resource-root path="jruby-complete-1.7.21.jar"/>
+        <resource-root path="jcommander-1.72.jar"/>
+        <resource-root path="jruby-complete-9.2.7.0.jar"/>
     </resources>
     <dependencies>
         <module name="sun.jdk" export="true">
