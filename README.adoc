@@ -1038,7 +1038,7 @@ If you want to use AsciidoctorJ in an application deployed on [app]_WildFly_, yo
     <resources>
         <resource-root path="asciidoctorj-api-{artifact-version}.jar"/>
         <resource-root path="asciidoctorj-{artifact-version}.jar"/>
-        <resource-root path="jcommander-1.35.jar"/>
+        <resource-root path="jcommander-1.72.jar"/>
         <resource-root path="jruby-complete-9.2.7.0.jar"/>
     </resources>
     <dependencies>
