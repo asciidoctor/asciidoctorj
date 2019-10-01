@@ -17,15 +17,21 @@ Improvement::
 
   * Upgrade to JCommander 1.72 (@Fiouz) (#782)
   * Set logger name on logged log records (@lread) (#834)
+  * Upgrade to JRuby 9.2.8.0 (@ahus1) (#850)
 
 Bug Fixes::
 
   * Remove exception protection from LogHandler in `JRubyAsciidoctor` to align behaviour with `AbstractConverter`  (@abelsromero) (#844)
+  * Make Asciidoctor API AutoClosable (@rmannibucau) (#849)
 
 Build::
 
   * Upgrade to Gradle 5.5.1 (@Fiouz) (#747)
   * Support build from paths with whitespace (@Fiouz) (#836)
+
+Documentation::
+
+  * Update README about running on WildFly (@anthonyvdotbe) (#848)
 
 == 2.1.0 (2019-06-22)
 
