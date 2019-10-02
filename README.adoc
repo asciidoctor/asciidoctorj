@@ -68,7 +68,7 @@ The artifact information can be found in the tables below.
 |org.asciidoctor
 |{uri-bintray-artifact-query}[asciidoctorj]
 |{uri-bintray-artifact-detail}[{artifact-version}]
-|{uri-bintray-artifact-file}.pom[pom] {uri-bintray-artifact-file}.jar[jar] {uri-bintray-artifact-file}-javadoc.jar[javadoc (jar)] {uri-bintray-artifact-file}-sources.jar[sources (jar)] {uri-bintray-artifact-file}-bin.zip[distribution (zip)]
+|{uri-bintray-artifact-file}.pom[pom] {uri-bintray-artifact-file}.jar[jar] {uri-bintray-artifact-file}-javadoc.jar[javadoc (jar)] {uri-bintray-artifact-file}-sources.jar[sources (jar)] distribution ({uri-bintray-artifact-file}-bin.zip[zip] {uri-bintray-artifact-file}-bin.tar[tar])
 
 |org.asciidoctor
 |{uri-bintray-artifact-api-query}[asciidoctorj-api]
@@ -94,7 +94,7 @@ The artifact information can be found in the tables below.
 |org.asciidoctor
 |{uri-maven-artifact-query}[asciidoctorj]
 |{uri-maven-artifact-detail}[{artifact-version}]
-|{uri-maven-artifact-file}.pom[pom] {uri-maven-artifact-file}.jar[jar] {uri-maven-artifact-file}-javadoc.jar[javadoc (jar)] {uri-maven-artifact-file}-sources.jar[sources (jar)] {uri-maven-artifact-file}-bin.zip[distribution (zip)]
+|{uri-maven-artifact-file}.pom[pom] {uri-maven-artifact-file}.jar[jar] {uri-maven-artifact-file}-javadoc.jar[javadoc (jar)] {uri-maven-artifact-file}-sources.jar[sources (jar)] distribution ({uri-maven-artifact-file}-bin.zip[zip] {uri-maven-artifact-file}-bin.tar[tar])
 
 |org.asciidoctor
 |{uri-maven-artifact-api-query}[asciidoctorj-api]
@@ -113,6 +113,40 @@ The artifact information can be found in the tables below.
 |===
 
 CAUTION: The artifactId changed to `asciidoctorj` starting in 1.5.0.
+
+== Quick win: using the command line interface
+
+If you download from a distribution link above (zip or tar), you can get started straight away from the command line.
+
+First, expand the downloaded file. That puts everything in directory asciidoctorj-{artifact-version}.
+Within that directory are `bin` and `lib` directories.  `bin` contains the executables -- `asciidoctorj` for
+Linux and macOS, and `asciidoctorj.bat` for Windows.  `lib` contains the supporting libraries.
+
+Verify the application runs by specifying the appropriate executable with no parameters;
+it should display the various run options available (i.e., help).
+
+----
+Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj
+Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat
+----
+
+Next, say you want to convert an ASCIIDOC (.adoc) file -- such as this README -- to a pdf.
+
+----
+Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj -b pdf README.adoc
+Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat -b pdf README.adoc
+----
+
+Boom! That should convert the README to a PDF named README.pdf.
+To create a PDF with a different name -- say, READTHIS.pdf -- just add the -o switch:
+
+----
+Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj -b pdf -o READTHIS.pdf README.adoc
+Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat -b pdf -o READTHIS.pdf README.adoc
+----
+
+The rest of the document addresses the asciidoctorj API, for doing such conversions
+from within a JVM-based application.
 
 == Installation
 
