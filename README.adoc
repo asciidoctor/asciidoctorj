@@ -118,13 +118,15 @@ CAUTION: The artifactId changed to `asciidoctorj` starting in 1.5.0.
 
 If you download from a distribution link above (zip or tar), you can get started straight away from the command line.
 
-First, expand the downloaded file. That puts everything in directory asciidoctorj-{artifact-version}.
+First, expand the downloaded file. That puts everything in directory `asciidoctorj-{artifact-version}`.
 Within that directory are `bin` and `lib` directories.  `bin` contains the executables -- `asciidoctorj` for
 Linux and macOS, and `asciidoctorj.bat` for Windows.  `lib` contains the supporting libraries.
 
 Verify the application runs by specifying the appropriate executable with no parameters;
 it should display the various run options available (i.e., help).
 
+[source]
+[subs="specialcharacters,attributes,callouts"]
 ----
 Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj
 Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat
@@ -132,6 +134,8 @@ Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat
 
 Next, say you want to convert an ASCIIDOC (.adoc) file -- such as this README -- to a pdf.
 
+[source]
+[subs="specialcharacters,attributes,callouts"]
 ----
 Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj -b pdf README.adoc
 Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat -b pdf README.adoc
@@ -140,6 +144,8 @@ Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat -b pdf README.adoc
 Boom! That should convert the README to a PDF named README.pdf.
 To create a PDF with a different name -- say, READTHIS.pdf -- just add the -o switch:
 
+[source]
+[subs="specialcharacters,attributes,callouts"]
 ----
 Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj -b pdf -o READTHIS.pdf README.adoc
 Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat -b pdf -o READTHIS.pdf README.adoc
