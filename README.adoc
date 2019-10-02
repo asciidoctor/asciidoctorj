@@ -151,7 +151,7 @@ Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj -b pdf -o READTHIS.pdf R
 Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat -b pdf -o READTHIS.pdf README.adoc
 ----
 
-The rest of the document addresses the asciidoctorj API, for doing such conversions
+The rest of the document addresses the asciidoctorj API, for doing more complex conversions
 from within a JVM-based application.
 
 == Installation
