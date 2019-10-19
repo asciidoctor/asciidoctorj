@@ -1,4 +1,4 @@
-apply plugin: 'osgi'
+apply plugin: 'biz.aQute.bnd.builder'
 
 dependencies {
   compile project(path: ':asciidoctorj-api')
@@ -21,6 +21,7 @@ dependencies {
   testCompile "org.jsoup:jsoup:$jsoupVersion"
   testCompile "io.netty:netty-all:$nettyVersion"
   testCompile project(path: ':asciidoctorj-arquillian-extension')
+  compileOnly "org.osgi:osgi.annotation:$osgiVersion"
 }
 
 def gemFiles = fileTree(jruby.gemInstallDir) {
@@ -49,14 +50,12 @@ javadoc {
 //}
 
 jar {
-  manifest {
-    symbolicName = 'org.asciidoctor'
-    instruction 'Export-Package',
-      "org.asciidoctor.jruby;version=\"${version}\""
-    instruction 'Import-Package',
-      'com.beust.jcommander;resolution:=optional',
-      '*'
-  }
+  bnd(
+    ('Bundle-Name'): 'asciidoctorj',
+    ('Bundle-SymbolicName'): 'org.asciidoctor',
+    ('Import-Package'):
+      'com.beust.jcommander;resolution:=optional, *'
+  )
   metaInf { from "$buildDir/version-info/" }
 }
 
