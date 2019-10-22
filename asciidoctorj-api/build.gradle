@@ -1,20 +1,15 @@
-apply plugin: 'osgi'
+apply plugin: 'biz.aQute.bnd.builder'
 
 dependencies {
+  compileOnly "org.osgi:osgi.annotation:$osgiVersion"
 }
 
 
 jar {
-  manifest {
-    symbolicName = 'org.asciidoctor'
-    instruction 'Export-Package',
-      "org.asciidoctor;version=\"${version}\"",
-      "org.asciidoctor.ast;version=\"${version}\"",
-      "org.asciidoctor.converter;version=\"${version}\"",
-      "org.asciidoctor.extension;version=\"${version}\"",
-      "org.asciidoctor.log;version=\"${version}\"",
-      "org.asciidoctor.spi;version=\"${version}\""
-  }
+  bnd(
+    ('Bundle-Name'): 'asciidoctorj-api',
+    ('Bundle-SymbolicName'): 'org.asciidoctor',
+  )
 }
 
 

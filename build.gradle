@@ -10,11 +10,13 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+        mavenCentral()
     }
     dependencies {
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.4.10"
         classpath "gradle.plugin.io.sdkman:gradle-sdkvendor-plugin:1.1.0"
+        classpath "biz.aQute.bnd:biz.aQute.bnd.gradle:4.3.0"
     }
 }
 
@@ -68,6 +70,7 @@ ext {
   spockVersion = '0.7-groovy-2.0'
   threadSafeGemVersion = '0.3.6'
   tiltGemVersion = '2.0.9'
+  osgiVersion = '7.0.0'
 }
 
 allprojects {
