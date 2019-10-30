@@ -40,7 +40,7 @@ ext {
   // jar versions
   arquillianVersion = '1.1.10.Final'
   arquillianSpockVersion = '1.0.0.Beta3'
-  asciidoctorjPdfVersion = '1.5.0-beta.6'
+  asciidoctorjPdfVersion = '1.5.0-beta.7'
   asciidoctorjEpub3Version = '1.5.0-alpha.9'
   asciidoctorjDiagramVersion = '1.5.18'
   commonsioVersion = '2.4'
@@ -58,7 +58,7 @@ ext {
   // gem versions
   asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '2.0.10'
   coderayGemVersion = '1.1.2'
-  rougeGemVersion = '3.3.0'
+  rougeGemVersion = '3.12.0'
 
   codenarcVersion = '0.24.1'
   groovyVersion = '2.4.13'
