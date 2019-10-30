@@ -20,7 +20,7 @@ class WhenACoderayAdapterIsImplementedInGroovy extends Specification {
   @ArquillianResource
   private Asciidoctor asciidoctor
 
-  @Ignore("until the latest release also puts the link to the CSS into the header")
+  @Ignore('until the latest release also puts the link to the CSS into the header')
   def 'should highlight with coderay'() {
 
     given:
