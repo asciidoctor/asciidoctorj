@@ -29,12 +29,14 @@ Bug Fixes::
 
 Build::
 
-  * Upgrade to Gradle 5.5.1 (@Fiouz) (#747)
+  * Upgrade to Gradle 5.6.3 (@Fiouz) (#747 #856)
   * Support build from paths with whitespace (@Fiouz) (#836)
+  * OSGi: switch to biz.aQute.bnd plugin (@Fiouz) (#855)
 
 Documentation::
 
   * Update README about running on WildFly (@anthonyvdotbe) (#848)
+  * link to tarball; add Quick Win section (@il-pazzo) (#854)
 
 == 2.1.0 (2019-06-22)
 
