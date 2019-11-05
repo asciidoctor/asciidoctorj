@@ -80,6 +80,10 @@ if [ -n "\$JAVA_HOME" ] ; then
 Please set the JAVA_HOME variable in your environment to match the
 location of your Java installation."
     fi
+# For Darwin, find JAVA_HOME for 1.8
+elif $darwin; then
+    JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+    JAVACMD="\$JAVA_HOME/bin/java"
 else
     JAVACMD="java"
     which java >/dev/null 2>&1 || die "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
@@ -106,7 +110,7 @@ fi
 
 # For Darwin, add options to specify how the application appears in the dock
 if \$darwin; then
-    GRADLE_OPTS="\$GRADLE_OPTS \\"-Xdock:name=\$APP_NAME\\" \\"-Xdock:icon=\$APP_HOME/media/gradle.icns\\""
+    JAVA_OPTS="\$JAVA_OPTS -Djava.awt.headless=true"
 fi
 
 # For Cygwin, switch paths to Windows format before running java
