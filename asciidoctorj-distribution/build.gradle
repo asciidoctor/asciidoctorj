@@ -68,7 +68,7 @@ startScripts {
   applicationName = rootProject.name
   mainClassName = 'org.asciidoctor.jruby.cli.AsciidoctorInvoker'
   defaultJvmOpts = [
-    '-client', '-Xmn128m', '-Xms256m', '-Xmx256m',
+    '-client', '-Xmn128m', '-Xms256m', '-Xmx256m', '-Djava.awt.headless=true',
     '-Xverify:none', '-XX:+TieredCompilation', '-XX:TieredStopAtLevel=1', '-XX:+DisableExplicitGC', '-Djruby.compile.mode=OFF'
   ]
 }
