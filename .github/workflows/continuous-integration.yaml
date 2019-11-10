@@ -1,0 +1,46 @@
+name: Build Master
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  build:
+    name: Build
+    strategy:
+      max-parallel: 2
+      matrix:
+        java:
+          - '1.8'
+          - '11'
+        os:
+          - ubuntu-latest
+          - macos-latest
+        exclude:
+          - os: macos-latest
+            java: '1.8'
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Build
+        run: |
+          ./gradlew -S -Pskip.signing assemble
+          unset GEM_PATH GEM_HOME JRUBY_OPTS
+          ./gradlew -S -Pskip.signing check -x test
+      - name: Upstream Build
+        if: matrix.os == 'ubuntu-latest' && matrix.java == '11'
+        run: |
+          unset GEM_PATH GEM_HOME JRUBY_OPTS
+          ./test-asciidoctor-upstream.sh
+
+
