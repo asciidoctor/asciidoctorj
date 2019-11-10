@@ -113,7 +113,7 @@ public class AsciidoctorCliOptions {
     @Parameter(names = { LOAD_PATHS, "--load-path" }, description = "add a directory to the $LOAD_PATH may be specified more than once")
     private String loadPath;
 
-    @Parameter(description = "input files")
+    @Parameter(description = "input files; use - to read from STDIN")
     private List<String> parameters = new ArrayList<String>();
 
     public boolean isQuiet() {
