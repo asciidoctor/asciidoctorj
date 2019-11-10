@@ -78,7 +78,7 @@ public class AsciidoctorInvoker {
                 timings.callMethod(JRubyRuntimeContext.get(asciidoctor).getCurrentContext(), "print_report");
             }
 
-            if (!"".equals(output.trim())) {
+            if (output != null && !"".equals(output.trim())) {
                 System.out.println(output);
             }
         }
