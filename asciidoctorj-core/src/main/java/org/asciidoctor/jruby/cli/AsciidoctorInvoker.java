@@ -150,14 +150,10 @@ public class AsciidoctorInvoker {
     }
 
     private String renderInput(Asciidoctor asciidoctor, Options options, List<File> inputFiles) {
-        
 
-        // jcommander bug makes this code not working.
-        /*
-        if("-".equals(inputFile)) {
+        if(inputFiles.size() == 1 && "-".equals(inputFiles.get(0).getName())) {
             return asciidoctor.convert(readInputFromStdIn(), options);
         }
-        */
 
         StringBuilder output = new StringBuilder();
 
@@ -186,8 +182,8 @@ public class AsciidoctorInvoker {
     }
 
     private String readInputFromStdIn() {
-        Scanner in = new Scanner(System.in);
-        String content = in.nextLine();
+        Scanner in = new Scanner(System.in).useDelimiter("\\A");
+        String content = in.next();
         in.close();
 
         return content;
@@ -201,13 +197,6 @@ public class AsciidoctorInvoker {
             System.err.println("asciidoctor: FAILED: empty input file name");
             throw new IllegalArgumentException(
                     "asciidoctor: FAILED: empty input file name");
-        }
-
-        if (parameters.contains("-")) {
-            System.err
-                    .println("asciidoctor:  FAILED: input file is required instead of an argument.");
-            throw new IllegalArgumentException(
-                    "asciidoctor:  FAILED: input file is required instead of an argument.");
         }
 
         List<File> filesToBeRendered = new ArrayList<File>();
