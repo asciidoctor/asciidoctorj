@@ -15,6 +15,7 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.jruby.DirectoryWalker;
 import org.asciidoctor.jruby.GlobDirectoryWalker;
 import org.asciidoctor.Options;
+import org.asciidoctor.jruby.internal.IOUtils;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
 import org.asciidoctor.jruby.internal.RubyUtils;
@@ -182,9 +183,12 @@ public class AsciidoctorInvoker {
     }
 
     private String readInputFromStdIn() {
-        Scanner in = new Scanner(System.in).useDelimiter("\\A");
-        String content = in.next();
-        in.close();
+        String content = IOUtils.readFull(System.in);
+        try {
+            System.in.close();
+        } catch (IOException e) {
+            // swallow
+        }
 
         return content;
     }
