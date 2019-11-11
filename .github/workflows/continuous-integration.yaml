@@ -36,7 +36,7 @@ jobs:
         run: |
           ./gradlew -S -Pskip.signing assemble
           unset GEM_PATH GEM_HOME JRUBY_OPTS
-          ./gradlew -S -Pskip.signing check -x test
+          ./gradlew -S -Pskip.signing check
       - name: Upstream Build
         if: matrix.os == 'ubuntu-latest' && matrix.java == '11'
         run: |
