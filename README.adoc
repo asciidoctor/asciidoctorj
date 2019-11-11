@@ -49,7 +49,7 @@ Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of
 ifdef::badges[]
 image:https://img.shields.io/travis/asciidoctor/asciidoctorj/master.svg[Build Status (Travis CI), link=https://travis-ci.org/asciidoctor/asciidoctorj]
 image:https://ci.appveyor.com/api/projects/status/syxrlv047esal4n0/branch/master?svg=true[Build Status (AppVeyor), link=https://ci.appveyor.com/project/asciidoctor/asciidoctorj]
-image:https://img.shields.io/badge/javadoc.io-1.6.0-blue.svg[Javadoc, link=http://www.javadoc.io/doc/org.asciidoctor/asciidoctorj/1.6.0-alpha.1]
+image:https://github.com/asciidoctor/asciidoctorj/workflows/Build%20Master/badge.svg?event=push[Build Status (Github Actions)]
 endif::[]
 
 ifdef::awestruct,env-browser[]
