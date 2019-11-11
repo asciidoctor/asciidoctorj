@@ -24,7 +24,7 @@ sed "s;<version></version>;<version>$ASCIIDOCTOR_VERSION</version>;" pom.xml > p
   mv -f pom.xml.sedtmp pom.xml
 
 #we override the jruby version here with one supported by java9, additionally java9 needs some add-opens arguments that need to be ignored on older jvms
-mvn install -Dgemspec=asciidoctor.gemspec -Djruby.version=9.1.14.0 -Djruby.jvmargs="-XX:+IgnoreUnrecognizedVMOptions --add-opens=java.base/java.security.cert=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util.zip=ALL-UNNAMED"
+mvn install --no-transfer-progress -Dgemspec=asciidoctor.gemspec -Djruby.version=9.2.9.0 -Djruby.jvmargs="-XX:+IgnoreUnrecognizedVMOptions --add-opens=java.base/java.security.cert=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util.zip=ALL-UNNAMED"
 
 cd ../..
 #rm -rf maven
