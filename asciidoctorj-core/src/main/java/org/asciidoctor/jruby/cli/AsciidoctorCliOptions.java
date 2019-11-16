@@ -248,6 +248,10 @@ public class AsciidoctorCliOptions {
         return this.version;
     }
 
+    private boolean isInputStdin() {
+        return getParameters().size() == 1 && "-".equals(getParameters().get(0));
+    }
+
     private boolean isOutputStdout() {
         return "-".equals(getOutFile());
     }
@@ -257,21 +261,31 @@ public class AsciidoctorCliOptions {
     }
 
     public Options parse() {
-        OptionsBuilder optionsBuilder = OptionsBuilder.options();
         AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
 
-        optionsBuilder.backend(this.backend).safe(this.safeMode).eruby(this.eruby);
+        OptionsBuilder optionsBuilder = OptionsBuilder.options()
+            .backend(this.backend)
+            .safe(this.safeMode)
+            .eruby(this.eruby)
+            .option(Options.STANDALONE, true);
 
         if (isDoctypeOption()) {
             optionsBuilder.docType(this.doctype);
+        }
+
+        if (isInputStdin()) {
+            optionsBuilder.toStream(System.out);
+            if (outFile == null) {
+                outFile = "-";
+            }
         }
 
         if (isOutFileOption() && !isOutputStdout()) {
             optionsBuilder.toFile(new File(this.outFile));
         }
 
-        if (isOutFileOption() && isOutputStdout()) {
-            optionsBuilder.toFile(false);
+        if (isOutputStdout()) {
+            optionsBuilder.toStream(System.out);
         }
 
         if (this.safe) {
@@ -279,7 +293,7 @@ public class AsciidoctorCliOptions {
         }
 
         if (this.noHeaderFooter) {
-            optionsBuilder.headerFooter(false);
+            optionsBuilder.option(Options.STANDALONE, false);
         }
 
         if (this.sectionNumbers) {

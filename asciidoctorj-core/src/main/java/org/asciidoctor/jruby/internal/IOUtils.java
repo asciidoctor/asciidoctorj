@@ -13,11 +13,15 @@ public class IOUtils {
     }
 
     public static String readFull(InputStream inputStream) {
-        return new Scanner(inputStream).useDelimiter("\\A").next();
+        try (Scanner scanner = new Scanner(inputStream).useDelimiter("\\A")){
+            return scanner.next();
+        }
     }
 
     public static String readFull(Reader reader) {
-        return new Scanner(reader).useDelimiter("\\A").next();
+        try (Scanner scanner = new Scanner(reader).useDelimiter("\\A")){
+            return scanner.next();
+        }
     }
 
     public static void writeFull(Writer writer, String content) throws IOException {

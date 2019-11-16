@@ -379,6 +379,11 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
             rubyRuntime.setCurrentDirectory((String) options.get(Options.BASEDIR));
         }
 
+        final Object toFileOption = options.get(Options.TO_FILE);
+        if (toFileOption instanceof OutputStream) {
+            options.put(Options.TO_FILE, RubyOutputStreamWrapper.wrap(getRubyRuntime(), (OutputStream) toFileOption));
+        }
+
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
 
         try {

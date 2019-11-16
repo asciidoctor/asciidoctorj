@@ -70,16 +70,12 @@ public class AsciidoctorInvoker {
             
             setVerboseLevel(asciidoctor, asciidoctorCliOptions);
 
-            String output = renderInput(asciidoctor, options, inputFiles);
+            renderInput(asciidoctor, options, inputFiles);
 
             if (asciidoctorCliOptions.isTimings()) {
                 Map<String, Object> optionsMap = options.map();
                 IRubyObject timings = (IRubyObject) optionsMap.get("timings");
                 timings.callMethod(JRubyRuntimeContext.get(asciidoctor).getCurrentContext(), "print_report");
-            }
-
-            if (output != null && !"".equals(output.trim())) {
-                System.out.println(output);
             }
         }
     }
@@ -183,14 +179,7 @@ public class AsciidoctorInvoker {
     }
 
     private String readInputFromStdIn() {
-        String content = IOUtils.readFull(System.in);
-        try {
-            System.in.close();
-        } catch (IOException e) {
-            // swallow
-        }
-
-        return content;
+        return IOUtils.readFull(System.in);
     }
 
     private List<File> getInputFiles(AsciidoctorCliOptions asciidoctorCliOptions) {

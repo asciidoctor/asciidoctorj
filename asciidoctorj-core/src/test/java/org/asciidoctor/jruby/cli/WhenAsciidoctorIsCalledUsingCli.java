@@ -209,8 +209,8 @@ public class WhenAsciidoctorIsCalledUsingCli {
 		
 		ByteArrayOutputStream output = redirectStdout();
 		
-        File inputFile = classpath.getResource("rendersample.asciidoc");
-        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+		File inputFile = classpath.getResource("rendersample.asciidoc");
+		String inputPath = inputFile.getPath().substring(pwd.length() + 1);
 		new AsciidoctorInvoker().invoke("-o", "-", inputPath);
 		
 		Document doc = Jsoup.parse(output.toString(), "UTF-8");
