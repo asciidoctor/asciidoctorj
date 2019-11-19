@@ -19,6 +19,7 @@ public class Options {
     public static final String MKDIRS = "mkdirs";
     public static final String SAFE = "safe";
     public static final String SOURCEMAP = "sourcemap";
+    public static final String STANDALONE = "standalone";
     public static final String ERUBY = "eruby";
     public static final String CATALOG_ASSETS = "catalog_assets";
     public static final String COMPACT = "compact";
