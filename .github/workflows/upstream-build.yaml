@@ -1,0 +1,19 @@
+name: Build Upstream
+on: repository_dispatch
+
+jobs:
+  build-upstream:
+    name: ${{ github.event.client_payload.message }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+          ref: ${{ github.event.client_payload.branch }} 
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '1.8'
+      - name: Build
+        run: |
+          unset GEM_PATH GEM_HOME JRUBY_OPTS
+          ./test-asciidoctor-upstream.sh
