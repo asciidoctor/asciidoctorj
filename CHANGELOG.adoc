@@ -28,6 +28,7 @@ Bug Fixes::
   * Remove exception protection from LogHandler in `JRubyAsciidoctor` to align behaviour with `AbstractConverter`  (@abelsromero) (#844)
   * Make Asciidoctor API AutoClosable (@rmannibucau) (#849)
   * Fix reading input from stdin and writing to stdout (@nicerloop) (#865)
+  * Assign distinct Osgi Bundle-SymbolicNames to asciidoctorj-api.jar and asciidoctorj.jar (@rmannibucau) (#878)
 
 Build::
 

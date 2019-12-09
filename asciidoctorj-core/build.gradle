@@ -52,7 +52,7 @@ javadoc {
 jar {
   bnd(
     ('Bundle-Name'): 'asciidoctorj',
-    ('Bundle-SymbolicName'): 'org.asciidoctor',
+    ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj',
     ('Import-Package'):
       'com.beust.jcommander;resolution:=optional, *'
   )
