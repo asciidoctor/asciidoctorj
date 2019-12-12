@@ -8,7 +8,7 @@ dependencies {
 jar {
   bnd(
     ('Bundle-Name'): 'asciidoctorj-api',
-    ('Bundle-SymbolicName'): 'org.asciidoctor',
+    ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj-api',
   )
 }
 
