@@ -20,6 +20,7 @@ Improvement::
   * Upgrade to JRuby 9.2.8.0 (@ahus1) (#850)
   * Upgrade to JRuby 9.2.9.0
   * Upgrade to Asciidoctor PDF 1.5.0-beta.8
+  * Upgrade to Asciidoctor Diagram 2.0.0
   * Upgrade to Rouge 3.12.0
   * Use headless jdk on all platforms (@nicerloop) (#863)
 
