@@ -13,6 +13,8 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == Unreleased
 
+== 2.2.0 (2019-12-17)
+
 Improvement::
 
   * Upgrade to JCommander 1.72 (@Fiouz) (#782)
