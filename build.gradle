@@ -187,15 +187,12 @@ configure(subprojects.findAll { !it.isDistribution() }) {
   apply from: rootProject.file('gradle/eclipse.gradle')
   apply plugin: 'idea'
 
+  jruby {
+    defaultRepositories false
+  }
+
   repositories {
-    maven {
-      name 'rubygems-release'
-      url 'http://rubygems-proxy.torquebox.org/releases'
-    }
-    maven {
-      name 'rubygems-prerelease'
-      url 'http://rubygems-proxy.torquebox.org/prereleases'
-    }
+    rubygems('https://rubygems.org')
   }
 
   if (JavaVersion.current().isJava8Compatible()) {
