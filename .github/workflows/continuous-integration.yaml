@@ -13,11 +13,12 @@ jobs:
   build:
     name: Build
     strategy:
+      fail-fast: false
       max-parallel: 2
       matrix:
         java:
           - '1.8'
-          - '11'
+          - '11.0.5'
         os:
           - ubuntu-latest
           - macos-latest
@@ -38,7 +39,7 @@ jobs:
           unset GEM_PATH GEM_HOME JRUBY_OPTS
           ./gradlew -S -Pskip.signing check
       - name: Upstream Build
-        if: matrix.os == 'ubuntu-latest' && matrix.java == '11'
+        if: matrix.os == 'ubuntu-latest' && matrix.java == '1.8'
         run: |
           unset GEM_PATH GEM_HOME JRUBY_OPTS
           ./test-asciidoctor-upstream.sh
