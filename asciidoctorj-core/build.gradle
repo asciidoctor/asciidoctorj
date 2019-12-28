@@ -24,7 +24,7 @@ dependencies {
   compileOnly "org.osgi:osgi.annotation:$osgiVersion"
 }
 
-def gemFiles = fileTree(jruby.gemInstallDir) {
+def gemFiles = fileTree("${project.buildDir}/.gems") {
   include 'specifications/*.gemspec'
   include 'gems/*/lib/**'
   include "gems/asciidoctor-*/data/**"

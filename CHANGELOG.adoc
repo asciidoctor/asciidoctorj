@@ -15,7 +15,7 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 Build::
 
-  * Load Gems directly from rubygems.org instead of using torquebox Maven proxy.
+  * Upgrade jruby-gradle-plugin to 2.0.0-alpha.7 and load Gems directly from rubygems.org instead of using torquebox Maven proxy.
 
 == 2.2.0 (2019-12-17)
 
