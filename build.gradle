@@ -22,7 +22,7 @@ buildscript {
 
 // modern plugins config
 plugins {
-  id 'com.github.jruby-gradle.base' version '1.7.0'
+  id 'com.github.jruby-gradle.base' version '2.0.0-alpha.7'
 }
 
 // TIP use -PpublishRelease=true to active release behavior regardless of the version
@@ -192,7 +192,7 @@ configure(subprojects.findAll { !it.isDistribution() }) {
   }
 
   repositories {
-    rubygems('https://rubygems.org')
+    ruby.gems()
   }
 
   if (JavaVersion.current().isJava8Compatible()) {
@@ -226,7 +226,6 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.
   jruby {
     defaultRepositories = false
     defaultVersion = jrubyVersion
-    execVersion = jrubyVersion
     // TODO I'd like to be able to customize the name of the gemInstallDir
   }
 
