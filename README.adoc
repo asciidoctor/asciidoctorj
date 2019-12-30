@@ -20,9 +20,10 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-discuss: http://discuss.asciidoctor.org
-:artifact-version: 2.1.0
-:asciidoctorj-pdf-version: 1.5.0-beta.5
-jruby-version: 9.2.8.0
+:artifact-version: 2.2.0
+:asciidoctorj-epub3-version: 1.5.0-alpha.9
+:asciidoctorj-pdf-version: 1.5.0-beta.8
+:jruby-version: 9.2.9.0
 :uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
 :uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
@@ -78,7 +79,7 @@ The artifact information can be found in the tables below.
 
 |org.asciidoctor
 |asciidoctorj-epub3
-|1.5.0-alpha.9
+|{asciidoctorj-epub3-version}
 |{empty}
 
 |org.asciidoctor
@@ -104,12 +105,12 @@ The artifact information can be found in the tables below.
 
 |org.asciidoctor
 |asciidoctorj-epub3
-|1.5.0-alpha.9
+|{asciidoctorj-epub3-version}
 |{empty}
 
 |org.asciidoctor
 |asciidoctorj-pdf
-|1.5.0-alpha.18
+|{asciidoctorj-pdf-version}
 |{empty}
 |===
 
@@ -841,13 +842,13 @@ The version of the AsciidoctorJ EPUB3 jar aligns with the version of the Asciido
 
 Here's how you can add the AsciidoctorJ EPUB3 jar to your Maven dependencies:
 
-[source,xml]
+[source,xml,subs="attributes+"]
 ----
 <dependencies>
   <dependency>
     <groupId>org.asciidoctor</groupId>
     <artifactId>asciidoctorj-epub3</artifactId>
-    <version>1.5.0-alpha.4</version>
+    <version>{asciidoctorj-epub3-version}</version>
     <scope>runtime</scope>
   </dependency>
 </dependencies>
