@@ -1,6 +1,7 @@
 package org.asciidoctor.integrationguide;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.OptionsBuilder;
 import org.junit.Test;
 
 import java.io.File;
@@ -34,5 +35,14 @@ public class AsciidoctorInterface {
         Asciidoctor asciidoctor = Asciidoctor.Factory.create();
         asciidoctor.shutdown();
 //end::shutdown[]
+    }
+
+    @Test
+    public void autocloseAsciidoctorInstance() {
+//tag::autoclose[]
+        try (Asciidoctor asciidoctor = Asciidoctor.Factory.create()) {
+            asciidoctor.convert("Hello World", OptionsBuilder.options());
+        }
+//end::autoclose[]
     }
 }

@@ -915,10 +915,10 @@ You can find out more about how to write your own converters using AsciidoctorJ 
 Simple extensions may be fully implemented in Java, but if you want to create complex extensions you can mix Ruby and Java code.
 This means that you may need to execute a Ruby file or a RubyGem (i.e., gem) inside your extension.
 
-To load a Ruby file inside the Ruby runtime, you can use `org.asciidoctor.internal.RubyUtils.loadRubyClass(Ruby, InputStream)`.
+To load a Ruby file inside the Ruby runtime, you can use `org.asciidoctor.jruby.internal.RubyUtils.loadRubyClass(Ruby, InputStream)`.
 You can also load a gem using an API that wraps Ruby's `require` command.
 The gem must be available inside the classpath.
-Next run `org.asciidoctor.internal.RubyUtils.requireLibrary(Ruby, String)`, passing the name of the gem as the second argument.
+Next run `org.asciidoctor.jruby.internal.RubyUtils.requireLibrary(Ruby, String)`, passing the name of the gem as the second argument.
 
 // SW or AS: show an example of loading Ruby libraries or point to an external resource showing examples/further documentation.
 
@@ -928,19 +928,20 @@ Sometimes you may need the Ruby runtime used inside AsciidoctorJ.
 One reason is because you are using JRuby outside AsciidoctorJ and you want to reuse the same instance.
 Another reason is that you need to instantiate by yourself an Asciidoctor Ruby object.
 
-To get this instance you can use `org.asciidoctor.internal.JRubyRuntimeContext.get(Asciidoctor)` to get it from a given Asciidoctor instance.
+To get this instance you can use `org.asciidoctor.jruby.internal.JRubyRuntimeContext.get(Asciidoctor)` to get it from a given Asciidoctor instance.
 
 == GEM_PATH
 
 By default, AsciidoctorJ comes with all required gems bundled within the jar.
 But in some circumstances like OSGi environments you may require to store gems in an external folder and be loaded by AsciidoctorJ.
-To accomplish this scenario, `create` method provides a parameter to set folder where gems are present.
-Internally, AsciidoctorJ will set `GEM_PATH` environment variable to given path.
+
+As the Java interface `org.asciidoctor.Asciidoctor` and its factory `org.asciidoctor.Asciidoctor.Factory` are agnostic to JRuby there are the interface `org.asciidoctor.jruby.AsciidoctorJRuby` and `org.asciidoctor.jruby.AsciidoctorJRuby.Factory` that allow to get an Asciidoctor instance using JRuby with a certain GEM_PATH.
+Note that `org.asciidoctor.jruby.AsciidoctorJRuby` directly extends `org.asciidoctor.Asciidoctor`.
 
 [source]
 .Example of setting GEM_PATH
 ----
-import static org.asciidoctor.Asciidoctor.Factory.create;
+import static org.asciidoctor.jruby.AsciidoctorJRuby.Factory.create;
 import org.asciidoctor.Asciidoctor;
 
 Asciidoctor asciidoctor = create("/my/gem/path"); // <1>
@@ -959,16 +960,19 @@ import org.asciidoctor.Asciidoctor;
 Asciidoctor asciidoctor = create();
 ----
 
-In an OSGi context it will not work because JRuby needs some paths to find the Asciidoctor gems. In order to make it work, you will need to specify the Asciidoctor gems path using the JavaEmbedUtils class. We will update the previous snippet of code to specify this path:
+In an OSGi context it will not work because JRuby needs some paths to find the Asciidoctor gems.
+In order to make it work, you will need to specify the Asciidoctor gems path using the JavaEmbedUtils class.
+We will update the previous snippet of code to specify this path:
 
 [source,java]
 ----
-import static org.asciidoctor.Asciidoctor.Factory.create;
+import static org.asciidoctor.jruby.AsciidoctorJRuby.Factory.create;
 import org.asciidoctor.Asciidoctor;
 
-Asciidoctor asciidoctor = create(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib")); <1><2>
+Asciidoctor asciidoctor = create(Arrays.asList("uri:classloader:/gems/asciidoctor-2.2.0/lib")); // <1><2>
 ----
-<1> `uri:classloader:/gems/asciidoctor-<version>/lib` specifies where the gems for Asciidoctor are located. Actually this path is located inside the `asciidoctorj-<version>.jar` file
+<1> `uri:classloader:/gems/asciidoctor-<version>/lib` specifies where the gems for Asciidoctor are located.
+    Actually this path is located inside the `asciidoctorj-<version>.jar` file
 <2> The version here differs from the AsciidoctorJ version as it corresponds to the version of Asciidoctor, not the AsciidoctorJ one.
 
 [NOTE]

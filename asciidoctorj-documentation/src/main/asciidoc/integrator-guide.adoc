@@ -136,22 +136,27 @@ include::src/test/java/org/asciidoctor/integrationguide/SimpleAsciidoctorRenderi
 === The Asciidoctor interface
 
 The main entry point for AsciidoctorJ is the `Asciidoctor` Java interface.
-You obtain an instance from the factory class `Asciidoctor.Factory` that provides multiple overloaded create methods:
+You obtain an instance from the factory class `Asciidoctor.Factory` that provides a simple create method.
+
+If you need to get an instance of Asciidoctor using a certain gem path the factory `org.asciidoctor.jruby.AsciidoctorJRuby.Factory` provides multiple create methods to get an instance with a certain gem or load path:
 
 .Methods to create an Asciidoctor instance
 [cols="1m,2"]
 |===
 |Method Name | Description
 
-| create()
+| org.asciidoctor.Asciidoctor.Factory +
+.create()
 | The default create method that is used most often.
   Only use other methods if you want to load extensions that are not on the classpath.
 
-| create(String gemPath)
+| org.asciidoctor.jruby.AsciidoctorJRuby.Factory +
+.create(String gemPath)
 | Creates a new Asciidoctor instance and sets the global variable `GEM_PATH` to the given String.
   The variable `GEM_PATH` defines where Ruby looks for installed gems.
 
-| create(List<String> loadPaths)
+| org.asciidoctor.jruby.AsciidoctorJRuby.Factory +
+.create(List<String> loadPaths)
 | Creates a new Asciidoctor instance and set the global variable `LOAD_PATH` to the given Strings.
   The variable `LOAD_PATH` defines where Ruby looks for files.
 
@@ -166,7 +171,7 @@ include::src/test/java/org/asciidoctor/integrationguide/AsciidoctorInterface.jav
 ----
 
 As Asciidoctor instances can be created they can also be explicitly destroyed to free resources used in particular by the Ruby runtime associated with it.
-Therefore the Asciidoctor interface offers the method destroy.
+Therefore the Asciidoctor interface offers the method shutdown.
 After calling this method every other method call on the instance will fail!
 
 [source,java,indent=0]
@@ -174,6 +179,16 @@ After calling this method every other method call on the instance will fail!
 ----
 include::src/test/java/org/asciidoctor/integrationguide/AsciidoctorInterface.java[tags=shutdown]
 ----
+
+The Asciidoctor interface also implements the interface `java.io.AutoCloseable` which also shuts down the Ruby runtime.
+Therefore the previous example is equivalent to this:
+
+[source,java,indent=0]
+.Automatically destroying an Asciidoctor instance
+----
+include::src/test/java/org/asciidoctor/integrationguide/AsciidoctorInterface.java[tags=autoclose]
+----
+
 
 To convert AsciiDoc documents the Asciidoctor interface provides four methods:
 

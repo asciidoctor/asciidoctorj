@@ -17,6 +17,10 @@ Build::
 
   * Upgrade jruby-gradle-plugin to 2.0.0-alpha.7 and load Gems directly from rubygems.org instead of using torquebox Maven proxy.
 
+Documentation::
+
+  * Update documentation to show how to create an Asciidoctor instance with GEM_PATH (#890)
+
 == 2.2.0 (2019-12-17)
 
 Improvement::
