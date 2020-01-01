@@ -4,11 +4,11 @@ Please take a bit of time giving some details about your pull request:
 
 ## Kind of change
 
-[ ] Bug fix
-[ ] New non-breaking feature
-[ ] New breaking feature
-[ ] Documentation update
-[ ] Build improvement
+- [ ] Bug fix
+- [ ] New non-breaking feature
+- [ ] New breaking feature
+- [ ] Documentation update
+- [ ] Build improvement
 
 ## Description
 
