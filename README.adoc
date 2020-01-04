@@ -10,7 +10,16 @@ ifdef::awestruct[:toclevels: 1]
 //:table-caption!:
 :source-language: java
 :language: {source-language}
-ifdef::env-github[:badges:]
+ifndef::env-github[:icons: font]
+ifdef::env-github[]
+:badges:
+:!toc-title:
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
 // Aliases:
 :dagger: &#8224;
 // URIs:
