@@ -10,8 +10,11 @@ import org.jsoup.Jsoup;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.lang.annotation.*;
 import java.util.Map;
 
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static java.util.stream.Collectors.joining;
 import static org.junit.Assert.assertEquals;
 
@@ -50,9 +53,27 @@ public class BlockMacroRegistrationTest {
         }
     }
 
+    @Documented
+    @Target(TYPE)
+    @Retention(RUNTIME)
+    @Name(MetaNameAnnotation.NAME)
+    public @interface MetaNameAnnotation {
+        String NAME = "annotated";
+    }
+
     @Name(AnnotatedTestProcessor.NAME)
     public static class AnnotatedTestProcessor extends AbstractTestProcessor {
         public static final String NAME = "annotated";
+    }
+
+    @MetaNameAnnotation
+    public static class AnnotatedTestProcessorWithMetaNameAnnotation extends AbstractTestProcessor {
+    }
+
+    @MetaNameAnnotation
+    @Name(AnnotatedTestProcessorWithMultipleNameAnnotations.NAME)
+    public static class AnnotatedTestProcessorWithMultipleNameAnnotations extends AbstractTestProcessor {
+        public static final String NAME = "anotherName";
     }
 
     @Test
@@ -63,12 +84,29 @@ public class BlockMacroRegistrationTest {
     }
 
     @Test
+    public void testRegisterClassWithMetaNameAnnotation() {
+        asciidoctor.javaExtensionRegistry().blockMacro(AnnotatedTestProcessorWithMetaNameAnnotation.class);
+        final String result = asciidoctor.convert(document(MetaNameAnnotation.NAME, "Hello World"), OptionsBuilder.options());
+        check("HELLO WORLD", result);
+    }
+
+    @Test
+    public void testRegisterClassWithMultipleNameAnnotations() {
+        asciidoctor.javaExtensionRegistry().blockMacro(AnnotatedTestProcessorWithMultipleNameAnnotations.class);
+        String result = asciidoctor.convert(document(MetaNameAnnotation.NAME, "Hello World"), OptionsBuilder.options());
+        check("HELLO WORLD", result);
+        result = asciidoctor.convert(document(AnnotatedTestProcessorWithMultipleNameAnnotations.NAME, "Hello World"), OptionsBuilder.options());
+        check("HELLO WORLD", result);
+    }
+
+    @Test
     public void testRegisterNamedClassAsClassWithExplicitName() {
         final String explicitblockname = "explicitblockname";
         asciidoctor.javaExtensionRegistry().blockMacro(explicitblockname, AnnotatedTestProcessor.class);
         final String result = asciidoctor.convert(document(explicitblockname, "Hello Explicit"), OptionsBuilder.options());
         check("HELLO EXPLICIT", result);
     }
+
     @Test
     public void testRegisterNamedClassAsInstance() {
         asciidoctor.javaExtensionRegistry().blockMacro(new AnnotatedTestProcessor());
