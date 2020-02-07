@@ -22,7 +22,7 @@ Documentation::
   * Update documentation to show how to create an Asciidoctor instance with GEM_PATH (#890)
   * Adds GitHub icons to admonitions sections in README (#893)
   * Upgrade to Asciidoctor PDF 1.5.0-rc.2
-  * Upgrade to Asciidoctor epub3 1.5.0-alpha.11
+  * Upgrade to Asciidoctor EPUB3 1.5.0-alpha.13
   * Upgrade to Asciidoctor Diagram 2.0.1
 
 Build::
