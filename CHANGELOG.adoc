@@ -16,6 +16,10 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 Build::
 
   * Upgrade jruby-gradle-plugin to 2.0.0-alpha.7 and load Gems directly from rubygems.org instead of using torquebox Maven proxy.
+  * Make asciidoctorj usable with the Java 9+ module system. To avoid the 'split-jar' problem, some classes
+  have moved from package `org.asciidoctor` to `org.asciidoctor.api`. This is true also the
+  packages `org.asciidoctor.extension` (to `org.asciidoctor.api.extension`)  and `org.asciidoctor.converter`
+  (to `org.asciidoctor.api.converter`).
 
 Documentation::
 
