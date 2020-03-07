@@ -3,8 +3,8 @@ package org.asciidoctor.jruby.internal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.asciidoctor.Attributes;
-import org.asciidoctor.Options;
+import org.asciidoctor.api.Attributes;
+import org.asciidoctor.api.Options;
 import org.jruby.Ruby;
 
 public class RubyGemsPreloader {

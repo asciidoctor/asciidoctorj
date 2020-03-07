@@ -1,11 +1,13 @@
 package org.asciidoctor;
 
+import org.asciidoctor.api.Options;
+import org.asciidoctor.api.OptionsBuilder;
+import org.asciidoctor.api.extension.ExtensionGroup;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.converter.JavaConverterRegistry;
-import org.asciidoctor.extension.ExtensionGroup;
-import org.asciidoctor.extension.JavaExtensionRegistry;
-import org.asciidoctor.extension.RubyExtensionRegistry;
+import org.asciidoctor.api.extension.JavaExtensionRegistry;
+import org.asciidoctor.api.extension.RubyExtensionRegistry;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterRegistry;
 

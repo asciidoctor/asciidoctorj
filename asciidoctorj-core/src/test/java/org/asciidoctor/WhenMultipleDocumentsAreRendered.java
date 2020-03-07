@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import org.asciidoctor.api.SafeMode;
 import org.asciidoctor.jruby.internal.IOUtils;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
@@ -12,8 +13,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import static org.asciidoctor.OptionsBuilder.options;
-import static org.hamcrest.Matchers.*;
+import static org.asciidoctor.api.OptionsBuilder.options;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
 public class WhenMultipleDocumentsAreRendered {

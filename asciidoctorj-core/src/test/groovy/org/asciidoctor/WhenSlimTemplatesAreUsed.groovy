@@ -1,5 +1,6 @@
 package org.asciidoctor
 
+import org.asciidoctor.api.Options
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor
 import org.asciidoctor.util.ClasspathResources
 import org.jsoup.Jsoup
@@ -8,7 +9,7 @@ import org.jsoup.nodes.Element
 import org.junit.Rule
 import spock.lang.Specification
 
-import static org.asciidoctor.OptionsBuilder.options
+import static org.asciidoctor.api.OptionsBuilder.options
 
 class WhenSlimTemplatesAreUsed extends Specification {
 

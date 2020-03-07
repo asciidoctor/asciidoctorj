@@ -1,10 +1,9 @@
 package org.asciidoctor.integrationguide.syntaxhighlighter;
 
-import org.apache.commons.io.IOUtils;
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.SafeMode;
+import org.asciidoctor.api.AttributesBuilder;
+import org.asciidoctor.api.OptionsBuilder;
+import org.asciidoctor.api.SafeMode;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -17,15 +16,11 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.io.FileReader;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(Arquillian.class)
 public class PrismJsHighlighterTest {

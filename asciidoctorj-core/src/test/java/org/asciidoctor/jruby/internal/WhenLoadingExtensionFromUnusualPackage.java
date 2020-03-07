@@ -2,7 +2,7 @@ package org.asciidoctor.jruby.internal;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.extension.JavaExtensionRegistry;
+import org.asciidoctor.api.extension.JavaExtensionRegistry;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;

@@ -1,7 +1,7 @@
 package org.asciidoctor.integrationguide;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.api.OptionsBuilder;
 import org.junit.Test;
 
 import java.io.File;

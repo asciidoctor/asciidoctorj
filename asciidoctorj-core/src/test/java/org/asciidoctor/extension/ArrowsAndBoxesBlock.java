@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.api.extension.BlockProcessor;
+import org.asciidoctor.api.extension.Reader;
 
 public class ArrowsAndBoxesBlock extends BlockProcessor {
 

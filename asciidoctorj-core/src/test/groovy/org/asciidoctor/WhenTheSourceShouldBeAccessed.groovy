@@ -1,14 +1,14 @@
 package org.asciidoctor
 
+import org.asciidoctor.api.OptionsBuilder
 import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.Cell
 import org.asciidoctor.ast.DescriptionList
 import org.asciidoctor.ast.DescriptionListEntry
 import org.asciidoctor.ast.Document
-import org.asciidoctor.ast.List
 import org.asciidoctor.ast.ListItem
 import org.asciidoctor.ast.Table
-import org.asciidoctor.extension.Treeprocessor
+import org.asciidoctor.api.extension.Treeprocessor
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
@@ -65,7 +65,7 @@ This paragraph should show {foo}
 '''
         when:
         Document doc = asciidoctor.load(document, OptionsBuilder.options().asMap())
-        List list = doc.blocks[0].blocks[0]
+        org.asciidoctor.ast.List list = doc.blocks[0].blocks[0]
         ListItem listItem = list.items[0]
 
         then:

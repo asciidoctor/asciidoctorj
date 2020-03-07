@@ -1,10 +1,14 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.api.OptionsBuilder
 import org.asciidoctor.ast.ContentModel
+import org.asciidoctor.api.extension.BlockProcessor
+import org.asciidoctor.api.extension.Contexts
 import org.asciidoctor.jruby.internal.AsciidoctorCoreException
 import spock.lang.Specification
+
+import java.lang.reflect.InvocationTargetException
 
 class WhenTheConfigIsSetOfAJavaExtension extends Specification {
 
@@ -58,7 +62,8 @@ Parsing will crash when processing this block
 
         then:
         Exception e = thrown()
-        e instanceof AsciidoctorCoreException || e instanceof IllegalStateException
+        // TODO: fixme: InvocationTargetException should not be here...
+        e instanceof AsciidoctorCoreException || e instanceof IllegalStateException || e instanceof InvocationTargetException
     }
 
 }

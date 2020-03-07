@@ -1,8 +1,9 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
-import org.asciidoctor.SafeMode
+import org.asciidoctor.api.OptionsBuilder
+import org.asciidoctor.api.SafeMode
+import org.asciidoctor.api.extension.LocationType
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup

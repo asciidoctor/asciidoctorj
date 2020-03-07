@@ -1,7 +1,6 @@
 package org.asciidoctor.jruby;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 
 import java.util.List;

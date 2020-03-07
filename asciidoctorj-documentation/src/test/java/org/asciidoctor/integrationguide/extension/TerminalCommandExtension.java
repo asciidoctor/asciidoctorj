@@ -1,7 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.extension.JavaExtensionRegistry;
+import org.asciidoctor.api.extension.JavaExtensionRegistry;
 
 //tag::include-extension-registry[]
 import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;

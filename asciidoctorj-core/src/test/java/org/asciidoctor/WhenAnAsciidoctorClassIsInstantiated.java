@@ -1,7 +1,7 @@
 package org.asciidoctor;
 
-import static org.asciidoctor.AttributesBuilder.attributes;
-import static org.asciidoctor.OptionsBuilder.options;
+import static org.asciidoctor.api.AttributesBuilder.attributes;
+import static org.asciidoctor.api.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.collection.IsArrayWithSize.arrayWithSize;
@@ -29,6 +29,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
 
+import org.asciidoctor.api.Attributes;
+import org.asciidoctor.api.Options;
+import org.asciidoctor.api.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.jruby.AsciiDocDirectoryWalker;
 import org.asciidoctor.jruby.internal.AsciidoctorCoreException;

@@ -5,8 +5,8 @@ import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.converter.ConverterFor;
-import org.asciidoctor.converter.StringConverter;
+import org.asciidoctor.api.converter.ConverterFor;
+import org.asciidoctor.api.converter.StringConverter;
 
 import java.util.Map;
 

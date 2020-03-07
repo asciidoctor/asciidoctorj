@@ -1,13 +1,13 @@
 package org.asciidoctor.jruby.extension.internal;
 
-import java.util.List;
-
-import org.asciidoctor.extension.Reader;
+import org.asciidoctor.api.extension.Reader;
 import org.asciidoctor.jruby.internal.RubyObjectWrapper;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
 import org.jruby.runtime.builtin.IRubyObject;
+
+import java.util.List;
 
 public class ReaderImpl extends RubyObjectWrapper implements Reader {
 

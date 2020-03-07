@@ -2,8 +2,8 @@ package org.asciidoctor.integrationguide.extension;
 
 //tag::include[]
 import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.extension.BlockMacroProcessor;
-import org.asciidoctor.extension.Name;
+import org.asciidoctor.api.extension.BlockMacroProcessor;
+import org.asciidoctor.api.extension.Name;
 
 import java.util.Map;
 

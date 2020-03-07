@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.api.extension.IncludeProcessor;
+import org.asciidoctor.api.extension.PreprocessorReader;
 
 public class PositionalAttrsIncludeProcessor extends IncludeProcessor {
 

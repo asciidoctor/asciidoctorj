@@ -1,35 +1,12 @@
 package org.asciidoctor;
 
-import static org.asciidoctor.AttributesBuilder.attributes;
-import static org.asciidoctor.OptionsBuilder.options;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.xmlmatchers.xpath.HasXPath.hasXPath;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMSource;
-
+import com.google.common.io.CharStreams;
+import org.asciidoctor.api.Attributes;
+import org.asciidoctor.api.CompatMode;
+import org.asciidoctor.api.Options;
+import org.asciidoctor.api.OptionsBuilder;
+import org.asciidoctor.api.Placement;
+import org.asciidoctor.api.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
@@ -43,7 +20,34 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.xml.sax.SAXException;
 
-import com.google.common.io.CharStreams;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Map;
+
+import static org.asciidoctor.api.AttributesBuilder.attributes;
+import static org.asciidoctor.api.OptionsBuilder.options;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.xmlmatchers.xpath.HasXPath.hasXPath;
 
 @RunWith(Arquillian.class)
 public class WhenAttributesAreUsedInAsciidoctor {

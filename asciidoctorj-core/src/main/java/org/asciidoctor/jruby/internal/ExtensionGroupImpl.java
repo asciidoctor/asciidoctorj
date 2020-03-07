@@ -1,14 +1,14 @@
 package org.asciidoctor.jruby.internal;
 
-import org.asciidoctor.extension.BlockMacroProcessor;
-import org.asciidoctor.extension.BlockProcessor;
-import org.asciidoctor.extension.DocinfoProcessor;
-import org.asciidoctor.extension.ExtensionGroup;
-import org.asciidoctor.extension.IncludeProcessor;
-import org.asciidoctor.extension.InlineMacroProcessor;
-import org.asciidoctor.extension.Postprocessor;
-import org.asciidoctor.extension.Preprocessor;
-import org.asciidoctor.extension.Treeprocessor;
+import org.asciidoctor.api.extension.BlockMacroProcessor;
+import org.asciidoctor.api.extension.BlockProcessor;
+import org.asciidoctor.api.extension.DocinfoProcessor;
+import org.asciidoctor.api.extension.ExtensionGroup;
+import org.asciidoctor.api.extension.IncludeProcessor;
+import org.asciidoctor.api.extension.InlineMacroProcessor;
+import org.asciidoctor.api.extension.Postprocessor;
+import org.asciidoctor.api.extension.Preprocessor;
+import org.asciidoctor.api.extension.Treeprocessor;
 import org.asciidoctor.jruby.extension.processorproxies.AbstractProcessorProxy;
 import org.asciidoctor.jruby.extension.processorproxies.BlockMacroProcessorProxy;
 import org.asciidoctor.jruby.extension.processorproxies.BlockProcessorProxy;

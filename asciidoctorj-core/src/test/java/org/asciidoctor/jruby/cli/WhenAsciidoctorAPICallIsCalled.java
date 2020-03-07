@@ -9,9 +9,9 @@ import static org.hamcrest.collection.IsMapContaining.hasKey;
 import java.io.File;
 import java.util.List;
 
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.SafeMode;
+import org.asciidoctor.api.AttributesBuilder;
+import org.asciidoctor.api.OptionsBuilder;
+import org.asciidoctor.api.SafeMode;
 import org.asciidoctor.jruby.internal.AsciidoctorUtils;
 import org.junit.Test;
 

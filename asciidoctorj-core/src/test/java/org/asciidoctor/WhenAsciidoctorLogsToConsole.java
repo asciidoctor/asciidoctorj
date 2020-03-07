@@ -1,10 +1,12 @@
 package org.asciidoctor;
 
+import org.asciidoctor.api.AttributesBuilder;
+import org.asciidoctor.api.SafeMode;
+import org.asciidoctor.api.extension.BlockProcessor;
+import org.asciidoctor.api.extension.Name;
+import org.asciidoctor.api.extension.Reader;
 import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.extension.BlockProcessor;
-import org.asciidoctor.extension.Name;
-import org.asciidoctor.extension.Reader;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
@@ -28,8 +30,13 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static org.asciidoctor.OptionsBuilder.options;
-import static org.hamcrest.Matchers.*;
+import static org.asciidoctor.api.OptionsBuilder.options;
+import static org.hamcrest.Matchers.both;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;

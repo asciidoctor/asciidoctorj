@@ -1,5 +1,8 @@
 package org.asciidoctor;
 
+import org.asciidoctor.api.AttributesBuilder;
+import org.asciidoctor.api.OptionsBuilder;
+import org.asciidoctor.api.SafeMode;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jsoup.Jsoup;
@@ -17,7 +20,7 @@ public class WhenSourceHighlightingIsUsed {
     private static final String DOCUMENT = "[source,java]\n" +
         "----\n" +
         "public class Main {\n" +
-        "  public static void main(String[] args) {\n" +
+        "  public static void main(String[] args) {\n" +
         "    println(\"Hello World\")\n" +
         "  }\n" +
         "}\n" +

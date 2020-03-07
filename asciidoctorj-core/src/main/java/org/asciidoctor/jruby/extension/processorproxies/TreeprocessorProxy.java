@@ -1,7 +1,6 @@
 package org.asciidoctor.jruby.extension.processorproxies;
 
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.extension.Treeprocessor;
+import org.asciidoctor.api.extension.Treeprocessor;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.jruby.internal.RubyHashMapDecorator;
@@ -93,7 +92,7 @@ public class TreeprocessorProxy extends AbstractProcessorProxy<Treeprocessor> {
     @JRubyMethod(name = "process", required = 1)
     public IRubyObject process(ThreadContext context, IRubyObject document) {
         Object o = getProcessor().process(
-                (Document) NodeConverter.createASTNode(document));
+                (org.asciidoctor.ast.Document) NodeConverter.createASTNode(document));
         return convertProcessorResult(o);
     }
 }

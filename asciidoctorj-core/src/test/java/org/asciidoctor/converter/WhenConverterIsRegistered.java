@@ -2,8 +2,8 @@ package org.asciidoctor.converter;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.MemoryLogHandler;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.SafeMode;
+import org.asciidoctor.api.OptionsBuilder;
+import org.asciidoctor.api.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;

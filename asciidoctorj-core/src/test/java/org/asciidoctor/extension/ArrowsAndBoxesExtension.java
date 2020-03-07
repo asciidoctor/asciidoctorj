@@ -1,6 +1,7 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.api.extension.JavaExtensionRegistry;
 import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
 
 public class ArrowsAndBoxesExtension implements ExtensionRegistry {

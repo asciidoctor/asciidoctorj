@@ -2,6 +2,8 @@ package org.asciidoctor.extension
 
 import org.asciidoctor.ast.Section
 import org.asciidoctor.ast.StructuralNode
+import org.asciidoctor.api.extension.BlockMacroProcessor
+import org.asciidoctor.api.extension.Name
 
 @Name('section')
 class SectionCreatorBlockMacro extends BlockMacroProcessor {

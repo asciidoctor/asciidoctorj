@@ -1,5 +1,8 @@
 package org.asciidoctor;
 
+import org.asciidoctor.api.AttributesBuilder;
+import org.asciidoctor.api.OptionsBuilder;
+import org.asciidoctor.api.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;

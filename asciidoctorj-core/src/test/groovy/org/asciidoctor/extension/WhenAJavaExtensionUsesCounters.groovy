@@ -2,12 +2,16 @@ package org.asciidoctor.extension
 
 import groovy.transform.CompileStatic
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
-import org.asciidoctor.SafeMode
+import org.asciidoctor.api.OptionsBuilder
+import org.asciidoctor.api.SafeMode
 import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.ContentModel
 import org.asciidoctor.ast.Section
 import org.asciidoctor.ast.StructuralNode
+import org.asciidoctor.api.extension.BlockMacroProcessor
+import org.asciidoctor.api.extension.Contexts
+import org.asciidoctor.api.extension.Name
+import org.asciidoctor.api.extension.Treeprocessor
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup

@@ -2,6 +2,9 @@ package org.asciidoctor.extension;
 
 import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.api.extension.BlockProcessor;
+import org.asciidoctor.api.extension.Contexts;
+import org.asciidoctor.api.extension.Reader;
 
 import java.util.Arrays;
 import java.util.HashMap;

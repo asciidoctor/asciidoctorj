@@ -3,6 +3,7 @@ package org.asciidoctor.extension;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.api.extension.Treeprocessor;
 
 import java.util.Arrays;
 import java.util.HashMap;

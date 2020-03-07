@@ -1,11 +1,12 @@
 package org.asciidoctor.integrationguide.syntaxhighlighter;
 
+import org.asciidoctor.api.extension.LocationType;
 import org.asciidoctor.ast.Document;
-//tag::include[]
-import org.asciidoctor.extension.LocationType;
 import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterAdapter;
 
 import java.util.Map;
+
+//tag::include[]
 
 public class HighlightJsHighlighter implements SyntaxHighlighterAdapter { // <1>
 

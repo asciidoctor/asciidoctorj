@@ -1,14 +1,13 @@
 package org.asciidoctor.integrationguide.syntaxhighlighter;
 
 import org.apache.commons.io.IOUtils;
+import org.asciidoctor.api.extension.LocationType;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.extension.LocationType;
 import org.asciidoctor.syntaxhighlighter.Formatter;
 import org.asciidoctor.syntaxhighlighter.StylesheetWriter;
 import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterAdapter;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,7 +15,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Map;
 
 //tag::include[]

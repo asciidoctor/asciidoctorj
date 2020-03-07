@@ -417,7 +417,7 @@ For example:
 
 [source, java]
 ----
-import static org.asciidoctor.OptionsBuilder.options;
+import static org.asciidoctor.api.OptionsBuilder.options;
 
 Map<String, Object> options = options().safe(SafeMode.SAFE)
                                        .asMap();
@@ -498,7 +498,7 @@ The code below results in the same output as the previous example but uses the b
 .Setting attributes and options with the builder classes
 ----
 import static org.asciidoctor.AttributesBuilder.attributes;
-import static org.asciidoctor.OptionsBuilder.options;
+import static org.asciidoctor.api.OptionsBuilder.options;
 
 //...
 Map<String, Object> attributes = attributes().backend("docbook") // <1>
@@ -518,7 +518,7 @@ String outfile = asciidoctor.convertFile(new File("sample.adoc"), options);
 .Setting attributes and options with the builder classes
 ----
 import static org.asciidoctor.AttributesBuilder.attributes;
-import static org.asciidoctor.OptionsBuilder.options;
+import static org.asciidoctor.api.OptionsBuilder.options;
 
 //...
 Attributes attributes = attributes().backend("docbook").get(); // <1>

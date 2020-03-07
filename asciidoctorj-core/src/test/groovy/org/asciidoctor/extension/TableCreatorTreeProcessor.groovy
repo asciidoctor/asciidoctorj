@@ -6,6 +6,7 @@ import org.asciidoctor.ast.Column
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.Row
 import org.asciidoctor.ast.Table
+import org.asciidoctor.api.extension.Treeprocessor
 
 @CompileStatic
 class TableCreatorTreeProcessor extends Treeprocessor {

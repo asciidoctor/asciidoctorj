@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-import org.asciidoctor.Attributes;
-import org.asciidoctor.Options;
+import org.asciidoctor.api.Attributes;
+import org.asciidoctor.api.Options;
 import org.jruby.Ruby;
 import org.jruby.RubyRuntimeAdapter;
 import org.jruby.RubyString;

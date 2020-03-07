@@ -1,6 +1,8 @@
 package org.asciidoctor.converter
 
 import groovy.transform.CompileStatic
+import org.asciidoctor.api.converter.ConverterFor
+import org.asciidoctor.api.converter.OutputFormatWriter
 
 
 @CompileStatic

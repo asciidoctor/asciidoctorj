@@ -1,8 +1,12 @@
 package org.asciidoctor.jruby.extension.processorproxies;
 
-import org.asciidoctor.extension.InlineMacroProcessor;
+import org.asciidoctor.api.extension.InlineMacroProcessor;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
-import org.asciidoctor.jruby.internal.*;
+import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
+import org.asciidoctor.jruby.internal.RubyAttributesMapDecorator;
+import org.asciidoctor.jruby.internal.RubyHashMapDecorator;
+import org.asciidoctor.jruby.internal.RubyHashUtil;
+import org.asciidoctor.jruby.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyHash;

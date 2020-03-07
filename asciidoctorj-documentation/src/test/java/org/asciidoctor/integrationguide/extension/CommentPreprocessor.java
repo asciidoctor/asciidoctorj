@@ -2,8 +2,8 @@ package org.asciidoctor.integrationguide.extension;
 
 //tag::include[]
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.extension.Preprocessor;
-import org.asciidoctor.extension.PreprocessorReader;
+import org.asciidoctor.api.extension.Preprocessor;
+import org.asciidoctor.api.extension.PreprocessorReader;
 
 import java.util.ArrayList;
 import java.util.List;

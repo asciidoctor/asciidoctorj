@@ -8,7 +8,7 @@ import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.Section;
-import org.asciidoctor.extension.Treeprocessor;
+import org.asciidoctor.api.extension.Treeprocessor;
 
 public class ASTExtractorTreeprocessor extends Treeprocessor {
 

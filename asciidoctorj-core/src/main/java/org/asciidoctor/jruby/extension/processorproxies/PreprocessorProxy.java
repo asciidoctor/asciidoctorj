@@ -1,7 +1,6 @@
 package org.asciidoctor.jruby.extension.processorproxies;
 
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.extension.Preprocessor;
+import org.asciidoctor.api.extension.Preprocessor;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.jruby.extension.internal.PreprocessorReaderImpl;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
@@ -92,7 +91,7 @@ public class PreprocessorProxy extends AbstractProcessorProxy<Preprocessor> {
     @JRubyMethod(name = "process", required = 2)
     public IRubyObject process(ThreadContext context, IRubyObject document, IRubyObject preprocessorReader) {
         getProcessor().process(
-                (Document) NodeConverter.createASTNode(document),
+                (org.asciidoctor.ast.Document) NodeConverter.createASTNode(document),
                 new PreprocessorReaderImpl(preprocessorReader));
 
         return getRuntime().getNil();

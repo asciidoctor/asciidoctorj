@@ -1,9 +1,10 @@
 package org.asciidoctor;
 
-import static org.asciidoctor.OptionsBuilder.options;
+import static org.asciidoctor.api.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import org.asciidoctor.api.Options;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;

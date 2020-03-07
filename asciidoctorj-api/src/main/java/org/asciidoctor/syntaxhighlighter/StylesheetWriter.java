@@ -1,7 +1,6 @@
 package org.asciidoctor.syntaxhighlighter;
 
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.extension.LocationType;
 
 import java.io.File;
 import java.util.Map;
@@ -26,7 +25,7 @@ public interface StylesheetWriter {
 
     /**
      * Allows to write additional stylesheets to disk while rendering a document.
-     * References to this stylesheet should be added by {@link SyntaxHighlighterAdapter#getDocinfo(LocationType, Document, Map)}.
+     * References to this stylesheet should be added by {@link SyntaxHighlighterAdapter#getDocinfo(org.asciidoctor.api.extension.LocationType, Document, Map)}.
      * @param doc The current document to be rendered.
      * @param toDir The file representing the absolute path to the directory where the stylesheet should be written.
      */

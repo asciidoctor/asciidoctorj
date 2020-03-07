@@ -1,7 +1,7 @@
 package org.asciidoctor.converter
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.api.OptionsBuilder
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
 import org.junit.runner.RunWith

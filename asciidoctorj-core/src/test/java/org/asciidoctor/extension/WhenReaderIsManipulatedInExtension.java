@@ -1,6 +1,7 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.api.extension.JavaExtensionRegistry;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;

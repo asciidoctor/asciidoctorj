@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import org.asciidoctor.api.OptionsBuilder;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.junit.Test;
 

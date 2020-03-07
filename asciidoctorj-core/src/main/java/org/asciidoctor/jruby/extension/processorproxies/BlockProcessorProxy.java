@@ -1,10 +1,14 @@
 package org.asciidoctor.jruby.extension.processorproxies;
 
+import org.asciidoctor.api.extension.BlockProcessor;
 import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.jruby.extension.internal.ReaderImpl;
-import org.asciidoctor.jruby.internal.*;
+import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
+import org.asciidoctor.jruby.internal.RubyAttributesMapDecorator;
+import org.asciidoctor.jruby.internal.RubyHashMapDecorator;
+import org.asciidoctor.jruby.internal.RubyHashUtil;
+import org.asciidoctor.jruby.internal.RubyUtils;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyHash;

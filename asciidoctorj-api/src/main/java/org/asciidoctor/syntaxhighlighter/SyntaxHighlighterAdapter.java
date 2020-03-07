@@ -1,7 +1,7 @@
 package org.asciidoctor.syntaxhighlighter;
 
+import org.asciidoctor.api.extension.LocationType;
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.extension.LocationType;
 
 import java.util.Map;
 

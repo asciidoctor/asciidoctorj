@@ -7,8 +7,8 @@ import java.io.File;
 import java.util.Map;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.api.AttributesBuilder;
+import org.asciidoctor.api.OptionsBuilder;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;

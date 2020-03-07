@@ -14,7 +14,7 @@ import java.util.Scanner;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.jruby.DirectoryWalker;
 import org.asciidoctor.jruby.GlobDirectoryWalker;
-import org.asciidoctor.Options;
+import org.asciidoctor.api.Options;
 import org.asciidoctor.jruby.internal.IOUtils;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;

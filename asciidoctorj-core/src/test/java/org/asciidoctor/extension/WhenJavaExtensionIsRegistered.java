@@ -1,8 +1,17 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.Options;
-import org.asciidoctor.SafeMode;
+import org.asciidoctor.api.Options;
+import org.asciidoctor.api.SafeMode;
+import org.asciidoctor.api.extension.BlockProcessor;
+import org.asciidoctor.api.extension.Contexts;
+import org.asciidoctor.api.extension.ExtensionGroup;
+import org.asciidoctor.api.extension.IncludeProcessor;
+import org.asciidoctor.api.extension.InlineMacroProcessor;
+import org.asciidoctor.api.extension.JavaExtensionRegistry;
+import org.asciidoctor.api.extension.PreprocessorReader;
+import org.asciidoctor.api.extension.Reader;
+import org.asciidoctor.api.extension.Treeprocessor;
 import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
@@ -41,7 +50,7 @@ import java.util.UUID;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 
-import static org.asciidoctor.OptionsBuilder.options;
+import static org.asciidoctor.api.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -238,7 +247,7 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element footer = doc.getElementById("footer");
-        // Since Asciidoctor 1.5.3 the docinfo in the footer is a sibling to the footer element
+        // Since Asciidoctor 1.5.3 the docinfo in the footer is a sibling to the footer element
         assertTrue("robots".equals(footer.nextElementSibling().attr("name")));
     }
 
@@ -939,7 +948,7 @@ public class WhenJavaExtensionIsRegistered {
     public void should_create_toc_with_treeprocessor() {
         asciidoctor.javaExtensionRegistry().treeprocessor(new Treeprocessor() {
             @Override
-            public org.asciidoctor.ast.Document process(org.asciidoctor.ast.Document document) {
+            public Document process(Document document) {
                 List<StructuralNode> blocks = document.getBlocks();
                 for (StructuralNode block : blocks) {
                     for (StructuralNode block2 : block.getBlocks()) {

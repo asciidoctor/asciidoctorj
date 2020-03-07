@@ -6,6 +6,8 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.Section;
+import org.asciidoctor.api.converter.ConverterFor;
+import org.asciidoctor.api.converter.StringConverter;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
 

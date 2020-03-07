@@ -5,6 +5,7 @@ import org.asciidoctor.ast.Cell
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.Section
 import org.asciidoctor.ast.Table
+import org.asciidoctor.api.converter.StringConverter
 
 class TableTestConverter extends StringConverter {
 

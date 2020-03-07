@@ -3,8 +3,8 @@ package org.asciidoctor.integrationguide.extension;
 //tag::include[]
 
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.extension.IncludeProcessor;
-import org.asciidoctor.extension.PreprocessorReader;
+import org.asciidoctor.api.extension.IncludeProcessor;
+import org.asciidoctor.api.extension.PreprocessorReader;
 
 import java.io.File;
 import java.util.Map;

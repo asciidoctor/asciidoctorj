@@ -1,7 +1,9 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.SafeMode;
+import org.asciidoctor.api.SafeMode;
+import org.asciidoctor.api.SafeMode;
+import org.asciidoctor.api.extension.ExtensionGroup;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
@@ -18,7 +20,7 @@ import org.junit.runner.RunWith;
 import java.util.Iterator;
 
 import static java.util.Collections.singletonList;
-import static org.asciidoctor.OptionsBuilder.options;
+import static org.asciidoctor.api.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

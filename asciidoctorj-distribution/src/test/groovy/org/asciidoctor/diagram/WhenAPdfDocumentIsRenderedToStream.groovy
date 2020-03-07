@@ -1,9 +1,9 @@
 package org.asciidoctor.diagram
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.AttributesBuilder
-import org.asciidoctor.OptionsBuilder
-import org.asciidoctor.SafeMode
+import org.asciidoctor.api.AttributesBuilder
+import org.asciidoctor.api.OptionsBuilder
+import org.asciidoctor.api.SafeMode
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
 import org.junit.rules.TemporaryFolder

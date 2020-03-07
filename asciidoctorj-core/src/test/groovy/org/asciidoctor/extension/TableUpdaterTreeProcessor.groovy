@@ -5,6 +5,7 @@ import org.asciidoctor.ast.Cell
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.StructuralNode
 import org.asciidoctor.ast.Table
+import org.asciidoctor.api.extension.Treeprocessor
 
 @CompileStatic
 class TableUpdaterTreeProcessor extends Treeprocessor {

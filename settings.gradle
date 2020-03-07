@@ -1,4 +1,4 @@
-rootProject.name = 'asciidoctorj'
+rootProject.name = 'asciidoctorj-parent'
 
 include \
   'asciidoctorj',

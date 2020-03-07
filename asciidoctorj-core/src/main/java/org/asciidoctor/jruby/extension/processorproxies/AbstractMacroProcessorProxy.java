@@ -1,6 +1,6 @@
 package org.asciidoctor.jruby.extension.processorproxies;
 
-import org.asciidoctor.extension.MacroProcessor;
+import org.asciidoctor.api.extension.MacroProcessor;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.jruby.internal.RubyUtils;
 import org.jruby.RubyClass;

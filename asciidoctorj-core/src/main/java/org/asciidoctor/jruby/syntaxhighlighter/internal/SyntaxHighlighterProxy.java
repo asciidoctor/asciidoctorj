@@ -1,19 +1,19 @@
 package org.asciidoctor.jruby.syntaxhighlighter.internal;
 
+import org.asciidoctor.api.extension.LocationType;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.extension.LocationType;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.jruby.internal.Extensions;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.jruby.internal.RubyHashMapDecorator;
 import org.asciidoctor.jruby.internal.RubyHashUtil;
 import org.asciidoctor.log.Logging;
+import org.asciidoctor.syntaxhighlighter.Formatter;
 import org.asciidoctor.syntaxhighlighter.HighlightResult;
 import org.asciidoctor.syntaxhighlighter.Highlighter;
-import org.asciidoctor.syntaxhighlighter.Formatter;
-import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterAdapter;
 import org.asciidoctor.syntaxhighlighter.StylesheetWriter;
+import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterAdapter;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyHash;

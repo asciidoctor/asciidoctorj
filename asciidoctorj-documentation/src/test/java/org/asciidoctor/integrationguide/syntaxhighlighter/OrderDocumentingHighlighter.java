@@ -1,8 +1,8 @@
 package org.asciidoctor.integrationguide.syntaxhighlighter;
 
+import org.asciidoctor.api.extension.LocationType;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.extension.LocationType;
 import org.asciidoctor.syntaxhighlighter.Formatter;
 import org.asciidoctor.syntaxhighlighter.HighlightResult;
 import org.asciidoctor.syntaxhighlighter.Highlighter;

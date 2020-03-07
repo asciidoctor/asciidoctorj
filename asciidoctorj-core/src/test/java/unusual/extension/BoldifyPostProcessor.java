@@ -1,7 +1,7 @@
 package unusual.extension;
 
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.extension.Postprocessor;
+import org.asciidoctor.api.extension.Postprocessor;
 import org.asciidoctor.jruby.internal.WhenLoadingExtensionFromUnusualPackage;
 
 /**
