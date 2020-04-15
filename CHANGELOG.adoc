@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == Unreleased
 
+Improvement::
+
+  * Add asciidoctor-revealjs to distribution (#910)
+
 Build::
 
   * Upgrade jruby-gradle-plugin to 2.0.0-alpha.7 and load Gems directly from rubygems.org instead of using torquebox Maven proxy.
