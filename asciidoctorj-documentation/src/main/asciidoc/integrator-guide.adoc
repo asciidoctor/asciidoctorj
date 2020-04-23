@@ -1177,7 +1177,7 @@ include::src/test/java/org/asciidoctor/integrationguide/converter/TextConverterR
 
 The jar file must also contain the services file containing the fully qualified class name of the `ConverterRegistry` implementation to make this service implementation available:
 
-.META-INF/services/META-INF/services/org.asciidoctor.jruby.converter.spi.ConverterRegistry
+.META-INF/services/org.asciidoctor.jruby.converter.spi.ConverterRegistry
 ----
 include::src/test/resources/converterregistry/META-INF/services/org.asciidoctor.jruby.converter.spi.ConverterRegistry[]
 ----

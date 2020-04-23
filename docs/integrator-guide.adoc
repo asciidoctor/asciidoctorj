@@ -1770,7 +1770,7 @@ public class TextConverterRegistry implements ConverterRegistry {
 
 The jar file must also contain the services file containing the fully qualified class name of the `ConverterRegistry` implementation to make this service implementation available:
 
-.META-INF/services/META-INF/services/org.asciidoctor.jruby.converter.spi.ConverterRegistry
+.META-INF/services/org.asciidoctor.jruby.converter.spi.ConverterRegistry
 ----
 org.asciidoctor.integrationguide.converter.TextConverterRegistry
 ----
