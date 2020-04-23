@@ -1089,7 +1089,6 @@ That means that our block processor will convert blocks like this:
 ----
 [yell]
 I really mean it
-
 ----
 
 After the processing this block will look like this
@@ -1171,7 +1170,6 @@ The processor could look like this:
 .LsIncludeProcessor.java
 [source,java,indent=0]
 ----
-
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.PreprocessorReader;
@@ -1252,7 +1250,6 @@ Normal content.
 ////
 RP: This is a comment and should only appear in draft documents
 ////
-
 ----
 
 The preprocessor will render the document as if it looked like this:
@@ -1266,7 +1263,6 @@ Normal content.
 --
 RP: This is a comment and should only appear in draft documents
 --
-
 ----
 
 The implementation of the preprocessor simply gets the AST node for the document to be created as well as a `PreprocessorReader`.
@@ -1739,7 +1735,6 @@ Finally the converter can be registered and used for conversion of AsciiDoc docu
                     OptionsBuilder.options()
                             .backend("text")                                   // <1>
                             .toFile(false));
-
 ----
 <1> Registers the converter class `TextConverter` for this Asciidoctor instance.
     The given converter is responsible for converting to the target format `text` because the `@ConverterFor` annotation of the converter class defines this name.
@@ -1765,7 +1760,6 @@ public class TextConverterRegistry implements ConverterRegistry {
 
     }
 }
-
 ----
 
 The jar file must also contain the services file containing the fully qualified class name of the `ConverterRegistry` implementation to make this service implementation available:
@@ -2079,7 +2073,6 @@ For scenarios where it should also be possible to read the document while offlin
 
 [source,java]
 ----
-
 public class HighlightJsWithOfflineStylesHighlighter implements SyntaxHighlighterAdapter, Formatter, StylesheetWriter { // <1>
 
     @Override
@@ -2382,7 +2375,6 @@ Next, you need to create a file called `org.asciidoctor.jruby.syntaxhighlighter.
 .META-INF/services/org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry
 ----
 org.asciidoctor.integrationguide.syntaxhighlighter.HighlightJsExtension
-
 ----
 
 And that's all.
