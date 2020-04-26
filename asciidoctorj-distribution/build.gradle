@@ -22,9 +22,13 @@ dependencies {
   compile("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
     transitive = false
   }
+  compile("org.asciidoctor:asciidoctorj-revealjs:$asciidoctorjRevealJsVersion") {
+    transitive = false
+  }
   compile "org.jruby:jruby-complete:$jrubyVersion"
   testCompile project(':asciidoctorj-arquillian-extension')
   testCompile "org.apache.pdfbox:pdfbox:$pdfboxVersion"
+  testCompile "org.jsoup:jsoup:$jsoupVersion"
 }
 
 jar.enabled = false

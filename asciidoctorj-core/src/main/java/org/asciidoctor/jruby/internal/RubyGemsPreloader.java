@@ -13,6 +13,7 @@ public class RubyGemsPreloader {
     private static final String ERUBIS = "erubis";
     private static final String EPUB3 = "epub3";
     private static final String PDF = "pdf";
+    private static final String REVEALJS = "asciidoctor-revealjs";
 
     private static final Map<String, String> optionToRequiredGem = new HashMap<String, String>() {
         {
@@ -23,6 +24,7 @@ public class RubyGemsPreloader {
             put(Attributes.CACHE_URI, "require 'open-uri/cached'");
             put(EPUB3, "require 'asciidoctor-epub3'");
             put(PDF, "require 'asciidoctor-pdf'");
+            put(REVEALJS, "require 'asciidoctor-revealjs'");
         }
     };
 
@@ -65,6 +67,10 @@ public class RubyGemsPreloader {
 
         if(isOptionSet(options, Options.BACKEND) && "pdf".equalsIgnoreCase((String) options.get(Options.BACKEND))) {
             preloadLibrary(PDF);
+        }
+
+        if(isOptionSet(options, Options.BACKEND) && "revealjs".equalsIgnoreCase((String) options.get(Options.BACKEND))) {
+            preloadLibrary(REVEALJS);
         }
     }
 
