@@ -156,6 +156,45 @@ public @interface Contexts {
      */
     String PARAGRAPH = ":paragraph";
 
+    /**
+     * Predefined constant for making a Processor work on ordered lists.
+     *
+     * <pre>
+     * 1. First item
+     * 2. Second item
+     * </pre>
+     */
+    String OLIST = ":olist";
+
+    /**
+     * Predefined constant for making a Processor work on unordered lists.
+     *
+     * <pre>
+     * . First item
+     * . Second item
+     * </pre>
+     */
+    String ULIST = ":ulist";
+
+    /**
+     * Predefined constant for making a Processor work on unordered lists.
+     *
+     * <pre>
+     * . First item
+     * . Second item
+     * </pre>
+     */
+    String COLIST = ":colist";
+
+    /**
+     * Predefined constant for making a Processor work on unordered lists.
+     *
+     * <pre>
+     * First:: The first item
+     * Second:: The second item
+     * </pre>
+     */
+    String DLIST = ":dlist";
 
     String[] value();
 

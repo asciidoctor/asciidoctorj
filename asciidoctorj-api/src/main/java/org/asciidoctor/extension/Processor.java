@@ -81,6 +81,18 @@ public interface Processor {
      */
     Document createDocument(Document parentDocument);
 
+    /**
+     * Creates a new List
+     * @param parent The block to which the parsed content should be added as children.
+     * @param context Either {@code "olist"}, {@code ulist}, {@code colist} or {@code dlist}
+     * @return
+     */
+    org.asciidoctor.ast.List createList(StructuralNode parent, String context);
+
+    org.asciidoctor.ast.List createList(StructuralNode parent, String context, Map<String, Object> attributes, Map<Object, Object> options);
+
+    org.asciidoctor.ast.List createList(StructuralNode parent, String context, Map<Object, Object> options);
+
     ListItem createListItem(final org.asciidoctor.ast.List parent, final String text);
 
     ListItem createListItem(final org.asciidoctor.ast.DescriptionList parent, final String text);

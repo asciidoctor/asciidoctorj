@@ -53,5 +53,9 @@ ruleset {
         exclude 'UnnecessaryGetter'
         exclude 'UnnecessaryCollectCall'
     }
-    ruleset('rulesets/dry.xml')
+    ruleset('rulesets/dry.xml') {
+        'DuplicateNumberLiteral' {
+            ignoreNumbers = '0,1,2'
+        }
+    }
 }

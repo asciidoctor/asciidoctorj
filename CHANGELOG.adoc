@@ -17,6 +17,10 @@ Improvement::
 
   * Add asciidoctor-revealjs to distribution (#910)
 
+Bug Fixes::
+
+  * Add missing factory methods to create Lists (@glisicivan) (#916)
+
 Build::
 
   * Upgrade jruby-gradle-plugin to 2.0.0-alpha.7 and load Gems directly from rubygems.org instead of using torquebox Maven proxy.
