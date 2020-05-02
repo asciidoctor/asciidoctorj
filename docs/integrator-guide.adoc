@@ -1250,6 +1250,7 @@ Normal content.
 ////
 RP: This is a comment and should only appear in draft documents
 ////
+
 ----
 
 The preprocessor will render the document as if it looked like this:
