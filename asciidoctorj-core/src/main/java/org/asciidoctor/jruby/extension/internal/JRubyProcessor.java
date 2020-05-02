@@ -8,21 +8,21 @@ import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
-import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.ast.PhraseNode;
 import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
+import org.asciidoctor.extension.Processor;
+import org.asciidoctor.extension.Reader;
 import org.asciidoctor.jruby.ast.impl.ColumnImpl;
 import org.asciidoctor.jruby.ast.impl.ContentNodeImpl;
 import org.asciidoctor.jruby.ast.impl.DescriptionListImpl;
 import org.asciidoctor.jruby.ast.impl.DocumentImpl;
 import org.asciidoctor.jruby.ast.impl.ListImpl;
+import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.jruby.ast.impl.RowImpl;
 import org.asciidoctor.jruby.ast.impl.StructuralNodeImpl;
-import org.asciidoctor.extension.Processor;
-import org.asciidoctor.extension.Reader;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
 import org.asciidoctor.jruby.internal.RubyHashUtil;
@@ -289,6 +289,38 @@ public class JRubyProcessor implements Processor {
                 ((DocumentImpl) parentDocument).getRubyObject());
 
         return (Document) NodeConverter.createASTNode(runtime, NodeConverter.NodeType.DOCUMENT_CLASS, runtime.getNil(), options);
+    }
+
+
+    @Override
+    public org.asciidoctor.ast.List createList(StructuralNode parent, String context) {
+        return createList(parent, context, new HashMap<>(), new HashMap<>());
+
+    }
+
+    @Override
+    public org.asciidoctor.ast.List createList(StructuralNode parent, String context,
+                                               Map<String, Object> attributes,
+                                               Map<Object, Object> options) {
+
+        options.put(Options.ATTRIBUTES, new HashMap<>(attributes));
+        return createList(parent, context, options);
+    }
+
+    @Override
+    public org.asciidoctor.ast.List createList(StructuralNode parent, String context,
+                                               Map<Object, Object> options) {
+
+        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
+
+        RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime,
+            filterBlockOptions(parent, options, "subs", ContentModel.KEY));
+
+        IRubyObject[] parameters = {
+            ((StructuralNodeImpl) parent).getRubyObject(),
+            RubyUtils.toSymbol(rubyRuntime, context),
+            convertMapToRubyHashWithSymbols};
+        return (org.asciidoctor.ast.List) NodeConverter.createASTNode(rubyRuntime, NodeConverter.NodeType.LIST_CLASS, parameters);
     }
 
     @Override
