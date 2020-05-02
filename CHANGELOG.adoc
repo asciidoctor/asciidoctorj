@@ -22,11 +22,8 @@ Improvement::
 
 Bug Fixes::
 
-  * Add missing factory methods to create Lists (@glisicivan) (#916)
-
-Build::
-
-  * Upgrade jruby-gradle-plugin to 2.0.0-alpha.7 and load Gems directly from rubygems.org instead of using torquebox Maven proxy.
+  * Add missing factory methods to create Lists. (@glisicivan) (#916)
+    The API `Processor.createList()` is experimental and may change with any release until declared to be stable.
 
 Documentation::
 
@@ -36,6 +33,10 @@ Documentation::
 Build::
 
   * Upgrade to jruby-gradle-plugin 2.0.0
+
+Known Limitations:
+
+  * The createList() and createListItem() API is not able to create DescriptionLists.
 
 == 2.2.0 (2019-12-17)
 

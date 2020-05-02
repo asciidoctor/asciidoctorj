@@ -82,15 +82,33 @@ public interface Processor {
     Document createDocument(Document parentDocument);
 
     /**
-     * Creates a new List
+     * Creates a new List.
+     * This method is experimental and may change in future minor releases until declared to be stable.
      * @param parent The block to which the parsed content should be added as children.
      * @param context Either {@code "olist"}, {@code ulist}, {@code colist} or {@code dlist}
-     * @return
+     * @return A List node that can be added to the AST of a document.
      */
     org.asciidoctor.ast.List createList(StructuralNode parent, String context);
 
+    /**
+     * Creates a new List.
+     * This method is experimental and may change in future minor releases until declared to be stable.
+     * @param parent The block to which the parsed content should be added as children.
+     * @param context Either {@code "olist"}, {@code ulist}, {@code colist} or {@code dlist}
+     * @param attributes Additional attributes to be set on the new list node, e.g. <code>Collections.singletonMap("start", "2")</code>.
+     * @param options Additional options to be set on the new list node.
+     * @return A List node that can be added to the AST of a document.
+     */
     org.asciidoctor.ast.List createList(StructuralNode parent, String context, Map<String, Object> attributes, Map<Object, Object> options);
 
+    /**
+     * Creates a new List.
+     * This method is experimental and may change in future minor releases until declared to be stable.
+     * @param parent The block to which the parsed content should be added as children.
+     * @param context Either {@code "olist"}, {@code ulist}, {@code colist} or {@code dlist}
+     * @param options Additional options to be set on the new list node.
+     * @return A List node that can be added to the AST of a document.
+     */
     org.asciidoctor.ast.List createList(StructuralNode parent, String context, Map<Object, Object> options);
 
     ListItem createListItem(final org.asciidoctor.ast.List parent, final String text);
