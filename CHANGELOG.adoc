@@ -18,7 +18,8 @@ Improvement::
   * Add asciidoctor-revealjs to distribution (#910)
   * Upgrade to Asciidoctor PDF 1.5.3
   * Upgrade to Asciidoctor EPUB3 1.5.0-alpha.16
-  * Upgrade to Asciidoctor Diagram 2.0.1
+  * Upgrade to Asciidoctor Diagram 2.0.2
+  * Upgrade to JRuby 9.2.11.1
 
 Bug Fixes::
 
