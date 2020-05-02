@@ -33,6 +33,7 @@ Documentation::
 Build::
 
   * Upgrade to jruby-gradle-plugin 2.0.0
+  * Remove CI build on TravisCI (#918)
 
 Known Limitations:
 

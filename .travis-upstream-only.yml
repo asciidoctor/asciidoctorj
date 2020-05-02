@@ -1,3 +1,0 @@
-install: true
-script: bash test-asciidoctor-upstream.sh
-
