@@ -144,7 +144,7 @@ public class RubyHashMapDecorator implements Map<String, Object> {
                 return NodeConverter.createASTNode(rubyObject);
             }
             if (rubyObject instanceof RubySymbol) {
-                return ((RubySymbol) rubyObject).asJavaString();
+                return ":" + rubyObject.asString();
             }
             return JavaEmbedUtils.rubyToJava((IRubyObject) rubyValue);
         } else {
