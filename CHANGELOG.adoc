@@ -13,6 +13,8 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == Unreleased
 
+== 2.3.1 (2020-06-17)
+
 Bug Fixes::
 
   * Inline macro attribute parsing changes after first document conversion (@wilkinsona) (#926)
