@@ -76,4 +76,29 @@ a|
 A HEADER       |Second column'''.readLines()
 
     }
+
+    def "should register a converter instance"() {
+
+        given:
+        String document = '''
+= Hello Asciidoctor Table
+
+[cols="2"]
+|====
+a|
+= A header
+| Second column
+|====
+'''
+        asciidoctor.javaConverterRegistry().register(new TableTestConverter(), 'tabletestconverter')
+
+        when:
+        String content = asciidoctor.convert(document, OptionsBuilder.options().headerFooter(false).backend('tabletestconverter'))
+
+        then:
+        content.readLines().collect {it - ~/\s+$/ } == '''HELLO ASCIIDOCTOR TABLE
+
+A HEADER       |Second column'''.readLines()
+
+    }
 }
