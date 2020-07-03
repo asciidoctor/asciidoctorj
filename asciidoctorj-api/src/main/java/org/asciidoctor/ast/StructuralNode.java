@@ -87,7 +87,10 @@ public interface StructuralNode extends ContentNode {
     Object getContent();
     String convert();
     List<StructuralNode> findBy(Map<Object, Object> selector);
+
     int getLevel();
+
+    void setLevel(int level);
 
     /**
      * Returns the content model.

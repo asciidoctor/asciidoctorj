@@ -5,6 +5,10 @@ import org.asciidoctor.MemoryLogHandler;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.arquillian.api.Unshared;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.Section;
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.extension.Treeprocessor;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
@@ -114,6 +118,35 @@ public class WhenConverterIsRegistered {
     public void shouldReturnRegisteredConverter() {
         asciidoctor.javaConverterRegistry().register(TextConverter.class, "test2");
         assertEquals(TextConverter.class, asciidoctor.javaConverterRegistry().converters().get("test2"));
+    }
+
+    @Test
+    public void shouldReceiveChangedLevels() {
+        asciidoctor.javaConverterRegistry().register(LevelConverter.class, "test3");
+        asciidoctor.javaExtensionRegistry().treeprocessor(new Treeprocessor() {
+            @Override
+            public Document process(Document document) {
+                processNode(document);
+                return document;
+            }
+
+            void processNode(StructuralNode block) {
+                if (block instanceof Section && block.getTitle().equals("Test2")) {
+                    block.setLevel(42);
+                }
+                for (StructuralNode node: block.getBlocks()) {
+                    processNode(node);
+                }
+            }
+        });
+        String result = asciidoctor.convert("= Test\n" +
+                "\n" +
+                "== Test" +
+                "\n" +
+                "== Test2\n", OptionsBuilder.options().backend("test3").headerFooter(false));
+
+        assertEquals("== 1 Test ==\n" +
+                "== 42 Test2 ==", result);
     }
 
     @Test

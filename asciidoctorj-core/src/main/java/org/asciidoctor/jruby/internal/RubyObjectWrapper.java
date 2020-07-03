@@ -86,9 +86,14 @@ public class RubyObjectWrapper {
         if (result instanceof RubyNil) {
             return 0;
         } else {
-            return (int) ((RubyNumeric) result).getLongValue();
+            return (int) ((RubyNumeric) result).getIntValue();
         }
     }
+
+    public void setInt(String propertyName, int value) {
+        setRubyProperty(propertyName, runtime.newFixnum(value));
+    }
+
 
     public <T> List<T> getList(String propertyName, Class<T> elementClass, Object... args) {
         IRubyObject result = getRubyProperty(propertyName, args);

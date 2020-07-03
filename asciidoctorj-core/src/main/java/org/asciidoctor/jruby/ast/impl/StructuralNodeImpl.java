@@ -98,6 +98,11 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
     }
 
     @Override
+    public void setLevel(int level) {
+        setInt("level", level);
+    }
+
+    @Override
     public Cursor getSourceLocation() {
         IRubyObject object = getRubyProperty("source_location");
         if (object == null || object.isNil()) {
