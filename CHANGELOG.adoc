@@ -16,6 +16,7 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 Improvement::
 
  * Add method StructuralNode.setLevel() (@Mogztter) (#931)
+ * Upgrade to JRuby 9.2.12.0 removing the last illegal access warnings (#935)
 
 == 2.3.1 (2020-06-17)
 
