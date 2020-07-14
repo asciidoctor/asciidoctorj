@@ -57,7 +57,6 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of a parsed AsciiDoc document from Java and other JVM languages.
 
 ifdef::badges[]
-image:https://img.shields.io/travis/asciidoctor/asciidoctorj/master.svg[Build Status (Travis CI), link=https://travis-ci.org/asciidoctor/asciidoctorj]
 image:https://ci.appveyor.com/api/projects/status/syxrlv047esal4n0/branch/master?svg=true[Build Status (AppVeyor), link=https://ci.appveyor.com/project/asciidoctor/asciidoctorj]
 image:https://github.com/asciidoctor/asciidoctorj/workflows/Build%20Master/badge.svg?event=push[Build Status (Github Actions)]
 endif::[]
@@ -1341,8 +1340,8 @@ Then, import the project into Eclipse using menu:File[Import,General,Existing Pr
 
 === Continuous integration
 
-Continuous integration for the AsciidoctorJ project is performed by Travis CI.
-You can find recent build results, including the build status of pull requests, on the https://travis-ci.org/asciidoctor/asciidoctorj[asciidoctor/asciidoctorj] page.
+Continuous integration for the AsciidoctorJ project is performed by GitHub Actions.
+You can find recent build results, including the build status of pull requests, on the https://github.com/asciidoctor/asciidoctorj/actions[asciidoctor/asciidoctorj] page.
 
 === Publish the artifacts
 

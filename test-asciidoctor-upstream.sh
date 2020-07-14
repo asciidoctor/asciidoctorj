@@ -3,9 +3,6 @@
 # This script runs the AsciidoctorJ tests against the specified tag (or master) of the Asciidoctor Ruby gem.
 
 GRADLE_CMD=./gradlew
-if [ ! -z $TRAVIS_JOB_NUMBER ] && [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "${TRAVIS_JOB_NUMBER##*.}" != '1' ]; then
-  exit 0
-fi
 # to build against a tag, set TAG to a git tag name (e.g., v1.5.2)
 TAG=master
 if [ "$TAG" == "master" ]; then
