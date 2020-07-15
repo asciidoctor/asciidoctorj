@@ -44,6 +44,7 @@ Documentation::
 
   * Update documentation to show how to create an Asciidoctor instance with GEM_PATH (#890)
   * Adds GitHub icons to admonitions sections in README (#893)
+  * Updates CI note in README to replace TravisCI by GH Actions (@abelsromero) (#938)
 
 Build::
 
