@@ -10,11 +10,15 @@ import org.junit.runner.RunWith
 import spock.lang.Specification
 
 import static junit.framework.Assert.assertEquals
+import static org.hamcrest.Matchers.either
+import static org.hamcrest.Matchers.is
+import static org.junit.Assert.assertThat
 
 @RunWith(ArquillianSputnik)
 class WhenAHighlightjsAdapterIsImplementedInGroovy extends Specification {
 
-    public static final String NAME_SYNTAXHIGHLIGHTER = 'highlight4J'
+    public static final String NAME_SYNTAXHIGHLIGHTER_OLD = 'oldhighlight4J'
+    public static final String NAME_SYNTAXHIGHLIGHTER_NEW = 'newhighlight4J'
     public static final String HIGHLIGHTJS = 'highlightjs'
 
     @ArquillianResource
@@ -40,13 +44,18 @@ func main() {
 
         given:
 
-        asciidoctor.syntaxHighlighterRegistry().register(HighlightJsHighlighter, NAME_SYNTAXHIGHLIGHTER)
+        asciidoctor.syntaxHighlighterRegistry().register(OldHighlightJsHighlighter, NAME_SYNTAXHIGHLIGHTER_OLD)
+        asciidoctor.syntaxHighlighterRegistry().register(NewHighlightJsHighlighter, NAME_SYNTAXHIGHLIGHTER_NEW)
 
         when:
-        String htmlJava = asciidoctor.convert(doc, OptionsBuilder.options()
+        String htmlJavaOld = asciidoctor.convert(doc, OptionsBuilder.options()
                 .safe(SafeMode.UNSAFE)
                 .headerFooter(true)
-                .attributes(AttributesBuilder.attributes().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER)))
+                .attributes(AttributesBuilder.attributes().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER_OLD)))
+        String htmlJavaNew = asciidoctor.convert(doc, OptionsBuilder.options()
+                .safe(SafeMode.UNSAFE)
+                .headerFooter(true)
+                .attributes(AttributesBuilder.attributes().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER_NEW)))
 
         String htmlRuby = asciidoctor.convert(doc, OptionsBuilder.options()
                 .safe(SafeMode.UNSAFE)
@@ -55,24 +64,20 @@ func main() {
 
         then:
         // Cannot use `htmlRuby == htmlJava` because it fails with OOM
-        assertEquals(htmlRuby, htmlJava)
+        // Asciidoctor > 2.0.10 changed the location where the javascript is included,
+        // therefore test against both possibilities to pass with 2.0.10 and upstream
+        assertThat(htmlRuby, either(is(htmlJavaNew)).or(is(htmlJavaOld)))
     }
 
     def 'should autoregister from extension'() {
 
         when:
-        String htmlJava = asciidoctor.convert(doc, OptionsBuilder.options()
+        asciidoctor.convert(doc, OptionsBuilder.options()
                 .safe(SafeMode.UNSAFE)
                 .headerFooter(true)
                 .attributes(AttributesBuilder.attributes().sourceHighlighter(HighlightJsExtension.NAME_HIGHLIGHTER)))
 
-        String htmlRuby = asciidoctor.convert(doc, OptionsBuilder.options()
-                .safe(SafeMode.UNSAFE)
-                .headerFooter(true)
-                .attributes(AttributesBuilder.attributes().sourceHighlighter(HIGHLIGHTJS)))
-
         then:
-        // Cannot use `htmlRuby == htmlJava` because it fails with OOM
-        assertEquals(htmlRuby, htmlJava)
+        assertEquals(2, ObservableHighlightJsHighlighter.called)
     }
 }
