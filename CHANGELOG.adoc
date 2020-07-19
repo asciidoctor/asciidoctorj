@@ -13,11 +13,14 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == Unreleased
 
+== 2.4.0 (2020-07-19)
+
 Improvement::
 
  * Add method StructuralNode.setLevel() (@Mogztter) (#931)
  * Upgrade to JRuby 9.2.12.0 removing the last illegal access warnings (#935)
  * Upgrade to Asciidoctor EPUB3 1.5.0-alpha.16 (#939)
+ * Upgrade to Rouge 3.21.0
 
 Build::
 
