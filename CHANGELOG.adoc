@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == Unreleased
 
+Bug Fixes::
+
+  * Fix NullPointerException when a document contains an empty table with PDF backend (#944)
+
 == 2.4.0 (2020-07-19)
 
 Improvement::
