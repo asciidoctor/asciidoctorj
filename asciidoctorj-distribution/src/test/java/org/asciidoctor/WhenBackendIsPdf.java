@@ -83,4 +83,13 @@ public class WhenBackendIsPdf {
         outputFile1.delete();
     }
 
+    @Test
+    public void pdf_should_not_fail_with_empty_tables() {
+        String filename = "empty-table";
+        File inputFile = this.classpath.getResource(filename + ".adoc");
+        File outputFile1 = new File(inputFile.getParentFile(), filename + ".pdf");
+
+        asciidoctor.convertFile(inputFile, options().backend("pdf").safe(SafeMode.SAFE).get());
+        assertThat(outputFile1.exists(), is(true));
+    }
 }

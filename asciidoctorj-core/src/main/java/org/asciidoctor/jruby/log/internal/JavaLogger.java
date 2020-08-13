@@ -205,7 +205,9 @@ public class JavaLogger extends RubyObject {
     if (getRuntime().getHash().equals(msg.getType())) {
       final RubyHash hash = (RubyHash) msg;
       final Object sourceLocation = hash.get(getRuntime().newSymbol(LOG_PROPERTY_SOURCE_LOCATION));
-      return new CursorImpl((IRubyObject) sourceLocation);
+      if (sourceLocation != null) {
+        return new CursorImpl((IRubyObject) sourceLocation);
+      }
     }
     return null;
   }
