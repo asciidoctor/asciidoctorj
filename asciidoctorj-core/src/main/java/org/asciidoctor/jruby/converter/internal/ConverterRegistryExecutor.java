@@ -14,8 +14,12 @@ public class ConverterRegistryExecutor {
     }
 
     public void registerAllConverters() {
+        registerAllConverters(Thread.currentThread().getContextClassLoader());
+    }
+
+    public void registerAllConverters(ClassLoader classloader) {
         ServiceLoader<ConverterRegistry> converterRegistryServiceLoader = ServiceLoader
-                .load(ConverterRegistry.class);
+                .load(ConverterRegistry.class, classloader);
 
         for (ConverterRegistry converterRegistry : converterRegistryServiceLoader) {
             converterRegistry.register(asciidoctor);

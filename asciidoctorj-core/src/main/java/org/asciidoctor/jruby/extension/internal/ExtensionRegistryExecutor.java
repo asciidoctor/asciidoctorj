@@ -14,9 +14,13 @@ public class ExtensionRegistryExecutor {
     }
 
     public void registerAllExtensions() {
+        registerAllExtensions(Thread.currentThread().getContextClassLoader());
+    }
+
+    public void registerAllExtensions(ClassLoader classloader) {
         ServiceLoader<ExtensionRegistry> extensionRegistryServiceLoader = ServiceLoader
-                .load(ExtensionRegistry.class);
-        
+                .load(ExtensionRegistry.class, classloader);
+
         for (ExtensionRegistry extensionRegistry : extensionRegistryServiceLoader) {
             extensionRegistry.register(asciidoctor);
         }
