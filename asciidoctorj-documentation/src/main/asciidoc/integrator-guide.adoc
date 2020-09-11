@@ -1,4 +1,3 @@
-
 = AsciidoctorJ: Integrator's guide
 Alex Soto <https://github.com/lordofthejars[@lordofthejars]>; Dan Allen <https://github.com/mojavelinux[@mojavelinux]>; Robert Panzer <https://github.com/robertpanzer[@robertpanzer]>
 :compat-mode!:
@@ -412,7 +411,7 @@ include::src/test/java/org/asciidoctor/integrationguide/OptionsTest.java[tags=un
 
 The example above will succeed with these two asciidoc files:
 
-[source,asciidoctor]
+[source,asciidoc]
 .includingcontent.adoc
 --
   = Including content
@@ -420,7 +419,7 @@ The example above will succeed with these two asciidoc files:
   include::includedcontent.adoc[]
 --
 
-[source,asciidoctor]
+[source,asciidoc]
 .includedcontent.adoc
 --
   This is included content
@@ -499,7 +498,16 @@ One of the major improvements to Asciidoctor recently is the extensions API.
 AsciidoctorJ brings this extension API to the JVM environment.
 {uri-repo}[AsciidoctorJ] allows us to write extensions in Java instead of Ruby.
 
-Asciidoctor provides seven types of extension points.
+To create an extension we only need to:
+
+. Have a brief understanding of the Asciidoctorj conversion process and internal representation of the document.
+In short, extensions allow you to tap into the conversion process to make modifications to enhance the generated content.
+. Write an extension class.
+This is as simple as creating a sub-class from one of the extension points listed below.
+. Register your class to make Asciidoctorj converter aware of it.
+There several options depending on the use case.
+
+Asciidoctor provides eight types of extension points.
 Each extension point has an abstract class in Java that maps to the extension API in Ruby.
 
 // #31
@@ -511,7 +519,7 @@ Each extension point has an abstract class in Java that maps to the extension AP
 
 |<<includeprocessor,Include processor>>
 |org.asciidoctor.extension.IncludeProcessor
-|intercepts `include::[]` lines
+|Intercepts `include::[]` lines
 
 |<<preprocessor,Preprocessor>>
 |org.asciidoctor.extension.Preprocessor
@@ -523,7 +531,7 @@ Each extension point has an abstract class in Java that maps to the extension AP
 
 |<<blockprocessor,Block processor>>
 |org.asciidoctor.extension.BlockProcessor
-a|Processes an arbitary block based on it's style such as 
+a|Processes an arbitrary block based on it's style such as
 
  [prohibited]
  --
@@ -548,38 +556,39 @@ a|Processes an arbitary block based on it's style such as
 
 |===
 
-[NOTE]
---
-.Order of execution
-The extension types are called during the conversion process in the order shown in the table.
+
+=== AsciidoctorJ conversion process overview
+
+Before starting to write your first extension, some basic understanding of how Asciidoctor treats the document is helpful.
+As any language processing tool, the process can be roughly split into three steps:
+
+. Parsing: the raw sources content is read and analyzed to generate the internal representation, the AST (_abstract syntax tree_).
+. Processing: the AST is processed. For example to detect possible errors, add automatically generated content (toc), etc.
+. Output generation: once the final AST is set, it's again processed to generate the desired output.
+For example, a sub-section of the AST representing a title with a paragraph will be converted into it's correspondent HTML or PDF output.
+
+NOTE: Some liberty is taken to make the process easier to understand.
+In reality, Asciidoctor has implementation details that divert from the 3 steps above.
+
+The different extension types are called in different steps of the conversion process in the order shown in the table.
 Within each type:
 
-* Include processors are called in an arbitrary and changeable order. 
-The first processor to accept the include line is the only one that is used.
+* Prepocessors is called just before parsing.
+* Treeprocessors is called right before processing.
+* Block macro, inline macro, and block processors are called during processing in the order that they appear in the document.
+* Postprocessors are called before output generation.
+* Include and DocinfoProcessors are called in an arbitrary and changeable order during processing.
+In the case of Include processors, it is called whenever an `include::` is found.
 
-* Block macro, inline macro, and block processors are called in the order that they appear in the document.
+==== Understanding the AST classes
 
-* Prepocessors, Treeprocessors, Postprocessors and DocinfoProcessors are called in an arbitrary and changeable order.
---
-
-To create an extension two things are required:
-
-. Create a class extending one of the extension classes from above
-. Register your class using the `JavaExtensionRegistry` class
-
-But before starting to write your first extension it is essential to understand how Asciidoctor treats the document:
-The raw text content is parsed into a tree structure which is then transformed into the target format.
-Therefore this section first goes into the details of this tree structure before explaining what extensions are possible and how to implement them.
-
-=== Understanding the AST classes
-
-To write extensions or converters for AsciidoctorJ understanding the Abstract Syntax Tree (AST) classes is key.
+To write extensions or converters for AsciidoctorJ understanding the AST (_abstract syntax tree_) classes is key.
 The AST classes are the intermediate representation of the document that Asciidoctor creates before rendering to the target format.
 
 The following example document demonstrates how an AST will look like to give you an idea how the document and the AST are connected.
 
 .Example document for the AST
-[source]
+[source,asciidoc]
 --
 include::src/test/resources/ast-demo.adoc[]
 --
@@ -595,66 +604,71 @@ include::src/test/resources/ast-demo-result.txt[]
 The AST is built from the following types:
 
 `org.asciidoctor.ast.Document`::
-  This is always the root of the document.
-  It owns the blocks and sections that make up the document and holds the document attributes.
+This is always the root of the document.
+It owns the blocks and sections that make up the document and holds the document attributes.
 
 `org.asciidoctor.ast.Section`::
-  This class model sections in the document.
-  The member level indicates the nesting level of this section, that is if level is 1 the section is a section, with level 2 it is a subsection etc.
+This class models sections in the document.
+The member `level` indicates the nesting level of this section, that is if level is 1 the section is a section, with level 2 it is a subsection, etc.
 
 `org.asciidoctor.ast.Block`::
-  Blocks are content in a section, like paragraphs, source listings, images, etc.
-  The concrete form of the block is available in the field `context`.
-  Among the possible values are:
-  .. `paragraph`
-  .. `listing`
-  .. `literal`
-  .. `open`
-  .. `example`
-  .. `pass`
+Blocks are content in a section, like paragraphs, source listings, images, etc.
+The concrete form of the block is available in the field `context`.
+Among the possible values are:
+* `paragraph`
+* `listing`
+* `literal`
+* `open`
+* `example`
+* `pass`
 
 `org.asciidoctor.ast.List`::
-  The list node is the container for ordered and unordered lists.
-  The type of list is available in the field `context`, with the content `ulist` for unordered lists, `olist` for ordered lists.
+The list node is the container for ordered and unordered lists.
+The type of list is available in the field `context`, `ulist` for unordered lists and `olist` for ordered lists.
 
 `org.asciidoctor.ast.ListItem`::
-  A list item represents a single item of a list.
+A list item represents a single item of a list.
 
 `org.asciidoctor.ast.DescriptionList`::
-  The description list node is the container for description lists.
-  The context of the node is `dlist`.
+The description list node is the container for description lists.
+The context of the node is `dlist`.
 
 `org.asciidoctor.ast.DescriptionListEntry`::
-  A list entry represents a single item of a description list.
-  It has multiple terms that are again instances of `org.asciidoctor.ast.ListItem` and a description that is also an instance of `org.asciidoctor.ast.ListItem`.
+A list entry represents a single item of a description list.
+It has multiple terms that are again instances of `org.asciidoctor.ast.ListItem` and a description that is also an instance of `org.asciidoctor.ast.ListItem`.
 
 `org.asciidoctor.ast.Table`::
-  This represents a table and is probably the most complex node type.
-  It owns a list of columns and lists of header, body and footer rows.
+This represents a table and is probably the most complex node type.
+It owns a list of columns and lists of header, body and footer rows.
 
 `org.asciidoctor.ast.Column`::
-  A column defines the style for the column of a table, the width and alignments.
-  
+A column defines the style for the column of a table, the width and alignments.
+
 `org.asciidoctor.ast.Row`::
-  A row in a table is only a simple owner of a list of table cells.
+A row in a table is only a simple owner of a list of table cells.
 
 `org.asciidoctor.ast.Cell`::
-  A cell in a table holds the cell content and formatting attributes like colspan, rowspan and alignment as appropriate.
-  A special case are cells that have the `asciidoctor` style.
-  These do not contain simple text content, but have another full `Document` in their member `innerDocument`.
-  
+A cell in a table holds the cell content and formatting attributes like colspan, rowspan and alignment as appropriate.
+A special case are cells that have the `asciidoctor` style.
+These do not contain simple text content, but have another full `Document` in their member `innerDocument`.
+
 `org.asciidoctor.ast.PhraseNode`::
-  This type is a special case.
-  It does not appear in the AST itself as Asciidoctor does not really parse into the block itself.
-  Phrase nodes are usually created by inline macro extensions that process macros like `issue:1234[]` and create links from them.
+This type is a special case.
+It does not appear in the AST itself as Asciidoctor does not really parse into the block itself.
+Phrase nodes are usually created by inline macro extensions that process macros like `issue:1234[]` and create links from them.
 
 Nodes are in general only created from within extensions.
 Therefore the abstract base class of all extensions, `org.asciidoctor.extension.Processor`, has factory methods for every node type.
 
-Now that you have learned about the AST structure you can go into the details of the extensions.
+Now that you have learned about the AST structure you can go into the details of writting the extensions.
+
+
+=== Writing an extension
+
+Writing an extension is as simple as creating a Java class and sub-classing from one of the extension points.
 
 [[blockmacroprocessor]]
-=== Block Macro Processors
+==== Block Macro Processors
 
 A block macro is a block having a content like this: `gist::mygithubaccount/8810011364687d7bec2c[]`.
 During the rendering process of the document Asciidoctor invokes a BlockMacroProcessor that has to create a block computed from this macro.
@@ -677,20 +691,20 @@ The following block macro processor replaces such a macro with the `<script>` el
 include::src/test/java/org/asciidoctor/integrationguide/extension/GistBlockMacroProcessor.java[tags=include]
 ----
 <1> The `@Name` annotation defines the macro name this BlockMacroProcessor should be called for.
-    In this case this instance will be called for all block macros that have the name `gist`.
+In this case this instance will be called for all block macros that have the name `gist`.
 <2> All BlockMacroProcessors must extend the class `org.asciidoctor.extension.BlockMacroProcessor`.
 <3> A BlockMacroProcessor must implement the abstract method `process` that is called by Asciidoctor.
-    The method must return a new block that is used be Asciidoctor instead of the block containing the block macro.
+The method must return a new block that is used be Asciidoctor instead of the block containing the block macro.
 <4> The implementation constructs the HTML content that should go into the final HTML document.
-    That means that the content has to be directly passed through into the result.
-    Having said that this example does not work when generating PDF content.
+That means that the content has to be directly passed through into the result.
+Having said that this example does not work when generating PDF content.
 <5> The processor creates a new block via the inherited method `createBlock()`.
-    The parent of the new block, a context and the content must be passed.
-    As we want to pass through the content directly into the result the context must be `pass` and the content is the computed HTML string.
+The parent of the new block, a context and the content must be passed.
+As we want to pass through the content directly into the result the context must be `pass` and the content is the computed HTML string.
 
 NOTE: There are many more methods available to create any type of AST node.
 
-Now we want to make this block macro processor work on the block macro in our document:
+Now, once it is registered, we would be able to use the new block macro in our document as:
 
 [[GistBlockMacroDocument]]
 .gist-macro.adoc
@@ -698,19 +712,8 @@ Now we want to make this block macro processor work on the block macro in our do
 include::src/test/resources/gist-macro.adoc[]
 ----
 
-To make AsciidoctorJ use our processor it has to be registered at the `JavaExtensionRegistry`:
-
-[[TestGistBlockMacroProcessor]]
-.Register and execute a BlockMacroProcessor
-[source,java,indent=0]
-----
-include::src/test/java/org/asciidoctor/integrationguide/extension/GistBlockMacroProcessorTest.java[tags=include]
-----
-<1> The block macro processor is registered at the `JavaExtensionRegistry` of the Asciidoctor instance.
-<2> Check that the resulting HTML contains the `<script>` element that you also get from the https://gist.github.com when you get the HTML snippet to embed a gist.
-
 [[inlineprocessor]]
-=== Inline Macro Processors
+==== Inline Macro Processors
 
 An inline macro is very similar to a block macro.
 But instead of being replaced by a block created by a BlockMacroProcessor it is replaced by a phrase node that is simply a part of a block, e.g. in the middle of a sentence.
@@ -720,7 +723,7 @@ The structure is always like this:
 
 . Macro name, e.g. `issue`
 . One colon, i.e. `:`.
-  This is what distinguishes it from a block macro even if it is alone in a paragraph.
+This is what distinguishes it from a block macro even if it is alone in a paragraph.
 . An optional target, e.g. `333`
 . Optional attributes, e.g. `[repo=asciidoctor/asciidoctorj]`.
 
@@ -744,25 +747,14 @@ The InlineMacroProcessor for these macros looks like this:
 include::src/test/java/org/asciidoctor/integrationguide/extension/IssueInlineMacroProcessor.java[tags=include]
 ----
 <1> The `@Name` annotation defines the macro name this InlineMacroProcessor should be called for.
-    In this case this instance will be called for all inline macros that have the name `issue`.
+In this case this instance will be called for all inline macros that have the name `issue`.
 <2> All InlineMacroProcessors must extend the class `org.asciidoctor.extension.InlineMacroProcessor`.
 <3> A InlineMacroProcessor must implement the abstract method `process` that is called by Asciidoctor.
-    The method must return the rendered result of this macro.
+The method must return the rendered result of this macro.
 <4> The implementation constructs and returns a new phrase node that is a link, i.e. an `anchor` via the method `createPhraseNode()`.
-    The third parameter `target` defines that the text to render this link is the target of the macro, that means that the link will be rendered as  `333` or `2`.
-    The last parameter, the options, must contain the target of the line, i.e. the referenced URL, and that the type of the anchor is a link.
-    It could also be a ':xref', a ':ref', or a ':bibref'.
-
-To make AsciidoctorJ use our processor it has to be registered at the `JavaExtensionRegistry`:
-
-[[TestIssueInlineMacroProcessor]]
-.Register and execute a InlineMacroProcessor
-[source,java,indent=0]
-----
-include::src/test/java/org/asciidoctor/integrationguide/extension/IssueInlineMacroProcessorTest.java[tags=include]
-----
-<1> The inline macro processor is registered at the `JavaExtensionRegistry` of the Asciidoctor instance.
-<2> Check that the resulting HTML contains the two anchor elements.
+The third parameter `target` defines that the text to render this link is the target of the macro, that means that the link will be rendered as  `333` or `2`.
+The last parameter, the options, must contain the target of the line, i.e. the referenced URL, and that the type of the anchor is a link.
+It could also be a ':xref', a ':ref', or a ':bibref'.
 
 The example above has shown how to create a link from a macro.
 But there are several other things that an InlineMacroProcessor can create like icons, inline images etc.
@@ -796,7 +788,6 @@ To create an inline image the PhraseNode must have the context `image`.
 The following example assumes that there is a site \http://foo.bar that serves images given as the target of the macro.
 That means the MacroProcessor should replace the macro `foo:1234` to an image element that refers to \http://foo.bar/1234.
 
-
 [[ImageInlineMacroProcessor]]
 .Create a PhraseNode for inline image.
 [source,java,indent=0]
@@ -806,14 +797,14 @@ include::src/test/java/org/asciidoctor/integrationguide/extension/ImageInlineMac
 <1> For an inline image the option `type` must have the value `image`.
 <2> The URL of the image must be set via the option `target`.
 <3> Optional attributes `alt` for alternative text, `width` and `height` are set in the node attributes.
-    Other possible attributes include `title` to define the title attribute of the `img` element when rendering to HTML.
-    When setting the attribute `link` to any value the node will be converted to a link to that image, where the window can be defined via the attribute `window`.
+Other possible attributes include `title` to define the title attribute of the `img` element when rendering to HTML.
+When setting the attribute `link` to any value the node will be converted to a link to that image, where the window can be defined via the attribute `window`.
 <4> Create and return a PhraseNode with context `image` and no text.
 
 // #506
 
-We said at the start of this section that the target (the x in `\menu:x[]`) is optional. 
-If you want a macro that does not have a target (for example `cite:[brown79]`) add the following annotation to your class:
+We said at the start of this section that the target (the x in `\menu:x[]`) is optional.
+If you want a macro that does not have a target (for example `cite:[brown79]`), add the following annotation to your class:
 
 [source,java,indent=0]
 ----
@@ -827,7 +818,7 @@ class CiteInlineMacroProcessor extends InlineMacroProcessor {
 With the SHORT format, the attributes are not parsed, and the 'target' that is passed to your macro is the value between the brackets ("brown79").
 
 [[blockprocessor]]
-=== Block Processors
+==== Block Processors
 
 A block processor is very similar to a block macro processor.
 But in contrast to a block macro a block processor is called for a block having a certain name instead of a macro invocation.
@@ -837,7 +828,7 @@ The following example shows a block processor that converts the whole text of a 
 That means that our block processor will convert blocks like this:
 
 .yell-block.adoc
-[source,asciidoctor]
+[source,asciidoc]
 ----
 include::src/test/resources/yell-block.adoc[]
 ----
@@ -857,33 +848,26 @@ include::src/test/java/org/asciidoctor/integrationguide/extension/YellBlockProce
 ----
 <1> The annotation `@Name` defines the block name that this block processor handles.
 <2> The annotation `@Contexts` defines the block types that this block processor handles like paragraphs, listing blocks, or open blocks.
-    Constants for all contexts are also defined in this annotation.
-    Note that this annotation takes a list of block types, so that a block processor can process paragraph blocks as well as example blocks with the same block name.
+Constants for all contexts are also defined in this annotation.
+Note that this annotation takes a list of block types, so that a block processor can process paragraph blocks as well as example blocks with the same block name.
 <3> The annotation `@ContentModel` defines what this processor produces.
-    Constants for all contexts are also defined for the annotation class.
-    In this case the block processor creates a simple paragraph, therefore the content model `ContentModel.SIMPLE` is defined.
+Constants for all contexts are also defined for the annotation class.
+In this case the block processor creates a simple paragraph, therefore the content model `ContentModel.SIMPLE` is defined.
 <4> All block processors must extend `org.asciidoctor.extension.BlockProcessor`.
 <5> A block processor must implement the method `process()`.
-    Here the implementation gets the raw block content from the reader, transforms it and creates and returns a new block that contains the transformed content.
-    
-To make AsciidoctorJ use our processor it also has to be registered at the `JavaExtensionRegistry`:
-
-[source,java,indent=0]
-----
-include::src/test/java/org/asciidoctor/integrationguide/extension/YellBlockProcessorTest.java[tags=include]
-----
-<1> The block processor is registered at the `JavaExtensionRegistry` of the Asciidoctor instance.
-<2> Check that the resulting HTML contains the text as upper-case letters.
+Here the implementation gets the raw block content from the reader, transforms it and creates and returns a new block that contains the transformed content.
 
 [[includeprocessor]]
-=== Include Processors
+==== Include Processors
 
-Asciidoctor supports include other documents via the include directive: You can simply write `include::other.adoc[]` to include the contents of the file `other.adoc`.
+//TODO Note you can only have one include processor at a time.
+
+Asciidoctor supports include other documents via the include directive.
+Whit it, you can simply write `include::other.adoc[]` to include the contents of the file `other.adoc`.
 Include Processors allow to intercept this mechanism and for instance include the content over the network.
-For example an Include Processor could resolve the include directive `include::ls[]` could insert the contents of the current directory.
 
-Our example will replace the include directive `include::ls[]` with the directory contents of the current directory, one line for every file.
-That is the document below will render a listing with the directory contents:
+For example, similarly to the *unix `ls` command, an Include Processor could resolve the include directive `include::ls[]`, and insert the contents of the current directory in the document.
+Our example will replace the include directive `include::ls[]` with the directory contents, adding one line for every file found.
 
 // Don't know how to include this file without asciidoctor trying to process include::ls[]
 .ls-include.adoc
@@ -903,25 +887,17 @@ include::src/test/java/org/asciidoctor/integrationguide/extension/LsIncludeProce
 ----
 <1> Every Include Processor must extend the class `org.asciidoctor.extension.IncludeProcessor`.
 <2> Asciidoctor calls the method `handles()` with the target for every include directive it finds.
-    The method must return `true` if it feels responsible for this directive.
-    In our case it returns `true` if the target is `ls`.
+The method must return `true` if it feels responsible for this directive.
+In our case it returns `true` if the target is `ls`.
 <3> The implementation of the method `process()` lists the directory contents of the current directory and creates a string with one line per file.
 <4> Finally the call to the method `push_include` inserts the contents.
-    The second and third parameters contain the 'file name' of the include content.
-    In our example this will be basically the name `ls` and the path of the current directory.
-    The parameter `1` is the line number of the first line of the included content.
-    This makes the most sense when partial content is included.
-
-To make AsciidoctorJ use our processor it also has to be registered at the `JavaExtensionRegistry`:
-
-[source,java,indent=0]
-----
-include::src/test/java/org/asciidoctor/integrationguide/extension/LsIncludeProcessorTest.java[tags=include]
-----
-<1> The Include Processor is registered at the `JavaExtensionRegistry` of the Asciidoctor instance.
+The second and third parameters contain the 'file name' of the include content.
+In our example this will be basically the name `ls` and the path of the current directory.
+The parameter `1` is the line number of the first line of the included content.
+This makes the most sense when partial content is included.
 
 [[preprocessor]]
-=== Preprocessors
+==== Preprocessors
 
 Preprocessors allow to process the raw asciidoctor sources before Asciidoctor parses and converts them.
 A preprocessor could for example make comments visible that should be rendered in drafts.
@@ -929,7 +905,7 @@ A preprocessor could for example make comments visible that should be rendered i
 Our example preprocessor does exactly that and will render the comment in the following document as a note.
 
 .comment.adoc
-[source,asciidoctor]
+[source,asciidoc]
 ----
 include::src/test/resources/comment.adoc[]
 ----
@@ -937,13 +913,13 @@ include::src/test/resources/comment.adoc[]
 The preprocessor will render the document as if it looked like this:
 
 .comment-with-note.adoc
-[source,asciidoctor]
+[source,asciidoc,indent=0]
 ----
 include::src/test/resources/comment-with-note.adoc[]
 ----
 
 The implementation of the preprocessor simply gets the AST node for the document to be created as well as a `PreprocessorReader`.
-A `PreprocessorReader` gives access to the raw input line by line allowing to fetch and restore content.
+A `PreprocessorReader` gives access to the raw input, on a per-line basis, allowing to fetch and manipulate content.
 And this is exactly what our Preprocessor does: it fetches the raw content, modifies it and stores it back so that Asciidoctor will only see our modified content.
 
 .A Preprocessor that renders comments as notes
@@ -954,64 +930,51 @@ include::src/test/java/org/asciidoctor/integrationguide/extension/CommentPreproc
 <1> All Preprocessors must extend the class `org.asciidoctor.extension.Preprocessor` and implement the method `process()`.
 <2> The implementation gets the whole Asciidoctor source as an array of Strings where each entry corresponds to one line.
 <3> Every odd occurrence of a comment start is replaced by opening an admonition block, every even occurrence is closing it.
-    The new content is collected in a new list.
+The new content is collected in a new list.
 <4> The processed content is restored to the original `PreprocessorReader` so that it replaces the content that was already consumed at the beginning of the method.
 
-To make AsciidoctorJ use our processor it also has to be registered at the `JavaExtensionRegistry`:
-
-[source,java,indent=0]
-----
-include::src/test/java/org/asciidoctor/integrationguide/extension/CommentPreprocessorTest.java[tags=include]
-----
-<1> The preprocessor is registered at the `JavaExtensionRegistry` of the Asciidoctor instance.
-<2> Check that the resulting HTML is the same as if a document with an admonition block would have been rendered.
-
 There may be multiple Preprocessors registered and every Preprocessor will be called.
-But the order in which the Preprocessors are called is undefined so that all Preprocessors should be independent of each other.
+The order in which the Preprocessors are called is undefined so that all Preprocessors should be independent of each other.
 
 [[postprocessor]]
-=== Postprocessors
+==== Postprocessors
 
 Postprocessors are called when Asciidoctor has converted the document to its target format and have the chance to modify the result.
 A Postprocessor could for example insert a custom copyright notice into the footer element of the resulting HTML document.
 
-[NOTE]
+[WARNING]
+====
 Postprocessors in AsciidoctorJ currently only supports String based target formats.
 That means it is not possible at the moment to write Postprocessors for binary formats like PDF or EPUB.
+====
 
-A Postprocessor that adds a copyright notice would look like this:
+As example, a Postprocessor that adds a copyright notice would look like this:
 
 .A Postprocessor that inserts a copyright notice in the footer element
 [source,java]
 ----
 include::src/test/java/org/asciidoctor/integrationguide/extension/CopyrightFooterPostprocessor.java[tags=include]
 ----
-<1> All Preprocessors must extend the class `org.asciidoctor.extension.Postprocessor` and implement the method `process()`.
+<1> All Postprocessors must extend the class `org.asciidoctor.extension.Postprocessor` and implement the method `process()`.
 <2> The processor parses the resulting HTML text using the Jsoup library.
-    This returns the document as a data structure.
+This returns the document as a data structure.
 <3> Find the element with the ID `footer-text`.
-    This element contains the footer text, which usually contains the document generation timestamp.
-    If this element is available its text is modified by appending the copyright notice.
-<4> Finally convert the modified document back to the HTML string and let the processor return it.
+This element contains the footer text, which usually contains the document generation timestamp.
+If this element is available its text is modified by appending the copyright notice.
+<4> Finally, convert the modified document back to the HTML string and let the processor return it.
 
-To make AsciidoctorJ use our processor it also has to be registered at the `JavaExtensionRegistry`:
-
-[source,java,indent=0]
-----
-include::src/test/java/org/asciidoctor/integrationguide/extension/CopyrightFooterPostprocessorTest.java[tags=include]
-----
-<1> The postprocessor is registered at the `JavaExtensionRegistry` of the Asciidoctor instance.
-<2> To make Asciidoctor generate the footer element the option <<options,`headerFooter`>> must be activated.
+NOTE: Make sure `header_footer` option is not set to `false`, otherwise these will not be added to the document.
 
 [[treeprocessor]]
-=== Treeprocessors
+==== Treeprocessors
 
 A Treeprocessor gets the whole AST and may do whatever it likes with the document tree.
 Examples for Treeprocessors could insert blocks, add roles to nodes with a certain content, etc.
 
 Treeprocessors are called by Asciidoctor at the end of the loading process after Preprocessors, Block processors, Macro processors and Include processors but before Postprocessors that are called after the conversion process.
 
-Our example Treeprocessor will recognize paragraphs that contain terminal scripts like below and make listing blocks from them and add the role `terminal` that can be styled in an own way.
+Our example Treeprocessor will recognize paragraphs that contain terminal scripts like below, make listing blocks from them and add the role `terminal`.
+The custom role will allows us to customize the style.
 
 .Example AsciiDoc document containing a terminal script
 ....
@@ -1025,7 +988,8 @@ The result when rendering this document with our Treeprocessor should be the sam
 include::src/test/resources/treeprocessorresult.adoc[]
 ....
 
-Note that a Blockprocessor would not work for this task, as a Blockprocessor requires a block name for which it is called, but in this case the only way to identify this type of blocks is the beginning of the first line.
+Note that a Blockprocessor would not work for this task, as a Blockprocessor requires a block name for which it is called.
+However, in this case the only way to identify this type of blocks is the beginning of the first line.
 
 The Treeprocessor could look like this:
 
@@ -1037,30 +1001,22 @@ include::src/test/java/org/asciidoctor/integrationguide/extension/TerminalComman
 <1> Every Treeprocessor must extend `org.asciidoctor.extension.Treeprocessor` and implement the method `process(Document)`.
 <2> The implementation basically iterates over the tree and invokes `processBlock()` for every node.
 <3> The method `processBlock()` checks for every node if it is a paragraph that has a first line beginning with a `$`.
-    If it encounters such a block it replaces it with the block created in the method `convertToTerminalListing()`.
-    Otherwise it descends into the AST searching for these blocks.
+If it encounters such a block it replaces it with the block created in the method `convertToTerminalListing()`.
+Otherwise it descends into the AST searching for these blocks.
 <4> When creating the new block we reuse the parent of the original block.
-    The context of the new block has to be `listing` to get a source block.
-    The content can be simply taken from the original block.
-    We add the option 'subs' with the value ':specialcharacters' so that special characters are substituted, i.e. `>` and `<` will be replaced with `\&gt;` and `\&lt;` respectively.
-<5> Finally we add the role of the node to `terminal`, which will result in the div containing the listing having the class `terminal`.
-
-After that we can simply use that Treeprocessor by registering it at the `JavaExtensionRegistry`.
-
-[source,java,indent=0]
-----
-include::src/test/java/org/asciidoctor/integrationguide/extension/TerminalCommandTreeprocessorTest.java[tags=include]
-----
-<1> The Treeprocessor is registered at the `JavaExtensionRegistry` of the Asciidoctor instance.
+The context of the new block has to be `listing` to get a source block.
+The content can be simply taken from the original block.
+We add the option 'subs' with the value ':specialcharacters' so that special characters are substituted, i.e. `>` and `<` will be replaced with `\&gt;` and `\&lt;` respectively.
+<5> Finally, we add the role of the node to `terminal`, which will result in the div containing the listing having the class `terminal`.
 
 [[docinfoprocessor]]
-=== Docinfo Processors
+==== Docinfo Processors
 
 Docinfo Processors are primarily targeted for the HTML and DocBook5 target format.
 A Docinfo Processor basically allows to add content to the HTML header or at the end of the HTML body.
-For the DocBook5 target format a Docinfo Processor can add content to the info element or at the very end of the document just before the closing tag of the root element.
+For the DocBook5 target format a Docinfo Processor can add content to the info element or at the very end of the document, just before the closing tag of the root element.
 
-Our example Docinfo Processor will add a robots meta tag to the head of the generated HTML document:
+Our example Docinfo Processor will add a robots meta tag to the head of the HTML output:
 
 .A Docinfo Processor that adds a robots meta tag
 [source,java,indent=0]
@@ -1068,24 +1024,126 @@ Our example Docinfo Processor will add a robots meta tag to the head of the gene
 include::src/test/java/org/asciidoctor/integrationguide/extension/RobotsDocinfoProcessor.java[tags=include]
 ----
 <1> The Location annotation defines whether the result of this Docinfo Processor should be added to the header or the footer of the document.
-    Content is added to the header via `LocationType.HEADER` and to the footer via `LocationType.FOOTER`.
+Content is added to the header via `LocationType.HEADER` and to the footer via `LocationType.FOOTER`.
 <2> Every Docinfo Processor must extend the class `DocinfoProcessor` and implement the `process()` method.
 <3> Our example implementation simply returns the meta tag as a string.
 
-To make AsciidoctorJ use our processor it also has to be registered at the `JavaExtensionRegistry`.
+[IMPORTANT]
+====
+For the example to work make sure:
 
-[source,java,indent=0]
-----
-include::src/test/java/org/asciidoctor/integrationguide/extension/RobotsDocinfoProcessorTest.java[tags=include]
-----
-<1> The Docinfo Processor implementation is registered at the `JavaExtensionRegistry` of the Asciidoctor instance.
-<2> We render our document with header and footer instead of an embeddable document.
-    Otherwise there is no header where the doc info can be added to.
-<3> Docinfo Processors will only be called by Asciidoctor if the safe mode is at least `SECURE`.
-<4> Test via the Jsoup HTML parsing library that our meta tag was correctly added to the resulting document.
+* `header_footer` option is not set to `false`, otherwise these will not be added to the document.
+* `safe` mode option is set to at least `SECURE`
 
-[[ExtensionSPI]]
-=== Automatically loading extensions
+.Options configuration example
+[source,java]
+----
+OptionsBuilder.options()
+        .headerFooter(true)
+        .safe(SafeMode.SERVER);
+----
+====
+
+=== Registering extensions
+
+Now that we have our extensions ready, we only need to register them.
+There are 3 ways to do so, and all of them can combined freely to suit your needs.
+Two are manual and one automatic.
+
+Also, at any moment, you can clear the configuration using `unregisterAllExtensions()`:
+
+[source,java]
+----
+Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+asciidoctor.unregisterAllExtensions();
+----
+
+===== Manually registering extensions with javaExtensionRegistry
+
+Extensions can be registered individually accessing the default extension registry directly from the Asciidoctor instance.
+
+[source,java]
+----
+Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+
+asciidoctor.javaExtensionRegistry()
+         .treeprocessor(Tre.class);
+----
+
+There is a method in the API for each extension point.
+
+[source,java]
+----
+asciidoctor.javaExtensionRegistry()
+        .blockMacro(GistBlockMacroProcessor.class);
+
+asciidoctor.javaExtensionRegistry()
+        .inlineMacro(IssueInlineMacroProcessor.class);
+
+asciidoctor.javaExtensionRegistry()
+        .block(YellBlockProcessor.class);
+
+asciidoctor.javaExtensionRegistry()
+        .includeProcessor(LsIncludeProcessor.class);
+
+asciidoctor.javaExtensionRegistry()
+        .preprocessor(CommentPreprocessor.class);
+
+asciidoctor.javaExtensionRegistry()
+        .postprocessor(CopyrightFooterPostprocessor.class);
+
+asciidoctor.javaExtensionRegistry()
+        .treeprocessor(TerminalCommandTreeprocessor.class);
+
+extensionRegistry
+        .docinfoProcessor(RobotsDocinfoProcessor.class);
+----
+
+Each method is overloaded to accept:
+
+A Class::
+As seen in the examples, in this case AsciidoctorJ will take care of the complete lifecycle (initialization, etc.) of the extension.
+An instance::
+This is useful when the extension requires pre-initialization or has a complex creation.
+For example, the extension instance could be managed in a Spring context making use of injected components.
+A full canonical class name::
+This allows to pass the extension as a `String` type.
+This can be used when the extension class is not known at compile time.
+String name macro name::
+Optional and only for `blockMacro`, `inlineMacro` and `block`.
+Allows defining the name of the macro if it's not set in the extension class.
+
+===== Bulk extension registration (aka. extension groups)
+
+As an alternative method to register extensions in bulk or groups.
+Using the `ExtensionGroup` API it is possible to define a set of extension grouped under a name to be registered later.
+
+[source,java]
+----
+final String groupName = "my-extensions";
+ExtensionGroup extensionGroup = asciidoctor.createGroup(groupName)
+        .blockMacro(GistBlockMacroProcessor.class)
+        .includeProcessor(LsIncludeProcessor.class)
+        .postprocessor(ByePostprocessor.class);       // <1>
+
+    ...
+
+extensionGroup.register();                            // <2>
+----
+<1> Multiple extensions can be added together using the fluent API.
+<2> Complete registration, otherwise extensions won't be enabled.
+
+If you don't need or want to set a specific name, you can just use `asciidoctor.createGroup()`, and a randomly generated name will be assigned automatically.
+
+[IMPORTANT]
+====
+Calling `createGroup(String) + register()` more than once will override any pre-existing group with the same name.
+Effectively REMOVING (and disabling) the previously set extensions.
+
+This does not apply to `createGroup()`, different calls will create different extension groups with random names.
+====
+
+===== Automatically loading extensions
 
 In previous examples, the extensions were registered manually.
 However, AsciidoctorJ provides another way to register extensions.
@@ -1116,7 +1174,7 @@ And that's all.
 Now when a `.jar` file containing the previous structure is dropped into the classpath of AsciidoctorJ, the `register` method will be executed automatically and the extensions will be registered.
 
 [NOTE]
---
+====
 If you have installed AsciidoctorJ as recommended, the asciidoctorj command will be on the path, and you can use:
 
  asciidoctorj -cp=lib/myextension.jar test.adoc
@@ -1124,7 +1182,7 @@ If you have installed AsciidoctorJ as recommended, the asciidoctorj command will
 If you have downloaded the distribution jars only, use a command like:
 
  java -cp lib/jruby-complete-{jruby-version}.jar;lib/asciidoctor-api-{artifact-version}.jar;lib/asciidoctor-core-{artifact-version}.jar;lib/jcommander-{jcommander-version}.jar;lib/myextension.jar org.asciidoctor.jruby.cli.AsciidoctorInvoker test.adoc
---
+====
 
 == Publish everywhere: Adapt Asciidoctor to your own target format
 
@@ -1338,7 +1396,7 @@ include::src/test/java/org/asciidoctor/integrationguide/syntaxhighlighter/Highli
 Let's say we want to convert this document:
 
 .sources.adoc
-[source,adoc]
+[source,asciidoc]
 -----
 include::src/test/resources/sources.adoc[]
 -----
