@@ -9,8 +9,9 @@ import org.jboss.arquillian.test.api.ArquillianResource
 import org.junit.runner.RunWith
 import spock.lang.Specification
 
-import static junit.framework.Assert.assertEquals
+import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.either
+import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 import static org.junit.Assert.assertThat
 
@@ -63,10 +64,17 @@ func main() {
                 .attributes(AttributesBuilder.attributes().sourceHighlighter(HIGHLIGHTJS)))
 
         then:
+        assertThat(htmlJavaOld, containsString('highlight.js/9.15.5'))
+        assertThat(htmlJavaNew, containsString('highlight.js/9.15.6'))
         // Cannot use `htmlRuby == htmlJava` because it fails with OOM
         // Asciidoctor > 2.0.10 changed the location where the javascript is included,
         // therefore test against both possibilities to pass with 2.0.10 and upstream
-        assertThat(htmlRuby, either(is(htmlJavaNew)).or(is(htmlJavaOld)))
+        assertThat(stripHighlightjsVersion(htmlRuby),
+                either(is(stripHighlightjsVersion(htmlJavaNew))).or(is(stripHighlightjsVersion(htmlJavaOld))))
+    }
+
+    private String stripHighlightjsVersion(String htmlRuby) {
+        htmlRuby.replaceAll('highlight\\.js/(\\d)+\\.(\\d)+\\.(\\d)+/', 'highlight\\.js/ma\\.min\\.fix/')
     }
 
     def 'should autoregister from extension'() {
@@ -78,6 +86,6 @@ func main() {
                 .attributes(AttributesBuilder.attributes().sourceHighlighter(HighlightJsExtension.NAME_HIGHLIGHTER)))
 
         then:
-        assertEquals(2, ObservableHighlightJsHighlighter.called)
+        assertThat(ObservableHighlightJsHighlighter.called, is(equalTo(2)))
     }
 }
