@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == Unreleased
 
+Build::
+
+* Fix upstream build to adapt for changes to highlightjs syntax highlighter. (#954)
+
 == 2.4.1 (2020-09-10)
 
 Bug Fixes::
