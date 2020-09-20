@@ -11,7 +11,7 @@ abstract class AbstractHighlightJsHighlighter implements SyntaxHighlighterAdapte
 
     @Override
     String getDocinfo(LocationType location, Document document, Map<String, Object> options) {
-        String baseUrl = document.getAttribute('highlightjsdir', "${options['cdn_base_url']}/highlight.js/9.15.6")
+        String baseUrl = document.getAttribute('highlightjsdir', "${options['cdn_base_url']}/highlight.js/9.15.5")
         """<link rel="stylesheet" href="$baseUrl/styles/${document.getAttribute('highlightjs-theme', 'github')}.min.css"${options['self_closing_tag_slash']}>
 <script src="$baseUrl/highlight.min.js"></script>
 <script>hljs.initHighlighting()</script>"""

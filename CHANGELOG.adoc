@@ -15,6 +15,10 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == 2.4.1 (2020-09-10)
 
+Build::
+
+* Make SyntaxHighlighter test independent of highlight.js version (@abelsromero) (#955)
+
 Bug Fixes::
 
   * Fix NullPointerException when a document contains an empty table with PDF backend (@anthonyroussel) (#944)
