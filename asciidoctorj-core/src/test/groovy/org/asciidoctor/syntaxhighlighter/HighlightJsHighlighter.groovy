@@ -4,17 +4,19 @@ import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.Document
 import org.asciidoctor.extension.LocationType
 
-abstract class AbstractHighlightJsHighlighter implements SyntaxHighlighterAdapter, Formatter {
+class HighlightJsHighlighter implements SyntaxHighlighterAdapter, Formatter {
 
-    @Override
-    abstract boolean hasDocInfo(LocationType location)
+    static DOCINFO_HEADER = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">'
+    static DOCINFO_FOOTER = '''<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>'''
+
+    boolean hasDocInfo(LocationType location) {
+        true
+    }
 
     @Override
     String getDocinfo(LocationType location, Document document, Map<String, Object> options) {
-        String baseUrl = document.getAttribute('highlightjsdir', "${options['cdn_base_url']}/highlight.js/9.15.5")
-        """<link rel="stylesheet" href="$baseUrl/styles/${document.getAttribute('highlightjs-theme', 'github')}.min.css"${options['self_closing_tag_slash']}>
-<script src="$baseUrl/highlight.min.js"></script>
-<script>hljs.initHighlighting()</script>"""
+        location == LocationType.HEADER ? DOCINFO_HEADER : DOCINFO_FOOTER
     }
 
     @Override
@@ -23,41 +25,9 @@ abstract class AbstractHighlightJsHighlighter implements SyntaxHighlighterAdapte
     }
 }
 
-class OldHighlightJsHighlighter extends AbstractHighlightJsHighlighter {
-
-    @Override
-    boolean hasDocInfo(LocationType location) {
-        location == LocationType.FOOTER
-    }
-
-}
-
-class NewHighlightJsHighlighter extends AbstractHighlightJsHighlighter {
-
-    @Override
-    boolean hasDocInfo(LocationType location) {
-        true
-    }
-
-    @Override
-    String getDocinfo(LocationType location, Document document, Map<String, Object> options) {
-        String baseUrl = document.getAttribute('highlightjsdir', "${options['cdn_base_url']}/highlight.js/9.15.6")
-        location == LocationType.HEADER ?
-                """<link rel="stylesheet" href="$baseUrl/styles/${document.getAttribute('highlightjs-theme', 'github')}.min.css"${options['self_closing_tag_slash']}>""" :
-                """<script src="$baseUrl/highlight.min.js"></script>
-<script>hljs.initHighlighting()</script>"""
-    }
-
-}
-
-class ObservableHighlightJsHighlighter extends AbstractHighlightJsHighlighter {
+class ObservableHighlightJsHighlighter extends HighlightJsHighlighter {
 
     static int called = 0
-
-    @Override
-    boolean hasDocInfo(LocationType location) {
-        location == LocationType.FOOTER
-    }
 
     @Override
     String format(Block node, String lang, Map<String, Object> opts) {

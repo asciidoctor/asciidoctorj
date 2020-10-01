@@ -6,11 +6,11 @@ import org.asciidoctor.OptionsBuilder
 import org.asciidoctor.SafeMode
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.junit.runner.RunWith
 import spock.lang.Specification
 
-import static org.hamcrest.Matchers.containsString
-import static org.hamcrest.Matchers.either
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 import static org.junit.Assert.assertThat
@@ -18,9 +18,9 @@ import static org.junit.Assert.assertThat
 @RunWith(ArquillianSputnik)
 class WhenAHighlightjsAdapterIsImplementedInGroovy extends Specification {
 
-    public static final String NAME_SYNTAXHIGHLIGHTER_OLD = 'oldhighlight4J'
-    public static final String NAME_SYNTAXHIGHLIGHTER_NEW = 'newhighlight4J'
+    public static final String NAME_SYNTAXHIGHLIGHTER = 'highlight4J'
     public static final String HIGHLIGHTJS = 'highlightjs'
+    public static final String EMPTY_STRING = ''
 
     @ArquillianResource
     private Asciidoctor asciidoctor
@@ -45,36 +45,23 @@ func main() {
 
         given:
 
-        asciidoctor.syntaxHighlighterRegistry().register(OldHighlightJsHighlighter, NAME_SYNTAXHIGHLIGHTER_OLD)
-        asciidoctor.syntaxHighlighterRegistry().register(NewHighlightJsHighlighter, NAME_SYNTAXHIGHLIGHTER_NEW)
+        asciidoctor.syntaxHighlighterRegistry().register(HighlightJsHighlighter, NAME_SYNTAXHIGHLIGHTER)
 
         when:
-        String htmlJavaOld = asciidoctor.convert(doc, OptionsBuilder.options()
+        String html = asciidoctor.convert(doc, OptionsBuilder.options()
                 .safe(SafeMode.UNSAFE)
                 .headerFooter(true)
-                .attributes(AttributesBuilder.attributes().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER_OLD)))
-        String htmlJavaNew = asciidoctor.convert(doc, OptionsBuilder.options()
-                .safe(SafeMode.UNSAFE)
-                .headerFooter(true)
-                .attributes(AttributesBuilder.attributes().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER_NEW)))
-
-        String htmlRuby = asciidoctor.convert(doc, OptionsBuilder.options()
-                .safe(SafeMode.UNSAFE)
-                .headerFooter(true)
-                .attributes(AttributesBuilder.attributes().sourceHighlighter(HIGHLIGHTJS)))
+                .attributes(AttributesBuilder.attributes().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER)))
 
         then:
-        assertThat(htmlJavaOld, containsString('highlight.js/9.15.5'))
-        assertThat(htmlJavaNew, containsString('highlight.js/9.15.6'))
-        // Cannot use `htmlRuby == htmlJava` because it fails with OOM
-        // Asciidoctor > 2.0.10 changed the location where the javascript is included,
-        // therefore test against both possibilities to pass with 2.0.10 and upstream
-        assertThat(stripHighlightjsVersion(htmlRuby),
-                either(is(stripHighlightjsVersion(htmlJavaNew))).or(is(stripHighlightjsVersion(htmlJavaOld))))
+        Document document = Jsoup.parse(html)
+        document.head().html().contains(HighlightJsHighlighter.DOCINFO_HEADER)
+        strip(document.body().html()).contains(strip(HighlightJsHighlighter.DOCINFO_FOOTER))
+        document.body().html().contains('<pre class="highlightjs highlight">')
     }
 
-    private String stripHighlightjsVersion(String htmlRuby) {
-        htmlRuby.replaceAll('highlight\\.js/(\\d)+\\.(\\d)+\\.(\\d)+/', 'highlight\\.js/ma\\.min\\.fix/')
+    def strip(String s) {
+        s.replace('\n', EMPTY_STRING).replace(' ', EMPTY_STRING)
     }
 
     def 'should autoregister from extension'() {
