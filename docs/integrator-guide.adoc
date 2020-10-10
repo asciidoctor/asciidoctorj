@@ -1712,15 +1712,6 @@ Finally the converter can be registered and used for conversion of AsciiDoc docu
                 OptionsBuilder.options()
                         .backend("text")                                   // <2>
                         .toFile(false));
-
-            File test_adoc = //...
-
-            String result = asciidoctor.convertFile(
-                    test_adoc,
-                    OptionsBuilder.options()
-                            .backend("text")                                   // <1>
-                            .toFile(false));
-
 ----
 <1> Registers the converter class `TextConverter` for this Asciidoctor instance.
     The given converter is responsible for converting to the target format `text` because the `@ConverterFor` annotation of the converter class defines this name.
