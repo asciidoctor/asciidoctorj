@@ -1,3 +1,6 @@
+// THIS FILE IS GENERATED - DO NOT EDIT
+// Edit here: asciidoctorj-documentation/src/main/asciidoc/integrator-guide.adoc
+// And then run: ./gradlew asciidoctorj-documentation:build
 = AsciidoctorJ: Integrator's guide
 Alex Soto <https://github.com/lordofthejars[@lordofthejars]>; Dan Allen <https://github.com/mojavelinux[@mojavelinux]>; Robert Panzer <https://github.com/robertpanzer[@robertpanzer]>
 :compat-mode!:
