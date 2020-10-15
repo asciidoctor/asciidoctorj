@@ -11,6 +11,8 @@ dependencies {
 }
 
 task processAsciidocFiles(type: Copy) {
+    inputs.files fileTree(dir: 'src')
+    outputs.files fileTree(dir: rootProject.file('docs'), include: '*.adoc')
 
     dependsOn test
 
