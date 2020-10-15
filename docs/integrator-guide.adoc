@@ -579,7 +579,7 @@ This is as simple as creating a sub-class from one of the extension points liste
 . Register your class to make Asciidoctorj converter aware of it.
 There several options depending on the use case.
 
-Asciidoctor provides eighth types of extension points.
+Asciidoctor provides eight types of extension points.
 Each extension point has an abstract class in Java that maps to the extension API in Ruby.
 
 // #31
@@ -637,10 +637,10 @@ As any language processing tool, the process can be roughly split into three ste
 . Parsing: the raw sources content is read and analyzed to generate the internal representation, the AST (_abstract syntax tree_).
 . Processing: the AST is processed. For example to detect possible errors, add automatically generated content (toc), etc.
 . Output generation: once the final AST is set, it's again processed to generate the desired output.
-For example, a sub-section of the AST representing a title with a paragraf will be converted into it's correspondent HTML or PDF output.
+For example, a sub-section of the AST representing a title with a paragraph will be converted into it's correspondent HTML or PDF output.
 
 NOTE: Some liberty is taken to make the process easier to understand.
-In truth, Asciidoctor has implementation details that divert from the 3 steps above.
+In reality, Asciidoctor has implementation details that divert from the 3 steps above.
 
 The different extension types are called in different steps of the conversion process in the order shown in the table.
 Within each type:
@@ -1044,7 +1044,7 @@ class CiteInlineMacroProcessor extends InlineMacroProcessor {
 With the SHORT format, the attributes are not parsed, and the 'target' that is passed to your macro is the value between the brackets ("brown79").
 
 [[blockprocessor]]
-===== Block Processors
+==== Block Processors
 
 A block processor is very similar to a block macro processor.
 But in contrast to a block macro a block processor is called for a block having a certain name instead of a macro invocation.
@@ -1297,7 +1297,7 @@ public class CopyrightFooterPostprocessor extends Postprocessor {    // <1>
     }
 }
 ----
-<1> All Preprocessors must extend the class `org.asciidoctor.extension.Postprocessor` and implement the method `process()`.
+<1> All Postprocessors must extend the class `org.asciidoctor.extension.Postprocessor` and implement the method `process()`.
 <2> The processor parses the resulting HTML text using the Jsoup library.
 This returns the document as a data structure.
 <3> Find the element with the ID `footer-text`.
@@ -1712,14 +1712,6 @@ Finally the converter can be registered and used for conversion of AsciiDoc docu
                 OptionsBuilder.options()
                         .backend("text")                                   // <2>
                         .toFile(false));
-
-            File test_adoc = //...
-
-            String result = asciidoctor.convertFile(
-                    test_adoc,
-                    OptionsBuilder.options()
-                            .backend("text")                                   // <1>
-                            .toFile(false));
 
 ----
 <1> Registers the converter class `TextConverter` for this Asciidoctor instance.

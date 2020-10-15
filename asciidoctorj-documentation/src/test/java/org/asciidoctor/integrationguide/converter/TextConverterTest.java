@@ -59,7 +59,6 @@ public class TextConverterTest {
     @Test
     public void should_use_text_converter_for_conversion_registered_as_service_impl() throws Exception {
 
-
         ClassLoader oldTCCL = Thread.currentThread().getContextClassLoader();
 
         try {
@@ -68,20 +67,15 @@ public class TextConverterTest {
             Thread.currentThread().setContextClassLoader(tccl);
 
             Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-//tag::include[]
             File test_adoc = //...
-//end::include[]
                     classpathResources.getResource("textconvertertest.adoc");
-
-//tag::include[]
 
             String result = asciidoctor.convertFile(
                     test_adoc,
                     OptionsBuilder.options()
-                            .backend("text")                                   // <1>
+                            .backend("text")
                             .toFile(false));
 
-//end::include[]
             verifyResult(result);
         } finally {
             Thread.currentThread().setContextClassLoader(oldTCCL);
