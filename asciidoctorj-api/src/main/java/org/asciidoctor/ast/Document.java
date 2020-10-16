@@ -75,4 +75,7 @@ public interface Document extends StructuralNode {
      * @param state The state in which to put the sourcemap (true = on, false = off).
      */
     void setSourcemap(boolean state);
+
+
+    Catalog getCatalog();
 }

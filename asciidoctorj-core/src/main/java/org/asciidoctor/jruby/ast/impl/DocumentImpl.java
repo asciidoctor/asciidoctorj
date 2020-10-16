@@ -2,8 +2,10 @@ package org.asciidoctor.jruby.ast.impl;
 
 import java.util.Map;
 
+import org.asciidoctor.ast.Catalog;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Title;
+import org.asciidoctor.jruby.internal.RubyHashMapDecorator;
 import org.asciidoctor.jruby.internal.RubyHashUtil;
 import org.jruby.Ruby;
 import org.jruby.RubyBoolean;
@@ -75,5 +77,10 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
     @Override
     public void setSourcemap(boolean state) {
         setBoolean("sourcemap", state);
+    }
+
+    @Override
+    public Catalog getCatalog() {
+        return new CatalogImpl(new RubyHashMapDecorator((RubyHash) getProperty("catalog")));
     }
 }
