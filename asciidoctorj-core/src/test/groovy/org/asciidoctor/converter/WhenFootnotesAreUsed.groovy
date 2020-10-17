@@ -25,6 +25,7 @@ import static org.junit.Assert.assertThat
  */
 @RunWith(ArquillianSputnik)
 class WhenFootnotesAreUsed extends Specification {
+    static final String CONVERTER_BACKEND = 'footnote'
 
     @ArquillianResource
     private Asciidoctor asciidoctor
@@ -58,11 +59,11 @@ class WhenFootnotesAreUsed extends Specification {
     def setup() {
         footnotesBeforeConvert = null
         footnotesAfterConvert = null
-        asciidoctor.javaConverterRegistry().register(Converter, 'footnote')
+        asciidoctor.javaConverterRegistry().register(Converter, CONVERTER_BACKEND)
     }
 
     def convert(String document) {
-        asciidoctor.convert(document, OptionsBuilder.options().backend("footnote"))
+        asciidoctor.convert(document, OptionsBuilder.options().backend(CONVERTER_BACKEND))
     }
 
     def footnote(Long index, String id, String text) {
@@ -91,7 +92,7 @@ class WhenFootnotesAreUsed extends Specification {
         then:
         assertThat(footnotesBeforeConvert, empty())
         assertThat(footnotesAfterConvert,
-                contains(samePropertyValuesAs(footnote(1,"fid","we shall find out!"))))
+                contains(samePropertyValuesAs(footnote(1,'fid','we shall find out!'))))
     }
 
     def 'when footnotes are in source doc, they should be accessible from the converter'() {
@@ -109,7 +110,7 @@ An existing footnote can be referenced.footnote:myid1[]
         then:
         assertThat(footnotesBeforeConvert, empty())
         assertThat(footnotesAfterConvert,
-                contains(samePropertyValuesAs(footnote(1,"myid1","first footnote")),
-                         samePropertyValuesAs(footnote(2, null, "second footnote"))))
+                contains(samePropertyValuesAs(footnote(1,'myid1','first footnote')),
+                         samePropertyValuesAs(footnote(2, null, 'second footnote'))))
     }
 }
