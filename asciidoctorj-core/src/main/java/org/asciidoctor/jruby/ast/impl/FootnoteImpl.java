@@ -16,7 +16,7 @@ public class FootnoteImpl implements Footnote {
     private String text;
 
     private static Object aref(RubyStruct s, String key)  {
-       return JavaEmbedUtils.rubyToJava(s.aref(JavaEmbedUtils.javaToRuby(s.getRuntime(), key)));
+       return JavaEmbedUtils.rubyToJava(s.aref(s.getRuntime().newString(key)));
     }
 
     public static Footnote getInstance(Long index, String id, String text)  {
