@@ -22,9 +22,35 @@ public class RubyHashMapDecorator implements Map<String, Object> {
 
     private RubyClass abstractNodeClass;
 
+    private Class rubyKeyType;
+
     public RubyHashMapDecorator(RubyHash rubyHash) {
+        this(rubyHash, RubySymbol.class);
+    }
+
+    /**
+     * Wrap a RubyHash map that uses a key of type `rubyKeyType`.
+     *
+     * Regardless of `rubyKeyType`, the wrapper will always use Java String
+     * as the exposed key type and coerce internally as appropriate.
+     *
+     * @param rubyHash hash map to wrap
+     * @param rubyKeyType key type, valid values: RubySymbol.class or String.class
+     */
+    public RubyHashMapDecorator(RubyHash rubyHash, Class rubyKeyType) {
         this.rubyRuntime = rubyHash.getRuntime();
         this.rubyHash = rubyHash;
+        if (rubyKeyType != RubySymbol.class && rubyKeyType != String.class) {
+            throw new UnsupportedOperationException("key type must be either RubySymbol or String");
+        }
+        this.rubyKeyType = rubyKeyType;
+    }
+
+    private Object coerceKey(Object key) {
+        if (rubyKeyType == RubySymbol.class) {
+            return rubyHash.getRuntime().getSymbolTable().getSymbol((String) key);
+        }
+        return key;
     }
 
     @Override
@@ -42,8 +68,7 @@ public class RubyHashMapDecorator implements Map<String, Object> {
         if (!(key instanceof String)) {
             return false;
         }
-        RubySymbol symbol = rubyHash.getRuntime().getSymbolTable().getSymbol((String) key);
-        return rubyHash.containsKey(symbol);
+        return rubyHash.containsKey(coerceKey(key));
     }
 
     @Override
@@ -56,16 +81,14 @@ public class RubyHashMapDecorator implements Map<String, Object> {
         if (!(key instanceof String)) {
             return false;
         }
-        RubySymbol symbol = rubyHash.getRuntime().getSymbolTable().getSymbol((String) key);
-        Object value = rubyHash.get(symbol);
+        Object value = rubyHash.get(coerceKey(key));
         return convertRubyValue(value);
     }
 
     @Override
     public Object put(String key, Object value) {
         Object oldValue = get(key);
-        RubySymbol symbol = rubyHash.getRuntime().getSymbolTable().getSymbol(key);
-        rubyHash.put(symbol, convertJavaValue(value));
+        rubyHash.put(coerceKey(key), convertJavaValue(value));
         return oldValue;
     }
 
@@ -75,8 +98,7 @@ public class RubyHashMapDecorator implements Map<String, Object> {
             return null;
         }
         Object oldValue = get(key);
-        RubySymbol symbol = rubyHash.getRuntime().getSymbolTable().getSymbol((String) key);
-        rubyHash.remove(symbol);
+        rubyHash.remove(coerceKey(key));
         return convertRubyValue(oldValue);
     }
 
