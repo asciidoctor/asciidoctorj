@@ -46,9 +46,9 @@ public class RubyHashMapDecorator implements Map<String, Object> {
         this.rubyKeyType = rubyKeyType;
     }
 
-    private Object coerceKey(Object key) {
+    private Object coerceKey(String key) {
         if (rubyKeyType == RubySymbol.class) {
-            return rubyHash.getRuntime().getSymbolTable().getSymbol((String) key);
+            return rubyHash.getRuntime().getSymbolTable().getSymbol(key);
         }
         return key;
     }
@@ -68,7 +68,7 @@ public class RubyHashMapDecorator implements Map<String, Object> {
         if (!(key instanceof String)) {
             return false;
         }
-        return rubyHash.containsKey(coerceKey(key));
+        return rubyHash.containsKey(coerceKey((String) key));
     }
 
     @Override
@@ -81,7 +81,7 @@ public class RubyHashMapDecorator implements Map<String, Object> {
         if (!(key instanceof String)) {
             return false;
         }
-        Object value = rubyHash.get(coerceKey(key));
+        Object value = rubyHash.get(coerceKey((String) key));
         return convertRubyValue(value);
     }
 
@@ -98,7 +98,7 @@ public class RubyHashMapDecorator implements Map<String, Object> {
             return null;
         }
         Object oldValue = get(key);
-        rubyHash.remove(coerceKey(key));
+        rubyHash.remove(coerceKey((String) key));
         return convertRubyValue(oldValue);
     }
 
