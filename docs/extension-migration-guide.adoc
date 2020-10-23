@@ -1,3 +1,6 @@
+// THIS FILE IS GENERATED - DO NOT EDIT
+// Edit here: asciidoctorj-documentation/src/main/asciidoc/extension-migration-guide.adoc
+// And then run: ./gradlew asciidoctorj-documentation:build
 = AsciidoctorJ: Extension Migration Guide
 Robert Panzer <https://github.com/robertpanzer[@robertpanzer]>
 :compat-mode!:

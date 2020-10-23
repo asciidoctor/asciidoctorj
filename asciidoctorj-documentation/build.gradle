@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.*
+
 jar.enabled = false
 
 dependencies {
@@ -10,11 +12,15 @@ dependencies {
     }
 }
 
+
 task processAsciidocFiles(type: Copy) {
+    def fromDir = 'src/main/asciidoc'
+
+    inputs.files fileTree(dir: 'src')
+    outputs.files fileTree(dir: rootProject.file('docs'), include: '*.adoc')
 
     dependsOn test
-
-    from 'src/main/asciidoc'
+    from fromDir
     include '*.adoc'
     into rootProject.file('docs')
     eachFile { file ->
@@ -74,6 +80,19 @@ task processAsciidocFiles(type: Copy) {
                     line
             }
         }
+        // A Gradle issue makes calculating the source path a bit awkward: we cannot file.getFile() when using a a filter.
+        // See: https://github.com/gradle/gradle/issues/1588
+        def relativeSourceFile = file.getRelativeSourcePath().getFile(new File(fromDir))
+        def absoluteSourceFile = new File("$projectDir", relativeSourceFile.toString())
+        def rootProjectRelativeSourceFile = project.getRootProject().getProjectDir().toPath().
+                relativize(absoluteSourceFile.toPath())
+        def header = File.createTempFile("header",".ado")
+        header.write """|// THIS FILE IS GENERATED - DO NOT EDIT
+                        |// Edit here: ${rootProjectRelativeSourceFile}
+                        |// And then run: ./gradlew asciidoctorj-documentation:build
+                     """.stripMargin().trim().concat("\n")
+        header.deleteOnExit()
+        file.filter ConcatFilter, prepend : header
     }
 }
 
