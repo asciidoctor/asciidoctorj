@@ -75,4 +75,14 @@ public interface Document extends StructuralNode {
      * @param state The state in which to put the sourcemap (true = on, false = off).
      */
     void setSourcemap(boolean state);
+
+
+    /**
+     * The catalog contains data collected by asciidoctor that is useful to a converter.
+     *
+     * Note that the catalog is not part of the asciidoctor public API and is subject to change.
+     *
+     * @return catalog
+     */
+    Catalog getCatalog();
 }

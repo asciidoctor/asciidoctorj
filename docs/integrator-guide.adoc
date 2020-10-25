@@ -1764,6 +1764,18 @@ It is also possible to provide converters for binary formats.
 In this case the converter should extend the generic class `org.asciidoctor.converter.AbstractConverter<T>` where `T` is the return type of the method `convert()`.
 `StringConverter` is actually a concrete subclass for the type `String`.
 
+Asciidoctor makes some useful information available to the converter via the catalog.
+The catalog is exposed in AsciidoctorJ under the `Document` via `getCatalog()` and offers :
+
+- `getFootnotes()` - returns a list of footnotes that occur in the document.
+Footnotes are available after `Document` `getContent()` has been called.
+A converter will typically use this data to render footnotes at the bottom of a document.
+- `getRefs()` - returns a map of ids to document elements.
+Ids are used as a document element target reference 1) to link to and/or 2) for styling, for example by CSS.
+By default, ids are automatically generated and assigned to sections.
+They can also be explicitly assigned by the document author to any document element.
+A converter will typically use this data to lookup ids in support of rendering inline anchors.
+
 == Logs handling API
 
 [NOTE]

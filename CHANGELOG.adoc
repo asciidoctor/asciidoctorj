@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == Unreleased
 
+Improvement::
+
+* AST now provides access to document catalog footnotes and refs (@lread) (#968)
+
 == 2.4.1 (2020-09-10)
 
 Build::
