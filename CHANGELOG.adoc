@@ -16,6 +16,11 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 Improvement::
 
 * AST now provides access to document catalog footnotes and refs (@lread) (#968)
+* Upgrade to Asciidoctor 2.0.11 (#972)
+* Upgrade to Asciidoctor EPUB3 1.5.0-alpha.19 (#972)
+* Upgrade to rouge 3.24.0 (#972)
+* Upgrade to rouge 1.1.3 (#972)
+
 
 == 2.4.1 (2020-09-10)
 
