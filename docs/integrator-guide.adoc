@@ -2324,12 +2324,12 @@ fmt.Println("Hello Go")
 For this document the calls to a syntax highlighter will happen in this order:
 
 . New SyntaxHighlighter
-. hasDocInfo for HEADER
-. getDocInfo for HEADER
 . format `java`
 . highlight `System.out.println("Hello Java");`
 . format `go`
 . highlight `fmt.Println("Hello Go")`
+. hasDocInfo for HEADER
+. getDocInfo for HEADER
 . hasDocInfo for FOOTER
 . getDocInfo for FOOTER
 . isWriteStylesheet
