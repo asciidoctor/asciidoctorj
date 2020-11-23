@@ -1,0 +1,25 @@
+// == ROOT module
+* xref:distribution.adoc[]
+// Moved here to aggregate installation as dependency and as CLI (sdkman, choco)
+* xref:installation.adoc[]
+
+// Moved content from Integrator's guide here
+* Usage
+** xref:cli.adoc[]
+** xref:converting-documents.adoc[]
+*** xref:asciidoctor-interface.adoc[]
+*** xref:asciidoctor-api-options.adoc[]
+*** xref:locating-files.adoc[]
+*** xref:safe-mode-and-filesystem-access.adoc[]
+*** xref:conversion-examples.adoc[]
+** xref:ruby-runtime.adoc[]
+** xref:ruby-extensions.adoc[]
+
+// Single page
+** xref:logs-handling.adoc[]
+
+// This feels disconnected: move to 'Help & guides' ?
+
+* xref:read-document-tree.adoc[]
+
+* xref:write-converter.adoc[]

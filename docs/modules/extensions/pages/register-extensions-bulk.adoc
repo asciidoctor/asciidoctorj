@@ -1,0 +1,29 @@
+= Bulk Extension Registration (_Extension Groups_)
+
+As an alternative method to register extensions in bulk or groups.
+Using the `ExtensionGroup` API it is possible to define a set of extension grouped under a name to be registered later.
+
+[source,java]
+----
+final String groupName = "my-extensions";
+ExtensionGroup extensionGroup = asciidoctor.createGroup(groupName)
+        .blockMacro(GistBlockMacroProcessor.class)
+        .includeProcessor(LsIncludeProcessor.class)
+        .postprocessor(ByePostprocessor.class);       // <1>
+
+    ...
+
+extensionGroup.register();                            // <2>
+----
+<1> Multiple extensions can be added together using the fluent API.
+<2> Complete registration, otherwise extensions won't be enabled.
+
+If you don't need or want to set a specific name, you can just use `asciidoctor.createGroup()`, and a randomly generated name will be assigned automatically.
+
+[IMPORTANT]
+====
+Calling `createGroup(String) + register()` more than once will override any pre-existing group with the same name.
+Effectively REMOVING (and disabling) the previously set extensions.
+
+This does not apply to `createGroup()`, different calls will create different extension groups with random names.
+====

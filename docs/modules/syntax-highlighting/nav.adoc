@@ -1,0 +1,8 @@
+* xref:syntax-highlighter.adoc[]
+** xref:implement-adapter.adoc[]
+** xref:lifecycle.adoc[]
+** xref:formatting.adoc[]
+** xref:link-external-resources.adoc[]
+** xref:static-during-conversion.adoc[]
+** xref:invocation-order.adoc[]
+** xref:automatic-loading.adoc[]

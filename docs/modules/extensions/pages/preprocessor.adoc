@@ -1,0 +1,39 @@
+[[preprocessor]]
+= Preprocessor
+
+Preprocessors allow to process the raw asciidoctor sources before Asciidoctor parses and converts them.
+A preprocessor could for example make comments visible that should be rendered in drafts.
+
+Our example preprocessor does exactly that and will render the comment in the following document as a note.
+
+.comment.adoc
+[source,asciidoc]
+----
+include::example$comment.adoc[]
+----
+
+The preprocessor will render the document as if it looked like this:
+
+.comment-with-note.adoc
+[source,asciidoc,indent=0]
+----
+include::example$comment-with-note.adoc[]
+----
+
+The implementation of the preprocessor simply gets the AST node for the document to be created as well as a `PreprocessorReader`.
+A `PreprocessorReader` gives access to the raw input, on a per-line basis, allowing to fetch and manipulate content.
+And this is exactly what our Preprocessor does: it fetches the raw content, modifies it and stores it back so that Asciidoctor will only see our modified content.
+
+.A Preprocessor that renders comments as notes
+[source,java,indent=0]
+----
+include::example$org/asciidoctor/integrationguide/extension/CommentPreprocessor.java[tags=include]
+----
+<1> All Preprocessors must extend the class `org.asciidoctor.extension.Preprocessor` and implement the method `process()`.
+<2> The implementation gets the whole Asciidoctor source as an array of Strings where each entry corresponds to one line.
+<3> Every odd occurrence of a comment start is replaced by opening an admonition block, every even occurrence is closing it.
+The new content is collected in a new list.
+<4> The processed content is restored to the original `PreprocessorReader` so that it replaces the content that was already consumed at the beginning of the method.
+
+There may be multiple Preprocessors registered and every Preprocessor will be called.
+The order in which the Preprocessors are called is undefined so that all Preprocessors should be independent of each other.

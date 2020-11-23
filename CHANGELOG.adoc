@@ -1,7 +1,7 @@
 = Asciidoctor Changelog
-:uri-asciidoctor: http://asciidoctor.org
-:uri-asciidoc: {uri-asciidoctor}/docs/what-is-asciidoc
-:uri-repo: https://github.com/asciidoctor/asciidoctorj
+:url-asciidoctor: http://asciidoctor.org
+:url-asciidoc: {url-asciidoctor}/docs/what-is-asciidoc
+:url-repo: https://github.com/asciidoctor/asciidoctorj
 :icons: font
 :star: icon:star[role=red]
 ifndef::icons[]
@@ -9,7 +9,7 @@ ifndef::icons[]
 endif::[]
 
 This document provides a high-level view of the changes introduced in AsciidoctorJ by release.
-For a detailed view of what has changed, refer to the {uri-repo}/commits/master[commit history] on GitHub.
+For a detailed view of what has changed, refer to the {url-repo}/commits/master[commit history] on GitHub.
 
 == Unreleased
 

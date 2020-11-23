@@ -1,0 +1,44 @@
+[[blockmacroprocessor]]
+= Block Macro Processor
+
+A block macro is a block having a content like this: `gist::mygithubaccount/8810011364687d7bec2c[]`.
+During the rendering process of the document Asciidoctor invokes a BlockMacroProcessor that has to create a block computed from this macro.
+
+The structure is always like this:
+
+. Macro name, e.g. `gist`
+. Two colons `::`
+. A target, `mygithubaccount/8810011364687d7bec2c`
+. Attributes, that are empty in this case, `[]`
+
+Our example block macro should embed the GitHub gist that would be available at the URL https://gist.github.com/mygithubaccount/8810011364687d7bec2c.
+
+The following block macro processor replaces such a macro with the `<script>` element that you can also pick from https://gist.github.com for a certain gist.
+
+[[GistBlockMacroProcessor]]
+.A BlockMacroProcessor that replaces gist block macros
+[source,java,indent=0]
+----
+include::example$org/asciidoctor/integrationguide/extension/GistBlockMacroProcessor.java[tags=include]
+----
+<1> The `@Name` annotation defines the macro name this BlockMacroProcessor should be called for.
+In this case this instance will be called for all block macros that have the name `gist`.
+<2> All BlockMacroProcessors must extend the class `org.asciidoctor.extension.BlockMacroProcessor`.
+<3> A BlockMacroProcessor must implement the abstract method `process` that is called by Asciidoctor.
+The method must return a new block that is used be Asciidoctor instead of the block containing the block macro.
+<4> The implementation constructs the HTML content that should go into the final HTML document.
+That means that the content has to be directly passed through into the result.
+Having said that this example does not work when generating PDF content.
+<5> The processor creates a new block via the inherited method `createBlock()`.
+The parent of the new block, a context and the content must be passed.
+As we want to pass through the content directly into the result the context must be `pass` and the content is the computed HTML string.
+
+NOTE: There are many more methods available to create any type of AST node.
+
+Now, once it is registered, we would be able to use the new block macro in our document as:
+
+[[GistBlockMacroDocument]]
+.gist-macro.adoc
+----
+include::example$gist-macro.adoc[]
+----

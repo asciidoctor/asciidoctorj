@@ -1,0 +1,35 @@
+= Register a Ruby Extension
+
+You can even register extensions written in Ruby using AsciidoctorJ.
+To register a _Ruby_ extension you must get a `RubyExtensionRegistry` class instead of `JavaExtensionRegistry`.
+
+[source,java]
+.Register a Ruby extension in Java
+----
+RubyExtensionRegistry rubyExtensionRegistry = this.asciidoctor.rubyExtensionRegistry(); // <1>
+rubyExtensionRegistry.loadClass(Class.class.getResourceAsStream("/YellRubyBlock.rb")).block("rubyyell", "YellRubyBlock"); // <2>
+
+String content = asciidoctor.convertFile(new File(
+                "target/test-classes/sample-with-ruby-yell-block.ad"),
+                options().toFile(false).get());
+----
+<1> `rubyExtensionRegistry` method is called to get a RubyExtensionRegistry instance.
+<2> Ruby file containing a class implementing a Block extension is loaded inside the Ruby runtime. Then the block is registered with a name (rubyyell), and we pass the name of the class to be instantiated.
+
+[source,ruby]
+.YellBlock.rb
+----
+require 'asciidoctor'
+require 'asciidoctor/extensions'
+
+class YellRubyBlock < Asciidoctor::Extensions::BlockProcessor
+  option :contexts, [:paragraph]
+  option :content_model, :simple
+
+  def process parent, reader, attributes
+    lines = reader.lines.map {|line| line.upcase.gsub(/\.( |$)/, '!\\1') }
+    Asciidoctor::Block.new parent, :paragraph, :source => lines, :attributes => attributes
+  end
+end
+----
+

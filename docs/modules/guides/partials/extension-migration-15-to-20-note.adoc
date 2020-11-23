@@ -1,0 +1,1 @@
+NOTE: If you want to migrate from 1.5.x to the latest version, i.e. 2.0.x, please follow all individual sections, i.e. first xref:extension-migration-guide-15-to-16.adoc[Extension Migration Guide: 1.5.x to 1.6.x] and then this.

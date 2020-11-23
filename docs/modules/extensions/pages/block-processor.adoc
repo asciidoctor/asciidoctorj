@@ -1,0 +1,39 @@
+[[blockprocessor]]
+= Block Processor
+
+A block processor is very similar to a block macro processor.
+But in contrast to a block macro a block processor is called for a block having a certain name instead of a macro invocation.
+Therefore block processors rather transform blocks instead of creating them as block macro processors do.
+
+The following example shows a block processor that converts the whole text of a block to upper case if it has the name `yell`.
+That means that our block processor will convert blocks like this:
+
+.yell-block.adoc
+[source,asciidoc]
+----
+include::example$yell-block.adoc[]
+----
+
+After the processing this block will look like this
+
+====
+include::example$yell-block-result.txt[]
+====
+
+The BlockProcessor looks like this:
+
+.A BlockProcessor that transforms the content of a block to upper case
+[source,java,indent=0]
+----
+include::example$org/asciidoctor/integrationguide/extension/YellBlockProcessor.java[tags=include]
+----
+<1> The annotation `@Name` defines the block name that this block processor handles.
+<2> The annotation `@Contexts` defines the block types that this block processor handles like paragraphs, listing blocks, or open blocks.
+Constants for all contexts are also defined in this annotation.
+Note that this annotation takes a list of block types, so that a block processor can process paragraph blocks as well as example blocks with the same block name.
+<3> The annotation `@ContentModel` defines what this processor produces.
+Constants for all contexts are also defined for the annotation class.
+In this case the block processor creates a simple paragraph, therefore the content model `ContentModel.SIMPLE` is defined.
+<4> All block processors must extend `org.asciidoctor.extension.BlockProcessor`.
+<5> A block processor must implement the method `process()`.
+Here the implementation gets the raw block content from the reader, transforms it and creates and returns a new block that contains the transformed content.

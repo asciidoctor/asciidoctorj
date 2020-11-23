@@ -1,0 +1,17 @@
+= Loading External Gems with GEM_PATH
+
+By default, AsciidoctorJ comes with all required gems bundled within the jar.
+But in some circumstances like xref:run-in-osgi.adoc[OSGi] environments you may require to store gems in an external folder and be loaded by AsciidoctorJ.
+
+As the Java interface `org.asciidoctor.Asciidoctor` and its factory `org.asciidoctor.Asciidoctor.Factory` are agnostic to JRuby there are the interface `org.asciidoctor.jruby.AsciidoctorJRuby` and `org.asciidoctor.jruby.AsciidoctorJRuby.Factory` that allow to get an Asciidoctor instance using JRuby with a certain GEM_PATH.
+Note that `org.asciidoctor.jruby.AsciidoctorJRuby` directly extends `org.asciidoctor.Asciidoctor`.
+
+[source,java]
+.Example of setting GEM_PATH
+----
+import static org.asciidoctor.jruby.AsciidoctorJRuby.Factory.create;
+import org.asciidoctor.Asciidoctor;
+
+Asciidoctor asciidoctor = create("/my/gem/path"); // <1>
+----
+<1> Creates an `Asciidoctor` instance with given `GEM_PATH` location.

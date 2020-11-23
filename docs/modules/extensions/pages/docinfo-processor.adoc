@@ -1,0 +1,34 @@
+[[docinfoprocessor]]
+= Docinfo Processor
+
+Docinfo Processors are primarily targeted for the HTML and DocBook5 target format.
+A Docinfo Processor basically allows to add content to the HTML header or at the end of the HTML body.
+For the DocBook5 target format a Docinfo Processor can add content to the info element or at the very end of the document, just before the closing tag of the root element.
+
+Our example Docinfo Processor will add a robots meta tag to the head of the HTML output:
+
+.A Docinfo Processor that adds a robots meta tag
+[source,java,indent=0]
+----
+include::example$org/asciidoctor/integrationguide/extension/RobotsDocinfoProcessor.java[tags=include]
+----
+<1> The Location annotation defines whether the result of this Docinfo Processor should be added to the header or the footer of the document.
+Content is added to the header via `LocationType.HEADER` and to the footer via `LocationType.FOOTER`.
+<2> Every Docinfo Processor must extend the class `DocinfoProcessor` and implement the `process()` method.
+<3> Our example implementation simply returns the meta tag as a string.
+
+[IMPORTANT]
+====
+For the example to work make sure:
+
+* `header_footer` option is not set to `false`, otherwise these will not be added to the document.
+* `safe` mode option is set to at least `SECURE`
+
+.Options configuration example
+[source,java]
+----
+OptionsBuilder.options()
+        .headerFooter(true)
+        .safe(SafeMode.SERVER);
+----
+====

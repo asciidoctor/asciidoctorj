@@ -1,0 +1,29 @@
+= Lifecycle of a SyntaxHighlighterAdapter
+
+AsciidoctorJ will create an own instance for every document that it converts.
+
+It will try to instantiate the class by calling a constructor that has three parameters:
+
+`name`::
+The name of the syntax highlighter as it was referenced by the `:source-highlighter` attribute.
+In the previous example this was `"myhighlightjs"`.
+
+`backend`::
+The name of the backend used to convert the document.
+This is for example `"html5"`.
+Note that SyntaxHighlighters can only be used for HTML based backends.
+
+`options`::
+A map containing options for this syntax highlighter.
+Currently this contains the current `org.asciidoctor.ast.Document` for the key `"document"`.
+
+This means the syntax highlighter class could also have this constructor:
+
+[source,java]
+----
+include::example$org/asciidoctor/integrationguide/syntaxhighlighter/threeparams/HighlightJsHighlighter.java[tags=include]
+----
+
+A constructor with only the first two, or only the first parameter is also allowed.
+AsciidoctorJ will call the constructor with the most matching parameters.
+

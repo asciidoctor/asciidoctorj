@@ -1,0 +1,9 @@
+= Loading Ruby Libraries
+
+Most extensions can be fully implemented in Java, but some complex ones may require mixing Ruby and Java code.
+This means that you may need to execute a Ruby file or a RubyGem (i.e., gem) inside your extension.
+
+To load a Ruby file inside the Ruby runtime, you can use `org.asciidoctor.jruby.internal.RubyUtils.loadRubyClass(Ruby, InputStream)`.
+You can also load a gem using an API that wraps Ruby's `require` command.
+The gem must be available inside the classpath.
+Next run `org.asciidoctor.jruby.internal.RubyUtils.requireLibrary(Ruby, String)`, passing the name of the gem as the second argument.

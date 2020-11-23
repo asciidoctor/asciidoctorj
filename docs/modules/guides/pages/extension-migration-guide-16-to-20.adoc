@@ -1,0 +1,112 @@
+= Extension Migration: 1.6.x to 2.0.x
+:url-base-1-5: https://github.com/asciidoctor/asciidoctorj/blob/v1.5.8.1
+:url-base-1-6: https://github.com/asciidoctor/asciidoctorj/blob/v1.6.0
+
+Between 1.6.x and 2.0.x there are only very few API changes that affect an extension writer.
+This guide will illustrate the changes
+
+include::partial$extension-migration-15-to-20-note.adoc[]
+
+== Extension registry location update
+
+You might have implemented the `org.asciidoctor.extension.spi.ExtensionRegistry` Service Interface to automatically register extensions as explained in the xref:extensions:register-extensions-automatically.adoc[].
+To achieve this you might have added these two artifacts:
+
+First the implementation:
+
+[source,java]
+.MyExtension.java for AsciidoctorJ 1.5.x or 1.6.x
+----
+package com.example;
+
+import org.asciidoctor.extension.spi.ExtensionRegistry;
+
+public class MyExtension implements ExtensionRegistry {
+  @Override
+  public void register(Asciidoctor asciidoctor) {
+    JavaExtensionRegistry javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
+    javaExtensionRegistry.treeprocessor(MyTreeprocessor.class);
+  }
+}
+----
+
+Additionally you have added a file in `META-INF/services/` that declares your extensions and allows it to be discovered:
+
+./META-INF/services/org.asciidoctor.extension.spi.ExtensionRegistry for AsciidoctorJ 1.5.x or 1.6.x
+----
+com.example.MyExtension
+----
+
+Now the interface `org.asciidoctor.extension.spi.ExtensionRegistry` moved to `org.asciidoctor.jruby.extension.spi.ExtensionRegistry`.
+That means that you have to update the name of the interface and rename the file in `/META-INF/services/`.
+In particular the last step is easily overseen as the compiler will not warn you.
+
+Therefore the implementation has to look like this:
+
+[source,java]
+.MyExtension.java for AsciidoctorJ 2.0.x
+----
+package com.example;
+
+import org.asciidoctor.jruby.extension.spi.ExtensionRegistry; // <1>
+
+public class MyExtension implements ExtensionRegistry {
+  @Override
+  public void register(Asciidoctor asciidoctor) {
+    JavaExtensionRegistry javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
+    javaExtensionRegistry.treeprocessor(MyTreeprocessor.class);
+  }
+}
+----
+<1> Import ExtensionRegistry from the new package
+
+Additionally the file `/META-INF/services/org.asciidoctor.extension.spi.ExtensionRegistry` has to be renamed to `/META-INF/services/org.asciidoctor.jruby.extension.spi.ExtensionRegistry`.
+
+./META-INF/services/org.asciidoctor.jruby.extension.spi.ExtensionRegistry for AsciidoctorJ 2.0.x
+----
+com.example.MyExtension
+----
+
+=== InlineMacroProcessor should return a PhraseNode instead of a String
+
+A really simple extension `yell` can be implemented as an `InlineMacroProcessor`.
+It just writes the target value as an upper-case string.
+For example `yell&#58;yes&#91;&#93;` is replaced by `YES` in the generated document.
+
+[source,java]
+.YellMacroProcessor.java for AsciidoctorJ 1.5.x or 1.6.x
+----
+public class YellMacroProcessor extends InlineMacroProcessor {
+
+  public YellMacroProcessor(String macroName, Map<String, Object> config) {
+    super(macroName, config);
+  }
+
+  @Override
+  public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
+    return target.toUpperCase();
+  }
+}
+----
+
+The implementation also works with Asciidoctor `2.0.x` but since version `2.0.0.rc.3` of Asciidoctor, when a String is returned, following entry is logged:
+
+ INFO: expected substitution value for custom inline macro to be of type Inline; got String: yell&#58;yes&#91;&#93;
+
+The correct implementation with Asciidoctor `2.0.x` is to return a `PhraseNode`:
+
+[source,java]
+.YellMacroProcessor.java for AsciidoctorJ 2.0.x
+----
+public class YellMacroProcessor extends InlineMacroProcessor {
+
+  public YellMacroProcessor(String macroName, Map<String, Object> config) {
+    super(macroName, config);
+  }
+
+  @Override
+  public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
+    return createPhraseNode(parent, "quoted", target.toUpperCase(), attributes, new HashMap<>());
+  }
+}
+----

@@ -1,0 +1,6 @@
+= AsciidoctorJ: Java Bindings for Asciidoctor
+
+Asciidoctor is an implementation of the AsciiDoc format in Ruby.
+Thanks to the {url-jruby}[JRuby], an implementation of the Ruby runtime in Java, Asciidoctor can also be executed on a JVM.
+{url-repo}[AsciidoctorJ] bundles all gems that are required for executing Asciidoctor and wraps it into a Java API so that Asciidoctor can be used in Java like any other Java library.
+Additionally, there is a distribution that you can simply download, unzip and execute without worrying about installing the right Ruby runtime, installing gems etc.

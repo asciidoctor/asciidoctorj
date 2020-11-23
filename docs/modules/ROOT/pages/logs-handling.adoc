@@ -1,0 +1,98 @@
+= Logs Handling API
+
+NOTE: This API is inspired by Java Logging API (JUL).
+If you are familiar with `java.util.logging.*` you will see familiar analogies with some of its components.
+
+AsciidoctorJ (v1.5.7+) offers the possibility to capture messages generated during document rendering.
+These messages correspond to logging information and are organized in 6 severity levels:
+
+. DEBUG
+. INFO
+. WARN
+. ERROR
+. FATAL
+. UNKNOWN
+
+== Logs Handling API
+
+The easiest way to capture messages is registering a `LogHandler` through the `Asciidoctor` instance.
+
+[source,java]
+.Registering a LogHandler
+----
+Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+
+asciidoctor.registerLogHandler(new LogHandler() { // <1>
+    @Override
+    public void log(LogRecord logRecord) {
+        System.out.println(logRecord.getMessage());
+    }
+});
+----
+<1> Use `registerLogHandler` to register one or more handlers.
+
+The `log` method in the `org.asciidoctor.log.LogHandler` interface provides a `org.asciidoctor.log.LogRecord` that exposes the following information:
+
+[horizontal]
+Severity severity::
+Severity level of the current record.
+
+Cursor cursor::
+Information about the location of the event, contains:
+* LineNumber: relative to the file where the message occurred.
+* Path: source file simple name, or `<stdin>` value when converting from a String.
+* Dir: absolute path to the source file parent directory, or the execution path when converting from a String.
+* File: absolute path to the source file, or `null` when converting from a String. +
+These will point to the correct source file, even when this is included from another.
+
+String message::
+Descriptive message about the event.
+
+String sourceFileName::
+Contains the value `<script>`. +
+For the source filename see `Cursor` above.
+
+String sourceMethodName::
+The Asciidoctor Ruby engine method used to convert the file; `convertFile` or `convert` whether you are converting a File or a String.
+
+== Logs Handling SPI
+
+Similarly to AsciidoctorJ extensions, the Log Handling API provides an alternate method to register Handlers without accessing `Asciidoctor` instance.
+
+Start creating a normal LogHandler implementation.
+
+[source,Java]
+----
+package my.asciidoctor.log.MemoryLogHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.asciidoctor.log.LogHandler;
+import org.asciidoctor.log.LogRecord;
+
+/**
+ * Stores LogRecords in memory for later analysis.
+ */
+public class MemoryLogHandler extends LogHandler {
+
+  private List<LogRecord> logRecords = new ArrayList<>();
+
+  @Override
+  public void log(LogRecord logRecord) {
+    logRecords.add(record);
+  }
+
+  public List<LogRecord> getLogRecords() {
+    return logRecords;
+  }
+}
+----
+
+Next, create a file called `org.asciidoctor.log.LogHandler` inside `META-INF/services` with the implementation’s full qualified name.
+
+.META-INF/services/org.asciidoctor.log.LogHandler
+ my.asciidoctor.log.MemoryLogHandler
+
+And that’s all.
+Now when a .jar file containing the previous structure is dropped inside classpath of AsciidoctorJ, the handler will be registered automatically.
+

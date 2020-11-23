@@ -1,0 +1,13 @@
+[cols="2m,1,3"]
+.Built-in `DirectoryWalker` implementations
+|===
+|Class |Type |Description
+
+|AsciiDocDirectoryWalker
+|Concrete class
+|Locates all files of given folder and all its subfolders. Ignores files starting with underscore (_).
+
+|GlobDirectoryWalker
+|Concrete class
+|Locates all files of given folder following a glob expression.
+|===

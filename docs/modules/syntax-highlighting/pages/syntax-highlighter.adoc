@@ -1,0 +1,19 @@
+= Syntax Highlighter API
+
+Asciidoctor supports a range of different syntax highlighters: Coderay, HighlightJs, Rouge, Pygments and Prettify.
+Since version 2.0.0 Asciidoctor also supports to adapt and plug in other syntax highlighters when rendering to HTML.
+
+AsciidoctorJ offers this as well since version 2.1.0.
+
+Adapting a syntax highlighter to Asciidoctor involves a subset of the following tasks:
+
+- Include certain stylesheets and scripts into the resulting HTML document.
+- Create stylesheet and script resources in the filesystem in case the document is rendered to a file and it's converted with the attributes ':linkcss' and ':copycss'.
+- Format the source block element, by wrapping it into `<pre/>` and `<code/>` elements with certain attributes.
+This means to convert the source text `puts "Hello World"` to the HTML `<pre class="highlightme"><code>puts "Hello World"</code></pre>`.
+- Format the source text itself by mapping it to span elements.
+This means to convert the source text `puts "Hello World"` to the HTML `<span class="id">puts</span> <span class="stringliteral">"Hello World"</span>`.
+This result still has to be formatted, which usually means to wrap it in `<pre/>` and `<code/>` elements.
+
+To adapt to a certain syntax highlighter some of these tasks have to be implemented.
+The following sections show how to write an adapter for a custom syntax highlighter.

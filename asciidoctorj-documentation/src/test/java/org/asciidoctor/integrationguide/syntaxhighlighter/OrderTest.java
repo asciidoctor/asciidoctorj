@@ -13,11 +13,10 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertThat;
+import static org.apache.commons.io.FileUtils.readFileToString;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Arquillian.class)
 public class OrderTest {
@@ -35,6 +34,9 @@ public class OrderTest {
     public void should_invoke_syntax_highlighter() throws Exception {
         File sources_adoc = //...
             classpathResources.getResource("syntax-highlighting-order.adoc");
+        String expectedHighlighterMessages =
+            readFileToString(classpathResources.getResource("syntax-highlighting-order-output.txt"))
+                .replaceAll("\r\n","\n");
 
         File toDir = // ...
             tempDir.newFolder();
@@ -52,11 +54,11 @@ public class OrderTest {
                     .copyCss(true)
                     .linkCss(true)));
 
-        try (PrintWriter out = new PrintWriter(new FileWriter("build/resources/test/order.txt"))) {
-            for (String msg: OrderDocumentingHighlighter.messages) {
-                out.println(". " + msg);
-            }
-        }
+        String actual = OrderDocumentingHighlighter.messages.stream()
+                .map(msg -> ". " + msg + "\n")
+                .collect(Collectors.joining());
+
+        assertEquals(expectedHighlighterMessages, actual);
     }
 
 }

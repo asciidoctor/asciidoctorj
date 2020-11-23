@@ -1,0 +1,36 @@
+= Build the Project
+
+Invoke Gradle on this project using the `gradlew` command (i.e., the Gradle Wrapper).
+
+TIP: We strongly recommend that you use Gradle via the https://www.timroes.de/2013/09/12/speed-up-gradle[Gradle daemon].
+
+To clone the project, compile the source and build the artifacts (i.e., jars) locally, run:
+
+ $ git clone https://github.com/asciidoctor/asciidoctorj
+   cd asciidoctorj
+   ./gradlew assemble
+
+You can find the built artifacts in the [path]_asciidoctorj-*/build/libs_ folders.
+
+To execute tests when running the build, use:
+
+ $ ./gradlew build
+
+To only execute the tests, run:
+
+ $ ./gradlew check
+
+You can also run tests for a single module:
+
+ $ cd asciidoctorj-core
+   ../gradlew check
+
+To run a single test in the asciidoctorj-core subproject, use:
+
+ $ ../gradlew -Dsingle.test=NameOfTestClass test
+
+To create the distribution, run:
+
+ $ ./gradlew distZip
+
+You can find the distribution in the [path]_asciidoctorj-distribution/build/distributions_ folder.

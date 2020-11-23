@@ -1,0 +1,26 @@
+= Link and Copy External Resources
+
+In xref:implement-adapter.adoc[] we have seen how to implement a basic syntax highlighter that embeds all required resources as DocInfo in the document.
+When the document is converted with the attributes `:linkcss` and `:copycss` we expect though that these resources are also written to disk next to the document, and that the document only references them.
+
+Looking at our current example of the highlight.js adapter we referenced the resources from the internet.
+For scenarios where it should also be possible to read the document while offline, the syntax highlighter can implement the interface `org.asciidoctor.syntaxhighlighter.StylesheetWriter`:
+
+[source,java]
+----
+include::example$org/asciidoctor/integrationguide/syntaxhighlighter/HighlightJsWithOfflineStylesHighlighter.java[tags=include]
+----
+<1> A syntax highlighter that writes additional resources to the filesystem next to the document must implement the interface `org.asciidoctor.syntaxhighlighter.StylesheetWriter`.
+<2> If the document is converted with the attributes `:copycss` and `:linkcss` the DocInfo that is added to the converted document should link to the local resources.
+<3> The syntax highlighter should return if it wants to write stylesheets in `isWriteStylesheet()`.
+This method could for example examine the document if it really needs external resources and return the corresponding result.
+<4> The method `writeStylesheet()` gets the `org.asciidoctor.ast.Document` and the File for the target directory where the document should be written.
+External resources should be written to this directory as well.
+
+This highlighter writes the css and js resources to files in the same directory as the document if it is converted with the attributes `:linkcss` and `:copycss`:
+
+[source,java]
+----
+include::example$org/asciidoctor/integrationguide/syntaxhighlighter/HighlightJsHighlighterTest.java[tags=includestylesheetwriter]
+----
+<1> External stylesheets are only written when converting to a file, not when converting to a stream or a string, and when the attributes `:linkcss` and `:copycss` are set.

@@ -1,0 +1,156 @@
+= The Asciidoctor Interface
+
+The main entry point for AsciidoctorJ is the `Asciidoctor` Java interface.
+You obtain an instance from the factory class `Asciidoctor.Factory` that provides a simple create method.
+
+If you need to get an instance of Asciidoctor using a certain gem path the factory `org.asciidoctor.jruby.AsciidoctorJRuby.Factory` provides multiple create methods to get an instance with a certain gem or load path:
+
+.Methods to create an Asciidoctor instance
+[cols="1m,2"]
+|===
+|Method Name | Description
+
+| org.asciidoctor.Asciidoctor.Factory +
+.create()
+| The default create method that is used most often.
+Only use other methods if you want to load extensions that are not on the classpath.
+
+| org.asciidoctor.jruby.AsciidoctorJRuby.Factory +
+.create(String gemPath)
+| Creates a new Asciidoctor instance and sets the global variable `GEM_PATH` to the given String.
+The variable `GEM_PATH` defines where Ruby looks for installed gems.
+
+| org.asciidoctor.jruby.AsciidoctorJRuby.Factory +
+.create(List<String> loadPaths)
+| Creates a new Asciidoctor instance and set the global variable `LOAD_PATH` to the given Strings.
+The variable `LOAD_PATH` defines where Ruby looks for files.
+
+|===
+
+So most of the time you simply get an Asciidoctor instance like this:
+
+[source,java,indent=0]
+.Default way to create an Asciidoctor instance
+----
+include::example$org/asciidoctor/integrationguide/AsciidoctorInterface.java[tags=create]
+----
+
+As Asciidoctor instances can be created they can also be explicitly destroyed to free resources used in particular by the Ruby runtime associated with it.
+Therefore the Asciidoctor interface offers the method shutdown.
+After calling this method every other method call on the instance will fail!
+
+[source,java,indent=0]
+.Destroying an Asciidoctor instance
+----
+include::example$org/asciidoctor/integrationguide/AsciidoctorInterface.java[tags=shutdown]
+----
+
+The Asciidoctor interface also implements the interface `java.io.AutoCloseable` which also shuts down the Ruby runtime.
+Therefore the previous example is equivalent to this:
+
+[source,java,indent=0]
+.Automatically destroying an Asciidoctor instance
+----
+include::example$org/asciidoctor/integrationguide/AsciidoctorInterface.java[tags=autoclose]
+----
+
+To convert AsciiDoc documents the Asciidoctor interface provides four methods:
+
+* `convert`
+* `convertFile`
+* `convertFiles`
+* `convertDirectory`
+
+IMPORTANT: Prior to Asciidoctor 1.5.0, the term `render` was used in these method names instead of `convert` (i.e., `render`, `renderFile`, `renderFiles` and `renderDirectory`).
+AsciidoctorJ continues to support the old method names for backwards compatibility.
+
+[cols="1m,1m,2"]
+.Convert methods on the `Asciidoctor` interface
+|===
+|Method Name |Return Type| Description
+
+|convert
+|String
+|Parses AsciiDoc content read from a string or stream and converts it to the format specified by the `backend` option.
+
+|convertFile
+|String
+|Parses AsciiDoc content read from a file and converts it to the format specified by the `backend` option.
+
+|convertFiles
+|String[]
+|Parses a collection of AsciiDoc files and converts them to the format specified by the `backend` option.
+
+|convertDirectory
+|String[]
+|Parses all AsciiDoc files found in the specified directory (using the provided strategy) and converts them to the format specified by the `backend` option.
+|===
+
+// What is the 'provided strategy', need a link
+
+Here's an example of using AsciidoctorJ to convert an AsciiDoc string.
+
+[source,java]
+.Converting an AsciiDoc string
+----
+String html = asciidoctor.convert(
+    "Writing AsciiDoc is _easy_!",
+    new HashMap<String, Object>());
+System.out.println(html);
+----
+
+The `convertFile` method will convert the contents of an AsciiDoc file.
+
+[source,java]
+.Converting an AsciiDoc file
+----
+String html = asciidoctor.convertFile(
+    new File("sample.adoc"),
+    new HashMap<String, Object>());
+System.out.println(html);
+----
+
+The `convertFiles` method will convert a collection of AsciiDoc files:
+
+[source,java]
+.Converting a collection of AsciiDoc files
+----
+String[] result = asciidoctor.convertFiles(
+    Arrays.asList(new File("sample.adoc")),
+    new HashMap<String, Object>());
+
+for (String html : result) {
+    System.out.println(html);
+}
+----
+
+NOTE: The `convertFile` or `convertFiles` methods will only return a converted `String` object or array if you disable writing to a file, which is enabled by default.
+To disable writing to a file, create a new `Options` object, disable the option to create a new file with `option.setToFile(false)`, and then pass the object as a parameter to `convertFile` or `convertFiles`.
+To learn more check xref:asciidoctor-api-options.adoc[] for a description of available customizations.
+
+TIP: When converting directly to files, the `convertFiles` method will return a String Array (i.e., `String[]`) with the names of all the converted documents.
+
+Another method provided by the `Asciidoctor` interface is `convertDirectory`.
+This method converts all of the files with AsciiDoc extensions (`.adoc` _(preferred)_, `.ad`, `.asciidoc`, `.asc`) that are present within a specified folder and following given strategy.
+If the converted content is not written into files, `convertDirectory` will return an array listing all the documents converted.
+
+[source,java]
+.Converting all AsciiDoc files in a directory
+----
+String[] result = asciidoctor.convertDirectory(
+    new AsciiDocDirectoryWalker("src/asciidoc"),
+    new HashMap<String, Object>());
+
+for (String html : result) {
+    System.out.println(html);
+}
+----
+
+In conjunction with `convertDirectory` the `DirectoryWalker` interface.
+This provides a strategy for locating files to process that can be passed as the first parameter of the `convertDirectory` method.
+
+Currently, `Asciidoctor` provides two built-in implementations of the `DirectoryWalker` interface:
+
+include::partial$directory-walkers.adoc[]
+
+To learn more, see xref:locating-files.adoc[].

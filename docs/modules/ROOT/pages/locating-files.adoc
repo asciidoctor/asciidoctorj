@@ -1,0 +1,42 @@
+= Locate Files
+
+AsciidoctorJ offers a collection of utilities called `DirectoryWalkers` for scenarios where sources may be organized in special ways.
+
+include::partial$directory-walkers.adoc[]
+
+TIP: You can also create your own DirectoryWalkers by extending `AbstractDirectoryWalker` class or `DirectoryWalker` interface.
+
+== AsciiDocDirectoryWalker class
+
+A utility class `AsciiDocDirectoryWalker` is available for searching the AsciiDoc files present in a root folder and its subfolders.
+`AsciiDocDirectoryWalker` locates all files that end with `.adoc`, `.ad`, `.asciidoc` or `.asc`.
+Also it ignores all files starting with underscore (`_`).
+
+[source,java]
+.Locating AsciiDoc files with `AsciiDocDirectoryWalker`
+----
+import java.util.List;
+import org.asciidoctor.AsciiDocDirectoryWalker;
+
+DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker("docs"); // <1>
+List<File> asciidocFiles = directoryWalker.scan(); // <2>
+----
+<1> Defines which parent directory is used for searching.
+<2> Returns a list of all AsciiDoc files found in root folder and its subfolders.
+
+== GlobDirectoryWalker class
+
+A utility class `GlobDirectoryWalker` is available for searching the AsciiDoc files present in a root folder and scanning using a `Glob` expression.
+`GlobDirectoryWalker` locates all files that end with `.adoc`, `.ad`, `.asciidoc` or `.asc`.
+
+[source,java]
+.Locating AsciiDoc files with `GlobDirectoryWalker`
+----
+import java.util.List;
+import org.asciidoctor.GlobDirectoryWalker;
+
+DirectoryWalker directoryWalker = new GlobDirectoryWalker("docs", "**/*.adoc"); // <1>
+List<File> asciidocFiles = directoryWalker.scan(); // <2>
+----
+<1> Defines which parent directory is used for searching and the glob expression.
+<2> Returns a list of all AsciiDoc files matching given glob expression.

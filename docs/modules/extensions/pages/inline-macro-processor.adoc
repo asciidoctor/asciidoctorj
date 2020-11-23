@@ -1,0 +1,104 @@
+[[inlineprocessor]]
+= Inline Macro Processor
+
+An inline macro is very similar to a block macro.
+But instead of being replaced by a block created by a BlockMacroProcessor it is replaced by a phrase node that is simply a part of a block, e.g. in the middle of a sentence.
+An example for an inline macro is `issue:333[repo=asciidoctor/asciidoctorj]`.
+
+The structure is always like this:
+
+. Macro name, e.g. `issue`
+. One colon, i.e. `:`.
+This is what distinguishes it from a block macro even if it is alone in a paragraph.
+. An optional target, e.g. `333`
+. Optional attributes, e.g. `[repo=asciidoctor/asciidoctorj]`.
+
+Our example inline macro processor should create a link to the issue #333 of the repository `asciidoctor/asciidoctorj` on GitHub.
+If the attribute `repo` in the macro is empty it should fall back to the document attribute `repo`.
+
+So for the following document our inline macro processor should create links to the issue #333 of the repository `asciidoctor/asciidoctorj` and to the issue #2 for the repository `asciidoctor/asciidoctorj-groovy-dsl`.
+
+[[IssueInlineMacroDocument]]
+.issue-inline-macro.adoc
+----
+include::example$issue-inline-macro.adoc[]
+----
+
+The InlineMacroProcessor for these macros looks like this:
+
+[[IssueInlineMacroProcessor]]
+.An InlineMacroProcessor that replaces issue macros with links
+[source,java,indent=0]
+----
+include::example$org/asciidoctor/integrationguide/extension/IssueInlineMacroProcessor.java[tags=include]
+----
+<1> The `@Name` annotation defines the macro name this InlineMacroProcessor should be called for.
+In this case this instance will be called for all inline macros that have the name `issue`.
+<2> All InlineMacroProcessors must extend the class `org.asciidoctor.extension.InlineMacroProcessor`.
+<3> A InlineMacroProcessor must implement the abstract method `process` that is called by Asciidoctor.
+The method must return the rendered result of this macro.
+<4> The implementation constructs and returns a new phrase node that is a link, i.e. an `anchor` via the method `createPhraseNode()`.
+The third parameter `target` defines that the text to render this link is the target of the macro, that means that the link will be rendered as  `333` or `2`.
+The last parameter, the options, must contain the target of the line, i.e. the referenced URL, and that the type of the anchor is a link.
+It could also be a ':xref', a ':ref', or a ':bibref'.
+
+The example above has shown how to create a link from a macro.
+But there are several other things that an InlineMacroProcessor can create like icons, inline images etc.
+Even though the following examples might not make much sense, they show how phrase nodes have to be created for the different use cases.
+
+To create keyboard icons like kbd:[Ctrl+T] which can be created directly in Asciidoctor via `\kbd:[Ctrl+T]` you create the PhraseNode as shown below.
+The example assumes that the macro is called with the macro name `ctrl` and a key as the target, e.g. `\ctrl:S[]`, and creates kbd:[Ctrl + S] from it.
+
+[[KeyboardInlineMacroProcessor]]
+.Create a phrase node for keys
+[source,java,indent=0]
+----
+include::example$org/asciidoctor/integrationguide/extension/KeyboardInlineMacroProcessor.java[tags=include]
+----
+<1> The attributes of the PhraseNode must contain the keys to be shown as a list for the attribute key `keys`.
+<2> Create a PhraseNode with context `kbd` and no text and return it.
+
+To create a menu selection as described at http://asciidoctor.org/docs/user-manual/#menu-selections a processor would create a PhraseNode with the `menu` context.
+The following processor would render the macro `rightclick:New|Class[]` like this: menu:New[Class].
+
+[[ContextMenuInlineMacroProcessor]]
+.Create a phrase node for menu selections.
+[source,java,indent=0]
+----
+include::example$org/asciidoctor/integrationguide/extension/ContextMenuInlineMacroProcessor.java[tags=include]
+----
+<1> The attributes of the PhraseNode must contain the key `menu` referring to the first menu selection, `submenus` referring to a possibly empty list of submenu selections, and finally the key `menuitem` referring to the final menu item selection.
+<2> Create and return an PhraseNode with context `menu` and no text.
+
+To create an inline image the PhraseNode must have the context `image`.
+The following example assumes that there is a site \http://foo.bar that serves images given as the target of the macro.
+That means the MacroProcessor should replace the macro `foo:1234` to an image element that refers to \http://foo.bar/1234.
+
+[[ImageInlineMacroProcessor]]
+.Create a PhraseNode for inline image.
+[source,java,indent=0]
+----
+include::example$org/asciidoctor/integrationguide/extension/ImageInlineMacroProcessor.java[tags=include]
+----
+<1> For an inline image the option `type` must have the value `image`.
+<2> The URL of the image must be set via the option `target`.
+<3> Optional attributes `alt` for alternative text, `width` and `height` are set in the node attributes.
+Other possible attributes include `title` to define the title attribute of the `img` element when rendering to HTML.
+When setting the attribute `link` to any value the node will be converted to a link to that image, where the window can be defined via the attribute `window`.
+<4> Create and return a PhraseNode with context `image` and no text.
+
+// #506
+
+We said at the start of this section that the target (the x in `\menu:x[]`) is optional.
+If you want a macro that does not have a target (for example `cite:[brown79]`), add the following annotation to your class:
+
+[source,java,indent=0]
+----
+@Name("cite")
+@Format(SHORT)
+class CiteInlineMacroProcessor extends InlineMacroProcessor {
+  ...
+}
+----
+
+With the SHORT format, the attributes are not parsed, and the 'target' that is passed to your macro is the value between the brackets ("brown79").
