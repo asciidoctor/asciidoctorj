@@ -741,6 +741,28 @@ public class WhenJavaExtensionIsRegistered {
     }
 
     @Test
+    public void an_inline_macro_with_subs_should_be_executed_when_an_inline_macro_is_detected() {
+
+        JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
+
+        javaExtensionRegistry.inlineMacro("say", "org.asciidoctor.extension.SayMacro");
+
+        String adoc = "Hello say:word[]!";
+        String content = asciidoctor.convert(adoc,
+                options().toFile(false));
+
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
+        Element p = doc.getElementsByTag("p").first();
+        assertThat(p, notNullValue());
+        Element strong = p.getElementsByTag("strong").first();
+        assertThat(strong, notNullValue());
+        assertThat(strong.text(), is("word"));
+
+        final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
+        assertThat(logRecords, hasSize(0));
+    }
+
+    @Test
     public void should_unregister_all_current_registered_extensions() throws IOException {
 
         JavaExtensionRegistry javaExtensionRegistry = this.asciidoctor.javaExtensionRegistry();
