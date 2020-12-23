@@ -1,0 +1,53 @@
+= Continuous Integration
+
+Continuous integration for the AsciidoctorJ project is performed by GitHub Actions.
+You can find recent build results, including the build status of pull requests, on the https://github.com/asciidoctor/asciidoctorj/actions[asciidoctor/asciidoctorj] page.
+
+== Publish the artifacts
+
+Artifacts are published to Maven Central and jCenter by way of Bintray's _Distribution as a Service_ platform.
+
+Before publishing, you need to configure your gpg signing and Bintray credentials.
+Create the file [path]_$HOME/.gradle/gradle.properties_ and populate the following properties.
+
+----
+signing.keyId=
+signing.password=
+signing.secretKeyRingFile=/home/YOUR_USERNAME/.gnupg/secring.gpg
+bintrayUsername=
+bintrayApiKey=
+----
+
+To build, assemble and sign the archives (jars and distribution zip), run:
+
+ $ ./gradlew -PpublishRelease=true signJars
+
+TIP: The `publishRelease=true` property is technically only required if the version is a snapshot.
+
+To build, assemble (but not sign) and install the archives (jars and distribution zip) into the local Maven repository, run:
+
+ $ ./gradlew -PpublishRelease=true install
+
+To build, assemble, sign and publish the archives (jars and distribution zip) to Bintray, run:
+
+ $ ./gradlew clean
+   ./gradlew -i -x pMNPTML asciidoctorj-api:bintrayUpload asciidoctorj:bintrayUpload asciidoctorj-distribution:bintrayUpload
+
+CAUTION: Don't run the `clean` task in the same execution as the `bintrayUpload` because it will not upload one of the signatures.
+
+If you want to first perform a dry run of the upload, add the `dryRun=true` property.
+
+ $ ./gradlew -i -PdryRun=true -x pMNPTML asciidoctorj-api:bintrayUpload asciidoctorj:bintrayUpload asciidoctorj-distribution:bintrayUpload
+
+NOTE: The `-x pMNPTML` is necessary to work around a bug in the publishing plugin that prevents it from signing the archives.
+
+IMPORTANT: Bintray does not allow you to publish snapshots.
+You have to first update the version in [path]_gradle.properties_ to a release (or pre-release) version number.
+Currently, Gradle is not configured to automatically tag a release, so *you have to create the git tag manually*.
+
+== Publish snapshot versions
+
+To publish a snapshot version simply run:
+
+ $ ./gradlew asciidoctorj-api:artifactoryPublish asciidoctorj:artifactoryPublish asciidoctorj-distribution:artifactoryPublish
+

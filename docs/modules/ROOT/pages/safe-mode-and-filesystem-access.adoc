@@ -1,0 +1,29 @@
+= Safe Modes
+
+Asciidoctor provides security levels that control the read and write access of attributes, the include directive, macros, and scripts while a document is processing.
+Each level includes the restrictions enabled in the prior security level.
+
+include::partial$safe-modes.adoc[]
+
+When Asciidoctor (and AsciidoctorJ) is used as _API_, it uses `SECURE` safe mode by default.
+This mode is the most restrictive one and in summary it disallows the document from attempting to read files from the file system and including their contents into the document.
+
+We recommend you to set `SAFE` safe mode when converting AsciiDoc documents using AsciidoctorJ to have almost all Asciidoctor features such as _icons_, _include directive_ or retrieving content from _URIs_ enabled.
+
+Safe mode is set as option when a document is converted.
+For example:
+
+[source, java]
+----
+import static org.asciidoctor.OptionsBuilder.options;
+
+Map<String, Object> options = options().safe(SafeMode.SAFE)
+                                       .asMap();
+
+String outfile = asciidoctor.convertFile(new File("sample.adoc"), options);
+----
+
+We are going to explain in more detail options in xref:asciidoctor-api-options.adoc[] section.
+
+// TODO update url when final site is available
+You can read more about safe modes in http://asciidoctor.org/docs/user-manual/#running-asciidoctor-securely

@@ -1,0 +1,38 @@
+[[includeprocessor]]
+= Include Processor
+
+//TODO Note you can only have one include processor at a time.
+
+Asciidoctor supports include other documents via the include directive.
+Whit it, you can simply write `include::other.adoc[]` to include the contents of the file `other.adoc`.
+Include Processors allow to intercept this mechanism and for instance include the content over the network.
+
+For example, similarly to the *unix `ls` command, an Include Processor could resolve the include directive `include::ls[]`, and insert the contents of the current directory in the document.
+Our example will replace the include directive `include::ls[]` with the directory contents, adding one line for every file found.
+
+// Don't know how to include this file without asciidoctor trying to process include::ls[]
+.ls-include.adoc
+[source,indent=0]
+----
+  ----
+  include::ls[]
+  ----
+----
+
+The processor could look like this:
+
+.LsIncludeProcessor.java
+[source,java,indent=0]
+----
+include::example$org/asciidoctor/integrationguide/extension/LsIncludeProcessor.java[tags=include]
+----
+<1> Every Include Processor must extend the class `org.asciidoctor.extension.IncludeProcessor`.
+<2> Asciidoctor calls the method `handles()` with the target for every include directive it finds.
+The method must return `true` if it feels responsible for this directive.
+In our case it returns `true` if the target is `ls`.
+<3> The implementation of the method `process()` lists the directory contents of the current directory and creates a string with one line per file.
+<4> Finally the call to the method `push_include` inserts the contents.
+The second and third parameters contain the 'file name' of the include content.
+In our example this will be basically the name `ls` and the path of the current directory.
+The parameter `1` is the line number of the first line of the included content.
+This makes the most sense when partial content is included.

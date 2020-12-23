@@ -1,0 +1,81 @@
+= Understanding the AST Classes
+
+To write extensions or converters for AsciidoctorJ understanding the AST (_abstract syntax tree_) classes is key.
+The AST classes are the intermediate representation of the document that Asciidoctor creates before rendering to the target format.
+
+The following example document demonstrates how an AST will look like to give you an idea how the document and the AST are connected.
+
+.Example document for the AST
+[source,asciidoc]
+--
+include::example$ast-demo.adoc[]
+--
+
+The following image shows the AST and some selected members of the node objects.
+The indentation of a line visualizes the nesting of the nodes like a tree.
+
+.AST for the example document
+----
+include::example$ast-demo-result.txt[]
+----
+
+The AST is built from the following types:
+
+`org.asciidoctor.ast.Document`::
+This is always the root of the document.
+It owns the blocks and sections that make up the document and holds the document attributes.
+
+`org.asciidoctor.ast.Section`::
+This class models sections in the document.
+The member `level` indicates the nesting level of this section, that is if level is 1 the section is a section, with level 2 it is a subsection, etc.
+
+`org.asciidoctor.ast.Block`::
+Blocks are content in a section, like paragraphs, source listings, images, etc.
+The concrete form of the block is available in the field `context`.
+Among the possible values are:
+* `paragraph`
+* `listing`
+* `literal`
+* `open`
+* `example`
+* `pass`
+
+`org.asciidoctor.ast.List`::
+The list node is the container for ordered and unordered lists.
+The type of list is available in the field `context`, `ulist` for unordered lists and `olist` for ordered lists.
+
+`org.asciidoctor.ast.ListItem`::
+A list item represents a single item of a list.
+
+`org.asciidoctor.ast.DescriptionList`::
+The description list node is the container for description lists.
+The context of the node is `dlist`.
+
+`org.asciidoctor.ast.DescriptionListEntry`::
+A list entry represents a single item of a description list.
+It has multiple terms that are again instances of `org.asciidoctor.ast.ListItem` and a description that is also an instance of `org.asciidoctor.ast.ListItem`.
+
+`org.asciidoctor.ast.Table`::
+This represents a table and is probably the most complex node type.
+It owns a list of columns and lists of header, body and footer rows.
+
+`org.asciidoctor.ast.Column`::
+A column defines the style for the column of a table, the width and alignments.
+
+`org.asciidoctor.ast.Row`::
+A row in a table is only a simple owner of a list of table cells.
+
+`org.asciidoctor.ast.Cell`::
+A cell in a table holds the cell content and formatting attributes like colspan, rowspan and alignment as appropriate.
+A special case are cells that have the `asciidoctor` style.
+These do not contain simple text content, but have another full `Document` in their member `innerDocument`.
+
+`org.asciidoctor.ast.PhraseNode`::
+This type is a special case.
+It does not appear in the AST itself as Asciidoctor does not really parse into the block itself.
+Phrase nodes are usually created by inline macro extensions that process macros like `issue:1234[]` and create links from them.
+
+Nodes are in general only created from within extensions.
+Therefore the abstract base class of all extensions, `org.asciidoctor.extension.Processor`, has factory methods for every node type.
+
+Now that you have learned about the AST structure you can go into the details of writting the extensions.

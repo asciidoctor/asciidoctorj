@@ -1,0 +1,61 @@
+= Installation
+:url-docs: http://asciidoctor.org/docs
+:url-maven-guide: {url-docs}/install-and-use-asciidoctor-maven-plugin
+:url-gradle-guide: {url-docs}/install-and-use-asciidoctor-gradle-plugin
+
+
+To start using AsciidoctorJ, you need to add the required dependency to the dependency management system of your choice, Maven, Gradle or Apache Ivy.
+If you don't use a Dependency Management system please check the dependency graph and add all jars in it to your classpath.
+
+// SW: Need functional tests for a java maven project and a java gradle project
+
+[source,xml]
+[subs="specialcharacters,attributes,callouts"]
+.Declaring the dependency in a Maven build file (i.e., pom.xml)
+----
+<dependencies>
+  <dependency>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctorj</artifactId>
+    <version>{artifact-version}</version> <!--1-->
+  </dependency>
+</dependencies>
+----
+
+[source,groovy]
+[subs="specialcharacters,attributes,callouts"]
+.Declaring the dependency in a Gradle build file (e.g., build.gradle)
+----
+dependencies {
+  compile 'org.asciidoctor:asciidoctorj:{artifact-version}'
+}
+----
+
+[source,scala]
+[subs="specialcharacters,attributes,callouts"]
+.Declaring the dependency in an SBT build file (e.g., build.sbt)
+----
+libraryDependencies += "org.asciidoctor" % "asciidoctorj" % "{artifact-version}" // <1>
+----
+
+<1> Specifying the version of AsciidoctorJ implicitly selects the version of Asciidoctor
+
+[source,clojure]
+[subs="specialcharacters,attributes,callouts"]
+.Declaring the dependency in a Leiningen build file (e.g., project.clj)
+----
+:dependencies [[org.asciidoctor/asciidoctorj "{artifact-version}"]]
+----
+
+[TIP]
+====
+In addition to using AsciidoctorJ directly, you can invoke it as part of your build using the Maven or Gradle plugin.
+
+// TODO update links when final site is available
+- {url-maven-guide}[How to Install and Use the Asciidoctor Maven Plugin]
+- {url-gradle-guide}[How to Install and Use the Asciidoctor Gradle Plugin]
+====
+
+NOTE: The versions of Asciidoctor and AsciidoctorJ no longer align since version 1.6.0 of AsciidoctorJ.
+Please check the corresponding release notes to find out which version of Asciidoctor is packaged if you are embedding the library.
+If you use the distribution you can call `asciidoctorj --version` to get the version of Asciidoctor that is embedded in AsciidoctorJ.

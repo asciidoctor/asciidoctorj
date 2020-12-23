@@ -1,0 +1,35 @@
+= Using AsciidoctorJ in an OSGi environment
+
+In a non OSGi context, the following snippet will successfully create an Asciidoctor object:
+
+[source,java]
+----
+import static org.asciidoctor.Asciidoctor.Factory.create;
+import org.asciidoctor.Asciidoctor;
+
+Asciidoctor asciidoctor = create();
+----
+
+In an OSGi context it will not work because JRuby needs some paths to find the Asciidoctor gems.
+In order to make it work, you will need to specify the Asciidoctor gems path using the JavaEmbedUtils class.
+We will update the previous snippet of code to specify this path:
+
+[source,java]
+----
+import static org.asciidoctor.jruby.AsciidoctorJRuby.Factory.create;
+import org.asciidoctor.Asciidoctor;
+
+Asciidoctor asciidoctor = create(Arrays.asList("uri:classloader:/gems/asciidoctor-2.2.0/lib")); // <1><2>
+----
+<1> `uri:classloader:/gems/asciidoctor-<version>/lib` specifies where the gems for Asciidoctor are located.
+Actually this path is located inside the `asciidoctorj-<version>.jar` file
+<2> The version here differs from the AsciidoctorJ version as it corresponds to the version of Asciidoctor, not the AsciidoctorJ one.
+
+[NOTE]
+We consider this code to be placed inside an OSGi bundle
+
+This solution has pros and cons:
+
+* _Pros:_ you don't need to extract the gems located in the asciidoctorj binary ;
+* _Cons:_
+** the version of asciidoctor is hard coded ;

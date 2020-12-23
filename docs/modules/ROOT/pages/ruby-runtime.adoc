@@ -1,0 +1,36 @@
+= Ruby Runtime
+
+Asciidoctor itself is implemented in Ruby and AsciidoctorJ is a wrapper that encapsulates Asciidoctor in a JRuby runtime.
+Even though AsciidoctorJ tries to hide as much as possible there are some points that you have to know and consider when using AsciidoctorJ.
+
+Every Asciidoctor instance uses and initializes its own Ruby runtime.
+As booting a Ruby runtime takes a considerable amount of time it is wise to either use a single instance or pool multiple instances in case your program wants to render multiple documents instead of creating one Asciidoctor instance per conversion.
+Asciidoctor itself is threadsafe, so from this point of view there is no issue in starting only one instance.
+
+The JRuby runtime can be configured in numerous ways to change the behavior as well as the performance.
+As the performance requirements vary between a program that only render a single document and quit and server application that run for a long time you should consider modifying these options for your own use case.
+AsciidoctorJ itself does not make any configurations so that you can modify like you think.
+A full overview of the options is available at https://github.com/jruby/jruby/wiki/ConfiguringJRuby.
+
+To change the configuration of the JRuby instance you have to set the corresponding options as system properties before creating the Asciidoctor instance.
+
+So to create an Asciidoctor instance for single use that does not try to JIT compile the Ruby code the option `compile.mode` should be set to `OFF`.
+That means that you have to set the system property `jruby.compile.mode` to `OFF`:
+
+[source,java]
+.Create an Asciidoctor instance for single use
+----
+System.setProperty("jruby.compile.mode", "OFF");
+Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+----
+
+The default for this value is `JIT` which is already a reasonable value for multiple uses of the Asciidoctor instance.
+
+In case you want to have direct access to the Ruby runtime instance that is used by a certain Asciidoctor instance you can use the class `JRubyRuntimeContext` to obtain the `org.jruby.Ruby` instance:
+
+[source,java]
+.Obtaining the Ruby instance associated with an Asciidoctor instance
+----
+Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+Ruby ruby = JRubyRuntimeContext.get(asciidoctor);
+----

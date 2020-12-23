@@ -1,0 +1,22 @@
+= AsciidoctorJ Conversion Process Overview
+
+Before starting to write your first extension, some basic understanding of how Asciidoctor treats the document is helpful.
+As any language processing tool, the process can be roughly split into three steps:
+
+. Parsing: the raw sources content is read and analyzed to generate the internal representation, the AST (_abstract syntax tree_).
+. Processing: the AST is processed. For example to detect possible errors, add automatically generated content (toc), etc.
+. Output generation: once the final AST is set, it's again processed to generate the desired output.
+For example, a sub-section of the AST representing a title with a paragraph will be converted into it's correspondent HTML or PDF output.
+
+NOTE: Some liberty is taken to make the process easier to understand.
+In reality, Asciidoctor has implementation details that divert from the 3 steps above.
+
+The different extension types are called in different steps of the conversion process in the order shown in the table.
+Within each type:
+
+* Prepocessors is called just before parsing.
+* Treeprocessors is called right before processing.
+* Block macro, inline macro, and block processors are called during processing in the order that they appear in the document.
+* Postprocessors are called before output generation.
+* Include and DocinfoProcessors are called in an arbitrary and changeable order during processing.
+In the case of Include processors, it is called whenever an `include::` is found.

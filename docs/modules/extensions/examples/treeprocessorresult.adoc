@@ -1,0 +1,15 @@
+To fetch the content of the URL invoke the following:
+
+[.terminal]
+----
+$ curl -v http://127.0.0.1:8080
+*   Trying 127.0.0.1...
+* Connected to 127.0.0.1 (127.0.0.1) port 8080 (#0)
+> GET / HTTP/1.1
+> User-Agent: curl/7.41.0
+> Host: 127.0.0.1:8080
+> Accept: */*
+>
+< HTTP/1.1 200 OK
+...
+----

@@ -1,0 +1,54 @@
+= Manually Registering Extensions with javaExtensionRegistry
+
+Extensions can be registered individually accessing the default extension registry directly from the Asciidoctor instance.
+
+[source,java]
+----
+Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+
+asciidoctor.javaExtensionRegistry()
+         .treeprocessor(Tre.class);
+----
+
+There is a method in the API for each extension point.
+
+[source,java]
+----
+asciidoctor.javaExtensionRegistry()
+        .blockMacro(GistBlockMacroProcessor.class);
+
+asciidoctor.javaExtensionRegistry()
+        .inlineMacro(IssueInlineMacroProcessor.class);
+
+asciidoctor.javaExtensionRegistry()
+        .block(YellBlockProcessor.class);
+
+asciidoctor.javaExtensionRegistry()
+        .includeProcessor(LsIncludeProcessor.class);
+
+asciidoctor.javaExtensionRegistry()
+        .preprocessor(CommentPreprocessor.class);
+
+asciidoctor.javaExtensionRegistry()
+        .postprocessor(CopyrightFooterPostprocessor.class);
+
+asciidoctor.javaExtensionRegistry()
+        .treeprocessor(TerminalCommandTreeprocessor.class);
+
+extensionRegistry
+        .docinfoProcessor(RobotsDocinfoProcessor.class);
+----
+
+Each method is overloaded to accept:
+
+A Class::
+As seen in the examples, in this case AsciidoctorJ will take care of the complete lifecycle (initialization, etc.) of the extension.
+An instance::
+This is useful when the extension requires pre-initialization or has a complex creation.
+For example, the extension instance could be managed in a Spring context making use of injected components.
+A full canonical class name::
+This allows to pass the extension as a `String` type.
+This can be used when the extension class is not known at compile time.
+String name macro name::
+Optional and only for `blockMacro`, `inlineMacro` and `block`.
+Allows defining the name of the macro if it's not set in the extension class.

@@ -1,0 +1,43 @@
+[[treeprocessor]]
+= Treeprocessor
+
+A Treeprocessor gets the whole AST and may do whatever it likes with the document tree.
+Examples for Treeprocessors could insert blocks, add roles to nodes with a certain content, etc.
+
+Treeprocessors are called by Asciidoctor at the end of the loading process after Preprocessors, Block processors, Macro processors and Include processors but before Postprocessors that are called after the conversion process.
+
+Our example Treeprocessor will recognize paragraphs that contain terminal scripts like below, make listing blocks from them and add the role `terminal`.
+The custom role will allows us to customize the style.
+
+.Example AsciiDoc document containing a terminal script
+....
+include::example$treeprocessorcontent.adoc[]
+....
+
+As the first line of the second block starts with a `$` sign the whole block should become a listing block.
+The result when rendering this document with our Treeprocessor should be the same as if the document looked like this:
+
+....
+include::example$treeprocessorresult.adoc[]
+....
+
+Note that a Blockprocessor would not work for this task, as a Blockprocessor requires a block name for which it is called.
+However, in this case the only way to identify this type of blocks is the beginning of the first line.
+
+The Treeprocessor could look like this:
+
+.A Treeprocessor that processes terminal scripts.
+[source,java]
+----
+include::example$org/asciidoctor/integrationguide/extension/TerminalCommandTreeprocessor.java[tags=include]
+----
+<1> Every Treeprocessor must extend `org.asciidoctor.extension.Treeprocessor` and implement the method `process(Document)`.
+<2> The implementation basically iterates over the tree and invokes `processBlock()` for every node.
+<3> The method `processBlock()` checks for every node if it is a paragraph that has a first line beginning with a `$`.
+If it encounters such a block it replaces it with the block created in the method `convertToTerminalListing()`.
+Otherwise it descends into the AST searching for these blocks.
+<4> When creating the new block we reuse the parent of the original block.
+The context of the new block has to be `listing` to get a source block.
+The content can be simply taken from the original block.
+We add the option 'subs' with the value ':specialcharacters' so that special characters are substituted, i.e. `>` and `<` will be replaced with `\&gt;` and `\&lt;` respectively.
+<5> Finally, we add the role of the node to `terminal`, which will result in the div containing the listing having the class `terminal`.

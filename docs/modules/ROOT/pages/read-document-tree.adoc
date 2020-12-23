@@ -1,0 +1,58 @@
+= Read the Document Tree
+
+Instead of converting an AsciiDoc document, you may want to parse the document to read information it contains or navigate the document's structure.
+AsciidoctorJ let's you do this!
+
+AsciidoctorJ provides a model of the abstract syntax tree of the document.
+These objects are directly linked to the internal representation.
+
+To load a document, use the `load` or `loadFile` methods.
+
+[source,java]
+----
+import org.asciidoctor.ast.Document;
+
+//...
+
+Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>()); // <1>
+assertThat(document.doctitle(), is("Document Title")); // <2>
+----
+<1> Document from a String is loaded into `Document` object.
+<2> Title of the document is retrieved.
+
+But also all blocks that conforms the document can be retrieved.
+Currently there are support for three kinds of blocks.
+`Blocks` itself, `Section` for sections of the document and `StructuralNode` which is the base type where all kind of blocks (including those not mapped as Java class) are mapped.
+
+[source,java]
+----
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.Section;
+
+//...
+
+Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>()); // <1>
+Section section = (Section) document.blocks().get(1); // <2>
+
+assertThat(section.index(), is(0)); // <3>
+assertThat(section.sectname(), is("sect1"));
+assertThat(section.special(), is(false));
+----
+<1> Document from a String is loaded into `Document` object.
+<2> All blocks are get and because in this example the first block is a Section block, we cast it directly.
+<3> Concrete methods for sections can be called.
+
+Blocks can also be retrieved from query using `findBy` method.
+
+[source,java]
+----
+Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
+Map<Object, Object> selector = new HashMap<>(); // <1>
+selector.put("context", ":image"); // <2>
+
+List<StructuralNode> findBy = document.findBy(selector);
+assertThat(findBy, hasSize(2)); //<3>
+----
+<1> Queries are defined in a `map` estructure.
+<2> In this example all blocks with context as image is returned. Notice that the colon (`:`) must be added in the value part.
+<3> Document used as example contains two images.

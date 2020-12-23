@@ -1,0 +1,40 @@
+= Automatically Loading Extensions
+
+In previous examples, the extensions were registered manually.
+However, AsciidoctorJ provides another way to register extensions.
+If any implementation of the SPI interface is present on the classpath, it will be executed.
+
+To create an autoloadable extension you should do the next steps:
+
+Create a class that implements `org.asciidoctor.jruby.extension.spi.ExtensionRegistry`.
+
+[source,java]
+.org.asciidoctor.extension.integratorguide.TerminalCommandExtension.java
+----
+include::example$org/asciidoctor/integrationguide/extension/TerminalCommandExtension.java[tags=include-extension-registry]
+----
+<1> To autoload extensions you need to implement `ExtensionRegistry`.
+<2> AsciidoctorJ will automatically run the `register` method. The method is responsible for registering all extensions.
+<3> All required Java extensions are registered.
+
+Next, you need to create a file called `org.asciidoctor.jruby.extension.spi.ExtensionRegistry` inside `META-INF/services` with the implementation's full qualified name.
+
+[source]
+.META-INF/services/org.asciidoctor.jruby.extension.spi.ExtensionRegistry
+----
+include::example$extensionregistry/META-INF/services/org.asciidoctor.jruby.extension.spi.ExtensionRegistry[]
+----
+
+And that's all.
+Now when a `.jar` file containing the previous structure is dropped into the classpath of AsciidoctorJ, the `register` method will be executed automatically and the extensions will be registered.
+
+[NOTE]
+====
+If you have installed AsciidoctorJ as recommended, the asciidoctorj command will be on the path, and you can use:
+
+ asciidoctorj -cp=lib/myextension.jar test.adoc
+
+If you have downloaded the distribution jars only, use a command like:
+
+ java -cp lib/jruby-complete-{jruby-version}.jar;lib/asciidoctor-api-{artifact-version}.jar;lib/asciidoctor-core-{artifact-version}.jar;lib/jcommander-{jcommander-version}.jar;lib/myextension.jar org.asciidoctor.jruby.cli.AsciidoctorInvoker test.adoc
+====

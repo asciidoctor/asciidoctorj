@@ -1,0 +1,13 @@
+= Register Extensions
+
+Now that we have our extensions ready, we only need to register them.
+There are 3 ways to do so, and all of them can combined freely to suit your needs.
+Two are manual and one automatic.
+
+Also, at any moment, you can clear the configuration using `unregisterAllExtensions()`:
+
+[source,java]
+----
+Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+asciidoctor.unregisterAllExtensions();
+----

@@ -1,0 +1,78 @@
+= Optimization
+
+JRuby may start slower than expected versus the C-based Ruby implementation (MRI).
+Fortunately, JRuby offers flags that can improve the start time and tune applications.
+Several Java flags can also be used in conjunction with or apart from the JRuby flags in order to improve the start time even more.
+
+// SW: Need examples of JRuby and Java flags being used
+
+For small tasks such as converting an AsciiDoc document, two JRuby flags can drastically improve the start time:
+
+.JRuby flags
+|===
+|Name |Value
+
+|jruby.compat.version
+|RUBY1_9
+
+|jruby.compile.mode
+|OFF
+|===
+
+When using AsciidoctorJ via the API these flags have to be set as system properties when creating the `org.asciidoctor.Asciidoctor` instance:
+
+[source,java]
+----
+System.setProperty("jruby.compat.version", "RUBY1_9");
+System.setProperty("jruby.compile.mode", "OFF");
+Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+----
+
+When starting AsciidoctorJ via the CLI these options can be defined in the files `.jrubyrc` that are loaded from the current working directory and the home directory of the user.
+
+----
+$ cat ./.jrubyrc
+compat.version=RUBY1_9
+compile.mode=OFF
+$ ./asciidoctorj -V
+AsciidoctorJ 1.5.2 [http://asciidoctor.org]
+Runtime Environment: jruby 1.7.20 (1.9.3)
+----
+
+NOTE: The properties in these `.jrubyrc` files do not contain the prefix `jruby.`.
+The property values also must not have trailing blanks!
+
+Alternatively you can also set any system properties using the environment variable `ASCIIDOCTORJ_OPTS`:
+
+----
+$ export ASCIIDOCTORJ_OPTS=-Djruby.compat.version=RUBY1_9
+$ asciidoctorj -V
+AsciidoctorJ 1.5.2 [http://asciidoctor.org]
+Runtime Environment: jruby 1.7.20 (1.9.3)
+----
+
+The Java flags available for improving start time depend on whether your working on a 32- or 64-bit processor and your JDK version.
+Let's see a summary of these flags and in which environments they can be used.
+
+.Java flags
+|===
+|Name |JDK
+
+|-client
+|32 bit Java
+
+|-Xverify:none
+|32/64 bit Java
+
+|-XX:+TieredCompilation
+|32/64 bit Java SE 7
+
+|-XX:TieredStopAtLevel=1
+|32/64 bit Java SE 7
+|===
+
+[source,shell]
+.Setting flags for Java SE 6
+----
+export JAVA_OPTS="-Xverify:none -client"
+----

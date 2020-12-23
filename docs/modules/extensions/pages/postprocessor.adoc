@@ -1,0 +1,28 @@
+[[postprocessor]]
+= Postprocessor
+
+Postprocessors are called when Asciidoctor has converted the document to its target format and have the chance to modify the result.
+A Postprocessor could for example insert a custom copyright notice into the footer element of the resulting HTML document.
+
+[WARNING]
+====
+Postprocessors in AsciidoctorJ currently only supports String based target formats.
+That means it is not possible at the moment to write Postprocessors for binary formats like PDF or EPUB.
+====
+
+As example, a Postprocessor that adds a copyright notice would look like this:
+
+.A Postprocessor that inserts a copyright notice in the footer element
+[source,java]
+----
+include::example$org/asciidoctor/integrationguide/extension/CopyrightFooterPostprocessor.java[tags=include]
+----
+<1> All Postprocessors must extend the class `org.asciidoctor.extension.Postprocessor` and implement the method `process()`.
+<2> The processor parses the resulting HTML text using the Jsoup library.
+This returns the document as a data structure.
+<3> Find the element with the ID `footer-text`.
+This element contains the footer text, which usually contains the document generation timestamp.
+If this element is available its text is modified by appending the copyright notice.
+<4> Finally, convert the modified document back to the HTML string and let the processor return it.
+
+NOTE: Make sure `header_footer` option is not set to `false`, otherwise these will not be added to the document.

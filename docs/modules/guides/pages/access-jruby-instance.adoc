@@ -1,0 +1,7 @@
+= Accessing the JRuby Instance
+
+Sometimes you may need the Ruby runtime used inside AsciidoctorJ.
+One reason is because you are using JRuby outside AsciidoctorJ and you want to reuse the same instance.
+Another reason is that you need to instantiate by yourself an Asciidoctor Ruby object.
+
+To get this instance you can use `org.asciidoctor.jruby.internal.JRubyRuntimeContext.get(Asciidoctor)` to get it from a given Asciidoctor instance.

@@ -1,0 +1,193 @@
+[[options]]
+= Conversion Options
+
+Asciidoctor provides many options that can be passed when converting content.
+This section explains the most important and commonly used options when converting Asciidoctor content.
+
+The options for conversion of a document are held in an instance of the class `org.asciidoctor.Options`.
+The builder `OptionsBuilder` allows for simple configuration of that instance that can be passed to the respective methods of the `Asciidoctor` interface.
+The following example shows how to set the options so that the resulting HTML document is rendered for embedding it into another document.
+That means that the result only contains the content of a HTML body element:
+
+[source,java,indent=0]
+.Example for converting to an embeddable document
+----
+include::example$org/asciidoctor/integrationguide/OptionsTest.java[tags=simpleOptionsExampleEmbeddableDocument]
+----
+<1> Create a new `OptionsBuilder` that is used to prepare the options with a fluent API.
+<2> Set the option `header_footer` to `false`, meaning that an embeddable document will be rendered,
+<3> Get the built `Options` instance and pass it to the conversion method.
+
+NOTE: The `convert` method is overloaded so `org.asciidoctor.Options`, `org.asciidoctor.OptionsBuild` or `java.util.Map` can be used.
+
+== toFile
+
+Via the option `toFile` it is possible to define if a document should be written to a file at all and to which file.
+
+To make the API return the converted document and not write to a file set `OptionsBuilder.toFile(false)`.
+
+To make Asciidoctor write to the default file set `OptionsBuilder.toFile(true)`.
+The default file is computed by taking the base name of the input file and adding the default suffix for the target format like `.html` or `.pdf`.
+That is for the input file `test.adoc` the resulting file would be in the same directory with the name `test.html`. +
+*This is also the way the CLI behaves.*
+
+To write to a certain file set `OptionsBuilder.toFile(targetFile)`.
+This is also necessary if you want to convert string content to files.
+
+The following example shows how to convert content to a dedicated file:
+
+[source,java,indent=0]
+.Example for converting to a dedicated file
+----
+include::example$org/asciidoctor/integrationguide/OptionsTest.java[tags=optionToFile]
+----
+<1> Set the option `toFile` so that the result will be written to the file pointed to by `targetFile`.
+<2> Set the safe mode to `UNSAFE` so that files can be written.
+See <<safemode>> for a description of this option.
+
+[[safemode]]
+== safe
+
+Asciidoctor provides security levels that control the read and write access of attributes, the include directive, macros, and scripts while a document is processing.
+Each level includes the restrictions enabled in the prior security level.
+All safe modes are defined by the enum `org.asciidoctor.SafeMode`.
+
+include::partial$safe-modes.adoc[]
+
+So if you want to render documents in the same way as the CLI does you have to set the safe mode to `Unsafe`.
+Without it you will for example not get the stylesheet embedded into the resulting document.
+
+[source,java,indent=0]
+.Converting a document in unsafe mode
+----
+include::example$org/asciidoctor/integrationguide/OptionsTest.java[tags=unsafeConversion]
+----
+<1> Sets the safe mode from `SECURE` to `UNSAFE`.
+<2> Don't convert the file to another file but to a string so that we can easier verify the contents.
+
+The example above will succeed with these two asciidoc files:
+
+[source,asciidoc,indent=0]
+.includingcontent.adoc
+--
+  = Including content
+
+  include::includedcontent.adoc[]
+--
+
+[source,asciidoc]
+.includedcontent.adoc
+----
+This is included content
+----
+
+== backend
+
+Defines the target format for which the document should be converted.
+Among the possible values are `html5`, `pdf` or `docbook`.
+
+[source,java,indent=0]
+.Converting a document to PDF
+----
+include::example$org/asciidoctor/integrationguide/OptionsTest.java[tags=optionsPDFBackend]
+----
+
+== inPlace
+
+Tells the converter to store the output to a file adjacent to the input file.
+This is `true` by default.
+
+[source,java,indent=0]
+.Setting inPlace option
+----
+OptionsBuilder optionsBuilder =
+            OptionsBuilder.options().inPlace(true);
+----
+
+== templateDirs
+
+Specifies a directory of {url-tilt}[Tilt]-compatible templates to be used instead of the default built-in templates.
+
+[source,java]
+.Setting templateDirs option
+----
+OptionsBuilder optionsBuilder =
+            OptionsBuilder.options().templateDirs(new File("templates_path"));
+----
+
+== attributes
+
+This option allows to define document attributes externally.
+// TODO add link main asciidoctor attributes page
+There are several ways to accomplish that.
+
+. Create an instance of `Attributes` and set them as a normal POJO.
++
+[source,java]
+.Attributes instance initialization as POJO
+----
+Attributes attributes = new Attributes();
+attributes.setBackend("pdf");
+attributes.setExperimental(true)
+attributes.setAttribute("my-attribute", "my-value");
+----
++
+It is also possible to use a `String` of attributes similar to the CLI.
++
+[source,java]
+.Attributes instance initialization as String
+----
+attributes.setAttributes("toc numbered icons=font");
+----
++
+. Use `AttributesBuilder` methods for a fluent API.
++
+[source,java]
+.Attributes builder initialization
+----
+Attributes attributes = AttributesBuilder.attributes()
+                            .icons("font")
+                            .experimental(true)
+                            .attribute("my-attribute", "my-value")
+                            .get();
+----
++
+The builder also allows passing a chain of values in a `String` or `Array`.
++
+[source, java]
+.Attributes builder initialization as String
+----
+Attributes attributes = attributes().attributes("toc numbered").get();
+----
++
+[source, java]
+.Attributes builder initialization as String array
+----
+String[] attributesArray = new String[]{"toc", "source-highlighter=coderay"};
+Attributes attributes = attributes().attributes(attributesArray).get();
+----
+
+. Directly pass a collection of key-values using Map<String,Object>.
++
+[source, java]
+.Attributes instance initialization as Map
+----
+Map<String, Object> attributesMap = new HashMap<>();
+attributesMap.put("icons", "font");
+attributesMap.put("experimental", Boolean.TRUE);
+attributesMap.put("my-attribute", "my-value");
+
+Attributes attributes = new Attributes(attributesMap);
+----
++
+[source, java]
+.Attributes builder initialization as Map
+----
+Map<String, Object> attributesMap = new HashMap<>();
+attributesMap.put("icons", "font");
+attributesMap.put("experimental", Boolean.TRUE);
+attributesMap.put("my-attribute", "my-value");
+
+AttributesBuilder.attributes()
+            .attributes(attributesMap);
+----

@@ -1,0 +1,80 @@
+= Running AsciidoctorJ on WildFly
+
+If you want to use AsciidoctorJ in an application deployed on [app]_WildFly_, you have to follow the instruction below:
+
+. Create an *Asciidoctor module* for [app]_WildFly_.
+. Create the following folder tree: [path]_$JBOSS_HOME/modules/org/asciidoctor/main_.
+. Create the module descriptor file [path]_module.xml_.
++
+[subs="+attributes"]
+[source,xml]
+.Asciidoctor module descriptor for WildFly
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.0" name="org.asciidoctor">
+    <resources>
+        <resource-root path="asciidoctorj-api-{artifact-version}.jar"/>
+        <resource-root path="asciidoctorj-{artifact-version}.jar"/>
+        <resource-root path="jcommander-1.72.jar"/>
+        <resource-root path="jruby-complete-{jruby-version}.jar"/>
+    </resources>
+    <dependencies>
+        <module name="sun.jdk" export="true">
+            <imports>
+                <include path="sun/misc/Unsafe" />
+            </imports>
+        </module>
+        <module name="javax.management.j2ee.api"/>
+        <module name="javax.api"/>
+        <module name="org.slf4j"/>
+    </dependencies>
+</module>
+----
+. Copy the jar files into the same folder as the _module.xml_ file.
+. Make sure the version numbers of the jar files agree with what's in the current set.
+Restart WildFly for the new module to take effect.
+
+
+. Add a dependency on your Java archive to this WildFly module using one of the following options:
+.. Add the dependency just into the [path]_MANIFEST.MF_ file.
++
+.MANIFEST.MF file example with dependency to Asciidoctor module
+----
+Manifest-Version: 1.0
+Dependencies: org.asciidoctor
+...
+----
+
+.. _Or_, configure the dependency into the [path]_pom.xml_ with the [app]_Maven JAR/WAR plugin_.
++
+[source,xml]
+[subs="specialcharacters,attributes,callouts"]
+.pom.xml file example with Maven WAR plugin configuration to add a dependency
+----
+...
+<dependencies>
+  <dependency>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctorj</artifactId>
+    <version>{artifact-version}</version>
+    <scope>provided</scope> <!--1-->
+    ...
+  </dependency>
+</dependencies>
+...
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-war-plugin</artifactId>
+    <version>2.4</version>
+    <configuration>
+      <archive>
+        <manifestEntries>
+          <Dependencies>org.asciidoctor</Dependencies> <!--2-->
+        </manifestEntries>
+      </archive>
+    </configuration>
+</plugin>
+...
+----
+<1> The AsciidoctorJ dependency and the transitives dependencies don't need to be added to the final WAR since all JARs are available through the module.
+<2> The module dependency will be added to the [path]_MANIFEST.MF_ file.

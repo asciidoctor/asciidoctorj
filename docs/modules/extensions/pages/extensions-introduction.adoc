@@ -1,0 +1,71 @@
+= Extensions API
+
+One of the major improvements to Asciidoctor recently is the extensions API.
+AsciidoctorJ brings this extension API to the JVM environment allowing us to write extensions in Java instead of Ruby.
+
+[NOTE]
+====
+If you are migrating existing extensions to a newer version, please see the guides:
+
+* xref:guides:extension-migration-guide-16-to-20.adoc[]
+* xref:guides:extension-migration-guide-15-to-16.adoc[]
+====
+
+Writing an extension is as simple as creating a Java class and sub-classing from one of the extension points.
+However, to explore the full potential it us recommended to:
+
+. Have a brief understanding of the AsciidoctorJ conversion process and internal representation of the document.
+In short, extensions allow you to tap into the conversion process to make modifications to enhance the generated content.
+. Write an extension class.
+This is as simple as creating a sub-class from one of the extension points listed below.
+. Register your class to make AsciidoctorJ converter aware of it.
+There several options depending on the use case.
+
+Asciidoctor provides eight types of extension points.
+Each extension point has an abstract class in Java that maps to the extension API in Ruby.
+
+// #31
+
+[cols="1m,2m,2"]
+.AsciidoctorJ extension APIs
+|===
+|Name |Class |Description
+
+|xref:include-processor.adoc[]
+|org.asciidoctor.extension.IncludeProcessor
+|Intercepts `include::[]` lines
+
+|xref:preprocessor.adoc[]
+|org.asciidoctor.extension.Preprocessor
+|Allows you to modify the asciidoc text before parsing
+
+|xref:block-macro-processor.adoc[]
+|org.asciidoctor.extension.BlockMacroProcessor
+|Processes block macros like `bibliography::[]`
+
+|xref:block-processor.adoc[]
+|org.asciidoctor.extension.BlockProcessor
+a|Processes an arbitrary block based on it's style such as
+
+ [prohibited]
+ --
+ Do not enter
+ --
+
+|xref:treeprocessor.adoc[]
+|org.asciidoctor.extension.Treeprocessor
+|Modify the AST after parsing.
+
+|xref:inline-macro-processor.adoc[]
+|org.asciidoctor.extension.InlineMacroProcessor
+|Processes inline macros like `btn:[]`.
+
+|xref:postprocessor.adoc[]
+|org.asciidoctor.extension.Postprocessor
+|Modifies the backend-specific output document.
+
+|xref:docinfo-processor.adoc[]
+|org.asciidoctor.extension.DocinfoProcessor
+|Insert content into the `header` element or the end of the body element (html), or the `info` element or at the end of the document (docbook).
+
+|===

@@ -1,0 +1,13 @@
+= Invocation Order
+
+This section explains the order of method invocations on a syntax highlighter.
+For a concrete example we use this document:
+
+[source,asciidoc]
+-----
+include::example$syntax-highlighting-order.adoc[]
+-----
+
+For this document the calls to a syntax highlighter will happen in this order:
+
+include::example$syntax-highlighting-order-output.txt[]

@@ -1,0 +1,68 @@
+= Convert Documents
+
+This section shows you how you can use AsciidoctorJ to render AsciiDoc documents to HTML from within your own code.
+An introductory <<getting-started>> example shows the first steps necessary to convert your documents.
+
+[#getting-started]
+== Getting started
+
+The very first step to integrate AsciidoctorJ is to add the required dependencies to your project.
+Depending on your build system you have to add a dependency on the artifact `asciidoctorj` with the group id `org.asciidoctor` to your build file.
+The following snippets show what you have to add in case you use Maven, Gradle, Ivy or SBT.
+
+[source,xml]
+[subs="specialcharacters,attributes,callouts"]
+.Declaring the dependency in a Maven build file (i.e., pom.xml)
+----
+<dependencies>
+  <dependency>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctorj</artifactId>
+    <version>{artifact-version}</version> <!--1-->
+  </dependency>
+</dependencies>
+----
+
+[source,groovy]
+[subs="specialcharacters,attributes,callouts"]
+.Declaring the dependency in a Gradle build file (e.g., build.gradle)
+----
+dependencies {
+  compile 'org.asciidoctor:asciidoctorj:{artifact-version}' // <1>
+}
+----
+
+[source,xml]
+[subs="specialcharacters,attributes,callouts"]
+.Declaring the dependency in an Ivy dependency descriptor (e.g., ivy.xml)
+----
+<dependency org="org.asciidoctor" name="asciidoctorj" rev="{artifact-version}" /> <!--1-->
+----
+
+[source,scala]
+[subs="specialcharacters,attributes,callouts"]
+.Declaring the dependency in an SBT build file (e.g., build.sbt)
+----
+libraryDependencies += "org.asciidoctor" % "asciidoctorj" % "{artifact-version}" // <1>
+----
+<1> Specifying the version of AsciidoctorJ implicitly selects the version of Asciidoctor
+
+The dependency on AsciidoctorJ will transitively add a dependency on the module `jruby-complete` with the group id `org.jruby`.
+
+The following Java program shows how to convert an arbitrary AsciiDoc file to an HTML file.
+AsciidoctorJ will already fully embedded in your Java program and it looks like any other Java library, so there is no need to fear Ruby.
+If you execute the following Java program and have an AsciiDoc file `document.adoc` in your current working directory you should see the rendered result `document.html` afterwards next to your original document.
+
+[source,java]
+.Converting an AsciiDoc file to an HTML file
+----
+include::example$org/asciidoctor/integrationguide/SimpleAsciidoctorRendering.java[]
+----
+<1> The static method `Asciidoctor.Factory.create()` creates a new Asciidoctor instance.
+This is the door to all interactions with Asciidoctor.
+<2> The method `convertFile` takes a `File` and conversion options.
+Depending on the options it will create a new file or return the rendered content.
+In this case a new file is created and the method returns `null`.
+<3> The conversion options define via `toFile(true)` that the result should be written to a new file.
+The option `safe` imposes security constraints on the rendering process.
+`safe(SafeMode.UNSAFE)` defines the least restricting constraints and allows for example inserting the beautiful `asciidoctor.css` stylesheet into the resulting document.

@@ -1,0 +1,23 @@
+name: asciidoctorj
+title: AsciidoctorJ
+version: '2.4'
+asciidoc:
+  attributes:
+    release-version: 2.4.2
+    artifact-version: 2.4.2
+    asciidoctorj-epub3-version: 1.5.0-alpha.19
+    asciidoctorj-pdf-version: 1.5.3
+    jruby-version: 9.2.13.0
+    url-jruby: http://jruby.org
+    url-gradle: https://gradle.org
+    url-repo: https://github.com/asciidoctor/asciidoctorj
+    url-tilt: https://github.com/rtomayko/tilt
+    url-font-awesome: http://fortawesome.github.io/Font-Awesome
+    url-highlightjs: https://highlightjs.org
+    url-prismjs: https://prismjs.com
+nav:
+  - modules/ROOT/nav.adoc
+  - modules/extensions/nav.adoc
+  - modules/syntax-highlighting/nav.adoc
+  - modules/guides/nav.adoc
+  - modules/project/nav.adoc

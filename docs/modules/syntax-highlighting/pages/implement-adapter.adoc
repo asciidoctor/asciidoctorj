@@ -1,0 +1,37 @@
+[[syntax-highlighter-adapter]]
+= Implement a Syntax Highlighter Adapter
+
+A syntax highlighter must implement the interface `org.asciidoctor.syntaxhighlighter.SyntaxHighlighterAdapter`.
+This has to be registered at the Asciidoctor instance, so that it can be used by using the corresponding value for the attribute `:source-highlighter`.
+
+A `SyntaxHighlighterAdapter` must implement methods to add stylesheets and scripts to the resulting HTML document.
+This is considered as a core functionality that every syntax highlighter requires.
+
+The following example shows a very simplistic syntax highlighter that uses {url-highlightjs}[highlight.js]:
+
+[source,java]
+----
+include::example$org/asciidoctor/integrationguide/syntaxhighlighter/HighlightJsHighlighter.java[tags=include]
+----
+<1> Every syntax highlighter must implement the interface `org.asciidoctor.syntaxhighlighter.SyntaxHighlighterAdapter`.
+<2> The method `hasDocInfo` indicates that this highlighter only wants to add DocInfo to the footer of the document.
+<3> The method `getDocInfo` is only called to return the DocInfo for the footer of the document.
+It returns references to the required css and js sources and starts highlight.js.
+
+Let's say we want to convert this document:
+
+.sources.adoc
+[source,asciidoc]
+-----
+include::example$sources.adoc[]
+-----
+
+Now this document can be converted using our highlighter after registering it with Asciidoctor:
+
+[source,java]
+----
+include::example$org/asciidoctor/integrationguide/syntaxhighlighter/HighlightJsHighlighterTest.java[tags=include]
+----
+<1> Register the adapter class using a well defined name.
+<2> Docinfo is only written if the document is converted with the option `:header_footer`.
+<3> The well defined name that was used to register the syntax highlighter must be used in the attribute `:source-highlighter`.

@@ -1,0 +1,34 @@
+= Static Syntax Highlighting During Conversion
+
+The examples we looked at until now did the actual syntax highlighting in the browser.
+But there are also cases where it is desirable to highlight the source during conversion, either because the syntax highlighter is implemented in Java, or syntax highlighting should also work when Javascript is not enabled at the client.
+The following example uses {url-prismjs}[prism.js] to show how to achieve this:
+
+When a `SyntaxHighlighterAdapter` also implements the interface `org.asciidoctor.syntaxhighlighter.Highlighter` it will be called to convert the raw source text to HTML.
+The example uses {url-prismjs}[prism.js] which is also a Javascript library.
+But now we will call this library during document conversion and only add the css part in the resulting HTML, so that the highlighted source will appear correctly even if Javascript is disabled on the client.
+
+[source,java]
+----
+include::example$org/asciidoctor/integrationguide/syntaxhighlighter/PrismJsHighlighter.java[tags=include]
+----
+<1> A syntax highlighter that wants to statically convert the source text has to implement the interface `org.asciidoctor.syntaxhighlighter.Highlighter`.
+<2> We use the Nashorn Javascript engine to run prism.js.
+<3> When rendering to a file and the attributes `:linkcss` and `:copycss` are set the css file of prism.js should be written to disk.
+Otherwise we include the content in a `<style/>` element.
+<4> `highlight()` is the only method required by the `Highlighter` interface.
+It gets the node to be converted, the source, the language and additional options.
+Here we invoke the prism.js API to convert the plain source text to static HTML, that uses the classes defined in the css.
+This is returned in a `HighlightResult`.
+
+// TODO: Explain what the index is, I don't fully understand it myself yet.
+
+Then we can use the highlighter just like in the previous examples.
+We just have to register it and use the correct value for the attribute `:source-highlighter`:
+
+[source,java]
+----
+include::example$org/asciidoctor/integrationguide/syntaxhighlighter/PrismJsHighlighterTest.java[tags=include]
+----
+<1> Register our prism.js highlighter and set the attribute `:source-highlighter` to its name to use it.
+<2> Test that the source code has been formatted statically to `<span/>` elements.

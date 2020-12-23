@@ -1,0 +1,30 @@
+= Format the Source Block Element
+
+{url-highlightjs}[highlight.js^] tries to automatically determine the source language, which might fail or result in wrong matches.
+To help highlight.js in identifying the correct source language the `<code/>` element can be annotated with the language as a class.
+
+That means instead of simply wrapping the code in `<pre/>` and `<code/>` elements we want to wrap it inside `<pre>` and `<code class="java"/>`.
+To allow Asciidoctor to apply the styles to properly embed a source block inside the document, the `<pre/>` element should also have the class `highlight`.
+Therefore we want to wrap the source text inside this construct:
+
+[source,html]
+----
+<pre class="highlight">
+  <code class="java">
+    ...
+  </code>
+</pre>
+----
+
+To allow a syntax highlighter to create this construct it also has to implement the interface `org.asciidoctor.syntaxhighlighter.Formatter`:
+
+[source,java]
+----
+include::example$org/asciidoctor/integrationguide/syntaxhighlighter/HighlightJsWithLanguageHighlighter.java[tags=include]
+----
+<1> The `SyntaxHighlighterAdapter` also has to implement the interface `Formatter`.
+This interface only requires the implementation of the method `format()` that receives the `org.asciidoctor.ast.Block` that is highlighted, the source language, and additional options.
+<2> The implementation of `format()` wraps everything in a `<pre/>` and `<code/>` element with the required classes.
+The value for the class of the `<code/>` element is the source language which is passed as an argument to the method.
+<3> The source text to be nested into the `<pre/>` and `<code/>` elements has to be obtained using `node.getContent()`.
+This guarantees that further processing like substitutions work properly.

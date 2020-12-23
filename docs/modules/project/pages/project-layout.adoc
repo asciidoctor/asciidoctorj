@@ -1,0 +1,68 @@
+= Project Layout
+
+The project is structured as a multi-module {url-gradle}[Gradle] build.
+
+The root folder is the root project and there are several subproject folders, each prefixed with _asciidoctorj-_.
+Each subproject produces a primary artifact (e.g., jar or zip) and its supporting artifacts (e.g., javadoc, sources, etc).
+
+The subprojects are as follows:
+
+asciidoctorj-api::
+  The common API for AsciidoctorJ.
+  Other implementations for different platforms than JRuby may reuse and implement this API.
+  Produces the asciidoctorj-api.jar
+
+asciidoctorj::
+  The main Java bindings for the Asciidoctor RubyGem (asciidoctor) running on JRuby.
+  Also bundles optional RubyGems needed at runtime, such as coderay, tilt, haml and slim.
+  Produces the asciidoctorj jar.
+
+asciidoctorj-distribution::
+  Produces the distribution zip that provides the standalone `asciidoctorj` command.
+
+asciidoctorj-documentation::
+  Contains code examples used for documentation that are run and tested during builds.
++
+IMPORTANT: When tests are modified the gradle task `copyAllExamplesToDocs` must be executed to update documentation required files in under `/docs`.
+
+asciidoctorj-arquillian-extension::
+  Bundles an Arquillian extension that allows to inject an Asciidoctor instance or other instances commonly used by Asciidoctor tests into a test case.
+
+asciidoctorj-test-support::
+  Contains some common test classes that are used by multiple other subprojects and the Arquillian extension.
+
+asciidoctorj-wildfly-integration-test::
+  Wildfly integration tests.
+
+The Gradle build is partitioned into the following files:
+
+....
+build.gradle
+gradle.properties
+settings.gradle
+gradle/
+  wrapper/
+    ...
+  deploy.gradle
+  deploySnapshot.gradle
+  eclipse.gradle
+  providedConfiguration.gradle
+  publish.gradle
+  sign.gradle
+asciidoctorj-arquillian-extension/
+  build.gradle
+asciidoctorj-api/
+  build.gradle
+asciidoctorj-core/
+  build.gradle
+asciidoctorj-distribution/
+  build.gradle
+asciidoctorj-documentation/
+  build.gradle
+asciidoctorj-test-support/
+  build.gradle
+asciidoctorj-wildfly-integration-test
+  build.gradle
+....
+
+This will publish the all artifacts that have a snapshot version number to https://oss.jfrog.org.
