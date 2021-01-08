@@ -3,6 +3,7 @@ package org.asciidoctor.converter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -18,7 +19,7 @@ public abstract class StringConverter extends AbstractConverter<String> {
     @Override
     public void write(String output, OutputStream out) throws IOException {
         if (output != null) {
-            out.write(output.getBytes(Charset.forName("UTF-8")));
+            out.write(output.getBytes(StandardCharsets.UTF_8));
         }
     }
 }
