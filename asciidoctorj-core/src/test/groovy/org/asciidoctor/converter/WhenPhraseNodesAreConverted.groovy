@@ -21,16 +21,14 @@ class WhenPhraseNodesAreConverted extends Specification {
         asciidoctor.javaConverterRegistry().register(PhraseNodeConverter)
 
         String document = '''
-:compat-mode: 
-
-Hello +{backtick}+
+Hello `+{backtick}+`
 '''
 
         when:
         String html = asciidoctor.convert(document, OptionsBuilder.options().backend(PhraseNodeConverter.DEFAULT_FORMAT).safe(SafeMode.UNSAFE))
 
         then:
-        html == '''Hello >>>`<<<'''
+        html == '''Hello >>>{backtick}<<<'''
     }
 
 }
