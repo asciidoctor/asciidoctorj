@@ -11,7 +11,7 @@ endif::[]
 This document provides a high-level view of the changes introduced in AsciidoctorJ by release.
 For a detailed view of what has changed, refer to the {url-repo}/commits/master[commit history] on GitHub.
 
-== Unreleased
+== 2.4.2 (2020-11-10)
 
 Improvement::
 
