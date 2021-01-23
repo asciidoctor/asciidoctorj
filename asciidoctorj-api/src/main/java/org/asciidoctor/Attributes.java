@@ -13,6 +13,10 @@ public class Attributes {
     private static Format DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static Format TIME_FORMAT = new SimpleDateFormat("HH:mm:ss z");
 
+    public static final String TOC = "toc";
+    public static final String TOC_POSITION = "toc-position";
+    public static final String TOC_LEVELS = "toclevels";
+    public static final String TOC_2 = "toc2";
     public static final String BACKEND = Options.BACKEND;
     public static final String TITLE = "title";
     public static final String DOCTYPE = Options.DOCTYPE;
@@ -23,7 +27,6 @@ public class Attributes {
     public static final String LOCALTIME = "localtime";
     public static final String DOCDATE = "docdate";
     public static final String DOCTIME = "doctime";
-    public static final String TOC = "toc";
     public static final String STYLESHEET_NAME = "stylesheet";
     public static final String STYLES_DIR = "stylesdir";
     public static final String NOT_STYLESHEET_NAME = STYLESHEET_NAME + "!";
@@ -43,8 +46,6 @@ public class Attributes {
     public static final String SHOW_TITLE = "showtitle";
     public static final String NOTITLE = "notitle";
     public static final String ALLOW_URI_READ = "allow-uri-read";
-    public static final String TOC_POSITION = "toc-position";
-    public static final String TOC_2 = "toc2";
     public static final String IGNORE_UNDEFINED = "ignore-undefined";
     public static final String UNTITLED_LABEL = "untitled-label";
     public static final String SET_ANCHORS = "sectanchors";
@@ -324,6 +325,16 @@ public class Attributes {
     public void setTableOfContents(Placement placement) {
         this.attributes.put(TOC, toAsciidoctorFlag(true));
         this.attributes.put(TOC_POSITION, placement.getPosition());
+    }
+
+    /**
+     * Sets the amount of levels which should be shown in the toc.
+     * 
+     * @param levels
+     *            number of levels which should be shown in the toc.
+     */
+    public void setTocLevels(int levels) {
+        this.attributes.put(TOC_LEVELS, levels);
     }
 
     /**
