@@ -3,11 +3,11 @@
 
 //TODO Note you can only have one include processor at a time.
 
-Asciidoctor supports include other documents via the include directive.
-Whit it, you can simply write `include::other.adoc[]` to include the contents of the file `other.adoc`.
+Asciidoctor supports including other documents via the include directive.
+With it, you can simply write `include::other.adoc[]` to include the contents of the file `other.adoc`.
 Include Processors allow to intercept this mechanism and for instance include the content over the network.
 
-For example, similarly to the *unix `ls` command, an Include Processor could resolve the include directive `include::ls[]`, and insert the contents of the current directory in the document.
+For example, similar to the *unix `ls` command, an Include Processor could resolve the include directive `include::ls[]`, and insert the contents of the current directory in the document.
 Our example will replace the include directive `include::ls[]` with the directory contents, adding one line for every file found.
 
 // Don't know how to include this file without asciidoctor trying to process include::ls[]
