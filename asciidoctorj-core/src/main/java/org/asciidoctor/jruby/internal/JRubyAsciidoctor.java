@@ -74,11 +74,15 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     }
 
     public static JRubyAsciidoctor create(ClassLoader classloader) {
-        return processRegistrations(createJRubyAsciidoctorInstance(null, new ArrayList<>(), classloader));
+        return processRegistrations(
+                createJRubyAsciidoctorInstance(null, new ArrayList<>(), classloader),
+                classloader);
     }
 
     public static JRubyAsciidoctor create(ClassLoader classloader, String gemPath) {
-        return processRegistrations(createJRubyAsciidoctorInstance(Collections.singletonMap(GEM_PATH, gemPath), new ArrayList<>(), classloader));
+        return processRegistrations(
+                createJRubyAsciidoctorInstance(Collections.singletonMap(GEM_PATH, gemPath), new ArrayList<>(), classloader),
+                classloader);
     }
 
     public static JRubyAsciidoctor create(List<String> loadPaths, String gemPath) {
@@ -96,20 +100,47 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
         return asciidoctor;
     }
 
+    private static JRubyAsciidoctor processRegistrations(JRubyAsciidoctor asciidoctor, ClassLoader classloader) {
+        registerExtensions(asciidoctor, classloader);
+        registerConverters(asciidoctor, classloader);
+        registerSyntaxHighlighters(asciidoctor, classloader);
+        registerLogHandlers(asciidoctor, classloader);
+
+        JavaLogger.install(asciidoctor.getRubyRuntime(), asciidoctor);
+
+        return asciidoctor;
+    }
+
     private static void registerConverters(AsciidoctorJRuby asciidoctor) {
         new ConverterRegistryExecutor(asciidoctor).registerAllConverters();
+    }
+
+    private static void registerConverters(AsciidoctorJRuby asciidoctor, ClassLoader classloader) {
+        new ConverterRegistryExecutor(asciidoctor).registerAllConverters(classloader);
     }
 
     private static void registerExtensions(AsciidoctorJRuby asciidoctor) {
         new ExtensionRegistryExecutor(asciidoctor).registerAllExtensions();
     }
 
+    private static void registerExtensions(AsciidoctorJRuby asciidoctor, ClassLoader classloader) {
+        new ExtensionRegistryExecutor(asciidoctor).registerAllExtensions(classloader);
+    }
+
     private static void registerSyntaxHighlighters(AsciidoctorJRuby asciidoctor) {
         new SyntaxHighlighterRegistryExecutor(asciidoctor).registerAllSyntaxHighlighter();
     }
 
+    private static void registerSyntaxHighlighters(AsciidoctorJRuby asciidoctor, ClassLoader classloader) {
+        new SyntaxHighlighterRegistryExecutor(asciidoctor).registerAllSyntaxHighlighter(classloader);
+    }
+
     private static void registerLogHandlers(AsciidoctorJRuby asciidoctor) {
         new LogHandlerRegistryExecutor(asciidoctor).registerAllLogHandlers();
+    }
+
+    private static void registerLogHandlers(AsciidoctorJRuby asciidoctor, ClassLoader classloader) {
+        new LogHandlerRegistryExecutor(asciidoctor).registerAllLogHandlers(classloader);
     }
 
     private static JRubyAsciidoctor createJRubyAsciidoctorInstance(Map<String, String> environmentVars, List<String> loadPaths, ClassLoader classloader) {

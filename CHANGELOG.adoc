@@ -36,6 +36,10 @@ Improvement::
 
   * Upgrade to JRuby 9.2.13.0 (#948)
 
+Bug Fixes::
+
+* When creating an AsciidoctorJ instance with classloader parameter, extensions are not discovered (@ahus1) (#942)
+
 == 2.4.0 (2020-07-19)
 
 Improvement::

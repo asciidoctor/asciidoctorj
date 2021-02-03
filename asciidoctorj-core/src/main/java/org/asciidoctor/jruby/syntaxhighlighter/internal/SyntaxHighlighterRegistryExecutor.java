@@ -15,9 +15,13 @@ public class SyntaxHighlighterRegistryExecutor {
     }
 
     public void registerAllSyntaxHighlighter() {
+        registerAllSyntaxHighlighter(Thread.currentThread().getContextClassLoader());
+    }
+
+    public void registerAllSyntaxHighlighter(ClassLoader classLoader) {
         ServiceLoader<SyntaxHighlighterRegistry> serviceLoader = ServiceLoader
-                .load(SyntaxHighlighterRegistry.class);
-        
+                .load(SyntaxHighlighterRegistry.class, classLoader);
+
         for (SyntaxHighlighterRegistry extensionRegistry : serviceLoader) {
             extensionRegistry.register(asciidoctor);
         }
