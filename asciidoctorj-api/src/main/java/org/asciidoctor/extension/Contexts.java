@@ -20,7 +20,7 @@ import java.lang.annotation.Target;
  *
  *     public Object process(StructuralNode parent, Reader reader, Map&lt;String, Object&gt; attributes) {
  *         List&lt;String&gt; lines = reader.readLines();
- *         List&lt;String&gt; newLines = new ArrayList<>();
+ *         List&lt;String&gt; newLines = new ArrayList&lt;&gt;();
  *         for (String line: lines) {
  *             newLines.add(line.toUpperCase());
  *         }
