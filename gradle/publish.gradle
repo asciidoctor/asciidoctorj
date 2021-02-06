@@ -1,112 +1,55 @@
-// NOTE replace deficient built-in publishing plugin with nebula-publishing,
-// which does a better job generating the POM and properly aggregates signature files for upload to Bintray
-apply plugin: 'maven-publish'
-
-def projectMeta = {
-    resolveStrategy = groovy.lang.Closure.DELEGATE_FIRST
-    name project.name
-    description project.description
-    url 'https://github.com/asciidoctor/asciidoctorj'
-    inceptionYear '2013'
-    licenses {
-        license {
-            name 'The Apache Software License, Version 2.0'
-            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-            distribution 'repo'
-        }
-    }
-    issueManagement {
-        system 'github'
-        url 'https://github.com/asciidoctor/asciidoctorj/issues'
-    }
-    scm {
-        url 'https://github.com/asciidoctor/asciidoctorj'
-    }
-    developers {
-        developer {
-            id 'asotobu'
-            name 'Alex Soto Bueno'
-            email 'asotobu@gmail.com'
-            timezone '1'
-            roles {
-                role 'Contributor'
-            }
-        }
-        developer {
-            id 'mojavelinux'
-            name 'Dan Allen'
-            email 'dan.j.allen@gmail.com'
-            timezone '-7'
-            roles {
-                role 'Contributor'
-            }
-        }
-        developer {
-            id 'abelsromero'
-            name 'Abel Salgado Romero'
-            email 'abelromero@gmail.com'
-            timezone '1'
-            roles {
-                role 'Contributor'
-            }
-        }
-        developer {
-            id 'robertpanzer'
-            name 'Robert Panzer'
-            email 'robert.panzer.pb@gmail.com'
-            timezone '1'
-            roles {
-                role 'Project Lead'
-            }
-        }
+nexusPublishing {
+    repositories {
+        sonatype()
     }
 }
 
-afterEvaluate {
-    publishing.publications {
-        jars(MavenPublication) {
+publishing {
+    publications.create(project.ext.publicationName, MavenPublication) {
+        pom {
+            name = project.name
+            description = project.description
+            url = 'https://github.com/asciidoctor/asciidoctorj'
 
-            // NOTE only build sources and javadoc jars when releasing
-            if (project.statusIsRelease) {
-                if (project.tasks.withType(Jar).findByName('sourcesJar')) {
-                    artifact sourcesJar
-                }
-                if (project.tasks.withType(Jar).findByName('javadocJar')) {
-                    artifact javadocJar
+            licenses {
+                license {
+                    name = 'The Apache Software License, Version 2.0'
+                    url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution = 'repo'
                 }
             }
-
-            pom.withXml {
-                asNode().children().last() + projectMeta
-            }
-
-            if (!project.isDistribution()) {
-                from components.java
+            developers {
+                developer {
+                    id = 'asotobu'
+                    name = 'Alex Soto Bueno'
+                    email = 'asotobu@gmail.com'
+                    timezone = '1'
+                    roles = ['Contributor']
+                }
+                developer {
+                    id = 'mojavelinux'
+                    name = 'Dan Allen'
+                    email = 'dan.j.allen@gmail.com'
+                    timezone = '-7'
+                    roles = ['Contributor']
+                }
+                developer {
+                    id = 'abelsromero'
+                    name = 'Abel Salgado Romero'
+                    email = 'abelromero@gmail.com'
+                    timezone = '1'
+                    roles = ['Contributor']
+                }
+                developer {
+                    id = 'robertpanzer'
+                    name = 'Robert Panzer'
+                    email = 'robert.panzer.pb@gmail.com'
+                    timezone = '1'
+                    roles = ['Project Lead']
+                }
             }
         }
     }
-}
-
-if ( !project.hasProperty('skip.signing') ) {
-    task addSignaturesToPublication(dependsOn: signArchives) {
-        group "publishing"
-        description "add all signatures to the publication"
-
-        doLast {
-            publishing.publications {
-                jars(MavenPublication) {
-                    configurations.signatures.getArtifacts().each { sig ->
-                        logger.debug "adding signature to jars publication: $sig"
-                        artifact(sig) {
-                            extension "jar.asc"
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    tasks["signPom"].finalizedBy addSignaturesToPublication
 }
 
 // QUESTION should we move manifest creation to general Java plugin config?
@@ -125,3 +68,16 @@ jar {
       'Implementation-Vendor': 'asciidoctor.org'
   }
 }
+
+publishing {
+    repositories {
+        maven {
+            name = "local"
+            // change URLs to point to your repos, e.g. http://my.org/repo
+            def releasesRepoUrl = "${rootProject.buildDir}/repos/releases"
+            def snapshotsRepoUrl = "${rootProject.buildDir}/repos/snapshots"
+            url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+        }
+    }
+}
+
