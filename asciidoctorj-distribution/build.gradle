@@ -57,9 +57,13 @@ startScripts {
 }
 
 project.ext.publicationName = "mavenAsciidoctorJ"
-
-publishing {
-  publications.findByName(project.ext.publicationName).each {
-    it.artifact(distZip)
-  }
+// This module wants to add an artifact to the publication configured for the module asciidoctorj
+// I am unaware right now how to enforce the configuration order, so it could theoretically happen that
+// the publication is not available yet. In that case fail the build and find some other way to fix it...
+def publication = rootProject.project('asciidoctorj').extensions.findByName('publishing').publications.findByName(project.ext.publicationName)
+if (!publication) {
+  throw new ProjectConfigurationException("Publication ${project.ext.publicationName} not configured yet", [])
+}
+publication.each {
+    it.artifact distZip
 }
