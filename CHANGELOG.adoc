@@ -13,6 +13,15 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/master[
 
 == Unreleased
 
+Improvement::
+
+* Upgrade to asciidoctorj-pdf 1.5.4 (#986)
+* Upgrade to asciidoctorj-revealjs 4.1.0 (#986)
+* Upgrade to asciidoctorj-diagram 2.1.0 (#986)
+* Upgrade to jruby 9.2.14.0 (#986)
+* Upgrade to rouge 3.26.0 (#986)
+* Add constant for attribute toclevel (@l0wlik34G6) (#984)
+
 Build Improvement::
 
 * Publish directly to Maven Central (#988)
