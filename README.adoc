@@ -1187,14 +1187,16 @@ To use a snapshot version of the the AsciidoctorJ library add this repository to
 [source,xml]
 ----
 <repositories>
-  <repository>
-    <id>oss-jfrog-artifactory</id>
-    <name>oss-jfrog-artifactory-releases</name>
-    <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
-    <snapshots>
-      <enabled>true</enabled>
-    </snapshots>
-  </repository>
+    <repository>
+        <id>snapshots</id>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
 </repositories>
 ----
 
@@ -1204,7 +1206,7 @@ If you build your project using {uri-gradle}[Gradle] add the repository like thi
 ----
 repositories {
     maven {
-        url 'http://oss.jfrog.org/oss-snapshot-local/'
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
     }
 }
 ----
