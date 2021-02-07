@@ -1,6 +1,5 @@
 package org.asciidoctor.arquillian;
 
-import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.arquillian.api.Shared;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.jboss.arquillian.core.api.Instance;

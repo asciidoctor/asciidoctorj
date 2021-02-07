@@ -1,3 +1,5 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
 apply plugin: 'biz.aQute.bnd.builder'
 
 dependencies {
@@ -117,4 +119,15 @@ task pollutedTest(type: Test) {
 }
 
 test.dependsOn pollutedTest
+
+project.ext.publicationName = "mavenAsciidoctorJ"
+
+apply from: rootProject.file('gradle/publish.gradle')
+apply from: rootProject.file('gradle/signing.gradle')
+
+publishing {
+  publications.findByName(project.ext.publicationName).each {
+    it.from(components.java)
+  }
+}
 

@@ -1,9 +1,11 @@
+apply plugin: 'java'
+
 dependencies {
     compile 'junit:junit:4.12'
 }
 
-def javaApiUrl = "https://docs.oracle.com/javase/6/docs/api"
-def junitURL = "http://junit.org/javadoc/latest/"
+def javaApiUrl = "https://docs.oracle.com/javase/8/docs/api/"
+def junitURL = "https://junit.org/junit4/javadoc/latest"
 
 javadoc {
     options.links(javaApiUrl, junitURL)

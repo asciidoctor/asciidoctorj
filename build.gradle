@@ -11,10 +11,9 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
         }
         mavenCentral()
+        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.4.10"
         classpath "gradle.plugin.io.sdkman:gradle-sdkvendor-plugin:1.1.0"
         classpath "biz.aQute.bnd:biz.aQute.bnd.gradle:4.3.0"
     }
@@ -22,8 +21,13 @@ buildscript {
 
 // modern plugins config
 plugins {
+  id "signing"
+  id "io.codearte.nexus-staging" version "0.22.0"
+  id "de.marcphilipp.nexus-publish" version "0.4.0"
   id 'com.github.jruby-gradle.base' version '2.0.0'
 }
+
+apply plugin: 'io.codearte.nexus-staging'
 
 // TIP use -PpublishRelease=true to active release behavior regardless of the version
 status = project.hasProperty('publishRelease') && project.publishRelease.toBoolean() ?
@@ -31,6 +35,17 @@ status = project.hasProperty('publishRelease') && project.publishRelease.toBoole
 
 // using ExpandoMetaClass to add isDistribution() Method to Project instances...
 Project.metaClass.isDistribution = { delegate.getName().endsWith("-distribution") }
+
+nexusStaging {
+  if (project.hasProperty("sonatypeUsername")) {
+    username = project.sonatypeUsername
+  }
+  if (project.hasProperty("sonatypePassword")) {
+    password = project.sonatypePassword
+  }
+  repositoryDescription = "Release ${project.group} ${project.version}"
+}
+
 
 ext {
   buildDateTime = new Date()
@@ -50,8 +65,8 @@ ext {
   jcommanderVersion = '1.72'
   jrubyVersion = '9.2.14.0'
   jsoupVersion = '1.12.1'
-  junitVersion = '4.12'
-  nettyVersion = '4.0.33.Final'
+  junitVersion = '4.13.1'
+  nettyVersion = '4.1.58.Final'
   saxonVersion = '9.9.0-2'
   xmlMatchersVersion = '1.0-RC1'
   pdfboxVersion = '1.8.10'
@@ -85,19 +100,6 @@ subprojects {
   apply plugin: 'java'
   apply plugin: 'groovy'
 
-  if (!it.name.endsWith('-documentation') && !it.name.endsWith('-wildfly-integration-test')) {
-
-    apply from: rootProject.file('gradle/signing.gradle')
-    if (!it.isDistribution()){
-      apply from: rootProject.file('gradle/publish.gradle')
-    }
-    if (statusIsRelease) {
-      apply from: rootProject.file('gradle/deploy.gradle')
-    } else if (it.version.endsWith('SNAPSHOT')) {
-      apply from: rootProject.file('gradle/deploySnapshot.gradle')
-    }
-  }
-
   status = _status
 
   // NOTE sourceCompatibility & targetCompatibility are set in gradle.properties to meet requirements of Gradle
@@ -125,8 +127,7 @@ subprojects {
     if (project.hasProperty('useMavenLocal') && project.useMavenLocal.toBoolean()) {
       mavenLocal()
     }
-
-    jcenter()
+    mavenCentral()
   }
 
   apply plugin: 'codenarc'
@@ -207,21 +208,9 @@ configure(subprojects.findAll { !it.isDistribution() }) {
 
 configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.endsWith('-documentation')}) {
 
-  task sourcesJar(type: Jar, dependsOn: classes, group: 'Release') {
-    description 'Assembles a jar archive containing the main source code.'
-    from sourceSets.main.allSource
-    classifier 'sources'
-  }
-
-  task javadocJar(type: Jar, dependsOn: javadoc, group: 'Release') {
-    description 'Assembles a jar archive containing the Javadoc API documentation for the main source code.'
-    from javadoc.destinationDir
-    classifier 'javadoc'
-  }
-
-  // jcenter & Maven Central requires sources & javadoc jars (even if empty), so give 'em what they want
-  artifacts {
-    archives sourcesJar, javadocJar
+  java {
+    withJavadocJar()
+    withSourcesJar()
   }
 
   jruby {

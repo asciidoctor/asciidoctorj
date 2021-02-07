@@ -61,7 +61,7 @@ public interface AsciidoctorJRuby extends Asciidoctor {
      *
      * <pre>
      * org.jruby.javasupport.JavaEmbedUtils.initialize(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib"));
-     * Asciidoctor asciidoctor = Asciidoctor.Factory.create(this.getClass().getClassLoader()); <3>
+     * Asciidoctor asciidoctor = Asciidoctor.Factory.create(this.getClass().getClassLoader());
      * </pre>
      *
      * @param classloader
@@ -79,7 +79,7 @@ public interface AsciidoctorJRuby extends Asciidoctor {
      *
      * <pre>
      * org.jruby.javasupport.JavaEmbedUtils.initialize(Arrays.asList("uri:classloader:/gems/asciidoctor-1.5.8/lib"));
-     * Asciidoctor asciidoctor = Asciidoctor.Factory.create(this.getClass().getClassLoader()); <3>
+     * Asciidoctor asciidoctor = Asciidoctor.Factory.create(this.getClass().getClassLoader());
      * </pre>
      *
      * @param classloader

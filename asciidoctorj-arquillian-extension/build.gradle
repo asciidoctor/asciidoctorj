@@ -1,3 +1,5 @@
+apply plugin: 'de.marcphilipp.nexus-publish'
+
 dependencies {
   compileOnly project(':asciidoctorj')
   compile project(':asciidoctorj-test-support')
@@ -7,9 +9,20 @@ dependencies {
   compile "org.jboss.arquillian.container:arquillian-container-test-impl-base:$arquillianVersion"
 }
 
-def javaApiUrl = "https://docs.oracle.com/javase/6/docs/api"
-def junitURL = "http://junit.org/javadoc/latest/"
+def javaApiUrl = "https://docs.oracle.com/javase/8/docs/api/"
+def junitURL = "https://junit.org/junit4/javadoc/latest"
 
 javadoc {
   options.links( javaApiUrl, junitURL )
+}
+
+project.ext.publicationName = "mavenAsciidoctorJArquillianExtension"
+
+apply from: rootProject.file('gradle/publish.gradle')
+apply from: rootProject.file('gradle/signing.gradle')
+
+publishing {
+  publications.findByName(project.ext.publicationName).each {
+    it.from(rootProject.project('asciidoctorj-arquillian-extension').components.java)
+  }
 }

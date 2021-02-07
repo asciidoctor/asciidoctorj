@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
  *         super(macroName)
  *     }
  *
- *     public Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+ *     public Object process(StructuralNode parent, String target, Map&lt;String, Object&gt; attributes) {
  *         assertEquals(attributes.get("section"), "7")
  *     }
  * }
