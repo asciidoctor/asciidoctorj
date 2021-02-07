@@ -1,60 +1,19 @@
-if ( !project.hasProperty('skip.signing') ){
+def hasSigningKey = project.hasProperty("signing.keyId") || project.findProperty("signingKey")
+if(hasSigningKey && !project.hasProperty('skip.signing')) {
     apply plugin: 'signing'
-
-    signing {
-        sign configurations.archives
-    }
-
-    if ( !signing.signatory ) {
-        logger.warn "No Signatory configured for project $project.name. Skip signing! See https://docs.gradle.org/current/userguide/signing_plugin.html"
-        signArchives.enabled = false
-        ext."skip.signing" = true
-    }
-
-    task signPom(type: Sign) {
-        group "publishing"
-        description "Sign the projects pom file"
-
-        ext.pom = file("$buildDir/publications/jars/pom-default.xml")
-        ext.signedPom = file("$buildDir/publications/jars/${project.name}-${project.version}.pom.asc")
-        ext.bintrayDestination = "${project.group.replace(".","/")}/${project.name}/${project.version}"
-
-        inputs.file pom
-        outputs.file signedPom
-
-        doLast{
-
-            def input = pom.newInputStream()
-            def output = signedPom.newOutputStream()
-            try{
-                signatory.sign(input, output)
-            }
-            catch (Exception e){
-                logger.error e.message
-            }
-            finally {
-                input.close()
-                output.close()
-            }
+    sign(project)
+}
+void sign(Project project) {
+    project.signing {
+        required { project.gradle.taskGraph.hasTask("required") }
+        def signingKeyId = project.findProperty("signingKeyId")
+        def signingKey = project.findProperty("signingKey")
+        def signingPassword = project.findProperty("signingPassword")
+        if (signingKeyId) {
+            useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+        } else if (signingKey) {
+            useInMemoryPgpKeys(signingKey, signingPassword)
         }
-    }
-
-    /**
-     * The signPom Task depends on the GenerateMavenPom task which gets dynamically added
-     * with a name derived from a publication. In our case 'jars'.
-     *
-     * Our jars publication registers the signed pom as artifact.
-     * If the task does not run before publishJarsPublicationToMavenLocal this task will fail.
-     */
-    tasks.whenTaskAdded {
-
-        switch (it.name) {
-            case "generatePomFileForJarsPublication":
-                signPom.dependsOn it
-                break
-            case "publishJarsPublicationToMavenLocal":
-                it.dependsOn signPom
-                break
-        }
+        sign publishing.publications[project.ext.publicationName]
     }
 }

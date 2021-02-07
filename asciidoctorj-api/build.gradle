@@ -1,4 +1,5 @@
 apply plugin: 'biz.aQute.bnd.builder'
+apply plugin: 'de.marcphilipp.nexus-publish'
 
 dependencies {
   compileOnly "org.osgi:osgi.annotation:$osgiVersion"
@@ -12,4 +13,13 @@ jar {
   )
 }
 
+ext.publicationName = "mavenAsciidoctorJApi"
 
+apply from: rootProject.file('gradle/publish.gradle')
+apply from: rootProject.file('gradle/signing.gradle')
+
+publishing {
+  publications.findByName(project.ext.publicationName).each {
+    it.from(components.java)
+  }
+}

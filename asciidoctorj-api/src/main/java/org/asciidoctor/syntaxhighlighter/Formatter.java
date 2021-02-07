@@ -28,7 +28,7 @@ public interface Formatter {
      *         sb.append("&lt;pre class='highlight'&gt;");
      *         sb.append("&lt;code data-lang='").append(lang).append("'&gt;");
      *         sb.append(node.getContent());
-     *         sb.append("&lt;/code&gt");
+     *         sb.append("&lt;/code&gt;");
      *         sb.append("&lt;/pre&gt;\n");
      *         return sb.toString();
      *     }
