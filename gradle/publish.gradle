@@ -1,15 +1,18 @@
-nexusPublishing {
-    repositories {
-        sonatype()
-    }
-}
+apply plugin: 'de.marcphilipp.nexus-publish'
 
 publishing {
     publications.create(project.ext.publicationName, MavenPublication) {
+
+        from components.java
+
         pom {
             name = project.name
             description = project.description
             url = 'https://github.com/asciidoctor/asciidoctorj'
+
+            scm {
+                url = 'https://github.com/asciidoctor/asciidoctorj'
+            }
 
             licenses {
                 license {
@@ -78,6 +81,12 @@ publishing {
             def snapshotsRepoUrl = "${rootProject.buildDir}/repos/snapshots"
             url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
         }
+    }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype()
     }
 }
 

@@ -1,5 +1,3 @@
-apply plugin: 'de.marcphilipp.nexus-publish'
-
 dependencies {
   compileOnly project(':asciidoctorj')
   compile project(':asciidoctorj-test-support')
@@ -20,9 +18,3 @@ project.ext.publicationName = "mavenAsciidoctorJArquillianExtension"
 
 apply from: rootProject.file('gradle/publish.gradle')
 apply from: rootProject.file('gradle/signing.gradle')
-
-publishing {
-  publications.findByName(project.ext.publicationName).each {
-    it.from(rootProject.project('asciidoctorj-arquillian-extension').components.java)
-  }
-}

@@ -10,3 +10,8 @@ def junitURL = "https://junit.org/junit4/javadoc/latest"
 javadoc {
     options.links(javaApiUrl, junitURL)
 }
+
+ext.publicationName = "mavenAsciidoctorJTestSupport"
+
+apply from: rootProject.file('gradle/publish.gradle')
+apply from: rootProject.file('gradle/signing.gradle')

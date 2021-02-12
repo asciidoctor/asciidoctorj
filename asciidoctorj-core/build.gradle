@@ -2,6 +2,11 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'biz.aQute.bnd.builder'
 
+project.ext.publicationName = "mavenAsciidoctorJ"
+
+apply from: rootProject.file('gradle/publish.gradle')
+apply from: rootProject.file('gradle/signing.gradle')
+
 dependencies {
   compile project(path: ':asciidoctorj-api')
   compile "org.jruby:jruby:$jrubyVersion"
@@ -120,14 +125,5 @@ task pollutedTest(type: Test) {
 
 test.dependsOn pollutedTest
 
-project.ext.publicationName = "mavenAsciidoctorJ"
 
-apply from: rootProject.file('gradle/publish.gradle')
-apply from: rootProject.file('gradle/signing.gradle')
-
-publishing {
-  publications.findByName(project.ext.publicationName).each {
-    it.from(components.java)
-  }
-}
 
