@@ -12,6 +12,7 @@
 *** xref:locating-files.adoc[]
 *** xref:safe-mode-and-filesystem-access.adoc[]
 *** xref:conversion-examples.adoc[]
+*** xref:convert-to-epub3.adoc[]
 ** xref:ruby-runtime.adoc[]
 ** xref:ruby-extensions.adoc[]
 

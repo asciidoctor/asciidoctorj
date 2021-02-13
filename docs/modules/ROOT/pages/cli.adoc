@@ -59,7 +59,7 @@ This will install the binary distribution and setup the PATH automatically.
 == Windows installation
 
 A {url-chocolatey}[Chocolatey] package is available which installs the
-asciidoctorj-{artifact-version}-bin.zip Bintray artifact along with a
+asciidoctorj-{artifact-version}-bin.zip Maven artifact along with a
 binary shim in %ChocolateyInstall%\bin which lets you run AsciidoctorJ
 from the command line.
 

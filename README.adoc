@@ -1,5 +1,5 @@
 = AsciidoctorJ: Java bindings for Asciidoctor
-Alex Soto <https://github.com/lordofthejars[@lordofthejars]>; Dan Allen <https://github.com/mojavelinux[@mojavelinux]>
+Alex Soto <https://github.com/lordofthejars[@lordofthejars]>; Dan Allen <https://github.com/mojavelinux[@mojavelinux]>; Robert Panzer <https://github.com/robertpanzer[@robertpanzer]>
 // Settings:
 :compat-mode!:
 :page-layout: base
@@ -29,22 +29,16 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-discuss: http://discuss.asciidoctor.org
-:artifact-version: 2.4.2
+:artifact-version: 2.4.3
 :asciidoctorj-epub3-version: 1.5.0-alpha.19
-:asciidoctorj-pdf-version: 1.5.3
-:jruby-version: 9.2.13.0
+:asciidoctorj-pdf-version: 1.5.4
+:jruby-version: 9.2.14.0
 :uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
 :uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
 :uri-maven-artifact-api-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj-api%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-api-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj-api%7C{artifact-version}%7Cjar
 :uri-maven-artifact-api-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj-api/{artifact-version}/asciidoctorj-api-{artifact-version}
-:uri-bintray-artifact-query: https://bintray.com/asciidoctor/maven/asciidoctorj/view/general
-:uri-bintray-artifact-detail: https://bintray.com/asciidoctor/maven/asciidoctorj/{artifact-version}/view
-:uri-bintray-artifact-file: http://dl.bintray.com/asciidoctor/maven/org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
-:uri-bintray-artifact-api-query: https://bintray.com/asciidoctor/maven/asciidoctorj-api/view/general
-:uri-bintray-artifact-api-detail: https://bintray.com/asciidoctor/maven/asciidoctorj-api/{artifact-version}/view
-:uri-bintray-artifact-api-file: http://dl.bintray.com/asciidoctor/maven/org/asciidoctor/asciidoctorj-api/{artifact-version}/asciidoctorj-api-{artifact-version}
 :uri-jruby-startup: http://github.com/jruby/jruby/wiki/Improving-startup-time
 :uri-maven-guide: {uri-docs}/install-and-use-asciidoctor-maven-plugin
 :uri-gradle-guide: {uri-docs}/install-and-use-asciidoctor-gradle-plugin
@@ -55,6 +49,8 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 
 {uri-repo}[AsciidoctorJ] is the official library for running {uri-asciidoctor}[Asciidoctor] on the JVM.
 Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of a parsed AsciiDoc document from Java and other JVM languages.
+
+You can find the documentation for integrating Asciidoctor in your JVM based language of choice at the https://docs.asciidoctor.org/asciidoctorj/latest/[Asciidoctor Docs site].
 
 ifdef::badges[]
 image:https://ci.appveyor.com/api/projects/status/syxrlv047esal4n0/branch/master?svg=true[Build Status (AppVeyor), link=https://ci.appveyor.com/project/asciidoctor/asciidoctorj]
@@ -67,34 +63,8 @@ endif::[]
 
 == Distribution
 
-AsciidoctorJ is published to Maven Central and Bintray.
+AsciidoctorJ is published to Maven Central.
 The artifact information can be found in the tables below.
-
-[cols="2,2,^2,4"]
-.Artifact information for AsciidoctorJ in jCenter (Bintray)
-|===
-|Group Id |Artifact Id |Version |Download
-
-|org.asciidoctor
-|{uri-bintray-artifact-query}[asciidoctorj]
-|{uri-bintray-artifact-detail}[{artifact-version}]
-|{uri-bintray-artifact-file}.pom[pom] {uri-bintray-artifact-file}.jar[jar] {uri-bintray-artifact-file}-javadoc.jar[javadoc (jar)] {uri-bintray-artifact-file}-sources.jar[sources (jar)] distribution ({uri-bintray-artifact-file}-bin.zip[zip] {uri-bintray-artifact-file}-bin.tar[tar])
-
-|org.asciidoctor
-|{uri-bintray-artifact-api-query}[asciidoctorj-api]
-|{uri-bintray-artifact-api-detail}[{artifact-version}]
-|{uri-bintray-artifact-api-file}.pom[pom] {uri-bintray-artifact-api-file}.jar[jar] {uri-bintray-artifact-api-file}-javadoc.jar[javadoc (jar)] {uri-bintray-artifact-api-file}-sources.jar[sources (jar)]
-
-|org.asciidoctor
-|asciidoctorj-epub3
-|{asciidoctorj-epub3-version}
-|{empty}
-
-|org.asciidoctor
-|asciidoctorj-pdf
-|{asciidoctorj-pdf-version}
-|{empty}
-|===
 
 [cols="2,2,^2,4"]
 .Artifact information for AsciidoctorJ in Maven Central
@@ -228,7 +198,7 @@ If you use the distribution you can call `asciidoctorj --version` to get the ver
 === Windows Installation
 
 A {uri-chocolatey}[Chocolatey] package is available which installs the
-asciidoctorj-{artifact-version}-bin.zip Bintray artifact along with a
+asciidoctorj-{artifact-version}-bin.zip Maven artifact along with a
 binary shim in %ChocolateyInstall%\bin which lets you run AsciidoctorJ
 from the command line.
 
@@ -239,945 +209,27 @@ C:\ProgramData\chocolatey\bin\asciidoctorj.exe
 C:\> asciidoctorj -b pdf README.adoc
 ----
 
-== Converting documents
-
-The main entry point for AsciidoctorJ is the `Asciidoctor` Java interface.
-This interface provides four methods for converting AsciiDoc content.
-
-* `convert`
-* `convertFile`
-* `convertFiles`
-* `convertDirectory`
-
-You'll learn about these methods in the <<converting-documents,converting documents section>>.
-
-IMPORTANT: Prior to Asciidoctor 1.5.0, the term `render` was used in these method names instead of `convert` (i.e., `render`, `renderFile`, `renderFiles` and `renderDirectory`).
-AsciidoctorJ continues to support the old method names for backwards compatibility.
-
-[cols="1m,1m,2"]
-.Convert methods on the `Asciidoctor` interface
-|===
-|Method Name |Return Type| Description
-
-|convert
-|String
-|Parses AsciiDoc content read from a string or stream and converts it to the format specified by the `backend` option.
-
-|convertFile
-|String
-|Parses AsciiDoc content read from a file and converts it to the format specified by the `backend` option.
-
-|convertFiles
-|String[]
-|Parses a collection of AsciiDoc files and converts them to the format specified by the `backend` option.
-
-|convertDirectory
-|String[]
-|Parses all AsciiDoc files found in the specified directory (using the provided strategy) and converts them to the format specified by the `backend` option.
-|===
-
-// What is the 'provided strategy', need a link
-
-NOTE: All the methods listed in Table 3 are overloaded to accommodate various input types and options.
-
-You retrieve an instance of the `Asciidoctor` interface from the factory method provided.
-
-[source]
-.Creating an Asciidoctor instance from Asciidoctor.Factory
-----
-import static org.asciidoctor.Asciidoctor.Factory.create;
-import org.asciidoctor.Asciidoctor;
-
-Asciidoctor asciidoctor = create();
-----
-
-Once you retrieve an instance of the `Asciidoctor` interface, you can use it to convert AsciiDoc content.
-Here's an example of using AsciidoctorJ to convert an AsciiDoc string.
-
-NOTE: The following `convertFile` or `convertFiles` methods will only return a converted `String` object or array if you disable writing to a file, which is enabled by default.
-To disable writing to a file, create a new `Options` object, disable the option to create a new file with `option.setToFile(false)`, and then pass the object as a parameter to `convertFile` or `convertFiles`.
-
-[source]
-.Converting an AsciiDoc string
-----
-//...
-import java.util.HashMap;
-//...
-
-String html = asciidoctor.convert(
-    "Writing AsciiDoc is _easy_!",
-    new HashMap<String, Object>());
-System.out.println(html);
-----
-
-The `convertFile` method will convert the contents of an AsciiDoc file.
-
-[source]
-.Converting an AsciiDoc file
-----
-//...
-import java.util.HashMap;
-//...
-
-String html = asciidoctor.convertFile(
-    new File("sample.adoc"),
-    new HashMap<String, Object>());
-System.out.println(html);
-----
-
-The `convertFiles` method will convert a collection of AsciiDoc files:
-
-[source]
-.Converting a collection of AsciiDoc files
-----
-//...
-import java.util.Arrays;
-//...
-
-String[] result = asciidoctor.convertFiles(
-    Arrays.asList(new File("sample.adoc")),
-    new HashMap<String, Object>());
-
-for (String html : result) {
-    System.out.println(html);
-}
-----
-
-WARNING: If the converted content is written to files, the `convertFiles` method will return a String Array (i.e., `String[]`) with the names of all the converted documents.
-
-Another method provided by the `Asciidoctor` interface is `convertDirectory`.
-This method converts all of the files with AsciiDoc extensions (`.adoc` _(preferred)_, `.ad`, `.asciidoc`, `.asc`) that are present within a specified folder and following given strategy.
-
-An instance of the `DirectoryWalker` interface, which provides a strategy for locating files to process, must be passed as the first parameter of the `convertDirectory` method.
-Currently `Asciidoctor` provides two built-in implementations of the `DirectoryWalker` interface:
-
-[cols="1m,2"]
-.Built-in `DirectoryWalker` implementations
-|===
-|Class |Description
-
-|AsciiDocDirectoryWalker
-|Converts all files of given folder and all its subfolders. Ignores files starting with underscore (_).
-
-|GlobDirectoryWalker
-|Converts all files of given folder following a glob expression.
-|===
-
-If the converted content is not written into files, `convertDirectory` will return an array listing all the documents converted.
-
-// SW: Maybe provide an example of this array output?
-
-[source]
-.Converting all AsciiDoc files in a directory
-----
-//...
-import org.asciidoctor.AsciiDocDirectoryWalker;
-//...
-
-String[] result = asciidoctor.convertDirectory(
-    new AsciiDocDirectoryWalker("src/asciidoc"),
-    new HashMap<String, Object>());
-
-for (String html : result) {
-    System.out.println(html);
-}
-----
-
-Another way to convert AsciiDoc content is by calling the `convert` method and providing a standard Java `java.io.Reader` and `java.io.Writer`.
-The `Reader` interface is used as the source, and the converted content is written to the `Writer` interface.
-
-[source]
-.Converting content read from a java.io.Reader to a java.io.Writer
-----
-//...
-import java.io.FileReader;
-import java.io.StringWriter;
-//...
-
-FileReader reader = new FileReader(new File("sample.adoc"));
-StringWriter writer = new StringWriter();
-
-asciidoctor.convert(reader, writer, options().asMap());
-
-StringBuffer htmlBuffer = writer.getBuffer();
-System.out.println(htmlBuffer.toString());
-----
-
-=== Safe mode and file system access
-Asciidoctor provides security levels that control the read and write access of attributes, the include directive, macros, and scripts while a document is processing. Each level includes the restrictions enabled in the prior security level.
-
-When Asciidoctor (and AsciidoctorJ) is used as _API_, it uses `SECURE` safe mode by default.
-This mode is the most restrictive one and in summary it disallows the document from attempting to read files from the file system and including their contents into the document.
-
-We recommend you to set `SAFE` safe mode when rendering AsciiDoc documents using AsciidoctorJ to have almost all Asciidoctor features such as _icons_, _include directive_ or retrieving content from _URIs_ enabled.
-
-Safe mode is set as option when a document is rendered.
-For example:
-
-[source, java]
-----
-import static org.asciidoctor.OptionsBuilder.options;
-
-Map<String, Object> options = options().safe(SafeMode.SAFE)
-                                       .asMap();
-
-String outfile = asciidoctor.convertFile(new File("sample.adoc"), options);
-----
-
-We are going to explain in more detail options in <<conversion-options, next section>>.
-
-
-You can read more about safe modes in http://asciidoctor.org/docs/user-manual/#running-asciidoctor-securely
-
-=== Conversion options
-
-Asciidoctor supports numerous options, such as:
-
-`in_place`::
-  Converts the output to a file adjacent to the input file.
-
-`template_dirs`::
-  Specifies a directory of {uri-tilt}[Tilt]-compatible templates to be used instead of the default built-in templates
-
-`attributes`::
-  A Hash (key-value pairs) of attributes to configure various aspects of the AsciiDoc processor
-
-The second parameter of the `convert` method is `java.util.Map`.
-The options listed above can be set in `java.util.Map`.
-
-[source]
-.Using the `in_place` option and the `backend` attribute
-----
-Map<String, Object> attributes = new HashMap<String, Object>();
-attributes.put("backend", "docbook"); // <1>
-
-Map<String, Object> options = new HashMap<String, Object>();
-options.put("attributes", attributes); // <2>
-options.put("in_place", true); // <3>
-
-String outfile = asciidoctor.convertFile(new File("sample.adoc"), options);
-----
-<1> Defines the `backend` attribute as `docbook` in the attributes map
-<2> Registers the attributes map as the `attributes` option in the options map
-<3> Defines the `in_place` option in the options map
-
-Another way for setting options is by using `org.asciidoctor.Options` class.
-`Options` is a simple Java class which contains methods for setting required options.
-Note that related with `org.asciidoctor.Options` class, there is `org.asciidoctor.Attributes` class, which can be used for setting attributes.
-
-The `convert` method is overloaded so `org.asciidoctor.Options` can be passed instead of a `java.util.Map`.
-
-[source]
-.Using the in_place option and the backend attribute
-----
-Attributes attributes = new Attributes();
-attributes.setBackend("docbook"); // <1>
-
-Options options = new Options();
-options.setAttributes(attributes); // <2>
-options.setInPlace(true); // <3>
-
-String outfile = asciidoctor.convertFile(new File("sample.adoc"), options);
-----
-<1> Defines the `backend` attribute as `docbook` in the attributes class
-<2> Registers the attributes class as the `attributes` option in the options class
-<3> Defines the `in_place` option in the options class
-
-AsciidoctorJ also provides two builder classes to create these maps and classes in a more readable form.
-
-`AttributesBuilder`::
-  Used to define attributes with a fluent API
-
-`OptionsBuilder`::
-  Used to define options with a fluent API
-
-The code below results in the same output as the previous example but uses the builder classes.
-
-[source]
-.Setting attributes and options with the builder classes
-----
-import static org.asciidoctor.AttributesBuilder.attributes;
-import static org.asciidoctor.OptionsBuilder.options;
-
-//...
-Map<String, Object> attributes = attributes().backend("docbook") // <1>
-                                             .asMap();
-
-Map<String, Object> options = options().inPlace(true)
-                                       .attributes(attributes) // <2>
-                                       .asMap(); // <3>
-
-String outfile = asciidoctor.convertFile(new File("sample.adoc"), options);
-----
-<1> Defines the `backend` attribute as `docbook` using fluent API.
-<2> Registers the attributes map as `attributes`.
-<3> Converts options to `java.util.Map` instance.
-
-[source]
-.Setting attributes and options with the builder classes
-----
-import static org.asciidoctor.AttributesBuilder.attributes;
-import static org.asciidoctor.OptionsBuilder.options;
-
-//...
-Attributes attributes = attributes().backend("docbook").get(); // <1>
-Options options = options().inPlace(true).attributes(attributes).get(); // <2>
-
-String outfile = asciidoctor.convertFile(new File("sample.adoc"), options); // <3>
-----
-<1> Defines and returns an `Attributes` class instead of `java.util.Map` by calling `get()` method instead of `asMap()`.
-<2> Defines and returns an `Options` class instead of `java.util.Map` by calling `get()` method instead of `asMap()`.
-<3> Converts the document passing `Options` class.
-
-TIP: All methods used to convert content are overloaded with `OptionsBuilder` parameter, so it is no longer required to call `get` nor `asMap` methods.
-
-WARNING: The `icons` attribute requires a `String` to set the value used to “draw” icons.
-At this time, you can use two constants `org.asciidoctor.Attributes.IMAGE_ICONS` for using the same approach as AsciiDoc, that is using `img` tags, or `org.asciidoctor.Attributes.FONT_ICONS` for using icons from {uri-font-awesome}[Font Awesome^].
-
-Attributes can be specified as `String` or `Array` instead of pair key/value by using `org.asciidoctor.Attributes.setAttributes(String)` or [x-]`org.asciidoctor.Attributes.setAttributes(String...)` and `AttributesBuilder` methods.
-
-[source]
-.Passing attributes as a string
-----
-//...
-Attributes attributes = attributes().attributes("toc numbered").get();
-Options options = options().attributes(attributes).get();
-----
-
-Passing attributes as a string is equivalent to passing individual attributes.
-
-[source]
-.Passing individual attributes
-----
-//...
-Attributes attributes = attributes().tableOfContents(true).sectionNumbers(true).get();
-Options options = options().attributes(attributes).get();
-----
-
-You can also use an array.
-
-[source]
-.Passing attributes as an array
-----
-//...
-String[] attributesArray = new String[]{"toc", "source-highlighter=coderay"};
-Attributes attributes = attributes().attributes(attributesArray).sectionNumbers(true).get();
-Options options = options().attributes(attributes).get();
-----
-
-Passing attributes as an array is equivalent to passing individual attribute.
-
-[source]
-.Passing individual attributes
-----
-//...
-Attributes attributes = attributes().tableOfContents(true).sectionNumbers(true).sourceHighlighter("coderay").get();
-Options options = options().attributes(attributes).get();
-----
-
-== Locating files
-
-A utility class `AsciiDocDirectoryWalker` is available for searching the AsciiDoc files present in a root folder and its subfolders.
-`AsciiDocDirectoryWalker` locates all files that end with `.adoc`, `.ad`, `.asciidoc` or `.asc`.
-Also it ignores all files starting with underscore (`_`).
-
-[source]
-.Locating AsciiDoc files with `AsciiDocDirectoryWalker`
-----
-import java.util.List;
-import org.asciidoctor.AsciiDocDirectoryWalker;
-
-DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker("docs"); // <1>
-List<File> asciidocFiles = directoryWalker.scan(); // <2>
-----
-<1> Defines which parent directory is used for searching.
-<2> Returns a list of all AsciiDoc files found in root folder and its subfolders.
-
-A utility class `GlobDirectoryWalker` is available for searching the AsciiDoc files present in a root folder and scanning using a `Glob` expression.
-`GlobDirectoryWalker` locates all files that end with `.adoc`, `.ad`, `.asciidoc` or `.asc`.
-
-[source]
-.Locating AsciiDoc files with `GlobDirectoryWalker`
-----
-import java.util.List;
-import org.asciidoctor.GlobDirectoryWalker;
-
-DirectoryWalker directoryWalker = new GlobDirectoryWalker("docs", "**/*.adoc"); // <1>
-List<File> asciidocFiles = directoryWalker.scan(); // <2>
-----
-<1> Defines which parent directory is used for searching and the glob expression.
-<2> Returns a list of all AsciiDoc files matching given glob expression.
-
-== Reading the document tree
-
-Instead of converting an AsciiDoc document, you may want to parse the document to read information it contains or navigate the document's structure.
-AsciidoctorJ let's you do this!
-
-AsciidoctorJ provides a model of the abstract syntax tree of the document.
-These objects are directly linked to the internal representation.
-
-To load a document, use the `load` or `loadFile` methods.
-
-[source]
-----
-import org.asciidoctor.ast.Document;
-
-//...
-
-Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>()); // <1>
-assertThat(document.doctitle(), is("Document Title")); // <2>
-----
-<1> Document from a String is loaded into `Document` object.
-<2> Title of the document is retrieved.
-
-But also all blocks that conforms the document can be retrieved.
-Currently there are support for three kinds of blocks.
-`Blocks` itself, `Section` for sections of the document and `StructuralNode` which is the base type where all kind of blocks (including those not mapped as Java class) are mapped.
-
-[source]
-----
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.Section;
-
-//...
-
-Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>()); // <1>
-Section section = (Section) document.blocks().get(1); // <2>
-
-assertThat(section.index(), is(0)); // <3>
-assertThat(section.sectname(), is("sect1"));
-assertThat(section.special(), is(false));
-----
-<1> Document from a String is loaded into `Document` object.
-<2> All blocks are get and because in this example the first block is a Section block, we cast it directly.
-<3> Concrete methods for sections can be called.
-
-Blocks can also be retrieved from query using `findBy` method.
-
-[source]
-----
-Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
-Map<Object, Object> selector = new HashMap<>(); // <1>
-selector.put("context", ":image"); // <2>
-
-List<StructuralNode> findBy = document.findBy(selector);
-assertThat(findBy, hasSize(2)); //<3>
-----
-<1> To make queries you need to use a `map` approach. Currently this is because of the Asciidoctor API but it will change in near future.
-<2> In this example all blocks with context as image is returned. Notice that the colon (`:`) must be added in the value part.
-<3> Document used as example contains two images.
-
-== Extension API
-
-[NOTE]
-If you are migrating existing extensions to a newer version of AsciidoctorJ please read the <<docs/extension-migration-guide#,Extension Migration Guide>>
-
-One of the major improvements to Asciidoctor recently is the extensions API.
-AsciidoctorJ brings this extension API to the JVM environment.
-{uri-repo}[AsciidoctorJ] allows us to write extensions in Java instead of Ruby.
-
-Asciidoctor provides seven types of extension points.
-Each extension point has an abstract class in Java that maps to the extension API in Ruby.
-
-[cols="1m,2"]
-.AsciidoctorJ extension APIs
-|===
-|Name |Class
-
-|Preprocessor
-|org.asciidoctor.extension.Preprocessor
-
-|Treeprocessor
-|org.asciidoctor.extension.Treeprocessor
-
-|Postprocessor
-|org.asciidoctor.extension.Postprocessor
-
-|Block processor
-|org.asciidoctor.extension.BlockProcessor
-
-|Block macro processor
-|org.asciidoctor.extension.BlockMacroProcessor
-
-|Inline macro processor
-|org.asciidoctor.extension.InlineMacroProcessor
-
-|Include processor
-|org.asciidoctor.extension.IncludeProcessor
-|===
-
-You can read more about the Extension API in the <<docs/integrator-guide#,Integrator Guide>>.
-
-=== Ruby extensions
-
-You can even register extensions written in Ruby using AsciidoctorJ.
-To register a _Ruby_ extension you must get a `RubyExtensionRegistry` class instead of `JavaExtensionRegistry`.
-
-[source]
-.Register a Ruby extension in Java
-----
-RubyExtensionRegistry rubyExtensionRegistry = this.asciidoctor.rubyExtensionRegistry(); // <1>
-rubyExtensionRegistry.loadClass(Class.class.getResourceAsStream("/YellRubyBlock.rb")).block("rubyyell", "YellRubyBlock"); // <2>
-
-String content = asciidoctor.convertFile(new File(
-                "target/test-classes/sample-with-ruby-yell-block.ad"),
-                options().toFile(false).get());
-----
-<1> `rubyExtensionRegistry` method is called to get a rubyExtensionRegistry instance.
-<2> Ruby file containing a class implementing a Block extension is loaded inside the Ruby runtime. Then the block is registered with a name (rubyyell), and we pass the name of the class to be instantiated.
-
-[source,ruby]
-.YellBlock.rb
-----
-require 'asciidoctor'
-require 'asciidoctor/extensions'
-
-class YellRubyBlock < Asciidoctor::Extensions::BlockProcessor
-  option :contexts, [:paragraph]
-  option :content_model, :simple
-
-  def process parent, reader, attributes
-    lines = reader.lines.map {|line| line.upcase.gsub(/\.( |$)/, '!\\1') }
-    Asciidoctor::Block.new parent, :paragraph, :source => lines, :attributes => attributes
-  end
-end
-----
-
-== Logs handling API
-
-[NOTE]
-====
-This API is inspired by Java Logging API (JUL).
-If you are familiar with `java.util.logging.*` you will see familiar analogies with some of its components.
-====
-
-AsciidoctorJ (v1.5.7+) offers the possibility to capture messages generated during document rendering.
-These messages correspond to logging information and are organized in 6 severity levels:
-
-. DEBUG
-. INFO
-. WARN
-. ERROR
-. FATAL
-. UNKNOWN
-
-The easiest way to capture messages is registering a `LogHandler` through the `Asciidoctor` instance.
-
-[source,java]
-.Registering a LogHandler
-----
-Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-
-asciidoctor.registerLogHandler(new LogHandler() { // <1>
-    @Override
-    public void log(LogRecord logRecord) {
-        System.out.println(logRecord.getMessage());
-    }
-});
-----
-<1> Use `registerLogHandler` to register one or more handlers.
-
-The `log` method in the `org.asciidoctor.log.LogHandler` interface provides a `org.asciidoctor.log.LogRecord` that exposes the following information:
-
-[horizontal]
-Severity severity::
-Severity level of the current record.
-
-Cursor cursor::
-Information about the location of the event, contains:
-* LineNumber: relative to the file where the message occurred.
-* Path: source file simple name, or `<stdin>` value when converting from a String.
-* Dir: absolute path to the source file parent directory, or the execution path when converting from a String.
-* File: absolute path to the source file, or `null` when converting from a String. +
-These will point to the correct source file, even when this is included from another.
-
-String message::
-Descriptive message about the event.
-
-String sourceFileName::
-Contains the value `<script>`. +
-For the source filename see `Cursor` above.
-
-String sourceMethodName::
-The Asciidoctor Ruby engine method used to convert the file; `convertFile` or `convert` whether you are converting a File or a String.
-
-=== Logs Handling SPI
-
-Similarly to AsciidoctorJ extensions, the Log Handling API provides an alternate method to register Handlers without accessing `Asciidoctor` instance.
-
-Start creating a normal LogHandler implementation.
-
-[source,Java]
-----
-package my.asciidoctor.log.MemoryLogHandler;
-
-import java.util.ArrayList;
-import java.util.List;
-import org.asciidoctor.log.LogHandler;
-import org.asciidoctor.log.LogRecord;
-
-/**
- * Stores LogRecords in memory for later analysis.
- */
-public class MemoryLogHandler extends LogHandler {
-
-  private List<LogRecord> logRecords = new ArrayList<>();
-
-  @Override
-  public void log(LogRecord logRecord) {
-    logRecords.add(record);
-  }
-
-  public List<LogRecord> getLogRecords() {
-    return logRecords;
-  }
-}
-----
-
-Next, create a file called `org.asciidoctor.log.LogHandler` inside `META-INF/services` with the implementation’s full qualified name.
-
-.META-INF/services/org.asciidoctor.log.LogHandler
- my.asciidoctor.log.MemoryLogHandler
-
-And that’s all.
-Now when a .jar file containing the previous structure is dropped inside classpath of AsciidoctorJ, the handler will be registered automatically.
-
-== Converting to EPUB3
-
-The Asciidoctor EPUB3 gem (asciidoctor-epub3) is bundled inside the AsciidoctorJ EPUB3 jar (asciidoctorj-epub3).
-To use it, simply add the asciidoctorj-epub3 jar to your dependencies.
-The version of the AsciidoctorJ EPUB3 jar aligns with the version of the Asciidoctor EPUB3 gem.
-
-Here's how you can add the AsciidoctorJ EPUB3 jar to your Maven dependencies:
-
-[source,xml,subs="attributes+"]
-----
-<dependencies>
-  <dependency>
-    <groupId>org.asciidoctor</groupId>
-    <artifactId>asciidoctorj-epub3</artifactId>
-    <version>{asciidoctorj-epub3-version}</version>
-    <scope>runtime</scope>
-  </dependency>
-</dependencies>
-----
-
-Once you've added the AsciidoctorJ EPUB3 jar to your classpath, you can set the `backend` attribute to `epub3`.
-The document will be converted to the http://idpf.org/epub/30[EPUB3^] format.
-
-CAUTION: The [app]_asciidoctor-epub3_ gem is alpha.
-While it can be used successfully, there may be bugs and its functionality may change in incompatible ways before the first stable release.
-In other words, by using it, you are also testing it ;)
-
-Let's see an example of how to use AsciidoctorJ with the EPUB3 converter.
-
-[source,asciidoc]
-.spine.adoc
-----
-= Book Title
-Author Name
-:imagesdir: images <1>
-
-include::content-document.adoc[] <2>
-----
-<1> The EPUB3 converter requires the value of the `imagesdir` attribute to be `images`.
-<2> The EPUB3 converter must be run on a _spine_ document that has at least one include directive (and no other body content) in order to function properly.
-
-[source,asciidoc]
-.content-document.adoc
-----
-= Content Title
-Author Name
-
-[abstract]
-This is the actual content.
-
-== First Section
-
-And off we go.
-----
-
-And finally we can convert the document to EPUB3 using AsciidoctorJ.
-
-[source]
-----
-asciidoctor.convertFile(new File("spine.adoc"),
-                options().safe(SafeMode.SAFE).backend("epub3").get()); // <1> <2>
-
-assertThat(new File("target/test-classes/index.epub").exists(), is(true));
-----
-<1> Currently, the EPUB3 converter must be run in `SAFE` or `UNSAFE` mode due to a bug
-<2> `epub3` is the name of the backend that must be set to convert to EPUB3.
-
-// TODO document how to convert to KF8/MOBI (need to set KINDLEGEN environment variable)
-// TODO add section that covers using Asciidoctor PDF via the AsciidoctorJ PDF jar
-
-
-== Writing a custom converter
-
-For output formats that are not natively supported by Asciidoctor it is possible to write an own converter in Java.
-You can find out more about how to write your own converters using AsciidoctorJ in the <<docs/integrator-guide.adoc#publish-everywhere-adapt-asciidoctor-to-your-own-target-format,Integrator Guide>>.
-
-== Loading Ruby libraries
-
-Simple extensions may be fully implemented in Java, but if you want to create complex extensions you can mix Ruby and Java code.
-This means that you may need to execute a Ruby file or a RubyGem (i.e., gem) inside your extension.
-
-To load a Ruby file inside the Ruby runtime, you can use `org.asciidoctor.jruby.internal.RubyUtils.loadRubyClass(Ruby, InputStream)`.
-You can also load a gem using an API that wraps Ruby's `require` command.
-The gem must be available inside the classpath.
-Next run `org.asciidoctor.jruby.internal.RubyUtils.requireLibrary(Ruby, String)`, passing the name of the gem as the second argument.
-
-// SW or AS: show an example of loading Ruby libraries or point to an external resource showing examples/further documentation.
-
-== JRuby instance
-
-Sometimes you may need the Ruby runtime used inside AsciidoctorJ.
-One reason is because you are using JRuby outside AsciidoctorJ and you want to reuse the same instance.
-Another reason is that you need to instantiate by yourself an Asciidoctor Ruby object.
-
-To get this instance you can use `org.asciidoctor.jruby.internal.JRubyRuntimeContext.get(Asciidoctor)` to get it from a given Asciidoctor instance.
-
-== GEM_PATH
-
-By default, AsciidoctorJ comes with all required gems bundled within the jar.
-But in some circumstances like OSGi environments you may require to store gems in an external folder and be loaded by AsciidoctorJ.
-
-As the Java interface `org.asciidoctor.Asciidoctor` and its factory `org.asciidoctor.Asciidoctor.Factory` are agnostic to JRuby there are the interface `org.asciidoctor.jruby.AsciidoctorJRuby` and `org.asciidoctor.jruby.AsciidoctorJRuby.Factory` that allow to get an Asciidoctor instance using JRuby with a certain GEM_PATH.
-Note that `org.asciidoctor.jruby.AsciidoctorJRuby` directly extends `org.asciidoctor.Asciidoctor`.
-
-[source]
-.Example of setting GEM_PATH
-----
-import static org.asciidoctor.jruby.AsciidoctorJRuby.Factory.create;
-import org.asciidoctor.Asciidoctor;
-
-Asciidoctor asciidoctor = create("/my/gem/path"); // <1>
-----
-<1> Creates an `Asciidoctor` instance with given `GEM_PATH` location.
-
-== Using AsciidoctorJ in an OSGi environment
-
-In a non OSGi context, the following snippet will successfully create an Asciidoctor object:
-
-[source,java]
-----
-import static org.asciidoctor.Asciidoctor.Factory.create;
-import org.asciidoctor.Asciidoctor;
-
-Asciidoctor asciidoctor = create();
-----
-
-In an OSGi context it will not work because JRuby needs some paths to find the Asciidoctor gems.
-In order to make it work, you will need to specify the Asciidoctor gems path using the JavaEmbedUtils class.
-We will update the previous snippet of code to specify this path:
-
-[source,java]
-----
-import static org.asciidoctor.jruby.AsciidoctorJRuby.Factory.create;
-import org.asciidoctor.Asciidoctor;
-
-Asciidoctor asciidoctor = create(Arrays.asList("uri:classloader:/gems/asciidoctor-2.2.0/lib")); // <1><2>
-----
-<1> `uri:classloader:/gems/asciidoctor-<version>/lib` specifies where the gems for Asciidoctor are located.
-    Actually this path is located inside the `asciidoctorj-<version>.jar` file
-<2> The version here differs from the AsciidoctorJ version as it corresponds to the version of Asciidoctor, not the AsciidoctorJ one.
-
-[NOTE]
-We consider this code to be placed inside an OSGi bundle
-
-This solution has pros and cons:
-
-* _Pros:_ you don't need to extract the gems located in the asciidoctorj binary ;
-* _Cons:_
-** the version of asciidoctor is hard coded ;
-
-== Optimization
-
-JRuby may start slower than expected versus the C-based Ruby implementation (MRI).
-Fortunately, JRuby offers flags that can improve the start time and tune applications.
-Several Java flags can also be used in conjunction with or apart from the JRuby flags in order to improve the start time even more.
-
-// SW: Need examples of JRuby and Java flags being used
-
-For small tasks such as converting an AsciiDoc document, two JRuby flags can drastically improve the start time:
-
-[cols="1m,2", width="50%"]
-.JRuby flags
-|===
-|Name |Value
-
-|jruby.compat.version
-|RUBY1_9
-
-|jruby.compile.mode
-|OFF
-|===
-
-When using AsciidoctorJ via the API these flags have to be set as system properties when creating the `org.asciidoctor.Asciidoctor` instance:
-
-[source,java]
-----
-System.setProperty("jruby.compat.version", "RUBY1_9");
-System.setProperty("jruby.compile.mode", "OFF");
-Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-----
-
-When starting AsciidoctorJ via the CLI these options can be defined in the files `.jrubyrc` that are loaded from the current working directory and the home directory of the user.
-
-----
-$ cat ./.jrubyrc
-compat.version=RUBY1_9
-compile.mode=OFF
-$ ./asciidoctorj -V
-AsciidoctorJ 1.5.2 [http://asciidoctor.org]
-Runtime Environment: jruby 1.7.20 (1.9.3)
-----
-
-[NOTE]
-The properties in these `.jrubyrc` files do not contain the prefix `jruby.`. 
-The property values also must not have trailing blanks!
-
-Alternatively you can also set any system properties using the environment variable `ASCIIDOCTORJ_OPTS`:
-
-----
-$ export ASCIIDOCTORJ_OPTS=-Djruby.compat.version=RUBY1_9
-$ asciidoctorj -V
-AsciidoctorJ 1.5.2 [http://asciidoctor.org]
-Runtime Environment: jruby 1.7.20 (1.9.3)
-----
-
-The Java flags available for improving start time depend on whether your working on a 32- or 64-bit processor and your JDK version.
-Let's see a summary of these flags and in which environments they can be used.
-
-[cols="1m,2",width="75%"]
-.Java flags
-|===
-|Name |JDK
-
-|-client
-|32 bit Java
-
-|-Xverify:none
-|32/64 bit Java
-
-|-XX:+TieredCompilation
-|32/64 bit Java SE 7
-
-|-XX:TieredStopAtLevel=1
-|32/64 bit Java SE 7
-|===
-
-[source,shell]
-.Setting flags for Java SE 6
-----
-export JAVA_OPTS="-Xverify:none -client" 
-----
-
-You can find a full explanation on how to improve the start time of JRuby applications in <<Optimization>>.
-
-== Running AsciidoctorJ on WildFly
-
-If you want to use AsciidoctorJ in an application deployed on [app]_WildFly_, you have to follow the instruction below:
-
-. Create an *Asciidoctor module* for [app]_WildFly_.
-. Create the following folder tree: [path]_$JBOSS_HOME/modules/org/asciidoctor/main_.
-. Create the module descriptor file [path]_module.xml_.
-+
-[subs="+attributes"]
-[source,xml]
-.Asciidoctor module descriptor for WildFly
-----
-<?xml version="1.0" encoding="UTF-8"?>
-<module xmlns="urn:jboss:module:1.0" name="org.asciidoctor">
-    <resources>
-        <resource-root path="asciidoctorj-api-{artifact-version}.jar"/>
-        <resource-root path="asciidoctorj-{artifact-version}.jar"/>
-        <resource-root path="jcommander-1.72.jar"/>
-        <resource-root path="jruby-complete-{jruby-version}.jar"/>
-    </resources>
-    <dependencies>
-        <module name="sun.jdk" export="true">
-            <imports>
-                <include path="sun/misc/Unsafe" />
-            </imports>
-        </module>
-        <module name="javax.management.j2ee.api"/>
-        <module name="javax.api"/>
-        <module name="org.slf4j"/>
-    </dependencies>
-</module>
-----
-. Copy the jar files into the same folder as the _module.xml_ file.
-. Make sure the version numbers of the jar files agree with what's in the current set.
-Restart WildFly for the new module to take effect.
-
-
-. Add a dependency on your Java archive to this WildFly module using one of the following options:
-.. Add the dependency just into the [path]_MANIFEST.MF_ file.
-+
-.MANIFEST.MF file example with dependency to Asciidoctor module
-----
-Manifest-Version: 1.0
-Dependencies: org.asciidoctor
-...
-----
-
-.. _Or_, configure the dependency into the [path]_pom.xml_ with the [app]_Maven JAR/WAR plugin_.
-+
-[source,xml]
-[subs="specialcharacters,attributes,callouts"]
-.pom.xml file example with Maven WAR plugin configuration to add a dependency
-----
-...
-<dependencies>
-  <dependency>
-    <groupId>org.asciidoctor</groupId>
-    <artifactId>asciidoctorj</artifactId>
-    <version>{artifact-version}</version>
-    <scope>provided</scope> <!--1-->
-    ...
-  </dependency>
-</dependencies>
-...
-<plugin>
-  <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-war-plugin</artifactId>
-    <version>2.4</version>
-    <configuration>
-      <archive>
-        <manifestEntries>
-          <Dependencies>org.asciidoctor</Dependencies> <!--2-->
-        </manifestEntries>
-      </archive>
-    </configuration>
-</plugin>
-...
-----
-<1> The AsciidoctorJ dependency and the transitives dependencies don't need to be added to the final WAR since all JARs are available through the module.
-<2> The module dependency will be added to the [path]_MANIFEST.MF_ file.
-
 == Using a pre-release version
 
-Pre-release versions of `AsciidoctorJ` are published to Bintray.
-You can find them in https://bintray.com/asciidoctor/maven/asciidoctorj/view.
-Final releases are released to both Maven Central and Bintray.
+Pre-release versions of `AsciidoctorJ` are published to oss.sonatype.org.
+The exact location of the repository will be announced.
+Final releases are released to both Maven Central.
 
 Here's how to use a pre-release version in Maven:
 
 [source, xml]
 ----
-<repositories>
-  <repository>
-    <id>central</id>
-    <name>bintray</name>
-    <url>http://dl.bintray.com/asciidoctor/maven</url>
-    <snapshots>
-      <enabled>false</enabled>
-    </snapshots>
-  </repository>
-</repositories>
+    <repositories>
+        <repository>
+            <id>staging</id>
+            <url>https://oss.sonatype.org/content/repositories/orgasciidoctor-1234</url> <1>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
 ----
+<1> The exact URL differs for every build
 
 == Using a snapshot version
 
@@ -1212,8 +264,6 @@ repositories {
 ----
 
 
-You can also download a snapshot version of the distribution from here: https://oss.jfrog.org/oss-snapshot-local/org/asciidoctor/asciidoctorj-distribution
-
 == Development
 
 AsciidoctorJ is built using {uri-gradle}[Gradle].
@@ -1239,15 +289,6 @@ asciidoctorj::
 asciidoctorj-distribution::
   Produces the distribution zip that provides the standalone `asciidoctorj` command.
 
-asciidoctorj-epub3::
-  Bundles the Asciidoctor EPUB3 RubyGem (asciidoctor-pdf) and its dependencies as the asciidoctorj-epub3 jar.
-
-asciidoctorj-pdf::
-  Bundles the Asciidoctor PDF RubyGem (asciidoctor-pdf) and its dependencies as the asciidoctorj-pdf jar.
-
-asciidoctorj-diagram::
-  Bundles the Asciidoctor Diagram RubyGem (asciidoctor-diagram) and its dependencies as the asciidoctorj-diagram jar.
-
 asciidoctorj-arquillian-extension::
   Bundles an Arquillian extension that allows to inject an Asciidoctor instance or other instances commonly used by Asciidoctor tests into a test case.
 
@@ -1263,8 +304,6 @@ settings.gradle
 gradle/
   wrapper/
     ...
-  deploy.gradle
-  deploySnapshot.gradle
   eclipse.gradle
   providedConfiguration.gradle
   publish.gradle
@@ -1275,13 +314,7 @@ asciidoctorj-api/
   build.gradle
 asciidoctorj-core/
   build.gradle
-asciidoctorj-diagram/
-  build.gradle
 asciidoctorj-distribution/
-  build.gradle
-asciidoctorj-epub3/
-  build.gradle
-asciidoctorj-pdf/
   build.gradle
 asciidoctorj-test-support/
   build.gradle
@@ -1345,55 +378,71 @@ Then, import the project into Eclipse using menu:File[Import,General,Existing Pr
 Continuous integration for the AsciidoctorJ project is performed by GitHub Actions.
 You can find recent build results, including the build status of pull requests, on the https://github.com/asciidoctor/asciidoctorj/actions[asciidoctor/asciidoctorj] page.
 
-=== Publish the artifacts
+=== Release and publish the artifacts
 
-Artifacts are published to Maven Central and jCenter by way of Bintray's _Distribution as a Service_ platform.
+To build and publish a release the following properties have to be set, for example in the file ~/.gradle/gradle.properties:
 
-Before publishing, you need to configure your gpg signing and Bintray credentials.
-Create the file [path]_$HOME/.gradle/gradle.properties_ and populate the following properties.
-
+.~/.gradle/gradle.properties
+[source,properties]
 ----
-signing.keyId=
-signing.password=
+signing.keyId=...              # <1>
+signing.password=...
 signing.secretKeyRingFile=/home/YOUR_USERNAME/.gnupg/secring.gpg
-bintrayUsername=
-bintrayApiKey=
+
+sdkman_consumer_key=...        # <2>
+sdkman_consumer_token=...
+
+sonatypeUsername=...           # <3>
+sonatypePassword=...
 ----
+<1> Settings for signing the artifacts
+<2> Credentials for publishing a new release to sdkman
+<3> Credentials for publishing artifacts to oss.sonatype.org
 
-To build, assemble and sign the archives (jars and distribution zip), run:
+The following steps are necessary to build a new release:
 
- $ ./gradlew -PpublishRelease=true signJars
-
-TIP: The `publishRelease=true` property is technically only required if the version is a snapshot.
-
-To build, assemble (but not sign) and install the archives (jars and distribution zip) into the local Maven repository, run:
-
- $ ./gradlew -PpublishRelease=true install
-
-To build, assemble, sign and publish the archives (jars and distribution zip) to Bintray, run:
-
- $ ./gradlew clean
-   ./gradlew -i -x pMNPTML asciidoctorj-api:bintrayUpload asciidoctorj:bintrayUpload asciidoctorj-distribution:bintrayUpload
-
-CAUTION: Don't run the `clean` task in the same execution as the `bintrayUpload` because it will not upload one of the signatures.
-
-If you want to first perform a dry run of the upload, add the `dryRun=true` property.
-
- $ ./gradlew -i -PdryRun=true -x pMNPTML asciidoctorj-api:bintrayUpload asciidoctorj:bintrayUpload asciidoctorj-distribution:bintrayUpload
-
-NOTE: The `-x pMNPTML` is necessary to work around a bug in the publishing plugin that prevents it from signing the archives.
-
-IMPORTANT: Bintray does not allow you to publish snapshots.
-You have to first update the version in [path]_gradle.properties_ to a release (or pre-release) version number.
-Currently, Gradle is not configured to automatically tag a release, so *you have to create the git tag manually*.
-
-=== Publish snapshot versions
-
-To publish a snapshot version simply run:
-
- $ ./gradlew asciidoctorj-api:artifactoryPublish asciidoctorj:artifactoryPublish asciidoctorj-distribution:artifactoryPublish
-
-This will publish the all artifacts that have a snapshot version number to https://oss.jfrog.org.
+. Update the version in gradle.properties to a release version, i.e. from `2.4.4-SNAPSHOT` to `2.4.4`.
+. Build the release with
++
+----
+# ./gradlew clean build
+----
+. After testing publish all artifacts to a local repository under `build/repos` with
++
+----
+# ./gradlew publishAllPublicationsToLocalRepository -i
+----
+. When everything is fine publish the artifacts to a staging repository on https://oss.sonatype.org and close the repository:
++
+----
+# ./gradlew publishAllPublicationsToSonatypeRepository -i
+# ./gradlew closeRepository -i
+----
+. Visit https://oss.sonatype.org/#stagingRepositories[] and check the staging repository.
+The artifacts are not published yet.
+The repository URL shown there can be used for testing this version before publishing to Maven central.
+. When everything is fine publish the artifacts in the staging repository by clicking the "Release" button.
+Alternatively you can release it with
++
+----
+# ./gradlew releaseRepository
+----
+. Publish the new version to sdkman with
++
+----
+# ./gradlew asciidoctorj-distribution:sdkMajorRelease
+----
+. Commit everything and assign a tag:
++
+----
+# git commit -m "Release v2.x.y"
+# git tag v2.x.y
+----
+. Upgrade the version to the next version by changing the version property in gradle.properties to `version=2.x.y+1-SNAPSHOT` and commit:
++
+----
+git commit -m "Prepare next release"
+----
 
 == Resources
 
