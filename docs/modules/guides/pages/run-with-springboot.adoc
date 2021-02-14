@@ -1,0 +1,41 @@
+= Running AsciidoctorJ with Spring Boot
+:url-springboot-docs: https://docs.spring.io/spring-boot/docs/current
+
+Due to Spring Boot's packaging system, Asciidoctorj won't work out of the box from a single JAR application.
+Luckily SpringBoot plugins for Gradle and Maven provide options to fix it.
+
+== Gradle configuration
+
+You just need to add the following configuration to your Gradle build.
+
+
+```groovy
+bootJar {
+	requiresUnpack '**/asciidoctorj-*.jar'
+}
+```
+
+For full details, check the official {url-springboot-docs}/gradle-plugin/reference/htmlsingle/#packaging-executable-configuring-unpacking[Spring Boot Gradle Plugin documentation].
+
+== Maven configuration
+
+Similarly, for the Maven plugin add the following configuration to your POM.
+
+```xml
+<plugin>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+    <configuration>
+        <requiresUnpack>
+            <dependency>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctorj</artifactId>
+            </dependency>
+        </requiresUnpack>
+    </configuration>
+</plugin>
+```
+
+For full details, check the official {url-springboot-docs}/maven-plugin/reference/htmlsingle/#goals-repackage[Spring Boot Maven Plugin documentation].
+
+

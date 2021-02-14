@@ -5,6 +5,7 @@
 ** Running in Frameworks
 *** xref:run-in-osgi.adoc[]
 *** xref:run-in-wildfly.adoc[]
+*** xref:run-with-springboot.adoc[]
 ** xref:access-jruby-instance.adoc[]
 ** xref:load-ruby-library.adoc[]
 ** xref:gem-path.adoc[]
