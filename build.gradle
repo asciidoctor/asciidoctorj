@@ -65,6 +65,7 @@ ext {
   jrubyVersion = '9.2.14.0'
   jsoupVersion = '1.12.1'
   junitVersion = '4.13.1'
+  assertjVersion = '3.19.0'
   nettyVersion = '4.1.58.Final'
   saxonVersion = '9.9.0-2'
   xmlMatchersVersion = '1.0-RC1'
@@ -134,7 +135,7 @@ subprojects {
     configFile = rootProject.file('config/codenarc/codenarc.groovy')
   }
 
-  if (it.name != 'asciidoctorj-wildfly-integration-test') {
+  if (!isIntegrationTestProject(it)) {
 
     dependencies {
       testCompile "junit:junit:$junitVersion"
@@ -177,8 +178,14 @@ subprojects {
 
 }
 
-configure(subprojects.findAll { !it.isDistribution() && it.name != 'asciidoctorj-api' && it.name != 'asciidoctorj-documentation' && it.name != 'asciidoctorj-test-support' && it.name != 'asciidoctorj-arquillian-extension' && it.name != 'asciidoctorj-wildfly-integration-test' }) {
+configure(subprojects.findAll { !it.isDistribution() && it.name != 'asciidoctorj-api' && it.name != 'asciidoctorj-documentation' && it.name != 'asciidoctorj-test-support' && it.name != 'asciidoctorj-arquillian-extension' && !isIntegrationTestProject(it) }) {
   apply from: rootProject.file('gradle/versioncheck.gradle')
+}
+
+boolean isIntegrationTestProject(def project) {
+  project.name in ['asciidoctorj-wildfly-integration-test',
+                   'asciidoctorj-springboot-integration-test',
+                   'springboot-app']
 }
 
 // apply JRuby and sources/javadocs packaging stuff for all subprojects except the distribution
