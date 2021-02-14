@@ -12,6 +12,16 @@ dependencies {
     }
 }
 
+compileTestJava {
+    // PrismJsHighlighterTest relies on Nashorn which is not supported anymore since Java 15
+    // Either include it as an external library and configure the module path accordingly as it must be included via the module path
+    // to run, or just exclude the test entirely. We're doing the latter, it's just a test.
+    def javaMajorVersion = Integer.parseInt(System.getProperty('java.version').split("[.]")[0])
+    if (javaMajorVersion >= 15) {
+        exclude('**/PrismJsHighlighter*.java')
+    }
+}
+
 task copyBaseExamplesToDocs(type: Copy) {
     group = 'documentation'
 
