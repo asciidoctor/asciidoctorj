@@ -25,7 +25,6 @@ dependencies {
 }
 
 bootJar {
-	requiresUnpack '**/jruby-complete-*.jar'
 	requiresUnpack '**/asciidoctorj-*.jar'
 }
 
