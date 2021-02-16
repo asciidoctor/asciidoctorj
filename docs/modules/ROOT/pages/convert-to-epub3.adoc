@@ -1,0 +1,70 @@
+= Converting to EPUB3
+
+The Asciidoctor EPUB3 gem (asciidoctor-epub3) is bundled inside the AsciidoctorJ EPUB3 jar (asciidoctorj-epub3).
+To use it, simply add the asciidoctorj-epub3 jar to your dependencies.
+The version of the AsciidoctorJ EPUB3 jar aligns with the version of the Asciidoctor EPUB3 gem.
+
+Here's how you can add the AsciidoctorJ EPUB3 jar to your Maven dependencies:
+
+[source,xml,subs="attributes+"]
+----
+<dependencies>
+  <dependency>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctorj-epub3</artifactId>
+    <version>{asciidoctorj-epub3-version}</version>
+    <scope>runtime</scope>
+  </dependency>
+</dependencies>
+----
+
+Once you've added the AsciidoctorJ EPUB3 jar to your classpath, you can set the `backend` attribute to `epub3`.
+The document will be converted to the http://idpf.org/epub/30[EPUB3^] format.
+
+CAUTION: The [app]_asciidoctor-epub3_ gem is alpha.
+While it can be used successfully, there may be bugs and its functionality may change in incompatible ways before the first stable release.
+In other words, by using it, you are also testing it ;)
+
+Let's see an example of how to use AsciidoctorJ with the EPUB3 converter.
+
+[source,asciidoc]
+.spine.adoc
+----
+= Book Title
+Author Name
+:imagesdir: images <1>
+
+include::content-document.adoc[] <2>
+----
+<1> The EPUB3 converter requires the value of the `imagesdir` attribute to be `images`.
+<2> The EPUB3 converter must be run on a _spine_ document that has at least one include directive (and no other body content) in order to function properly.
+
+[source,asciidoc]
+.content-document.adoc
+----
+= Content Title
+Author Name
+
+[abstract]
+This is the actual content.
+
+== First Section
+
+And off we go.
+----
+
+And finally we can convert the document to EPUB3 using AsciidoctorJ.
+
+[source]
+----
+asciidoctor.convertFile(new File("spine.adoc"),
+                options().safe(SafeMode.SAFE).backend("epub3").get()); // <1> <2>
+
+assertThat(new File("target/test-classes/index.epub").exists(), is(true));
+----
+<1> Currently, the EPUB3 converter must be run in `SAFE` or `UNSAFE` mode due to a bug
+<2> `epub3` is the name of the backend that must be set to convert to EPUB3.
+
+// TODO document how to convert to KF8/MOBI (need to set KINDLEGEN environment variable)
+// TODO add section that covers using Asciidoctor PDF via the AsciidoctorJ PDF jar
+

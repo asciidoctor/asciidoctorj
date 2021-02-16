@@ -3,51 +3,68 @@
 Continuous integration for the AsciidoctorJ project is performed by GitHub Actions.
 You can find recent build results, including the build status of pull requests, on the https://github.com/asciidoctor/asciidoctorj/actions[asciidoctor/asciidoctorj] page.
 
-== Publish the artifacts
+== Release and publish the artifacts
 
-Artifacts are published to Maven Central and jCenter by way of Bintray's _Distribution as a Service_ platform.
+To build and publish a release the following properties have to be set, for example in the file ~/.gradle/gradle.properties:
 
-Before publishing, you need to configure your gpg signing and Bintray credentials.
-Create the file [path]_$HOME/.gradle/gradle.properties_ and populate the following properties.
-
+.~/.gradle/gradle.properties
+[source,properties]
 ----
-signing.keyId=
-signing.password=
+signing.keyId=...              # <1>
+signing.password=...
 signing.secretKeyRingFile=/home/YOUR_USERNAME/.gnupg/secring.gpg
-bintrayUsername=
-bintrayApiKey=
+
+sdkman_consumer_key=...        # <2>
+sdkman_consumer_token=...
+
+sonatypeUsername=...           # <3>
+sonatypePassword=...
 ----
+<1> Settings for signing the artifacts
+<2> Credentials for publishing a new release to sdkman
+<3> Credentials for publishing artifacts to oss.sonatype.org
 
-To build, assemble and sign the archives (jars and distribution zip), run:
+The following steps are necessary to build a new release:
 
- $ ./gradlew -PpublishRelease=true signJars
-
-TIP: The `publishRelease=true` property is technically only required if the version is a snapshot.
-
-To build, assemble (but not sign) and install the archives (jars and distribution zip) into the local Maven repository, run:
-
- $ ./gradlew -PpublishRelease=true install
-
-To build, assemble, sign and publish the archives (jars and distribution zip) to Bintray, run:
-
- $ ./gradlew clean
-   ./gradlew -i -x pMNPTML asciidoctorj-api:bintrayUpload asciidoctorj:bintrayUpload asciidoctorj-distribution:bintrayUpload
-
-CAUTION: Don't run the `clean` task in the same execution as the `bintrayUpload` because it will not upload one of the signatures.
-
-If you want to first perform a dry run of the upload, add the `dryRun=true` property.
-
- $ ./gradlew -i -PdryRun=true -x pMNPTML asciidoctorj-api:bintrayUpload asciidoctorj:bintrayUpload asciidoctorj-distribution:bintrayUpload
-
-NOTE: The `-x pMNPTML` is necessary to work around a bug in the publishing plugin that prevents it from signing the archives.
-
-IMPORTANT: Bintray does not allow you to publish snapshots.
-You have to first update the version in [path]_gradle.properties_ to a release (or pre-release) version number.
-Currently, Gradle is not configured to automatically tag a release, so *you have to create the git tag manually*.
-
-== Publish snapshot versions
-
-To publish a snapshot version simply run:
-
- $ ./gradlew asciidoctorj-api:artifactoryPublish asciidoctorj:artifactoryPublish asciidoctorj-distribution:artifactoryPublish
-
+. Update the version in gradle.properties to a release version, i.e. from `2.4.4-SNAPSHOT` to `2.4.4`.
+. Build the release with
++
+----
+# ./gradlew clean build
+----
+. After testing publish all artifacts to a local repository under `build/repos` with
++
+----
+# ./gradlew publishAllPublicationsToLocalRepository -i
+----
+. When everything is fine publish the artifacts to a staging repository on https://oss.sonatype.org and close the repository:
++
+----
+# ./gradlew publishAllPublicationsToSonatypeRepository -i
+# ./gradlew closeRepository -i
+----
+. Visit https://oss.sonatype.org/#stagingRepositories[] and check the staging repository.
+The artifacts are not published yet.
+The repository URL shown there can be used for testing this version before publishing to Maven central.
+. When everything is fine publish the artifacts in the staging repository by clicking the "Release" button.
+Alternatively you can release it with
++
+----
+# ./gradlew releaseRepository
+----
+. Publish the new version to sdkman with
++
+----
+# ./gradlew asciidoctorj-distribution:sdkMajorRelease
+----
+. Commit everything and assign a tag:
++
+----
+# git commit -m "Release v2.x.y"
+# git tag v2.x.y
+----
+. Upgrade the version to the next version by changing the version property in gradle.properties to `version=2.x.y+1-SNAPSHOT` and commit:
++
+----
+git commit -m "Prepare next release"
+----

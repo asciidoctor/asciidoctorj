@@ -1,21 +1,21 @@
-= Using a Pre-Release Version
+== Using a pre-release version
 
-Pre-release versions of `AsciidoctorJ` are published to Bintray.
-You can find them in https://bintray.com/asciidoctor/maven/asciidoctorj/view.
-Final releases are released to both Maven Central and Bintray.
+Pre-release versions of `AsciidoctorJ` are published to oss.sonatype.org.
+The exact location of the repository will be announced.
+Final releases are released to both Maven Central.
 
 Here's how to use a pre-release version in Maven:
 
 [source, xml]
 ----
-<repositories>
-  <repository>
-    <id>central</id>
-    <name>bintray</name>
-    <url>http://dl.bintray.com/asciidoctor/maven</url>
-    <snapshots>
-      <enabled>false</enabled>
-    </snapshots>
-  </repository>
-</repositories>
+    <repositories>
+        <repository>
+            <id>staging</id>
+            <url>https://oss.sonatype.org/content/repositories/orgasciidoctor-1234</url> <1>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
 ----
+<1> The exact URL differs for every build

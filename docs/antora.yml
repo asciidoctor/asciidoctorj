@@ -3,11 +3,11 @@ title: AsciidoctorJ
 version: '2.4'
 asciidoc:
   attributes:
-    release-version: 2.4.2
-    artifact-version: 2.4.2
+    release-version: 2.4.3
+    artifact-version: 2.4.3
     asciidoctorj-epub3-version: 1.5.0-alpha.19
-    asciidoctorj-pdf-version: 1.5.3
-    jruby-version: 9.2.13.0
+    asciidoctorj-pdf-version: 1.5.4
+    jruby-version: 9.2.14.0
     url-jruby: http://jruby.org
     url-gradle: https://gradle.org
     url-repo: https://github.com/asciidoctor/asciidoctorj
