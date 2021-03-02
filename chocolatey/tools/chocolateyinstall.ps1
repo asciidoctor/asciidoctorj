@@ -4,12 +4,10 @@
 
 $ErrorActionPreference = 'Stop'; # stop on all errors
 
-$adocjVersion = '2.4.2'
-$packageName= 'asciidoctorj' # arbitrary name for the package, used in messages
-$toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-# Which is the preferred mirror? There are many listed at
-# http://www.apache.org/dyn/closer.cgi/xmlgraphics/fop
-$url        = "https://dl.bintray.com/asciidoctor/maven/org/asciidoctor/asciidoctorj/$($adocjVersion)/asciidoctorj-$($adocjVersion)-bin.zip" # download url
+$adocjVersion = '2.4.3'
+$packageName  = 'asciidoctorj' # arbitrary name for the package, used in messages
+$toolsDir     = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
+$url          = "https://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/$($adocjVersion)/asciidoctorj-$($adocjVersion)-bin.zip"
 #$url64      = '' # 64bit URL here or remove - if installer is both, use $url
 #$fileLocation = Join-Path $toolsDir 'NAME_OF_EMBEDDED_INSTALLER_FILE'
 #$fileLocation = Join-Path $toolsDir 'SHARE_LOCATION_OF_INSTALLER_FILE'
@@ -18,7 +16,7 @@ $packageArgs = @{
   packageName   = $packageName
   unzipLocation = $toolsDir
   url           = $url
-  checksum      = '3b5cb8d3a31aa88b3152f4a6983d4f56b3f3fda913328ffa4e3d451aba5697ea'
+  checksum      = '3f51281ac38a13cf277215dc14381de4a035862e5d99bbbbf1f0cd6216403a2b'
   checksumType  = 'sha256' #default is md5, can also be sha1
   #checksum64    = ''
   #checksumType64= 'md5' #default is checksumType
@@ -28,5 +26,7 @@ $packageArgs = @{
 ## see https://github.com/chocolatey/choco/wiki/HelpersReference
 
 Install-ChocolateyZipPackage @packageArgs
+
+# XXX Check for java.exe
 
 Install-BinFile -name 'asciidoctorj' -path "$toolsDir\asciidoctorj-$($adocjVersion)\bin\asciidoctorj.bat"

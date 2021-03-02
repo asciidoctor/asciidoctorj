@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>asciidoctorj</id>
     <title>AsciidoctorJ (Install)</title>
-    <version>2.4.2</version>
+    <version>2.4.3</version>
     <!--
       https://github.com/asciidoctor/asciidoctorj/graphs/contributors
       https://github.com/asciidoctor/asciidoctor/graphs/contributors
@@ -16,8 +16,8 @@
     <description>Java wrapper and bindings for the Asciidoctor markup processor.
     Converts AsciiDoc to HTML5, EPUB3, PDF, DocBook, and other formats. To use, run
     "asciidoctorj" along with any Asciidoctor command line flags, e.g. "asciidoctorj
-    -b pdf mydocument.adoc". Requires a Java runtime such as jre8, corretto8jre, or
-    adoptopenjdk8jre.
+    -b pdf mydocument.adoc". You MUST install a Java runtime such as jre8, corretto8jre, or
+    adoptopenjdk8jre yourself. This package doesn't presume to choose for you.
     </description>
     <projectUrl>http://asciidoctor.org/</projectUrl>
     <packageSourceUrl>https://github.com/geraldcombs/chocolatey-packages</packageSourceUrl>
