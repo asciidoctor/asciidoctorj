@@ -15,8 +15,9 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/master[
 
 Build Improvement::
 
+* Upgrade Gradle to 7.0.0 (#1001)
 * Fix URL for distribution in sdkman (#990)
-* Update gradle plugin biz.aQute.bnd to 5.2.0 (#991)
+* Update gradle plugin biz.aQute.bnd to 5.3.0 (#1001)
 
 Documentation::
 
