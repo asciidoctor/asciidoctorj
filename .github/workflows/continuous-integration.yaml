@@ -19,7 +19,7 @@ jobs:
         java:
           - '1.8'
           - '11.0.5'
-          - '15.0.2'
+          - '16'
         os:
           - ubuntu-latest
           - macos-latest
@@ -27,7 +27,7 @@ jobs:
           - os: macos-latest
             java: '1.8'
           - os: macos-latest
-            java: '15.0.2'
+            java: '16'
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
