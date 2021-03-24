@@ -4,7 +4,7 @@ ext {
     arquillianVersion = '1.1.13.Final'
     arquillianWildflyVersion = '2.1.1.Final'
 
-    wildflyVersion = '15.0.0.Final'
+    wildflyVersion = '23.0.0.Final'
 }
 
 configurations {
@@ -24,14 +24,14 @@ dependencies {
 
     jbossdist group: 'org.wildfly', name: 'wildfly-dist', version: wildflyVersion, ext: 'zip'
     
-    testCompile "javax:javaee-api:7.0"
+    testImplementation "javax:javaee-api:7.0"
     testCompileOnly project(':asciidoctorj')
-    testCompile "junit:junit:$junitVersion"
-    testCompile "org.hamcrest:hamcrest-library:$hamcrestVersion"
-    testCompile "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
-    testCompile "org.jsoup:jsoup:$jsoupVersion"
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.hamcrest:hamcrest-library:$hamcrestVersion"
+    testImplementation "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
+    testImplementation "org.jsoup:jsoup:$jsoupVersion"
 
-    testRuntime "org.wildfly.arquillian:wildfly-arquillian-container-managed:$arquillianWildflyVersion"
+    testRuntimeOnly "org.wildfly.arquillian:wildfly-arquillian-container-managed:$arquillianWildflyVersion"
 }
 
 task unpackWildfly(type: Copy) {
@@ -87,6 +87,7 @@ test {
 
     if (JavaVersion.current().isJava11Compatible()) {
         systemProperty('arquillian.launch', 'wildfly-java11')
+        // jvmArgs = ['--add-modules', 'java.security']
     }
 
 

@@ -1,10 +1,11 @@
 dependencies {
   compileOnly project(':asciidoctorj')
-  compile project(':asciidoctorj-test-support')
-  compile "org.jboss.arquillian.container:arquillian-container-spi:$arquillianVersion"
-  compile "org.jboss.arquillian.container:arquillian-container-test-spi:$arquillianVersion"
-  compile "org.jboss.arquillian.container:arquillian-container-impl-base:$arquillianVersion"
-  compile "org.jboss.arquillian.container:arquillian-container-test-impl-base:$arquillianVersion"
+  implementation 'junit:junit:4.12'
+  api project(':asciidoctorj-test-support')
+  implementation "org.jboss.arquillian.container:arquillian-container-spi:$arquillianVersion"
+  implementation "org.jboss.arquillian.container:arquillian-container-test-spi:$arquillianVersion"
+  implementation "org.jboss.arquillian.container:arquillian-container-impl-base:$arquillianVersion"
+  implementation "org.jboss.arquillian.container:arquillian-container-test-impl-base:$arquillianVersion"
 }
 
 def javaApiUrl = "https://docs.oracle.com/javase/8/docs/api/"

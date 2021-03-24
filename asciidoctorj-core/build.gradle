@@ -1,4 +1,4 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'groovy'
 apply plugin: 'biz.aQute.bnd.builder'
 
@@ -8,9 +8,9 @@ apply from: rootProject.file('gradle/publish.gradle')
 apply from: rootProject.file('gradle/signing.gradle')
 
 dependencies {
-  compile project(path: ':asciidoctorj-api')
-  compile "org.jruby:jruby:$jrubyVersion"
-  compile "com.beust:jcommander:$jcommanderVersion"
+  api project(path: ':asciidoctorj-api')
+  api "org.jruby:jruby:$jrubyVersion"
+  implementation "com.beust:jcommander:$jcommanderVersion"
   gems "rubygems:asciidoctor:$asciidoctorGemVersion"
   gems "rubygems:coderay:$coderayGemVersion"
   gems "rubygems:rouge:$rougeGemVersion"
@@ -22,12 +22,12 @@ dependencies {
   gems "rubygems:tilt:$tiltGemVersion"
   gems "rubygems:concurrent-ruby:$concurrentRubyGemVersion"
   // TODO could use dependency replacement feature to fix version of Saxon-HE
-  testCompile("org.xmlmatchers:xml-matchers:$xmlMatchersVersion") { exclude module: 'Saxon-HE' }
-  testCompile "net.sf.saxon:Saxon-HE:$saxonVersion"
-  testCompile "com.google.guava:guava:$guavaVersion"
-  testCompile "org.jsoup:jsoup:$jsoupVersion"
-  testCompile "io.netty:netty-all:$nettyVersion"
-  testCompile project(path: ':asciidoctorj-arquillian-extension')
+  testImplementation("org.xmlmatchers:xml-matchers:$xmlMatchersVersion") { exclude module: 'Saxon-HE' }
+  testImplementation "net.sf.saxon:Saxon-HE:$saxonVersion"
+  testImplementation "com.google.guava:guava:$guavaVersion"
+  testImplementation "org.jsoup:jsoup:$jsoupVersion"
+  testImplementation "io.netty:netty-all:$nettyVersion"
+  testImplementation project(path: ':asciidoctorj-arquillian-extension')
   compileOnly "org.osgi:osgi.annotation:$osgiVersion"
 }
 

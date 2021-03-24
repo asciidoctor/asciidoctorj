@@ -5,30 +5,30 @@ if (project.statusIsRelease && project.hasProperty("sdkman_consumer_key")) {
 }
 
 dependencies {
-  compile(project(':asciidoctorj')) {
+  implementation(project(':asciidoctorj')) {
     exclude group: 'org.jruby'
   }
 
-  compile(project(':asciidoctorj-api')) {
+  implementation(project(':asciidoctorj-api')) {
     transitive = false
   }
 
-  compile("org.asciidoctor:asciidoctorj-epub3:$asciidoctorjEpub3Version") {
+  implementation("org.asciidoctor:asciidoctorj-epub3:$asciidoctorjEpub3Version") {
     transitive = false
   }
-  compile("org.asciidoctor:asciidoctorj-diagram:$asciidoctorjDiagramVersion") {
+  implementation("org.asciidoctor:asciidoctorj-diagram:$asciidoctorjDiagramVersion") {
     transitive = false
   }
-  compile("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
+  implementation("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
     transitive = false
   }
-  compile("org.asciidoctor:asciidoctorj-revealjs:$asciidoctorjRevealJsVersion") {
+  implementation("org.asciidoctor:asciidoctorj-revealjs:$asciidoctorjRevealJsVersion") {
     transitive = false
   }
-  compile "org.jruby:jruby-complete:$jrubyVersion"
-  testCompile project(':asciidoctorj-arquillian-extension')
-  testCompile "org.apache.pdfbox:pdfbox:$pdfboxVersion"
-  testCompile "org.jsoup:jsoup:$jsoupVersion"
+  implementation "org.jruby:jruby-complete:$jrubyVersion"
+  testImplementation project(':asciidoctorj-arquillian-extension')
+  testImplementation "org.apache.pdfbox:pdfbox:$pdfboxVersion"
+  testImplementation "org.jsoup:jsoup:$jsoupVersion"
 }
 
 jar.enabled = false
