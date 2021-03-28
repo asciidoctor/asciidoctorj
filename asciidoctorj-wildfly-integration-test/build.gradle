@@ -95,7 +95,12 @@ test {
     dependsOn createModule
     dependsOn unpackWildfly
     dependsOn configurations.jbossmodule
+
+    onlyIf {
+        JavaVersion.current() != JavaVersion.VERSION_16
+    }
 }
+
 
 
 configurations.all {
