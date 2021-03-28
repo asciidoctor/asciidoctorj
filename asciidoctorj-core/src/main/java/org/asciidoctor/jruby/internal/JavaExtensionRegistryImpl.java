@@ -22,6 +22,11 @@ import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyModule;
 
+import java.lang.annotation.Annotation;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
 
     private final JRubyAsciidoctor asciidoctor;
@@ -192,8 +197,9 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
 
     @Override
     public JavaExtensionRegistry block(Class<? extends BlockProcessor> blockProcessor) {
-        String name = getName(blockProcessor);
-        block(name, blockProcessor);
+        getNames(blockProcessor).forEach(name -> {
+            block(name, blockProcessor);
+        });
         return this;
     }
 
@@ -222,9 +228,10 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
 
     @Override
     public JavaExtensionRegistry blockMacro(Class<? extends BlockMacroProcessor> blockMacroProcessor) {
-        String name = getName(blockMacroProcessor);
-        RubyClass rubyClass = BlockMacroProcessorProxy.register(asciidoctor, blockMacroProcessor);
-        getAsciidoctorModule().callMethod("block_macro", rubyClass, rubyRuntime.newString(name));
+        getNames(blockMacroProcessor).forEach(name -> {
+            RubyClass rubyClass = BlockMacroProcessorProxy.register(asciidoctor, blockMacroProcessor);
+            getAsciidoctorModule().callMethod("block_macro", rubyClass, rubyRuntime.newString(name));
+        });
         return this;
     }
 
@@ -290,9 +297,10 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
 
     @Override
     public JavaExtensionRegistry inlineMacro(Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
-        String name = getName(inlineMacroProcessor);
-        RubyClass rubyClass = InlineMacroProcessorProxy.register(asciidoctor, inlineMacroProcessor);
-        getAsciidoctorModule().callMethod("inline_macro", rubyClass, rubyRuntime.newString(name));
+        getNames(inlineMacroProcessor).forEach(name -> {
+            RubyClass rubyClass = InlineMacroProcessorProxy.register(asciidoctor, inlineMacroProcessor);
+            getAsciidoctorModule().callMethod("inline_macro", rubyClass, rubyRuntime.newString(name));
+        });
         return this;
     }
 
@@ -318,12 +326,29 @@ public class JavaExtensionRegistryImpl implements JavaExtensionRegistry {
         }
     }
 
-    private String getName(Class<?> clazz) {
-        Name nameAnnotation = clazz.getAnnotation(Name.class);
-        if (nameAnnotation == null) {
-            throw new IllegalArgumentException(clazz + " must be registered with a name or it must have a Name annotation!");
+    private Set<Name> getNameAnnotations(Annotation[] annotations, Set<Annotation> visitedAnnotations) {
+        Set<Name> allNameAnnotations = new HashSet<>();
+        for (Annotation anno : annotations) {
+            if (visitedAnnotations.contains(anno)) {
+                continue;
+            }
+            if (anno.annotationType().isAssignableFrom(Name.class)) {
+                allNameAnnotations.add((Name) anno);
+            } else {
+                visitedAnnotations.add(anno);
+                allNameAnnotations.addAll(getNameAnnotations(anno.annotationType().getAnnotations(), visitedAnnotations));
+            }
         }
-        return nameAnnotation.value();
+        return allNameAnnotations;
+    }
+
+    private Set<String> getNames(Class<?> clazz) {
+        Set<String> nameAnnotations = getNameAnnotations(clazz.getAnnotations(), new HashSet<Annotation>()).stream().map(Name::value).distinct().collect(Collectors.toSet());
+        if (nameAnnotations.isEmpty()) {
+            throw new IllegalArgumentException(clazz + " must be registered with a name or it must have a Name annotation!");
+        } else {
+            return nameAnnotations;
+        }
     }
 
     private RubyModule getAsciidoctorModule() {
