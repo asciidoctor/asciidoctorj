@@ -10,11 +10,11 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
         }
         mavenCentral()
-        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https//oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
         classpath "gradle.plugin.io.sdkman:gradle-sdkvendor-plugin:1.1.0"
-        classpath "biz.aQute.bnd:biz.aQute.bnd.gradle:5.2.0"
+        classpath "biz.aQute.bnd:biz.aQute.bnd.gradle:5.3.0"
     }
 }
 
@@ -69,7 +69,7 @@ ext {
   nettyVersion = '4.1.58.Final'
   saxonVersion = '9.9.0-2'
   xmlMatchersVersion = '1.0-RC1'
-  pdfboxVersion = '1.8.10'
+  pdfboxVersion = '1.8.16'
 
   // gem versions
   asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '2.0.12'
@@ -97,7 +97,7 @@ allprojects {
 subprojects {
   // NOTE applying Java plugin changes the status; take steps to preserve value
   def _status = status
-  apply plugin: 'java'
+  apply plugin: 'java-library'
   apply plugin: 'groovy'
 
   status = _status
@@ -138,14 +138,14 @@ subprojects {
   if (!isIntegrationTestProject(it)) {
 
     dependencies {
-      testCompile "junit:junit:$junitVersion"
-      testCompile "org.hamcrest:hamcrest-library:$hamcrestVersion"
-      testCompile("org.spockframework:spock-core:$spockVersion") {
+      testImplementation "junit:junit:$junitVersion"
+      testImplementation "org.hamcrest:hamcrest-library:$hamcrestVersion"
+      testImplementation("org.spockframework:spock-core:$spockVersion") {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
       }
-      testCompile "org.codehaus.groovy:groovy-all:$groovyVersion"
-      testCompile "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
-      testCompile "org.jboss.arquillian.spock:arquillian-spock-container:$arquillianSpockVersion"
+      testImplementation "org.codehaus.groovy:groovy-all:$groovyVersion"
+      testImplementation "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
+      testImplementation "org.jboss.arquillian.spock:arquillian-spock-container:$arquillianSpockVersion"
 
       codenarc "org.codehaus.groovy:groovy:$groovyVersion"
       codenarc "org.codehaus.groovy:groovy-xml:$groovyVersion"

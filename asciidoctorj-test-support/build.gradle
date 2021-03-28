@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 dependencies {
-    compile 'junit:junit:4.12'
+    api 'junit:junit:4.12'
 }
 
 def javaApiUrl = "https://docs.oracle.com/javase/8/docs/api/"

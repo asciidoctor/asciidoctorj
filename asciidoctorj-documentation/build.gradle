@@ -3,11 +3,11 @@ import org.apache.tools.ant.filters.*
 jar.enabled = false
 
 dependencies {
-    testCompile project(':asciidoctorj')
-    testCompile project(path: ':asciidoctorj-arquillian-extension')
-    testCompile "commons-io:commons-io:$commonsioVersion"
-    testCompile "org.jsoup:jsoup:$jsoupVersion"
-    testCompile("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
+    testImplementation project(':asciidoctorj')
+    testImplementation project(path: ':asciidoctorj-arquillian-extension')
+    testImplementation "commons-io:commons-io:$commonsioVersion"
+    testImplementation "org.jsoup:jsoup:$jsoupVersion"
+    testImplementation("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
         transitive = false
     }
 }
