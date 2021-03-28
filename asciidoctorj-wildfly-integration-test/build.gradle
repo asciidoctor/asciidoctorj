@@ -1,10 +1,15 @@
 jar.enabled = false
 
 ext {
-    arquillianVersion = '1.1.13.Final'
-    arquillianWildflyVersion = '2.1.1.Final'
+    arquillianVersion = '1.6.0.Final'
+    arquillianWildflyVersion = '3.0.1.Final'
 
     wildflyVersion = '23.0.0.Final'
+}
+
+repositories {
+    // Required by arquillian
+    maven { url "https://maven.repository.redhat.com/ga/" }
 }
 
 configurations {
@@ -23,7 +28,7 @@ dependencies {
     jbossmodule "org.jruby:jruby-complete:$jrubyVersion"
 
     jbossdist group: 'org.wildfly', name: 'wildfly-dist', version: wildflyVersion, ext: 'zip'
-    
+
     testImplementation "javax:javaee-api:7.0"
     testCompileOnly project(':asciidoctorj')
     testImplementation "junit:junit:$junitVersion"
@@ -85,9 +90,7 @@ test {
     systemProperty('jboss.home', jbossHome)
     systemProperty('module.path', jbossHome + "/modules" + File.pathSeparator + file('build/modules').absolutePath)
 
-    if (JavaVersion.current() == JavaVersion.VERSION_16) {
-        systemProperty('arquillian.launch', 'wildfly-java16')
-    } else if (JavaVersion.current().isJava11Compatible()) {
+    if (JavaVersion.current().isJava11Compatible()) {
         systemProperty('arquillian.launch', 'wildfly-java11')
     }
 
@@ -95,12 +98,7 @@ test {
     dependsOn createModule
     dependsOn unpackWildfly
     dependsOn configurations.jbossmodule
-
-    onlyIf {
-        JavaVersion.current() != JavaVersion.VERSION_16
-    }
 }
-
 
 
 configurations.all {
