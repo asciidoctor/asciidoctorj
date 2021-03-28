@@ -6,7 +6,7 @@ include \
   'asciidoctorj-api',
   'asciidoctorj-distribution',
   'asciidoctorj-documentation',
-//  'asciidoctorj-wildfly-integration-test',
+  'asciidoctorj-wildfly-integration-test',
   'asciidoctorj-springboot-integration-test',
   'asciidoctorj-springboot-integration-test:springboot-app',
   'asciidoctorj-test-support'

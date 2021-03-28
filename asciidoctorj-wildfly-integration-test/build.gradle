@@ -85,9 +85,10 @@ test {
     systemProperty('jboss.home', jbossHome)
     systemProperty('module.path', jbossHome + "/modules" + File.pathSeparator + file('build/modules').absolutePath)
 
-    if (JavaVersion.current().isJava11Compatible()) {
+    if (JavaVersion.current() == JavaVersion.VERSION_16) {
+        systemProperty('arquillian.launch', 'wildfly-java16')
+    } else if (JavaVersion.current().isJava11Compatible()) {
         systemProperty('arquillian.launch', 'wildfly-java11')
-        // jvmArgs = ['--add-modules', 'java.security']
     }
 
 
