@@ -1,21 +1,19 @@
 package org.asciidoctor.jruby.ast.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.asciidoctor.ast.Author;
 import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.ast.RevisionInfo;
 import org.asciidoctor.ast.Title;
 import org.asciidoctor.jruby.internal.CaseInsensitiveMap;
 
+import java.util.List;
+import java.util.Map;
+
 public class DocumentHeaderImpl implements DocumentHeader {
 
     private Title documentTitle;
     private String pageTitle;
-    private Author author;
-    private List<Author> authors = new ArrayList<Author>();
+    private List<Author> authors;
     private RevisionInfo revisionInfo;
 
     private Map<String, Object> attributes;
@@ -37,7 +35,7 @@ public class DocumentHeaderImpl implements DocumentHeader {
     }
 
     public Author getAuthor() {
-        return author;
+        return authors == null || authors.size() == 0 ? null : authors.get(0);
     }
 
     public RevisionInfo getRevisionInfo() {
@@ -49,27 +47,17 @@ public class DocumentHeaderImpl implements DocumentHeader {
     }
 
     public static DocumentHeaderImpl createDocumentHeader(Title documentTitle, String pageTitle,
-            Map<String, Object> attributes) {
+                                                          List<Author> authors, Map<String, Object> attributes) {
 
         DocumentHeaderImpl documentHeader = new DocumentHeaderImpl();
 
         documentHeader.documentTitle = documentTitle;
         documentHeader.pageTitle = pageTitle;
-        documentHeader.attributes = new CaseInsensitiveMap<String, Object>(attributes);
-
-        documentHeader.author = getAuthor(attributes);
+        documentHeader.attributes = new CaseInsensitiveMap<>(attributes);
+        documentHeader.authors = authors;
         documentHeader.revisionInfo = getRevisionInfo(attributes);
-        documentHeader.authors.addAll(getAuthors(attributes));
 
         return documentHeader;
-    }
-
-    private static List<Author> getAuthors(Map<String, Object> attributes) {
-        return AuthorImpl.getAuthors(attributes);
-    }
-
-    private static Author getAuthor(Map<String, Object> attributes) {
-        return AuthorImpl.getInstance(attributes);
     }
 
     private static RevisionInfo getRevisionInfo(Map<String, Object> attributes) {

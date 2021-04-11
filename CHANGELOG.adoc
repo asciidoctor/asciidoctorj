@@ -18,6 +18,7 @@ Improvement::
 * Allow defining `@Name` as a meta annotation on Block and Inline Macros (@uniqueck) (#898)
 * Upgrade to jruby 9.2.17.0 (#1004)
 * Upgrade to asciidoctorj-diagram 2.1.2 (#1004)
+* Add getAuthors method to Document (#1007)
 
 Build Improvement::
 
