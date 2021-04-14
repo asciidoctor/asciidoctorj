@@ -1,5 +1,6 @@
 package org.asciidoctor.ast;
 
+import java.util.List;
 import java.util.Map;
 
 public interface Document extends StructuralNode {
@@ -23,6 +24,14 @@ public interface Document extends StructuralNode {
      */
     @Deprecated
     String doctitle();
+
+    /**
+     * Gets the author(s) information as defined in the author line
+     * in the document header, or in author & email attributes.
+     *
+     * @return authors information
+     */
+    List<Author> getAuthors();
 
     /**
      * @return basebackend attribute value

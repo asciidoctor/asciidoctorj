@@ -1,17 +1,17 @@
 package org.asciidoctor.jruby.ast.impl;
 
-import java.util.Map;
-
+import org.asciidoctor.ast.Author;
 import org.asciidoctor.ast.Catalog;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Title;
 import org.asciidoctor.jruby.internal.RubyHashMapDecorator;
 import org.asciidoctor.jruby.internal.RubyHashUtil;
-import org.jruby.Ruby;
-import org.jruby.RubyBoolean;
-import org.jruby.RubyHash;
-import org.jruby.RubySymbol;
+import org.jruby.*;
 import org.jruby.runtime.builtin.IRubyObject;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DocumentImpl extends StructuralNodeImpl implements Document {
 
@@ -57,6 +57,14 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
     @Deprecated
     public String doctitle() {
         return getDoctitle();
+    }
+
+    @Override
+    public List<Author> getAuthors() {
+        return getList("authors", RubyStruct.class)
+                .stream()
+                .map(AuthorImpl::getInstance)
+                .collect(Collectors.toList());
     }
 
     @Override
