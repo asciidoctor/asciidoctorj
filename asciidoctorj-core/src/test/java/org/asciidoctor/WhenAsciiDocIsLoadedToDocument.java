@@ -1,14 +1,12 @@
 package org.asciidoctor;
 
 import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.ast.Author;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.Section;
-import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.ast.*;
 import org.asciidoctor.jruby.internal.IOUtils;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -449,5 +447,22 @@ public class WhenAsciiDocIsLoadedToDocument {
         assertThat(secondAuthor.getMiddleName(), is("A."));
         assertThat(secondAuthor.getLastName(), is("Smith"));
         assertThat(secondAuthor.getInitials(), is("JAS"));
+    }
+
+    @Test
+    public void should_get_revision_info() {
+        String content = "= Sample Document\n" +
+                "Doc Writer <doc.writer@asciidoc.org>\n" +
+                "v1.0, 2013-05-20: First draft\n" +
+                "\n" +
+                "Preamble...";
+
+        Document document = asciidoctor.load(content, emptyMap());
+
+        RevisionInfo revisionInfo = document.getRevisionInfo();
+
+        assertThat(revisionInfo.getDate(), is("2013-05-20"));
+        assertThat(revisionInfo.getNumber(), is("1.0"));
+        assertThat(revisionInfo.getRemark(), is("First draft"));
     }
 }

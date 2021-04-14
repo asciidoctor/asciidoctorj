@@ -13,12 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -376,26 +371,35 @@ public interface Asciidoctor extends AutoCloseable {
     /**
      * Reads only header parameters instead of all document.
      *
+     * @deprecated Use {@link #loadFile(File, Map)} instead.
+     *
      * @param file to read the attributes.
      * @return header.
      */
+    @Deprecated
     DocumentHeader readDocumentHeader(File file);
 
     /**
      * Reads only header parameters instead of all document.
      *
+     * @deprecated Use {@link #load(String, Map)} instead.
+     *
      * @param content where rendered content is written. Writer is flushed, but not
      *                closed.
      * @return header.
      */
+    @Deprecated
     DocumentHeader readDocumentHeader(String content);
 
     /**
      * Reads only header parameters instead of all document.
      *
+     * @deprecated Use {@link #loadFile(File, Map)} instead.
+     *
      * @param contentReader where asciidoc content is read.
      * @return header.
      */
+    @Deprecated
     DocumentHeader readDocumentHeader(Reader contentReader);
 
     /**
