@@ -2,10 +2,10 @@
 
 This directory contains the necessary configuration files for
 creating a https://chocolatey.org/[Chocolatey] package based on a
-designated "asciidoctorj-x.y.z-bin.zip" bintray file.
+designated "asciidoctorj-x.y.z-bin.zip" file.
 
 Complete instructions on creating Chocolatey packages can be found at
-https://chocolatey.org/docs/create-packages .
+https://chocolatey.org/docs/create-packages.
 
 == Quick Instructions
 

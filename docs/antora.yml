@@ -7,7 +7,7 @@ asciidoc:
     artifact-version: 2.4.3
     asciidoctorj-epub3-version: 1.5.0-alpha.19
     asciidoctorj-pdf-version: 1.5.4
-    jruby-version: 9.2.14.0
+    jruby-version: 9.2.17.0
     url-jruby: http://jruby.org
     url-gradle: https://gradle.org
     url-repo: https://github.com/asciidoctor/asciidoctorj

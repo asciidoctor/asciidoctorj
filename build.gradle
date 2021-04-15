@@ -2,7 +2,7 @@
     adding the plugin jars to the classpath to apply them later.
     currently the new plugins DSL does apply them directly.
     there are other limitations too. See https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block
-    we don't need to apply the jruby and bintray plugin on the rootProject.
+    we don't need to apply the jruby plugin on the rootProject.
 */
 buildscript {
     repositories {
