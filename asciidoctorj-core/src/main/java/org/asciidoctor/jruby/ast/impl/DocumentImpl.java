@@ -1,9 +1,6 @@
 package org.asciidoctor.jruby.ast.impl;
 
-import org.asciidoctor.ast.Author;
-import org.asciidoctor.ast.Catalog;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.Title;
+import org.asciidoctor.ast.*;
 import org.asciidoctor.jruby.internal.RubyHashMapDecorator;
 import org.asciidoctor.jruby.internal.RubyHashUtil;
 import org.jruby.*;
@@ -90,5 +87,10 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
     @Override
     public Catalog getCatalog() {
         return new CatalogImpl(new RubyHashMapDecorator((RubyHash) getProperty("catalog")));
+    }
+
+    @Override
+    public RevisionInfo getRevisionInfo() {
+        return RevisionInfoImpl.getInstance(getAttributes());
     }
 }

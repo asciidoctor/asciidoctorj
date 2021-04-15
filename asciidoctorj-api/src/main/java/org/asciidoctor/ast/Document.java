@@ -94,4 +94,12 @@ public interface Document extends StructuralNode {
      * @return catalog
      */
     Catalog getCatalog();
+
+
+    /**
+     * The revision information with: date, number and remark.
+     *
+     * @return revisionInfo
+     */
+    RevisionInfo getRevisionInfo();
 }
