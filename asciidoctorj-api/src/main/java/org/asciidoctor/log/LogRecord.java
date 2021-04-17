@@ -2,6 +2,9 @@ package org.asciidoctor.log;
 
 import org.asciidoctor.ast.Cursor;
 
+/**
+ * Description of an specific event occurred during conversion.
+ */
 public class LogRecord {
 
     private final Severity severity;
@@ -41,7 +44,7 @@ public class LogRecord {
     }
 
     /**
-     * @return Information about the location of the event
+     * @return Information about the location of the event.
      */
     public Cursor getCursor() {
         return cursor;
