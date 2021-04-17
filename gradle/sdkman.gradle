@@ -11,7 +11,7 @@ sdkman {
 
 task distributionAvailable() {
     group = "Verification"
-    description = "Check if distribution is available on bintray"
+    description = "Check if distribution is available on remote repo"
 
     doLast {
         String errorMsg = "Distribution is not available at $sdkman.url"
