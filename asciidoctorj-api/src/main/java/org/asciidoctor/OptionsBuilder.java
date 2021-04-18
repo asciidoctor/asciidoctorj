@@ -6,17 +6,19 @@ import java.util.Map;
 
 public class OptionsBuilder {
 
-    private Options options = new Options();
+    private final Options options = new Options();
 
-    private OptionsBuilder() {
+    OptionsBuilder() {
         super();
     }
 
     /**
      * Creates options builder instance.
+     * @deprecated Use {@link Options#builder()} instead.
      * 
      * @return options builder instance.
      */
+    @Deprecated
     public static OptionsBuilder options() {
         return new OptionsBuilder();
     }
@@ -123,11 +125,13 @@ public class OptionsBuilder {
 
     /**
      * Sets attributes used for rendering input.
+     * @deprecated Use {@link #attributes(Attributes)} instead.
      * 
      * @param attributes
      *            map.
      * @return this instance.
      */
+    @Deprecated
     public OptionsBuilder attributes(Map<String, Object> attributes) {
         this.options.setAttributes(attributes);
         return this;
@@ -141,17 +145,19 @@ public class OptionsBuilder {
      * @return this instance.
      */
     public OptionsBuilder attributes(Attributes attributes) {
-        this.options.setAttributes(attributes.map());
+        this.options.setAttributes(attributes);
         return this;
     }
     
     /**
      * Sets attributes used for rendering input.
+     * @deprecated Use {@link #attributes(Attributes)} instead. 
      * 
      * @param attributes
      *            builder.
      * @return this instance.
      */
+    @Deprecated
     public OptionsBuilder attributes(AttributesBuilder attributes) {
         this.options.setAttributes(attributes.asMap());
         return this;
@@ -336,8 +342,6 @@ public class OptionsBuilder {
         this.options.setOption(option, value);
         return this;
     }
-
-    
     
     /**
      * Sets base dir for working directory.
@@ -353,14 +357,29 @@ public class OptionsBuilder {
 
     /**
      * Gets a map with configured options.
+     * @deprecated Use {@link #build()} instead.
      * 
      * @return map with all options. By default an empty map is returned.
      */
+    @Deprecated
     public Map<String, Object> asMap() {
         return this.options.map();
     }
 
+    /**
+     * @deprecated Use {@link #build()} instead. 
+     */
+    @Deprecated
     public Options get() {
+        return this.options;
+    }
+    
+    /**
+     * Returns a valid Options instance.
+     * 
+     * @return options instance.
+     */
+    public Options build() {
         return this.options;
     }
 
