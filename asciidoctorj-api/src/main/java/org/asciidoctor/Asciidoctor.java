@@ -17,32 +17,38 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * The main application interface (API) for Asciidoctor.
+ * This API provides methods to:
+ * <ul>
+ *   <li>parse (aka. load) AsciiDoc content,
+ *   <li>convert it to various output formats,
+ *   <li>register extensions, custom converter and syntax highlighter.
+ * </ul>
+ *
  * @author lordofthejars
  */
 public interface Asciidoctor extends AutoCloseable {
 
-    String STRUCTURE_MAX_LEVEL = "STRUCTURE_MAX_LEVEL";
-
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
+     * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
      *
      * @param content the AsciiDoc source as String.
-     * @param options a Hash of options to control processing (default: {}).
+     * @param options a Map of options to control processing (default: {}).
      * @return the rendered output String is returned
      */
     String convert(String content, Map<String, Object> options);
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
+     * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
      *
      * @param content        the AsciiDoc source as String.
-     * @param options        a Hash of options to control processing (default: {}).
+     * @param options        a Map of options to control processing (default: {}).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
      *                       In this case {@link #convert(String, Map)} is the same.
      * @return the rendered output String is returned
@@ -51,24 +57,24 @@ public interface Asciidoctor extends AutoCloseable {
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
+     * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
      *
      * @param content the AsciiDoc source as String.
-     * @param options a Hash of options to control processing (default: {}).
+     * @param options a Map of options to control processing (default: {}).
      * @return the rendered output String is returned
      */
     String convert(String content, Options options);
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
+     * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
      *
      * @param content        the AsciiDoc source as String.
-     * @param options        a Hash of options to control processing (default: {}).
+     * @param options        a Map of options to control processing (default: {}).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
      *                       In this case {@link #convert(String, Options)} is the same.
      * @return the rendered output String is returned
@@ -77,24 +83,24 @@ public interface Asciidoctor extends AutoCloseable {
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
+     * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
      *
      * @param content the AsciiDoc source as String.
-     * @param options a Hash of options to control processing (default: {}).
+     * @param options a Map of options to control processing (default: {}).
      * @return the rendered output String is returned
      */
     String convert(String content, OptionsBuilder options);
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
+     * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
      *
      * @param content        the AsciiDoc source as String.
-     * @param options        a Hash of options to control processing (default: {}).
+     * @param options        a Map of options to control processing (default: {}).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
      *                       In this case {@link #convert(String, OptionsBuilder)} is the same.
      * @return the rendered output String is returned
@@ -102,13 +108,13 @@ public interface Asciidoctor extends AutoCloseable {
     <T> T convert(String content, OptionsBuilder options, Class<T> expectedResult);
 
     /**
-     * Parse the document read from reader, and rendered result is sent to
+     * Parse the document read from reader sending the converted result to
      * writer.
      *
      * @param contentReader  where asciidoc content is read.
      * @param rendererWriter where rendered content is written. Writer is flushed, but not
      *                       closed.
-     * @param options        a Hash of options to control processing (default: {}).
+     * @param options        a Map of options to control processing (default: {}).
      * @throws IOException if an error occurs while writing rendered content, this
      *                     exception is thrown.
      */
@@ -116,13 +122,13 @@ public interface Asciidoctor extends AutoCloseable {
                  Map<String, Object> options) throws IOException;
 
     /**
-     * Parse the document read from reader, and rendered result is sent to
+     * Parse the document read from reader sending the converted result to
      * writer.
      *
      * @param contentReader  where asciidoc content is read.
      * @param rendererWriter where rendered content is written. Writer is flushed, but not
      *                       closed.
-     * @param options        a Hash of options to control processing (default: {}).
+     * @param options        a Map of options to control processing (default: {}).
      * @throws IOException if an error occurs while writing rendered content, this
      *                     exception is thrown.
      */
@@ -130,13 +136,13 @@ public interface Asciidoctor extends AutoCloseable {
             throws IOException;
 
     /**
-     * Parse the document read from reader, and rendered result is sent to
+     * Parse the document read from reader sending the converted result to
      * writer.
      *
      * @param contentReader  where asciidoc content is read.
      * @param rendererWriter where rendered content is written. Writer is flushed, but not
      *                       closed.
-     * @param options        a Hash of options to control processing (default: {}).
+     * @param options        a Map of options to control processing (default: {}).
      * @throws IOException if an error occurs while writing rendered content, this
      *                     exception is thrown.
      */
@@ -145,9 +151,9 @@ public interface Asciidoctor extends AutoCloseable {
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
+     * convert it to the specified backend format.
      * <p>
-     * Accepts input as File path.
+     * Accepts input as File.
      * <p>
      * If the :in_place option is true, and the input is a File, the output is
      * written to a file adjacent to the input file, having an extension that
@@ -161,7 +167,7 @@ public interface Asciidoctor extends AutoCloseable {
      * raised.
      *
      * @param file    an input Asciidoctor file.
-     * @param options a Hash of options to control processing (default: {}).
+     * @param options a Map of options to control processing (default: {}).
      * @return returns nothing if the rendered output String is written to a
      * file.
      */
@@ -169,9 +175,9 @@ public interface Asciidoctor extends AutoCloseable {
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
+     * convert it to the specified backend format.
      * <p>
-     * Accepts input as File path.
+     * Accepts input as File.
      * <p>
      * If the :in_place option is true, and the input is a File, the output is
      * written to a file adjacent to the input file, having an extension that
@@ -185,7 +191,7 @@ public interface Asciidoctor extends AutoCloseable {
      * raised.
      *
      * @param file           an input Asciidoctor file.
-     * @param options        a Hash of options to control processing (default: {}).
+     * @param options        a Map of options to control processing (default: {}).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
      *                       In this case {@link #convertFile(File, Map)} is the same.
      * @return returns nothing if the rendered output is written to a
@@ -196,9 +202,9 @@ public interface Asciidoctor extends AutoCloseable {
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
+     * convert it to the specified backend format.
      * <p>
-     * Accepts input as File path.
+     * Accepts input as File.
      * <p>
      * If the :in_place option is true, and the input is a File, the output is
      * written to a file adjacent to the input file, having an extension that
@@ -212,7 +218,7 @@ public interface Asciidoctor extends AutoCloseable {
      * raised.
      *
      * @param file    an input Asciidoctor file.
-     * @param options a Hash of options to control processing (default: {}).
+     * @param options a Map of options to control processing (default: {}).
      * @return returns nothing if the rendered output String is written to a
      * file.
      */
@@ -220,9 +226,9 @@ public interface Asciidoctor extends AutoCloseable {
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
+     * convert it to the specified backend format.
      * <p>
-     * Accepts input as File path.
+     * Accepts input as File.
      * <p>
      * If the :in_place option is true, and the input is a File, the output is
      * written to a file adjacent to the input file, having an extension that
@@ -236,7 +242,7 @@ public interface Asciidoctor extends AutoCloseable {
      * raised.
      *
      * @param file           an input Asciidoctor file.
-     * @param options        a Hash of options to control processing (default: {}).
+     * @param options        a Map of options to control processing (default: {}).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
      *                       In this case {@link #convertFile(File, Map)} is the same.
      * @return returns nothing if the rendered output is written to a
@@ -246,9 +252,9 @@ public interface Asciidoctor extends AutoCloseable {
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
+     * convert it to the specified backend format.
      * <p>
-     * Accepts input as File path.
+     * Accepts input as File.
      * <p>
      * If the :in_place option is true, and the input is a File, the output is
      * written to a file adjacent to the input file, having an extension that
@@ -262,7 +268,7 @@ public interface Asciidoctor extends AutoCloseable {
      * raised.
      *
      * @param file    an input Asciidoctor file.
-     * @param options a Hash of options to control processing (default: {}).
+     * @param options a Map of options to control processing (default: {}).
      * @return returns nothing if the rendered output String is written to a
      * file.
      */
@@ -270,9 +276,9 @@ public interface Asciidoctor extends AutoCloseable {
 
     /**
      * Parse the AsciiDoc source input into an Document {@link Document} and
-     * render it to the specified backend format.
+     * convert it to the specified backend format.
      * <p>
-     * Accepts input as File path.
+     * Accepts input as File.
      * <p>
      * If the :in_place option is true, and the input is a File, the output is
      * written to a file adjacent to the input file, having an extension that
@@ -286,7 +292,7 @@ public interface Asciidoctor extends AutoCloseable {
      * raised.
      *
      * @param file           an input Asciidoctor file.
-     * @param options        a Hash of options to control processing (default: {}).
+     * @param options        a Map of options to control processing (default: {}).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
      *                       In this case {@link #convertFile(File, Map)} is the same.
      * @return returns nothing if the rendered output is written to a
@@ -295,74 +301,77 @@ public interface Asciidoctor extends AutoCloseable {
     <T> T convertFile(File file, OptionsBuilder options, Class<T> expectedResult);
 
     /**
-     * Parse all AsciiDoc files found using DirectoryWalker instance.
+     * Convert all AsciiDoc files found in directoryWalker.
+     * See {@code AsciiDocDirectoryWalker} for reference strategy.
      *
      * @param directoryWalker strategy used to retrieve all files to be rendered.
-     * @param options         a Hash of options to control processing (default: {}).
+     * @param options         a Map of options to control processing (default: {}).
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
     String[] convertDirectory(Iterable<File> directoryWalker, Map<String, Object> options);
 
     /**
-     * Parse all AsciiDoc files found using DirectoryWalker instance.
+     * Convert all AsciiDoc files found in directoryWalker.
+     * See {@code AsciiDocDirectoryWalker} for reference strategy.
      *
      * @param directoryWalker strategy used to retrieve all files to be rendered.
-     * @param options         a Hash of options to control processing (default: {}).
+     * @param options         a Map of options to control processing (default: {}).
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
     String[] convertDirectory(Iterable<File> directoryWalker, Options options);
 
     /**
-     * Parse all AsciiDoc files found using DirectoryWalker instance.
+     * Convert all AsciiDoc files found in directoryWalker.
+     * See {@code AsciiDocDirectoryWalker} for reference strategy.
      *
      * @param directoryWalker strategy used to retrieve all files to be rendered.
-     * @param options         a Hash of options to control processing (default: {}).
+     * @param options         a Map of options to control processing (default: {}).
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
     String[] convertDirectory(Iterable<File> directoryWalker, OptionsBuilder options);
 
     /**
-     * Parses all files added inside a collection.
+     * Convert all files from a collection.
      *
-     * @param files   to be rendered.
-     * @param options a Hash of options to control processing (default: {}).
+     * @param files   to be converted.
+     * @param options a Map of options to control processing (default: {}).
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
     String[] convertFiles(Collection<File> files, Map<String, Object> options);
 
     /**
-     * Parses all files added inside a collection.
+     * Convert all files from a collection.
      *
-     * @param asciidoctorFiles to be rendered.
-     * @param options          a Hash of options to control processing (default: {}).
+     * @param asciidoctorFiles to be converted.
+     * @param options          a Map of options to control processing (default: {}).
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
     String[] convertFiles(Collection<File> asciidoctorFiles, Options options);
 
     /**
-     * Parses all files added inside a collection.
+     * Convert all files from a collection.
      *
-     * @param files   to be rendered.
-     * @param options a Hash of options to control processing (default: {}).
+     * @param files   to be converted.
+     * @param options a Map of options to control processing (default: {}).
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
     String[] convertFiles(Collection<File> files, OptionsBuilder options);
 
     /**
-     * Require the given libraries by name when rendering.
+     * Loads the given Ruby gem(s) by name.
      *
      * @param requiredLibraries
      */
     void requireLibrary(String... requiredLibraries);
 
     /**
-     * Require the given libraries by name when rendering.
+     * Loads the given Ruby gem in requiredLibraries by name.
      *
      * @param requiredLibraries
      */
@@ -384,7 +393,7 @@ public interface Asciidoctor extends AutoCloseable {
      *
      * @deprecated Use {@link #load(String, Map)} instead.
      *
-     * @param content where rendered content is written. Writer is flushed, but not
+     * @param content where converted content is written. Writer is flushed, but not
      *                closed.
      * @return header.
      */
@@ -403,28 +412,28 @@ public interface Asciidoctor extends AutoCloseable {
     DocumentHeader readDocumentHeader(Reader contentReader);
 
     /**
-     * Creates an extension registry ready to be used for registering all processors
+     * Creates an extension registry ready to be used for registering Java extensions.
      *
      * @return Extension Registry object.
      */
     JavaExtensionRegistry javaExtensionRegistry();
 
     /**
-     * Creates an Ruby extension registry ready to be used for registering all processors
+     * Creates an Ruby extension registry ready to be used for registering Ruby extension.
      *
      * @return Extension Registry object.
      */
     RubyExtensionRegistry rubyExtensionRegistry();
 
     /**
-     * Creates a registry for registering converters.
+     * Creates a registry for registering Java converters.
      *
      * @return Converter Registry object.
      */
     JavaConverterRegistry javaConverterRegistry();
 
     /**
-     * Creates a registry for registering converters.
+     * Creates a registry for registering Java syntax highlighter.
      *
      * <p>This API is experimental and might change in an incompatible way in a minor version update!</p>
      *
@@ -433,16 +442,17 @@ public interface Asciidoctor extends AutoCloseable {
     SyntaxHighlighterRegistry syntaxHighlighterRegistry();
 
     /**
-     * Creates an ExtensionGroup that can be used to register and unregister a group of extensions.
+     * Creates an ExtensionGroup that can be used to register and unregister multiples extensions all at once.
      *
-     * @return
+     * @return Extension Group instance.
      */
     ExtensionGroup createGroup();
 
     /**
-     * Creates an ExtensionGroup that can be used to register and unregister a group of extensions.
+     * Creates an ExtensionGroup that can be used to register and unregister multiples extensions all at once.
      *
-     * @return
+     * @param groupName to assign to the ExtensionGroup.
+     * @return Extension Group instance.
      */
     ExtensionGroup createGroup(String groupName);
 
@@ -452,7 +462,8 @@ public interface Asciidoctor extends AutoCloseable {
     void unregisterAllExtensions();
 
     /**
-     * This method frees all resources consumed by asciidoctorJ module. Keep in mind that if this method is called, instance becomes unusable and you should create another instance.
+     * This method frees all resources consumed by AsciidoctorJ module.
+     * Keep in mind that if this method is called, instance becomes unusable and you should create another instance.
      */
     void shutdown();
 
@@ -475,7 +486,7 @@ public interface Asciidoctor extends AutoCloseable {
         /**
          * Creates a new instance of Asciidoctor.
          *
-         * @return Asciidoctor instance which uses JRuby to wraps Asciidoctor
+         * @return Asciidoctor instance which uses JRuby to wrap Asciidoctor
          * Ruby calls.
          */
         public static Asciidoctor create() {
@@ -510,7 +521,7 @@ public interface Asciidoctor extends AutoCloseable {
      * Loads AsciiDoc content and returns the Document object.
      *
      * @param content to be parsed.
-     * @param options
+     * @param options a Map of options to control processing (default: {}).
      * @return Document of given content.
      */
     Document load(String content, Map<String, Object> options);
@@ -518,14 +529,24 @@ public interface Asciidoctor extends AutoCloseable {
     /**
      * Loads AsciiDoc content from file and returns the Document object.
      *
-     * @param file    to be loaded.
-     * @param options
+     * @param file    to be parsed.
+     * @param options a Map of options to control processing (default: {}).
      * @return Document of given content.
      */
     Document loadFile(File file, Map<String, Object> options);
 
+    /**
+     * Register a {@link LogHandler} to capture Asciidoctor message records.
+     *
+     * @param logHandler handler instance.
+     */
     void registerLogHandler(LogHandler logHandler);
 
+    /**
+     * Unregister a {@link LogHandler}.
+     *
+     * @param logHandler handler instance.
+     */
     void unregisterLogHandler(LogHandler logHandler);
 
     default <T> T unwrap(Class<T> clazz) {

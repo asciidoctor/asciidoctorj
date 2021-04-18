@@ -1,5 +1,10 @@
 package org.asciidoctor.ast;
 
+import org.asciidoctor.log.LogRecord;
+
+/**
+ * Location of a conversion record ({@link LogRecord}).
+ */
 public interface Cursor {
 
     /**
@@ -18,7 +23,7 @@ public interface Cursor {
     String getDir();
 
     /**
-     * @return Absolute path to the source file, or <code>null</code> when converting from a String. These will point to the correct source file, even when it is included from another.
+     * @return Absolute path to the source file, or <code>null</code> when converting from a String. This will point to the correct source file, even when it is included from another.
      */
     String getFile();
 
