@@ -60,7 +60,7 @@ But note that it is no longer necessary to explicitly register the converter for
 [source,java]
 ----
 File adocFile = ...
-asciidoctor.convertFile(adocFile, OptionsBuilder.options().backend("text"));
+asciidoctor.convertFile(adocFile, Options.builder().backend("text").build());
 ----
 
 It is also possible to provide converters for binary formats.

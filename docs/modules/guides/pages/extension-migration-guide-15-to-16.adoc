@@ -167,7 +167,7 @@ asciidoctor.javaExtensionRegistry().block("yell", YellStaticBlock.class);
 
 final String doc = "[yell]\nHello World";
 
-final String result = asciidoctor.convert(doc, OptionsBuilder.options());
+final String result = asciidoctor.convert(doc, Options.builder().build());
 Document htmlDoc = Jsoup.parse(result);
 assertEquals("HELLO WORLD", htmlDoc.select("p").first().text());
 ----
@@ -243,7 +243,7 @@ asciidoctor.javaExtensionRegistry().block(YellStaticBlock.class);  // <1>
 
 final String doc = "[yell]\nHello World";
 
-final String result = asciidoctor.convert(doc, OptionsBuilder.options());
+final String result = asciidoctor.convert(doc, Options.builder().build());
 Document htmlDoc = Jsoup.parse(result);
 assertEquals("HELLO WORLD", htmlDoc.select("p").first().text());
 ----

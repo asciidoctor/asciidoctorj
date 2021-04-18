@@ -11,7 +11,7 @@ rubyExtensionRegistry.loadClass(Class.class.getResourceAsStream("/YellRubyBlock.
 
 String content = asciidoctor.convertFile(new File(
                 "target/test-classes/sample-with-ruby-yell-block.ad"),
-                options().toFile(false).get());
+                Opions.builder().toFile(false).build());
 ----
 <1> `rubyExtensionRegistry` method is called to get a RubyExtensionRegistry instance.
 <2> Ruby file containing a class implementing a Block extension is loaded inside the Ruby runtime. Then the block is registered with a name (rubyyell), and we pass the name of the class to be instantiated.

@@ -58,7 +58,7 @@ And finally we can convert the document to EPUB3 using AsciidoctorJ.
 [source]
 ----
 asciidoctor.convertFile(new File("spine.adoc"),
-                options().safe(SafeMode.SAFE).backend("epub3").get()); // <1> <2>
+                Options.builder().safe(SafeMode.SAFE).backend("epub3").build()); // <1> <2>
 
 assertThat(new File("target/test-classes/index.epub").exists(), is(true));
 ----

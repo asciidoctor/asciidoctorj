@@ -15,10 +15,9 @@ For example:
 
 [source, java]
 ----
-import static org.asciidoctor.OptionsBuilder.options;
-
-Map<String, Object> options = options().safe(SafeMode.SAFE)
-                                       .asMap();
+Options options = Options.builder()
+                            .safe(SafeMode.SAFE)
+                            .build();
 
 String outfile = asciidoctor.convertFile(new File("sample.adoc"), options);
 ----

@@ -93,9 +93,10 @@ Here's an example of using AsciidoctorJ to convert an AsciiDoc string.
 [source,java]
 .Converting an AsciiDoc string
 ----
+Options emptyOptions = Options.builder().build();
 String html = asciidoctor.convert(
     "Writing AsciiDoc is _easy_!",
-    new HashMap<String, Object>());
+    emptyOptions);
 System.out.println(html);
 ----
 
@@ -106,7 +107,7 @@ The `convertFile` method will convert the contents of an AsciiDoc file.
 ----
 String html = asciidoctor.convertFile(
     new File("sample.adoc"),
-    new HashMap<String, Object>());
+    Options.builder().build());
 System.out.println(html);
 ----
 
@@ -117,7 +118,7 @@ The `convertFiles` method will convert a collection of AsciiDoc files:
 ----
 String[] result = asciidoctor.convertFiles(
     Arrays.asList(new File("sample.adoc")),
-    new HashMap<String, Object>());
+    Options.builder().build());
 
 for (String html : result) {
     System.out.println(html);
@@ -137,9 +138,10 @@ If the converted content is not written into files, `convertDirectory` will retu
 [source,java]
 .Converting all AsciiDoc files in a directory
 ----
+Options emptyOptions = Options.builder().build();
 String[] result = asciidoctor.convertDirectory(
     new AsciiDocDirectoryWalker("src/asciidoc"),
-    new HashMap<String, Object>());
+    emptyOptions);
 
 for (String html : result) {
     System.out.println(html);
