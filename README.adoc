@@ -51,8 +51,7 @@ Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of
 You can find the documentation for integrating Asciidoctor in your JVM based language of choice at the https://docs.asciidoctor.org/asciidoctorj/latest/[Asciidoctor Docs site].
 
 ifdef::badges[]
-image:https://ci.appveyor.com/api/projects/status/syxrlv047esal4n0/branch/master?svg=true[Build Status (AppVeyor), link=https://ci.appveyor.com/project/asciidoctor/asciidoctorj]
-image:https://github.com/asciidoctor/asciidoctorj/workflows/Build%20Master/badge.svg?event=push[Build Status (Github Actions)]
+image:https://github.com/asciidoctor/asciidoctorj/workflows/Build%20Main/badge.svg?event=push[Build Status (Github Actions)]
 image:https://img.shields.io/badge/zulip-join_chat-brightgreen.svg[project chat,link=https://asciidoctor.zulipchat.com/]
 endif::[]
 

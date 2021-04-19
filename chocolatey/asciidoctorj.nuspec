@@ -27,9 +27,9 @@
     <bugTrackerUrl>https://github.com/asciidoctor/asciidoctorj/issues</bugTrackerUrl>
     <tags>asciidoctor asciidoc docbook pdf</tags>
     <copyright>2012-2021 Dan Allen, Ryan Waldron and the Asciidoctor Project</copyright>
-    <licenseUrl>https://raw.githubusercontent.com/asciidoctor/asciidoctorj/master/LICENSE.txt</licenseUrl>
+    <licenseUrl>https://raw.githubusercontent.com/asciidoctor/asciidoctorj/main/LICENSE.txt</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <!-- <iconUrl>https://raw.githubusercontent.com/asciidoctor/brand/master/logo/logo-fill-color.svg?sanitize=true</iconUrl> -->
+    <!-- <iconUrl>https://raw.githubusercontent.com/asciidoctor/brand/main/logo/logo-fill-color.svg?sanitize=true</iconUrl> -->
     <iconUrl>https://cdn.statically.io/gh/asciidoctor/brand/b9cf5e27/logo/logo-fill-color.svg</iconUrl>
     <!--
       XXX Add other JREs and JVMs when https://github.com/chocolatey/choco/issues/879 is fixed?

@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# This script runs the AsciidoctorJ tests against the specified tag (or master) of the Asciidoctor Ruby gem.
+# This script runs the AsciidoctorJ tests against the specified tag (or main) of the Asciidoctor Ruby gem.
 
 GRADLE_CMD=./gradlew
 # to build against a tag, set TAG to a git tag name (e.g., v1.5.2)
-TAG=master
-if [ "$TAG" == "master" ]; then
-  SRC_DIR=asciidoctor-master
+TAG=main
+if [ "$TAG" == "main" ]; then
+  SRC_DIR=asciidoctor-main
 else
   SRC_DIR=asciidoctor-${TAG#v}
 fi
