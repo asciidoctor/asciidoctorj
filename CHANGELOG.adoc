@@ -28,6 +28,7 @@ Build Improvement::
 * Upgrade Gradle to 7.0.0 (#1001)
 * Fix URL for distribution in sdkman (#990)
 * Update gradle plugin biz.aQute.bnd to 5.3.0 (#1001)
+* Run Github actions for main branch (#1017)
 
 Documentation::
 
