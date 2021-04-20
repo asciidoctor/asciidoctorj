@@ -9,7 +9,7 @@ ifndef::icons[]
 endif::[]
 
 This document provides a high-level view of the changes introduced in AsciidoctorJ by release.
-For a detailed view of what has changed, refer to the {url-repo}/commits/master[commit history] on GitHub.
+For a detailed view of what has changed, refer to the {url-repo}/commits/main[commit history] on GitHub.
 
 == Unreleased
 
@@ -28,6 +28,7 @@ Build Improvement::
 * Upgrade Gradle to 7.0.0 (#1001)
 * Fix URL for distribution in sdkman (#990)
 * Update gradle plugin biz.aQute.bnd to 5.3.0 (#1001)
+* Run Github actions for main branch (#1017)
 
 Documentation::
 
