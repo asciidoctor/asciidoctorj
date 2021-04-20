@@ -20,7 +20,7 @@ Improvement::
 * Upgrade to asciidoctorj-diagram 2.1.2 (#1004)
 * Add getRevisionInfo method to Document. Make `DocumentHeader` class and `readDocumentHeader` methods as deprecated (@abelsromero) (#1008)
 * Add getAuthors method to Document (@abelsromero) (#1007)
-* Upgrade to asciidoctor 2.0.13 (#1006)
+* Upgrade to asciidoctor 2.0.14 (#1016)
 
 Build Improvement::
 
