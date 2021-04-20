@@ -9,7 +9,7 @@ ifndef::icons[]
 endif::[]
 
 This document provides a high-level view of the changes introduced in AsciidoctorJ by release.
-For a detailed view of what has changed, refer to the {url-repo}/commits/master[commit history] on GitHub.
+For a detailed view of what has changed, refer to the {url-repo}/commits/main[commit history] on GitHub.
 
 == Unreleased
 
@@ -20,7 +20,7 @@ Improvement::
 * Upgrade to asciidoctorj-diagram 2.1.2 (#1004)
 * Add getRevisionInfo method to Document. Make `DocumentHeader` class and `readDocumentHeader` methods as deprecated (@abelsromero) (#1008)
 * Add getAuthors method to Document (@abelsromero) (#1007)
-* Upgrade to asciidoctor 2.0.13 (#1006)
+* Upgrade to asciidoctor 2.0.14 (#1016)
 * Deprecated methods Asciidoctor, Options and Attributes API scheduled for future removal (@abelsromero)(#1015) 
 
 Build Improvement::
@@ -29,6 +29,7 @@ Build Improvement::
 * Upgrade Gradle to 7.0.0 (#1001)
 * Fix URL for distribution in sdkman (#990)
 * Update gradle plugin biz.aQute.bnd to 5.3.0 (#1001)
+* Run Github actions for main branch (#1017)
 
 Documentation::
 
