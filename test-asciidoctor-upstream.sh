@@ -1,12 +1,11 @@
 #!/bin/bash
-
-# This script runs the AsciidoctorJ tests against the specified tag (or main) of the Asciidoctor Ruby gem.
+# This script runs the AsciidoctorJ tests against the specified tag (or master) of the Asciidoctor Ruby gem.
 
 GRADLE_CMD=./gradlew
 # to build against a tag, set TAG to a git tag name (e.g., v1.5.2)
-TAG=main
-if [ "$TAG" == "main" ]; then
-  SRC_DIR=asciidoctor-main
+TAG=master
+if [ "$TAG" == "master" ]; then
+  SRC_DIR=asciidoctor-master
 else
   SRC_DIR=asciidoctor-${TAG#v}
 fi
@@ -21,7 +20,7 @@ sed "s;<version></version>;<version>$ASCIIDOCTOR_VERSION</version>;" pom.xml > p
   mv -f pom.xml.sedtmp pom.xml
 
 #we override the jruby version here with one supported by java9, additionally java9 needs some add-opens arguments that need to be ignored on older jvms
-mvn install --no-transfer-progress -Dgemspec=asciidoctor.gemspec -Djruby.version=9.2.9.0 -Djruby.jvmargs="-XX:+IgnoreUnrecognizedVMOptions --add-opens=java.base/java.security.cert=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util.zip=ALL-UNNAMED"
+mvn install --no-transfer-progress -Dgemspec=asciidoctor.gemspec -Djruby.version=9.2.17.0 -Djruby.jvmargs="-XX:+IgnoreUnrecognizedVMOptions --add-opens=java.base/java.security.cert=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util.zip=ALL-UNNAMED"
 
 cd ../..
 #rm -rf maven
