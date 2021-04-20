@@ -66,7 +66,7 @@ public interface Asciidoctor extends AutoCloseable {
      * Accepts input as String object.
      *
      * @param content the AsciiDoc source as String.
-     * @param options a Map of options to control processing (default: {}).
+     * @param options options to control processing (default: empty).
      * @return the rendered output String is returned
      */
     String convert(String content, Options options);
@@ -78,7 +78,7 @@ public interface Asciidoctor extends AutoCloseable {
      * Accepts input as String object.
      *
      * @param content        the AsciiDoc source as String.
-     * @param options        a Map of options to control processing (default: {}).
+     * @param options        options to control processing (default: empty).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
      *                       In this case {@link #convert(String, Options)} is the same.
      * @return the rendered output String is returned
@@ -138,7 +138,7 @@ public interface Asciidoctor extends AutoCloseable {
      * @param contentReader  where asciidoc content is read.
      * @param rendererWriter where rendered content is written. Writer is flushed, but not
      *                       closed.
-     * @param options        a Map of options to control processing (default: {}).
+     * @param options        options to control processing (default: empty).
      * @throws IOException if an error occurs while writing rendered content, this
      *                     exception is thrown.
      */
@@ -234,7 +234,7 @@ public interface Asciidoctor extends AutoCloseable {
      * raised.
      *
      * @param file    an input Asciidoctor file.
-     * @param options a Map of options to control processing (default: {}).
+     * @param options options to control processing (default: empty).
      * @return returns nothing if the rendered output String is written to a
      * file.
      */
@@ -258,7 +258,7 @@ public interface Asciidoctor extends AutoCloseable {
      * raised.
      *
      * @param file           an input Asciidoctor file.
-     * @param options        a Map of options to control processing (default: {}).
+     * @param options        options to control processing (default: empty).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
      *                       In this case {@link #convertFile(File, Map)} is the same.
      * @return returns nothing if the rendered output is written to a
@@ -338,7 +338,7 @@ public interface Asciidoctor extends AutoCloseable {
      * See {@code AsciiDocDirectoryWalker} for reference strategy.
      *
      * @param directoryWalker strategy used to retrieve all files to be rendered.
-     * @param options         a Map of options to control processing (default: {}).
+     * @param options         options to control processing (default: empty).
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
@@ -373,7 +373,7 @@ public interface Asciidoctor extends AutoCloseable {
      * Convert all files from a collection.
      *
      * @param asciidoctorFiles to be converted.
-     * @param options          a Map of options to control processing (default: {}).
+     * @param options          options to control processing (default: empty).
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
@@ -547,22 +547,44 @@ public interface Asciidoctor extends AutoCloseable {
 
     /**
      * Loads AsciiDoc content and returns the Document object.
-     *
+     * @deprecated Use {@link #load(String, Options)} instead.
+     * 
      * @param content to be parsed.
      * @param options a Map of options to control processing (default: {}).
      * @return Document of given content.
      */
+    @Deprecated
     Document load(String content, Map<String, Object> options);
+
+    /**
+     * Loads AsciiDoc content and returns the Document object.
+     *
+     * @param content to be parsed.
+     * @param options options to control processing (default: empty).
+     * @return Document of given content.
+     */
+    Document load(String content, Options options);
+    
+    /**
+     * Loads AsciiDoc content from file and returns the Document object.
+     * @deprecated Use {@link #loadFile(File, Options)} instead.
+     * 
+     * @param file    to be parsed.
+     * @param options a Map of options to control processing (default: {}).
+     * @return Document of given content.
+     */
+    @Deprecated
+    Document loadFile(File file, Map<String, Object> options);
 
     /**
      * Loads AsciiDoc content from file and returns the Document object.
      *
      * @param file    to be parsed.
-     * @param options a Map of options to control processing (default: {}).
+     * @param options options to control processing (default: empty).
      * @return Document of given content.
      */
-    Document loadFile(File file, Map<String, Object> options);
-
+    Document loadFile(File file, Options options);
+    
     /**
      * Register a {@link LogHandler} to capture Asciidoctor message records.
      *
