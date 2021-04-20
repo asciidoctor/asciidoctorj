@@ -6,26 +6,30 @@ import java.util.Map;
 
 public class AttributesBuilder {
 
-	private Attributes attributes = new Attributes();
+	private final Attributes attributes = new Attributes();
 
-	private AttributesBuilder() {
+	AttributesBuilder() {
 		super();
 	}
 
 	/**
 	 * Creates attributes builder.
+	 * @deprecated Use {@link Attributes#builder()} instead.
 	 * 
-	 * @return atributes builder.
+	 * @return attributes builder.
 	 */
+	@Deprecated
 	public static AttributesBuilder attributes() {
 		return new AttributesBuilder();
 	}
 
 	/**
      * Creates attributes builder.
+	 * @deprecated Use {@link Attributes#builder()} with {@link #arguments(String...)} instead.
      * 
-     * @return atributes builder.
+     * @return attributes builder.
      */
+	@Deprecated
     public static AttributesBuilder attributes(String[] arguments) {
         AttributesBuilder attributesBuilder = new AttributesBuilder();
         attributesBuilder.arguments(arguments);
@@ -34,9 +38,11 @@ public class AttributesBuilder {
 
     /**
      * Creates attributes builder.
+	 * @deprecated Use {@link Attributes#builder()} with {@link #arguments(String)} instead.
      * 
      * @return attributes builder.
      */
+    @Deprecated
     public static AttributesBuilder attributes(String arguments) {
         AttributesBuilder attributesBuilder = new AttributesBuilder();
         attributesBuilder.arguments(arguments);
@@ -599,15 +605,29 @@ public class AttributesBuilder {
 
 	/**
 	 * Gets a map with configured options.
+	 * @deprecated Use {@link #build()} instead. 
 	 * 
 	 * @return map with all options. By default an empty map is returned.
 	 */
+	@Deprecated
 	public Map<String, Object> asMap() {
 		return this.attributes.map();
 	}
 
+	/**
+	 * @deprecated Use {@link #build()} instead.
+	 */
+	@Deprecated
 	public Attributes get() {
 		return this.attributes;
 	}
 
+	/**
+	 * Returns a valid Attributes instance.
+	 *
+	 * @return attributes instance.
+	 */
+	public Attributes build() {
+		return this.attributes;
+	}
 }

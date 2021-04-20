@@ -21,6 +21,7 @@ Improvement::
 * Add getRevisionInfo method to Document. Make `DocumentHeader` class and `readDocumentHeader` methods as deprecated (@abelsromero) (#1008)
 * Add getAuthors method to Document (@abelsromero) (#1007)
 * Upgrade to asciidoctor 2.0.14 (#1016)
+* Deprecated methods Asciidoctor, Options and Attributes API scheduled for future removal (@abelsromero)(#1015) 
 
 Build Improvement::
 

@@ -34,11 +34,13 @@ public interface Asciidoctor extends AutoCloseable {
      * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
-     *
+     * @deprecated User {@link #convert(String, Options)} instead.
+     * 
      * @param content the AsciiDoc source as String.
      * @param options a Map of options to control processing (default: {}).
      * @return the rendered output String is returned
      */
+    @Deprecated
     String convert(String content, Map<String, Object> options);
 
     /**
@@ -46,13 +48,15 @@ public interface Asciidoctor extends AutoCloseable {
      * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
-     *
+     * @deprecated Use {@link #convert(String, Options, Class)} instead.
+     * 
      * @param content        the AsciiDoc source as String.
      * @param options        a Map of options to control processing (default: {}).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
      *                       In this case {@link #convert(String, Map)} is the same.
      * @return the rendered output String is returned
      */
+    @Deprecated
     <T> T convert(String content, Map<String, Object> options, Class<T> expectedResult);
 
     /**
@@ -86,11 +90,13 @@ public interface Asciidoctor extends AutoCloseable {
      * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
-     *
+     * @deprecated Use {@link #convert(String, Options)} instead.
+     * 
      * @param content the AsciiDoc source as String.
      * @param options a Map of options to control processing (default: {}).
      * @return the rendered output String is returned
      */
+    @Deprecated
     String convert(String content, OptionsBuilder options);
 
     /**
@@ -98,19 +104,22 @@ public interface Asciidoctor extends AutoCloseable {
      * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
-     *
+     * @deprecated Use {@link #convert(String, Options, Class)} instead.
+     * 
      * @param content        the AsciiDoc source as String.
      * @param options        a Map of options to control processing (default: {}).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
      *                       In this case {@link #convert(String, OptionsBuilder)} is the same.
      * @return the rendered output String is returned
      */
+    @Deprecated
     <T> T convert(String content, OptionsBuilder options, Class<T> expectedResult);
 
     /**
      * Parse the document read from reader sending the converted result to
      * writer.
-     *
+     * @deprecated Use {@link #convert(Reader, Writer, Options)} instead.
+     * 
      * @param contentReader  where asciidoc content is read.
      * @param rendererWriter where rendered content is written. Writer is flushed, but not
      *                       closed.
@@ -118,6 +127,7 @@ public interface Asciidoctor extends AutoCloseable {
      * @throws IOException if an error occurs while writing rendered content, this
      *                     exception is thrown.
      */
+    @Deprecated
     void convert(Reader contentReader, Writer rendererWriter,
                  Map<String, Object> options) throws IOException;
 
@@ -138,7 +148,8 @@ public interface Asciidoctor extends AutoCloseable {
     /**
      * Parse the document read from reader sending the converted result to
      * writer.
-     *
+     * @deprecated Use {@link #convert(Reader, Writer, Options)} instead.
+     * 
      * @param contentReader  where asciidoc content is read.
      * @param rendererWriter where rendered content is written. Writer is flushed, but not
      *                       closed.
@@ -146,6 +157,7 @@ public interface Asciidoctor extends AutoCloseable {
      * @throws IOException if an error occurs while writing rendered content, this
      *                     exception is thrown.
      */
+    @Deprecated
     void convert(Reader contentReader, Writer rendererWriter,
                  OptionsBuilder options) throws IOException;
 
@@ -165,12 +177,14 @@ public interface Asciidoctor extends AutoCloseable {
      * cannot be written because the target directory does not exist, or because
      * it falls outside of the Document#base_dir in safe mode, an IOError is
      * raised.
-     *
+     * @deprecated Use {@link #convertFile(File, Options)} instead.
+     * 
      * @param file    an input Asciidoctor file.
      * @param options a Map of options to control processing (default: {}).
      * @return returns nothing if the rendered output String is written to a
      * file.
      */
+    @Deprecated
     String convertFile(File file, Map<String, Object> options);
 
     /**
@@ -189,7 +203,8 @@ public interface Asciidoctor extends AutoCloseable {
      * cannot be written because the target directory does not exist, or because
      * it falls outside of the Document#base_dir in safe mode, an IOError is
      * raised.
-     *
+     * @deprecated User {@link #convertFile(File, Options, Class)} instead.
+     * 
      * @param file           an input Asciidoctor file.
      * @param options        a Map of options to control processing (default: {}).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
@@ -197,6 +212,7 @@ public interface Asciidoctor extends AutoCloseable {
      * @return returns nothing if the rendered output is written to a
      * file.
      */
+    @Deprecated
     <T> T convertFile(File file, Map<String, Object> options, Class<T> expectedResult);
 
 
@@ -266,12 +282,14 @@ public interface Asciidoctor extends AutoCloseable {
      * cannot be written because the target directory does not exist, or because
      * it falls outside of the Document#base_dir in safe mode, an IOError is
      * raised.
-     *
+     * @deprecated Use {@link #convertFile(File, Options)} instead.
+     * 
      * @param file    an input Asciidoctor file.
      * @param options a Map of options to control processing (default: {}).
      * @return returns nothing if the rendered output String is written to a
      * file.
      */
+    @Deprecated
     String convertFile(File file, OptionsBuilder options);
 
     /**
@@ -290,7 +308,8 @@ public interface Asciidoctor extends AutoCloseable {
      * cannot be written because the target directory does not exist, or because
      * it falls outside of the Document#base_dir in safe mode, an IOError is
      * raised.
-     *
+     * @deprecated User {@link #convertFile(File, Options, Class)} instead.
+     * 
      * @param file           an input Asciidoctor file.
      * @param options        a Map of options to control processing (default: {}).
      * @param expectedResult the expected return type. Usually {@link String} for HTML based formats.
@@ -298,17 +317,20 @@ public interface Asciidoctor extends AutoCloseable {
      * @return returns nothing if the rendered output is written to a
      * file.
      */
+    @Deprecated
     <T> T convertFile(File file, OptionsBuilder options, Class<T> expectedResult);
 
     /**
      * Convert all AsciiDoc files found in directoryWalker.
      * See {@code AsciiDocDirectoryWalker} for reference strategy.
-     *
+     * @deprecated Use {@link #convertDirectory(Iterable, Options)} instead.
+     * 
      * @param directoryWalker strategy used to retrieve all files to be rendered.
      * @param options         a Map of options to control processing (default: {}).
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
+    @Deprecated
     String[] convertDirectory(Iterable<File> directoryWalker, Map<String, Object> options);
 
     /**
@@ -325,22 +347,26 @@ public interface Asciidoctor extends AutoCloseable {
     /**
      * Convert all AsciiDoc files found in directoryWalker.
      * See {@code AsciiDocDirectoryWalker} for reference strategy.
-     *
+     * @deprecated Use {@link #convertDirectory(Iterable, Options)} instead.
+     *     
      * @param directoryWalker strategy used to retrieve all files to be rendered.
      * @param options         a Map of options to control processing (default: {}).
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
+    @Deprecated
     String[] convertDirectory(Iterable<File> directoryWalker, OptionsBuilder options);
 
     /**
      * Convert all files from a collection.
-     *
+     * @deprecated Use {@link #convertFiles(Collection, Options)} instead.
+     * 
      * @param files   to be converted.
      * @param options a Map of options to control processing (default: {}).
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
+    @Deprecated
     String[] convertFiles(Collection<File> files, Map<String, Object> options);
 
     /**
@@ -355,12 +381,14 @@ public interface Asciidoctor extends AutoCloseable {
 
     /**
      * Convert all files from a collection.
-     *
+     * @deprecated Use {@link #convertFiles(Collection, Options)} instead. 
+     * 
      * @param files   to be converted.
      * @param options a Map of options to control processing (default: {}).
      * @return returns an array of 0 positions if the rendered output is written
      * to a file.
      */
+    @Deprecated
     String[] convertFiles(Collection<File> files, OptionsBuilder options);
 
     /**

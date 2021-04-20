@@ -27,8 +27,9 @@ For the example to work make sure:
 .Options configuration example
 [source,java]
 ----
-OptionsBuilder.options()
+Options.builder()
         .headerFooter(true)
-        .safe(SafeMode.SERVER);
+        .safe(SafeMode.SERVER)
+        .build();
 ----
 ====

@@ -33,16 +33,31 @@ public class Options {
     public static final String PARSE = "parse";
     public static final String PARSE_HEADER_ONLY = "parse_header_only";
 
-    private Map<String, Object> options = new HashMap<String, Object>();
+    private Map<String, Object> options = new HashMap<>();
 
+    /**
+     * @deprecated Use {@link Options#builder()} instead.
+     */
+    @Deprecated
     public Options() {
         super();
     }
 
+    /**
+     * @deprecated Use {@link Options#builder()} instead.
+     */
+    @Deprecated
     public Options(Map<String, Object> options) {
         this.options = options;
     }
 
+    /**
+     * @return Empty OptionsBuilder instance.
+     */
+    public static OptionsBuilder builder() {
+        return new OptionsBuilder();
+    }
+    
     public void setInPlace(boolean inPlace) {
         this.options.put(IN_PLACE, inPlace);
     }
@@ -198,6 +213,10 @@ public class Options {
         this.options.put(optionName, optionValue);
     }
 
+    /**
+     * @deprecated For internal use only.
+     */
+    @Deprecated
     public Map<String, Object> map() {
         return this.options;
     }

@@ -3,8 +3,7 @@ package org.asciidoctor.integrationguide;
 import org.apache.commons.io.IOUtils;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
@@ -16,8 +15,9 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.io.FileReader;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Arquillian.class)
 public class OptionsTest {
@@ -37,9 +37,9 @@ public class OptionsTest {
         String result =
                 asciidoctor.convert(
                         "Hello World",
-                        OptionsBuilder.options()     // <1>
+                        Options.builder()            // <1>
                                 .headerFooter(false) // <2>
-                                .get());             // <3>
+                                .build());           // <3>
 
         assertThat(result, startsWith("<div "));
 //end::simpleOptionsExampleEmbeddableDocument[]
@@ -55,11 +55,11 @@ public class OptionsTest {
 //tag::optionsPDFBackend[]
         asciidoctor.convert(
                 "Hello World",
-                OptionsBuilder.options()
+                Options.builder()
                         .backend("pdf")
                         .toFile(targetFile)
                         .safe(SafeMode.UNSAFE)
-                        .get());
+                        .build());
 
         assertThat(targetFile.length(), greaterThan(0L));
 //end::optionsPDFBackend[]
@@ -81,10 +81,10 @@ public class OptionsTest {
 //tag::unsafeConversion[]
         String result = asciidoctor.convertFile(
                 sourceFile,
-                OptionsBuilder.options()
+                Options.builder()
                         .safe(SafeMode.UNSAFE) // <1>
                         .toFile(false)         // <2>
-                        .get());
+                        .build());
 
         assertThat(result, containsString("This is included content"));
 //end::unsafeConversion[]
@@ -100,10 +100,10 @@ public class OptionsTest {
 //tag::optionToFile[]
         asciidoctor.convert(
                 "Hello World",
-                OptionsBuilder.options()
+                Options.builder()
                         .toFile(targetFile)    // <1>
                         .safe(SafeMode.UNSAFE) // <2>
-                        .get());
+                        .build());
 
         assertTrue(targetFile.exists());
         assertThat(
@@ -120,15 +120,15 @@ public class OptionsTest {
                 "NOTE: Asciidoctor supports font-based admonition icons!\n" +
                     "\n" +
                     "{foo}",
-                OptionsBuilder.options()
-                        .toFile(false)
-                        .headerFooter(false)
-                        .attributes(
-                                AttributesBuilder.attributes()        // <1>
-                                        .icons(Attributes.FONT_ICONS) // <2>
-                                        .attribute("foo", "bar")      // <3>
-                                        .get())
-                        .get());
+                    Options.builder()
+                            .toFile(false)
+                            .headerFooter(false)
+                            .attributes(
+                                    Attributes.builder()                                          // <1>        
+                                            .icons(Attributes.FONT_ICONS)                         // <2>
+                                            .attribute("foo", "bar") // <3>
+                                            .build())
+                            .build());
         assertThat(result, containsString("<i class=\"fa icon-note\" title=\"Note\"></i>"));
         assertThat(result, containsString("<p>bar</p>"));
 //end::attributeFontIcons[]

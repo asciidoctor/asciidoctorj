@@ -62,22 +62,45 @@ public class Attributes {
     public static final String HIDE_URI_SCHEME = "hide-uri-scheme";
     public static final String COMPAT_MODE = "compat-mode";
 
-    private Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+    private Map<String, Object> attributes = new LinkedHashMap<>();
 
+    /**
+     * @deprecated Use {@link #builder} instead.
+     */
+    @Deprecated
     public Attributes() {
         super();
     }
-
+    
+    /**
+     * @deprecated Use {@link #builder} instead.
+     */
+    @Deprecated
     public Attributes(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 
+    /**
+     * @deprecated Use {@link #builder} instead.
+     */
+    @Deprecated
     public Attributes(String[] attributes) {
         this.setAttributes(attributes);
     }
 
+    /**
+     * @deprecated Use {@link #builder} instead.
+     */
+    @Deprecated
     public Attributes(String attributes) {
         this.setAttributes(attributes);
+    }
+
+    /**
+     * @return Empty AttributesBuilder instance.
+     */
+    public static AttributesBuilder builder() {
+        return new AttributesBuilder();
     }
 
     /**
@@ -623,10 +646,6 @@ public class Attributes {
         this.attributes.putAll(attributes);
     }
 
-    public Map<String, Object> map() {
-        return this.attributes;
-    }
-
     public static String toAsciidoctorFlag(boolean flag) {
         return flag ? "" : null;
     }
@@ -639,4 +658,11 @@ public class Attributes {
         return TIME_FORMAT.format(time);
     }
 
+    /**
+     * @deprecated For internal use only.
+     */
+    @Deprecated
+    public Map<String, Object> map() {
+        return this.attributes;
+    }
 }

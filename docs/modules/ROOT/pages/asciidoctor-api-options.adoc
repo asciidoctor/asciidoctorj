@@ -5,7 +5,7 @@ Asciidoctor provides many options that can be passed when converting content.
 This section explains the most important and commonly used options when converting Asciidoctor content.
 
 The options for conversion of a document are held in an instance of the class `org.asciidoctor.Options`.
-The builder `OptionsBuilder` allows for simple configuration of that instance that can be passed to the respective methods of the `Asciidoctor` interface.
+The builder `OptionsBuilder` (obtained via `Options.builder()`) allows for simple configuration of that instance that can be passed to the respective methods of the `Asciidoctor` interface.
 The following example shows how to set the options so that the resulting HTML document is rendered for embedding it into another document.
 That means that the result only contains the content of a HTML body element:
 
@@ -24,14 +24,14 @@ NOTE: The `convert` method is overloaded so `org.asciidoctor.Options`, `org.asci
 
 Via the option `toFile` it is possible to define if a document should be written to a file at all and to which file.
 
-To make the API return the converted document and not write to a file set `OptionsBuilder.toFile(false)`.
+To make the API return the converted document and not write to a file set `toFile(false)`.
 
-To make Asciidoctor write to the default file set `OptionsBuilder.toFile(true)`.
+To make Asciidoctor write to the default file set `toFile(true)`.
 The default file is computed by taking the base name of the input file and adding the default suffix for the target format like `.html` or `.pdf`.
 That is for the input file `test.adoc` the resulting file would be in the same directory with the name `test.html`. +
 *This is also the way the CLI behaves.*
 
-To write to a certain file set `OptionsBuilder.toFile(targetFile)`.
+To write to a certain file set `toFile(targetFile)`.
 This is also necessary if you want to convert string content to files.
 
 The following example shows how to convert content to a dedicated file:
@@ -101,7 +101,7 @@ This is `true` by default.
 .Setting inPlace option
 ----
 OptionsBuilder optionsBuilder =
-            OptionsBuilder.options().inPlace(true);
+            Options.builder().inPlace(true);
 ----
 
 == templateDirs
@@ -112,7 +112,7 @@ Specifies a directory of {url-tilt}[Tilt]-compatible templates to be used instea
 .Setting templateDirs option
 ----
 OptionsBuilder optionsBuilder =
-            OptionsBuilder.options().templateDirs(new File("templates_path"));
+            Options.builder().templateDirs(new File("templates_path"));
 ----
 
 == attributes
@@ -120,6 +120,36 @@ OptionsBuilder optionsBuilder =
 This option allows to define document attributes externally.
 // TODO add link main asciidoctor attributes page
 There are several ways to accomplish that.
+
+. Use `Attributes.builder()` to obtain a fluent API builder.
++
+WARNING: This is the supported method for its ease of use and type validation.
+Other way found below have been deprecated since v2.4.4 and may not be available in future releases.
++
+[source,java]
+.Attributes builder initialization
+----
+Attributes attributes = Attributes.builder()
+                            .icons("font")
+                            .experimental(true)
+                            .attribute("my-attribute", "my-value")
+                            .build();
+----
++
+The builder also allows passing a chain of values in a `String` or `Array`.
++
+[source, java]
+.Attributes builder initialization as String
+----
+Attributes attributes = Attributes.builder().arguments("toc numbered").build();
+----
++
+[source, java]
+.Attributes builder initialization as String array
+----
+String[] attributesArray = new String[]{"toc", "source-highlighter=coderay"};
+Attributes attributes = Attributes.builder().arguments(attributesArray).build();
+----
 
 . Create an instance of `Attributes` and set them as a normal POJO.
 +
@@ -138,33 +168,6 @@ It is also possible to use a `String` of attributes similar to the CLI.
 .Attributes instance initialization as String
 ----
 attributes.setAttributes("toc numbered icons=font");
-----
-+
-. Use `AttributesBuilder` methods for a fluent API.
-+
-[source,java]
-.Attributes builder initialization
-----
-Attributes attributes = AttributesBuilder.attributes()
-                            .icons("font")
-                            .experimental(true)
-                            .attribute("my-attribute", "my-value")
-                            .get();
-----
-+
-The builder also allows passing a chain of values in a `String` or `Array`.
-+
-[source, java]
-.Attributes builder initialization as String
-----
-Attributes attributes = attributes().attributes("toc numbered").get();
-----
-+
-[source, java]
-.Attributes builder initialization as String array
-----
-String[] attributesArray = new String[]{"toc", "source-highlighter=coderay"};
-Attributes attributes = attributes().attributes(attributesArray).get();
 ----
 
 . Directly pass a collection of key-values using Map<String,Object>.
@@ -188,6 +191,6 @@ attributesMap.put("icons", "font");
 attributesMap.put("experimental", Boolean.TRUE);
 attributesMap.put("my-attribute", "my-value");
 
-AttributesBuilder.attributes()
+Attributes.builder()
             .attributes(attributesMap);
 ----
