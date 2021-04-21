@@ -1,8 +1,10 @@
 def hasSigningKey = project.hasProperty("signing.keyId") || project.findProperty("signingKey")
-if(hasSigningKey && !project.hasProperty('skip.signing')) {
+
+if (hasSigningKey && !project.hasProperty('skip.signing')) {
     apply plugin: 'signing'
     sign(project)
 }
+
 void sign(Project project) {
     project.signing {
         required { project.gradle.taskGraph.hasTask("required") }

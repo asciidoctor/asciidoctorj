@@ -34,6 +34,9 @@ asciidoctorj-test-support::
 asciidoctorj-wildfly-integration-test::
   Wildfly integration tests.
 
+asciidoctorj-springboot-integration-test::
+  Spring Boot example app and integration tests.
+
 The Gradle build is partitioned into the following files:
 
 ....
