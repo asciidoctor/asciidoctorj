@@ -2,6 +2,7 @@ apply plugin: 'biz.aQute.bnd.builder'
 
 dependencies {
   compileOnly "org.osgi:osgi.annotation:$osgiVersion"
+  testRuntimeOnly "org.osgi:osgi.annotation:$osgiVersion"
 }
 
 
