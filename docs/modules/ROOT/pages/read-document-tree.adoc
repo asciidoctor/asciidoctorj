@@ -13,8 +13,7 @@ To load a document, use the `load` or `loadFile` methods.
 import org.asciidoctor.ast.Document;
 
 //...
-
-Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>()); // <1>
+Document document = asciidoctor.load(DOCUMENT, Options.builder().build()); // <1>
 assertThat(document.doctitle(), is("Document Title")); // <2>
 ----
 <1> Document from a String is loaded into `Document` object.
@@ -30,8 +29,7 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
 
 //...
-
-Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>()); // <1>
+Document document = asciidoctor.load(DOCUMENT, Options.builder().build()); // <1>
 Section section = (Section) document.blocks().get(1); // <2>
 
 assertThat(section.index(), is(0)); // <3>
@@ -46,12 +44,13 @@ Blocks can also be retrieved from query using `findBy` method.
 
 [source,java]
 ----
-Document document = asciidoctor.load(DOCUMENT, new HashMap<String, Object>());
+Document document = asciidoctor.load(DOCUMENT, Options.builder().build());
+
 Map<Object, Object> selector = new HashMap<>(); // <1>
 selector.put("context", ":image"); // <2>
 
 List<StructuralNode> findBy = document.findBy(selector);
-assertThat(findBy, hasSize(2)); //<3>
+assertThat(findBy, hasSize(2)); // <3>
 ----
 <1> Queries are defined in a `map` estructure.
 <2> In this example all blocks with context as image is returned. Notice that the colon (`:`) must be added in the value part.

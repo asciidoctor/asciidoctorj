@@ -80,7 +80,7 @@ public class WhenAsciiDocIsLoadedToDocument {
 
         Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
         assertThat(document.getDoctitle(), is("Document Title"));
-
+        assertThat(document.getBlocks(), hasSize(3));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class WhenAsciiDocIsLoadedToDocument {
     public void should_find_elements_from_document() {
 
         Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
-        Map<Object, Object> selector = new HashMap<Object, Object>();
+        Map<Object, Object> selector = new HashMap<>();
         selector.put("context", ":image");
         List<StructuralNode> findBy = document.findBy(selector);
         assertThat(findBy, hasSize(2));
@@ -105,7 +105,7 @@ public class WhenAsciiDocIsLoadedToDocument {
     }
 
     @Test
-    public void should_return_options_from_document() {
+    public void should_return_options_from_parsed_string_when_passed_as_map() {
         Map<String, Object> options = OptionsBuilder.options().compact(true).asMap();
         Document document = asciidoctor.load(DOCUMENT, options);
 
@@ -114,6 +114,31 @@ public class WhenAsciiDocIsLoadedToDocument {
         assertThat((Boolean) documentOptions.get("compact"), is(true));
     }
 
+    @Test
+    public void should_return_options_from_parsed_string_when_passed_as_options_object() {
+        Options options = Options.builder()
+                .compact(true)
+                .build();
+        Document document = asciidoctor.load(DOCUMENT, options);
+
+        Map<Object, Object> documentOptions = document.getOptions();
+
+        assertThat((Boolean) documentOptions.get("compact"), is(true));
+    }
+
+    @Test
+    public void should_return_options_from_parsed_file_when_passed_as_options_object() {
+        Options options = Options.builder()
+                .compact(true)
+                .build();
+        File resource = classpath.getResource("sourcelocation.adoc");
+        Document document = asciidoctor.loadFile(resource, options);
+
+        Map<Object, Object> documentOptions = document.getOptions();
+
+        assertThat((Boolean) documentOptions.get("compact"), is(true));
+    }
+    
     @Test
     public void should_return_node_name() {
         Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
@@ -230,10 +255,11 @@ public class WhenAsciiDocIsLoadedToDocument {
     public void should_be_able_to_read_asset() throws FileNotFoundException {
         Map<String, Object> options = OptionsBuilder.options().safe(SafeMode.SAFE)
                 .attributes(AttributesBuilder.attributes().dataUri(false))
-                .compact(true).asMap();
+                .compact(true)
+                .asMap();
         Document document = asciidoctor.load(DOCUMENT, options);
         File inputFile = classpath.getResource("rendersample.asciidoc");
-        String content = document.readAsset(inputFile.getAbsolutePath(), new HashMap<Object, Object>());
+        String content = document.readAsset(inputFile.getAbsolutePath(), new HashMap<>());
         assertThat(content.replace("\r", ""), is(IOUtils.readFull(new FileReader(inputFile)).replace("\r", "")));
     }
 
@@ -264,7 +290,7 @@ public class WhenAsciiDocIsLoadedToDocument {
 
         // When
         Document document = asciidoctor.loadFile(file, OptionsBuilder.options().sourcemap(true).docType("book").asMap());
-        Map<Object, Object> selector = new HashMap<Object, Object>();
+        Map<Object, Object> selector = new HashMap<>();
         selector.put("context", ":paragraph");
         List<StructuralNode> findBy = document.findBy(selector);
 
