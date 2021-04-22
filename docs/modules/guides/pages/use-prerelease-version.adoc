@@ -1,4 +1,4 @@
-== Using a pre-release version
+= Using a pre-release version
 
 Pre-release versions of `AsciidoctorJ` are published to oss.sonatype.org.
 The exact location of the repository will be announced.
