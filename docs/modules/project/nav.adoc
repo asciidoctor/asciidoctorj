@@ -1,5 +1,5 @@
 * Development
 ** xref:project-layout.adoc[]
-** xref:build.adoc[]
+** xref:local-development.adoc[]
 ** xref:ide.adoc[]
 ** xref:continuous-integration.adoc[]
