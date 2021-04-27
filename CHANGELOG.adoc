@@ -13,6 +13,8 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+== 2.5.0 (2021-02-27)
+
 Improvement::
 
 * Allow defining `@Name` as a meta annotation on Block and Inline Macros (@uniqueck) (#898)
