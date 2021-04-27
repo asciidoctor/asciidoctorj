@@ -13,13 +13,13 @@ buildscript {
         maven { url "https//oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
-        classpath "gradle.plugin.io.sdkman:gradle-sdkvendor-plugin:1.1.0"
         classpath "biz.aQute.bnd:biz.aQute.bnd.gradle:5.3.0"
     }
 }
 
 // modern plugins config
 plugins {
+  id "io.sdkman.vendors" version "2.0.0"
   id "signing"
   id "io.codearte.nexus-staging" version "0.22.0"
   id "de.marcphilipp.nexus-publish" version "0.4.0"
