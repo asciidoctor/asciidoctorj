@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Improvement::
+
+* Upgrade to asciidoctor 2.0.15 (#1026)
+
 Build Improvement::
 
 * Upgrade to sdkman vendor plugin 2.0.0
