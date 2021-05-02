@@ -20,6 +20,7 @@ Improvement::
 Build Improvement::
 
 * Upgrade to sdkman vendor plugin 2.0.0
+* Remove builds on appveyor (#1027)
 
 == 2.5.0 (2021-02-27)
 
