@@ -1,6 +1,5 @@
 package org.asciidoctor.integrationguide.syntaxhighlighter;
 
-import org.apache.commons.io.IOUtils;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.OptionsBuilder;
@@ -11,21 +10,14 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.io.FileReader;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(Arquillian.class)
 public class PrismJsHighlighterTest {
@@ -36,8 +28,8 @@ public class PrismJsHighlighterTest {
     @ArquillianResource
     private ClasspathResources classpathResources;
 
-    @Rule
-    public TemporaryFolder tempDir = new TemporaryFolder();
+    @ArquillianResource
+    public TemporaryFolder tempDir;
 
     @Test
     public void should_invoke_syntax_highlighter() throws Exception {

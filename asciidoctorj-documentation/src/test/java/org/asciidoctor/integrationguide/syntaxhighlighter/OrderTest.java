@@ -1,13 +1,12 @@
 package org.asciidoctor.integrationguide.syntaxhighlighter;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.Attributes;
+import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
@@ -27,8 +26,8 @@ public class OrderTest {
     @ArquillianResource
     private ClasspathResources classpathResources;
 
-    @Rule
-    public TemporaryFolder tempDir = new TemporaryFolder();
+    @ArquillianResource
+    public TemporaryFolder tempDir;
 
     @Test
     public void should_invoke_syntax_highlighter() throws Exception {
@@ -45,14 +44,16 @@ public class OrderTest {
             .register(OrderDocumentingHighlighter.class, "order");
 
         asciidoctor.convertFile(sources_adoc,
-            OptionsBuilder.options()
+            Options.builder()
                 .headerFooter(true)
                 .toDir(toDir)
                 .safe(SafeMode.UNSAFE)
-                .attributes(AttributesBuilder.attributes()
+                .attributes(Attributes.builder()
                     .sourceHighlighter("order")
                     .copyCss(true)
-                    .linkCss(true)));
+                    .linkCss(true)
+                    .build())
+                .build());
 
         String actual = OrderDocumentingHighlighter.messages.stream()
                 .map(msg -> ". " + msg + "\n")

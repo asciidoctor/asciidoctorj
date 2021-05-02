@@ -65,7 +65,7 @@ ext {
   jcommanderVersion = '1.72'
   jrubyVersion = '9.2.17.0'
   jsoupVersion = '1.12.1'
-  junitVersion = '4.13.1'
+  junitVersion = '4.13.2'
   assertjVersion = '3.19.0'
   nettyVersion = '4.1.58.Final'
   saxonVersion = '9.9.0-2'
