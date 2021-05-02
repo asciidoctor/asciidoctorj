@@ -20,6 +20,6 @@ class ConfigModifyingBlockProcessor extends BlockProcessor {
 
     @Override
     Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
-        setConfig([:])
+        config = [:]
     }
 }

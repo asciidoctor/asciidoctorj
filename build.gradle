@@ -24,6 +24,7 @@ plugins {
   id "io.codearte.nexus-staging" version "0.22.0"
   id "de.marcphilipp.nexus-publish" version "0.4.0"
   id 'com.github.jruby-gradle.base' version '2.0.0'
+  id 'codenarc'
 }
 
 apply plugin: 'io.codearte.nexus-staging'
@@ -52,8 +53,8 @@ ext {
   statusIsRelease = (status == 'release')
 
   // jar versions
-  arquillianVersion = '1.1.10.Final'
-  arquillianSpockVersion = '1.0.0.Beta3'
+  arquillianVersion = '1.6.0.Final'
+  arquillianSpockVersion = '1.0.0.CR1'
   asciidoctorjPdfVersion = '1.5.4'
   asciidoctorjEpub3Version = '1.5.1'
   asciidoctorjDiagramVersion = '2.1.2'
@@ -76,14 +77,14 @@ ext {
   coderayGemVersion = '1.1.3'
   rougeGemVersion = '3.26.0'
 
-  codenarcVersion = '0.24.1'
-  groovyVersion = '2.4.13'
+  codenarcVersion = '2.1.0'
+  groovyVersion = '2.4.21'
   erubisGemVersion = '2.7.0'
   hamlGemVersion = '5.0.4'
   openUriCachedGemVersion = '0.0.5'
   slimGemVersion = '4.1.0'
   concurrentRubyGemVersion = '1.1.8'
-  spockVersion = '0.7-groovy-2.0'
+  spockVersion = '1.3-groovy-2.4'
   threadSafeGemVersion = '0.3.6'
   tiltGemVersion = '2.0.10'
   osgiVersion = '7.0.0'

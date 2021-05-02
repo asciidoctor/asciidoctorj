@@ -1,19 +1,16 @@
 package org.asciidoctor.syntaxhighlighter
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.AttributesBuilder
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Attributes
+import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 import org.asciidoctor.ast.Document
 import org.asciidoctor.extension.LocationType
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
+import org.junit.Rule
 import org.junit.rules.TemporaryFolder
-import org.junit.runner.RunWith
 import spock.lang.Specification
 import spock.lang.Unroll
 
-@RunWith(ArquillianSputnik)
 class WhenASyntaxHighlighterThatWritesStylesheetsIsRegistered extends Specification {
 
   public static final String NAME_SYNTAXHIGHLIGHTER = 'test'
@@ -21,12 +18,10 @@ class WhenASyntaxHighlighterThatWritesStylesheetsIsRegistered extends Specificat
   public static final String CONTENT_CSS = 'FOOBAR'
   public static final String FILENAME_CSS = 'highlighter.css'
 
-  @ArquillianResource
-  private Asciidoctor asciidoctor
+  private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
-  @ArquillianResource
-  private TemporaryFolder tmp
-
+  @Rule
+  public TemporaryFolder tmp = new TemporaryFolder()
 
   static class TestHighlighter implements SyntaxHighlighterAdapter, StylesheetWriter {
 
@@ -81,15 +76,15 @@ System.out.println("Hello World");
     asciidoctor.syntaxHighlighterRegistry().register(TestHighlighter, NAME_SYNTAXHIGHLIGHTER)
 
     when:
-    asciidoctor.convert(doc, OptionsBuilder.options()
+    asciidoctor.convert(doc, Options.builder()
             .safe(SafeMode.UNSAFE)
             .headerFooter(true)
             .toFile(new File(toDir,'syntaxhighlighterwithwritestylesheet.html'))
             .attributes(
-            AttributesBuilder.attributes().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER)
-                    .copyCss(true)
-                    .linkCss(true))
-    )
+                    Attributes.builder().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER)
+                            .copyCss(true)
+                            .linkCss(true).build())
+            .build())
 
     then:
 

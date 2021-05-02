@@ -161,7 +161,7 @@ Item A::
             Document process(Document doc) {
                 DescriptionList dl = doc.getBlocks().get(0)
                 DescriptionListEntry dlEntry = dl.items[0]
-                dlEntry.setDescription(createListItem(dl, newDescription))
+                dlEntry.description = createListItem(dl, newDescription)
                 doc
             }
         })

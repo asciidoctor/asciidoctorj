@@ -33,7 +33,7 @@ class GithubContributorsBlockMacro extends BlockMacroProcessor {
         Column avatarColumn = createTableColumn(table, 0)
         Column loginColumn = createTableColumn(table, 1)
         Column contributionsColumn = createTableColumn(table, 2)
-        contributionsColumn.setHorizontalAlignment(Table.HorizontalAlignment.CENTER)
+        contributionsColumn.horizontalAlignment = Table.HorizontalAlignment.CENTER
 
         // Create the single header row with the column titles
         Row headerRow = createTableRow(table)

@@ -39,8 +39,8 @@ System.out.println("Hello World");
 
         when:
         Document doc = asciidoctor.load(document, OptionsBuilder.options().asMap())
-        Block paragraph = doc.blocks()[0].blocks[0]
-        Block source = doc.blocks()[0].blocks[1]
+        Block paragraph = doc.blocks[0].blocks[0]
+        Block source = doc.blocks[0].blocks[1]
 
         then:
         paragraph.substitutions == [SUBSTITUTION_SPECIAL_CHARACTERS, SUBSTITUTION_QUOTES, SUBSTITUTION_ATTRIBUTES, SUBSTITUTION_REPLACEMENTS, SUBSTITUTION_MACROS, SUBSTITUTION_POST_REPLACEMENTS]
@@ -64,8 +64,8 @@ Second test paragraph {foo}
         when:
         asciidoctor.javaExtensionRegistry().treeprocessor(TestTreeprocessor)
         Document doc = asciidoctor.load(document, OptionsBuilder.options().asMap())
-        Block firstparagraph = doc.blocks()[0].blocks[0]
-        Block secondparagraph = doc.blocks()[0].blocks[1]
+        Block firstparagraph = doc.blocks[0].blocks[0]
+        Block secondparagraph = doc.blocks[0].blocks[1]
 
         String html = asciidoctor.convert(document, OptionsBuilder.options().asMap())
 
@@ -99,8 +99,8 @@ System.out.println("{foo}");
         when:
         asciidoctor.javaExtensionRegistry().treeprocessor(TestTreeprocessor)
         Document doc = asciidoctor.load(document, OptionsBuilder.options().asMap())
-        Block firstparagraph = doc.blocks()[0].blocks[0]
-        Block secondparagraph = doc.blocks()[0].blocks[1]
+        Block firstparagraph = doc.blocks[0].blocks[0]
+        Block secondparagraph = doc.blocks[0].blocks[1]
 
         String html = asciidoctor.convert(document, OptionsBuilder.options().asMap())
 
@@ -182,10 +182,10 @@ First test paragraph *{foo}
 
         when:
         asciidoctor.javaExtensionRegistry().treeprocessor(SetSubstitutionTestTreeprocessor)
-        Document doc = asciidoctor.load(document, OptionsBuilder.options().asMap())
-        Block firstparagraph = doc.blocks()[0].blocks[0]
+        Document doc = asciidoctor.load(document, Options.builder().build())
+        Block firstparagraph = doc.blocks[0].blocks[0]
 
-        String html = asciidoctor.convert(document, OptionsBuilder.options().asMap())
+        String html = asciidoctor.convert(document, Options.builder().build())
 
         then:
         firstparagraph.substitutions == [SUBSTITUTION_ATTRIBUTES]
@@ -197,7 +197,7 @@ First test paragraph *{foo}
     static class SetSubstitutionTestTreeprocessor extends Treeprocessor {
         @Override
         Document process(Document document) {
-            document.blocks()[0].blocks[0].setSubstitutions(SUBSTITUTION_ATTRIBUTES)
+            document.blocks[0].blocks[0].substitutions = [SUBSTITUTION_ATTRIBUTES]
             document
         }
     }
