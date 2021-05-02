@@ -16,6 +16,7 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 Improvement::
 
 * Upgrade to asciidoctor 2.0.15 (#1026)
+* Upgrade to asciidoctor-epub 1.5.1 (#1030)
 
 Build Improvement::
 

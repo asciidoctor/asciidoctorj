@@ -55,7 +55,7 @@ ext {
   arquillianVersion = '1.1.10.Final'
   arquillianSpockVersion = '1.0.0.Beta3'
   asciidoctorjPdfVersion = '1.5.4'
-  asciidoctorjEpub3Version = '1.5.0-alpha.19'
+  asciidoctorjEpub3Version = '1.5.1'
   asciidoctorjDiagramVersion = '2.1.2'
   asciidoctorjRevealJsVersion = '4.1.0'
   commonsioVersion = '2.4'
