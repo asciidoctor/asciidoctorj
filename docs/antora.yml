@@ -3,9 +3,9 @@ title: AsciidoctorJ
 version: '2.5'
 asciidoc:
   attributes:
-    release-version: 2.5.0
-    artifact-version: 2.5.0
-    asciidoctorj-epub3-version: 1.5.0-alpha.19
+    release-version: 2.5.1
+    artifact-version: 2.5.1
+    asciidoctorj-epub3-version: 1.5.1
     asciidoctorj-pdf-version: 1.5.4
     jruby-version: 9.2.17.0
     url-jruby: http://jruby.org
