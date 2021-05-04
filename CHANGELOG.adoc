@@ -18,6 +18,10 @@ Improvement::
 * Upgrade to asciidoctor 2.0.15 (#1026)
 * Upgrade to asciidoctor-epub 1.5.1 (#1030)
 
+Bug Fixes::
+
+* Fix performance regression in v2.5.0 with asciidoctorj-pdf and concurrent-ruby (@kedar-joshi) (#1032)
+
 Build Improvement::
 
 * Upgrade to sdkman vendor plugin 2.0.0
