@@ -13,6 +13,8 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+== 2.5.1 (2021-05-04)
+
 Improvement::
 
 * Upgrade to asciidoctor 2.0.15 (#1026)
@@ -31,7 +33,7 @@ Build / Infrastructure::
 
 * Upgrade test dependencies on Arquillian and Spock (#1031)
 
-== 2.5.0 (2021-02-27)
+== 2.5.0 (2021-04-27)
 
 Improvement::
 
