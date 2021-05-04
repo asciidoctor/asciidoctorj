@@ -29,8 +29,8 @@ public class HighlightJsHighlighterTest {
     @ArquillianResource
     private ClasspathResources classpathResources;
 
-    @Rule
-    public TemporaryFolder tempDir = new TemporaryFolder();
+    @ArquillianResource
+    public TemporaryFolder tempDir;
 
     @Test
     public void should_invoke_syntax_highlighter() throws Exception {

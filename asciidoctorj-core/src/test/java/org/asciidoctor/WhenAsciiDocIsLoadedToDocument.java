@@ -1,12 +1,15 @@
 package org.asciidoctor;
 
 import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.ast.*;
+import org.asciidoctor.ast.Author;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.RevisionInfo;
+import org.asciidoctor.ast.Section;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.internal.IOUtils;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

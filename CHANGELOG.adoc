@@ -23,6 +23,10 @@ Build Improvement::
 * Upgrade to sdkman vendor plugin 2.0.0
 * Remove builds on appveyor (#1027)
 
+Build / Infrastructure::
+
+* Upgrade test dependencies on Arquillian and Spock (#1031)
+
 == 2.5.0 (2021-02-27)
 
 Improvement::

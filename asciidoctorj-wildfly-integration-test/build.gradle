@@ -1,7 +1,6 @@
 jar.enabled = false
 
 ext {
-    arquillianVersion = '1.6.0.Final'
     arquillianWildflyVersion = '3.0.1.Final'
 
     wildflyVersion = '23.0.0.Final'

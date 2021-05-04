@@ -35,11 +35,11 @@ class WhenExtensionsAreRegisteredAsService extends Specification {
     ClassLoader originalTCCL
 
     def setup() {
-        originalTCCL = Thread.currentThread().getContextClassLoader()
+        originalTCCL = Thread.currentThread().contextClassLoader
     }
 
     def cleanup() {
-        Thread.currentThread().setContextClassLoader(originalTCCL)
+        Thread.currentThread().contextClassLoader = originalTCCL
     }
 
 

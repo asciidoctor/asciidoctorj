@@ -60,8 +60,7 @@ jar {
   bnd(
     ('Bundle-Name'): 'asciidoctorj',
     ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj',
-    ('Import-Package'):
-      'com.beust.jcommander;resolution:=optional, *'
+    ('Import-Package'): 'com.beust.jcommander;resolution:=optional, *'
   )
   metaInf { from "$buildDir/version-info/" }
 }

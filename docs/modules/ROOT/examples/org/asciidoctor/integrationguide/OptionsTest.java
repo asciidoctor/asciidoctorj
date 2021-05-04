@@ -50,7 +50,7 @@ public class OptionsTest {
 //tag::optionsPDFBackend[]
         File targetFile = // ...
 //end::optionsPDFBackend[]
-                temporaryFolder.newFile("test.pdf");
+        temporaryFolder.newFile("test.pdf");
         assertTrue(targetFile.exists());
 //tag::optionsPDFBackend[]
         asciidoctor.convert(
@@ -95,7 +95,7 @@ public class OptionsTest {
 //tag::optionToFile[]
         File targetFile = //...
 //end::optionToFile[]
-                temporaryFolder.newFile("toFileExample.html");
+        temporaryFolder.newFile("toFileExample.html");
 
 //tag::optionToFile[]
         asciidoctor.convert(
@@ -116,19 +116,19 @@ public class OptionsTest {
     public void use_font_awesome_icons() throws Exception {
 //tag::attributeFontIcons[]
         String result =
-                asciidoctor.convert(
-                        "NOTE: Asciidoctor supports font-based admonition icons!\n" +
-                                "\n" +
-                                "{foo}",
-                        Options.builder()
-                                .toFile(false)
-                                .headerFooter(false)
-                                .attributes(
-                                        Attributes.builder()                                          // <1>        
-                                                .icons(Attributes.FONT_ICONS)                         // <2>
-                                                .attribute("foo", "bar") // <3>
-                                                .build())
-                                .build());
+            asciidoctor.convert(
+                "NOTE: Asciidoctor supports font-based admonition icons!\n" +
+                    "\n" +
+                    "{foo}",
+                    Options.builder()
+                            .toFile(false)
+                            .headerFooter(false)
+                            .attributes(
+                                    Attributes.builder()                                          // <1>        
+                                            .icons(Attributes.FONT_ICONS)                         // <2>
+                                            .attribute("foo", "bar") // <3>
+                                            .build())
+                            .build());
         assertThat(result, containsString("<i class=\"fa icon-note\" title=\"Note\"></i>"));
         assertThat(result, containsString("<p>bar</p>"));
 //end::attributeFontIcons[]

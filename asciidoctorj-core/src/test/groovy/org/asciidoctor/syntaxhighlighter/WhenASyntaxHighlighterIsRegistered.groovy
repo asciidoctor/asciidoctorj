@@ -1,24 +1,20 @@
 package org.asciidoctor.syntaxhighlighter
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.AttributesBuilder
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Attributes
+import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 import org.asciidoctor.ast.Document
 import org.asciidoctor.extension.LocationType
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
-import org.junit.runner.RunWith
 import spock.lang.Specification
 import spock.lang.Unroll
 
-@RunWith(ArquillianSputnik)
 class WhenASyntaxHighlighterIsRegistered extends Specification {
 
   public static final String NAME_SYNTAXHIGHLIGHTER = 'test'
-  @ArquillianResource
-  private Asciidoctor asciidoctor
+
+  private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
   static class TestHighlighter implements SyntaxHighlighterAdapter {
 
@@ -101,15 +97,16 @@ System.out.println("Hello World");
 ----'''
 
   @Unroll
-  def '#highlighter.simpleName should create header docinfo #expectHeader and footer docinfo #expectFooter'(Class highlighter, boolean expectHeader, boolean expectFooter) {
+  def '#highlighter.simpleName should create header docinfo #expectHeader and footer docinfo #expectFooter'() {
 
     expect:
     asciidoctor.syntaxHighlighterRegistry().register(highlighter, NAME_SYNTAXHIGHLIGHTER)
-    String html = asciidoctor.convert(DOC, OptionsBuilder.options()
+    String html = asciidoctor.convert(DOC, Options.builder()
             .safe(SafeMode.UNSAFE)
             .headerFooter(true)
             .attributes(
-            AttributesBuilder.attributes().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER)))
+                    Attributes.builder().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER).build())
+            .build())
 
     org.jsoup.nodes.Document doc = Jsoup.parse(html)
 
