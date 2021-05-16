@@ -153,7 +153,9 @@ public class AttributesBuilder {
      * Sets table of contents 2 attribute.
      * @param placement where toc is rendered.
      * @return this instance.
+	 * @deprecated Use {@link #tableOfContents(Placement)}
      */
+    @Deprecated
     public AttributesBuilder tableOfContents2(Placement placement) {
         this.attributes.setTableOfContents2(placement);
         return this;

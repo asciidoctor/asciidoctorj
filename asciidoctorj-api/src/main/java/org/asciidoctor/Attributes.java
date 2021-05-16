@@ -333,7 +333,9 @@ public class Attributes {
      * 
      * @param placement
      *            where toc is rendered.
+     * @deprecated Use {@link #setTableOfContents(Placement)}
      */
+    @Deprecated
     public void setTableOfContents2(Placement placement) {
         this.attributes.put(TOC_2, toAsciidoctorFlag(true));
         this.attributes.put(TOC_POSITION, placement.getPosition());
@@ -346,8 +348,7 @@ public class Attributes {
      *            position of toc.
      */
     public void setTableOfContents(Placement placement) {
-        this.attributes.put(TOC, toAsciidoctorFlag(true));
-        this.attributes.put(TOC_POSITION, placement.getPosition());
+        this.attributes.put(TOC, placement.getPosition());
     }
 
     /**
@@ -383,7 +384,11 @@ public class Attributes {
      *            value.
      */
     public void setTableOfContents(boolean toc) {
-        this.attributes.put(TOC, toAsciidoctorFlag(toc));
+        if (toc) {
+            this.attributes.put(TOC, "");
+        } else {
+            this.attributes.remove(TOC);
+        }
     }
 
     /**
