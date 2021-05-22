@@ -17,6 +17,12 @@ Improvement::
 
 * Upgrade to asciidoctorj-pdf 1.6.0 (#1040)
 
+Bug Fixes::
+
+* Avoid using of deprecated attributes toc2 and toc-placement.
+  Deprecated Attributes.setTableOfContents2().
+  Added new constants Placement.PREAMBLE and Placement.MACRO as parameters for Attributes.setTableOfConstants(). (@abelsromero) (#1037)
+
 == 2.5.1 (2021-05-04)
 
 Improvement::

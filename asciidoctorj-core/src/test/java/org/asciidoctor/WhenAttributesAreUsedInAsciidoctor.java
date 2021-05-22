@@ -1,35 +1,6 @@
 package org.asciidoctor;
 
-import static org.asciidoctor.AttributesBuilder.attributes;
-import static org.asciidoctor.OptionsBuilder.options;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.xmlmatchers.xpath.HasXPath.hasXPath;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMSource;
-
+import com.google.common.io.CharStreams;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
@@ -43,7 +14,28 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.xml.sax.SAXException;
 
-import com.google.common.io.CharStreams;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Map;
+
+import static org.asciidoctor.AttributesBuilder.attributes;
+import static org.asciidoctor.OptionsBuilder.options;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
+import static org.junit.Assert.assertEquals;
+import static org.xmlmatchers.xpath.HasXPath.hasXPath;
 
 @RunWith(Arquillian.class)
 public class WhenAttributesAreUsedInAsciidoctor {
@@ -364,8 +356,8 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void setting_toc_attribute_table_of_contents_should_be_generated() throws IOException {
 
-        Attributes attributes = attributes().tableOfContents(true).get();
-        Options options = options().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().tableOfContents(true).build();
+        Options options = Options.builder().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).build();
 
         asciidoctor.convertFile(classpath.getResource("tocsample.asciidoc"), options);
 
@@ -374,6 +366,58 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Elements tocElement = doc.select("div.toc");
         assertThat(tocElement.hasClass("toc"), is(true));
 
+    }
+
+    @Test
+    public void setting_toc_attribute_left_should_work() throws IOException {
+        Attributes attributes = Attributes.builder().tableOfContents(Placement.LEFT).build();
+        Options options = Options.builder().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).build();
+
+        asciidoctor.convertFile(classpath.getResource("tocsample.asciidoc"), options);
+
+        Document doc = Jsoup.parse(new File(testFolder.getRoot(),
+                "tocsample.html"), "UTF-8");
+        Elements tocElement = doc.select("body.toc-left > div#header > div#toc");
+        assertThat(tocElement.size(), is(1));
+    }
+
+    @Test
+    public void setting_toc_attribute_right_should_work() throws IOException {
+        Attributes attributes = Attributes.builder().tableOfContents(Placement.RIGHT).build();
+        Options options = Options.builder().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).build();
+
+        asciidoctor.convertFile(classpath.getResource("tocsample.asciidoc"), options);
+
+        Document doc = Jsoup.parse(new File(testFolder.getRoot(),
+                "tocsample.html"), "UTF-8");
+        Elements tocElement = doc.select("body.toc-right > div#header > div#toc");
+        assertThat(tocElement.size(), is(1));
+    }
+
+    @Test
+    public void setting_toc_attribute_preamble_should_work() throws IOException {
+        Attributes attributes = Attributes.builder().tableOfContents(Placement.PREAMBLE).build();
+        Options options = Options.builder().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).build();
+
+        asciidoctor.convertFile(classpath.getResource("tocsample.asciidoc"), options);
+
+        Document doc = Jsoup.parse(new File(testFolder.getRoot(),
+                "tocsample.html"), "UTF-8");
+        Elements tocElement = doc.select("body.article > div#content > div#preamble > div#toc");
+        assertThat(tocElement.size(), is(1));
+    }
+
+    @Test
+    public void setting_toc_attribute_macro_should_work() throws IOException {
+        Attributes attributes = Attributes.builder().tableOfContents(Placement.MACRO).build();
+        Options options = Options.builder().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).build();
+
+        asciidoctor.convertFile(classpath.getResource("tocsamplemacro.asciidoc"), options);
+
+        Document doc = Jsoup.parse(new File(testFolder.getRoot(),
+                "tocsamplemacro.html"), "UTF-8");
+        Elements tocElement = doc.select("body.article > div#content > div.sect1 > div.sectionbody > div#toc");
+        assertThat(tocElement.size(), is(1));
     }
 
     @Test
