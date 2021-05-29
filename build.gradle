@@ -1,3 +1,5 @@
+import java.time.Duration
+
 /*
     adding the plugin jars to the classpath to apply them later.
     currently the new plugins DSL does apply them directly.
@@ -21,13 +23,10 @@ buildscript {
 plugins {
   id "io.sdkman.vendors" version "2.0.0"
   id "signing"
-  id "io.codearte.nexus-staging" version "0.22.0"
-  id "de.marcphilipp.nexus-publish" version "0.4.0"
+  id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
   id 'com.github.jruby-gradle.base' version '2.0.0'
   id 'codenarc'
 }
-
-apply plugin: 'io.codearte.nexus-staging'
 
 // TIP use -PpublishRelease=true to active release behavior regardless of the version
 status = project.hasProperty('publishRelease') && project.publishRelease.toBoolean() ?
@@ -36,14 +35,19 @@ status = project.hasProperty('publishRelease') && project.publishRelease.toBoole
 // using ExpandoMetaClass to add isDistribution() Method to Project instances...
 Project.metaClass.isDistribution = { delegate.getName().endsWith("-distribution") }
 
-nexusStaging {
-  if (project.hasProperty("sonatypeUsername")) {
-    username = project.sonatypeUsername
+nexusPublishing {
+  repositories {
+    sonatype {
+      if (project.hasProperty("sonatypeUsername")) {
+        username = project.sonatypeUsername
+      }
+      if (project.hasProperty("sonatypePassword")) {
+        password = project.sonatypePassword
+      }
+      repositoryDescription = "Release ${project.group} ${project.version}"
+    }
   }
-  if (project.hasProperty("sonatypePassword")) {
-    password = project.sonatypePassword
-  }
-  repositoryDescription = "Release ${project.group} ${project.version}"
+  clientTimeout = Duration.ofMinutes(5)
 }
 
 

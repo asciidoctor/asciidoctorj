@@ -1,6 +1,4 @@
-import java.time.Duration
-
-apply plugin: 'de.marcphilipp.nexus-publish'
+apply plugin: 'maven-publish'
 
 publishing {
     publications.create(project.ext.publicationName, MavenPublication) {
@@ -86,10 +84,4 @@ publishing {
     }
 }
 
-nexusPublishing {
-    repositories {
-        sonatype()
-    }
-    clientTimeout = Duration.ofMinutes(5)
-}
 
