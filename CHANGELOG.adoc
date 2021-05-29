@@ -23,6 +23,10 @@ Bug Fixes::
   Deprecated Attributes.setTableOfContents2().
   Added new constants Placement.PREAMBLE and Placement.MACRO as parameters for Attributes.setTableOfConstants(). (@abelsromero) (#1037)
 
+Build Improvement::
+
+* Use JavaCompile options.release instead of sourceCompatibility and targetCompatibility to target Java 8 (#1042)
+
 == 2.5.1 (2021-05-04)
 
 Improvement::

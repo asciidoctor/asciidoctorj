@@ -103,14 +103,12 @@ subprojects {
 
   status = _status
 
-  // NOTE sourceCompatibility & targetCompatibility are set in gradle.properties to meet requirements of Gradle
-  // Must redefine here to work around a bug in the Eclipse plugin
-  sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
   plugins.withType(JavaPlugin) {
     project.tasks.withType(JavaCompile) { task ->
-      task.sourceCompatibility = project.sourceCompatibility
-      task.targetCompatibility = project.targetCompatibility
+      if (JavaVersion.current().isJava11Compatible()) {
+        task.options.release = 8
+      }
       if (project.hasProperty("showDeprecation")) {
         options.compilerArgs << "-Xlint:deprecation"
       }
@@ -119,8 +117,9 @@ subprojects {
       }
     }
     project.tasks.withType(GroovyCompile) { task ->
-      task.sourceCompatibility = project.sourceCompatibility
-      task.targetCompatibility = project.targetCompatibility
+      if (JavaVersion.current().isJava11Compatible()) {
+        task.options.release = 8
+      }
     }
   }
 
@@ -204,12 +203,10 @@ configure(subprojects.findAll { !it.isDistribution() }) {
     ruby.gems()
   }
 
-  if (JavaVersion.current().isJava8Compatible()) {
-    javadoc {
-      // Oracle JDK8 likes to fail the build over spoiled HTML
-      options.addStringOption('Xdoclint:none', '-quiet')
-      options.source('8')
-    }
+  javadoc {
+    // Oracle JDK8 likes to fail the build over spoiled HTML
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.source('8')
   }
 }
 
