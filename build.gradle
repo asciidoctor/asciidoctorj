@@ -106,7 +106,9 @@ subprojects {
 
   plugins.withType(JavaPlugin) {
     project.tasks.withType(JavaCompile) { task ->
-      task.options.release = 8
+      if (JavaVersion.current().isJava11Compatible()) {
+        task.options.release = 8
+      }
       if (project.hasProperty("showDeprecation")) {
         options.compilerArgs << "-Xlint:deprecation"
       }
@@ -115,7 +117,9 @@ subprojects {
       }
     }
     project.tasks.withType(GroovyCompile) { task ->
-      task.options.release = 8
+      if (JavaVersion.current().isJava11Compatible()) {
+        task.options.release = 8
+      }
     }
   }
 
