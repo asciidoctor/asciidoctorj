@@ -26,6 +26,7 @@ Bug Fixes::
 Build Improvement::
 
 * Use JavaCompile options.release instead of sourceCompatibility and targetCompatibility to target Java 8 (#1042)
+* Upgrade nexus publishing and staging to new gradle-nexus.publish-plugin (#1043)
 
 == 2.5.1 (2021-05-04)
 
