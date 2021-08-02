@@ -1,16 +1,19 @@
 #!/bin/bash
-# This script runs the AsciidoctorJ tests against the specified tag (or master) of the Asciidoctor Ruby gem.
+# This script runs the AsciidoctorJ tests against the specified ref of the Asciidoctor Ruby gem.
 
 GRADLE_CMD=./gradlew
-# to build against a tag, set TAG to a git tag name (e.g., v1.5.2)
-TAG=master
-if [ "$TAG" == "master" ]; then
-  SRC_DIR=asciidoctor-master
-else
-  SRC_DIR=asciidoctor-${TAG#v}
+# to build against a tag, set REF to a git tag name (e.g., refs/tags/v1.5.2)
+REF=refs/heads/master
+if [ ! -z "$1" ]; then
+  REF=$1
+  if [[ $REF != refs/* ]]; then
+    REF=refs/heads/$REF
+  fi
 fi
+BASE_REF=${REF##*/}
+SRC_DIR=asciidoctor-${BASE_REF#v}
 rm -rf build/maven && mkdir -p build/maven && cd build/maven
-wget --quiet -O $SRC_DIR.zip https://github.com/asciidoctor/asciidoctor/archive/$TAG.zip
+wget --quiet -O $SRC_DIR.zip https://github.com/asciidoctor/asciidoctor/archive/$REF.zip
 unzip -q $SRC_DIR.zip
 cp ../../asciidoctor-gem-installer.pom $SRC_DIR/pom.xml
 cd $SRC_DIR
