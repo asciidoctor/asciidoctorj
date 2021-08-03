@@ -7,9 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-          ref: ${{ github.event.client_payload.branch }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
@@ -17,4 +14,4 @@ jobs:
       - name: Build
         run: |
           unset GEM_PATH GEM_HOME JRUBY_OPTS
-          ./test-asciidoctor-upstream.sh
+          ./test-asciidoctor-upstream.sh ${{ github.event.client_payload.branch }}
