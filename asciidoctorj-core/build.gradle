@@ -12,6 +12,7 @@ dependencies {
   api "org.jruby:jruby:$jrubyVersion"
   implementation "com.beust:jcommander:$jcommanderVersion"
   gems "rubygems:asciidoctor:$asciidoctorGemVersion"
+  gems "rubygems:asciimath:$asciimathGemVersion"
   gems "rubygems:coderay:$coderayGemVersion"
   gems "rubygems:rouge:$rougeGemVersion"
   gems "rubygems:erubis:$erubisGemVersion"
