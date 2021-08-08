@@ -13,8 +13,11 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+== 2.5.2 (2021-08-08)
+
 Improvement::
 
+* Upgrade to asciidoctorj 2.0.16 (#1052)
 * Upgrade to asciidoctorj-pdf 1.6.0 (#1040)
 
 Bug Fixes::
