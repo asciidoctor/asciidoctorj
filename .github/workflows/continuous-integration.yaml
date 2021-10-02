@@ -19,7 +19,7 @@ jobs:
         java:
           - '8'
           - '11'
-          - '16'
+          - '17'
         os:
           - ubuntu-latest
           - macos-latest
@@ -27,7 +27,7 @@ jobs:
           - os: macos-latest
             java: '1.8'
           - os: macos-latest
-            java: '16'
+            java: '17'
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -35,7 +35,7 @@ jobs:
           fetch-depth: 1
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
+          distribution: 'temurin'
           java-version: ${{ matrix.java }}
       - name: Build
         run: |
@@ -50,6 +50,13 @@ jobs:
   build-windows:
     name: Build on Windows
     runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        java:
+          - '11'
+          - '17'
     steps:
       - uses: actions/checkout@v2
         with:
@@ -66,5 +73,3 @@ jobs:
         shell: cmd
         run: |
           gradlew.bat -i -S check
-
-
