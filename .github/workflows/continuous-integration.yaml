@@ -37,11 +37,6 @@ jobs:
           ./gradlew -S -Pskip.signing assemble
           unset GEM_PATH GEM_HOME JRUBY_OPTS
           ./gradlew -S -Pskip.signing check
-      - name: Upstream Build
-        if: matrix.os == 'ubuntu-latest' && matrix.java != '8'
-        run: |
-          unset GEM_PATH GEM_HOME JRUBY_OPTS
-          ./test-asciidoctor-upstream.sh
   build-windows:
     name: Build on Windows
     runs-on: windows-latest
@@ -68,3 +63,30 @@ jobs:
         shell: cmd
         run: |
           gradlew.bat -i -S check
+  test-asciidoctor-upstream:
+    name: Test Asciidoctor Upstream
+    needs: 
+      - build
+      - build-windows
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        java:
+          - '11'
+          - '17'
+        os:
+          - ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+      - name: Upstream Build
+        run: |
+          unset GEM_PATH GEM_HOME JRUBY_OPTS
+          ./ci/test-asciidoctor-upstream.sh
