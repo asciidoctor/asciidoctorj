@@ -4,7 +4,7 @@
 set -euo pipefail
 
 # to build against a tag, set REF to a git tag name (e.g., refs/tags/v1.5.2)
-REF=${1:-refs/heads/master}
+REF=${1:-refs/heads/main}
 if [[ $REF != refs/* ]]; then
   REF=refs/heads/$REF
 fi
