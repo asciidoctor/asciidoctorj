@@ -14,4 +14,4 @@ jobs:
       - name: Build
         run: |
           unset GEM_PATH GEM_HOME JRUBY_OPTS
-          ./test-asciidoctor-upstream.sh ${{ github.event.client_payload.branch }}
+          ./ci/test-asciidoctor-upstream.sh ${{ github.event.client_payload.branch }}
