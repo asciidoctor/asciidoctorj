@@ -4,14 +4,8 @@ NOTE: This API is inspired by Java Logging API (JUL).
 If you are familiar with `java.util.logging.*` you will see familiar analogies with some of its components.
 
 AsciidoctorJ (v1.5.7+) offers the possibility to capture messages generated during document rendering.
-These messages correspond to logging information and are organized in 6 severity levels:
+While the API described here explains how to forward these messages to any receiver, AsciidoctorJ already logs all messages to the java.util.logging Logger with the name `asciidoctor`.
 
-. DEBUG
-. INFO
-. WARN
-. ERROR
-. FATAL
-. UNKNOWN
 
 == Logs Handling API
 
@@ -36,6 +30,15 @@ The `log` method in the `org.asciidoctor.log.LogHandler` interface provides a `o
 [horizontal]
 Severity severity::
 Severity level of the current record.
+A log record always has one of the 6 severity levels:
+
+. DEBUG
+. INFO
+. WARN
+. ERROR
+. FATAL
+. UNKNOWN
+
 
 Cursor cursor::
 Information about the location of the event, contains:
