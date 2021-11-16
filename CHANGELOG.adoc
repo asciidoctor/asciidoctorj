@@ -15,7 +15,7 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 Improvement::
 
-* Upgrade to asciidoctorj-diagram 2.2.1 (#1066)
+* Upgrade to asciidoctorj-diagram 2.2.1 (#1066) (@abelsromero) (#1065)
 
 Build Improvement::
 
