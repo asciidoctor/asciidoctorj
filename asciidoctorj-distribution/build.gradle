@@ -19,6 +19,12 @@ dependencies {
   implementation("org.asciidoctor:asciidoctorj-diagram:$asciidoctorjDiagramVersion") {
     transitive = false
   }
+  implementation("org.asciidoctor:asciidoctorj-diagram-ditaamini:$asciidoctorjDiagramDitaaMiniVersion") {
+    transitive = false
+  }
+  implementation("org.asciidoctor:asciidoctorj-diagram-plantuml:$asciidoctorjDiagramPlantumlVersion") {
+    transitive = false
+  }
   implementation("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
     transitive = false
   }

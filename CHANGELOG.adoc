@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Improvement::
+
+* Upgrade to asciidoctorj-diagram 2.2.1 (#1066) (@abelsromero) (#1065)
+
 Build Improvement::
 
 * Add Java17 to CI pipelines (@abelsromero) (#1055)
