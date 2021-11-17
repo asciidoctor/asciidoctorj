@@ -1,19 +1,10 @@
 package org.asciidoctor.jruby.cli;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.Options;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.SafeMode;
-
 import com.beust.jcommander.Parameter;
+import org.asciidoctor.*;
+
+import java.io.File;
+import java.util.*;
 
 public class AsciidoctorCliOptions {
 
@@ -41,80 +32,80 @@ public class AsciidoctorCliOptions {
     public static final char ATTRIBUTE_SEPARATOR = '=';
     public static final String TIMINGS_OPTION_NAME = "timings";
 
-    @Parameter(names = { VERBOSE, "--verbose" }, description = "enable verbose mode (default: false)")
+    @Parameter(names = {VERBOSE, "--verbose"}, description = "enable verbose mode (default: false)")
     private boolean verbose = false;
 
-    @Parameter(names = { TIMINGS, "--timings" }, description = "enable timings mode (default: false)")
+    @Parameter(names = {TIMINGS, "--timings"}, description = "enable timings mode (default: false)")
     private boolean timings = false;
 
-    @Parameter(names = { VERSION, "--version" }, description = "display the version and runtime environment")
+    @Parameter(names = {VERSION, "--version"}, description = "display the version and runtime environment")
     private boolean version = false;
 
-    @Parameter(names = { BACKEND, "--backend" }, description = "set output format backend (default: html5)")
+    @Parameter(names = {BACKEND, "--backend"}, description = "set output format backend (default: html5)")
     private String backend = "html5";
 
-    @Parameter(names = { DOCTYPE, "--doctype" }, description = "document type to use when rendering output: [article, book, inline] (default: article)")
+    @Parameter(names = {DOCTYPE, "--doctype"}, description = "document type to use when rendering output: [article, book, inline] (default: article)")
     private String doctype;
 
-    @Parameter(names = { OUTFILE, "--out-file" }, description = "output file (default: based on input file path); use - to output to STDOUT")
+    @Parameter(names = {OUTFILE, "--out-file"}, description = "output file (default: based on input file path); use - to output to STDOUT")
     private String outFile;
 
-    @Parameter(names = { "--safe" }, description = "set safe mode level to safe (default: unsafe)")
+    @Parameter(names = {"--safe"}, description = "set safe mode level to safe (default: unsafe)")
     private boolean safe = false;
 
-    @Parameter(names = { SAFE, "--safe-mode" }, converter = SafeModeConverter.class, description = "set safe mode level explicitly: [unsafe, safe, server, secure] (default: unsafe)")
+    @Parameter(names = {SAFE, "--safe-mode"}, converter = SafeModeConverter.class, description = "set safe mode level explicitly: [unsafe, safe, server, secure] (default: unsafe)")
     private SafeMode safeMode = SafeMode.UNSAFE;
 
-    @Parameter(names = { NO_HEADER_FOOTER, "--no-header-footer" }, description = "suppress output of header and footer (default: false)")
+    @Parameter(names = {NO_HEADER_FOOTER, "--no-header-footer"}, description = "suppress output of header and footer (default: false)")
     private boolean noHeaderFooter = false;
 
-    @Parameter(names = { SECTION_NUMBERS, "--section-numbers" }, description = "auto-number section titles in the HTML backend; disabled by default")
+    @Parameter(names = {SECTION_NUMBERS, "--section-numbers"}, description = "auto-number section titles in the HTML backend; disabled by default")
     private boolean sectionNumbers = false;
 
-    @Parameter(names = { ERUBY, "--eruby" }, description = "specify eRuby implementation to render built-in templates: [erb, erubis] (default: erb)")
+    @Parameter(names = {ERUBY, "--eruby"}, description = "specify eRuby implementation to render built-in templates: [erb, erubis] (default: erb)")
     private String eruby = "erb";
 
-    @Parameter(names = { COMPACT, "--compact" }, description = "compact the output by removing blank lines (default: false)")
+    @Parameter(names = {COMPACT, "--compact"}, description = "compact the output by removing blank lines (default: false)")
     private boolean compact = false;
 
-    @Parameter(names = { TEMPLATE_ENGINE, "--template-engine" }, description = "template engine to use for the custom render templates (loads gem on demand)")
+    @Parameter(names = {TEMPLATE_ENGINE, "--template-engine"}, description = "template engine to use for the custom render templates (loads gem on demand)")
     private String templateEngine;
 
-    @Parameter(names = { TEMPLATE_DIR, "--template-dir" }, description = "directory containing custom render templates the override the built-in set")
+    @Parameter(names = {TEMPLATE_DIR, "--template-dir"}, description = "directory containing custom render templates the override the built-in set")
     private List<String> templateDir;
 
-    @Parameter(names = { BASE_DIR, "--base-dir" }, description = "base directory containing the document and resources (default: directory of source file)")
+    @Parameter(names = {BASE_DIR, "--base-dir"}, description = "base directory containing the document and resources (default: directory of source file)")
     private String baseDir;
 
-    @Parameter(names = { DESTINATION_DIR, "--destination-dir" }, description = "destination output directory (default: directory of source file)")
+    @Parameter(names = {DESTINATION_DIR, "--destination-dir"}, description = "destination output directory (default: directory of source file)")
     private String destinationDir;
 
-    @Parameter(names = { SOURCE_DIR, "--source-dir" }, description = "source directory (requires destination directory)")
+    @Parameter(names = {SOURCE_DIR, "--source-dir"}, description = "source directory (requires destination directory)")
     private String sourceDir;
 
-    @Parameter(names = { "--trace" }, description = "include backtrace information on errors (default: false)")
+    @Parameter(names = {"--trace"}, description = "include backtrace information on errors (default: false)")
     private boolean trace = false;
 
-    @Parameter(names = { HELP, "--help" }, help = true, description = "show this message")
+    @Parameter(names = {HELP, "--help"}, help = true, description = "show this message")
     private boolean help = false;
 
-    @Parameter(names = { ATTRIBUTE, "--attribute" }, description = "a list of attributes, in the form key or key=value pair, to set on the document")
-    private List<String> attributes = new ArrayList<String>();
+    @Parameter(names = {ATTRIBUTE, "--attribute"}, description = "a list of attributes, in the form key or key=value pair, to set on the document")
+    private List<String> attributes = new ArrayList<>();
 
-    @Parameter(names = { QUIET, "--quiet" }, description = "suppress warnings (default: false)")
+    @Parameter(names = {QUIET, "--quiet"}, description = "suppress warnings (default: false)")
     private boolean quiet = false;
 
-    @Parameter(names = { REQUIRE, "--require" }, description = "require the specified library before executing the processor (using require)")
+    @Parameter(names = {REQUIRE, "--require"}, description = "require the specified library before executing the processor (using require)")
     private List<String> require;
 
-    @Parameter(names = { "-cp", "-classpath", "--classpath" }, description = "add a directory to the classpath may be specified more than once")
+    @Parameter(names = {"-cp", "-classpath", "--classpath"}, description = "add a directory to the classpath may be specified more than once")
     private String classPath;
 
-    @Parameter(names = { LOAD_PATHS, "--load-path" }, description = "add a directory to the $LOAD_PATH may be specified more than once")
+    @Parameter(names = {LOAD_PATHS, "--load-path"}, description = "add a directory to the $LOAD_PATH may be specified more than once")
     private String loadPath;
 
     @Parameter(description = "input files; use - to read from STDIN")
-    private List<String> parameters = new ArrayList<String>();
+    private List<String> parameters = new ArrayList<>();
 
     public boolean isQuiet() {
         return quiet;
@@ -261,13 +252,13 @@ public class AsciidoctorCliOptions {
     }
 
     public Options parse() {
-        AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
+        AttributesBuilder attributesBuilder = Attributes.builder();
 
-        OptionsBuilder optionsBuilder = OptionsBuilder.options()
-            .backend(this.backend)
-            .safe(this.safeMode)
-            .eruby(this.eruby)
-            .option(Options.STANDALONE, true);
+        OptionsBuilder optionsBuilder = Options.builder()
+                .backend(this.backend)
+                .safe(this.safeMode)
+                .eruby(this.eruby)
+                .option(Options.STANDALONE, true);
 
         if (isDoctypeOption()) {
             optionsBuilder.docType(this.doctype);
@@ -314,14 +305,14 @@ public class AsciidoctorCliOptions {
 
         if (isTemplateDirOption()) {
             for (String templateDir : this.templateDir) {
-                optionsBuilder.templateDir(new File(templateDir));
+                optionsBuilder.templateDirs(new File(templateDir));
             }
         }
 
         if (isDestinationDirOption() && !isOutputStdout()) {
             optionsBuilder.toDir(new File(this.destinationDir));
 
-            if(isSourceDirOption()) {
+            if (isSourceDirOption()) {
                 optionsBuilder.sourceDir(new File(this.sourceDir));
             }
         }
@@ -331,17 +322,16 @@ public class AsciidoctorCliOptions {
         }
 
         attributesBuilder.attributes(getAttributes());
-        optionsBuilder.attributes(attributesBuilder.get());
-        return optionsBuilder.get();
-
+        optionsBuilder.attributes(attributesBuilder.build());
+        return optionsBuilder.build();
     }
 
     public Map<String, Object> getAttributes() {
 
-        Map<String, Object> attributeValues = new HashMap<String, Object>();
+        Map<String, Object> attributeValues = new HashMap<>();
 
         for (String attribute : this.attributes) {
-            int equalsIndex = -1;
+            int equalsIndex;
             if ((equalsIndex = attribute.indexOf(ATTRIBUTE_SEPARATOR)) > -1) {
                 extractAttributeNameAndValue(attributeValues, attribute, equalsIndex);
             } else {
@@ -354,7 +344,7 @@ public class AsciidoctorCliOptions {
 
     private void extractAttributeNameAndValue(Map<String, Object> attributeValues, String attribute, int equalsIndex) {
         String attributeName = attribute.substring(0, equalsIndex);
-        String attributeValue = attribute.substring(equalsIndex + 1, attribute.length());
+        String attributeValue = attribute.substring(equalsIndex + 1);
 
         attributeValues.put(attributeName, attributeValue);
     }
@@ -364,7 +354,7 @@ public class AsciidoctorCliOptions {
             return Collections.emptyList();
         }
         StringTokenizer tokenizer = new StringTokenizer(path, File.pathSeparator);
-        List<String> ret = new ArrayList<String>();
+        List<String> ret = new ArrayList<>();
         while (tokenizer.hasMoreTokens()) {
             ret.add(tokenizer.nextToken());
         }
