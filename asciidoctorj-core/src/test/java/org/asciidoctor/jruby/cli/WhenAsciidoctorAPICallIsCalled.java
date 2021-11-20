@@ -1,21 +1,20 @@
 package org.asciidoctor.jruby.cli;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
-import static org.hamcrest.collection.IsMapContaining.hasKey;
-
-import java.io.File;
-import java.util.List;
-
+import com.beust.jcommander.JCommander;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.jruby.internal.AsciidoctorUtils;
 import org.junit.Test;
 
-import com.beust.jcommander.JCommander;
+import java.io.File;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static org.hamcrest.collection.IsMapContaining.hasEntry;
+import static org.hamcrest.collection.IsMapContaining.hasKey;
 
 public class WhenAsciidoctorAPICallIsCalled {
 
@@ -33,23 +32,23 @@ public class WhenAsciidoctorAPICallIsCalled {
         List<String> command = AsciidoctorUtils.toAsciidoctorCommand(
                 optionsBuilder.asMap(), "file.adoc");
 
-        String currentDirectory = new File( "" ).getAbsolutePath() + File.separator;
+        String currentDirectory = new File("").getAbsolutePath() + File.separator;
 
         String[] parameters = command.subList(1, command.size()).toArray(new String[0]);
-        
-        AsciidoctorCliOptions asciidoctorCliOptions = new AsciidoctorCliOptions();
-        new JCommander(asciidoctorCliOptions,
-                parameters);
-        
-        assertThat(asciidoctorCliOptions.getTemplateDir(), containsInAnyOrder(currentDirectory+"a", currentDirectory+"b"));
+
+        final AsciidoctorCliOptions asciidoctorCliOptions = new AsciidoctorCliOptions();
+        final JCommander jCommander = new JCommander(asciidoctorCliOptions);
+        jCommander.parse(parameters);
+
+        assertThat(asciidoctorCliOptions.getTemplateDir(), containsInAnyOrder(currentDirectory + "a", currentDirectory + "b"));
         assertThat(asciidoctorCliOptions.getSafeMode(), is(SafeMode.UNSAFE));
         assertThat(asciidoctorCliOptions.getBackend(), is("docbook"));
         assertThat(asciidoctorCliOptions.getParameters(), containsInAnyOrder("file.adoc"));
-        
-        assertThat(asciidoctorCliOptions.getAttributes(), hasEntry("myAtribute", (Object)"myValue"));
+
+        assertThat(asciidoctorCliOptions.getAttributes(), hasEntry("myAtribute", (Object) "myValue"));
         assertThat(asciidoctorCliOptions.getAttributes(), hasKey("numbered"));
         assertThat(asciidoctorCliOptions.getAttributes(), hasKey("copycss!"));
-        
+
     }
 
 }
