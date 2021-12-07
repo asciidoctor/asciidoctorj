@@ -11,12 +11,13 @@ For example, a sub-section of the AST representing a title with a paragraph will
 NOTE: Some liberty is taken to make the process easier to understand.
 In reality, Asciidoctor has implementation details that divert from the 3 steps above.
 
-The different extension types are called in different steps of the conversion process in the order shown in the table.
-Within each type:
+The different extension types are called in different steps of the conversion process in the following order:
 
-* Prepocessors is called just before parsing.
-* Treeprocessors is called right before processing.
-* Block macro, inline macro, and block processors are called during processing in the order that they appear in the document.
-* Postprocessors are called before output generation.
-* Include and DocinfoProcessors are called in an arbitrary and changeable order during processing.
-In the case of Include processors, it is called whenever an `include::` is found.
+. IncludeProcessors are called in an arbitrary and changeable order during processing and are called whenever an `include::` is found.
+. Preprocessors are called just before parsing.
+. BlockMacroProcessors are called during processing in the order that they appear in the document.
+. BlockProcessors are called during processing in the order that they appear in the document.
+. Treeprocessors are called right before processing.
+. InlineMacroProcessors are called during processing in the order that they appear in the document.
+. Postprocessors  are called before output generation.
+. DocinfoProcessors are called in an arbitrary and changeable order during processing.
