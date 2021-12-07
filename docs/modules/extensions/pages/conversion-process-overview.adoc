@@ -6,7 +6,7 @@ As any language processing tool, the process can be roughly split into three ste
 . Parsing: the raw sources content is read and analyzed to generate the internal representation, the AST (_abstract syntax tree_).
 . Processing: the AST is processed. For example to detect possible errors, add automatically generated content (toc), etc.
 . Output generation: once the final AST is set, it's again processed to generate the desired output.
-For example, a sub-section of the AST representing a title with a paragraph will be converted into it's correspondent HTML or PDF output.
+For example, a sub-section of the AST representing a title with a paragraph will be converted into its correspondent HTML or PDF output.
 
 NOTE: Some liberty is taken to make the process easier to understand.
 In reality, Asciidoctor has implementation details that divert from the 3 steps above.
