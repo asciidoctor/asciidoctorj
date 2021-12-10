@@ -76,7 +76,7 @@ import org.asciidoctor.log.LogRecord;
 /**
  * Stores LogRecords in memory for later analysis.
  */
-public class MemoryLogHandler extends LogHandler {
+public class MemoryLogHandler implements LogHandler {
 
   private List<LogRecord> logRecords = new ArrayList<>();
 
