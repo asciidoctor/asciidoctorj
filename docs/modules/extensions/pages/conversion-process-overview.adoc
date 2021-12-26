@@ -13,10 +13,10 @@ In reality, Asciidoctor has implementation details that divert from the 3 steps 
 
 The different extension types are called in different steps of the conversion process in the following order:
 
-. IncludeProcessors are called in an arbitrary and changeable order during processing and are called whenever an `include::` is found.
-. Preprocessors are called just before parsing.
-. BlockMacroProcessors and BlockProcessors are called during processing in the order that they appear in the document.
-. Treeprocessors are called right before processing.
-. InlineMacroProcessors are called during processing in the order that they appear in the document.
+. Preprocessors are called just before parsing the document.
+. IncludeProcessors are called whenever an `include::` directive is found while reading the Asciidoc source.
+. BlockMacroProcessors and BlockProcessors are called while parsing in the order that they appear in the source document.
+. Treeprocessors are called after the document has been completely parsed into the Document tree right before processing.
+. InlineMacroProcessors are called during output generation in the order that they appear in the document.
+. DocinfoProcessors are called before or after the InlineMacroProcessors based on their location, i.e., header or footer.
 . Postprocessors are called before output generation.
-. DocinfoProcessors are called in an arbitrary and changeable order during processing.
