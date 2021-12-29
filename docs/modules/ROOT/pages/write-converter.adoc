@@ -25,6 +25,9 @@ This could be for example the value `embedded` to indicate that the resulting do
 If it is `null` the transformation usually is defined by the node type and name.
 <5> Calls to the method `getContent()` of a node will recursively call the method `convert()` with the child nodes again.
 Thereby the converter can collect the rendered child nodes, merge them appropriately and return the rendering of the whole node.
+<6> Converters can log messages in the same way as xref:extensions:logging.adoc[extensions].
+These messages will also be forwarded to build tools like the Asciidoctor Maven plugin and allow xref:maven-tools:plugin:goals/process-asciidoc.adoc#configuration-logHandler[failing the build] on certain messages.
+
 
 Finally, the converter can be registered and used for conversion of AsciiDoc documents:
 
