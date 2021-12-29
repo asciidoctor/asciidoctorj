@@ -118,7 +118,8 @@ OptionsBuilder optionsBuilder =
 [[sourcemap]]
 == sourcemap
 
-Keeps track of the file and line number for each parsed block. (Useful for tooling applications where the association between the converted output and the source file is important).
+Keeps track of the file and line number for each parsed block.
+This is useful for tooling applications where the association between the converted output and the source file is important.
 The default for this option is `false`.
 
 [source,java]
