@@ -1,6 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
@@ -37,5 +38,29 @@ public class YellBlockProcessorTest {
 
         assertThat(result, containsString("I REALLY MEAN IT"));              // <2>
 //end::include[]
+    }
+
+    @Test
+    public void should_invoke_block_processor_with_attributes() throws Exception {
+        File yellblock_adoc = //...
+            classpathResources.getResource("yell-block-attributes.adoc");
+
+        asciidoctor.javaExtensionRegistry().block(YellBlockProcessorWithAttributes.class);
+
+        String result = asciidoctor.convertFile(yellblock_adoc, Options.builder().toFile(false).build());
+
+        assertThat(result, containsString("I REALLY MEAN IT!!!"));
+    }
+
+    @Test
+    public void should_invoke_block_processor_with_positional_attributes() throws Exception {
+        File yellblock_adoc = //...
+            classpathResources.getResource("yell-block-positional.adoc");
+
+        asciidoctor.javaExtensionRegistry().block(YellBlockProcessorWithPositionalAttributes.class);
+
+        String result = asciidoctor.convertFile(yellblock_adoc, Options.builder().toFile(false).build());
+
+        assertThat(result, containsString("I REALLY MEAN IT!!!!!"));
     }
 }

@@ -58,6 +58,8 @@ task copyExtensionsExamplesToDocs(type: Copy) {
         include '**/extension/TerminalCommandExtension.java'
         include '**/extension/TerminalCommandTreeprocessor.java'
         include '**/extension/YellBlockProcessor.java'
+        include '**/extension/YellBlockProcessorWithAttributes.java'
+        include '**/extension/YellBlockProcessorWithPositionalAttributes.java'
 
     }
     from('src/test/resources/') {
@@ -71,6 +73,8 @@ task copyExtensionsExamplesToDocs(type: Copy) {
         include 'treeprocessorcontent.adoc'
         include 'treeprocessorresult.adoc'
         include 'yell-block.adoc'
+        include 'yell-block-attributes.adoc'
+        include 'yell-block-positional.adoc'
         include 'yell-block-result.txt'
 
         include 'extensionregistry/META-INF/services/org.asciidoctor.jruby.extension.spi.ExtensionRegistry'
