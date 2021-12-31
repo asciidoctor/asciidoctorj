@@ -115,6 +115,20 @@ OptionsBuilder optionsBuilder =
             Options.builder().templateDirs(new File("templates_path"));
 ----
 
+[[sourcemap]]
+== sourcemap
+
+Keeps track of the file and line number for each parsed block.
+This is useful for tooling applications where the association between the converted output and the source file is important.
+The default for this option is `false`.
+
+[source,java]
+.Setting the option sourcemap
+----
+OptionsBuilder optionsBuilder =
+            Options.builder().sourcemap(true);
+----
+
 == attributes
 
 This option allows to define document attributes externally.

@@ -1,11 +1,38 @@
 = Logs Handling API
+:uri-javadocs-logmanager: https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html
 
-NOTE: This API is inspired by Java Logging API (JUL).
+[NOTE]
+This API is inspired by Java Logging API (JUL).
 If you are familiar with `java.util.logging.*` you will see familiar analogies with some of its components.
 
 AsciidoctorJ (v1.5.7+) offers the possibility to capture messages generated during document rendering.
 While the API described here explains how to forward these messages to any receiver, AsciidoctorJ already logs all messages to the java.util.logging Logger with the name `asciidoctor`.
 
+[NOTE]
+The default log level of java.util.logging is INFO.
+That means you might see messages for provisional messages about possible invalid xrefs which could be valid xrefs that Asciidoctor just can't resolve.
+
+[TIP]
+--
+The behavior of the java.util.logging logger can be configured with a properties file.
+For other ways to configure this behavior please check the documentation of {uri-javadocs-logmanager}[java.util.logging.LogManager].
+To restrict the logger to only log messages with severity WARNING or higher create this file:
+
+.logging.properties
+[source,properties]
+----
+handlers = java.util.logging.ConsoleHandler
+.level = WARNING
+java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
+java.util.logging.SimpleFormatter.format = %3$
+----
+
+To use this configuration when running asciidoctorj via the CLI pass the location of the file like this:
+
+----
+# JAVA_OPTS="-Djava.util.logging.config.file=$PWD/logging.properties" asciidoctorj document.adoc
+----
+--
 
 == Logs Handling API
 

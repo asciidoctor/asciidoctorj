@@ -14,3 +14,5 @@
 *** xref:register-extensions-manually.adoc[]
 *** xref:register-extensions-bulk.adoc[]
 *** xref:register-extensions-automatically.adoc[]
+** xref:logging.adoc[]
+

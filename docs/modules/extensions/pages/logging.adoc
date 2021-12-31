@@ -1,0 +1,17 @@
+= Logging
+
+Extensions are also able to log messages that are handled in the same way as messages logged by Asciidoctor itself as explained in xref:ROOT:logs-handling.adoc[].
+
+Logging messages via this API allows build tools like the Asciidoctor Maven plugin to capture them and for example xref:maven-tools:plugin:goals/process-asciidoc.adoc#configuration-logHandler[fail the build] in case an error or warning is logged.
+Therefore it might be preferable to use this instead of directly logging messages via slf4j or other APIs.
+
+Every extension inherits the method `Processor.log()` that allows it to log messages.
+The following example shows a Block Macro Processor that logs a message containing the target of the macro:
+
+[source,java]
+----
+include::example$org/asciidoctor/integrationguide/extension/LoggingBlockMacroProcessor.java[tags=include]
+----
+<1> The method `log(LogRecord)` is inherited from the Processor class hierarchy.
+<2> You can access the source location of the parent node to put the message in relation to the source document.
+    Note that the source location will be null unless you enable the xref:ROOT:asciidoctor-api-options.adoc#sourcemap[sourcemap] option
