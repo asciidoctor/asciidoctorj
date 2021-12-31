@@ -21,9 +21,7 @@ public class IssueInlineMacroPositionalAttributesProcessor extends InlineMacroPr
         String href =
                 new StringBuilder()
                     .append("https://github.com/")
-                    .append(attributes.containsKey("repo") ?
-                            attributes.get("repo") :
-                            parent.getDocument().getAttribute("repo"))
+                    .append(attributes.get("repo"))
                     .append("/issues/")
                     .append(target).toString();
 
