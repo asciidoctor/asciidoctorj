@@ -1,3 +1,4 @@
- = InlineMacroProcessor Test Document
+= InlineMacroProcessor Test Document
+:repo: asciidoctor/asciidoctorj-groovy-dsl
 
-You might want to take a look at the issue issue:334[asciidoctor/asciidoctorj] and issue:3[asciidoctor/asciidoctorj-groovy-dsl].
+You might want to take a look at the issue issue:334[asciidoctor/asciidoctorj] and issue:3[].

@@ -28,7 +28,7 @@ public class LsIncludeProcessor extends IncludeProcessor {    // <1>
             sb.append(f.getName()).append("\n");
         }
 
-        reader.push_include(                                  // <4>
+        reader.pushInclude(                                  // <4>
                 sb.toString(),
                 target,
                 new File(".").getAbsolutePath(),
