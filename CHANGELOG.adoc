@@ -23,6 +23,10 @@ Build Improvement::
 * Add Java17 to CI pipelines (@abelsromero) (#1055)
 * Improve pipelines to better display Asciidoctor test upstream (@abelsromero) (#1057)
 
+Documentation::
+
+* Clarify execution order for extensions (@rockyallen) (#1068)
+
 == 2.5.2 (2021-08-08)
 
 Improvement::
