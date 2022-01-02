@@ -3,7 +3,7 @@
 
 An inline macro is very similar to a block macro.
 But instead of being replaced by a block created by a BlockMacroProcessor it is replaced by a phrase node that is simply a part of a block, e.g. in the middle of a sentence.
-An example for an inline macro is `issue:333[repo=asciidoctor/asciidoctorj]`.
+An example for an inline macro is `+issue:333[repo=asciidoctor/asciidoctorj]+`.
 
 The structure is always like this:
 
@@ -50,8 +50,8 @@ Even though the following examples might not make much sense, they show how phra
 
 === Create keyboard macros
 
-To create keyboard icons like kbd:[Ctrl+T] which can be created directly in Asciidoctor via `\kbd:[Ctrl+T]` you create the PhraseNode as shown below.
-The example assumes that the macro is called with the macro name `ctrl` and a key as the target, e.g. `\ctrl:S[]`, and creates kbd:[Ctrl + S] from it.
+To create keyboard icons like kbd:[Ctrl+T] which can be created directly in Asciidoctor via `+kbd:[Ctrl+T]+` you create the PhraseNode as shown below.
+The example assumes that the macro is called with the macro name `ctrl` and a key as the target, e.g. `+ctrl:S[]+`, and creates kbd:[Ctrl + S] from it.
 
 [[KeyboardInlineMacroProcessor]]
 .Create a phrase node for keys
@@ -64,8 +64,8 @@ include::example$org/asciidoctor/integrationguide/extension/KeyboardInlineMacroP
 
 === Create button or menu selection macros
 
-To create a menu selection as described at http://asciidoctor.org/docs/user-manual/#menu-selections a processor would create a PhraseNode with the `menu` context.
-The following processor would render the macro `rightclick:New|Class[]` like this: menu:New[Class].
+To create a menu selection as described at xref:asciidoc:macros:ui-macros.adoc[] a processor would create a PhraseNode with the `menu` context.
+The following processor would render the macro `+rightclick:New|Class[]+` like this: menu:New[Class].
 
 [[ContextMenuInlineMacroProcessor]]
 .Create a phrase node for menu selections.
@@ -80,7 +80,7 @@ include::example$org/asciidoctor/integrationguide/extension/ContextMenuInlineMac
 
 To create an inline image the PhraseNode must have the context `image`.
 The following example assumes that there is a site \http://foo.bar that serves images given as the target of the macro.
-That means the MacroProcessor should replace the macro `foo:1234` to an image element that refers to \http://foo.bar/1234.
+That means the MacroProcessor should replace the macro `+foo:1234+` to an image element that refers to \http://foo.bar/1234.
 
 [[ImageInlineMacroProcessor]]
 .Create a PhraseNode for inline image.
@@ -97,8 +97,8 @@ When setting the attribute `link` to any value the node will be converted to a l
 
 // #506
 
-We said at the start of this section that the target (the x in `\menu:x[]`) is optional.
-If you want a macro that does not have a target (for example `cite:[brown79]`), add the following annotation to your class:
+We said at the start of this section that the target (the x in `+menu:x[]+`) is optional.
+If you want a macro that does not have a target (for example `+cite:[brown79]+`), add the following annotation to your class:
 
 [source,java,indent=0]
 ----
@@ -114,8 +114,8 @@ With the SHORT format, the attributes are not parsed, and the 'target' that is p
 == Positional attributes
 
 The first example here has shown how to access named attributes.
-But AsciiDoc also supports positional attributes where the meaning implicitly derived from the position in the attribute list.
-In that example the attribute `repo` might also be defined as the first attribute so that the inline macro might also be written as  `issue:333[asciidoctor/asciidoctorj]`.
+But AsciiDoc also supports positional attributes where the meaning is implicitly derived from the position in the attribute list.
+In that example the attribute `repo` might also be defined as the first attribute so that the inline macro might also be written as  `+issue:333[asciidoctor/asciidoctorj]+`.
 
 The following extension accepts the attribute `repo` as a positional attribute:
 
