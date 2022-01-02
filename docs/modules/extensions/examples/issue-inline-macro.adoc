@@ -1,4 +1,1 @@
-= InlineMacroProcessor Test Document
-:repo: asciidoctor/asciidoctorj-groovy-dsl
-
-You might want to take a look at the issue issue:333[repo=asciidoctor/asciidoctorj] and issue:2[].
+../../../../asciidoctorj-documentation/src/test/resources/issue-inline-macro.adoc

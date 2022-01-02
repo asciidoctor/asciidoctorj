@@ -1,2 +1,1 @@
-[yell,5]
-I really mean it
+../../../../asciidoctorj-documentation/src/test/resources/yell-block-positional.adoc

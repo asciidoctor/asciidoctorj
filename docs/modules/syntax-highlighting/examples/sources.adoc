@@ -1,12 +1,1 @@
-= Syntax Highlighter Test
-
-== Some sources
-
-[source,java]
-----
-public static class Test {
-  public static void main(String[] args) {
-    System.out.println("Hello World");
-  }
-}
-----
+../../../../asciidoctorj-documentation/src/test/resources/sources.adoc

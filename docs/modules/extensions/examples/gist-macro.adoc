@@ -1,3 +1,1 @@
-= Gist test
-
-gist::myaccount/1234abcd[]
+../../../../asciidoctorj-documentation/src/test/resources/gist-macro.adoc

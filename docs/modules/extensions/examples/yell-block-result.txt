@@ -1,1 +1,1 @@
-I REALLY MEAN IT
+../../../../asciidoctorj-documentation/src/test/resources/yell-block-result.txt

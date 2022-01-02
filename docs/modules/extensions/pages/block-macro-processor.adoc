@@ -11,9 +11,9 @@ The structure is always like this:
 . A target, `mygithubaccount/8810011364687d7bec2c`
 . Attributes, that are empty in this case, `[]`
 
-Our example block macro should embed the GitHub gist that would be available at the URL https://gist.github.com/mygithubaccount/8810011364687d7bec2c.
+Our example block macro should embed the GitHub gist that would be available at the URL \https://gist.github.com/mygithubaccount/8810011364687d7bec2c.
 
-The following block macro processor replaces such a macro with the `<script>` element that you can also pick from https://gist.github.com for a certain gist.
+The following block macro processor replaces such a macro with the `<script>` element that you can also pick from \https://gist.github.com for a certain gist.
 
 [[GistBlockMacroProcessor]]
 .A BlockMacroProcessor that replaces gist block macros

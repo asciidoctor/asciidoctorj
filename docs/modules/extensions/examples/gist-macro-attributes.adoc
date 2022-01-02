@@ -1,9 +1,1 @@
-== Gists
-
-gist::myaccount/1234abcd[]
-
-gist::2228798[gitlab]
-
-gist::1717978[gitlab,gitlab-org/gitlab-foss]
-
-gist::1717979[gitlab,repo=gitlab-org/gitlab-foss]
+../../../../asciidoctorj-documentation/src/test/resources/gist-macro-attributes.adoc
