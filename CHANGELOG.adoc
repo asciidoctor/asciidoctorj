@@ -15,6 +15,8 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 Improvement::
 
+* Upgrade to asciidoctorj-pdf 1.6.2 (#1073)
+* Upgrade to rouge 3.27.0 (#1073)
 * Upgrade to asciidoctorj-diagram 2.2.1 (#1066) (@abelsromero) (#1065)
 * Upgrade CLI to use JCommander 1.81 (@abelsromero) (#1067)
 
