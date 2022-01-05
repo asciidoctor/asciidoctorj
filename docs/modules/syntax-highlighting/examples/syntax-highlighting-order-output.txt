@@ -1,11 +1,1 @@
-. New SyntaxHighlighter
-. format `java`
-. highlight `System.out.println("Hello Java");`
-. format `go`
-. highlight `fmt.Println("Hello Go")`
-. hasDocInfo for HEADER
-. getDocInfo for HEADER
-. hasDocInfo for FOOTER
-. getDocInfo for FOOTER
-. isWriteStylesheet
-. writeStylesheet
+../../../../asciidoctorj-documentation/src/test/resources/syntax-highlighting-order-output.txt

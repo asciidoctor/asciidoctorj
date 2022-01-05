@@ -1,6 +1,1 @@
-Normal content.
-
-[NOTE]
---
-RP: This is a comment and should only appear in draft documents
---
+../../../../asciidoctorj-documentation/src/test/resources/comment-with-note.adoc

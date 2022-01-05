@@ -1,1 +1,1 @@
-org.asciidoctor.integrationguide.converter.TextConverterRegistry
+../../../../../../../asciidoctorj-documentation/src/test/resources/converterregistry/META-INF/services/org.asciidoctor.jruby.converter.spi.ConverterRegistry

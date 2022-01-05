@@ -1,6 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
@@ -45,6 +46,28 @@ public class IssueInlineMacroProcessorTest {
                         "<a href=\"https://github.com/asciidoctor/asciidoctorj-groovy-dsl/issues/2\""));
 
 //end::include[]
+    }
+
+    @Test
+    public void should_create_anchor_elements_for_inline_macros_with_positional_attributes() {
+
+        File issueinlinemacro_adoc = //...
+                classpathResources.getResource("issue-inline-macro-positional.adoc");
+
+        asciidoctor.javaExtensionRegistry().inlineMacro(IssueInlineMacroPositionalAttributesProcessor.class);
+
+        String result = asciidoctor.convertFile(issueinlinemacro_adoc, Options.builder().toFile(false).build());
+
+        assertThat(
+                result,
+                containsString(
+                        "<a href=\"https://github.com/asciidoctor/asciidoctorj/issues/334\"")); // <2>
+
+        assertThat(
+                result,
+                containsString(                                                                 // <2>
+                        "<a href=\"https://github.com/asciidoctor/asciidoctorj-groovy-dsl/issues/3\""));
+
     }
 
 

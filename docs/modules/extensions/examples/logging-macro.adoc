@@ -1,5 +1,1 @@
-= Log Test
-
-== A logging macro
-
-log::HelloWorld[]
+../../../../asciidoctorj-documentation/src/test/resources/logging-macro.adoc

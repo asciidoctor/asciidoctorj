@@ -1,13 +1,1 @@
-= Syntax Highlighter Test
-
-== Some sources
-
-[source,java]
-----
-System.out.println("Hello Java");
-----
-
-[source,go]
-----
-fmt.Println("Hello Go")
-----
+../../../../asciidoctorj-documentation/src/test/resources/syntax-highlighting-order.adoc

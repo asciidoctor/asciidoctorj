@@ -1,1 +1,1 @@
-org.asciidoctor.integrationguide.syntaxhighlighter.HighlightJsExtension
+../../../../../../../asciidoctorj-documentation/src/test/resources/syntaxhighlighterregistry/META-INF/services/org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry

@@ -37,3 +37,49 @@ In this case the block processor creates a simple paragraph, therefore the conte
 <4> All block processors must extend `org.asciidoctor.extension.BlockProcessor`.
 <5> A block processor must implement the method `process()`.
 Here the implementation gets the raw block content from the reader, transforms it and creates and returns a new block that contains the transformed content.
+
+== Attributes
+
+Block Processors receive attributes in their `process()` method.
+These attributes contain the additional key value pairs that were applied to the block.
+You can read more about element attributes in general in the xref:asciidoc:attributes:element-attributes.adoc[AsciiDoc documentation].
+
+If we convert the following document:
+
+.yell-block-attributes.adoc
+[source,asciidoc]
+----
+include::example$yell-block-attributes.adoc[]
+----
+
+Then a Block Processor can access the attribute `loudness` like this:
+
+.YellBlockProcessorWithAttributes.java
+[source,java,indent=0]
+----
+include::example$org/asciidoctor/integrationguide/extension/YellBlockProcessorWithAttributes.java[tags=include]
+----
+<1> Attribute values from the source document are usually Strings.
+
+== Positional attributes
+
+Besides defining attributes as key value pairs like in `[yell,loudness=3]` AsciiDoc also supports positional attributes.
+For positional attributes the meaning is implicitly derived from the position in the attribute list.
+In our example the attribute `loudness` might be defined as the first positional attribute after the block style:
+
+.yell-block-positional.adoc
+[source,asciidoc]
+----
+include::example$yell-block-positional.adoc[]
+----
+
+Then a Block Processor can access the attribute `loudness` like this:
+
+.YellBlockProcessorWithPositionalAttributes.java
+[source,java,indent=0]
+----
+include::example$org/asciidoctor/integrationguide/extension/YellBlockProcessorWithPositionalAttributes.java[tags=include]
+----
+<1> The attribute names defined in the annotation reflect the attribute positions, i.e., `loudness` is the first positional attribute.
+A second attribute `exclamationmark` would be defined as `@PositionalAttributes({"loudness", "exclamationmark"})` so that the Block Processor can access the attributes of the block defined with `[yell,3,"¡"]`.
+<2> For the code itself there is no difference between a positional and a named attribute.
