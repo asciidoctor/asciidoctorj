@@ -15,9 +15,11 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 Improvement::
 
+* Upgrade to asciidoctorj 2.0.17 (#1074)
 * Upgrade to asciidoctorj-pdf 1.6.2 (#1073)
-* Upgrade to rouge 3.27.0 (#1073)
 * Upgrade to asciidoctorj-diagram 2.2.1 (#1066) (@abelsromero) (#1065)
+* Upgrade to jruby 9.2.20.1 (#1074)
+* Upgrade to rouge 3.27.0 (#1073)
 * Upgrade CLI to use JCommander 1.81 (@abelsromero) (#1067)
 
 Build Improvement::
@@ -28,6 +30,9 @@ Build Improvement::
 Documentation::
 
 * Clarify execution order for extensions (@rockyallen) (#1068)
+* Added docs for attributes and positional attributes in extensions (#1072)
+* Added docs for how to log from extensions (#1071)
+
 
 == 2.5.2 (2021-08-08)
 
