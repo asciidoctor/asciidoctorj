@@ -19,6 +19,7 @@ Improvement::
 * Upgrade to rouge 3.27.0 (#1073)
 * Upgrade to asciidoctorj-diagram 2.2.1 (#1066) (@abelsromero) (#1065)
 * Upgrade CLI to use JCommander 1.81 (@abelsromero) (#1067)
+* Upgrade to asciidoctor-2.0.17 (#1075)
 
 Build Improvement::
 
