@@ -16,8 +16,6 @@ import org.junit.runner.RunWith
 import spock.lang.Ignore
 import spock.lang.Specification
 
-import static org.asciidoctor.OptionsBuilder.options
-
 @RunWith(ArquillianSputnik)
 class WhenExtensionsAreRegisteredAsService extends Specification {
 
@@ -51,14 +49,15 @@ class WhenExtensionsAreRegisteredAsService extends Specification {
         //To avoid registering the same extension over and over for all tests, service is instantiated manually.
         new ArrowsAndBoxesExtension().register(asciidoctor)
 
-        Options options = options().inPlace(false)
-                .toFile(new File(testFolder.getRoot(), FILENAME_HTML))
-                .safe(SafeMode.UNSAFE).get()
+        File renderedFile = testFolder.newFile(FILENAME_HTML)
+        Options options = Options.builder()
+                .inPlace(false)
+                .toFile(renderedFile)
+                .safe(SafeMode.UNSAFE).build()
 
         asciidoctor.convertFile(classpath.getResource('arrows-and-boxes-example.ad'), options)
 
         then:
-        File renderedFile = new File(testFolder.getRoot(), FILENAME_HTML)
         Document doc = Jsoup.parse(renderedFile, 'UTF-8')
 
         Element arrowsJs = doc.select('script[src=http://www.headjump.de/javascripts/arrowsandboxes.js').first()
