@@ -300,12 +300,15 @@ public class WhenJavaExtensionIsRegistered {
 
         javaExtensionRegistry.postprocessor("org.asciidoctor.extension.CustomFooterPostProcessor");
 
-        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
-                .safe(SafeMode.UNSAFE).get();
+        File renderedFile = testFolder.newFile("rendersample.html");
+        Options options = Options.builder()
+                .inPlace(false)
+                .toFile(renderedFile)
+                .safe(SafeMode.UNSAFE)
+                .build();
 
         asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
-        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
@@ -319,12 +322,15 @@ public class WhenJavaExtensionIsRegistered {
 
         javaExtensionRegistry.postprocessor(CustomFooterPostProcessor.class);
 
-        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
-                .safe(SafeMode.UNSAFE).get();
+        File renderedFile = testFolder.newFile("rendersample.html");
+        Options options = Options.builder()
+                .inPlace(false)
+                .toFile(renderedFile)
+                .safe(SafeMode.UNSAFE)
+                .build();
 
         asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
-        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
@@ -338,12 +344,14 @@ public class WhenJavaExtensionIsRegistered {
 
         javaExtensionRegistry.postprocessor(new CustomFooterPostProcessor(new HashMap<>()));
 
-        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
+        File renderedFile = testFolder.newFile("rendersample.html");
+        Options options = Options.builder()
+                .inPlace(false)
+                .toFile(renderedFile)
                 .safe(SafeMode.UNSAFE).get();
 
         asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
-        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
@@ -542,12 +550,15 @@ public class WhenJavaExtensionIsRegistered {
         // service is instantiated manually.
         new ArrowsAndBoxesExtension().register(asciidoctor);
 
-        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
-                .safe(SafeMode.UNSAFE).get();
+        File renderedFile = testFolder.newFile("rendersample.html");
+        Options options = Options.builder()
+                .inPlace(false)
+                .toFile(renderedFile)
+                .safe(SafeMode.UNSAFE)
+                .build();
 
         asciidoctor.convertFile(classpath.getResource("arrows-and-boxes-example.ad"), options);
 
-        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element arrowsJs = doc.select("script[src=http://www.headjump.de/javascripts/arrowsandboxes.js").first();
@@ -769,13 +780,15 @@ public class WhenJavaExtensionIsRegistered {
 
         javaExtensionRegistry.postprocessor(CustomFooterPostProcessor.class);
 
-        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
+        File renderedFile = testFolder.newFile("rendersample.html");
+        Options options = Options.builder()
+                .inPlace(false)
+                .toFile(renderedFile)
                 .safe(SafeMode.UNSAFE).get();
 
         asciidoctor.unregisterAllExtensions();
         asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
-        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
@@ -992,13 +1005,16 @@ public class WhenJavaExtensionIsRegistered {
 
         // When: I render a document without registering the ExtensionGroup
         {
-            Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
-                    .safe(SafeMode.UNSAFE).get();
+            File renderedFile = testFolder.newFile("rendersample.html");
+            Options options = Options.builder()
+                    .inPlace(false)
+                    .toFile(renderedFile)
+                    .safe(SafeMode.UNSAFE)
+                    .build();
 
             asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
             // Then: it is invoked
-            File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
             org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
             Element footer = doc.getElementById("footer-text");
             assertThat(footer.text(), not(containsString("Copyright Acme, Inc.")));
@@ -1007,13 +1023,16 @@ public class WhenJavaExtensionIsRegistered {
         // When: I register the ExtensionGroup and render a document
         {
             extensionGroup.register();
-            Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
-                    .safe(SafeMode.UNSAFE).get();
+            File renderedFile = testFolder.newFile("rendersample.html");
+            Options options = Options.builder()
+                    .inPlace(false)
+                    .toFile(renderedFile)
+                    .safe(SafeMode.UNSAFE)
+                    .build();
 
             asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
             // Then: it is invoked
-            File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
             org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
             Element footer = doc.getElementById("footer-text");
             assertThat(footer.text(), containsString("Copyright Acme, Inc."));
@@ -1023,10 +1042,13 @@ public class WhenJavaExtensionIsRegistered {
             extensionGroup.unregister();
             ;
 
-            Options options2 = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample2.html"))
-                    .safe(SafeMode.UNSAFE).get();
-            asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options2);
             File renderedFile2 = new File(testFolder.getRoot(), "rendersample2.html");
+            Options options2 = Options.builder()
+                    .inPlace(false)
+                    .toFile(renderedFile2)
+                    .safe(SafeMode.UNSAFE)
+                    .build();
+            asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options2);
             org.jsoup.nodes.Document doc2 = Jsoup.parse(renderedFile2, "UTF-8");
 
             Element footer2 = doc2.getElementById("footer-text");
@@ -1038,7 +1060,7 @@ public class WhenJavaExtensionIsRegistered {
     public void should_unregister_block_processor() {
 
         Map<String, Object> config = new HashMap<>();
-        config.put("contexts", Arrays.asList(":paragraph"));
+        config.put("contexts", Collections.singletonList(":paragraph"));
         config.put("content_model", ":simple");
         YellBlock yellBlock = new YellBlock("yell", config);
 

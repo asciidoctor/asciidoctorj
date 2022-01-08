@@ -41,7 +41,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.LogManager;
 
-import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -138,7 +137,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-uri-include.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -198,7 +197,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-uri-include.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -216,7 +215,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("simple.adoc"),
-                options().headerFooter(true).safe(SafeMode.SERVER).toFile(false).get());
+                Options.builder().headerFooter(true).safe(SafeMode.SERVER).toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -237,7 +236,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("simple.adoc"),
-                options().headerFooter(true).safe(SafeMode.SERVER).toFile(false).get());
+                Options.builder().headerFooter(true).safe(SafeMode.SERVER).toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -255,7 +254,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("changeattribute.adoc"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -273,7 +272,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("changeattribute.adoc"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -290,7 +289,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("changeattribute.adoc"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -305,12 +304,15 @@ public class WhenJavaExtensionGroupIsRegistered {
             .postprocessor("org.asciidoctor.extension.CustomFooterPostProcessor")
             .register();
 
-        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
-                .safe(SafeMode.UNSAFE).get();
+        File renderedFile = testFolder.newFile("rendersample.html");
+        Options options = Options.builder()
+                .inPlace(false)
+                .toFile(renderedFile)
+                .safe(SafeMode.UNSAFE).
+                build();
 
         asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
-        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
@@ -324,12 +326,14 @@ public class WhenJavaExtensionGroupIsRegistered {
             .postprocessor(CustomFooterPostProcessor.class)
             .register();
 
-        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
-                .safe(SafeMode.UNSAFE).get();
+        File renderedFile = testFolder.newFile("rendersample.html");
+        Options options = Options.builder()
+                .inPlace(false)
+                .toFile(renderedFile)
+                .safe(SafeMode.UNSAFE).build();
 
         asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
-        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
@@ -343,12 +347,14 @@ public class WhenJavaExtensionGroupIsRegistered {
             .postprocessor(new CustomFooterPostProcessor(new HashMap<String, Object>()))
             .register();
 
-        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
-                .safe(SafeMode.UNSAFE).get();
+        File renderedFile = testFolder.newFile("rendersample.html");
+        Options options = Options.builder()
+                .inPlace(false)
+                .toFile(renderedFile)
+                .safe(SafeMode.UNSAFE).build();
 
         asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
-        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
@@ -366,7 +372,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-uri-include.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -387,7 +393,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-uri-include.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -408,7 +414,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-uri-include.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -426,7 +432,7 @@ public class WhenJavaExtensionGroupIsRegistered {
             .register();
 
         String content = asciidoctor.convertFile(classpath.getResource("sample-with-include.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -444,7 +450,7 @@ public class WhenJavaExtensionGroupIsRegistered {
             .register();
 
         String content = asciidoctor.convertFile(classpath.getResource("sample-with-include-pos-attrs.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -463,7 +469,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
       String content = asciidoctor.convertFile(
           classpath.getResource("sample-with-terminal-command.ad"),
-          options().toFile(false).get());
+          Options.builder().toFile(false).build());
 
       org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -485,7 +491,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-terminal-command-and-gist-macro.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         System.out.println(content);
@@ -500,8 +506,6 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         contentElement = doc.getElementsByAttributeValue("class", "command").last();
         assertThat(contentElement.text(), is("gem install asciidoctor"));
-
-
     }
 
     @Test
@@ -513,7 +517,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-terminal-command.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -534,7 +538,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-terminal-command.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -557,12 +561,14 @@ public class WhenJavaExtensionGroupIsRegistered {
             .block("arrowsAndBoxes", ArrowsAndBoxesBlock.class)
             .register();
 
-        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
-                .safe(SafeMode.UNSAFE).get();
+        File renderedFile = testFolder.newFile("rendersample.html");
+        Options options = Options.builder()
+                .inPlace(false)
+                .toFile(renderedFile)
+                .safe(SafeMode.UNSAFE).build();
 
         asciidoctor.convertFile(classpath.getResource("arrows-and-boxes-example.ad"), options);
 
-        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element arrowsJs = doc.select("script[src=http://www.headjump.de/javascripts/arrowsandboxes.js").first();
@@ -586,7 +592,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-gist-macro.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element script = doc.getElementsByTag("script").first();
@@ -603,7 +609,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-gist-macro.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element script = doc.getElementsByTag("script").first();
@@ -620,7 +626,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-gist-macro.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element script = doc.getElementsByTag("script").first();
@@ -640,7 +646,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-gist-macro.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element script = doc.getElementsByTag("script").first();
@@ -657,7 +663,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-man-link.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
@@ -676,7 +682,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-man-link.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
@@ -699,7 +705,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-man-link.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
@@ -723,7 +729,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-man-link.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
@@ -745,7 +751,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-man-link.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
@@ -763,13 +769,16 @@ public class WhenJavaExtensionGroupIsRegistered {
             .postprocessor(CustomFooterPostProcessor.class)
             .register();
 
-        Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
-                .safe(SafeMode.UNSAFE).get();
+        File renderedFile = testFolder.newFile("rendersample.html");
+        Options options = Options.builder()
+                .inPlace(false)
+                .toFile(renderedFile)
+                .safe(SafeMode.UNSAFE)
+                .build();
 
         asciidoctor.unregisterAllExtensions();
         asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
-        File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
@@ -785,7 +794,7 @@ public class WhenJavaExtensionGroupIsRegistered {
             .register();
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-yell-block.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
@@ -802,7 +811,7 @@ public class WhenJavaExtensionGroupIsRegistered {
             .register();
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-yell-block.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
@@ -824,7 +833,7 @@ public class WhenJavaExtensionGroupIsRegistered {
             .register();
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-yell-block.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
         assertThat(elements.size(), is(1));
@@ -840,7 +849,7 @@ public class WhenJavaExtensionGroupIsRegistered {
             .register();
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-yell-listing-block.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
@@ -862,7 +871,7 @@ public class WhenJavaExtensionGroupIsRegistered {
             .register();
         String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-yell-listing-block.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
         assertThat(elements.size(), is(1));
@@ -890,7 +899,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("documentwithtoc.adoc"),
-                options().headerFooter(true).toFile(false).safe(SafeMode.UNSAFE).get());
+                Options.builder().headerFooter(true).toFile(false).safe(SafeMode.UNSAFE).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element toc = doc.getElementById("toc");
@@ -906,14 +915,16 @@ public class WhenJavaExtensionGroupIsRegistered {
             .postprocessor(CustomFooterPostProcessor.class);
 
         // When: I render a document without registering the ExtensionGroup
-        {
-            Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
-                .safe(SafeMode.UNSAFE).get();
+         File renderedFile = testFolder.newFile("rendersample.html");
+         {
+            Options options = Options.builder()
+                    .inPlace(false)
+                    .toFile(renderedFile)
+                .safe(SafeMode.UNSAFE).build();
 
             asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
             // Then: it is invoked
-            File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
             org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
             Element footer = doc.getElementById("footer-text");
             assertThat(footer.text(), not(containsString("Copyright Acme, Inc.")));
@@ -922,13 +933,12 @@ public class WhenJavaExtensionGroupIsRegistered {
         // When: I register the ExtensionGroup and render a document
         {
             extensionGroup.register();
-            Options options = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample.html"))
-                .safe(SafeMode.UNSAFE).get();
+            Options options = Options.builder().inPlace(false).toFile(renderedFile)
+                .safe(SafeMode.UNSAFE).build();
 
             asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options);
 
             // Then: it is invoked
-            File renderedFile = new File(testFolder.getRoot(), "rendersample.html");
             org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
             Element footer = doc.getElementById("footer-text");
             assertThat(footer.text(), containsString("Copyright Acme, Inc."));
@@ -937,10 +947,13 @@ public class WhenJavaExtensionGroupIsRegistered {
         {
             extensionGroup.unregister();;
 
-            Options options2 = options().inPlace(false).toFile(new File(testFolder.getRoot(), "rendersample2.html"))
-                .safe(SafeMode.UNSAFE).get();
+            File renderedFile2 = testFolder.newFile("rendersample2.html");
+            Options options2 = Options.builder()
+                    .inPlace(false)
+                    .toFile(renderedFile2)
+                    .safe(SafeMode.UNSAFE)
+                    .build();
             asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options2);
-            File renderedFile2 = new File(testFolder.getRoot(), "rendersample2.html");
             org.jsoup.nodes.Document doc2 = Jsoup.parse(renderedFile2, "UTF-8");
 
             Element footer2 = doc2.getElementById("footer-text");
@@ -962,7 +975,7 @@ public class WhenJavaExtensionGroupIsRegistered {
         {
             String contentWithoutBlock = asciidoctor.convertFile(
                 classpath.getResource("sample-with-yell-block.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
             org.jsoup.nodes.Document docWithoutBlock = Jsoup.parse(contentWithoutBlock, "UTF-8");
             Elements elementsWithoutBlock = docWithoutBlock.getElementsByClass("paragraph");
             assertThat(elementsWithoutBlock.size(), is(1));
@@ -973,7 +986,7 @@ public class WhenJavaExtensionGroupIsRegistered {
             extensionGroup.register();
             String content = asciidoctor.convertFile(
                 classpath.getResource("sample-with-yell-block.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
             org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
             Elements elements = doc.getElementsByClass("paragraph");
             assertThat(elements.size(), is(1));
@@ -983,7 +996,7 @@ public class WhenJavaExtensionGroupIsRegistered {
             extensionGroup.unregister();
             String contentWithoutBlock = asciidoctor.convertFile(
                 classpath.getResource("sample-with-yell-block.ad"),
-                options().toFile(false).get());
+                Options.builder().toFile(false).build());
             org.jsoup.nodes.Document docWithoutBlock = Jsoup.parse(contentWithoutBlock, "UTF-8");
             Elements elementsWithoutBlock = docWithoutBlock.getElementsByClass("paragraph");
             assertThat(elementsWithoutBlock.size(), is(1));
