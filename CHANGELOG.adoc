@@ -15,6 +15,16 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 Improvement::
 
+Bug Fixes::
+
+Build Improvement::
+
+Documentation::
+
+== 2.5.3 (2022-01-12)
+
+Improvement::
+
 * Upgrade to asciidoctorj 2.0.17 (#1074)
 * Upgrade to asciidoctorj-pdf 1.6.2 (#1073)
 * Upgrade to asciidoctorj-diagram 2.2.1 (#1066) (@abelsromero) (#1065)
