@@ -15,9 +15,13 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 Improvement::
 
+* Upgrade to jcommander 1.81 (#1079)
+
 Bug Fixes::
 
 Build Improvement::
+
+* Upgrade to gradle 7.3.3 (#1079)
 
 Documentation::
 

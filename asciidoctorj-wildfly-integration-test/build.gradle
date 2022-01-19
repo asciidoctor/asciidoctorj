@@ -49,6 +49,14 @@ compileTestJava {
     dependsOn unpackWildfly
 }
 
+javadocJar {
+    dependsOn unpackWildfly
+}
+
+sourcesJar {
+    dependsOn unpackWildfly
+}
+
 tasks.create("createModule").doLast {
     copy {
         from "src/test/resources/module.xml"

@@ -45,7 +45,7 @@ configurations.archives.with {
 }
 
 tasks.withType(AbstractArchiveTask) {
-  baseName rootProject.name
+  archiveBaseName.set(rootProject.name)
   classifier 'bin' // use classifier for identification in repository list
   eachFile { it.path = it.path.replaceFirst('-bin(?=/)', '') }
   //destinationDir = ...
@@ -55,7 +55,7 @@ startScripts {
   unixStartScriptGenerator.template = resources.text.fromFile('src/main/resources/customUnixStartScript.txt')
 
   applicationName = rootProject.name
-  mainClassName = 'org.asciidoctor.jruby.cli.AsciidoctorInvoker'
+  mainClass.set('org.asciidoctor.jruby.cli.AsciidoctorInvoker')
   defaultJvmOpts = [
     '-client', '-Xmn128m', '-Xms256m', '-Xmx256m', '-Djava.awt.headless=true',
     '-Xverify:none', '-XX:+TieredCompilation', '-XX:TieredStopAtLevel=1', '-XX:+DisableExplicitGC', '-Djruby.compile.mode=OFF'
