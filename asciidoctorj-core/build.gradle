@@ -33,6 +33,7 @@ dependencies {
   testImplementation "com.google.guava:guava:$guavaVersion"
   testImplementation "org.jsoup:jsoup:$jsoupVersion"
   testImplementation "io.netty:netty-all:$nettyVersion"
+  testImplementation "org.assertj:assertj-core:$assertjVersion"
   testImplementation project(path: ':asciidoctorj-arquillian-extension')
   compileOnly "org.osgi:osgi.annotation:$osgiVersion"
 }

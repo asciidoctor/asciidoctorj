@@ -72,7 +72,7 @@ ext {
   jrubyVersion = '9.3.4.0'
   jsoupVersion = '1.14.3'
   junitVersion = '4.13.2'
-  assertjVersion = '3.19.0'
+  assertjVersion = '3.22.0'
   nettyVersion = '4.1.58.Final'
   saxonVersion = '9.9.0-2'
   xmlMatchersVersion = '1.0-RC1'
