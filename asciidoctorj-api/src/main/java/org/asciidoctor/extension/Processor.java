@@ -1,16 +1,6 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.Cell;
-import org.asciidoctor.ast.Column;
-import org.asciidoctor.ast.ContentNode;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.ListItem;
-import org.asciidoctor.ast.PhraseNode;
-import org.asciidoctor.ast.Row;
-import org.asciidoctor.ast.Section;
-import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.ast.Table;
+import org.asciidoctor.ast.*;
 import org.asciidoctor.log.LogRecord;
 
 import java.util.List;
@@ -143,6 +133,20 @@ public interface Processor {
      * @param lines  Raw asciidoctor content
      */
     void parseContent(StructuralNode parent, List<String> lines);
+
+    Cursor newCursor(String file);
+
+    Cursor newCursor(String file, String dir);
+
+    Cursor newCursor(String file, String dir, int lineno);
+
+    Reader newReader(List<String> source, Cursor cursor, Map<Object, Object> options);
+
+    Reader newReader(List<String> source, Cursor cursor);
+
+    Reader newReader(List<String> source, Map<Object, Object> options);
+
+    Reader newReader(List<String> source);
 
     Map<String, Object> getConfig();
 

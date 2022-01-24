@@ -32,7 +32,7 @@ $secondLine"""
 
         asciidoctor.javaExtensionRegistry().preprocessor(new Preprocessor() {
             @Override
-            void process(Document doc, PreprocessorReader reader) {
+            Reader process(Document doc, PreprocessorReader reader) {
                 preprocessorCalled.set(true)
 
                 assert reader.peekLine() == firstLine
@@ -46,6 +46,7 @@ $secondLine"""
                 reader.advance()
 
                 assert reader.peekLine() == null
+                reader
             }
         })
 
@@ -63,7 +64,7 @@ $secondLine"""
 
         asciidoctor.javaExtensionRegistry().preprocessor(new Preprocessor() {
             @Override
-            void process(Document doc, PreprocessorReader reader) {
+            Reader process(Document doc, PreprocessorReader reader) {
                 preprocessorCalled.set(true)
 
                 assert reader.peekLines(ONE) == [firstLine]
@@ -78,6 +79,7 @@ $secondLine"""
 
                 assert reader.peekLines(ONE) == []
                 assert reader.peekLines(TWO) == []
+                reader
             }
         })
 
@@ -95,12 +97,13 @@ $secondLine"""
 
         asciidoctor.javaExtensionRegistry().preprocessor(new Preprocessor() {
             @Override
-            void process(Document doc, PreprocessorReader reader) {
+            Reader process(Document doc, PreprocessorReader reader) {
                 preprocessorCalled.set(true)
 
                 assert reader.readLine() == firstLine
                 assert reader.readLine() == secondLine
                 assert reader.readLine() == null
+                reader
             }
         })
 
@@ -120,7 +123,7 @@ $secondLine"""
 
         asciidoctor.javaExtensionRegistry().preprocessor(new Preprocessor() {
             @Override
-            void process(Document doc, PreprocessorReader reader) {
+            Reader process(Document doc, PreprocessorReader reader) {
                 preprocessorCalled.set(true)
 
                 assert reader.peekLine() == firstLine
@@ -131,6 +134,7 @@ $secondLine"""
                 assert reader.readLine() == anotherLine
                 assert reader.peekLine() == firstLine
                 assert reader.readLine() == firstLine
+                reader
             }
         })
 
@@ -151,7 +155,7 @@ $secondLine"""
 
         asciidoctor.javaExtensionRegistry().preprocessor(new Preprocessor() {
             @Override
-            void process(Document doc, PreprocessorReader reader) {
+            Reader process(Document doc, PreprocessorReader reader) {
                 preprocessorCalled.set(true)
 
                 assert reader.peekLine() == firstLine
@@ -164,6 +168,7 @@ $secondLine"""
                 assert reader.readLine() == anotherSecondLine
                 assert reader.peekLine() == firstLine
                 assert reader.readLine() == firstLine
+                reader
             }
         })
 

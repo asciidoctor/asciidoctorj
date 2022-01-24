@@ -8,10 +8,10 @@ import java.util.List;
 public class FrontMatterPreprocessor extends Preprocessor {
 
     @Override
-    public void process(Document document, PreprocessorReader reader) {
+    public Reader process(Document document, PreprocessorReader reader) {
         List<String> lines = reader.getLines();
         if (lines.isEmpty()) {
-            return;
+            return reader;
         }
         List<String> frontMatter = new ArrayList<>();
         if ("---".equals(lines.get(0).trim())) {
@@ -28,5 +28,6 @@ public class FrontMatterPreprocessor extends Preprocessor {
                 }
             }
         }
+        return reader;
     }
 }

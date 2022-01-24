@@ -15,7 +15,7 @@ import java.util.Arrays;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Arquillian.class)
-public class FrontMatterPreprocessorTest {
+public class PreprocessorTest {
 
     @ArquillianResource
     private Asciidoctor asciidoctor;
@@ -62,5 +62,20 @@ public class FrontMatterPreprocessorTest {
 
         assertThat(body.getElementsByTag("p").first().text())
                 .startsWith("This is a sample page");
+    }
+
+    @Test
+    public void shouldUseNewReader() {
+        // Given: the HardBreakPreprocessor
+        asciidoctor.javaExtensionRegistry().preprocessor(HardBreakPreprocessor.class);
+
+        // And a document
+        String document = "Ruby is red.\n" +
+                "Java is beige.";
+
+        // When the document is converted
+        String html = asciidoctor.convert(document, Options.builder().toFile(false).build());
+        org.jsoup.nodes.Document htmlDoc = Jsoup.parse(html);
+        assertThat(htmlDoc.getElementsByTag("br")).hasSize(2);
     }
 }

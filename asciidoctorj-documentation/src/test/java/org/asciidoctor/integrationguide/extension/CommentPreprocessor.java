@@ -4,6 +4,7 @@ package org.asciidoctor.integrationguide.extension;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.extension.PreprocessorReader;
+import org.asciidoctor.extension.Reader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public class CommentPreprocessor extends Preprocessor {   // <1>
 
     @Override
-    public void process(Document document, PreprocessorReader reader) {
+    public Reader process(Document document, PreprocessorReader reader) {
 
         List<String> lines = reader.readLines();          // <2>
         List<String> newLines = new ArrayList<String>();
@@ -31,6 +32,7 @@ public class CommentPreprocessor extends Preprocessor {   // <1>
         }
 
         reader.restoreLines(newLines);                    // <4>
+        return reader;
     }
 }
 //end::include[]
