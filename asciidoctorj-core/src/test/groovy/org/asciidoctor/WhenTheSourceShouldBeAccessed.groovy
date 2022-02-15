@@ -103,8 +103,7 @@ That::
 and should continue here'''
         listItem.description.text == '''list item should show bar
 and should continue here'''
-        list.blocks.size() == list.items.size()
-        list.items[0].description.source == list.blocks[0].description.source
+        list.blocks.size() == 0
     }
 
     def 'it should be possible to get the raw text from a table cell'() {

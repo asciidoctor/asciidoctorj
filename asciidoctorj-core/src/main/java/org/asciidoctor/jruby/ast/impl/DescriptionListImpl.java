@@ -9,6 +9,8 @@ import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 public class DescriptionListImpl extends StructuralNodeImpl implements DescriptionList {
 
     public DescriptionListImpl(IRubyObject delegate) {
@@ -39,7 +41,6 @@ public class DescriptionListImpl extends StructuralNodeImpl implements Descripti
 
     @Override
     public List<StructuralNode> getBlocks() {
-        RubyArray rubyBlocks = (RubyArray) getRubyProperty("blocks");
-        return new RubyBlockListDecorator<>(rubyBlocks);
+        return emptyList();
     }
 }
