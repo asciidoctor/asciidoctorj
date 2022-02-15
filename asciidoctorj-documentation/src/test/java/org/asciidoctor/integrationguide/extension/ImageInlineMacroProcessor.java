@@ -1,6 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.PhraseNode;
 import org.asciidoctor.extension.InlineMacroProcessor;
 import org.asciidoctor.extension.Name;
 
@@ -12,7 +13,7 @@ import java.util.Map;
 public class ImageInlineMacroProcessor extends InlineMacroProcessor {
 
     @Override
-    public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
+    public PhraseNode process(ContentNode parent, String target, Map<String, Object> attributes) {
 
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("type", "image");                                            // <1>

@@ -34,7 +34,7 @@ public class BlockMacroRegistrationTest {
 
     public static class AbstractTestProcessor extends BlockMacroProcessor {
         @Override
-        public Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+        public StructuralNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
             return createBlock(parent, "paragraph", target.toUpperCase());
         }
     }
@@ -48,7 +48,7 @@ public class BlockMacroRegistrationTest {
         }
 
         @Override
-        public Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+        public StructuralNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
             return createBlock(parent, "paragraph", target.toUpperCase());
         }
     }

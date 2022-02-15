@@ -1,5 +1,6 @@
 package org.asciidoctor.jruby.extension.processorproxies;
 
+import org.asciidoctor.ast.PhraseNode;
 import org.asciidoctor.extension.InlineMacroProcessor;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.jruby.internal.*;

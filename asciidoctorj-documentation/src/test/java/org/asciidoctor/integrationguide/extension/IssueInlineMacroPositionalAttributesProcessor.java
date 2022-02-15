@@ -2,6 +2,7 @@ package org.asciidoctor.integrationguide.extension;
 
 //tag::include[]
 import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.PhraseNode;
 import org.asciidoctor.extension.InlineMacroProcessor;
 import org.asciidoctor.extension.Name;
 import org.asciidoctor.extension.PositionalAttributes;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class IssueInlineMacroPositionalAttributesProcessor extends InlineMacroProcessor {
 
     @Override
-    public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
+    public PhraseNode process(ContentNode parent, String target, Map<String, Object> attributes) {
 
         String href =
                 new StringBuilder()

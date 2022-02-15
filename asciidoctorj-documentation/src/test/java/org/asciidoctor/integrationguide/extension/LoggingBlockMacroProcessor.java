@@ -11,7 +11,7 @@ import java.util.Map;
 public class LoggingBlockMacroProcessor extends BlockMacroProcessor {
 
     @Override
-    public Object process(
+    public StructuralNode process(
             StructuralNode parent, String target, Map<String, Object> attributes) {
 
         String message = target;

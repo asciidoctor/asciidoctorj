@@ -5,7 +5,7 @@ import org.asciidoctor.ast.ContentNode;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class MacroProcessor<T extends ContentNode> extends BaseProcessor {
+public abstract class MacroProcessor<T extends ContentNode, R extends ContentNode> extends BaseProcessor {
 
     protected String name;
 
@@ -30,6 +30,6 @@ public abstract class MacroProcessor<T extends ContentNode> extends BaseProcesso
         return new HashMap<>();
     }
     
-    public abstract Object process(T parent, String target, Map<String, Object> attributes);
+    public abstract R process(T parent, String target, Map<String, Object> attributes);
     
 }

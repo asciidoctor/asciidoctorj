@@ -13,7 +13,7 @@ class ListCreatorBlockMacro extends BlockMacroProcessor {
     }
 
     @Override
-    Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+    StructuralNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
 
         def attrs = new HashMap<String, Object>()
         attrs['start'] = '42'

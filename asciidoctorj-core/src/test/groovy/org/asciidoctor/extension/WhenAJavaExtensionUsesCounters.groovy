@@ -126,7 +126,7 @@ testmacro::countera[]
     static class TestBlockMacroProcessor extends BlockMacroProcessor {
 
         @Override
-        Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+        StructuralNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
 
             String text = "This is macro call ${parent.document.getAndIncrementCounter(target)} for ${target}"
             // Have to do this to interact successfully with counters also used in the document
@@ -143,7 +143,7 @@ testmacro::countera[]
     static class TestBlockMacroWithInitialCounterProcessor extends BlockMacroProcessor {
 
         @Override
-        Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+        StructuralNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
 
             String text = "This is macro call ${parent.document.getAndIncrementCounter(target, 42)} for ${target}"
 

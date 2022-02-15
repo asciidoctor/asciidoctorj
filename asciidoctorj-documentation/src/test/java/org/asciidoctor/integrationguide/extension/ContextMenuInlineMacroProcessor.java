@@ -1,6 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.PhraseNode;
 import org.asciidoctor.extension.InlineMacroProcessor;
 import org.asciidoctor.extension.Name;
 
@@ -14,7 +15,7 @@ import java.util.Map;
 public class ContextMenuInlineMacroProcessor extends InlineMacroProcessor {
 
     @Override
-    public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
+    public PhraseNode process(ContentNode parent, String target, Map<String, Object> attributes) {
         String[] items = target.split("\\|");
         Map<String, Object> attrs = new HashMap<String, Object>();
         attrs.put("menu", "Right click");                              // <1>
