@@ -16,13 +16,16 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 Improvement::
 
 * Upgrade to jcommander 1.81 (#1079)
-* Upgrade to JRuby 9.3.3.0 (#1079)
+* Upgrade to JRuby 9.3.4.0 (#1085)
+* Upgrade to Rouge 3.28.0 (#1085)
 
 Bug Fixes::
 
 Build Improvement::
 
-* Upgrade to gradle 7.3.3 (#1079)
+* Upgrade to gradle 7.4.1 (#1085)
+* Upgrade to Wildfly 26.0.1 for integration test (#1085)
+* Upgrade to Spring Boot 2.6.5 for integration test (#1085)
 
 Documentation::
 
