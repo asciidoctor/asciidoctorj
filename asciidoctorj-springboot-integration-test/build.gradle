@@ -5,9 +5,9 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.assertj:assertj-core:$assertjVersion"
     testImplementation "commons-io:commons-io:$commonsioVersion"
-    testImplementation "org.awaitility:awaitility:4.0.3"
-    testImplementation "com.squareup.okhttp3:okhttp:4.9.1"
-    testImplementation "com.google.code.gson:gson:2.8.6"
+    testImplementation "org.awaitility:awaitility:4.2.0"
+    testImplementation "com.squareup.okhttp3:okhttp:4.9.3"
+    testImplementation "com.google.code.gson:gson:2.9.0"
 }
 
 test.dependsOn(':asciidoctorj-springboot-integration-test:springboot-app:assemble')

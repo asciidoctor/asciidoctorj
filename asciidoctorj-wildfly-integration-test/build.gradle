@@ -3,7 +3,7 @@ jar.enabled = false
 ext {
     arquillianWildflyVersion = '3.0.1.Final'
 
-    wildflyVersion = '23.0.0.Final'
+    wildflyVersion = '26.0.1.Final'
 }
 
 repositories {

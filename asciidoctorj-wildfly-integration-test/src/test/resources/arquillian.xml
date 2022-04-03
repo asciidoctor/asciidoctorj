@@ -23,7 +23,7 @@
     <configuration>
       <property name="jbossHome">${jboss.home}</property>
       <!--<property name="javaVmArguments">-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005</property> -->
-      <property name="javaVmArguments">--add-modules java.se</property>
+      <property name="javaVmArguments">--add-modules java.se --add-opens java.base/java.util=ALL-UNNAMED</property>
       <property name="serverConfig">${jboss.server.config.file.name:standalone.xml}</property>
       <property name="jbossArguments">${jboss.args:}</property>
     </configuration>
