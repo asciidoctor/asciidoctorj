@@ -23,7 +23,7 @@ Bug Fixes::
 
 Build Improvement::
 
-* Upgrade to gradle 7.4.1 (#1085)
+* Upgrade to gradle 7.4.2 (#1086)
 * Upgrade to Wildfly 26.0.1 for integration test (#1085)
 * Upgrade to Spring Boot 2.6.5 for integration test (#1085)
 
