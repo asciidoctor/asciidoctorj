@@ -22,14 +22,14 @@ task checkVersion() {
 
         String gem_latest_version = getLatestGemVersion(gem_name)
         String javaVersion = latestGemVersionAsJavaVersion(gem_latest_version)
-
         try {
 
-            Version projectVersion = Version.valueOf(version as String)
+            String resolvedVersion = project.configurations.gems.resolvedConfiguration.resolvedArtifacts.find { it.name == gem_name }.moduleVersion.id.version
+            Version projectVersion = Version.valueOf(resolvedVersion as String)
             Version gemJavaVersion = Version.valueOf(javaVersion)
 
             if (projectVersion.lessThan(gemJavaVersion)) {
-                logger.warn "\nWARNING\nVersion mismatch: Current Version: {}, Gem Version: {}\n",version , gem_latest_version
+                logger.warn "\nWARNING\nVersion mismatch: Current Version: {}, Gem Version: {}\n", resolvedVersion , gem_latest_version
             } else {
                 println "up-to-date"
             }
