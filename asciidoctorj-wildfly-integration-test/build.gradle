@@ -57,21 +57,20 @@ sourcesJar {
     dependsOn unpackWildfly
 }
 
-tasks.create("createModule").doLast {
-    copy {
-        from "src/test/resources/module.xml"
-        into "build/modules/org/asciidoctor/asciidoctorj/main"
-        filter {
-            it
-                    .replaceAll('@@version@@', project(':asciidoctorj').version)
-                    .replaceAll('@@jrubyVersion@@', jrubyVersion)
-        }
+task createModuleDescriptor(type: Copy) {
+    from "src/test/resources/module.xml"
+    into "build/modules/org/asciidoctor/asciidoctorj/main"
+    filter {
+        it
+                .replaceAll('@@version@@', project(':asciidoctorj').version)
+                .replaceAll('@@jrubyVersion@@', jrubyVersion)
     }
+}
 
-    copy {
-        from configurations.jbossmodule
-        into "build/modules/org/asciidoctor/asciidoctorj/main"
-    }
+task createModule(type: Copy) {
+    from configurations.jbossmodule
+    into "build/modules/org/asciidoctor/asciidoctorj/main"
+    dependsOn createModuleDescriptor
 }
 
 
@@ -109,9 +108,4 @@ test {
     dependsOn createModule
     dependsOn unpackWildfly
     dependsOn configurations.jbossmodule
-}
-
-
-configurations.all {
-    artifacts.clear()
 }
