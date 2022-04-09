@@ -1,6 +1,5 @@
 apply plugin: 'eclipse'
 
-tasks.eclipse.dependsOn jrubyPrepare
 eclipse {
   classpath {
     defaultOutputDir = file('build/eclipse')
