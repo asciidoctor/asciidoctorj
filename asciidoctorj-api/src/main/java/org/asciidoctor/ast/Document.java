@@ -27,7 +27,7 @@ public interface Document extends StructuralNode {
 
     /**
      * Gets the author(s) information as defined in the author line
-     * in the document header, or in author & email attributes.
+     * in the document header, or in author &amp; email attributes.
      *
      * @return authors information
      */
