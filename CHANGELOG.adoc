@@ -27,6 +27,7 @@ Build Improvement::
 * Upgrade to Wildfly 26.0.1 for integration test (#1085)
 * Upgrade to Spring Boot 2.6.5 for integration test (#1085)
 * Fix gem version check task (#1087)
+* Release from Github Actions (#1090)
 
 Documentation::
 
