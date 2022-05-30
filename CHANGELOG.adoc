@@ -13,6 +13,8 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+== 2.5.4 (2022-06-30)
+
 Improvement::
 
 * Upgrade to asciidoctorj-diagram 2.2.3 (#1091)
@@ -21,6 +23,8 @@ Improvement::
 * Upgrade to Rouge 3.28.0 (#1085)
 
 Bug Fixes::
+
+* Make DescriptionList.getBlocks() return null instead of a List of DescriptionListItems resulting in a ClassCastException (#1082) (@someth2say)
 
 Build Improvement::
 

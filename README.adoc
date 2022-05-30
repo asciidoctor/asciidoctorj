@@ -29,9 +29,9 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-zulip: https://asciidoctor.zulipchat.com/
-:artifact-version: 2.5.2
+:artifact-version: 2.5.4
 :asciidoctorj-epub3-version: 1.5.1
-:asciidoctorj-pdf-version: 1.6.0
+:asciidoctorj-pdf-version: 1.6.2
 :uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
 :uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
