@@ -59,7 +59,7 @@ ext {
   // jar versions
   arquillianVersion = '1.6.0.Final'
   arquillianSpockVersion = '1.0.0.CR1'
-  asciidoctorjPdfVersion = '1.6.2'
+  asciidoctorjPdfVersion = '2.0.6'
   asciidoctorjEpub3Version = '1.5.1'
   asciidoctorjDiagramVersion = '2.2.3'
   asciidoctorjDiagramDitaaMiniVersion = '1.0.3'
