@@ -2,6 +2,7 @@ package org.asciidoctor;
 
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.Author;
+import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.RevisionInfo;
 import org.asciidoctor.ast.Section;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Collections.emptyMap;
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -51,7 +53,12 @@ public class WhenAsciiDocIsLoadedToDocument {
             "\n" +
             "== Section B\n" +
             "\n" +
-            "paragraph";
+            "paragraph\n" +
+            "\n" +
+            "|===\n" +
+            "|A\n" +
+            "|B\n" +
+            "|===";
 
     private static final String ROLE = "[\"quote\", \"author\", \"source\", role=\"famous\"]\n" +
             "____\n" +
@@ -91,6 +98,20 @@ public class WhenAsciiDocIsLoadedToDocument {
 
         Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
         assertThat(document.getDoctitle(), is("Document Title"));
+    }
+
+    @Test
+    public void should_find_all_nodes() {
+        Document document = asciidoctor.load(DOCUMENT, Options.builder().sourcemap(true).build());
+        List<StructuralNode> findBy = document.findBy(new HashMap<>());
+        assertThat(findBy, hasSize(17));
+        List<Cell> tableCells = findBy.stream()
+                .filter(Cell.class::isInstance)
+                .map(Cell.class::cast)
+                .collect(toList());
+        assertThat(tableCells, hasSize(2));
+        assertThat(tableCells.get(0).getSourceLocation().getLineNumber(), is(23));
+        assertThat(tableCells.get(1).getSourceLocation().getLineNumber(), is(24));
     }
 
     @Test
