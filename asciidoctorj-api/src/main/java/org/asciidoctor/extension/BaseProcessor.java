@@ -5,6 +5,7 @@ import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.Column;
 import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.ast.DescriptionList;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
@@ -23,7 +24,7 @@ import java.util.ServiceLoader;
 
 public class BaseProcessor implements Processor {
 
-    private static ProcessorFactory processorFactory;
+    private static final ProcessorFactory processorFactory;
 
     static {
         Iterator<ProcessorFactory> iterator = ServiceLoader.load(ProcessorFactory.class).iterator();
@@ -33,7 +34,7 @@ public class BaseProcessor implements Processor {
         processorFactory = iterator.next();
     }
 
-    private Processor delegate;
+    private final Processor delegate;
 
     public BaseProcessor() {
         this(new HashMap<>());
@@ -152,6 +153,41 @@ public class BaseProcessor implements Processor {
     @Override
     public void parseContent(StructuralNode parent, List<String> lines) {
         delegate.parseContent(parent, lines);
+    }
+
+    @Override
+    public Cursor newCursor(String file) {
+        return delegate.newCursor(file);
+    }
+
+    @Override
+    public Cursor newCursor(String file, String dir) {
+        return delegate.newCursor(file, dir);
+    }
+
+    @Override
+    public Cursor newCursor(String file, String dir, int lineno) {
+        return delegate.newCursor(file, dir, lineno);
+    }
+
+    @Override
+    public Reader newReader(List<String> source, Cursor cursor, Map<Object, Object> options) {
+        return delegate.newReader(source, cursor, options);
+    }
+
+    @Override
+    public Reader newReader(List<String> source, Cursor cursor) {
+        return delegate.newReader(source, cursor);
+    }
+
+    @Override
+    public Reader newReader(List<String> source, Map<Object, Object> options) {
+        return delegate.newReader(source, options);
+    }
+
+    @Override
+    public Reader newReader(List<String> source) {
+        return delegate.newReader(source);
     }
 
     // REMIND: Could be default method but Groovy (with compileStatic does not resolve default methods)

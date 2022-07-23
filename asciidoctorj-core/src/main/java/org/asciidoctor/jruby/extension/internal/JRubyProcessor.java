@@ -6,6 +6,7 @@ import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.Column;
 import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.PhraseNode;
@@ -17,6 +18,7 @@ import org.asciidoctor.extension.Processor;
 import org.asciidoctor.extension.Reader;
 import org.asciidoctor.jruby.ast.impl.ColumnImpl;
 import org.asciidoctor.jruby.ast.impl.ContentNodeImpl;
+import org.asciidoctor.jruby.ast.impl.CursorImpl;
 import org.asciidoctor.jruby.ast.impl.DescriptionListImpl;
 import org.asciidoctor.jruby.ast.impl.DocumentImpl;
 import org.asciidoctor.jruby.ast.impl.ListImpl;
@@ -31,6 +33,7 @@ import org.asciidoctor.jruby.internal.RubyUtils;
 import org.asciidoctor.log.LogRecord;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
+import org.jruby.RubyClass;
 import org.jruby.RubyFixnum;
 import org.jruby.RubyHash;
 import org.jruby.RubySymbol;
@@ -374,6 +377,60 @@ public class JRubyProcessor implements Processor {
             parent.append(nextBlock);
             nextBlock = parser.nextBlock();
         }
+    }
+
+    public Cursor newCursor(String file) {
+        return newCursor(file, null);
+    }
+
+    public Cursor newCursor(String file, String dir) {
+        return newCursor(file, dir, 1);
+    }
+
+    public Cursor newCursor(String file, String dir, int lineNo) {
+        Ruby runtime = JRubyRuntimeContext.get(asciidoctor);
+        RubyClass klazz = runtime.getModule("Asciidoctor").getClass("Reader").getClass("Cursor");
+        IRubyObject rubyCursor = klazz.newInstance(runtime.getCurrentContext(), new IRubyObject[]{
+                runtime.newString(file),
+                dir == null ? runtime.getNil() : runtime.newString(dir),
+                runtime.newFixnum(lineNo),
+        }, org.jruby.runtime.Block.NULL_BLOCK);
+        return new CursorImpl(rubyCursor);
+    }
+
+    @Override
+    public Reader newReader(List<String> source, Cursor cursor) {
+        return newReader(source, cursor, null);
+    }
+
+    @Override
+    public Reader newReader(List<String> source, Map<Object, Object> options) {
+        return newReader(source, null, options);
+    }
+
+    @Override
+    public Reader newReader(List<String> source) {
+        return newReader(source, null, null);
+    }
+
+    @Override
+    public Reader newReader(List<String> source, Cursor cursor, Map<Object, Object> options) {
+        Ruby runtime = JRubyRuntimeContext.get(asciidoctor);
+        RubyClass klazz = runtime.getModule("Asciidoctor").getClass("Reader");
+
+        RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(runtime, options);
+
+        RubyArray data = runtime.newArray();
+        for (String line : source) {
+            data.add(runtime.newString(line));
+        }
+
+        IRubyObject rubyReader = klazz.newInstance(runtime.getCurrentContext(), new IRubyObject[]{
+                data,
+                cursor == null ? runtime.getNil() : ((RubyObjectWrapper) cursor).getRubyObject(),
+                convertMapToRubyHashWithSymbols
+        }, org.jruby.runtime.Block.NULL_BLOCK);
+        return new ReaderImpl(rubyReader);
     }
 
     private class Parser extends RubyObjectWrapper {

@@ -15,6 +15,6 @@ public abstract class Preprocessor extends BaseProcessor {
         super(config);
     }
 
-    public abstract void process(Document document, PreprocessorReader reader);
+    public abstract Reader process(Document document, PreprocessorReader reader);
 
 }

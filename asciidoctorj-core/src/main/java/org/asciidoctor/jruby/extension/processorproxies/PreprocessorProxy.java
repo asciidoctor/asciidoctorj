@@ -2,11 +2,13 @@ package org.asciidoctor.jruby.extension.processorproxies;
 
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.Preprocessor;
+import org.asciidoctor.extension.Reader;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.jruby.extension.internal.PreprocessorReaderImpl;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.jruby.internal.RubyHashMapDecorator;
 import org.asciidoctor.jruby.internal.RubyHashUtil;
+import org.asciidoctor.jruby.internal.RubyObjectWrapper;
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
 import org.jruby.RubyHash;
@@ -91,10 +93,14 @@ public class PreprocessorProxy extends AbstractProcessorProxy<Preprocessor> {
 
     @JRubyMethod(name = "process", required = 2)
     public IRubyObject process(ThreadContext context, IRubyObject document, IRubyObject preprocessorReader) {
-        getProcessor().process(
+        PreprocessorReaderImpl readerArg = new PreprocessorReaderImpl(preprocessorReader);
+        Reader reader = getProcessor().process(
                 (Document) NodeConverter.createASTNode(document),
-                new PreprocessorReaderImpl(preprocessorReader));
+                readerArg);
 
-        return getRuntime().getNil();
+        if (reader == null || reader == readerArg) {
+            return getRuntime().getNil();
+        }
+        return ((RubyObjectWrapper) reader).getRubyObject();
     }
 }

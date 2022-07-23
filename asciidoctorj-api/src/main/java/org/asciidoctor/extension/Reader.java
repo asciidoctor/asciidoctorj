@@ -76,7 +76,17 @@ public interface Reader {
     */
     String readLine();
 
+    /**
+     * @return A copy of the String List of lines remaining in this Reader
+     * @deprecated Use {@link #getLines()}
+     */
+    @Deprecated
     List<String> lines();
+
+    /**
+     * @return A copy of the String List of lines remaining in this Reader
+     */
+    List<String> getLines();
 
     /**
      * Push the String line onto the beginning of the Array of source data.
@@ -107,7 +117,8 @@ public interface Reader {
      * already marked as processed, but does not consume them.
      *
      * @param lineCount The Integer number of lines to peek.
-     * @return
+     * @return A String List of the next multiple lines of source data, or an empty list
+     * if there are no more lines in this Reader.
      */
     List<String> peekLines(int lineCount);
 

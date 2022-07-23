@@ -18,8 +18,9 @@ class WhenAPreprocessorSetsTheSourceMapOption extends Specification {
 
     static class SourceMapOptionPreprocessor extends Preprocessor {
         @Override
-        void process(Document document, PreprocessorReader reader) {
+        Reader process(Document document, PreprocessorReader reader) {
             document.sourcemap = true
+            reader
         }
     }
 

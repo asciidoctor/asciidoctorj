@@ -24,6 +24,10 @@ public class RubyHashUtil {
 
         RubyHash rubyHash = new RubyHash(rubyRuntime);
 
+        if (options == null) {
+            return rubyHash;
+        }
+
         Set<Entry<Object, Object>> optionsSet = options.entrySet();
 
         for (Entry<Object, Object> entry : optionsSet) {
