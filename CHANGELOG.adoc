@@ -15,6 +15,7 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 Improvement::
 
+* BREAKING: Allow Preprocessor extensions to create new Readers and replace the original Reader. (#1081)
 * Upgrade to asciidoctorj-pdf 2.1.6 (#1094)
 
 
