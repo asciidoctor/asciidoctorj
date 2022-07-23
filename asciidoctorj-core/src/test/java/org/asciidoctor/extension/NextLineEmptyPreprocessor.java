@@ -4,8 +4,8 @@ import org.asciidoctor.ast.Document;
 
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class NextLineEmptyPreprocessor extends Preprocessor {
 
@@ -15,13 +15,13 @@ public class NextLineEmptyPreprocessor extends Preprocessor {
 
 	@Override
 	public Reader process(Document document,
-			PreprocessorReader reader) {
+						  PreprocessorReader reader) {
 
-		assertThat(reader.isNextLineEmpty(), is(false));
+		assertFalse(reader.isNextLineEmpty());
 
 		reader.advance();
 		
-		assertThat(reader.isNextLineEmpty(), is(true));
+		assertTrue(reader.isNextLineEmpty());
 
 		return reader;
 	}

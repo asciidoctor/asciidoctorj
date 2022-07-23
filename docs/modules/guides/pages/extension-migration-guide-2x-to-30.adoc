@@ -1,0 +1,53 @@
+= Extension Migration: 1.6.x to 2.0.x
+:url-base-1-5: https://github.com/asciidoctor/asciidoctorj/blob/v1.5.8.1
+:url-base-1-6: https://github.com/asciidoctor/asciidoctorj/blob/v1.6.0
+
+Between 2.x and 3.0.x there are some changes that may affect existing extensions.
+This guide will illustrate the changes.
+
+== Preprocessor API
+
+In AsciidoctorJ 1.x and 2.x a Preprocessor could not return anything from its process() method.
+This deviated from the API offered by Asciidoctor itself which allows to replace the original Reader.
+Certain use cases were very hard or even impossible to achieve.
+
+Therefore the signature of the method `Preprocessor.process()` was changed so that it now may return a new Reader.
+This causes all existing Preprocessor implementation to fail compilation.
+The fix for this is very simple: It is sufficient to change the method to return `null` or the given reader.
+
+Let's assume that a Preprocessor originally looks like this:
+
+[source,java]
+----
+public class ChangeAttributeValuePreprocessor extends Preprocessor {
+
+	public ChangeAttributeValuePreprocessor(Map<String, Object> config) {
+		super(config);
+	}
+
+	@Override
+	public void process(Document document, PreprocessorReader reader) {
+		document.getAttributes().put("myattribute", "myvalue");
+	}
+}
+----
+
+To make this Preprocessor compile and run with AsciidoctorJ 3.x it has to be changed like this
+
+[source,java]
+----
+public class ChangeAttributeValuePreprocessor extends Preprocessor {
+
+	public ChangeAttributeValuePreprocessor(Map<String, Object> config) {
+		super(config);
+	}
+
+	@Override
+	public Reader process(Document document, PreprocessorReader reader) { // <1>
+		document.getAttributes().put("myattribute", "myvalue");
+		return reader;                                                    // <2>
+	}
+}
+----
+<1> Change the method signature to return a `Reader` instead of `void`.
+<2> Directly return the passed Reader.

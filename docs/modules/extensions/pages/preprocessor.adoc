@@ -33,7 +33,7 @@ include::example$org/asciidoctor/integrationguide/extension/CommentPreprocessor.
 <2> The implementation gets the whole Asciidoctor source as an array of Strings where each entry corresponds to one line.
 <3> Every odd occurrence of a comment start is replaced by opening an admonition block, every even occurrence is closing it.
 The new content is collected in a new list.
-<4> The processed content is restored to the original `PreprocessorReader` so that it replaces the content that was already consumed at the beginning of the method.
+<4> A new Reader containing the processed content is returned so that it replaces the content that was already consumed at the beginning of the method.
 
 There may be multiple Preprocessors registered and every Preprocessor will be called.
 The order in which the Preprocessors are called is undefined so that all Preprocessors should be independent of each other.

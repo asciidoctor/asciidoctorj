@@ -31,8 +31,7 @@ public class CommentPreprocessor extends Preprocessor {   // <1>
             }
         }
 
-        reader.restoreLines(newLines);                    // <4>
-        return reader;
+        return newReader(newLines);                       // <4>
     }
 }
 //end::include[]

@@ -1,6 +1,17 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.*;
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.Cell;
+import org.asciidoctor.ast.Column;
+import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.Cursor;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.ListItem;
+import org.asciidoctor.ast.PhraseNode;
+import org.asciidoctor.ast.Row;
+import org.asciidoctor.ast.Section;
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.ast.Table;
 import org.asciidoctor.log.LogRecord;
 
 import java.util.List;
