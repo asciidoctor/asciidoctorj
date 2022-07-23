@@ -18,6 +18,10 @@ Improvement::
 * BREAKING: Allow Preprocessor extensions to create new Readers and replace the original Reader. (#1081)
 * Upgrade to asciidoctorj-pdf 2.1.6 (#1094)
 
+Bug Fixes::
+
+* Cell nodes do not inherit from StructuralNode (#1086) (@rahmanusta)
+
 Build Improvement::
 
 * Upgrade build to Gradle 7.5 (#1100)
