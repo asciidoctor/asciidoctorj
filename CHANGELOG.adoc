@@ -18,6 +18,9 @@ Improvement::
 * BREAKING: Allow Preprocessor extensions to create new Readers and replace the original Reader. (#1081)
 * Upgrade to asciidoctorj-pdf 2.1.6 (#1094)
 
+Build Improvement::
+
+* Upgrade build to Gradle 7.5 (#1100)
 
 == 2.5.4 (2022-06-30)
 
