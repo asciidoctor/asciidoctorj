@@ -6,7 +6,7 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Table;
 import org.jruby.runtime.builtin.IRubyObject;
 
-public class CellImpl extends ContentNodeImpl implements Cell {
+public class CellImpl extends StructuralNodeImpl implements Cell {
 
     public CellImpl(IRubyObject rubyNode) {
         super(rubyNode);
