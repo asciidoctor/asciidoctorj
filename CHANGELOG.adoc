@@ -13,6 +13,12 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+== 2.5.4 (2022-07-26)
+
+Improvement::
+
+* Upgrade to Rouge 3.29.0 (#1103)
+
 Bug Fixes::
 
 * Cell nodes do not inherit from StructuralNode (#1086) (@rahmanusta)
