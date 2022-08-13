@@ -2,8 +2,8 @@ package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.PhraseNode;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -32,7 +32,7 @@ public class InlineMacroRegistrationTest {
 
     public static class AbstractTestProcessor extends InlineMacroProcessor {
         @Override
-        public PhraseNode process(ContentNode parent, String target, Map<String, Object> attributes) {
+        public PhraseNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
             String transformed = target.chars()
                 .mapToObj(c -> Character.isUpperCase(c) ? " " + (char) c : Character.toString((char) c))
                 .collect(joining())
@@ -50,7 +50,7 @@ public class InlineMacroRegistrationTest {
         }
 
         @Override
-        public PhraseNode process(ContentNode parent, String target, Map<String, Object> attributes) {
+        public PhraseNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
             String transformed = target.chars()
                 .mapToObj(c -> Character.isUpperCase(c) ? " " + (char) c : Character.toString((char) c))
                 .collect(joining())

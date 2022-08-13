@@ -1,9 +1,8 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.Options;
 import org.asciidoctor.util.ClasspathResources;
-import org.hamcrest.Matcher;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
@@ -39,8 +38,8 @@ public class CommentPreprocessorTest {
 //tag::include[]
         asciidoctor.javaExtensionRegistry().preprocessor(CommentPreprocessor.class);      // <1>
 
-        String result1 = asciidoctor.convertFile(comment_adoc, OptionsBuilder.options().toFile(false));
-        String result2 = asciidoctor.convertFile(comment_with_note_adoc, OptionsBuilder.options().toFile(false));
+        String result1 = asciidoctor.convertFile(comment_adoc, Options.builder().toFile(false).build());
+        String result2 = asciidoctor.convertFile(comment_with_note_adoc, Options.builder().toFile(false).build());
 
         assertThat(result1, is(result2)); // <2>
 //end::include[]

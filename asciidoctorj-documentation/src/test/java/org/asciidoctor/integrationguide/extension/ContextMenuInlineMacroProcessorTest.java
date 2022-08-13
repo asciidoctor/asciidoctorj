@@ -1,7 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -22,7 +22,7 @@ public class ContextMenuInlineMacroProcessorTest {
 
         asciidoctor.javaExtensionRegistry().inlineMacro(ContextMenuInlineMacroProcessor.class);
 
-        String result = asciidoctor.convert("rightclick:New|Class[]", OptionsBuilder.options().toFile(false).safe(SafeMode.UNSAFE));
+        String result = asciidoctor.convert("rightclick:New|Class[]", Options.builder().toFile(false).safe(SafeMode.UNSAFE).build());
 
 
         assertThat(

@@ -1,7 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.Options;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -35,9 +35,10 @@ public class CopyrightFooterPostprocessorTest {
 
         String result =
                 asciidoctor.convertFile(doc,
-                        OptionsBuilder.options()
+                        Options.builder()
                                 .headerFooter(true)                                            // <2>
-                                .toFile(false));
+                                .toFile(false)
+                                .build());
 
         assertThat(result, containsString(CopyrightFooterPostprocessor.COPYRIGHT_NOTICE));
 //end::include[]

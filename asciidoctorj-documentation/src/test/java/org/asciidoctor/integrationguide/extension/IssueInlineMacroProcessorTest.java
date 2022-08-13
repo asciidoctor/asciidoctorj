@@ -2,7 +2,6 @@ package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
-import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -33,7 +32,7 @@ public class IssueInlineMacroProcessorTest {
 //tag::include[]
         asciidoctor.javaExtensionRegistry().inlineMacro(IssueInlineMacroProcessor.class);       // <1>
 
-        String result = asciidoctor.convertFile(issueinlinemacro_adoc, OptionsBuilder.options().toFile(false));
+        String result = asciidoctor.convertFile(issueinlinemacro_adoc, Options.builder().toFile(false).build());
 
         assertThat(
                 result,

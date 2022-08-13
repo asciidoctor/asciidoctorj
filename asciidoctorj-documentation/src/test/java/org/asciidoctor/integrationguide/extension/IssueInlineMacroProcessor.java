@@ -2,8 +2,8 @@ package org.asciidoctor.integrationguide.extension;
 
 //tag::include[]
 
-import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.PhraseNode;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.InlineMacroProcessor;
 import org.asciidoctor.extension.Name;
 
@@ -15,7 +15,7 @@ public class IssueInlineMacroProcessor extends InlineMacroProcessor {    // <2>
 
     @Override
     public PhraseNode process(                                           // <3>
-        ContentNode parent, String target, Map<String, Object> attributes) {
+        StructuralNode parent, String target, Map<String, Object> attributes) {
 
         String href =
                 new StringBuilder()
