@@ -149,6 +149,7 @@ public class AsciidoctorInvoker {
 
         if (inputFiles.size() == 1 && "-".equals(inputFiles.get(0).getName())) {
             asciidoctor.convert(readInputFromStdIn(), options);
+            return;
         }
 
         findInvalidInputFile(inputFiles)

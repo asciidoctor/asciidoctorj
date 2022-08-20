@@ -13,7 +13,11 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
-== 2.5.4 (2022-07-26)
+Bug Fixes::
+
+* Avoid throwing an exception when using AsciidoctorJ CLI and reading input from stdin (#1105) (@AlexCzar)
+
+== 2.5.5 (2022-07-26)
 
 Improvement::
 
