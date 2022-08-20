@@ -21,6 +21,7 @@ Improvement::
 Bug Fixes::
 
 * Cell nodes do not inherit from StructuralNode (#1086) (@rahmanusta)
+* Avoid throwing an exception when using AsciidoctorJ CLI and reading input from stdin (#1105) (@AlexCzar)
 
 Build Improvement::
 
