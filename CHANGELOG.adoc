@@ -17,7 +17,10 @@ Improvement::
 
 * BREAKING: Fix Macro APIs to take StructuralNodes and return Phrase- or StructuralNodes. (#1084)
 * BREAKING: Allow Preprocessor extensions to create new Readers and replace the original Reader. (#1081)
-* Upgrade to asciidoctorj-pdf 2.1.6 (#1094)
+* Upgrade to asciidoctorj-pdf 2.3.0 (#1109)
+* Upgrade to JRuby 9.3.7.0 (#1109)
+* Upgrade to tilt 2.0.11 (#1109)
+* Upgrade to asciimath 2.0.4 (#1109)
 
 Bug Fixes::
 
@@ -26,7 +29,7 @@ Bug Fixes::
 
 Build Improvement::
 
-* Upgrade build to Gradle 7.5 (#1100)
+* Upgrade build to Gradle 7.5.1 (#1109)
 
 == 2.5.4 (2022-06-30)
 
