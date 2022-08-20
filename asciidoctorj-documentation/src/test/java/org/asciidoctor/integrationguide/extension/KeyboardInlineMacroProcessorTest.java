@@ -1,9 +1,8 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
@@ -25,7 +24,7 @@ public class KeyboardInlineMacroProcessorTest {
 
         asciidoctor.javaExtensionRegistry().inlineMacro(KeyboardInlineMacroProcessor.class);       // <1>
 
-        String result = asciidoctor.convert("ctrl:S[]", OptionsBuilder.options().toFile(false).safe(SafeMode.UNSAFE));
+        String result = asciidoctor.convert("ctrl:S[]", Options.builder().toFile(false).safe(SafeMode.UNSAFE).build());
 
         assertThat(
                 result,

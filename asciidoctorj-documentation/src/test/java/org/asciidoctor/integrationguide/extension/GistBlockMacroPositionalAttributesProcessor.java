@@ -13,7 +13,7 @@ import java.util.Map;
 public class GistBlockMacroPositionalAttributesProcessor extends BlockMacroProcessor {
 
     @Override
-    public Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+    public StructuralNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
 
         String script;
         String provider = (String) attributes.get("provider");

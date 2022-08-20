@@ -1,6 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
@@ -81,9 +82,10 @@ public class TerminalCommandTreeprocessorTest {
 //tag::include-extension-registry[]
         String result = asciidoctor.convertFile(
             src,
-            OptionsBuilder.options()
+            Options.builder()
                 .headerFooter(false)
-                .toFile(false));
+                .toFile(false)
+                .build());
 //end::include-extension-registry[]
             assertThat(result, is(referenceResult));
         } finally {

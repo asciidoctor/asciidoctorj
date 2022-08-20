@@ -1,6 +1,6 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.PhraseNode;
 import org.asciidoctor.ast.StructuralNode;
 
 import java.util.HashMap;
@@ -17,7 +17,7 @@ public class SayMacro extends InlineMacroProcessor {
     }
 
     @Override
-    public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
+    public PhraseNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
         String text = "*" + target + "*";
         Map<String, Object> phraseNodeAttributes = new HashMap<>();
         phraseNodeAttributes.put("subs", ":normal");

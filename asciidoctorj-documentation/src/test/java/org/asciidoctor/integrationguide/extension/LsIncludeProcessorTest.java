@@ -1,7 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.Options;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -35,7 +35,7 @@ public class LsIncludeProcessorTest {
 
         asciidoctor.javaExtensionRegistry().includeProcessor(LsIncludeProcessor.class);       // <1>
 
-        String result = asciidoctor.convertFile(lsinclude_adoc, OptionsBuilder.options().toFile(false));
+        String result = asciidoctor.convertFile(lsinclude_adoc, Options.builder().toFile(false).build());
 
         assertThat(
                 result,

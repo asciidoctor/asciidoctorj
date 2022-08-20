@@ -1,7 +1,8 @@
 package org.asciidoctor.extension
 
 import groovy.transform.CompileStatic
-import org.asciidoctor.ast.ContentNode
+import org.asciidoctor.ast.PhraseNode
+import org.asciidoctor.ast.StructuralNode
 
 @CompileStatic
 @Name('man')
@@ -13,7 +14,7 @@ class AnnotatedLongInlineMacroProcessor extends InlineMacroProcessor {
     public static final String SECTION = 'section'
 
     @Override
-    Object process(ContentNode parent, String target, Map<String, Object> attributes) {
+    PhraseNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
         assert attributes[SECTION] == '7' || ( attributes[SECTION] == '8' || attributes[SUBSECTION] == '1')
 
         Map<String, Object> options = new HashMap<String, Object>()

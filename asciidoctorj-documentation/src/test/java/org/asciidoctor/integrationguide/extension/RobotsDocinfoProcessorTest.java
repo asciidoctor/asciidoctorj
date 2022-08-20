@@ -1,7 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
@@ -37,10 +37,11 @@ public class RobotsDocinfoProcessorTest {
 
         String result = asciidoctor.convert(
                 src,
-                OptionsBuilder.options()
+                Options.builder()
                         .headerFooter(true)                      // <2>
                         .safe(SafeMode.SERVER)                   // <3>
-                        .toFile(false));
+                        .toFile(false)
+                        .build());
 
         org.jsoup.nodes.Document document = Jsoup.parse(result); // <4>
         Element metaElement = document.head().children().last();

@@ -11,7 +11,7 @@ import java.util.Map;
 public class GistBlockMacroProcessor extends BlockMacroProcessor {     // <2>
 
     @Override
-    public Object process(                                             // <3>
+    public StructuralNode process(                                     // <3>
             StructuralNode parent, String target, Map<String, Object> attributes) {
 
         String content = new StringBuilder()
@@ -23,7 +23,7 @@ public class GistBlockMacroProcessor extends BlockMacroProcessor {     // <2>
             .append("</div>")
             .append("</div>").toString();
 
-        return createBlock(parent, "pass", content);                   // <5>
+        return createBlock(parent, "pass", content);           // <5>
     }
 
 }

@@ -123,7 +123,7 @@ testmacro::target[]
 
         asciidoctor.javaExtensionRegistry().blockMacro(new BlockMacroProcessor('testmacro'){
             @Override
-            Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+            StructuralNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
                 createBlock(parent, 'paragraph', expectedContent, [:])
             }
         })

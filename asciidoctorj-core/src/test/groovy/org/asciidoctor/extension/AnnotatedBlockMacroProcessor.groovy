@@ -10,7 +10,7 @@ class AnnotatedBlockMacroProcessor extends BlockMacroProcessor {
     public static final String RESULT = 'This content is added by this macro!'
 
     @Override
-    Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+    StructuralNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
         createBlock(parent, 'paragraph', RESULT)
     }
 }

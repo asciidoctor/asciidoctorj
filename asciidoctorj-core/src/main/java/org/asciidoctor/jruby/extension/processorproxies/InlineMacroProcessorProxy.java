@@ -1,5 +1,6 @@
 package org.asciidoctor.jruby.extension.processorproxies;
 
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.InlineMacroProcessor;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.jruby.internal.*;
@@ -67,7 +68,7 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
             // If options contains a String with a Regexp create the RubyRegexp from it
             RubyHash rubyConfig = RubyHashUtil.convertMapToRubyHashWithSymbols(getRuntime(), getProcessor().getConfig());
             Object regexp = getProcessor().getConfig().get("regexp");
-            if (regexp != null && regexp instanceof CharSequence) {
+            if (regexp instanceof CharSequence) {
                 RubySymbol regexpSymbol = RubySymbol.newSymbol(getRuntime(), "regexp");
                 rubyConfig.put(regexpSymbol, convertRegexp(getRuntime(), (CharSequence) regexp));
             }
@@ -121,7 +122,7 @@ public class InlineMacroProcessorProxy extends AbstractMacroProcessorProxy<Inlin
     @JRubyMethod(name = "process", required = 3)
     public IRubyObject process(ThreadContext context, IRubyObject parent, IRubyObject target, IRubyObject attributes) {
         Object o = getProcessor().process(
-                NodeConverter.createASTNode(parent),
+                (StructuralNode) NodeConverter.createASTNode(parent),
                 RubyUtils.rubyToJava(getRuntime(), target, String.class),
                 new RubyAttributesMapDecorator((RubyHash) attributes));
         return convertProcessorResult(o);

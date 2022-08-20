@@ -18,7 +18,7 @@ class GithubContributorsBlockMacro extends BlockMacroProcessor {
     }
 
     @Override
-    Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+    StructuralNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
         URL url = new URL("http://api.github.com/repos/${target}/contributors")
         URLConnection connection = url.openConnection(new Proxy(Proxy.Type.HTTP, new InetSocketAddress('localhost', TestHttpServer.instance.localPort)))
         String content = connection.inputStream.text

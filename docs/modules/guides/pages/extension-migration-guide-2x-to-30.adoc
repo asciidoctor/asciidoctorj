@@ -1,11 +1,9 @@
-= Extension Migration: 1.6.x to 2.0.x
-:url-base-1-5: https://github.com/asciidoctor/asciidoctorj/blob/v1.5.8.1
-:url-base-1-6: https://github.com/asciidoctor/asciidoctorj/blob/v1.6.0
+= Extension Migration: 2.0.x to 3.0.x
 
 Between 2.x and 3.0.x there are some changes that may affect existing extensions.
 This guide will illustrate the changes.
 
-== Preprocessor API
+== Preprocessor Extensions
 
 In AsciidoctorJ 1.x and 2.x a Preprocessor could not return anything from its process() method.
 This deviated from the API offered by Asciidoctor itself which allows to replace the original Reader.
@@ -51,3 +49,40 @@ public class ChangeAttributeValuePreprocessor extends Preprocessor {
 ----
 <1> Change the method signature to return a `Reader` instead of `void`.
 <2> Directly return the passed Reader.
+
+== Inline Macro Extensions
+
+The API that inline macro extensions had the return type `java.lang.Object`, while `org.asciidoctor.ast.PhraseNode` is actually expected.
+Additionally, the parent node passed to the process method is guaranteed to be a `org.asciidoctor.ast.StructuralNode`, while the previous API offered the supertype `org.asciidoctor.ast.ContentNode`.
+This is corrected in AsciidoctorJ 3.x making it clearer for extension implementors what types to expect and what types to return.
+
+Let's assume that an InlineMacro originally looks like this for AsciidoctorJ 2.x:
+
+[source,java]
+----
+public class KeyboardInlineMacroProcessor extends InlineMacroProcessor {
+     @Override
+     public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
+         Map<String, Object> attrs = new HashMap<>();
+         attrs.put("keys", Arrays.asList("Ctrl", target));
+         return createPhraseNode(parent, "kbd", (String) null, attrs);
+    }
+}
+----
+
+The only change that is necessary is to change the method declaration of the process method:
+Change the return type to `org.asciidoctor.ast.PhraseNode` and the type of the first parameter to `org.asciidoctor.ast.StructuralNode`.
+
+[source,java]
+----
+public class KeyboardInlineMacroProcessor extends InlineMacroProcessor {
+     @Override
+     public PhraseNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
+         Map<String, Object> attrs = new HashMap<>();
+         attrs.put("keys", Arrays.asList("Ctrl", target));
+         return createPhraseNode(parent, "kbd", (String) null, attrs);
+    }
+}
+----
+
+This change mostly makes it clearer for new extensions what they have to return and what they can expect.

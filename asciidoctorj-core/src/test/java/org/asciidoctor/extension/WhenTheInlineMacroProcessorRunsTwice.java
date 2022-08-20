@@ -1,7 +1,8 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.PhraseNode;
+import org.asciidoctor.ast.StructuralNode;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -20,7 +21,7 @@ public class WhenTheInlineMacroProcessorRunsTwice {
         asciidoctor.javaExtensionRegistry().inlineMacro(new InlineMacroProcessor("example") {
 
             @Override
-            public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
+            public PhraseNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
                 return createPhraseNode(parent, "quoted", attributes.toString(), attributes, new HashMap<>());
             }
 
