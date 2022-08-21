@@ -6,7 +6,7 @@
 There are two basic ways to make AsciidoctorJ available as a command line tool.
 
 * Manual installation using the binary distribution.
-* Automatic installation using a package manager like {url-sdkman}[SDKMAN^] or {url-chocolatey}[Chocolately^].
+* Automatic installation using a package manager like {url-sdkman}[SDKMAN^] or {url-chocolatey}[Chocolatey^].
 
 == Manual distribution installation
 
@@ -29,7 +29,7 @@ Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj
 Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat
 ----
 
-Next, say you want to convert an ASCIIDOC (.adoc) file to a pdf.
+Next, say you want to convert an AsciiDoc (.adoc) file to a pdf.
 
 [source]
 [subs="specialcharacters,attributes,callouts"]
@@ -51,7 +51,7 @@ Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat -b pdf -o READTHIS
 == Linux and MacOS installation
 
 A {url-sdkman}[SDKMAN!] candidate is available for easy installation in Linux and MacOS.
-This will install the binary distribution and setup the PATH automatically.
+This will install the binary distribution and set up the PATH automatically.
 
  $ sdk install asciidoctorj
  $ asciidoctorj -b pdf README.adoc

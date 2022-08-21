@@ -1,7 +1,7 @@
 = Read the Document Tree
 
 Instead of converting an AsciiDoc document, you may want to parse the document to read information it contains or navigate the document's structure.
-AsciidoctorJ let's you do this!
+AsciidoctorJ lets you do this!
 
 AsciidoctorJ provides a model of the abstract syntax tree of the document.
 These objects are directly linked to the internal representation.

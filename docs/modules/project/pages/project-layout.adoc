@@ -1,6 +1,6 @@
 = Project Layout
 
-The project is structured as a multi-module {url-gradle}[Gradle] build.
+The project is structured as a multimodule {url-gradle}[Gradle] build.
 
 The root folder is the root project and there are several subproject folders, each prefixed with _asciidoctorj-_.
 Each subproject produces a primary artifact (e.g., jar or zip) and its supporting artifacts (e.g., javadoc, sources, etc).
@@ -32,7 +32,7 @@ asciidoctorj-test-support::
   Contains some common test classes that are used by multiple other subprojects and the Arquillian extension.
 
 asciidoctorj-wildfly-integration-test::
-  Wildfly integration tests.
+  WildFly integration tests.
 
 asciidoctorj-springboot-integration-test::
   Spring Boot example app and integration tests.
