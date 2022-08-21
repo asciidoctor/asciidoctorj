@@ -5,7 +5,7 @@ Even though AsciidoctorJ tries to hide as much as possible there are some points
 
 Every Asciidoctor instance uses and initializes its own Ruby runtime.
 As booting a Ruby runtime takes a considerable amount of time it is wise to either use a single instance or pool multiple instances in case your program wants to render multiple documents instead of creating one Asciidoctor instance per conversion.
-Asciidoctor itself is threadsafe, so from this point of view there is no issue in starting only one instance.
+Asciidoctor itself is thread-safe, so from this point of view there is no issue in starting only one instance.
 
 The JRuby runtime can be configured in numerous ways to change the behavior as well as the performance.
 As the performance requirements vary between a program that only render a single document and quit and server application that run for a long time you should consider modifying these options for your own use case.
