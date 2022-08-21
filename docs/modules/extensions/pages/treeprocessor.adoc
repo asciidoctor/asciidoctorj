@@ -4,7 +4,7 @@
 A Treeprocessor gets the whole AST and may do whatever it likes with the document tree.
 Examples for Treeprocessors could insert blocks, add roles to nodes with a certain content, etc.
 
-Treeprocessors are called by Asciidoctor at the end of the loading process after Preprocessors, Block processors, Macro processors and Include processors but before Postprocessors that are called after the conversion process.
+Treeprocessors are called by Asciidoctor at the end of the loading process after Preprocessors, BlockProcessors, MacroProcessors and IncludeProcessors but before Postprocessors that are called after the conversion process.
 
 Our example Treeprocessor will recognize paragraphs that contain terminal scripts like below, make listing blocks from them and add the role `terminal`.
 The custom role will allows us to customize the style.
@@ -21,7 +21,7 @@ The result when rendering this document with our Treeprocessor should be the sam
 include::example$treeprocessorresult.adoc[]
 ....
 
-Note that a Blockprocessor would not work for this task, as a Blockprocessor requires a block name for which it is called.
+Note that a BlockProcessor would not work for this task, as a BlockProcessor requires a block name for which it is called.
 However, in this case the only way to identify this type of blocks is the beginning of the first line.
 
 The Treeprocessor could look like this:

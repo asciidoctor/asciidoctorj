@@ -2,7 +2,7 @@
 :url-springboot-docs: https://docs.spring.io/spring-boot/docs/current
 
 Due to Spring Boot's packaging system, Asciidoctorj won't work out of the box from a single JAR application.
-Luckily SpringBoot plugins for Gradle and Maven provide options to fix it.
+Luckily Spring Boot plugins for Gradle and Maven provide options to fix it.
 
 == Gradle configuration
 
