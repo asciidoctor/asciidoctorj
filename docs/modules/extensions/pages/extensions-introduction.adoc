@@ -12,12 +12,12 @@ If you are migrating existing extensions to a newer version, please see the guid
 ====
 
 Writing an extension is as simple as creating a Java class and sub-classing from one of the extension points.
-However, to explore the full potential it us recommended to:
+However, to explore the full potential it's recommended to:
 
 . Have a brief understanding of the AsciidoctorJ conversion process and internal representation of the document.
 In short, extensions allow you to tap into the conversion process to make modifications to enhance the generated content.
 . Write an extension class.
-This is as simple as creating a sub-class from one of the extension points listed below.
+This is as simple as creating a subclass from one of the extension points listed below.
 . Register your class to make AsciidoctorJ converter aware of it.
 There several options depending on the use case.
 

@@ -78,4 +78,4 @@ Phrase nodes are usually created by inline macro extensions that process macros 
 Nodes are in general only created from within extensions.
 Therefore the abstract base class of all extensions, `org.asciidoctor.extension.Processor`, has factory methods for every node type.
 
-Now that you have learned about the AST structure you can go into the details of writting the extensions.
+Now that you have learned about the AST structure you can go into the details of writing the extensions.

@@ -46,10 +46,10 @@ include::example$gist-macro.adoc[]
 
 == Attributes and Positional attributes
 
-As a next step for the gist macro we might want to add support for Gitlab Snippets, which are a similar system to Github Gists.
-The property whether we want to embed a Github Gist or a Gitlab Snippet can be passed as the first attribute to the macro.
+As a next step for the gist macro we might want to add support for GitLab Snippets, which are a similar system to Github Gists.
+The property whether we want to embed a Github Gist or a GitLab Snippet can be passed as the first attribute to the macro.
 
-Gitlab Snippets can also be part of a project.
+GitLab Snippets can also be part of a project.
 This project could be accepted as a second attribute.
 
 That way Gists or Snippets could be embedded with our macro with these AsciiDoc block macros:
@@ -62,11 +62,11 @@ include::example$gist-macro-attributes.adoc[]
 
 The first macro shows our original notation for how to embed a Github Gist.
 
-The second macro shows how to embed a Snippet from Gitlab that is not associated with a project.
+The second macro shows how to embed a Snippet from GitLab that is not associated with a project.
 
-The third macro shows how to embed a Snippet from Gitlab that is associated with the project `gitlab-org/gitlab-foss`.
+The third macro shows how to embed a Snippet from GitLab that is associated with the project `gitlab-org/gitlab-foss`.
 
-The last macro shows how to embed a Snippet from Gitlab that is associated with the project `gitlab-org/gitlab-foss` by not using a positional attribute, but instead naming it explicitly.
+The last macro shows how to embed a Snippet from GitLab that is associated with the project `gitlab-org/gitlab-foss` by not using a positional attribute, but instead naming it explicitly.
 
 This can be achieved by the following extension:
 

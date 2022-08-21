@@ -1,7 +1,7 @@
 = Examples
 
 Here you will find simple but complete examples of how to convert documents using the different configuration options available.
-The examples cover the main scenarios, but you can mix and match usage of instances, builders and maps freely to suite yous needs.
+The examples cover the main scenarios, but you can mix and match usage of instances, builders and maps freely to suite your needs.
 
 == Setting attributes and options as instances
 
