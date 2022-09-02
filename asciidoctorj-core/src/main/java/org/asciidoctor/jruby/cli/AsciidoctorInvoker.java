@@ -26,7 +26,7 @@ public class AsciidoctorInvoker {
 
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
-    public void invoke(String... parameters) {
+    public int invoke(String... parameters) {
 
         AsciidoctorCliOptions asciidoctorCliOptions = new AsciidoctorCliOptions();
         JCommander jCommander = new JCommander(asciidoctorCliOptions);
@@ -43,7 +43,7 @@ public class AsciidoctorInvoker {
                 System.out.println("AsciidoctorJ " + getAsciidoctorJVersion() + " (Asciidoctor " + asciidoctor.asciidoctorVersion() + ") [https://asciidoctor.org]");
                 Object rubyVersionString = JRubyRuntimeContext.get(asciidoctor).evalScriptlet("\"#{JRUBY_VERSION} (#{RUBY_VERSION})\"");
                 System.out.println("Runtime Environment: jruby " + rubyVersionString);
-                return;
+                return 0;
             }
 
             List<File> inputFiles = getInputFiles(asciidoctorCliOptions);
@@ -72,12 +72,17 @@ public class AsciidoctorInvoker {
 
             convertInput(asciidoctor, options, inputFiles);
 
+            if (asciidoctorCliOptions.getFailureLevel().compareTo(asciidoctor.getMaxSeverity()) <= 0) {
+                return 1;
+            }
+
             if (asciidoctorCliOptions.isTimings()) {
                 Map<String, Object> optionsMap = options.map();
                 IRubyObject timings = (IRubyObject) optionsMap.get(TIMINGS_OPTION_NAME);
                 timings.callMethod(JRubyRuntimeContext.get(asciidoctor).getCurrentContext(), "print_report");
             }
         }
+        return 0;
     }
 
     private String getAsciidoctorJVersion() {
@@ -196,7 +201,10 @@ public class AsciidoctorInvoker {
         // Process .jrubyrc file
         Main.processDotfile();
 
-        new AsciidoctorInvoker().invoke(args);
+        int status = new AsciidoctorInvoker().invoke(args);
+        if (status != 0) {
+            System.exit(status);
+        }
     }
 
 }
