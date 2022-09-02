@@ -2,6 +2,7 @@ package org.asciidoctor.jruby.cli;
 
 import com.beust.jcommander.Parameter;
 import org.asciidoctor.*;
+import org.asciidoctor.log.Severity;
 
 import java.io.File;
 import java.util.*;
@@ -95,6 +96,9 @@ public class AsciidoctorCliOptions {
     @Parameter(names = {QUIET, "--quiet"}, description = "suppress warnings (default: false)")
     private boolean quiet = false;
 
+    @Parameter(names = {"--failure-level"}, converter = SeverityConverter.class, description = "set minimum log level that yields a non-zero exit code: [info, warning, error, fatal] (default: fatal) ")
+    private Severity failureLevel = Severity.FATAL;
+
     @Parameter(names = {REQUIRE, "--require"}, description = "require the specified library before executing the processor (using require)")
     private List<String> require;
 
@@ -110,6 +114,8 @@ public class AsciidoctorCliOptions {
     public boolean isQuiet() {
         return quiet;
     }
+
+    public Severity getFailureLevel() { return failureLevel; }
 
     public boolean isRequire() {
         return this.require != null && this.require.size() > 0;
