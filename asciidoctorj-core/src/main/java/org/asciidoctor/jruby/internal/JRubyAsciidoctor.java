@@ -22,7 +22,6 @@ import org.asciidoctor.jruby.log.internal.LogHandlerRegistryExecutor;
 import org.asciidoctor.jruby.syntaxhighlighter.internal.SyntaxHighlighterRegistryExecutor;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
-import org.asciidoctor.log.Severity;
 import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterRegistry;
 import org.jruby.*;
 import org.jruby.exceptions.RaiseException;
@@ -46,8 +45,6 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     private RubyClass extensionGroupClass;
 
     private List<LogHandler> logHandlers = new ArrayList<>();
-
-    private Severity maxSeverity = Severity.DEBUG;
 
     public JRubyAsciidoctor() {
         this(createRubyRuntime(Collections.singletonMap(GEM_PATH, null), new ArrayList<>(), null));
@@ -510,15 +507,8 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
     @Override
     public void log(LogRecord logRecord) {
-        if (this.maxSeverity.compareTo(logRecord.getSeverity()) < 0) {
-            this.maxSeverity = logRecord.getSeverity();
-        }
         for (LogHandler logHandler : logHandlers) {
             logHandler.log(logRecord);
         }
-    }
-
-    public Severity getMaxSeverity() {
-        return this.maxSeverity;
     }
 }
