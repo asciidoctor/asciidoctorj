@@ -1,12 +1,17 @@
 package org.asciidoctor.jruby.cli;
 
-import com.beust.jcommander.IStringConverter;
-import org.asciidoctor.SafeMode;
+import com.beust.jcommander.converters.EnumConverter;
 import org.asciidoctor.log.Severity;
 
-public class SeverityConverter implements IStringConverter<Severity> {
+public class SeverityConverter extends EnumConverter<Severity> {
+
+    public SeverityConverter() {
+        super("--failure-level", Severity.class);
+    }
 
     @Override
-    public Severity convert(String argument) { return Severity.valueOf(argument.toUpperCase()); }
+    public Severity convert(String argument) {
+        return super.convert(argument.toUpperCase());
+    }
 
 }
