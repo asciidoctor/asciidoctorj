@@ -58,6 +58,9 @@ public class AsciidoctorInvoker {
                                 + "' missing or cannot be read");
             }
 
+            MaxSeverityLogHandler maxSeverityLogHandler = new MaxSeverityLogHandler();
+            asciidoctor.registerLogHandler(maxSeverityLogHandler);
+
             Options options = asciidoctorCliOptions.parse();
 
             if (asciidoctorCliOptions.isRequire()) {
@@ -72,7 +75,7 @@ public class AsciidoctorInvoker {
 
             convertInput(asciidoctor, options, inputFiles);
 
-            if (asciidoctorCliOptions.getFailureLevel().compareTo(asciidoctor.getMaxSeverity()) <= 0) {
+            if (asciidoctorCliOptions.getFailureLevel().compareTo(maxSeverityLogHandler.getMaxSeverity()) <= 0) {
                 return 1;
             }
 
