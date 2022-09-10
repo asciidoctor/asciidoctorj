@@ -250,6 +250,22 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
+    public void should_exit_with_zero_status_even_if_errors_were_logged() {
+        File inputFile = classpath.getResource("brokeninclude.asciidoc");
+        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+        int status = new AsciidoctorInvoker().invoke(inputPath);
+        assertThat(status, is(0));
+    }
+
+    @Test
+    public void should_exit_with_nonzero_status_if_logged_severity_was_at_least_failure_level() {
+        File inputFile = classpath.getResource("brokeninclude.asciidoc");
+        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+        int status = new AsciidoctorInvoker().invoke("--failure-level", "warn", inputPath);
+        assertThat(status, is(1));
+    }
+
+    @Test
     public void with_absolute_path_file_should_be_rendered() {
 
         File inputFile = classpath.getResource("rendersample.asciidoc");
