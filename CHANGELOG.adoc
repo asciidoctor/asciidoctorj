@@ -17,6 +17,7 @@ Improvement::
 
 * Add command line option --failure-level to force non-zero exit code from AsciidoctorJ CLI if specified logging level is reached. (#1115) (@pasieronen)
 * Upgrade to JRuby 9.3.8.0 (#1117)
+* Upgrade to Rouge 3.30.0 (#1118)
 
 Bug Fixes::
 
