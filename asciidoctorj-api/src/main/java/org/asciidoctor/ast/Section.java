@@ -74,4 +74,24 @@ public interface Section extends StructuralNode {
      */
     boolean isNumbered();
 
+
+    /**
+     * Get the section number for the current Section.
+     * <p>
+     * The section number is a dot-separated String that uniquely describes the position of this
+     * Section in the document. Each entry represents a level of nesting. The value of each entry is
+     * the 1-based outline number of the Section amongst its numbered sibling Sections.
+     */
+    String getSectnum();
+
+    /**
+     * Get the section number for the current Section.
+     * <p>
+     * The section number is a dot-separated String that uniquely describes the position of this
+     * Section in the document. Each entry represents a level of nesting. The value of each entry is
+     * the 1-based outline number of the Section amongst its numbered sibling Sections.
+     *
+     * @param delimiter the delimiter to separate the number for each level
+     */
+    String getSectnum(String delimiter);
 }

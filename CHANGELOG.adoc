@@ -22,6 +22,7 @@ Improvement::
 * Upgrade to JRuby 9.3.8.0 (#1116)
 * Upgrade to tilt 2.0.11 (#1109)
 * Upgrade to asciimath 2.0.4 (#1109)
+* Expose `sectnum` property in Section interface (#1121)
 
 Bug Fixes::
 
