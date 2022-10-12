@@ -60,7 +60,7 @@ public class AsciidoctorCliOptions {
     @Parameter(names = {NO_HEADER_FOOTER, "--no-header-footer"}, description = "suppress output of header and footer (default: false)")
     private boolean noHeaderFooter = false;
 
-    @Parameter(names = {SECTION_NUMBERS, "--section-numbers"}, description = "auto-number section titles in the HTML backend; disabled by default")
+    @Parameter(names = {SECTION_NUMBERS, "--section-numbers"}, description = "auto-number section titles; disabled by default")
     private boolean sectionNumbers = false;
 
     @Parameter(names = {ERUBY, "--eruby"}, description = "specify eRuby implementation to render built-in templates: [erb, erubis] (default: erb)")

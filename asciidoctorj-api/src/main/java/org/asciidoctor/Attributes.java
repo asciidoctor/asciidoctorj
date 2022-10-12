@@ -38,7 +38,7 @@ public class Attributes {
     public static final String ICONFONT_NAME = "iconfont-name";
     public static final String ICONS_DIR = "iconsdir";
     public static final String DATA_URI = "data-uri";
-    public static final String SECTION_NUMBERS = "numbered";
+    public static final String SECTION_NUMBERS = "sectnums";
     public static final String IMAGE_ICONS = "";
     public static final String FONT_ICONS = "font";
     public static final String LINK_ATTRS = "linkattrs";
@@ -541,7 +541,7 @@ public class Attributes {
     }
 
     /**
-     * auto-number section titles in the HTML backend
+     * auto-number section titles.
      * 
      * @param sectionNumbers
      */
@@ -596,9 +596,9 @@ public class Attributes {
     /**
      * Sets attributes in string form. An example of a valid string would be:
      * 
-     * 'toc numbered source-highlighter=coderay'
+     * 'toc sectnums source-highlighter=coderay'
      * 
-     * where you are adding three attributes: toc, numbered and source-highlighter with value coderay.
+     * where you are adding three attributes: toc, sectnums and source-highlighter with value coderay.
      * 
      * @param attributes
      *            in string format.
@@ -612,9 +612,9 @@ public class Attributes {
     /**
      * Sets attributes in array form. An example of a valid array would be:
      * 
-     * '['toc', 'numbered']'
+     * '['toc', 'sectnums']'
      * 
-     * where you are adding three attributes: toc and numbered.
+     * where you are adding two attributes: toc and sectnums.
      * 
      * @param attributes
      *            in array format.
