@@ -70,4 +70,14 @@ public class SectionImpl extends StructuralNodeImpl implements Section {
         return getBoolean("numbered");
     }
 
+    @Override
+    public String getSectnum() {
+        return getString("sectnum");
+    }
+
+    @Override
+    public String getSectnum(String delimiter) {
+        return getString("sectnum", new Object[]{delimiter});
+    }
+
 }
