@@ -1,9 +1,7 @@
 package org.asciidoctor.jruby.cli;
 
 import com.beust.jcommander.JCommander;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.SafeMode;
+import org.asciidoctor.*;
 import org.asciidoctor.jruby.internal.AsciidoctorUtils;
 import org.junit.Test;
 
@@ -21,13 +19,17 @@ public class WhenAsciidoctorAPICallIsCalled {
     @Test
     public void api_parameters_should_be_transformed_to_cli_command() {
 
-        AttributesBuilder attributesBuilder = AttributesBuilder.attributes()
-                .attribute("myAtribute", "myValue").sectionNumbers(true)
-                .copyCss(false);
+        Attributes attributes = Attributes.builder()
+                .attribute("myAtribute", "myValue")
+                .sectionNumbers(true)
+                .copyCss(false)
+                .build();
 
-        OptionsBuilder optionsBuilder = OptionsBuilder.options()
-                .backend("docbook").templateDirs(new File("a"), new File("b"))
-                .safe(SafeMode.UNSAFE).attributes(attributesBuilder.get());
+        OptionsBuilder optionsBuilder = Options.builder()
+                .backend("docbook")
+                .templateDirs(new File("a"), new File("b"))
+                .safe(SafeMode.UNSAFE)
+                .attributes(attributes);
 
         List<String> command = AsciidoctorUtils.toAsciidoctorCommand(
                 optionsBuilder.asMap(), "file.adoc");
@@ -45,8 +47,8 @@ public class WhenAsciidoctorAPICallIsCalled {
         assertThat(asciidoctorCliOptions.getBackend(), is("docbook"));
         assertThat(asciidoctorCliOptions.getParameters(), containsInAnyOrder("file.adoc"));
 
-        assertThat(asciidoctorCliOptions.getAttributes(), hasEntry("myAtribute", (Object) "myValue"));
-        assertThat(asciidoctorCliOptions.getAttributes(), hasKey("numbered"));
+        assertThat(asciidoctorCliOptions.getAttributes(), hasEntry("myAtribute", "myValue"));
+        assertThat(asciidoctorCliOptions.getAttributes(), hasKey("sectnums"));
         assertThat(asciidoctorCliOptions.getAttributes(), hasKey("copycss!"));
 
     }

@@ -435,10 +435,10 @@ public class AttributesBuilder {
 	}
 
 	/**
-	 * Auto-number section titles in the HTML backend.
+	 * Auto-number section titles.
 	 * 
 	 * @param sectionNumbers
-	 *            true if numbers should be autonumbered, false otherwise.
+	 *            true if numbers should be auto-numbered, false otherwise.
 	 * @return this instance.
 	 */
 	public AttributesBuilder sectionNumbers(boolean sectionNumbers) {
@@ -573,9 +573,9 @@ public class AttributesBuilder {
 	/**
 	 * Sets attributes in string form. An example of a valid string would be:
 	 * 
-	 * 'toc numbered source-highlighter=coderay'
+	 * 'toc sectnums source-highlighter=coderay'
 	 * 
-	 * where you are adding three attributes: toc, numbered and
+	 * where you are adding three attributes: toc, sectnums and
 	 * source-highlighter with value coderay.
 	 * 
 	 * @param attributes
@@ -591,9 +591,9 @@ public class AttributesBuilder {
 	/**
 	 * Sets attributes in array form. An example of a valid array would be:
 	 * 
-	 * '['toc', 'numbered']'
+	 * '['toc', 'sectnums']'
 	 * 
-	 * where you are adding three attributes: toc and numbered.
+	 * where you are adding two attributes: toc and sectnums.
 	 * 
 	 * @param attributes
 	 *            in array format.

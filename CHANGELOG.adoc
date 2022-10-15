@@ -34,6 +34,10 @@ Build Improvement::
 * Upgrade build to Gradle 7.5.1 (#1109)
 * Fix upstream tests forcing SNAPSHOT on Asciidoctor gem installation (#1123) (@abelsromero)
 
+Build / Infrastructure::
+
+* Replace use of deprecated 'numbered' attribute by 'sectnums' (#1123) (@abelsromero)
+
 == 2.5.4 (2022-06-30)
 
 Improvement::
