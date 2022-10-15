@@ -46,10 +46,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(Arquillian.class)
@@ -111,8 +112,6 @@ public class WhenJavaExtensionGroupIsRegistered {
 
                 bufferedReader.close();
 
-            } catch (MalformedURLException e) {
-                throw new IllegalArgumentException(e);
             } catch (IOException e) {
                 throw new IllegalArgumentException(e);
             }
@@ -180,8 +179,6 @@ public class WhenJavaExtensionGroupIsRegistered {
 
                     bufferedReader.close();
 
-                } catch (MalformedURLException e) {
-                    throw new IllegalArgumentException(e);
                 } catch (IOException e) {
                     throw new IllegalArgumentException(e);
                 }
@@ -242,7 +239,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         Element footer = doc.getElementById("footer");
         // Since Asciidoctor 1.5.3 the docinfo in the footer is a sibling to the footer element
-        assertTrue("robots".equals(footer.nextElementSibling().attr("name")));
+        assertEquals("robots", footer.nextElementSibling().attr("name"));
     }
 
     @Test
@@ -436,7 +433,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
-        Element contentElement = doc.getElementsByAttributeValue("class", "bare").first();
+        Element contentElement = doc.getElementsByClass("bare").first();
 
         assertThat(contentElement.text(), startsWith("sample-book.adoc"));
 
