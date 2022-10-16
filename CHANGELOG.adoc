@@ -17,6 +17,10 @@ Improvement::
 
 * Upgrade to asciidoctorj 2.0.18 (#1126)
 
+Build / Infrastructure::
+
+* Replace use of deprecated 'numbered' attribute by 'sectnums' (#1127) (@abelsromero)
+
 == 2.5.6 (2022-09-19)
 
 Improvement::
@@ -38,10 +42,6 @@ Improvement::
 Bug Fixes::
 
 * Cell nodes do not inherit from StructuralNode (#1086) (@rahmanusta)
-
-Build / Infrastructure::
-
-* Replace use of deprecated 'numbered' attribute by 'sectnums' (#1123) (@abelsromero)
 
 == 2.5.4 (2022-06-30)
 
