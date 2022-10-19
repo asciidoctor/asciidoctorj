@@ -513,7 +513,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void setting_toc_attribute_and_numbered_in_string_form_table_of_contents_should_be_generated() throws IOException {
 
-        Attributes attributes = attributes("toc numbered").get();
+        Attributes attributes = attributes("toc sectnums").get();
         Options options = options().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).get();
 
         asciidoctor.convertFile(classpath.getResource("tocsample.asciidoc"), options);
@@ -530,8 +530,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void setting_toc_attribute_and_numbered_in_array_form_table_of_contents_should_be_generated() throws IOException {
 
-        Attributes attributes = attributes(new String[] { "toc", "numbered" })
-                .get();
+        Attributes attributes = attributes(new String[] { "toc", "sectnums" }).get();
         Options options = options().inPlace(false).toDir(testFolder.getRoot()).safe(SafeMode.UNSAFE).attributes(attributes).get();
 
        asciidoctor.convertFile(classpath.getResource("tocsample.asciidoc"), options);

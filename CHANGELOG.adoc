@@ -17,6 +17,10 @@ Improvement::
 
 * Upgrade to asciidoctorj 2.0.18 (#1126)
 
+Build / Infrastructure::
+
+* Replace use of deprecated 'numbered' attribute by 'sectnums' (#1127) (@abelsromero)
+
 == 2.5.6 (2022-09-19)
 
 Improvement::
