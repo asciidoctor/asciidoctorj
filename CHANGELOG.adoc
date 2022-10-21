@@ -13,6 +13,8 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+== 2.5.7 (2022-10-21)
+
 Improvement::
 
 * Upgrade to asciidoctorj 2.0.18 (#1126)
