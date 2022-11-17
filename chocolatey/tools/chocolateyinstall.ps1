@@ -4,7 +4,7 @@
 
 $ErrorActionPreference = 'Stop'; # stop on all errors
 
-$adocjVersion = '2.5.5'
+$adocjVersion = '2.5.7'
 $packageName  = 'asciidoctorj'
 $toolsDir     = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $url          = "https://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/$($adocjVersion)/asciidoctorj-$($adocjVersion)-bin.zip"
@@ -13,7 +13,7 @@ $packageArgs = @{
   packageName   = $packageName
   unzipLocation = $toolsDir
   url           = $url
-  checksum      = 'dcef87a6f09a1fbfa76aecd5b1cab63fa9c6d263385d1f8ce3acc03be73b6a1a'
+  checksum      = 'e25292735620cbb31af11e2fc730b52d9dac35a68f2f2f7ca4ee5aef0dfb7c37'
   checksumType  = 'sha256'
 }
 
