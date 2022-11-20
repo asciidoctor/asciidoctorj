@@ -15,12 +15,6 @@
             <url>http://rubygems-proxy.torquebox.org/releases</url>
         </repository>
     </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>rubygems-releases</id>
-            <url>https://rubygems-proxy.torquebox.org/releases</url>
-        </pluginRepository>
-    </pluginRepositories>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
