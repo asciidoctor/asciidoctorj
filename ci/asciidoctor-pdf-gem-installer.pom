@@ -9,12 +9,6 @@
     <name>Asciidoctor PDF RubyGem Installer</name>
     <description>Installs the upstream Asciidoctor PDF RubyGem to the local repository.</description>
     <url>http://asciidoctor.org</url>
-    <repositories>
-        <repository>
-            <id>rubygems-releases</id>
-            <url>http://rubygems-proxy.torquebox.org/releases</url>
-        </repository>
-    </repositories>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
