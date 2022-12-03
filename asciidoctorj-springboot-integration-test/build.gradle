@@ -16,7 +16,3 @@ tasks.withType(JavaCompile).configureEach { task ->
     task.options.release = 17
 }
 
-test {
-    testLogging.showStandardStreams true
-}
-
