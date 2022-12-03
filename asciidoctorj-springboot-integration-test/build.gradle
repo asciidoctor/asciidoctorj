@@ -11,3 +11,12 @@ dependencies {
 }
 
 test.dependsOn(':asciidoctorj-springboot-integration-test:springboot-app:assemble')
+
+tasks.withType(JavaCompile).configureEach { task ->
+    task.options.release = 17
+}
+
+test {
+    testLogging.showStandardStreams true
+}
+
