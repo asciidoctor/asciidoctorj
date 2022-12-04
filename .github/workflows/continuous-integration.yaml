@@ -21,9 +21,15 @@ jobs:
           - '8'
           - '11'
           - '17'
+          - '19'
         os:
           - ubuntu-latest
           - macos-latest
+        exclude:
+        - os: macos-latest
+          java: '8'
+        - os: macos-latest
+          java: '19'
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3

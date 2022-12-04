@@ -1,7 +1,7 @@
 package org.asciidoctor.it.springboot;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.springframework.stereotype.Component;
 
@@ -15,11 +15,12 @@ public class AsciidoctorService {
         return asciidoctor.convert(source, defaultOptions());
     }
 
-    private OptionsBuilder defaultOptions() {
-        return OptionsBuilder.options()
+    private Options defaultOptions() {
+        return Options.builder()
                 .backend("html5")
                 .safe(SafeMode.SAFE)
                 .headerFooter(true)
-                .toFile(false);
+                .toFile(false)
+                .build();
     }
 }
