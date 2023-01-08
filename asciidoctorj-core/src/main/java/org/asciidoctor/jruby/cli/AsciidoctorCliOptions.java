@@ -5,6 +5,7 @@ import org.asciidoctor.*;
 import org.asciidoctor.log.Severity;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class AsciidoctorCliOptions {
@@ -257,7 +258,7 @@ public class AsciidoctorCliOptions {
         return !isOutFileOption() && !isDestinationDirOption() && !isOutputStdout();
     }
 
-    public Options parse() {
+    public Options parse() throws IOException {
         AttributesBuilder attributesBuilder = Attributes.builder();
 
         OptionsBuilder optionsBuilder = Options.builder()
@@ -302,7 +303,7 @@ public class AsciidoctorCliOptions {
         }
 
         if (isBaseDirOption()) {
-            optionsBuilder.baseDir(new File(this.baseDir));
+            optionsBuilder.baseDir(new File(this.baseDir).getCanonicalFile());
         }
 
         if (isTemplateEngineOption()) {
@@ -311,15 +312,15 @@ public class AsciidoctorCliOptions {
 
         if (isTemplateDirOption()) {
             for (String templateDir : this.templateDir) {
-                optionsBuilder.templateDirs(new File(templateDir));
+                optionsBuilder.templateDirs(new File(templateDir).getCanonicalFile());
             }
         }
 
         if (isDestinationDirOption() && !isOutputStdout()) {
-            optionsBuilder.toDir(new File(this.destinationDir));
+            optionsBuilder.toDir(new File(this.destinationDir).getCanonicalFile());
 
             if (isSourceDirOption()) {
-                optionsBuilder.sourceDir(new File(this.sourceDir));
+                optionsBuilder.sourceDir(new File(this.sourceDir).getCanonicalFile());
             }
         }
 

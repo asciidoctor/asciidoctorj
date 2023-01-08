@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Bug Fixes::
+
+* Fix CLI target file location for source files relative to source dir (#1135,#1241) (@AlexCzar,@mojavelinux)
+
 Improvement::
 
 * Upgrade to JRuby 9.4.3.0 (#1235) (@headius)
