@@ -27,6 +27,7 @@ Improvement::
 
 Bug Fixes::
 
+* Fix CLI target file location for source files relative to source dir (#1135) (@AlexCzar)
 * Cell nodes do not inherit from StructuralNode (#1086) (@rahmanusta)
 * Avoid throwing an exception when using AsciidoctorJ CLI and reading input from stdin (#1105) (@AlexCzar)
 
