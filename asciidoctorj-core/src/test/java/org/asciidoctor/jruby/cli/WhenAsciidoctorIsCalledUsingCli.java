@@ -20,6 +20,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.StringStartsWith.startsWith;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Arquillian.class)
 public class WhenAsciidoctorIsCalledUsingCli {
@@ -33,7 +34,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     public String pwd = new File("").getAbsolutePath();
 
     @Test
-    public void with_no_options_file_should_be_rendered_in_place_and_in_html5_format() {
+    public void with_no_options_file_should_be_rendered_in_place_and_in_html5_format() throws IOException {
 
         File inputFile = classpath.getResource("rendersample.asciidoc");
         String inputPath = inputFile.getPath().substring(pwd.length() + 1);
@@ -61,7 +62,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void file_should_be_rendered_to_docbook_with_docbook_backend() {
+    public void file_should_be_rendered_to_docbook_with_docbook_backend() throws IOException {
 
         File inputFile = classpath.getResource("rendersample.asciidoc");
         String inputPath = inputFile.getPath().substring(pwd.length() + 1);
@@ -108,7 +109,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void destination_dir_should_render_files_to_ouput_directory() {
+    public void destination_dir_should_render_files_to_ouput_directory() throws IOException {
         File outputDirectory = temporaryFolder.getRoot();
 
         File inputFile = classpath.getResource("rendersample.asciidoc");
@@ -122,12 +123,12 @@ public class WhenAsciidoctorIsCalledUsingCli {
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void empty_input_file_name_should_throw_an_exception() {
+    public void empty_input_file_name_should_throw_an_exception() throws IOException {
         new AsciidoctorInvoker().invoke("");
     }
 
     @Test
-    public void version_flag_should_print_version_and_exit() {
+    public void version_flag_should_print_version_and_exit() throws IOException {
         PrintStream oldOs = System.out;
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         System.setOut(new PrintStream(os));
@@ -140,14 +141,14 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void invalid_input_file_should_throw_an_exception() {
+    public void invalid_input_file_should_throw_an_exception() throws IOException {
 
         new AsciidoctorInvoker().invoke("myunknown.adoc");
 
     }
 
     @Test
-    public void more_than_one_input_file_should_throw_an_exception() {
+    public void more_than_one_input_file_should_throw_an_exception() throws IOException {
 
         File inputFile1 = classpath.getResource("rendersample.asciidoc");
         String inputPath1 = inputFile1.getPath().substring(pwd.length() + 1);
@@ -167,7 +168,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void glob_expression_can_be_used_to_render_AsciiDoc_files() {
+    public void glob_expression_can_be_used_to_render_AsciiDoc_files() throws IOException {
 
         File inputFile = classpath.getResource("toc2sample.asciidoc");
         String inputPath = inputFile.getPath().substring(pwd.length() + 1);
@@ -183,7 +184,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void help_option_should_show_usage_information() {
+    public void help_option_should_show_usage_information() throws IOException {
         ByteArrayOutputStream output = redirectStdout();
 
         new AsciidoctorInvoker().invoke("--help");
@@ -194,7 +195,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void no_parameters_should_show_usage_information() {
+    public void no_parameters_should_show_usage_information() throws IOException {
         ByteArrayOutputStream output = redirectStdout();
 
         new AsciidoctorInvoker().invoke();
@@ -205,7 +206,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void output_file_hyphen_symbol_should_render_output_to_stdout() {
+    public void output_file_hyphen_symbol_should_render_output_to_stdout() throws IOException {
 
         ByteArrayOutputStream output = redirectStdout();
 
@@ -223,7 +224,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void verbose_option_should_fill_monitor_map() {
+    public void verbose_option_should_fill_monitor_map() throws IOException {
 
         ByteArrayOutputStream output = redirectStdout();
 
@@ -237,7 +238,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void quiet_option_should_not_write_to_console() {
+    public void quiet_option_should_not_write_to_console() throws IOException {
 
         ByteArrayOutputStream output = redirectStdout();
 
@@ -250,7 +251,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void should_exit_with_zero_status_even_if_errors_were_logged() {
+    public void should_exit_with_zero_status_even_if_errors_were_logged() throws IOException {
         File inputFile = classpath.getResource("brokeninclude.asciidoc");
         String inputPath = inputFile.getPath().substring(pwd.length() + 1);
         int status = new AsciidoctorInvoker().invoke(inputPath);
@@ -258,7 +259,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void should_exit_with_nonzero_status_if_logged_severity_was_at_least_failure_level() {
+    public void should_exit_with_nonzero_status_if_logged_severity_was_at_least_failure_level() throws IOException {
         File inputFile = classpath.getResource("brokeninclude.asciidoc");
         String inputPath = inputFile.getPath().substring(pwd.length() + 1);
         int status = new AsciidoctorInvoker().invoke("--failure-level", "warn", inputPath);
@@ -266,7 +267,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void with_absolute_path_file_should_be_rendered() {
+    public void with_absolute_path_file_should_be_rendered() throws IOException {
 
         File inputFile = classpath.getResource("rendersample.asciidoc");
         String inputPath = inputFile.getAbsolutePath();
@@ -274,6 +275,19 @@ public class WhenAsciidoctorIsCalledUsingCli {
         File expectedFile = new File(inputPath.replaceFirst("\\.asciidoc$", ".html"));
 
         assertThat(expectedFile.exists(), is(true));
+        expectedFile.delete();
+    }
+
+    @Test
+    public void should_convert_to_subdirectories() throws IOException {
+
+        File inputFile = classpath.getResource("relative/sub/test.adoc");
+        File srcDir = inputFile.getParentFile().getParentFile();
+        File toDir = new File(srcDir, "target");
+        new AsciidoctorInvoker().invoke("-R", srcDir.getPath(), "-D", toDir.getPath(), srcDir.getAbsolutePath() + "/**/*.adoc");
+        File expectedFile = new File(toDir, "sub/test.html");
+
+        assertTrue(expectedFile.exists());
         expectedFile.delete();
     }
 

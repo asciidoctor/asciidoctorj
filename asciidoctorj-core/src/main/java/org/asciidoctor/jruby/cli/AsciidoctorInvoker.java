@@ -24,9 +24,7 @@ import static org.asciidoctor.jruby.cli.AsciidoctorCliOptions.TIMINGS_OPTION_NAM
 
 public class AsciidoctorInvoker {
 
-    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
-
-    public int invoke(String... parameters) {
+    public int invoke(String... parameters) throws IOException {
 
         AsciidoctorCliOptions asciidoctorCliOptions = new AsciidoctorCliOptions();
         JCommander jCommander = new JCommander(asciidoctorCliOptions);
@@ -160,6 +158,8 @@ public class AsciidoctorInvoker {
             return;
         }
 
+        options.setMkDirs(true);
+
         findInvalidInputFile(inputFiles)
                 .ifPresent(inputFile -> {
                     System.err.println("asciidoctor: FAILED: input file(s) '"
@@ -171,7 +171,26 @@ public class AsciidoctorInvoker {
                                     + "' missing or cannot be read");
                 });
 
-        inputFiles.forEach(inputFile -> asciidoctor.convertFile(inputFile, options));
+        final Optional<File> toDir = getAbsolutePathFromOption(options, Options.TO_DIR);
+        final Optional<File> srcDir = getAbsolutePathFromOption(options, Options.SOURCE_DIR);
+
+        inputFiles.forEach(inputFile -> {
+            if (toDir.isPresent() && srcDir.isPresent()) {
+                if (inputFile.getAbsolutePath().startsWith(srcDir.get().getAbsolutePath())) {
+                    String relativePath = srcDir.get().toURI().relativize(inputFile.getParentFile().getAbsoluteFile().toURI()).getPath();
+                    String absolutePath = new File(toDir.get(), relativePath).getAbsolutePath();
+                    options.setToDir(absolutePath);
+                }
+            }
+            asciidoctor.convertFile(inputFile, options);
+        });
+    }
+
+    private Optional<File> getAbsolutePathFromOption(Options options, String name) {
+        return Optional.ofNullable(options.map().get(name))
+                .filter(String.class::isInstance)
+                .map(String.class::cast)
+                .map(File::new);
     }
 
     private Optional<File> findInvalidInputFile(List<File> inputFiles) {
@@ -199,7 +218,7 @@ public class AsciidoctorInvoker {
                 .collect(Collectors.toList());
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
 
         // Process .jrubyrc file
         Main.processDotfile();
