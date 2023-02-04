@@ -18,6 +18,7 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 Improvement::
 
 * Upgrade to asciidoctorj 2.0.18 (#1126)
+* Upgrade to jruby 9.3.10.0 (#1138) (@alexlevinfr)
 
 Build / Infrastructure::
 
