@@ -33,8 +33,8 @@ Bug Fixes::
 
 Build Improvement::
 
-* Upgrade build to Gradle 7.6 (#1563)
-* Upgrade Spring Boot test to 3.0.0 (#1563)
+* Upgrade build to Gradle 8.0.1 (#1141)
+* Upgrade Spring Boot test to 3.0.0 (#1134)
 * Run tests on Java 19 (#1563)
 * Fix upstream tests forcing SNAPSHOT on Asciidoctor gem installation (#1123) (@abelsromero)
 * Fix upstream build removing the explicit plugin repository (#1131)
