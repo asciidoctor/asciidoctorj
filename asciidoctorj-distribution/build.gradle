@@ -46,7 +46,6 @@ configurations.archives.with {
 
 tasks.withType(AbstractArchiveTask) {
   archiveBaseName.set(rootProject.name)
-  classifier 'bin' // use classifier for identification in repository list
   eachFile { it.path = it.path.replaceFirst('-bin(?=/)', '') }
   //destinationDir = ...
 }
@@ -71,5 +70,7 @@ if (!publication) {
   throw new ProjectConfigurationException("Publication ${project.ext.publicationName} not configured yet", [])
 }
 publication.each {
-    it.artifact distZip
+    it.artifact(distZip) {
+      classifier 'bin'
+    }
 }

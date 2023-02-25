@@ -43,6 +43,7 @@ task unpackWildfly(type: Copy) {
         zipTree(configurations.jbossdist.singleFile)
     }
     into "$buildDir"
+    doNotTrackState "Build on Github Actions seems to fail on Windows without it"
 }
 
 compileTestJava {
