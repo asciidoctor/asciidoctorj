@@ -17,6 +17,16 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
     }
 
     @Override
+    public String getSource() {
+        return getString("source");
+    }
+
+    @Override
+    public List<String> getSourceLines() {
+        return getList("source_lines", String.class);
+    }
+
+    @Override
     public boolean isBasebackend(String backend) {
         return getBoolean("basebackend?", backend);
     }

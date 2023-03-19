@@ -86,7 +86,7 @@ public class RubyObjectWrapper {
         if (result instanceof RubyNil) {
             return 0;
         } else {
-            return (int) ((RubyNumeric) result).getIntValue();
+            return ((RubyNumeric) result).getIntValue();
         }
     }
 
@@ -100,7 +100,7 @@ public class RubyObjectWrapper {
         if (result instanceof RubyNil) {
             return null;
         } else {
-            List<T> ret = new ArrayList<T>();
+            List<T> ret = new ArrayList<>();
             RubyArray array = (RubyArray) result;
             for (int i = 0; i < array.size(); i++) {
                 ret.add(RubyUtils.rubyToJava(runtime, array.at(RubyFixnum.newFixnum(runtime, i)), elementClass));
@@ -160,7 +160,7 @@ public class RubyObjectWrapper {
     }
 
     public <T> T toJava(IRubyObject rubyObject, Class<T> targetClass) {
-        return (T) JavaEmbedUtils.rubyToJava(runtime, rubyObject, targetClass);
+        return JavaEmbedUtils.rubyToJava(runtime, rubyObject, targetClass);
     }
 
 }

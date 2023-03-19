@@ -34,6 +34,21 @@ public interface Document extends StructuralNode {
     List<Author> getAuthors();
 
     /**
+     * Make the raw source for the Document available.
+     * Trailing white characters (spaces, line breaks, etc.) are removed.
+     *
+     * @return raw content as String
+     */
+    String getSource();
+
+    /**
+     * Make the raw source lines for the Document available.
+     *
+     * @return raw content as List<String>
+     */
+    List<String> getSourceLines();
+
+    /**
      * @return basebackend attribute value
      */
     boolean isBasebackend(String backend);

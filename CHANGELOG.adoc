@@ -24,6 +24,8 @@ Improvement::
 * Upgrade to tilt 2.0.11 (#1109)
 * Upgrade to asciimath 2.0.4 (#1109)
 * Expose `sectnum` property in Section interface (#1121)
+* Replace use of deprecated 'numbered' attribute by 'sectnums' (#1123) (@abelsromero)
+* Expose `source` and `source_lines` use of deprecated 'numbered' in Document interface (#1145) (@abelsromero)
 
 Bug Fixes::
 
@@ -38,10 +40,6 @@ Build Improvement::
 * Run tests on Java 19 (#1563)
 * Fix upstream tests forcing SNAPSHOT on Asciidoctor gem installation (#1123) (@abelsromero)
 * Fix upstream build removing the explicit plugin repository (#1131)
-
-Build / Infrastructure::
-
-* Replace use of deprecated 'numbered' attribute by 'sectnums' (#1123) (@abelsromero)
 
 == 2.5.4 (2022-06-30)
 
