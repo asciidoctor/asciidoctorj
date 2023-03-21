@@ -1,8 +1,7 @@
 package org.asciidoctor.jruby.cli;
 
-import org.asciidoctor.SafeMode;
-
 import com.beust.jcommander.IStringConverter;
+import org.asciidoctor.SafeMode;
 
 public class SafeModeConverter implements IStringConverter<SafeMode> {
 

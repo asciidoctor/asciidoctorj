@@ -5,12 +5,8 @@ if (project.statusIsRelease && project.hasProperty("sdkman_consumer_key")) {
 }
 
 dependencies {
-  implementation(project(':asciidoctorj')) {
+  implementation(project(':asciidoctorj-cli')) {
     exclude group: 'org.jruby'
-  }
-
-  implementation(project(':asciidoctorj-api')) {
-    transitive = false
   }
 
   implementation("org.asciidoctor:asciidoctorj-epub3:$asciidoctorjEpub3Version") {
@@ -32,6 +28,7 @@ dependencies {
     transitive = false
   }
   implementation "org.jruby:jruby-complete:$jrubyVersion"
+
   testImplementation project(':asciidoctorj-arquillian-extension')
   testImplementation "org.apache.pdfbox:pdfbox:$pdfboxVersion"
   testImplementation "org.jsoup:jsoup:$jsoupVersion"

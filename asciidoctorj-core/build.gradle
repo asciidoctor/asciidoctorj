@@ -13,9 +13,9 @@ repositories {
 }
 
 dependencies {
-  api project(path: ':asciidoctorj-api')
+  api project(':asciidoctorj-api')
   api "org.jruby:jruby:$jrubyVersion"
-  implementation "com.beust:jcommander:$jcommanderVersion"
+
   gems "rubygems:asciidoctor:$asciidoctorGemVersion"
   gems "rubygems:asciimath:$asciimathGemVersion"
   gems "rubygems:coderay:$coderayGemVersion"
@@ -34,7 +34,7 @@ dependencies {
   testImplementation "org.jsoup:jsoup:$jsoupVersion"
   testImplementation "io.netty:netty-all:$nettyVersion"
   testImplementation "org.assertj:assertj-core:$assertjVersion"
-  testImplementation project(path: ':asciidoctorj-arquillian-extension')
+  testImplementation project(':asciidoctorj-arquillian-extension')
   compileOnly "org.osgi:osgi.annotation:$osgiVersion"
 }
 
@@ -94,8 +94,7 @@ javadoc {
 jar {
   bnd(
     ('Bundle-Name'): 'asciidoctorj',
-    ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj',
-    ('Import-Package'): 'com.beust.jcommander;resolution:=optional, *'
+    ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj'
   )
   metaInf { from "$buildDir/version-info/" }
 }

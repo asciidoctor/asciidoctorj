@@ -5,6 +5,7 @@ import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
 
 public class MaxSeverityLogHandler implements LogHandler {
+
     private Severity maxSeverity = Severity.DEBUG;
 
     @Override

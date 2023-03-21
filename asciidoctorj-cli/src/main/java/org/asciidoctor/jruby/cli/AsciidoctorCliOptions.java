@@ -116,7 +116,9 @@ public class AsciidoctorCliOptions {
         return quiet;
     }
 
-    public Severity getFailureLevel() { return failureLevel; }
+    public Severity getFailureLevel() {
+        return failureLevel;
+    }
 
     public boolean isRequire() {
         return this.require != null && this.require.size() > 0;
