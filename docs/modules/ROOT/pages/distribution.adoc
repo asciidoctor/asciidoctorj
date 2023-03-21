@@ -1,4 +1,6 @@
 = Distribution
+
+:asciidoctorj-group-id: org.asciidoctor
 :url-maven-artifact-query: https://central.sonatype.com/artifact/org.asciidoctor/asciidoctorj/{artifact-version}/versions
 :url-maven-artifact-detail: https://central.sonatype.com/artifact/org.asciidoctor/asciidoctorj/{artifact-version}
 :url-maven-artifact-api-query: https://central.sonatype.com/artifact/org.asciidoctor/asciidoctorj-api/{artifact-version}/versions
@@ -12,19 +14,19 @@ The artifact information can be found in the tables below.
 |===
 |Group Id |Artifact Id |Version
 
-|org.asciidoctor
+|{asciidoctorj-group-id}
 |{url-maven-artifact-query}[asciidoctorj]
 |{url-maven-artifact-detail}[{artifact-version}]
 
-|org.asciidoctor
+|{asciidoctorj-group-id}
 |{url-maven-artifact-api-query}[asciidoctorj-api]
 |{url-maven-artifact-api-detail}[{artifact-version}]
 
-|org.asciidoctor
+|{asciidoctorj-group-id}
 |asciidoctorj-epub3
 |{asciidoctorj-epub3-version}
 
-|org.asciidoctor
+|{asciidoctorj-group-id}
 |asciidoctorj-pdf
 |{asciidoctorj-pdf-version}
 |===
