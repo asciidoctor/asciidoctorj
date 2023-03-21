@@ -308,7 +308,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
         try {
 
             IRubyObject object = getAsciidoctorModule().callMethod("convert",
-                    rubyRuntime.newString(content), rubyHash);
+                    Optional.ofNullable(content).map(rubyRuntime::newString).orElse(null), rubyHash);
             if (NodeConverter.NodeType.DOCUMENT_CLASS.isInstance(object)) {
                 // If a document is rendered to a file Asciidoctor returns the document, we return null
                 return null;
@@ -468,7 +468,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     public Document load(String content, Options options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options.map());
         return (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load",
-                rubyRuntime.newString(content), rubyHash));
+                Optional.ofNullable(content).map(rubyRuntime::newString).orElse(null), rubyHash));
     }
     
     @Override

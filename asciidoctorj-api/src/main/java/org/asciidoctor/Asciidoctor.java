@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public interface Asciidoctor extends AutoCloseable {
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * Parse the AsciiDoc source input into a Document {@link Document} and
      * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
@@ -44,7 +44,7 @@ public interface Asciidoctor extends AutoCloseable {
     String convert(String content, Map<String, Object> options);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * Parse the AsciiDoc source input into a Document {@link Document} and
      * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
@@ -60,7 +60,7 @@ public interface Asciidoctor extends AutoCloseable {
     <T> T convert(String content, Map<String, Object> options, Class<T> expectedResult);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * Parse the AsciiDoc source input into a Document {@link Document} and
      * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
@@ -72,7 +72,7 @@ public interface Asciidoctor extends AutoCloseable {
     String convert(String content, Options options);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * Parse the AsciiDoc source input into a Document {@link Document} and
      * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
@@ -86,7 +86,7 @@ public interface Asciidoctor extends AutoCloseable {
     <T> T convert(String content, Options options, Class<T> expectedResult);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * Parse the AsciiDoc source input into a Document {@link Document} and
      * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
@@ -100,7 +100,7 @@ public interface Asciidoctor extends AutoCloseable {
     String convert(String content, OptionsBuilder options);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * Parse the AsciiDoc source input into a Document {@link Document} and
      * convert it to the specified backend format.
      * <p>
      * Accepts input as String object.
@@ -162,7 +162,7 @@ public interface Asciidoctor extends AutoCloseable {
                  OptionsBuilder options) throws IOException;
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * Parse the AsciiDoc source input into a Document {@link Document} and
      * convert it to the specified backend format.
      * <p>
      * Accepts input as File.
@@ -188,7 +188,7 @@ public interface Asciidoctor extends AutoCloseable {
     String convertFile(File file, Map<String, Object> options);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * Parse the AsciiDoc source input into a Document {@link Document} and
      * convert it to the specified backend format.
      * <p>
      * Accepts input as File.
@@ -217,7 +217,7 @@ public interface Asciidoctor extends AutoCloseable {
 
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * Parse the AsciiDoc source input into a Document {@link Document} and
      * convert it to the specified backend format.
      * <p>
      * Accepts input as File.
@@ -241,7 +241,7 @@ public interface Asciidoctor extends AutoCloseable {
     String convertFile(File file, Options options);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * Parse the AsciiDoc source input into a Document {@link Document} and
      * convert it to the specified backend format.
      * <p>
      * Accepts input as File.
@@ -267,7 +267,7 @@ public interface Asciidoctor extends AutoCloseable {
     <T> T convertFile(File file, Options options, Class<T> expectedResult);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * Parse the AsciiDoc source input into a Document {@link Document} and
      * convert it to the specified backend format.
      * <p>
      * Accepts input as File.
@@ -293,7 +293,7 @@ public interface Asciidoctor extends AutoCloseable {
     String convertFile(File file, OptionsBuilder options);
 
     /**
-     * Parse the AsciiDoc source input into an Document {@link Document} and
+     * Parse the AsciiDoc source input into a Document {@link Document} and
      * convert it to the specified backend format.
      * <p>
      * Accepts input as File.
