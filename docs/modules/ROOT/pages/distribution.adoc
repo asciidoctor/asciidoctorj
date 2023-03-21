@@ -1,38 +1,32 @@
 = Distribution
-:url-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
-:url-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
-:url-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
-:url-maven-artifact-api-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj-api%22%20AND%20v%3A%22{artifact-version}%22
-:url-maven-artifact-api-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj-api%7C{artifact-version}%7Cjar
-:url-maven-artifact-api-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj-api/{artifact-version}/asciidoctorj-api-{artifact-version}
+:url-maven-artifact-query: https://central.sonatype.com/artifact/org.asciidoctor/asciidoctorj/{artifact-version}/versions
+:url-maven-artifact-detail: https://central.sonatype.com/artifact/org.asciidoctor/asciidoctorj/{artifact-version}
+:url-maven-artifact-api-query: https://central.sonatype.com/artifact/org.asciidoctor/asciidoctorj-api/{artifact-version}/versions
+:url-maven-artifact-api-detail: https://central.sonatype.com/artifact/org.asciidoctor/asciidoctorj-api/{artifact-version}
 
 AsciidoctorJ is published to Maven Central.
 The artifact information can be found in the tables below.
 
-[cols="2,2,^2,4"]
+[cols="2,2,^2"]
 .Artifact information for AsciidoctorJ in Maven Central
 |===
-|Group Id |Artifact Id |Version |Download
+|Group Id |Artifact Id |Version
 
 |org.asciidoctor
 |{url-maven-artifact-query}[asciidoctorj]
 |{url-maven-artifact-detail}[{artifact-version}]
-|{url-maven-artifact-file}.pom[pom] {url-maven-artifact-file}.jar[jar] {url-maven-artifact-file}-javadoc.jar[javadoc (jar)] {url-maven-artifact-file}-sources.jar[sources (jar)] distribution ({url-maven-artifact-file}-bin.zip[zip] {url-maven-artifact-file}-bin.tar[tar])
 
 |org.asciidoctor
 |{url-maven-artifact-api-query}[asciidoctorj-api]
 |{url-maven-artifact-api-detail}[{artifact-version}]
-|{url-maven-artifact-api-file}.pom[pom] {url-maven-artifact-api-file}.jar[jar] {url-maven-artifact-api-file}-javadoc.jar[javadoc (jar)] {url-maven-artifact-api-file}-sources.jar[sources (jar)]
 
 |org.asciidoctor
 |asciidoctorj-epub3
 |{asciidoctorj-epub3-version}
-|{empty}
 
 |org.asciidoctor
 |asciidoctorj-pdf
 |{asciidoctorj-pdf-version}
-|{empty}
 |===
 
 CAUTION: The artifactId changed to `asciidoctorj` starting in 1.5.0.
