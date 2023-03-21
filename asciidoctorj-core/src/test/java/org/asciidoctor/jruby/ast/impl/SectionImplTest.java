@@ -75,8 +75,7 @@ public class SectionImplTest {
     private Document loadDocument(String source, boolean sectionNumbers) {
         Attributes attributes = Attributes.builder().sectionNumbers(sectionNumbers).build();
         Options options = Options.builder().attributes(attributes).build();
-        Document document = asciidoctor.load(source, options);
-        return document;
+        return asciidoctor.load(source, options);
     }
 
     private Section findSectionNode(Document document, int level) {
