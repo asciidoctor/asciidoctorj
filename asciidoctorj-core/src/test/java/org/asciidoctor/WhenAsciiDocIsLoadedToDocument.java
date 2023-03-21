@@ -1,14 +1,10 @@
 package org.asciidoctor;
 
 import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.ast.Author;
-import org.asciidoctor.ast.Cell;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.RevisionInfo;
-import org.asciidoctor.ast.Section;
-import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.ast.*;
 import org.asciidoctor.jruby.internal.IOUtils;
 import org.asciidoctor.util.ClasspathResources;
+import org.assertj.core.api.Assertions;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
@@ -75,6 +71,23 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @ArquillianResource
     private ClasspathResources classpath = new ClasspathResources();
+
+    @Test
+    public void should_return_empty_sources_when_document_is_null() {
+        assertEmptySources(asciidoctor.load(null, Options.builder().build()));
+    }
+
+    @Test
+    public void should_return_empty_sources_when_document_is_empty() {
+        assertEmptySources(asciidoctor.load(null, Options.builder().build()));
+    }
+
+    private static void assertEmptySources(Document document) {
+        String source = document.getSource();
+        assertThat(source, isEmptyString());
+        List<String> sourceLines = document.getSourceLines();
+        assertThat(sourceLines, hasSize(0));
+    }
 
     @Test
     public void should_return_section_blocks() {
@@ -162,7 +175,7 @@ public class WhenAsciiDocIsLoadedToDocument {
 
         assertThat((Boolean) documentOptions.get("compact"), is(true));
     }
-    
+
     @Test
     public void should_return_node_name() {
         Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
@@ -514,5 +527,98 @@ public class WhenAsciiDocIsLoadedToDocument {
         assertThat(revisionInfo.getDate(), is("2013-05-20"));
         assertThat(revisionInfo.getNumber(), is("1.0"));
         assertThat(revisionInfo.getRemark(), is("First draft"));
+    }
+
+    @Test
+    public void should_return_source_and_source_lines() {
+        final String asciidoc = asciidocWithSections();
+
+        Document document = loadDocument(asciidoc);
+
+        String source = document.getSource();
+        Assertions.assertThat(source).isEqualTo(asciidoc.trim());
+        List<String> sourceLines = document.getSourceLines();
+        Assertions.assertThat(sourceLines)
+                .containsExactly("= Document Title",
+                        "",
+                        "== Section A",
+                        "",
+                        "Section A paragraph.",
+                        "",
+                        "=== Section A Subsection",
+                        "",
+                        "Section A 'subsection' paragraph.");
+    }
+
+    @Test
+    public void should_return_source_and_source_lines_without_trailing() {
+        final String asciidoc = "= Document Title\n\n" +
+                "== Section\n\n" +
+                "Hello\t  \n";
+
+        Document document = loadDocument(asciidoc);
+
+        String source = document.getSource();
+        Assertions.assertThat(source)
+                .isEqualTo("= Document Title\n\n== Section\n\nHello");
+        List<String> sourceLines = document.getSourceLines();
+        Assertions.assertThat(sourceLines)
+                .containsExactly("= Document Title",
+                        "",
+                        "== Section",
+                        "",
+                        "Hello");
+    }
+
+    @Test
+    public void should_return_source_and_source_lines_without_resolving_attributes() {
+        final String asciidoc = "= Document Title\n" +
+                ":an-attribute: a-value\n\n" +
+                "This is {an-attribute}";
+
+        Document document = loadDocument(asciidoc);
+
+        String source = document.getSource();
+        Assertions.assertThat(source)
+                .isEqualTo("= Document Title\n:an-attribute: a-value\n\nThis is {an-attribute}");
+        List<String> sourceLines = document.getSourceLines();
+        Assertions.assertThat(sourceLines)
+                .containsExactly("= Document Title",
+                        ":an-attribute: a-value",
+                        "",
+                        "This is {an-attribute}");
+    }
+
+    @Test
+    public void should_return_source_and_source_lines_without_resolving_includes() {
+        final String asciidoc = "= Document Title\n\n" +
+                "== Section\n\n" +
+                "include::partial.adoc[]";
+
+        Document document = loadDocument(asciidoc);
+
+        String source = document.getSource();
+        Assertions.assertThat(source)
+                .isEqualTo("= Document Title\n\n== Section\n\ninclude::partial.adoc[]");
+        List<String> sourceLines = document.getSourceLines();
+        Assertions.assertThat(sourceLines)
+                .containsExactly("= Document Title",
+                        "",
+                        "== Section",
+                        "",
+                        "include::partial.adoc[]");
+    }
+
+    private Document loadDocument(String source) {
+        Options options = Options.builder().build();
+        return asciidoctor.load(source, options);
+    }
+
+    static String asciidocWithSections() {
+        return "= Document Title\n\n" +
+                "== Section A\n\n" +
+                "Section A paragraph.\n\n" +
+                "=== Section A Subsection\n\n" +
+                "Section A 'subsection' paragraph.\n\n";
     }
 }

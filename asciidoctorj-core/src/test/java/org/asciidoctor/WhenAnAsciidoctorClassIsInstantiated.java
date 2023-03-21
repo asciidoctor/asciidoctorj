@@ -1,38 +1,11 @@
 package org.asciidoctor;
 
-import static org.asciidoctor.AttributesBuilder.attributes;
-import static org.asciidoctor.OptionsBuilder.options;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.collection.IsArrayWithSize.arrayWithSize;
-import static org.junit.Assert.assertThat;
-import static org.xmlmatchers.xpath.HasXPath.hasXPath;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMSource;
-
+import com.google.common.io.CharStreams;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.jruby.AsciiDocDirectoryWalker;
 import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
 import org.asciidoctor.util.ClasspathResources;
+import org.assertj.core.api.Assertions;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
@@ -40,7 +13,26 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.xml.sax.SAXException;
 
-import com.google.common.io.CharStreams;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
+import java.io.*;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.asciidoctor.AttributesBuilder.attributes;
+import static org.asciidoctor.OptionsBuilder.options;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.collection.IsArrayWithSize.arrayWithSize;
+import static org.junit.Assert.assertThat;
+import static org.xmlmatchers.xpath.HasXPath.hasXPath;
 
 @RunWith(Arquillian.class)
 public class WhenAnAsciidoctorClassIsInstantiated {
@@ -53,6 +45,47 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
     @ArquillianResource(Unshared.class)
     private Asciidoctor asciidoctor;
+
+    @Test
+    public void should_accept_empty_string_as_empty_content_when_output_is_String() {
+        Options basicOptions = Options.builder().build();
+        String result = asciidoctor.convert("", basicOptions);
+
+        assertThat(result, isEmptyString());
+    }
+
+    @Test
+    public void should_accept_null_string_as_empty_content_when_output_is_String() {
+        Options basicOptions = Options.builder().build();
+        String result = asciidoctor.convert(null, basicOptions);
+
+        assertThat(result, isEmptyString());
+    }
+
+    @Test
+    public void should_accept_null_string_as_empty_content_when_output_is_File() {
+        File expectedFile = new File(testFolder.getRoot(), "expected_empty.html");
+        Options options = Options.builder()
+                .safe(SafeMode.UNSAFE)
+                .toFile(expectedFile)
+                .build();
+        String renderContent = asciidoctor.convert(null, options);
+
+        assertThat(expectedFile.exists(), is(true));
+        assertThat(renderContent, is(nullValue()));
+    }
+
+    @Test
+    public void should_fail_when_reader_is_null() {
+        Options basicOptions = Options.builder().build();
+        StringWriter writer = new StringWriter();
+
+        Throwable throwable = Assertions.catchThrowable(() -> asciidoctor.convert(null, writer, basicOptions));
+
+        Assertions.assertThat(throwable)
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("reader");
+    }
 
     @Test
     public void content_should_be_read_from_reader_and_written_to_writer() throws IOException, SAXException,
@@ -78,8 +111,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     }
 
     @Test
-    public void file_document_should_be_rendered_into_current_directory_using_options_class()
-            throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
+    public void file_document_should_be_rendered_into_current_directory_using_options_class() {
 
         Options options = options().inPlace(true).get();
         File inputFile = classpath.getResource("rendersample.asciidoc");
@@ -94,8 +126,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     }
 
     @Test
-    public void file_document_should_be_rendered_into_current_directory() throws FileNotFoundException, IOException,
-            SAXException, ParserConfigurationException {
+    public void file_document_should_be_rendered_into_current_directory() {
 
         File inputFile = classpath.getResource("rendersample.asciidoc");
         String renderContent = asciidoctor.convertFile(inputFile, options()
@@ -110,8 +141,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     }
 
     @Test
-    public void file_document_should_be_rendered_into_foreign_directory() throws FileNotFoundException, IOException,
-            SAXException, ParserConfigurationException {
+    public void file_document_should_be_rendered_into_foreign_directory() {
 
         Map<String, Object> options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot())
                 .asMap();
@@ -140,8 +170,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     }
 
     @Test
-    public void file_document_should_be_rendered_into_foreign_directory_using_options_class()
-            throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
+    public void file_document_should_be_rendered_into_foreign_directory_using_options_class() {
 
         Options options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(testFolder.getRoot()).get();
 
@@ -154,8 +183,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     }
 
     @Test
-    public void docbook_document_should_be_rendered_into_current_directory() throws FileNotFoundException, IOException,
-            SAXException, ParserConfigurationException {
+    public void docbook_document_should_be_rendered_into_current_directory() {
 
         Map<String, Object> attributes = attributes().backend("docbook").asMap();
         Map<String, Object> options = options().inPlace(true).attributes(attributes).asMap();
@@ -172,8 +200,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     }
 
     @Test
-    public void docbook_document_should_be_rendered_into_current_directory_using_options_class()
-            throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
+    public void docbook_document_should_be_rendered_into_current_directory_using_options_class() {
 
         Attributes attributes = attributes().backend("docbook").get();
         Options options = options().inPlace(true).attributes(attributes).get();
@@ -190,8 +217,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     }
 
     @Test
-    public void docbook_document_should_be_rendered_into_current_directory_using_options_backend_attribute()
-            throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
+    public void docbook_document_should_be_rendered_into_current_directory_using_options_backend_attribute() {
 
         Options options = options().inPlace(true).backend("docbook").get();
 

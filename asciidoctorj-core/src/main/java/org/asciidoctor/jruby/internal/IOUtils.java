@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class IOUtils {
@@ -13,13 +14,14 @@ public class IOUtils {
     }
 
     public static String readFull(InputStream inputStream) {
-        try (Scanner scanner = new Scanner(inputStream).useDelimiter("\\A")){
+        try (Scanner scanner = new Scanner(inputStream).useDelimiter("\\A")) {
             return scanner.next();
         }
     }
 
     public static String readFull(Reader reader) {
-        try (Scanner scanner = new Scanner(reader).useDelimiter("\\A")){
+        Objects.requireNonNull(reader, "reader");
+        try (Scanner scanner = new Scanner(reader).useDelimiter("\\A")) {
             return scanner.next();
         }
     }
