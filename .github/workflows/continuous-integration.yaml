@@ -18,7 +18,6 @@ jobs:
       max-parallel: 4
       matrix:
         java:
-          - '8'
           - '11'
           - '17'
           - '19'
@@ -26,8 +25,6 @@ jobs:
           - ubuntu-latest
           - macos-latest
         exclude:
-        - os: macos-latest
-          java: '8'
         - os: macos-latest
           java: '19'
     runs-on: ${{ matrix.os }}

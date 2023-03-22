@@ -113,19 +113,11 @@ subprojects {
 
   plugins.withType(JavaPlugin) {
     project.tasks.withType(JavaCompile) { task ->
-      if (JavaVersion.current().isJava11Compatible()) {
-        task.options.release = 8
-      }
       if (project.hasProperty("showDeprecation")) {
         options.compilerArgs << "-Xlint:deprecation"
       }
       if (project.hasProperty("showUnchecked")) {
         options.compilerArgs << "-Xlint:unchecked"
-      }
-    }
-    project.tasks.withType(GroovyCompile) { task ->
-      if (JavaVersion.current().isJava11Compatible()) {
-        task.options.release = 8
       }
     }
   }
@@ -168,9 +160,6 @@ subprojects {
     forkEvery = 10
     minHeapSize = '128m'
     maxHeapSize = '1024m'
-    if (JavaVersion.current().isJava8Compatible()) {
-      jvmArgs '-XX:-UseGCOverheadLimit'
-    }
 
     testLogging {
       // events 'passed', 'failed', 'skipped', 'standard_out', 'standard_error'
@@ -199,9 +188,8 @@ configure(subprojects.findAll { !it.isDistribution() }) {
 
 
   javadoc {
-    // Oracle JDK8 likes to fail the build over spoiled HTML
+    // Oracle JDK11+ likes to fail the build over spoiled HTML
     options.addStringOption('Xdoclint:none', '-quiet')
-    options.source('8')
   }
 }
 
@@ -210,6 +198,9 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.
   java {
     withJavadocJar()
     withSourcesJar()
+    toolchain {
+      languageVersion.set(JavaLanguageVersion.of(11))
+    }
   }
 
 }

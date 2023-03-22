@@ -127,12 +127,7 @@ task pollutedTest(type: Test) {
   forkEvery = 10
   minHeapSize = '128m'
   maxHeapSize = '1024m'
-  if (JavaVersion.current().isJava8Compatible()) {
-    jvmArgs '-XX:-UseGCOverheadLimit'
-  }
-  else {
-    jvmArgs '-XX:MaxPermSize=256m', '-XX:-UseGCOverheadLimit'
-  }
+  jvmArgs '-XX:-UseGCOverheadLimit'
 
   environment 'GEM_PATH', '/some/path'
   environment 'GEM_HOME', '/some/other/path'
