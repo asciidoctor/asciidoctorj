@@ -1,3 +1,5 @@
+import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
+
 import java.time.Duration
 
 /*
@@ -199,8 +201,19 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.
     withJavadocJar()
     withSourcesJar()
     toolchain {
-      languageVersion.set(JavaLanguageVersion.of(11))
+      languageVersion.set(JavaLanguageVersion.of(getToolchainVersion()))
     }
   }
 
+}
+
+// Windows workaround to fix invalid toolchain detection
+def getToolchainVersion() {
+  if (DefaultNativePlatform.getCurrentOperatingSystem().isWindows()) {
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_19))
+      return 19
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17))
+      return 17
+  }
+  return 11
 }

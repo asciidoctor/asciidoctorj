@@ -1,3 +1,4 @@
+import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
@@ -20,6 +21,20 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+java {
+	toolchain {
+		languageVersion.set(JavaLanguageVersion.of(getToolchainVersion()))
+	}
+}
+
+def getToolchainVersion() {
+	if (DefaultNativePlatform.getCurrentOperatingSystem().isWindows()) {
+		if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_19))
+			return 19
+	}
+	return 17
 }
 
 bootJar {
