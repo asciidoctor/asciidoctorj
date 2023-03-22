@@ -24,9 +24,6 @@ jobs:
         os:
           - ubuntu-latest
           - macos-latest
-        exclude:
-        - os: macos-latest
-          java: '19'
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
