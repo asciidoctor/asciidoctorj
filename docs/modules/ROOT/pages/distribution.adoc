@@ -1,10 +1,10 @@
 = Distribution
 
 :asciidoctorj-group-id: org.asciidoctor
-:url-maven-artifact-query: https://central.sonatype.com/artifact/org.asciidoctor/asciidoctorj/{artifact-version}/versions
-:url-maven-artifact-detail: https://central.sonatype.com/artifact/org.asciidoctor/asciidoctorj/{artifact-version}
-:url-maven-artifact-api-query: https://central.sonatype.com/artifact/org.asciidoctor/asciidoctorj-api/{artifact-version}/versions
-:url-maven-artifact-api-detail: https://central.sonatype.com/artifact/org.asciidoctor/asciidoctorj-api/{artifact-version}
+:url-maven-artifact-query: https://central.sonatype.com/artifact/{asciidoctorj-group-id}/asciidoctorj/{artifact-version}/versions
+:url-maven-artifact-detail: https://central.sonatype.com/artifact/{asciidoctorj-group-id}/asciidoctorj/{artifact-version}
+:url-maven-artifact-api-query: https://central.sonatype.com/artifact/{asciidoctorj-group-id}/asciidoctorj-api/{artifact-version}/versions
+:url-maven-artifact-api-detail: https://central.sonatype.com/artifact/{asciidoctorj-group-id}/asciidoctorj-api/{artifact-version}
 
 AsciidoctorJ is published to Maven Central.
 The artifact information can be found in the tables below.
