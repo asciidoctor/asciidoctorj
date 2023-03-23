@@ -284,8 +284,13 @@ asciidoctorj::
   Also bundles optional RubyGems needed at runtime, such as coderay, tilt, haml and slim.
   Produces the asciidoctorj jar.
 
+asciidoctorj-cli::
+  `asciidoctorj` command Java components.
+  Produces the asciidoctorj-cli.
+
 asciidoctorj-distribution::
-  Produces the distribution zip that provides the standalone `asciidoctorj` command.
+  Produces the distribution zip that provides the standalone `asciidoctorj` command including Java components,
+  launch scripts and required libraries.
 
 asciidoctorj-arquillian-extension::
   Bundles an Arquillian extension that allows to inject an Asciidoctor instance or other instances commonly used by Asciidoctor tests into a test case.
@@ -309,6 +314,8 @@ gradle/
 asciidoctorj-arquillian-extension/
   build.gradle
 asciidoctorj-api/
+  build.gradle
+asciidoctorj-cli/
   build.gradle
 asciidoctorj-core/
   build.gradle

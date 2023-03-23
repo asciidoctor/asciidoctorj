@@ -1,0 +1,25 @@
+apply plugin: 'java-library'
+apply plugin: 'biz.aQute.bnd.builder'
+
+dependencies {
+  api project(':asciidoctorj-api')
+  api project(':asciidoctorj')
+  implementation "com.beust:jcommander:$jcommanderVersion"
+
+  testImplementation project(':asciidoctorj-arquillian-extension')
+  testImplementation "org.jsoup:jsoup:$jsoupVersion"
+}
+
+project.ext.publicationName = "mavenAsciidoctorJCli"
+
+apply from: rootProject.file('gradle/publish.gradle')
+apply from: rootProject.file('gradle/signing.gradle')
+
+jar {
+  bnd(
+    ('Bundle-Name'): 'asciidoctorj-cli',
+    ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj-cli',
+    ('Import-Package'): 'com.beust.jcommander;resolution:=optional, *'
+  )
+  metaInf { from "$buildDir/version-info/" }
+}

@@ -4,7 +4,7 @@ jar.enabled = false
 
 dependencies {
     testImplementation project(':asciidoctorj')
-    testImplementation project(path: ':asciidoctorj-arquillian-extension')
+    testImplementation project(':asciidoctorj-arquillian-extension')
     testImplementation "commons-io:commons-io:$commonsioVersion"
     testImplementation "org.jsoup:jsoup:$jsoupVersion"
     testImplementation("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {

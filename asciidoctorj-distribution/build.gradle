@@ -5,12 +5,8 @@ if (project.statusIsRelease && project.hasProperty("sdkman_consumer_key")) {
 }
 
 dependencies {
-  implementation(project(':asciidoctorj')) {
+  implementation(project(':asciidoctorj-cli')) {
     exclude group: 'org.jruby'
-  }
-
-  implementation(project(':asciidoctorj-api')) {
-    transitive = false
   }
 
   implementation("org.asciidoctor:asciidoctorj-epub3:$asciidoctorjEpub3Version") {
@@ -32,6 +28,7 @@ dependencies {
     transitive = false
   }
   implementation "org.jruby:jruby-complete:$jrubyVersion"
+
   testImplementation project(':asciidoctorj-arquillian-extension')
   testImplementation "org.apache.pdfbox:pdfbox:$pdfboxVersion"
   testImplementation "org.jsoup:jsoup:$jsoupVersion"
@@ -54,7 +51,7 @@ startScripts {
   unixStartScriptGenerator.template = resources.text.fromFile('src/main/resources/customUnixStartScript.txt')
 
   applicationName = rootProject.name
-  mainClass.set('org.asciidoctor.jruby.cli.AsciidoctorInvoker')
+  mainClass.set('org.asciidoctor.cli.jruby.AsciidoctorInvoker')
   defaultJvmOpts = [
     '-client', '-Xmn128m', '-Xms256m', '-Xmx256m', '-Djava.awt.headless=true',
     '-Xverify:none', '-XX:+TieredCompilation', '-XX:TieredStopAtLevel=1', '-XX:+DisableExplicitGC', '-Djruby.compile.mode=OFF'

@@ -1,7 +1,10 @@
-package org.asciidoctor.jruby.cli;
+package org.asciidoctor.cli;
 
 import com.beust.jcommander.JCommander;
-import org.asciidoctor.*;
+import org.asciidoctor.Attributes;
+import org.asciidoctor.Options;
+import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.SafeMode;
 import org.asciidoctor.jruby.internal.AsciidoctorUtils;
 import org.junit.Test;
 
@@ -50,7 +53,6 @@ public class WhenAsciidoctorAPICallIsCalled {
         assertThat(asciidoctorCliOptions.getAttributes(), hasEntry("myAtribute", "myValue"));
         assertThat(asciidoctorCliOptions.getAttributes(), hasKey("sectnums"));
         assertThat(asciidoctorCliOptions.getAttributes(), hasKey("copycss!"));
-
     }
 
 }

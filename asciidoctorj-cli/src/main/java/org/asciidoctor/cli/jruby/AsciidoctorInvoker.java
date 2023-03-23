@@ -1,8 +1,10 @@
-package org.asciidoctor.jruby.cli;
+package org.asciidoctor.cli.jruby;
 
 import com.beust.jcommander.JCommander;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
+import org.asciidoctor.cli.AsciidoctorCliOptions;
+import org.asciidoctor.cli.MaxSeverityLogHandler;
 import org.asciidoctor.jruby.DirectoryWalker;
 import org.asciidoctor.jruby.GlobDirectoryWalker;
 import org.asciidoctor.jruby.internal.IOUtils;
@@ -20,7 +22,7 @@ import java.net.URLClassLoader;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.asciidoctor.jruby.cli.AsciidoctorCliOptions.TIMINGS_OPTION_NAME;
+import static org.asciidoctor.cli.AsciidoctorCliOptions.TIMINGS_OPTION_NAME;
 
 public class AsciidoctorInvoker {
 

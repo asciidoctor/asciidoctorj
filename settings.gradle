@@ -4,6 +4,7 @@ include \
   'asciidoctorj',
   'asciidoctorj-arquillian-extension',
   'asciidoctorj-api',
+  'asciidoctorj-cli',
   'asciidoctorj-distribution',
   'asciidoctorj-documentation',
   'asciidoctorj-wildfly-integration-test',

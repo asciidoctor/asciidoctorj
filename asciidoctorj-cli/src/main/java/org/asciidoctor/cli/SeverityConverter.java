@@ -1,4 +1,4 @@
-package org.asciidoctor.jruby.cli;
+package org.asciidoctor.cli;
 
 import com.beust.jcommander.converters.EnumConverter;
 import org.asciidoctor.log.Severity;

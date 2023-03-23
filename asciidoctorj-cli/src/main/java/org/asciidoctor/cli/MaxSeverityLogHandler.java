@@ -1,10 +1,11 @@
-package org.asciidoctor.jruby.cli;
+package org.asciidoctor.cli;
 
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
 
 public class MaxSeverityLogHandler implements LogHandler {
+
     private Severity maxSeverity = Severity.DEBUG;
 
     @Override
