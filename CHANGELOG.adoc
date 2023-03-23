@@ -27,6 +27,7 @@ Improvement::
 * Replace use of deprecated 'numbered' attribute by 'sectnums' (#1123) (@abelsromero)
 * Expose `source` and `source_lines` use of deprecated 'numbered' in Document interface (#1145) (@abelsromero)
 * Accept 'null' as valid input (same as empty string) for load and convert String methods (#1148) (@abelsromero)
+* Set Java 11 as the minimal version (#1151) (@abelsromero)
 
 Bug Fixes::
 
