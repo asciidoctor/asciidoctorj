@@ -10,7 +10,7 @@ dependencies {
   testImplementation "org.jsoup:jsoup:$jsoupVersion"
 }
 
-project.ext.publicationName = "mavenAsciidoctorJ"
+project.ext.publicationName = "mavenAsciidoctorJCli"
 
 apply from: rootProject.file('gradle/publish.gradle')
 apply from: rootProject.file('gradle/signing.gradle')

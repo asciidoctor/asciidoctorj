@@ -1,6 +1,6 @@
 package org.asciidoctor;
 
-import org.asciidoctor.jruby.cli.AsciidoctorInvoker;
+import org.asciidoctor.cli.jruby.AsciidoctorInvoker;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -56,7 +56,6 @@ public class WhenBackendIsRevealJs {
 
         Element diagram = diagramSlide.selectFirst("div.imageblock img");
         assertThat(diagram, notNullValue());
-
         assertThat(diagram.attr("src"), startsWith("data:image/svg+xml;base64,"));
     }
 

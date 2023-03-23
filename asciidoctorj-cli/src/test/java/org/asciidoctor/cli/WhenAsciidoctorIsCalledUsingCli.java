@@ -1,7 +1,7 @@
-package org.asciidoctor.jruby.cli;
+package org.asciidoctor.cli;
 
+import org.asciidoctor.cli.jruby.AsciidoctorInvoker;
 import org.asciidoctor.util.ClasspathResources;
-import org.hamcrest.MatcherAssert;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jsoup.Jsoup;
@@ -151,7 +151,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void more_than_one_input_file_should_throw_an_exception() throws IOException {
+    public void should_convert_multiple_inputs() throws IOException {
         File inputFile1 = classpath.getResource(SAMPLE_FILE);
         String inputPath1 = inputFile1.getPath().substring(pwd.length() + 1);
         File inputFile2 = classpath.getResource(TOC_SAMPLE_ASCIIDOC);

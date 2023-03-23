@@ -1,4 +1,4 @@
-package org.asciidoctor.jruby.cli;
+package org.asciidoctor.cli;
 
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;

@@ -36,5 +36,5 @@ If you have installed AsciidoctorJ as recommended, the asciidoctorj command will
 
 If you have downloaded the distribution jars only, use a command like:
 
- java -cp lib/jruby-complete-{jruby-version}.jar;lib/asciidoctor-api-{artifact-version}.jar;lib/asciidoctor-core-{artifact-version}.jar;lib/jcommander-{jcommander-version}.jar;lib/myextension.jar org.asciidoctor.jruby.cli.AsciidoctorInvoker test.adoc
+ java -cp lib/jruby-complete-{jruby-version}.jar;lib/asciidoctor-api-{artifact-version}.jar;lib/asciidoctor-core-{artifact-version}.jar;lib/jcommander-{jcommander-version}.jar;lib/myextension.jar org.asciidoctor.cli.jruby.AsciidoctorInvoker test.adoc
 ====

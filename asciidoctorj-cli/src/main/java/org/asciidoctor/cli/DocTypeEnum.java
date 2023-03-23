@@ -1,4 +1,4 @@
-package org.asciidoctor.jruby.cli;
+package org.asciidoctor.cli;
 
 public enum DocTypeEnum {
 

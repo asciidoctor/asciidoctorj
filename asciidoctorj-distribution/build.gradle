@@ -51,7 +51,7 @@ startScripts {
   unixStartScriptGenerator.template = resources.text.fromFile('src/main/resources/customUnixStartScript.txt')
 
   applicationName = rootProject.name
-  mainClass.set('org.asciidoctor.jruby.cli.AsciidoctorInvoker')
+  mainClass.set('org.asciidoctor.cli.jruby.AsciidoctorInvoker')
   defaultJvmOpts = [
     '-client', '-Xmn128m', '-Xms256m', '-Xmx256m', '-Djava.awt.headless=true',
     '-Xverify:none', '-XX:+TieredCompilation', '-XX:TieredStopAtLevel=1', '-XX:+DisableExplicitGC', '-Djruby.compile.mode=OFF'

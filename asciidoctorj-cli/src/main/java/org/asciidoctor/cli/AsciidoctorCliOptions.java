@@ -1,4 +1,4 @@
-package org.asciidoctor.jruby.cli;
+package org.asciidoctor.cli;
 
 import com.beust.jcommander.Parameter;
 import org.asciidoctor.*;
