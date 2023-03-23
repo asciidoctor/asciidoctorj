@@ -3,32 +3,39 @@
 :asciidoctorj-group-id: org.asciidoctor
 :url-maven-artifact-query: https://central.sonatype.com/artifact/{asciidoctorj-group-id}/asciidoctorj/{artifact-version}/versions
 :url-maven-artifact-detail: https://central.sonatype.com/artifact/{asciidoctorj-group-id}/asciidoctorj/{artifact-version}
+:url-maven-artifact-file: https://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
+
 :url-maven-artifact-api-query: https://central.sonatype.com/artifact/{asciidoctorj-group-id}/asciidoctorj-api/{artifact-version}/versions
 :url-maven-artifact-api-detail: https://central.sonatype.com/artifact/{asciidoctorj-group-id}/asciidoctorj-api/{artifact-version}
+:url-maven-artifact-api-file: https://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj-api/{artifact-version}/asciidoctorj-api-{artifact-version}
 
 AsciidoctorJ is published to Maven Central.
 The artifact information can be found in the tables below.
 
-[cols="2,2,^2"]
+[cols="2,2,^2,4"]
 .Artifact information for AsciidoctorJ in Maven Central
 |===
-|Group Id |Artifact Id |Version
+|Group Id |Artifact Id |Version |Download
 
 |{asciidoctorj-group-id}
 |{url-maven-artifact-query}[asciidoctorj]
 |{url-maven-artifact-detail}[{artifact-version}]
+|{url-maven-artifact-file}.pom[pom] {url-maven-artifact-file}.jar[jar] {url-maven-artifact-file}-javadoc.jar[javadoc (jar)] {url-maven-artifact-file}-sources.jar[sources (jar)] {url-maven-artifact-file}-bin.zip[distribution (zip)]
 
 |{asciidoctorj-group-id}
 |{url-maven-artifact-api-query}[asciidoctorj-api]
 |{url-maven-artifact-api-detail}[{artifact-version}]
+|{url-maven-artifact-api-file}.pom[pom] {url-maven-artifact-api-file}.jar[jar] {url-maven-artifact-api-file}-javadoc.jar[javadoc (jar)] {url-maven-artifact-api-file}-sources.jar[sources (jar)]
 
 |{asciidoctorj-group-id}
 |asciidoctorj-epub3
 |{asciidoctorj-epub3-version}
+|{empty}
 
 |{asciidoctorj-group-id}
 |asciidoctorj-pdf
 |{asciidoctorj-pdf-version}
+|{empty}
 |===
 
 CAUTION: The artifactId changed to `asciidoctorj` starting in 1.5.0.
