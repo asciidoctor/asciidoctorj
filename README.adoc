@@ -29,7 +29,7 @@ ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
 :uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-zulip: https://asciidoctor.zulipchat.com/
-:artifact-version: 2.5.4
+:artifact-version: 2.5.7
 :asciidoctorj-epub3-version: 1.5.1
 :asciidoctorj-pdf-version: 1.6.2
 :uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
