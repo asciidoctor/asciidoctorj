@@ -148,7 +148,7 @@ public class OptionsBuilder {
         this.options.setAttributes(attributes);
         return this;
     }
-    
+
     /**
      * Sets attributes used for rendering input.
      * @deprecated Use {@link #attributes(Attributes)} instead. 
@@ -232,8 +232,9 @@ public class OptionsBuilder {
     }
 
     /**
-     * Keeps track of the file and line number for each parsed block. (Useful for tooling applications where the association between the converted output and the source file is important).
-     * 
+     * Keeps track of the file and line number for each parsed block.
+     * Useful for tooling applications where the association between the converted output and the source file is important.
+     *
      * @param sourcemap
      *            value.
      * @return this instance.
@@ -254,10 +255,13 @@ public class OptionsBuilder {
         this.options.setEruby(eruby);
         return this;
     }
-    
+
     /**
-     * If true, tells the parser to capture images and links in the reference table. (Normally only IDs, footnotes and indexterms are included). The reference table is available via the references property on the document AST object. (Experimental).
-     * 
+     * If true, tells the parser to capture images and links in the reference table.
+     * Normally only IDs, footnotes and indexterms are included.
+     * The reference table is available via the references property on the document AST object.
+     * (Experimental).
+     *
      * @param catalogAssets
      *            value.
      * @return this instance.
@@ -280,8 +284,9 @@ public class OptionsBuilder {
     }
 
     /**
-     * If true, the source is parsed eagerly (i.e., as soon as the source is passed to the load or load_file API). If false, parsing is deferred until the parse method is explicitly invoked.
-     * 
+     * If true, the source is parsed eagerly (i.e., as soon as the source is passed to the load or load_file API).
+     * If false, parsing is deferred until the parse method is explicitly invoked.
+     *
      * @param parse
      *            value.
      * @return this instance.
@@ -304,21 +309,9 @@ public class OptionsBuilder {
     }
 
     /**
-     * Destination output directory.
-     * 
-     * @param destinationDir
-     *            destination directory.
-     * @return this instance.
-     */
-    public OptionsBuilder destinationDir(File destinationDir) {
-        this.options.setDestinationDir(destinationDir.getAbsolutePath());
-        return this;
-    }
-
-    /**
      * Source directory.
      *
-     * This must be used alongside {@link #destinationDir(File)}.
+     * This must be used alongside {@link #toDir(File)}.
      *
      * @param srcDir
      *            source directory.
@@ -342,7 +335,7 @@ public class OptionsBuilder {
         this.options.setOption(option, value);
         return this;
     }
-    
+
     /**
      * Sets base dir for working directory.
      * 
@@ -359,7 +352,7 @@ public class OptionsBuilder {
      * Gets a map with configured options.
      * @deprecated Use {@link #build()} instead.
      * 
-     * @return map with all options. By default an empty map is returned.
+     * @return map with all options. By default, an empty map is returned.
      */
     @Deprecated
     public Map<String, Object> asMap() {
@@ -367,16 +360,16 @@ public class OptionsBuilder {
     }
 
     /**
-     * @deprecated Use {@link #build()} instead. 
+     * @deprecated Use {@link #build()} instead.
      */
     @Deprecated
     public Options get() {
         return this.options;
     }
-    
+
     /**
      * Returns a valid Options instance.
-     * 
+     *
      * @return options instance.
      */
     public Options build() {

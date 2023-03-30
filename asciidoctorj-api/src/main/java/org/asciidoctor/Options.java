@@ -23,7 +23,6 @@ public class Options {
     public static final String ERUBY = "eruby";
     public static final String CATALOG_ASSETS = "catalog_assets";
     public static final String COMPACT = "compact";
-    public static final String DESTINATION_DIR = "destination_dir";
     public static final String SOURCE_DIR = "source_dir";
     public static final String BACKEND = "backend";
     public static final String DOCTYPE = "doctype";
@@ -169,10 +168,6 @@ public class Options {
 
     public void setCompact(boolean compact) {
         this.options.put(COMPACT, compact);
-    }
-
-    public void setDestinationDir(String destinationDir) {
-        this.options.put(DESTINATION_DIR, destinationDir);
     }
 
     public void setSourceDir(String srcDir) {
