@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -171,6 +172,14 @@ public class Options {
         this.options.put(COMPACT, compact);
     }
 
+    /**
+     * Destination output directory.
+     *
+     * @param destinationDir
+     *            destination directory.
+     * @deprecated Use {@link #setToDir(String)} instead.
+     */
+    @Deprecated
     public void setDestinationDir(String destinationDir) {
         this.options.put(DESTINATION_DIR, destinationDir);
     }

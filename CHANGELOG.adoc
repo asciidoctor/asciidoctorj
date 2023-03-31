@@ -21,6 +21,9 @@ Improvement::
 * Upgrade to asciidoctorj-diagram 2.2.4 (#1140)
 * Upgrade to jruby 9.3.10.0 (#1138) (@alexlevinfr)
 
+Bug Fixes::
+* Fix destinationDir not having effect. Deprecate destinationDir in favour of toDir (@abelsromero) (#853, #941)
+
 Build / Infrastructure::
 
 * Replace use of deprecated 'numbered' attribute by 'sectnums' (#1127) (@abelsromero)

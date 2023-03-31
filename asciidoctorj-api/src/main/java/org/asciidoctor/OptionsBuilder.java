@@ -305,13 +305,15 @@ public class OptionsBuilder {
 
     /**
      * Destination output directory.
-     * 
+     *
      * @param destinationDir
-     *            destination directory.
+     *             destination directory.
      * @return this instance.
+     * @deprecated Use {@link #toDir(File)} instead.
      */
+    @Deprecated
     public OptionsBuilder destinationDir(File destinationDir) {
-        this.options.setDestinationDir(destinationDir.getAbsolutePath());
+        this.options.setToDir(destinationDir.getAbsolutePath());
         return this;
     }
 
