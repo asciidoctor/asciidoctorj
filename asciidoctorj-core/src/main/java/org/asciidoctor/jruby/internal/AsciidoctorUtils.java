@@ -18,6 +18,8 @@ public class AsciidoctorUtils {
      * See class 'org.asciidoctor.jruby.cli.AsciidoctorCliOptions'
      */
     private class CliOptions {
+        private static final String DESTINATION_DIR_LONG = "destination_dir";
+
         private static final String DESTINATION_DIR = "-D";
         private static final String BASE_DIR = "-B";
         private static final String TEMPLATE_DIR = "-T";
@@ -58,9 +60,9 @@ public class AsciidoctorUtils {
 
         List<String> optionsAndAttributes = new ArrayList<>();
 
-        if (options.containsKey(Options.DESTINATION_DIR)) {
+        if (options.containsKey(CliOptions.DESTINATION_DIR_LONG)) {
             optionsAndAttributes.add(CliOptions.DESTINATION_DIR);
-            optionsAndAttributes.add(options.get(Options.DESTINATION_DIR).toString());
+            optionsAndAttributes.add(options.get(CliOptions.DESTINATION_DIR_LONG).toString());
         }
 
         if (options.containsKey(Options.BASEDIR)) {
