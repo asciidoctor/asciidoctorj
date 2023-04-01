@@ -53,6 +53,8 @@ startScripts {
   applicationName = rootProject.name
   mainClass.set('org.asciidoctor.cli.jruby.AsciidoctorInvoker')
   defaultJvmOpts = [
+    '--add-opens', 'java.base/sun.nio.ch=ALL-UNNAMED',
+    '--add-opens', 'java.base/java.io=ALL-UNNAMED',
     '-client', '-Xmn128m', '-Xms256m', '-Xmx256m', '-Djava.awt.headless=true',
     '-Xverify:none', '-XX:+TieredCompilation', '-XX:TieredStopAtLevel=1', '-XX:+DisableExplicitGC', '-Djruby.compile.mode=OFF'
   ]
