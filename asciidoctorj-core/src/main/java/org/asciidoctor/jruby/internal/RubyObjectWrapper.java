@@ -36,11 +36,8 @@ public class RubyObjectWrapper {
 
         if (result instanceof RubyNil) {
             return null;
-        } else if (result instanceof RubySymbol) {
-            return result.asJavaString();
-        } else {
-            return result.asJavaString();
         }
+        return result.asJavaString();
     }
 
     public void setString(String propertyName, String value) {
@@ -120,7 +117,7 @@ public class RubyObjectWrapper {
             }
             result = rubyNode.getInstanceVariables().getInstanceVariable(propertyName);
         } else {
-            if (args == null) {
+            if (args == null || args.length == 0) {
                 result = rubyNode.callMethod(threadContext, propertyName);
             } else {
                 IRubyObject[] rubyArgs = new IRubyObject[args.length];
