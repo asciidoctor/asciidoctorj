@@ -143,7 +143,7 @@ public class WhenConverterIsRegistered {
                 "\n" +
                 "== Test" +
                 "\n" +
-                "== Test2\n", OptionsBuilder.options().backend("test3").headerFooter(false));
+                "== Test2\n", OptionsBuilder.options().backend("test3").standalone(false));
 
         assertEquals("== 1 Test ==\n" +
                 "== 42 Test2 ==", result);

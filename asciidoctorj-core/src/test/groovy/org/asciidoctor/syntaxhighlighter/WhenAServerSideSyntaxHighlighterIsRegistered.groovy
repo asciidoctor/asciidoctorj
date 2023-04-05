@@ -61,7 +61,7 @@ System.out.println("Hello World");
     when:
     String html = asciidoctor.convert(doc, OptionsBuilder.options()
             .safe(SafeMode.UNSAFE)
-            .headerFooter(false)
+            .standalone(false)
             .attributes(AttributesBuilder.attributes().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER)))
 
     org.jsoup.nodes.Document document = Jsoup.parse(html)

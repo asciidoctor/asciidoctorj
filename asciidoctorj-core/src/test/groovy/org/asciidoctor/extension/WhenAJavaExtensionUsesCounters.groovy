@@ -51,7 +51,7 @@ The attribute for counterb: {counter:counterb}
 '''
         when:
         asciidoctor.javaExtensionRegistry().blockMacro(TestBlockMacroProcessor)
-        String result = asciidoctor.convert(document, OptionsBuilder.options().headerFooter(true).safe(SafeMode.SERVER))
+        String result = asciidoctor.convert(document, OptionsBuilder.options().standalone(true).safe(SafeMode.SERVER))
 
         then:
         Document doc = Jsoup.parse(result, UTF8)
@@ -83,7 +83,7 @@ The attribute for counterb: {counter:counterb}
 '''
         when:
         asciidoctor.javaExtensionRegistry().treeprocessor(TestTreeProcessor)
-        String result = asciidoctor.convert(document, OptionsBuilder.options().headerFooter(true).safe(SafeMode.SERVER))
+        String result = asciidoctor.convert(document, OptionsBuilder.options().standalone(true).safe(SafeMode.SERVER))
 
         then:
         Document doc = Jsoup.parse(result, UTF8)
@@ -109,7 +109,7 @@ testmacro::countera[]
 '''
         when:
         asciidoctor.javaExtensionRegistry().blockMacro(TestBlockMacroWithInitialCounterProcessor)
-        String result = asciidoctor.convert(document, OptionsBuilder.options().headerFooter(true).safe(SafeMode.SERVER))
+        String result = asciidoctor.convert(document, OptionsBuilder.options().standalone(true).safe(SafeMode.SERVER))
 
         then:
         Document doc = Jsoup.parse(result, UTF8)

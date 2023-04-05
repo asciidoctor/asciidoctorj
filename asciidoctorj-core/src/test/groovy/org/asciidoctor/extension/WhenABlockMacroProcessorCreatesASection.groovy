@@ -35,7 +35,7 @@ section::HelloWorld[]
         asciidoctor.javaExtensionRegistry().blockMacro(BLOCKMACRO_NAME, SectionCreatorBlockMacro)
 
         when:
-        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).headerFooter(true))
+        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).standalone(true))
 
         then:
         noExceptionThrown()
@@ -52,7 +52,7 @@ section::HelloWorld[]
         asciidoctor.createGroup().blockMacro(BLOCKMACRO_NAME, SectionCreatorBlockMacro).register()
 
         when:
-        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).headerFooter(true))
+        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).standalone(true))
 
         then:
         noExceptionThrown()

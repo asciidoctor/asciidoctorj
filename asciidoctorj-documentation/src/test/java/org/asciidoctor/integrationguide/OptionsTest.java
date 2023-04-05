@@ -38,7 +38,7 @@ public class OptionsTest {
                 asciidoctor.convert(
                         "Hello World",
                         Options.builder()            // <1>
-                                .headerFooter(false) // <2>
+                                .standalone(false)   // <2>
                                 .build());           // <3>
 
         assertThat(result, startsWith("<div "));
@@ -66,7 +66,7 @@ public class OptionsTest {
     }
 
     @Test
-    public void convert_in_unsafe_mode() throws Exception {
+    public void convert_in_unsafe_mode() {
 //tag::unsafeConversion[]
         File sourceFile =
 //end::unsafeConversion[]
@@ -113,7 +113,7 @@ public class OptionsTest {
     }
 
     @Test
-    public void use_font_awesome_icons() throws Exception {
+    public void use_font_awesome_icons() {
 //tag::attributeFontIcons[]
         String result =
             asciidoctor.convert(
@@ -122,11 +122,11 @@ public class OptionsTest {
                     "{foo}",
                     Options.builder()
                             .toFile(false)
-                            .headerFooter(false)
+                            .standalone(false)
                             .attributes(
                                     Attributes.builder()                                          // <1>        
                                             .icons(Attributes.FONT_ICONS)                         // <2>
-                                            .attribute("foo", "bar") // <3>
+                                            .attribute("foo", "bar")   // <3>
                                             .build())
                             .build());
         assertThat(result, containsString("<i class=\"fa icon-note\" title=\"Note\"></i>"));

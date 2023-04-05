@@ -91,7 +91,7 @@ And even more infos on manpage:git[7].
     def "a docinfoprocessor should be configurable via the Location annotation"() {
         when:
         asciidoctor.createGroup().docinfoProcessor(AnnotatedDocinfoProcessor).register()
-        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().headerFooter(true).safe(SafeMode.SERVER))
+        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().standalone(true).safe(SafeMode.SERVER))
 
         then:
         Document doc = Jsoup.parse(result, UTF8)
@@ -102,7 +102,7 @@ And even more infos on manpage:git[7].
     def "a docinfoprocessor instance should be configurable via the Location annotation"() {
         when:
         asciidoctor.createGroup().docinfoProcessor(new AnnotatedDocinfoProcessor()).register()
-        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().headerFooter(true).safe(SafeMode.SERVER))
+        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().standalone(true).safe(SafeMode.SERVER))
 
         then:
         Document doc = Jsoup.parse(result, UTF8)
@@ -114,7 +114,7 @@ And even more infos on manpage:git[7].
     def "a docinfoprocessor instance can override the annotation from footer to header"() {
         when:
         asciidoctor.createGroup().docinfoProcessor(new AnnotatedDocinfoProcessor(LocationType.HEADER)).register()
-        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().headerFooter(true).safe(SafeMode.SERVER))
+        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().standalone(true).safe(SafeMode.SERVER))
 
         then:
         Document doc = Jsoup.parse(result, UTF8)
@@ -124,7 +124,7 @@ And even more infos on manpage:git[7].
     def "a docinfoprocessor instance can override the annotation from footer to footer"() {
         when:
         asciidoctor.createGroup().docinfoProcessor(new AnnotatedDocinfoProcessor(LocationType.FOOTER)).register()
-        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().headerFooter(true).safe(SafeMode.SERVER))
+        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().standalone(true).safe(SafeMode.SERVER))
 
         then:
         Document doc = Jsoup.parse(result, UTF8)
@@ -136,7 +136,7 @@ And even more infos on manpage:git[7].
 
         when:
         asciidoctor.createGroup().blockMacro(AnnotatedBlockMacroProcessor).register()
-        String result = asciidoctor.convert(BLOCK_MACRO_DOCUMENT, OptionsBuilder.options().headerFooter(false))
+        String result = asciidoctor.convert(BLOCK_MACRO_DOCUMENT, OptionsBuilder.options().standalone(false))
 
         then:
         result.contains(AnnotatedBlockMacroProcessor.RESULT)
@@ -148,7 +148,7 @@ And even more infos on manpage:git[7].
 
         when:
         asciidoctor.createGroup().block(AnnotatedBlockProcessor).register()
-        String result = asciidoctor.convert(BLOCK_DOCUMENT, OptionsBuilder.options().headerFooter(false))
+        String result = asciidoctor.convert(BLOCK_DOCUMENT, OptionsBuilder.options().standalone(false))
 
         then:
         result.contains(DO_NOT_TOUCH_THIS)
@@ -162,7 +162,7 @@ And even more infos on manpage:git[7].
 
         when:
         asciidoctor.createGroup().block(new AnnotatedBlockProcessor('dummy', 'yell2')).register()
-        String result = asciidoctor.convert(BLOCK_DOCUMENT_2, OptionsBuilder.options().headerFooter(false))
+        String result = asciidoctor.convert(BLOCK_DOCUMENT_2, OptionsBuilder.options().standalone(false))
 
         then:
         result.contains(DO_NOT_TOUCH_THIS)
@@ -173,7 +173,7 @@ And even more infos on manpage:git[7].
     def "when registering an InlineMacroProcessor class with long format it should be configurable via annotations"() {
         when:
         asciidoctor.createGroup().inlineMacro(AnnotatedLongInlineMacroProcessor).register()
-        String result = asciidoctor.convert(INLINE_MACRO_DOCUMENT, OptionsBuilder.options().headerFooter(false))
+        String result = asciidoctor.convert(INLINE_MACRO_DOCUMENT, OptionsBuilder.options().standalone(false))
 
         then:
         Document doc = Jsoup.parse(result, UTF8)
@@ -184,7 +184,7 @@ And even more infos on manpage:git[7].
     def "when registering an InlineMacroProcessor class with regexp it should be configurable via annotations"() {
         when:
         asciidoctor.createGroup().inlineMacro(AnnotatedRegexpInlineMacroProcessor).register()
-        String result = asciidoctor.convert(INLINE_MACRO_REGEXP_DOCUMENT, OptionsBuilder.options().headerFooter(false))
+        String result = asciidoctor.convert(INLINE_MACRO_REGEXP_DOCUMENT, OptionsBuilder.options().standalone(false))
 
         then:
         Document doc = Jsoup.parse(result, UTF8)

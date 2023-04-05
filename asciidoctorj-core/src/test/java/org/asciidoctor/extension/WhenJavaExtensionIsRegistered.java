@@ -213,7 +213,7 @@ public class WhenJavaExtensionIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("simple.adoc"),
-                options().headerFooter(true).safe(SafeMode.SERVER).toFile(false).get());
+                options().standalone(true).safe(SafeMode.SERVER).toFile(false).get());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -233,7 +233,7 @@ public class WhenJavaExtensionIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("simple.adoc"),
-                options().headerFooter(true).safe(SafeMode.SERVER).toFile(false).get());
+                options().standalone(true).safe(SafeMode.SERVER).toFile(false).get());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -988,7 +988,7 @@ public class WhenJavaExtensionIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("documentwithtoc.adoc"),
-                options().headerFooter(true).toFile(false).safe(SafeMode.UNSAFE).get());
+                options().standalone(true).toFile(false).safe(SafeMode.UNSAFE).get());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element toc = doc.getElementById("toc");

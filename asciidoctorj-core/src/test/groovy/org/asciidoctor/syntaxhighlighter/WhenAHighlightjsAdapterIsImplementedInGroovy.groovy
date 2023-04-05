@@ -50,7 +50,7 @@ func main() {
         when:
         String html = asciidoctor.convert(doc, OptionsBuilder.options()
                 .safe(SafeMode.UNSAFE)
-                .headerFooter(true)
+                .standalone(true)
                 .attributes(AttributesBuilder.attributes().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER)))
 
         then:
@@ -69,7 +69,7 @@ func main() {
         when:
         asciidoctor.convert(doc, OptionsBuilder.options()
                 .safe(SafeMode.UNSAFE)
-                .headerFooter(true)
+                .standalone(true)
                 .attributes(AttributesBuilder.attributes().sourceHighlighter(HighlightJsExtension.NAME_HIGHLIGHTER)))
 
         then:

@@ -19,7 +19,7 @@ class WhenSlimTemplatesAreUsed extends Specification {
 
     def 'the slim paragraph template should be used when rendering a document inline'() {
         given:
-        Options options = options().templateDir(classpath.getResource('src/custom-backends/slim')).toFile(false).headerFooter(false).get()
+        Options options = options().templateDir(classpath.getResource('src/custom-backends/slim')).toFile(false).standalone(false).get()
 
         String sourceDocument = '''
 = Hello World

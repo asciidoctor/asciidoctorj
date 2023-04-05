@@ -41,7 +41,7 @@ public class PreprocessorTest {
 
         // If I parse the document
         Document ast = asciidoctor.load(document, Options.builder()
-                .headerFooter(true)
+                .standalone(true)
                 .toFile(false)
                 .build());
 

@@ -1,7 +1,5 @@
 package org.asciidoctor;
 
-
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,19 +14,16 @@ public class AsciidoctorServlet extends HttpServlet {
     private Asciidoctor asciidoctor;
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         asciidoctor = Asciidoctor.Factory.create();
-
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setStatus(200);
         try (InputStreamReader reader = new InputStreamReader(req.getInputStream());
              OutputStreamWriter writer = new OutputStreamWriter(resp.getOutputStream())) {
             asciidoctor.convert(reader, writer, OptionsBuilder.options().get());
         }
-
     }
 }

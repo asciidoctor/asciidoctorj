@@ -103,7 +103,7 @@ System.out.println("Hello World");
     asciidoctor.syntaxHighlighterRegistry().register(highlighter, NAME_SYNTAXHIGHLIGHTER)
     String html = asciidoctor.convert(DOC, Options.builder()
             .safe(SafeMode.UNSAFE)
-            .headerFooter(true)
+            .standalone(true)
             .attributes(
                     Attributes.builder().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER).build())
             .build())

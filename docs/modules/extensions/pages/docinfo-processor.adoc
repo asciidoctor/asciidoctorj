@@ -1,7 +1,7 @@
 [[docinfoprocessor]]
 = Docinfo Processor
 
-Docinfo Processors are primarily targeted for the HTML and DocBook5 target format.
+Docinfo Processors are primarily targeted for the HTML and DocBook5 formats.
 A Docinfo Processor basically allows to add content to the HTML header or at the end of the HTML body.
 For the DocBook5 target format a Docinfo Processor can add content to the info element or at the very end of the document, just before the closing tag of the root element.
 
@@ -21,14 +21,14 @@ Content is added to the header via `LocationType.HEADER` and to the footer via `
 ====
 For the example to work make sure:
 
-* `header_footer` option is not set to `false`, otherwise these will not be added to the document.
+* `standalone` option is not set to `true`, otherwise these will not be added to the document.
 * `safe` mode option is set to at least `SECURE`
 
 .Options configuration example
 [source,java]
 ----
 Options.builder()
-        .headerFooter(true)
+        .standalone(true)
         .safe(SafeMode.SERVER)
         .build();
 ----

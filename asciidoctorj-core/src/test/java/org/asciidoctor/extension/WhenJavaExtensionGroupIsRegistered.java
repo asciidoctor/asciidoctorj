@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
@@ -212,7 +211,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("simple.adoc"),
-                Options.builder().headerFooter(true).safe(SafeMode.SERVER).toFile(false).build());
+                Options.builder().standalone(true).safe(SafeMode.SERVER).toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -233,7 +232,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("simple.adoc"),
-                Options.builder().headerFooter(true).safe(SafeMode.SERVER).toFile(false).build());
+                Options.builder().standalone(true).safe(SafeMode.SERVER).toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
@@ -801,7 +800,7 @@ public class WhenJavaExtensionGroupIsRegistered {
     }
 
     @Test
-    public void a_block_processor_should_be_executed_when_registered_block_is_found_in_document() throws IOException {
+    public void a_block_processor_should_be_executed_when_registered_block_is_found_in_document() {
 
         this.asciidoctor.createGroup()
             .block("yell", YellStaticBlock.class)
@@ -818,8 +817,7 @@ public class WhenJavaExtensionGroupIsRegistered {
     }
 
     @Test
-    public void a_block_processor_instance_should_be_executed_when_registered_block_is_found_in_document()
-            throws IOException {
+    public void a_block_processor_instance_should_be_executed_when_registered_block_is_found_in_document() {
 
         Map<String, Object> config = new HashMap<String, Object>();
         config.put(Contexts.KEY, Arrays.asList(Contexts.PARAGRAPH));
@@ -839,7 +837,7 @@ public class WhenJavaExtensionGroupIsRegistered {
     }
 
     @Test
-    public void a_block_processor_should_be_executed_when_registered_listing_block_is_found_in_document() throws IOException {
+    public void a_block_processor_should_be_executed_when_registered_listing_block_is_found_in_document() {
 
         this.asciidoctor.createGroup()
             .block("yell", YellStaticListingBlock.class)
@@ -856,8 +854,7 @@ public class WhenJavaExtensionGroupIsRegistered {
     }
 
     @Test
-    public void a_block_processor_instance_should_be_executed_when_registered_listing_block_is_found_in_document()
-            throws IOException {
+    public void a_block_processor_instance_should_be_executed_when_registered_listing_block_is_found_in_document() {
 
         Map<String, Object> config = new HashMap<String, Object>();
         config.put(Contexts.KEY, Arrays.asList(Contexts.LISTING));
@@ -877,7 +874,7 @@ public class WhenJavaExtensionGroupIsRegistered {
     }
 
     @Test
-    public void should_create_toc_with_treeprocessor() throws Exception {
+    public void should_create_toc_with_treeprocessor() {
         this.asciidoctor.createGroup()
             .treeprocessor(new Treeprocessor() {
                 @Override
@@ -896,7 +893,7 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         String content = asciidoctor.convertFile(
                 classpath.getResource("documentwithtoc.adoc"),
-                Options.builder().headerFooter(true).toFile(false).safe(SafeMode.UNSAFE).build());
+                Options.builder().standalone(true).toFile(false).safe(SafeMode.UNSAFE).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element toc = doc.getElementById("toc");
@@ -959,8 +956,7 @@ public class WhenJavaExtensionGroupIsRegistered {
     }
 
     @Test
-    public void should_unregister_block_processor()
-        throws IOException {
+    public void should_unregister_block_processor() {
 
         Map<String, Object> config = new HashMap<String, Object>();
         config.put("contexts", Arrays.asList(":paragraph"));

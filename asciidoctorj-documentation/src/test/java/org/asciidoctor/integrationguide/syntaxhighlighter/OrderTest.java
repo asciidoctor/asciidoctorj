@@ -45,7 +45,7 @@ public class OrderTest {
 
         asciidoctor.convertFile(sources_adoc,
             Options.builder()
-                .headerFooter(true)
+                .standalone(true)
                 .toDir(toDir)
                 .safe(SafeMode.UNSAFE)
                 .attributes(Attributes.builder()

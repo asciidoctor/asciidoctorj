@@ -1,5 +1,7 @@
 package org.asciidoctor
 
+import org.asciidoctor.ast.Block
+import org.asciidoctor.ast.ContentNode
 import org.asciidoctor.ast.StructuralNode
 import org.asciidoctor.extension.BlockMacroProcessor
 import spock.lang.Specification
@@ -25,8 +27,8 @@ testmacro::Test[]
         asciidoctor1.javaExtensionRegistry().blockMacro('testmacro', TestBlockMacroProcessor)
 
         then:
-        asciidoctor1.convert(document, OptionsBuilder.options().headerFooter(false)).contains(TEST_STRING)
-        !asciidoctor2.convert(document, OptionsBuilder.options().headerFooter(false)).contains(TEST_STRING)
+        asciidoctor1.convert(document, OptionsBuilder.options().standalone(false)).contains(TEST_STRING)
+        !asciidoctor2.convert(document, OptionsBuilder.options().standalone(false)).contains(TEST_STRING)
     }
 
 
@@ -36,7 +38,7 @@ testmacro::Test[]
         }
 
         @Override
-        Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+        Block process(StructuralNode parent, String target, Map<String, Object> attributes) {
             createBlock(parent, PARAGRAPH, TEST_STRING)
         }
     }

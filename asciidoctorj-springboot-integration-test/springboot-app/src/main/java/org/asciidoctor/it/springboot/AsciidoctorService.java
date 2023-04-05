@@ -19,7 +19,7 @@ public class AsciidoctorService {
         return Options.builder()
                 .backend("html5")
                 .safe(SafeMode.SAFE)
-                .headerFooter(true)
+                .standalone(true)
                 .toFile(false)
                 .build();
     }

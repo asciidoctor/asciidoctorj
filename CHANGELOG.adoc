@@ -30,6 +30,7 @@ Improvement::
 * Set Java 11 as the minimal version (#1151) (@abelsromero)
 * Create `asciidoctorj-cli` module to prevent unnecessary dependencies to asciidoctorj jar consumers (#1149)
 * Add required `--add-opens` to cli launch script to remove Jdk warnings (#1155) (@abelsromero)
+* Rename deprecated `headerFooter` option to the new `standalone` with same functionality (#1155) (@abelsromero)
 
 Bug Fixes::
 
