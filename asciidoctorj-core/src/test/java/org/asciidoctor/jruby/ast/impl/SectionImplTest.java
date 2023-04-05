@@ -93,4 +93,43 @@ public class SectionImplTest {
                 "=== Section A Subsection\n\n" +
                 "Section A 'subsection' paragraph.\n\n";
     }
+
+    @Test
+    public void should_return_isNumbered_true_when_doctype_is_article_and_sectnums_is_set() {
+        assertDocTypeAndSectnums("article", true);
+    }
+
+    @Test
+    public void should_return_isNumbered_false_when_doctype_is_article_and_sectnums_is_not_set() {
+        assertDocTypeAndSectnums("article", false);
+    }
+
+    @Test
+    public void should_return_isNumbered_true_when_doctype_is_book_and_sectnums_is_set() {
+        assertDocTypeAndSectnums("book", true);
+    }
+
+    @Test
+    public void should_return_isNumbered_false_when_doctype_is_book_and_sectnums_is_not_set() {
+        assertDocTypeAndSectnums("book", false);
+    }
+
+    private void assertDocTypeAndSectnums(String doctype, boolean sectnums) {
+        String content = buildContent(doctype, sectnums);
+
+        Document document = asciidoctor.load(content, Options.builder().build());
+
+        SectionImpl section = (SectionImpl) document.getBlocks().get(0);
+        assertThat(section.isNumbered()).isEqualTo(sectnums);
+    }
+
+    private static String buildContent(String doctype, boolean sectnums) {
+        return "= Sample Document\n" +
+                ":doctype: " + doctype + "\n" +
+                (sectnums ? ":sectnums:" : "") +
+                "\n\n" +
+                "== Test\n" +
+                "\n" +
+                "Test";
+    }
 }

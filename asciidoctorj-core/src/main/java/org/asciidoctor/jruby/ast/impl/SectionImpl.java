@@ -67,6 +67,8 @@ public class SectionImpl extends StructuralNodeImpl implements Section {
 
     @Override
     public boolean isNumbered() {
+        // Not always an actual boolean, but coercing when object and non-null is enough:
+        // https://github.com/asciidoctor/asciidoctorj/issues/1122
         return getBoolean("numbered");
     }
 

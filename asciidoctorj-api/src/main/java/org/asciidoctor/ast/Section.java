@@ -74,7 +74,6 @@ public interface Section extends StructuralNode {
      */
     boolean isNumbered();
 
-
     /**
      * Get the section number for the current Section.
      * <p>
