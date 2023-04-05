@@ -27,7 +27,7 @@ public class WhenSourceHighlightingIsUsed {
     private Asciidoctor asciidoctor;
 
     @Test
-    public void should_render_with_rouge() throws Exception {
+    public void should_render_with_rouge() {
         String html = asciidoctor.convert(DOCUMENT,
             OptionsBuilder.options()
                 .headerFooter(true)
@@ -43,7 +43,7 @@ public class WhenSourceHighlightingIsUsed {
     }
 
     @Test
-    public void should_render_with_coderay() throws Exception {
+    public void should_render_with_coderay() {
         String html = asciidoctor.convert(DOCUMENT,
             OptionsBuilder.options()
                 .headerFooter(true)

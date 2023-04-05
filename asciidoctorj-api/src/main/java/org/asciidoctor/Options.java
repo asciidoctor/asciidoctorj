@@ -1,6 +1,5 @@
 package org.asciidoctor;
 
-import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,6 +73,19 @@ public class Options {
     /**
      * Toggle including header and footer into the output.
      *
+     * @param standalone <code>true</code> to generate a standalone output document
+     *                   (which includes the shell around the body content, such
+     *                   as the header and footer).
+     *                   Defaults to <code>true</code> when converting a file only,
+     *                   otherwise is <code>false</code>.
+     */
+    public void setStandalone(boolean standalone) {
+        this.options.put(STANDALONE, standalone);
+    }
+
+    /**
+     * Toggle including header and footer into the output.
+     *
      * @param headerFooter If <code>true</true>, include header and footer into the output,
      *                     otherwise exclude them. This overrides any output-specific defaults.
      *
@@ -85,7 +97,7 @@ public class Options {
     public void setTemplateDirs(String... templateDirs) {
 
         if (!this.options.containsKey(TEMPLATE_DIRS)) {
-            this.options.put(TEMPLATE_DIRS, new ArrayList<Object>());
+            this.options.put(TEMPLATE_DIRS, new ArrayList<>());
         }
 
         List<Object> allTemplateDirs = (List<Object>) this.options.get(TEMPLATE_DIRS);

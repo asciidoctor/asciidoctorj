@@ -6,6 +6,7 @@ on:
   pull_request:
     branches:
       - main
+      - v2.5.x
   schedule:
     - cron: '0 0 * * *'
 

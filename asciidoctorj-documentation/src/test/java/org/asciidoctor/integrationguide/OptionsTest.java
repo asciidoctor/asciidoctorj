@@ -66,7 +66,7 @@ public class OptionsTest {
     }
 
     @Test
-    public void convert_in_unsafe_mode() throws Exception {
+    public void convert_in_unsafe_mode() {
 //tag::unsafeConversion[]
         File sourceFile =
 //end::unsafeConversion[]
@@ -113,7 +113,7 @@ public class OptionsTest {
     }
 
     @Test
-    public void use_font_awesome_icons() throws Exception {
+    public void use_font_awesome_icons() {
 //tag::attributeFontIcons[]
         String result =
             asciidoctor.convert(
@@ -122,7 +122,7 @@ public class OptionsTest {
                     "{foo}",
                     Options.builder()
                             .toFile(false)
-                            .headerFooter(false)
+                            .standalone(false)
                             .attributes(
                                     Attributes.builder()                                          // <1>        
                                             .icons(Attributes.FONT_ICONS)                         // <2>

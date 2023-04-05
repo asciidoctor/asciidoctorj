@@ -33,7 +33,7 @@ public class HighlightJsHighlighterTest {
     public TemporaryFolder tempDir;
 
     @Test
-    public void should_invoke_syntax_highlighter() throws Exception {
+    public void should_invoke_syntax_highlighter() {
 //tag::include[]
         File sources_adoc = //...
 //end::include[]
@@ -56,7 +56,7 @@ public class HighlightJsHighlighterTest {
     }
 
     @Test
-    public void should_invoke_syntax_highlighter_with_3_params() throws Exception {
+    public void should_invoke_syntax_highlighter_with_3_params() {
         File sources_adoc =
             classpathResources.getResource("sources.adoc");
 
@@ -75,7 +75,7 @@ public class HighlightJsHighlighterTest {
     }
 
     @Test
-    public void should_invoke_formatting_syntax_highlighter() throws Exception {
+    public void should_invoke_formatting_syntax_highlighter() {
         File sources_adoc =
             classpathResources.getResource("sources.adoc");
 

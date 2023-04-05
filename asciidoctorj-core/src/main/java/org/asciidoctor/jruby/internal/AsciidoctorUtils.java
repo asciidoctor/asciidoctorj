@@ -1,14 +1,14 @@
 package org.asciidoctor.jruby.internal;
 
+import org.asciidoctor.Options;
+import org.asciidoctor.SafeMode;
+import org.asciidoctor.jruby.cli.AsciidoctorCliOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import org.asciidoctor.Options;
-import org.asciidoctor.SafeMode;
-import org.asciidoctor.jruby.cli.AsciidoctorCliOptions;
 
 public class AsciidoctorUtils {
 
@@ -17,26 +17,26 @@ public class AsciidoctorUtils {
     private AsciidoctorUtils() {
         super();
     }
-    
+
     public static boolean isOptionWithAttribute(Map<String, Object> options, String attributeName, String attributeValue) {
-        
+
         if(options.containsKey(Options.ATTRIBUTES)) {
             Map<String, Object> attributes = (Map<String, Object>) options.get(Options.ATTRIBUTES);
-            
+
             if(attributes.containsKey(attributeName)) {
                 String configuredAttributeValue = (String) attributes.get(attributeName);
-                
+
                 if(configuredAttributeValue.equals(attributeValue)) {
                     return true;
                 }
-                
+
             }
-            
+
         }
-        
+
         return false;
     }
-    
+
     public static List<String> toAsciidoctorCommand(Map<String, Object> options,
                                                     String inputPath) {
 
@@ -65,7 +65,7 @@ public class AsciidoctorUtils {
 
         if (options.containsKey(Options.TEMPLATE_DIRS)) {
             List<String> templates = (List<String>) options.get(Options.TEMPLATE_DIRS);
-            
+
             for (String template : templates) {
                 optionsAndAttributes.add(AsciidoctorCliOptions.TEMPLATE_DIR);
                 optionsAndAttributes.add(template);
@@ -86,7 +86,7 @@ public class AsciidoctorUtils {
             optionsAndAttributes.add(options.get(Options.ERUBY).toString());
         }
 
-        if (options.containsKey(Options.HEADER_FOOTER)) {
+        if (options.containsKey(Options.STANDALONE) || options.containsKey(Options.HEADER_FOOTER)) {
             optionsAndAttributes.add(AsciidoctorCliOptions.NO_HEADER_FOOTER);
         }
 
@@ -117,9 +117,9 @@ public class AsciidoctorUtils {
         }
 
         return optionsAndAttributes;
-        
+
     }
-    
+
     private static List<String> getAttributesSyntax(Map<String, Object> attributes) {
         List<String> attributesOutput = new ArrayList<>();
 
@@ -144,9 +144,9 @@ public class AsciidoctorUtils {
 
         if (attributeValue != null && !"".equals(attributeValue.toString().trim())) {
             argument.append("=");
-            argument.append(attributeValue.toString());
+            argument.append(attributeValue);
         }
-        
+
         if(attributeValue == null) {
             argument.append("!");
         }
