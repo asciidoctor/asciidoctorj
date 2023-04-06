@@ -65,7 +65,7 @@ ext {
   asciidoctorjEpub3Version = '1.5.1'
   asciidoctorjDiagramVersion = '2.2.3'
   asciidoctorjDiagramDitaaMiniVersion = '1.0.3'
-  asciidoctorjDiagramPlantumlVersion = '1.2022.5'
+  asciidoctorjDiagramPlantumlVersion = '1.2022.14'
   asciidoctorjRevealJsVersion = '4.1.0'
   commonsioVersion = '2.11.0'
   guavaVersion = '18.0'
