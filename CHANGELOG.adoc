@@ -307,6 +307,7 @@ Improvements::
   * Upgrade to Asciidoctor 2.0.8
   * Upgrade to asciidoctor-pdf 1.5.0-alpha.17 (#809)
   * Add Rouge source highlighter to asciidoctor.jar (#806)
+  * Add required `--add-opens` to cli launch script to remove Jdk warnings when running on Java8 (#1155) (@abelsromero)
 
 Bug Fixes::
 
