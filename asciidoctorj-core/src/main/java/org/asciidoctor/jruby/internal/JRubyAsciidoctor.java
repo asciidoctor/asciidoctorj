@@ -286,9 +286,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
 
-        logger.fine(String.join(" ", AsciidoctorUtils.toAsciidoctorCommand(options, "-")));
-
-        if (AsciidoctorUtils.isOptionWithAttribute(options, Attributes.SOURCE_HIGHLIGHTER, "pygments")) {
+        if (containsAttributeWithValue(options, Attributes.SOURCE_HIGHLIGHTER, "pygments")) {
             logger.fine("In order to use Pygments with Asciidoctor, you need to install Pygments (and Python, if you don't have it yet). Read https://docs.asciidoctor.org/asciidoctor/latest/syntax-highlighting/pygments.");
         }
 
@@ -324,6 +322,12 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
     }
 
+    private boolean containsAttributeWithValue(Map<String, Object> options, String attributeName, String attributeValue) {
+        return Optional.ofNullable((Map<String, String>) options.get(Options.ATTRIBUTES))
+                .map(attributes -> attributes.get(attributeName))
+                .map(value -> value.equals(attributeValue))
+                .orElse(Boolean.FALSE);
+    }
 
     @Override
     public String convert(String content, Options options) {
@@ -371,8 +375,6 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     public <T> T convertFile(File file, Map<String, Object> options, Class<T> expectedResult) {
 
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
-
-        logger.fine(String.join(" ", AsciidoctorUtils.toAsciidoctorCommand(options, file.getAbsolutePath())));
 
         String currentDirectory = rubyRuntime.getCurrentDirectory();
 
