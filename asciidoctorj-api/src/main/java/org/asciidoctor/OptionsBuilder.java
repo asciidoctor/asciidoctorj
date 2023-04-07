@@ -60,12 +60,27 @@ public class OptionsBuilder {
     }
 
     /**
-     * Sets header footer attribute.
-     * 
-     * @param headerFooter
-     *            value.
-     * @return this instance.
+     * Toggle including header and footer into the output.
+     *
+     * @param standalone <code>true</code> to generate a standalone output document
+     *                   (which includes the shell around the body content, such
+     *                   as the header and footer).
+     *                   Defaults to <code>true</code> when converting a file only,
+     *                   otherwise is <code>false</code>.
      */
+    public OptionsBuilder standalone(boolean standalone) {
+        this.options.setStandalone(standalone);
+        return this;
+    }
+
+    /**
+     * Sets header footer attribute.
+     *
+     * @param headerFooter value.
+     * @return this instance.
+     * @deprecated Use {@link #standalone(boolean)} instead.
+     */
+    @Deprecated
     public OptionsBuilder headerFooter(boolean headerFooter) {
         this.options.setHeaderFooter(headerFooter);
         return this;
@@ -80,6 +95,7 @@ public class OptionsBuilder {
      *            directory where templates are stored.
      * @return this instance.
      */
+    @Deprecated
     public OptionsBuilder templateDir(File templateDir) {
         this.options.setTemplateDirs(templateDir.getAbsolutePath());
         return this;

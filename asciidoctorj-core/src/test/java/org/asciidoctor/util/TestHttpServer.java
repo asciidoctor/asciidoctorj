@@ -46,7 +46,7 @@ public class TestHttpServer {
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<Channel>() {
                     @Override
-                    protected void initChannel(Channel ch) throws Exception {
+                    protected void initChannel(Channel ch) {
                         ChannelPipeline pipeline = ch.pipeline();
                         pipeline.addLast("codec", new HttpServerCodec());
                         pipeline.addLast("aggregator", new HttpObjectAggregator(MAX_MESSAGE_LENGTH));
