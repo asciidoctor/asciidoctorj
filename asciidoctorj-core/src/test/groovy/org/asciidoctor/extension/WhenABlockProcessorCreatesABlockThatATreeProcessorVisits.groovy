@@ -77,7 +77,7 @@ This will be ignored
 		asciidoctor.javaExtensionRegistry().treeprocessor(BlockVisitor)
 
         when:
-        asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).headerFooter(true))
+        asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).standalone(true))
 
         then:
         notThrown(ClassCastException)

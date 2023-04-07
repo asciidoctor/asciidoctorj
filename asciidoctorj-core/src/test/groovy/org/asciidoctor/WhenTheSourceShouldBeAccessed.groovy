@@ -151,7 +151,7 @@ xxx
                 doc
             }
         })
-        String html = asciidoctor.convert(document, OptionsBuilder.options().headerFooter(false).asMap())
+        String html = asciidoctor.convert(document, OptionsBuilder.options().standalone(false).asMap())
         org.jsoup.nodes.Document doc = Jsoup.parse(html)
 
         then:
@@ -179,7 +179,7 @@ xxx
                 doc
             }
         })
-        String html = asciidoctor.convert(document, OptionsBuilder.options().headerFooter(false).asMap())
+        String html = asciidoctor.convert(document, OptionsBuilder.options().standalone(false).asMap())
         org.jsoup.nodes.Document doc = Jsoup.parse(html)
 
         then:
@@ -211,7 +211,7 @@ xxx
                 doc
             }
         })
-        String html = asciidoctor.convert(document, OptionsBuilder.options().headerFooter(false).asMap())
+        String html = asciidoctor.convert(document, OptionsBuilder.options().standalone(false).asMap())
         org.jsoup.nodes.Document doc = Jsoup.parse(html)
 
         then:

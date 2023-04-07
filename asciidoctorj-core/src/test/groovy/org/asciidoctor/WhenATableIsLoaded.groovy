@@ -29,7 +29,7 @@ class WhenATableIsLoaded extends Specification {
 '''
 
         when:
-        Document documentNode = asciidoctor.load(document, OptionsBuilder.options().headerFooter(false).asMap())
+        Document documentNode = asciidoctor.load(document, OptionsBuilder.options().standalone(false).asMap())
         Table tableNode = documentNode.blocks[0]
 
         then:
@@ -50,7 +50,7 @@ class WhenATableIsLoaded extends Specification {
 '''
 
         when:
-        Document documentNode = asciidoctor.load(document, OptionsBuilder.options().headerFooter(false).asMap())
+        Document documentNode = asciidoctor.load(document, OptionsBuilder.options().standalone(false).asMap())
         Table tableNode = documentNode.blocks[0]
 
         then:
@@ -78,7 +78,7 @@ The second content cell
 '''
 
 		when:
-		Document documentNode = asciidoctor.load(document, OptionsBuilder.options().headerFooter(false).asMap())
+		Document documentNode = asciidoctor.load(document, OptionsBuilder.options().standalone(false).asMap())
 		Table tableNode = documentNode.blocks[0]
 
 		then:

@@ -78,7 +78,7 @@ System.out.println("Hello World");
     when:
     asciidoctor.convert(doc, Options.builder()
             .safe(SafeMode.UNSAFE)
-            .headerFooter(true)
+            .standalone(true)
             .toFile(new File(toDir,'syntaxhighlighterwithwritestylesheet.html'))
             .attributes(
                     Attributes.builder().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER)

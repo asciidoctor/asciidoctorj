@@ -58,7 +58,7 @@ public class WhenAsciidoctorLogsToConsole {
     }
 
     @Test
-    public void shouldRedirectToJUL() throws Exception {
+    public void shouldRedirectToJUL() {
         final MemoryLogHandler memoryLogHandler = registerMemoryLogHandler();
 
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
@@ -87,7 +87,7 @@ public class WhenAsciidoctorLogsToConsole {
     }
 
     @Test
-    public void shouldNotifyLogHandler() throws Exception {
+    public void shouldNotifyLogHandler() {
 
         final List<LogRecord> logRecords = new ArrayList<>();
 
@@ -121,7 +121,7 @@ public class WhenAsciidoctorLogsToConsole {
     }
 
     @Test
-    public void shouldLogInvalidRefs() throws Exception {
+    public void shouldLogInvalidRefs() {
 
         final List<LogRecord> logRecords = new ArrayList<>();
 
@@ -144,7 +144,7 @@ public class WhenAsciidoctorLogsToConsole {
     }
 
     @Test
-    public void shouldOnlyNotifyFromRegisteredAsciidoctor() throws Exception {
+    public void shouldOnlyNotifyFromRegisteredAsciidoctor() {
 
         final List<LogRecord> logRecords = new ArrayList<>();
 
@@ -188,7 +188,7 @@ public class WhenAsciidoctorLogsToConsole {
     }
 
     @Test
-    public void shouldNoLongerNotifyAfterUnregisterOnlyNotifyFromRegisteredAsciidoctor() throws Exception {
+    public void shouldNoLongerNotifyAfterUnregisterOnlyNotifyFromRegisteredAsciidoctor() {
 
         final List<LogRecord> logRecords = new ArrayList<>();
 
@@ -227,7 +227,7 @@ public class WhenAsciidoctorLogsToConsole {
     }
 
     @Test
-    public void shouldNotifyLogHandlerService() throws Exception {
+    public void shouldNotifyLogHandlerService() {
 
         File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
         String renderContent = asciidoctor.convertFile(inputFile,
@@ -274,7 +274,7 @@ public class WhenAsciidoctorLogsToConsole {
     }
 
     @Test
-    public void a_extension_should_be_able_to_log() throws Exception {
+    public void a_extension_should_be_able_to_log() {
 
         final List<LogRecord> logRecords = new ArrayList<>();
 

@@ -49,7 +49,7 @@ public class PrismJsHighlighterTest {
 
         asciidoctor.convertFile(sources_adoc,
             OptionsBuilder.options()
-                .headerFooter(true)
+                .standalone(true)
                 .toDir(toDir)
                 .safe(SafeMode.UNSAFE)
                 .attributes(AttributesBuilder.attributes()

@@ -52,7 +52,7 @@ more text
         })
 
         when:
-        String result = asciidoctor.convert(this.document, OptionsBuilder.options().headerFooter(false))
+        String result = asciidoctor.convert(this.document, OptionsBuilder.options().standalone(false))
 
         then:
         org.jsoup.nodes.Document htmlDocument = Jsoup.parse(result)
@@ -86,7 +86,7 @@ And this as well
         })
 
         when:
-        String result = asciidoctor.convert(document, OptionsBuilder.options().headerFooter(false))
+        String result = asciidoctor.convert(document, OptionsBuilder.options().standalone(false))
 
         then:
         org.jsoup.nodes.Document htmlDocument = Jsoup.parse(result)
@@ -129,7 +129,7 @@ testmacro::target[]
         })
 
         when:
-        String result = asciidoctor.convert(document, OptionsBuilder.options().headerFooter(false))
+        String result = asciidoctor.convert(document, OptionsBuilder.options().standalone(false))
 
         then:
         result.contains(expectedContent)

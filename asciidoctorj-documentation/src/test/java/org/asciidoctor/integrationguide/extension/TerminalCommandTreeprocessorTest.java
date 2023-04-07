@@ -33,7 +33,7 @@ public class TerminalCommandTreeprocessorTest {
         String referenceResult = asciidoctor.convertFile(
                 referenceDocument,
                 OptionsBuilder.options()
-                        .headerFooter(false)
+                        .standalone(false)
                         .toFile(false));
 
 //tag::include[]
@@ -47,7 +47,7 @@ public class TerminalCommandTreeprocessorTest {
         String result = asciidoctor.convertFile(
                 src,
                 OptionsBuilder.options()
-                        .headerFooter(false)
+                        .standalone(false)
                         .toFile(false));
 //end::include[]
 
@@ -62,7 +62,7 @@ public class TerminalCommandTreeprocessorTest {
         String referenceResult = asciidoctor.convertFile(
                 referenceDocument,
                 OptionsBuilder.options()
-                        .headerFooter(false)
+                        .standalone(false)
                         .toFile(false));
 
 //tag::include-extension-registry[]
@@ -83,7 +83,7 @@ public class TerminalCommandTreeprocessorTest {
         String result = asciidoctor.convertFile(
             src,
             Options.builder()
-                .headerFooter(false)
+                .standalone(false)
                 .toFile(false)
                 .build());
 //end::include-extension-registry[]

@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.OutputStream;
 import java.util.Map;
 
+/**
+ * Fluent Options API for AsciidoctorJ.
+ *
+ * @see org.asciidoctor.Options
+ */
 public class OptionsBuilder {
 
     private final Options options = new Options();
@@ -37,9 +42,11 @@ public class OptionsBuilder {
 
     /**
      * Sets doctype option.
-     * 
-     * @param docType
-     *            value.
+     * Valid options are <code>article</code>, <code>book</code>,
+     * <code>manpage</code> and <code>inline</code>.
+     * Default <code>article</code>.
+     *
+     * @param docType value.
      * @return this instance.
      */
     public OptionsBuilder docType(String docType) {
@@ -60,14 +67,17 @@ public class OptionsBuilder {
     }
 
     /**
-     * Sets header footer attribute.
-     * 
-     * @param headerFooter
-     *            value.
+     * Sets standalone option.
+     *
+     * @param standalone <code>true</code> to generate a standalone output document
+     *                   (which includes the shell around the body content, such
+     *                   as the header and footer).
+     *                   Defaults to <code>true</code> when converting a file only,
+     *                   otherwise is <code>false</code>.
      * @return this instance.
      */
-    public OptionsBuilder headerFooter(boolean headerFooter) {
-        this.options.setHeaderFooter(headerFooter);
+    public OptionsBuilder standalone(boolean standalone) {
+        this.options.setStandalone(standalone);
         return this;
     }
 
@@ -79,7 +89,9 @@ public class OptionsBuilder {
      * @param templateDir
      *            directory where templates are stored.
      * @return this instance.
+     * @deprecated Use {@link #templateDirs(File...)} instead.
      */
+    @Deprecated
     public OptionsBuilder templateDir(File templateDir) {
         this.options.setTemplateDirs(templateDir.getAbsolutePath());
         return this;

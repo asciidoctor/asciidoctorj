@@ -32,7 +32,7 @@ class WhenATreeProcessorWorksOnTables extends Specification {
         asciidoctor.javaExtensionRegistry().treeprocessor(TableCreatorTreeProcessor)
 
         when: 'the document is rendered'
-        String content = asciidoctor.convert(EMPTY_DOCUMENT, OptionsBuilder.options().headerFooter(false))
+        String content = asciidoctor.convert(EMPTY_DOCUMENT, OptionsBuilder.options().standalone(false))
 
         then: 'the resulting document has a table'
         org.jsoup.nodes.Document document = Jsoup.parse(content)
@@ -72,7 +72,7 @@ class WhenATreeProcessorWorksOnTables extends Specification {
 | World | Hello 
 |===
 
-''', OptionsBuilder.options().headerFooter(false))
+''', OptionsBuilder.options().standalone(false))
 
         def htmlDocument = Jsoup.parse(content)
 

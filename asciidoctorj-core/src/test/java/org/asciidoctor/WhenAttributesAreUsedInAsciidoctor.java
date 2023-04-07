@@ -50,7 +50,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
     private Asciidoctor asciidoctor;
 
     @Test
-    public void qualified_http_url_inline_with_hide_uri_scheme_set() throws IOException {
+    public void qualified_http_url_inline_with_hide_uri_scheme_set() {
         
         Attributes attributes = attributes().hiddenUriScheme(true).get();
         
@@ -89,7 +89,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
     }
 
     @Test
-    public void should_preload_open_cache_uri_gem() throws IOException {
+    public void should_preload_open_cache_uri_gem() {
         
         Attributes attributes = attributes().cacheUri(true).get();
         
@@ -132,7 +132,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
     }
 
     @Test
-    public void should_add_a_hardbreak_at_end_of_each_line_when_hardbreaks_option_is_set() throws IOException {
+    public void should_add_a_hardbreak_at_end_of_each_line_when_hardbreaks_option_is_set() {
         
         Attributes attributes = attributes().hardbreaks(true).get();
         
@@ -184,7 +184,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         final Options options = options()
             .attributes(attributes().showTitle(true).get())
             .toFile(false)
-            .headerFooter(false)
+            .standalone(false)
             .get();
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options));
@@ -198,7 +198,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         final Options options = options()
             .attributes(attributes().showTitle(false).showTitle(true).get())
             .toFile(false)
-            .headerFooter(false)
+            .standalone(false)
             .get();
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options));
@@ -212,7 +212,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         final Options options = options()
             .attributes(attributes().showTitle(false).get())
             .toFile(false)
-            .headerFooter(false)
+            .standalone(false)
             .get();
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options));
@@ -225,7 +225,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         final Options options = options()
             .attributes(attributes().showTitle(true).showTitle(false).get())
             .toFile(false)
-            .headerFooter(false)
+            .standalone(false)
             .get();
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options));
@@ -238,7 +238,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         final Options options = options()
             .attributes(attributes().showTitle(true).get())
             .toFile(false)
-            .headerFooter(true)
+            .standalone(true)
             .get();
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options));
@@ -253,7 +253,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         final Options options = options()
             .attributes(attributes().showTitle(false).get())
             .toFile(false)
-            .headerFooter(true)
+            .standalone(true)
             .get();
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options));
@@ -267,7 +267,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         final Options options = options()
             .attributes(attributes().showTitle(false).get())
             .toFile(false)
-            .headerFooter(true)
+            .standalone(true)
             .get();
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(classpath.getResource("rendersample.asciidoc"), options));
@@ -312,8 +312,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
     }
     
     @Test
-    public void should_skip_front_matter_if_specified_by_skip_front_matter_attribute()
-            throws IOException {
+    public void should_skip_front_matter_if_specified_by_skip_front_matter_attribute() {
 
         Attributes attributes = attributes().skipFrontMatter(true).get();
         Options options = options().toFile(false).inPlace(false).attributes(attributes).get();
@@ -801,7 +800,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
     @Test
     public void string_content_with_icons_enabled_and_iconsdir_set_should_be_rendered_with_iconsdir()
-            throws IOException, SAXException, ParserConfigurationException {
+            throws IOException {
 
         InputStream content = new FileInputStream(
                 classpath.getResource("documentwithnote.asciidoc"));

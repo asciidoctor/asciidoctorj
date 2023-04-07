@@ -58,7 +58,7 @@ This will be ignored
     '''
 
         when:
-        org.jsoup.nodes.Document html = Jsoup.parse(asciidoctor.convert(asciidoctorSource, OptionsBuilder.options().safe(SafeMode.SAFE).headerFooter(false).asMap()))
+        org.jsoup.nodes.Document html = Jsoup.parse(asciidoctor.convert(asciidoctorSource, OptionsBuilder.options().safe(SafeMode.SAFE).standalone(false).asMap()))
 
         then:
         html.select(CLASS_LISTINGBLOCK).get(0).text() == 'This will be ignored'

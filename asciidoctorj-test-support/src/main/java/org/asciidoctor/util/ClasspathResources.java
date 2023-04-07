@@ -17,7 +17,7 @@ public class ClasspathResources extends ClasspathHelper implements TestRule {
         setClassloader(clazz);
     }
 
-    protected void before(Class<?> clazz) throws Throwable {
+    protected void before(Class<?> clazz) {
         super.setClassloader(clazz);
     }
 

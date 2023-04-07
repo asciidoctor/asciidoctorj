@@ -41,7 +41,7 @@ public class YellBlockProcessorTest {
     }
 
     @Test
-    public void should_invoke_block_processor_with_attributes() throws Exception {
+    public void should_invoke_block_processor_with_attributes() {
         File yellblock_adoc = //...
             classpathResources.getResource("yell-block-attributes.adoc");
 
@@ -53,7 +53,7 @@ public class YellBlockProcessorTest {
     }
 
     @Test
-    public void should_invoke_block_processor_with_positional_attributes() throws Exception {
+    public void should_invoke_block_processor_with_positional_attributes() {
         File yellblock_adoc = //...
             classpathResources.getResource("yell-block-positional.adoc");
 

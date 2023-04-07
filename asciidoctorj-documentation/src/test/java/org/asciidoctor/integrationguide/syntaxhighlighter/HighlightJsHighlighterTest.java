@@ -8,7 +8,6 @@ import org.asciidoctor.SafeMode;
 import org.asciidoctor.util.ClasspathResources;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
@@ -33,7 +32,7 @@ public class HighlightJsHighlighterTest {
     public TemporaryFolder tempDir;
 
     @Test
-    public void should_invoke_syntax_highlighter() throws Exception {
+    public void should_invoke_syntax_highlighter() {
 //tag::include[]
         File sources_adoc = //...
 //end::include[]
@@ -46,7 +45,7 @@ public class HighlightJsHighlighterTest {
 
         String result = asciidoctor.convertFile(sources_adoc,
             OptionsBuilder.options()
-                .headerFooter(true) // <2>
+                .standalone(true) // <2>
                 .toFile(false)
                 .attributes(AttributesBuilder.attributes().sourceHighlighter("myhighlightjs"))); // <3>
 
@@ -56,7 +55,7 @@ public class HighlightJsHighlighterTest {
     }
 
     @Test
-    public void should_invoke_syntax_highlighter_with_3_params() throws Exception {
+    public void should_invoke_syntax_highlighter_with_3_params() {
         File sources_adoc =
             classpathResources.getResource("sources.adoc");
 
@@ -66,7 +65,7 @@ public class HighlightJsHighlighterTest {
 
         String result = asciidoctor.convertFile(sources_adoc,
             OptionsBuilder.options()
-                .headerFooter(true)
+                .standalone(true)
                 .toFile(false)
                 .attributes(AttributesBuilder.attributes().sourceHighlighter("myhighlightjs")));
 
@@ -75,7 +74,7 @@ public class HighlightJsHighlighterTest {
     }
 
     @Test
-    public void should_invoke_formatting_syntax_highlighter() throws Exception {
+    public void should_invoke_formatting_syntax_highlighter() {
         File sources_adoc =
             classpathResources.getResource("sources.adoc");
 
@@ -87,7 +86,7 @@ public class HighlightJsHighlighterTest {
 
         String result = asciidoctor.convertFile(sources_adoc,
             OptionsBuilder.options()
-                .headerFooter(true)
+                .standalone(true)
                 .toFile(false)
                 .attributes(AttributesBuilder.attributes().sourceHighlighter("myhighlightjs")));
 
@@ -114,7 +113,7 @@ public class HighlightJsHighlighterTest {
 
         asciidoctor.convertFile(sources_adoc,
             OptionsBuilder.options()
-                .headerFooter(true)
+                .standalone(true)
                 .toDir(toDir)              // <1>
                 .safe(SafeMode.UNSAFE)
                 .attributes(AttributesBuilder.attributes()

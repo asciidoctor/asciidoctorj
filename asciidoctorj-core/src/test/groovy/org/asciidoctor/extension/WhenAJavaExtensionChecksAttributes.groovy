@@ -27,7 +27,7 @@ Check me
     def "a BlockProcessor should only get String attribute keys"() {
         when:
         asciidoctor.javaExtensionRegistry().block(AttributeCheckingBlockProcessor)
-        asciidoctor.convert(DOCUMENT, OptionsBuilder.options().headerFooter(true).safe(SafeMode.SERVER))
+        asciidoctor.convert(DOCUMENT, OptionsBuilder.options().standalone(true).safe(SafeMode.SERVER))
 
         then:
         noExceptionThrown()

@@ -36,7 +36,7 @@ list::HelloWorld[]
         asciidoctor.javaExtensionRegistry().blockMacro(LISTMACRO_NAME, new ListCreatorBlockMacro('olist'))
 
         when:
-        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).headerFooter(false))
+        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).standalone(false))
 
         then:
         noExceptionThrown()
@@ -57,7 +57,7 @@ list::HelloWorld[]
         asciidoctor.javaExtensionRegistry().blockMacro(LISTMACRO_NAME, new ListCreatorBlockMacro('ulist'))
 
         when:
-        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).headerFooter(false))
+        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).standalone(false))
 
         then:
         noExceptionThrown()

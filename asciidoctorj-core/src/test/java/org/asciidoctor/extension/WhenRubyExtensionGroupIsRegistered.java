@@ -319,7 +319,7 @@ public class WhenRubyExtensionGroupIsRegistered {
                 "* hidden till clicked            \n" +
                 "* hidden till clicked 2          \n" +
                 "====                             ",
-            options().toFile(false).safe(SafeMode.SAFE).headerFooter(true).get());
+            options().toFile(false).safe(SafeMode.SAFE).standalone(true).get());
 
         final Document document = Jsoup.parse(content);
         final Iterator<Element> elems = document.getElementsByTag("style").iterator();

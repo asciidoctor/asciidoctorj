@@ -51,7 +51,7 @@ puts "Hello"
         asciidoctor.javaExtensionRegistry().treeprocessor(tp)
 
         when: 'The document is converted'
-        String html = asciidoctor.convert(document, OptionsBuilder.options().headerFooter(true))
+        String html = asciidoctor.convert(document, OptionsBuilder.options().standalone(true))
 
         then: 'The second source block uses the same value of the language attribute and highlight as Ruby'
         org.jsoup.nodes.Document htmlDocument = Jsoup.parse(html)

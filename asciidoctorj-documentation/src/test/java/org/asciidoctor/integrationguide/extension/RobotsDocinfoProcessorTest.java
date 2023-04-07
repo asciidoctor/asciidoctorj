@@ -11,9 +11,6 @@ import org.jsoup.nodes.Element;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.File;
-
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -38,7 +35,7 @@ public class RobotsDocinfoProcessorTest {
         String result = asciidoctor.convert(
                 src,
                 Options.builder()
-                        .headerFooter(true)                      // <2>
+                        .standalone(true)                        // <2>
                         .safe(SafeMode.SERVER)                   // <3>
                         .toFile(false)
                         .build());

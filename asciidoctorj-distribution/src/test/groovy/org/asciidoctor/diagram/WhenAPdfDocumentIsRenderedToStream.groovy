@@ -84,7 +84,7 @@ c
         asciidoctor.convert(testDoc,
                 OptionsBuilder.options()
                         .backend(BACKEND_PDF)
-                        .headerFooter(true)
+                        .standalone(true)
                         .attributes(attrs)
                         .safe(SafeMode.UNSAFE)
                         .toStream(out))
@@ -95,7 +95,7 @@ c
         asciidoctor.convert(testDoc,
                 OptionsBuilder.options()
                         .backend(BACKEND_PDF)
-                        .headerFooter(true)
+                        .standalone(true)
                         .attributes(attrs)
                         .safe(SafeMode.UNSAFE)
                         .toFile(referenceFile))

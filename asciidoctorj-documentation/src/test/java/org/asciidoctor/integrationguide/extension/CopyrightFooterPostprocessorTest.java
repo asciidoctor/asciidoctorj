@@ -36,7 +36,7 @@ public class CopyrightFooterPostprocessorTest {
         String result =
                 asciidoctor.convertFile(doc,
                         Options.builder()
-                                .headerFooter(true)                                            // <2>
+                                .standalone(true)                                            // <2>
                                 .toFile(false)
                                 .build());
 

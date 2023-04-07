@@ -7,11 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * AsciidoctorJ conversion options. Each one maps to an option in Asciidoctor.
+ * See https://docs.asciidoctor.org/asciidoctor/latest/api/options/ for further
+ * details.
+ */
 public class Options {
 
     public static final String IN_PLACE = "in_place";
     public static final String ATTRIBUTES = "attributes";
-    public static final String HEADER_FOOTER = "header_footer";
     public static final String TEMPLATE_DIRS = "template_dirs";
     public static final String TEMPLATE_ENGINE = "template_engine";
     public static final String TO_FILE = "to_file";
@@ -72,18 +76,20 @@ public class Options {
     /**
      * Toggle including header and footer into the output.
      *
-     * @param headerFooter If <code>true</true>, include header and footer into the output,
-     *                     otherwise exclude them. This overrides any output-specific defaults.
-     *
+     * @param standalone <code>true</code> to generate a standalone output document
+     *                   (which includes the shell around the body content, such
+     *                   as the header and footer).
+     *                   Defaults to <code>true</code> when converting a file only,
+     *                   otherwise is <code>false</code>.
      */
-    public void setHeaderFooter(boolean headerFooter) {
-        this.options.put(HEADER_FOOTER, headerFooter);
+    public void setStandalone(boolean standalone) {
+        this.options.put(STANDALONE, standalone);
     }
 
     public void setTemplateDirs(String... templateDirs) {
 
         if (!this.options.containsKey(TEMPLATE_DIRS)) {
-            this.options.put(TEMPLATE_DIRS, new ArrayList<Object>());
+            this.options.put(TEMPLATE_DIRS, new ArrayList<>());
         }
 
         List<Object> allTemplateDirs = (List<Object>) this.options.get(TEMPLATE_DIRS);
@@ -117,7 +123,7 @@ public class Options {
      *               as the input file, including header and footer into the output. If
      *               <code>false</code>, return output as a string without any header or
      *               footer. The default header and footer visibility can be overridden
-     *               using {@link #setHeaderFooter(boolean)}.
+     *               using {@link #setStandalone(boolean)}.
      *
      */
     public void setToFile(boolean toFile) {

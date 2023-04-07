@@ -45,14 +45,14 @@ func main() {
     when:
     String htmlJava = asciidoctor.convert(doc, OptionsBuilder.options()
             .safe(SafeMode.UNSAFE)
-            .headerFooter(true)
+            .standalone(true)
             .attributes(AttributesBuilder.attributes()
                 .sourceHighlighter(NAME_SYNTAXHIGHLIGHTER)
                 .linkCss(true)))
 
     String htmlRuby = asciidoctor.convert(doc, OptionsBuilder.options()
             .safe(SafeMode.UNSAFE)
-            .headerFooter(true)
+            .standalone(true)
             .attributes(AttributesBuilder.attributes()
                 .sourceHighlighter('coderay')
                 .linkCss(true)))

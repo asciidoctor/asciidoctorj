@@ -34,7 +34,6 @@ public class AsciidoctorUtils {
     }
 
     private AsciidoctorUtils() {
-        super();
     }
 
     public static boolean isOptionWithAttribute(Map<String, Object> options, String attributeName, String attributeValue) {
@@ -93,7 +92,7 @@ public class AsciidoctorUtils {
             optionsAndAttributes.add(options.get(Options.ERUBY).toString());
         }
 
-        if (options.containsKey(Options.HEADER_FOOTER)) {
+        if (options.containsKey(Options.STANDALONE)) {
             optionsAndAttributes.add(CliOptions.NO_HEADER_FOOTER);
         }
 
