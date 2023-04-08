@@ -1,7 +1,7 @@
 package org.asciidoctor.converter
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.asciidoctor.ast.ContentNode
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.Footnote
@@ -13,22 +13,23 @@ import org.junit.runner.RunWith
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.contains
-import static org.hamcrest.Matchers.empty
 import static org.hamcrest.Matchers.samePropertyValuesAs
 import static org.junit.Assert.assertThat
 
 /**
  * Tests that footnotes can be accessed from converter.
  *
- * Note that it is a current limitation of asciidoctor that footnotes are not available until
- * after they have been converted for the document.
+ * Note that it is a current limitation of asciidoctor that footnotes are not
+ * available until after they have been converted for the document.
  */
 @RunWith(ArquillianSputnik)
 class WhenFootnotesAreUsed extends Specification {
+
     static final String CONVERTER_BACKEND = 'footnote'
 
     @ArquillianResource
     private Asciidoctor asciidoctor
+
     private static List<Footnote> footnotesBeforeConvert
     private static List<Footnote> footnotesAfterConvert
 
@@ -42,15 +43,15 @@ class WhenFootnotesAreUsed extends Specification {
          * we simply want to force the conversion to verify that footnotes
          * are populated.
          */
+
         @Override
         String convert(ContentNode node, String transform, Map<Object, Object> opts) {
             if (node instanceof Document) {
                 def doc = (Document) node
-                footnotesBeforeConvert = doc.catalog.footnotes.collect()
+                footnotesBeforeConvert = doc.catalog.footnotes
                 doc.content
-                footnotesAfterConvert = doc.catalog.footnotes.collect()
-            }
-            else if (node instanceof StructuralNode) {
+                footnotesAfterConvert = doc.catalog.footnotes
+            } else if (node instanceof StructuralNode) {
                 ((StructuralNode) node).content
             }
         }
@@ -63,7 +64,8 @@ class WhenFootnotesAreUsed extends Specification {
     }
 
     def convert(String document) {
-        asciidoctor.convert(document, OptionsBuilder.options().backend(CONVERTER_BACKEND))
+        def options = Options.builder().backend(CONVERTER_BACKEND).build()
+        asciidoctor.convert(document, options)
     }
 
     def footnote(Long index, String id, String text) {
@@ -78,8 +80,8 @@ class WhenFootnotesAreUsed extends Specification {
         convert(document)
 
         then:
-        assertThat(footnotesBeforeConvert, empty())
-        assertThat(footnotesAfterConvert, empty())
+        footnotesBeforeConvert.isEmpty()
+        footnotesAfterConvert.isEmpty()
     }
 
     def 'when a footnote is is in source doc, it should be accessible from converter'() {
@@ -90,9 +92,9 @@ class WhenFootnotesAreUsed extends Specification {
         convert(document)
 
         then:
-        assertThat(footnotesBeforeConvert, empty())
+        footnotesBeforeConvert.isEmpty()
         assertThat(footnotesAfterConvert,
-                contains(samePropertyValuesAs(footnote(1,'fid','we shall find out!'))))
+                contains(samePropertyValuesAs(footnote(1, 'fid', 'we shall find out!'))))
     }
 
     def 'when footnotes are in source doc, they should be accessible from the converter'() {
@@ -108,9 +110,9 @@ An existing footnote can be referenced.footnote:myid1[]
         convert(document)
 
         then:
-        assertThat(footnotesBeforeConvert, empty())
+        footnotesBeforeConvert.isEmpty()
         assertThat(footnotesAfterConvert,
-                contains(samePropertyValuesAs(footnote(1,'myid1','first footnote')),
-                         samePropertyValuesAs(footnote(2, null, 'second footnote'))))
+                contains(samePropertyValuesAs(footnote(1, 'myid1', 'first footnote')),
+                        samePropertyValuesAs(footnote(2, null, 'second footnote'))))
     }
 }

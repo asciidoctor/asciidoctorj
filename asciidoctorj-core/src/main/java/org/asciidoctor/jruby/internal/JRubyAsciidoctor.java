@@ -10,7 +10,6 @@ import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
-import org.asciidoctor.jruby.DirectoryWalker;
 import org.asciidoctor.jruby.ast.impl.DocumentHeaderImpl;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.jruby.converter.internal.ConverterRegistryExecutor;
@@ -216,10 +215,6 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
         return asciidoctorContent;
     }
 
-    private List<File> scanForAsciiDocFiles(DirectoryWalker directoryWalker) {
-        return directoryWalker.scan();
-    }
-
     @Override
     public void requireLibrary(String... library) {
         requireLibraries(Arrays.asList(library));
@@ -307,11 +302,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
             IRubyObject object = getAsciidoctorModule().callMethod("convert",
                     Optional.ofNullable(content).map(rubyRuntime::newString).orElse(null), rubyHash);
-            if (NodeConverter.NodeType.DOCUMENT_CLASS.isInstance(object)) {
-                // If a document is rendered to a file Asciidoctor returns the document, we return null
-                return null;
-            }
-            return RubyUtils.rubyToJava(rubyRuntime, object, expectedResult);
+            return adaptReturn(object, expectedResult);
         } catch (RaiseException e) {
             logger.severe(e.getException().getClass().getCanonicalName());
             throw new AsciidoctorCoreException(e);
@@ -392,11 +383,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
         try {
             IRubyObject object = getAsciidoctorModule().callMethod("convert_file",
                     rubyRuntime.newString(file.getAbsolutePath()), rubyHash);
-            if (NodeConverter.NodeType.DOCUMENT_CLASS.isInstance(object)) {
-                // If a document is rendered to a file Asciidoctor returns the document, we return null
-                return null;
-            }
-            return RubyUtils.rubyToJava(rubyRuntime, object, expectedResult);
+            return adaptReturn(object, expectedResult);
         } catch (RaiseException e) {
             logger.severe(e.getMessage());
 
@@ -405,6 +392,17 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
             // we restore current directory to its original value.
             rubyRuntime.setCurrentDirectory(currentDirectory);
         }
+    }
+
+    private <T> T adaptReturn(IRubyObject object, Class<T> expectedResult) {
+        if (NodeConverter.NodeType.DOCUMENT_CLASS.isInstance(object)) {
+            if (Document.class.isAssignableFrom(expectedResult)) {
+                return (T) NodeConverter.createASTNode(object);
+            } else {
+                return null;
+            }
+        }
+        return RubyUtils.rubyToJava(rubyRuntime, object, expectedResult);
     }
 
     @Override
@@ -472,7 +470,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
         return (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load",
                 Optional.ofNullable(content).map(rubyRuntime::newString).orElse(null), rubyHash));
     }
-    
+
     @Override
     public Document loadFile(File file, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
@@ -488,7 +486,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
         return (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load_file",
                 rubyRuntime.newString(file.getAbsolutePath()), rubyHash));
     }
-    
+
     @Override
     public ExtensionGroup createGroup() {
         return createGroup(UUID.randomUUID().toString());

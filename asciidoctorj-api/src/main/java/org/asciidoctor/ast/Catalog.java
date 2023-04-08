@@ -16,6 +16,14 @@ public interface Catalog {
     List<Footnote> getFootnotes();
 
     /**
+     * Retrieves the images from the source document.
+     * Note that inline images are only available after `Document.getContent()` has been called.
+     *
+     * @return images occurring in document.
+     */
+    List<ImageReference> getImages();
+
+    /**
      * Refs is a map of asciidoctor ids to asciidoctor document elements.
      *
      * For example, by default, each section is automatically assigned an id.
@@ -29,4 +37,5 @@ public interface Catalog {
      * @return a map of ids to elements that asciidoctor has collected from the document.
      */
     Map<String, Object> getRefs();
+
 }
