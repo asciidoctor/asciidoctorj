@@ -16,6 +16,7 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 Improvement::
 
 * Add 'standalone' option, deprecates 'headerFooter' (#1160) (@abelsromero)
+* Upgrade to asciidoctorj-diagram 2.2.7
 
 Bug Fixes::
 
