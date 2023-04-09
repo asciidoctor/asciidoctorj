@@ -140,6 +140,7 @@ subprojects {
 
     dependencies {
       testImplementation "junit:junit:$junitVersion"
+      testImplementation "org.assertj:assertj-core:$assertjVersion"
       testImplementation "org.hamcrest:hamcrest-library:$hamcrestVersion"
       testImplementation("org.spockframework:spock-core:$spockVersion") {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
