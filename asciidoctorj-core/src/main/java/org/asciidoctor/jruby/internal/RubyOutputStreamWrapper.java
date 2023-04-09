@@ -8,7 +8,6 @@ import org.jruby.RubyNumeric;
 import org.jruby.RubyObject;
 import org.jruby.RubyString;
 import org.jruby.anno.JRubyMethod;
-import org.jruby.runtime.ObjectAllocator;
 import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 
@@ -25,7 +24,7 @@ public class RubyOutputStreamWrapper extends RubyObject {
 
   public static IRubyObject wrap(final Ruby rubyRuntime, final OutputStream out) {
 
-    final RubyClass rubyClass = getOrCreateOutputStreamWrapperClass(rubyRuntime);
+    final RubyClass rubyClass = getOutputStreamWrapperClass(rubyRuntime);
 
     final IRubyObject wrapper = rubyClass.allocate();
 
@@ -53,16 +52,14 @@ public class RubyOutputStreamWrapper extends RubyObject {
       return outputStreamWrapperClass;
     }
 
-    final RubyClass rubyClass = asciidoctorModule.defineClassUnder(RUBY_CLASS_NAME, rubyRuntime.getObject(), new ObjectAllocator() {
-      @Override
-      public IRubyObject allocate(final Ruby runtime, final RubyClass klazz) {
-        return new RubyOutputStreamWrapper(runtime, klazz);
-      }
-    });
-
+    final RubyClass rubyClass = asciidoctorModule.defineClassUnder(RUBY_CLASS_NAME, rubyRuntime.getObject(), RubyOutputStreamWrapper::new);
     rubyClass.defineAnnotatedMethods(RubyOutputStreamWrapper.class);
-
     return rubyClass;
+  }
+
+  private static RubyClass getOutputStreamWrapperClass(final Ruby rubyRuntime) {
+    RubyModule asciidoctorModule = rubyRuntime.getModule("AsciidoctorJ");
+    return asciidoctorModule.getClass(RUBY_CLASS_NAME);
   }
 
   @JRubyMethod(name = "write", required = 1)
