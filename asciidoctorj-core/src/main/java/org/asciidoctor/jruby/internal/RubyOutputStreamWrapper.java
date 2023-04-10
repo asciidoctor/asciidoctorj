@@ -22,7 +22,7 @@ public class RubyOutputStreamWrapper extends RubyObject {
 
   private int bytesWritten = 0;
 
-  public static IRubyObject wrap(final Ruby rubyRuntime, final OutputStream out) {
+  static IRubyObject wrap(final Ruby rubyRuntime, final OutputStream out) {
 
     final RubyClass rubyClass = getOutputStreamWrapperClass(rubyRuntime);
 
