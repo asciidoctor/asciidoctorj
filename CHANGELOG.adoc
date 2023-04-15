@@ -13,6 +13,8 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+== 2.5.8 (2023-04-15)
+
 Improvement::
 
 * Add 'standalone' option, deprecates 'headerFooter' (#1160) (@abelsromero)
@@ -21,6 +23,7 @@ Improvement::
 Bug Fixes::
 
 * Fix destinationDir not having effect. Deprecate destinationDir in favour of toDir (#853, #941) (@abelsromero)
+* Fix ConcurrentModificationException when converting to stream concurrently (#1158) (@rocketraman)
 
 == 2.5.7 (2022-10-21)
 
@@ -30,9 +33,6 @@ Improvement::
 * Upgrade to asciidoctorj-diagram 2.2.4 (#1140)
 * Upgrade to jruby 9.3.10.0 (#1138) (@alexlevinfr)
 
-Bug Fixes::
-
-* Fix ConcurrentModificationException when converting to stream concurrently (#1158) (@rocketraman)
 
 Build / Infrastructure::
 
