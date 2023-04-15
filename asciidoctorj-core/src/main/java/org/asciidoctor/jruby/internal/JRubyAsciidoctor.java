@@ -21,13 +21,30 @@ import org.asciidoctor.jruby.syntaxhighlighter.internal.SyntaxHighlighterRegistr
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterRegistry;
-import org.jruby.*;
+import org.jruby.Ruby;
+import org.jruby.RubyClass;
+import org.jruby.RubyHash;
+import org.jruby.RubyInstanceConfig;
+import org.jruby.RubyModule;
 import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
@@ -58,6 +75,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
         this.rubyGemsPreloader = new RubyGemsPreloader(this.rubyRuntime);
         this.logHandlers.add(new JULLogHandler());
+        RubyOutputStreamWrapper.createOutputStreamWrapperClass(this.rubyRuntime);
     }
 
     public static JRubyAsciidoctor create() {
@@ -182,7 +200,6 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
         return toDocumentHeader(document);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public DocumentHeader readDocumentHeader(String content) {
 
