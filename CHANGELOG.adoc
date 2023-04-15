@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Build / Infrastructure::
+
+* Fix Asciidoctor upstream CI tests (#1178) (@abelsromero)
+
 == 2.5.8 (2023-04-15)
 
 Improvement::
