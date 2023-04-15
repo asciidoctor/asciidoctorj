@@ -1,11 +1,10 @@
 package org.asciidoctor.jruby.internal;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.jruby.Ruby;
+
+import java.util.Map;
 
 public class RubyGemsPreloader {
 
@@ -15,18 +14,16 @@ public class RubyGemsPreloader {
     private static final String PDF = "pdf";
     private static final String REVEALJS = "asciidoctor-revealjs";
 
-    private static final Map<String, String> optionToRequiredGem = new HashMap<String, String>() {
-        {
-            put(Attributes.SOURCE_HIGHLIGHTER, "require 'coderay'");
-            put(Options.ERUBY, "require 'erubis'");
-            put(Options.TEMPLATE_DIRS, "require 'tilt'");
-            put(Attributes.DATA_URI, "require 'base64'");
-            put(Attributes.CACHE_URI, "require 'open-uri/cached'");
-            put(EPUB3, "require 'asciidoctor-epub3'");
-            put(PDF, "require 'asciidoctor-pdf'");
-            put(REVEALJS, "require 'asciidoctor-revealjs'");
-        }
-    };
+    private static final Map<String, String> optionToRequiredGem = Map.of(
+            Options.ERUBY, "require 'erubis'",
+            Options.TEMPLATE_DIRS, "require 'tilt'",
+            Attributes.CACHE_URI, "require 'open-uri/cached'",
+            Attributes.DATA_URI, "require 'base64'",
+            Attributes.SOURCE_HIGHLIGHTER, "require 'coderay'",
+            EPUB3, "require 'asciidoctor-epub3'",
+            PDF, "require 'asciidoctor-pdf'",
+            REVEALJS, "require 'asciidoctor-revealjs'"
+    );
 
     private Ruby rubyRuntime;
 
@@ -60,16 +57,16 @@ public class RubyGemsPreloader {
         if (isOptionSet(options, Options.TEMPLATE_DIRS)) {
             preloadLibrary(Options.TEMPLATE_DIRS);
         }
-        
-        if(isOptionSet(options, Options.BACKEND) && "epub3".equalsIgnoreCase((String) options.get(Options.BACKEND))) {
+
+        if (isOptionSet(options, Options.BACKEND) && "epub3".equalsIgnoreCase((String) options.get(Options.BACKEND))) {
             preloadLibrary(EPUB3);
         }
 
-        if(isOptionSet(options, Options.BACKEND) && "pdf".equalsIgnoreCase((String) options.get(Options.BACKEND))) {
+        if (isOptionSet(options, Options.BACKEND) && "pdf".equalsIgnoreCase((String) options.get(Options.BACKEND))) {
             preloadLibrary(PDF);
         }
 
-        if(isOptionSet(options, Options.BACKEND) && "revealjs".equalsIgnoreCase((String) options.get(Options.BACKEND))) {
+        if (isOptionSet(options, Options.BACKEND) && "revealjs".equalsIgnoreCase((String) options.get(Options.BACKEND))) {
             preloadLibrary(REVEALJS);
         }
     }

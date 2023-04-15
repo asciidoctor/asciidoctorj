@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -32,7 +32,7 @@ public class WhenReaderIsManipulatedInExtension {
         javaExtensionRegistry.preprocessor(NumberLinesPreprocessor.class);
 
         File inputFile = classpath.getResource("rendersample.asciidoc");
-        asciidoctor.convertFile(inputFile, new HashMap<String, Object>());
+        asciidoctor.convertFile(inputFile, Map.of());
 
         File outpuFile = new File(inputFile.getParent(), "rendersample.asciidoc");
         assertThat(outpuFile.exists(), is(true));
@@ -48,10 +48,10 @@ public class WhenReaderIsManipulatedInExtension {
 
         asciidoctor.convertFile(
                 classpath.getResource("rendersample.asciidoc"),
-                new HashMap<String, Object>());
+                Map.of());
 
         File inputFile = classpath.getResource("rendersample.asciidoc");
-        asciidoctor.convertFile(inputFile, new HashMap<String, Object>());
+        asciidoctor.convertFile(inputFile, Map.of());
 
         File outpuFile = new File(inputFile.getParent(), "rendersample.asciidoc");
         assertThat(outpuFile.exists(), is(true));
@@ -67,10 +67,10 @@ public class WhenReaderIsManipulatedInExtension {
 
         asciidoctor.convertFile(
                 classpath.getResource("rendersample.asciidoc"),
-                new HashMap<String, Object>());
+                Map.of());
 
         File inputFile = classpath.getResource("rendersample.asciidoc");
-        asciidoctor.convertFile(inputFile, new HashMap<String, Object>());
+        asciidoctor.convertFile(inputFile, Map.of());
 
         File outpuFile = new File(inputFile.getParent(), "rendersample.asciidoc");
         assertThat(outpuFile.exists(), is(true));

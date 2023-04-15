@@ -33,6 +33,8 @@ Improvement::
 * Add required `--add-opens` to cli launch script to remove Jdk warnings (#1155) (@abelsromero)
 * Rename deprecated `headerFooter` option to the new `standalone` with same functionality (#1155) (@abelsromero)
 * Remove class `AsciidoctorUtils` to remove complexity and unused logging (#1169) (@abelsromero)
+* Expose ImageReferences in the catalog (#1166) (@abelsromero)
+* Return Document AST when using convert or convertFile with appropriate options (#1171) (@abelsromero)
 
 Bug Fixes::
 

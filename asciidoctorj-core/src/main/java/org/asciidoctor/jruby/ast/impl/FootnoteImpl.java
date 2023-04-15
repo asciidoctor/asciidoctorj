@@ -1,8 +1,7 @@
 package org.asciidoctor.jruby.ast.impl;
 
-import org.jruby.RubyStruct;
-
 import org.asciidoctor.ast.Footnote;
+import org.jruby.RubyStruct;
 import org.jruby.javasupport.JavaEmbedUtils;
 
 public class FootnoteImpl implements Footnote {
@@ -15,11 +14,11 @@ public class FootnoteImpl implements Footnote {
     private String id;
     private String text;
 
-    private static Object aref(RubyStruct s, String key)  {
-       return JavaEmbedUtils.rubyToJava(s.aref(s.getRuntime().newString(key)));
+    private static Object aref(RubyStruct s, String key) {
+        return JavaEmbedUtils.rubyToJava(s.aref(s.getRuntime().newString(key)));
     }
 
-    public static Footnote getInstance(Long index, String id, String text)  {
+    public static Footnote getInstance(Long index, String id, String text) {
         FootnoteImpl footnote = new FootnoteImpl();
         footnote.index = index;
         footnote.id = id;
@@ -35,11 +34,17 @@ public class FootnoteImpl implements Footnote {
     }
 
     @Override
-    public Long getIndex() { return index; }
+    public Long getIndex() {
+        return index;
+    }
 
     @Override
-    public String getId() { return id; }
+    public String getId() {
+        return id;
+    }
 
     @Override
-    public String getText() { return text; }
+    public String getText() {
+        return text;
+    }
 }
