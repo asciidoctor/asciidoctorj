@@ -79,16 +79,26 @@ jobs:
           - '17'
         os:
           - ubuntu-latest
+        maven:
+          - '3.9.1'
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - uses: actions/setup-java@v2
+      - name: Setup Java
+        uses: s4u/setup-maven-action@v1.7.0
         with:
           distribution: temurin
           java-version: ${{ matrix.java }}
+          maven-version: ${{ matrix.maven }}
       - name: Upstream Build
         run: |
           unset GEM_PATH GEM_HOME JRUBY_OPTS
           ./ci/test-asciidoctor-upstream.sh
+      - name: Upload reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: asciidoctorj-core-reports
+          path: asciidoctorj-core/build/reports/*
