@@ -17,9 +17,9 @@ public class ImageReferenceImpl implements ImageReference {
         this.imagesdir = imagesdir;
     }
 
-    static ImageReference getInstance(RubyStruct rubyFootnote) {
-        final String target = (String) aref(rubyFootnote, TARGET_KEY_NAME);
-        final String imagesdir = (String) aref(rubyFootnote, IMAGESDIR_KEY_NAME);
+    static ImageReference getInstance(RubyStruct rubyStruct) {
+        final String target = (String) aref(rubyStruct, TARGET_KEY_NAME);
+        final String imagesdir = (String) aref(rubyStruct, IMAGESDIR_KEY_NAME);
         return new ImageReferenceImpl(target, imagesdir);
     }
 

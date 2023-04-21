@@ -35,6 +35,7 @@ Improvement::
 * Remove class `AsciidoctorUtils` to remove complexity and unused logging (#1169) (@abelsromero)
 * Expose ImageReferences in the catalog (#1166) (@abelsromero)
 * Return Document AST when using convert or convertFile with appropriate options (#1171) (@abelsromero)
+* Expose Links in the catalog (#1183) (@abelsromero)
 
 Bug Fixes::
 

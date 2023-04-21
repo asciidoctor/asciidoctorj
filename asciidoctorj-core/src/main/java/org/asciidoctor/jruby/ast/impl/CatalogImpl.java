@@ -3,6 +3,7 @@ package org.asciidoctor.jruby.ast.impl;
 import org.asciidoctor.ast.Catalog;
 import org.asciidoctor.ast.Footnote;
 import org.asciidoctor.ast.ImageReference;
+import org.asciidoctor.ast.Link;
 import org.asciidoctor.jruby.internal.RubyHashMapDecorator;
 import org.jruby.RubyArray;
 import org.jruby.RubyHash;
@@ -34,6 +35,14 @@ public class CatalogImpl implements Catalog {
         return (List<ImageReference>) ((RubyArray) catalog.get("images"))
                 .stream()
                 .map(o -> ImageReferenceImpl.getInstance((RubyStruct) o))
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    public List<Link> getLinks() {
+        return (List<Link>) ((RubyArray) catalog.get("links"))
+                .stream()
+                .map(o -> LinkImpl.getInstance((String) o))
                 .collect(Collectors.toUnmodifiableList());
     }
 
