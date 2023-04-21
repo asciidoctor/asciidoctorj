@@ -1,9 +1,10 @@
 package org.asciidoctor.converter
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 import org.asciidoctor.arquillian.api.Unshared
+import org.asciidoctor.converter.ObjectConverter.ObjectConverterResult
 import org.jboss.arquillian.spock.ArquillianSputnik
 import org.jboss.arquillian.test.api.ArquillianResource
 import org.junit.rules.TemporaryFolder
@@ -43,7 +44,7 @@ World!
 '''
 
         when:
-        asciidoctor.convert(document, OptionsBuilder.options().backend(WritingTextConverter.DEFAULT_FORMAT).toFile(file).safe(SafeMode.UNSAFE))
+        asciidoctor.convert(document, Options.builder().backend(WritingTextConverter.DEFAULT_FORMAT).toFile(file).safe(SafeMode.UNSAFE).build())
 
         then:
         file.text == '''== Hello ==
@@ -67,10 +68,11 @@ World!
         asciidoctor.javaConverterRegistry().register(ObjectConverter)
 
         when:
-        ObjectConverterResult result = asciidoctor.convert(DONT_CARE_DOCUMENT, OptionsBuilder.options().backend(BACKEND_NAME_42).asMap(), ObjectConverterResult)
+        ObjectConverterResult result = asciidoctor.convert(DONT_CARE_DOCUMENT, Options.builder().backend(BACKEND_NAME_42).build(), ObjectConverterResult)
 
         then:
-        result == new ObjectConverterResult(x: ObjectConverter.FIXED_RESULT)
+        result.value == ObjectConverter.FIXED_RESULT
+        result instanceof ObjectConverterResult
     }
 
     def 'should write to stream'() {
@@ -80,7 +82,7 @@ World!
         ByteArrayOutputStream bout = new ByteArrayOutputStream()
 
         when:
-        ObjectConverterResult result = asciidoctor.convert(DONT_CARE_DOCUMENT, OptionsBuilder.options().backend(BACKEND_NAME_42).toStream(bout).asMap(), ObjectConverterResult)
+        ObjectConverterResult result = asciidoctor.convert(DONT_CARE_DOCUMENT, Options.builder().backend(BACKEND_NAME_42).toStream(bout).build(), ObjectConverterResult)
 
         then:
         new String(bout.toByteArray()) == new ObjectConverterResult(ObjectConverter.FIXED_RESULT).toString()
