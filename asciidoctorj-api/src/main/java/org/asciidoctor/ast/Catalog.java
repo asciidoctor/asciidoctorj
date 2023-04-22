@@ -24,6 +24,14 @@ public interface Catalog {
     List<ImageReference> getImages();
 
     /**
+     * Retrieves the images from the source document.
+     * Note that inline images are only available after `Document.getContent()` has been called.
+     *
+     * @return images occurring in document.
+     */
+    List<Link> getLinks();
+
+    /**
      * Refs is a map of asciidoctor ids to asciidoctor document elements.
      *
      * For example, by default, each section is automatically assigned an id.

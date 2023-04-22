@@ -1,0 +1,9 @@
+= This is a title
+:site-host: some.rangomsite.org
+
+You can learn about Asciidoctor at https://docs.asciidoctor.org.
+The Asciidoctor source repo is hosted on https://github.com[GitHub].
+
+== A few links
+
+You can also use attributes for links like in https://{site-host}, or use full syntax for files link:downloads/report.pdf[Get Report].
