@@ -7,58 +7,52 @@ import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.ContentModel
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.StructuralNode
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
-import org.junit.runner.RunWith
-
 import spock.lang.Specification
 
-@RunWith(ArquillianSputnik)
 class WhenABlockProcessorCreatesABlockThatATreeProcessorVisits extends Specification {
 
-	@Name('tst')
-	@Contexts(Contexts.OPEN)
-	@ContentModel(ContentModel.COMPOUND)
-	static class BlockCreator extends BlockProcessor {
+    @Name('tst')
+    @Contexts(Contexts.OPEN)
+    @ContentModel(ContentModel.COMPOUND)
+    static class BlockCreator extends BlockProcessor {
 
-		@Override
-		Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
-			List<String> output = new LinkedList<>()
-			output.add('line 1')
-			output.add('line 2')
+        @Override
+        Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
+            List<String> output = new LinkedList<>()
+            output.add('line 1')
+            output.add('line 2')
 
-			attributes.put('name', 'value')
+            attributes.put('name', 'value')
 
-			createBlock(parent, 'open', output, attributes)
-		}
-	}
+            createBlock(parent, 'open', output, attributes)
+        }
+    }
 
-	static class BlockVisitor extends Treeprocessor {
+    static class BlockVisitor extends Treeprocessor {
 
-		@Override
-		Document process(Document document) {
-			recurse(document)
-			document
-		}
+        @Override
+        Document process(Document document) {
+            recurse(document)
+            document
+        }
 
-		private void recurse(StructuralNode node) {
-			// Accessing the attributes of a block that was previously created by a block processor
-			// causes a ClassCastException in ContentNodeImpl#getAttributes since the value returned
-			// from the AbstractNode in the JRuby AST is an instance of MapJavaProxy, which does not
-			// conform to RubyHash.
-			Map<String, Object> attributes = node.getAttributes()
+        private void recurse(StructuralNode node) {
+            // Accessing the attributes of a block that was previously created by a block processor
+            // causes a ClassCastException in ContentNodeImpl#getAttributes since the value returned
+            // from the AbstractNode in the JRuby AST is an instance of MapJavaProxy, which does not
+            // conform to RubyHash.
+            Map<String, Object> attributes = node.getAttributes()
 
-			// To silence Codenarc. We must access the attributes to provoke the error.
-			attributes = new HashMap<String, Object>(attributes)
+            // To silence Codenarc. We must access the attributes to provoke the error.
+            attributes = new HashMap<String, Object>(attributes)
 
-			for (Block block : node.getBlocks()) {
-				recurse(block)
-			}
-		}
-	}
+            for (Block block : node.getBlocks()) {
+                recurse(block)
+            }
+        }
+    }
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     private static final String DOCUMENT = '''
 = Block and Tree Processor Interaction Test
@@ -71,10 +65,9 @@ This will be ignored
 '''
 
     def "execution should not throw class cast exception"() {
-
         given:
         asciidoctor.javaExtensionRegistry().block(BlockCreator)
-		asciidoctor.javaExtensionRegistry().treeprocessor(BlockVisitor)
+        asciidoctor.javaExtensionRegistry().treeprocessor(BlockVisitor)
 
         when:
         asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).standalone(true))
@@ -82,6 +75,5 @@ This will be ignored
         then:
         notThrown(ClassCastException)
     }
-
 
 }

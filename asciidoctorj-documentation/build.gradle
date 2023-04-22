@@ -1,10 +1,10 @@
-import org.apache.tools.ant.filters.*
-
 jar.enabled = false
 
 dependencies {
     testImplementation project(':asciidoctorj')
-    testImplementation project(':asciidoctorj-arquillian-extension')
+    testImplementation (project(':asciidoctorj-test-support')) {
+        exclude group: 'junit', module: 'junit'
+    }
     testImplementation "commons-io:commons-io:$commonsioVersion"
     testImplementation "org.jsoup:jsoup:$jsoupVersion"
     testImplementation("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
@@ -21,7 +21,3 @@ compileTestJava {
         exclude('**/PrismJsHighlighter*.java')
     }
 }
-
-
-test.enabled = testClasses.enabled = JavaVersion.current().isJava7Compatible()
-

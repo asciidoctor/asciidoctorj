@@ -2,12 +2,13 @@ jar.enabled = false
 
 dependencies {
     testCompileOnly project(':asciidoctorj')
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.assertj:assertj-core:$assertjVersion"
+
     testImplementation "commons-io:commons-io:$commonsioVersion"
     testImplementation "org.awaitility:awaitility:4.2.0"
-    testImplementation "com.squareup.okhttp3:okhttp:4.9.3"
-    testImplementation "com.google.code.gson:gson:2.9.0"
+    testImplementation "com.squareup.okhttp3:okhttp:4.10.0"
+    testImplementation "com.google.code.gson:gson:2.10.1"
 }
 
-test.dependsOn(':asciidoctorj-springboot-integration-test:springboot-app:assemble')
+tasks.withType(Test) {
+    dependsOn(':asciidoctorj-springboot-integration-test:springboot-app:assemble')
+}

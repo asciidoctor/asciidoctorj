@@ -1,25 +1,30 @@
 package org.asciidoctor
 
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor
-import org.asciidoctor.util.ClasspathResources
+import org.asciidoctor.util.ClasspathHelper
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import org.junit.Rule
 import spock.lang.Specification
-
-import static org.asciidoctor.OptionsBuilder.options
 
 class WhenSlimTemplatesAreUsed extends Specification {
 
-    @Rule
-    ClasspathResources classpath = new ClasspathResources()
+    ClasspathHelper classpath = new ClasspathHelper()
+
+    def setup() {
+        classpath = new ClasspathHelper()
+        classpath.classloader = WhenSlimTemplatesAreUsed
+    }
 
     Asciidoctor asciidoctor = JRubyAsciidoctor.create()
 
     def 'the slim paragraph template should be used when rendering a document inline'() {
         given:
-        Options options = options().templateDir(classpath.getResource('src/custom-backends/slim')).toFile(false).standalone(false).get()
+        Options options = Options.builder()
+                .templateDirs(classpath.getResource('src/custom-backends/slim'))
+                .toFile(false)
+                .standalone(false)
+                .build()
 
         String sourceDocument = '''
 = Hello World

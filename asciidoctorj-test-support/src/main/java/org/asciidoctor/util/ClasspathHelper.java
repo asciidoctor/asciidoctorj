@@ -6,22 +6,21 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
- * Hels getting files from the classpath.
+ * Helps to get files from the classpath.
  */
 public class ClasspathHelper {
 
     private ClassLoader classloader;
 
     /**
-     * Gets a resourse in a similar way as {@link File#File(String)} 
+     * Gets a resource in a similar way as {@link File#File(String)}
      */
     public File getResource(String pathname) {
         try {
             URL resource = classloader.getResource(pathname);
             if (resource != null) {
                 return new File(classloader.getResource(pathname).toURI());
-            }
-            else {
+            } else {
                 throw new RuntimeException(new FileNotFoundException(pathname));
             }
         } catch (URISyntaxException e) {
@@ -30,7 +29,7 @@ public class ClasspathHelper {
     }
 
     /**
-     *  Gets a resourse in a similar way as {@link File#File(String, String)} 
+     * Gets a resource in a similar way as {@link File#File(String, String)}
      */
     public File getResource(String parent, String child) {
         return new File(getResource(parent), child);
@@ -43,7 +42,7 @@ public class ClasspathHelper {
     public void setClassloader(ClassLoader classloader) {
         this.classloader = classloader;
     }
-    
+
     public void setClassloader(Class<?> clazz) {
         this.classloader = clazz.getClassLoader();
     }

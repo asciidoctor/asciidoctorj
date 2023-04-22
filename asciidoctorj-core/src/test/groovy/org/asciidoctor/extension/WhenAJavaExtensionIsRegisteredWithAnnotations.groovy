@@ -3,17 +3,13 @@ package org.asciidoctor.extension
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.OptionsBuilder
 import org.asciidoctor.SafeMode
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import org.junit.runner.RunWith
 import spock.lang.Issue
 import spock.lang.Specification
 
 @Issue('https://github.com/asciidoctor/asciidoctorj/issues/196')
-@RunWith(ArquillianSputnik)
 class WhenAJavaExtensionIsRegisteredWithAnnotations extends Specification {
 
     public static final String UTF8 = 'UTF-8'
@@ -27,8 +23,7 @@ class WhenAJavaExtensionIsRegisteredWithAnnotations extends Specification {
     public static final String HREF = 'href'
     public static final String ANCHOR_TAG = 'a'
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     private static final String DOCUMENT = '''= Test document
 '''

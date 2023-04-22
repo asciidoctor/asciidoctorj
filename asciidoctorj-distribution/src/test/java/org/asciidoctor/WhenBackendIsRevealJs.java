@@ -4,22 +4,21 @@ import org.asciidoctor.cli.jruby.AsciidoctorInvoker;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class WhenBackendIsRevealJs {
 
     private Asciidoctor asciidoctor;
 
-    @Before
+    @BeforeEach
     public void initAsciidoctor() {
         this.asciidoctor = Asciidoctor.Factory.create();
     }
@@ -40,23 +39,22 @@ public class WhenBackendIsRevealJs {
 
         Document doc = Jsoup.parse(outputFile1, "UTF-8");
 
-        assertThat(outputFile1.exists(), is(true));
+        assertThat(outputFile1).exists();
 
         List<String> stylesheets = doc.head().getElementsByTag("link").stream()
                 .filter(element -> "stylesheet".equals(element.attr("rel")))
                 .map(element -> element.attr("href"))
                 .collect(toList());
-        assertThat(stylesheets,
-                hasItems(
-                        "https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/reveal.css",
-                        "https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/theme/black.css"));
+        assertThat(stylesheets)
+                .contains("https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/reveal.css",
+                        "https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/theme/black.css");
 
         Element diagramSlide = doc.selectFirst("#diagram");
-        assertThat(diagramSlide, notNullValue());
+        assertThat(diagramSlide).isNotNull();
 
         Element diagram = diagramSlide.selectFirst("div.imageblock img");
-        assertThat(diagram, notNullValue());
-        assertThat(diagram.attr("src"), startsWith("data:image/svg+xml;base64,"));
+        assertThat(diagram).isNotNull();
+        assertThat(diagram.attr("src")).startsWith("data:image/svg+xml;base64,");
     }
 
     private void removeFileIfItExists(File file) throws IOException {

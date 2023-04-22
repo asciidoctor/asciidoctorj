@@ -29,7 +29,9 @@ dependencies {
   }
   implementation "org.jruby:jruby-complete:$jrubyVersion"
 
-  testImplementation project(':asciidoctorj-arquillian-extension')
+  testImplementation (project(':asciidoctorj-test-support')) {
+    exclude group: 'junit', module: 'junit'
+  }
   testImplementation "org.apache.pdfbox:pdfbox:$pdfboxVersion"
   testImplementation "org.jsoup:jsoup:$jsoupVersion"
 }
@@ -68,6 +70,7 @@ def publication = rootProject.project('asciidoctorj').extensions.findByName('pub
 if (!publication) {
   throw new ProjectConfigurationException("Publication ${project.ext.publicationName} not configured yet", [])
 }
+
 publication.each {
     it.artifact(distZip) {
       classifier 'bin'

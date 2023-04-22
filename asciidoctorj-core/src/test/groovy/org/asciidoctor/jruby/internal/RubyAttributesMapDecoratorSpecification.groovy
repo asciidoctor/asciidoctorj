@@ -3,12 +3,8 @@ package org.asciidoctor.jruby.internal
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.Document
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
-@RunWith(ArquillianSputnik)
 class RubyAttributesMapDecoratorSpecification extends Specification {
 
     public static final String ATTR_ONE = '1'
@@ -16,8 +12,7 @@ class RubyAttributesMapDecoratorSpecification extends Specification {
     public static final String ATTR_NAME_ROLE = 'role'
     public static final String ATTR_NAME_ID = 'id'
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     String attrValue = 'example#idname.rolename'
     String blockStyle = 'example'

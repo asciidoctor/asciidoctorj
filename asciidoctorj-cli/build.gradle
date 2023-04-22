@@ -6,7 +6,9 @@ dependencies {
   api project(':asciidoctorj')
   implementation "com.beust:jcommander:$jcommanderVersion"
 
-  testImplementation project(':asciidoctorj-arquillian-extension')
+  testImplementation (project(':asciidoctorj-test-support')) {
+    exclude group: 'junit', module: 'junit'
+  }
   testImplementation "org.jsoup:jsoup:$jsoupVersion"
 }
 

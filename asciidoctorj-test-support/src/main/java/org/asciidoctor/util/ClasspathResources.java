@@ -6,12 +6,13 @@ import org.junit.runners.model.Statement;
 
 /**
  * JUnit TestRule to handle classpath files.
- * 
- *  Delegates to {@link ClasspathHelper}
+ * <p>
+ * Delegates to {@link ClasspathHelper}.
  */
 public class ClasspathResources extends ClasspathHelper implements TestRule {
 
-    public ClasspathResources() {}
+    public ClasspathResources() {
+    }
 
     public ClasspathResources(Class<?> clazz) {
         setClassloader(clazz);

@@ -2,13 +2,9 @@ package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.OptionsBuilder
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
-@RunWith(ArquillianSputnik)
 class WhenATreeProcessorWorksOnTables extends Specification {
 
     private static final String EMPTY_DOCUMENT = '= Document without table'
@@ -23,8 +19,7 @@ class WhenATreeProcessorWorksOnTables extends Specification {
 
     public static final String TH = 'th'
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     def "then the extension should be able to create tables"() {
 

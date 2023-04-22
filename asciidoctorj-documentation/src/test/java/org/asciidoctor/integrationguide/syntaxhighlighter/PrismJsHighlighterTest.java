@@ -4,32 +4,35 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
+import org.asciidoctor.util.ClasspathHelper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.CleanupMode;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
-@RunWith(Arquillian.class)
+
 public class PrismJsHighlighterTest {
 
-    @ArquillianResource
     private Asciidoctor asciidoctor;
+    private ClasspathHelper classpathResources;
 
-    @ArquillianResource
-    private ClasspathResources classpathResources;
+    @TempDir(cleanup = CleanupMode.NEVER)
+    public File tempDir;
 
-    @ArquillianResource
-    public TemporaryFolder tempDir;
+    @BeforeEach
+    public void beforeEach() {
+        asciidoctor = Asciidoctor.Factory.create();
+        classpathResources = new ClasspathHelper();
+        classpathResources.setClassloader(this.getClass());
+    }
 
     @Test
     public void should_invoke_syntax_highlighter() throws Exception {
@@ -41,7 +44,7 @@ public class PrismJsHighlighterTest {
 //tag::include[]
         File toDir = // ...
 //end::include[]
-            tempDir.newFolder();
+            tempDir;
 
 //tag::include[]
         asciidoctor.syntaxHighlighterRegistry()
@@ -59,7 +62,7 @@ public class PrismJsHighlighterTest {
 
         File docFile = new File(toDir, "sources.html");
 
-        Document document = Jsoup.parse(new File(toDir, "sources.html"), "UTF-8");
+        Document document = Jsoup.parse(docFile, "UTF-8");
         Elements keywords = document.select("div.content pre.highlight code span.token.keyword"); // <2>
         assertThat(keywords, not(empty()));
         assertThat(keywords.first().text(), is("public"));

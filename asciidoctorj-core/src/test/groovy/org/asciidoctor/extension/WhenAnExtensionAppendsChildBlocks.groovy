@@ -2,20 +2,18 @@ package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.OptionsBuilder
-import org.asciidoctor.ast.StructuralNode
 import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.Section
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
+import org.asciidoctor.ast.StructuralNode
 import org.jsoup.Jsoup
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
-@RunWith(ArquillianSputnik)
 class WhenAnExtensionAppendsChildBlocks extends Specification {
 
-    String document = '''= Test document
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
+
+    final String document = '''= Test document
 
 == Section 1
 
@@ -26,9 +24,6 @@ some text
 more text
 
 '''
-
-    @ArquillianResource
-    private Asciidoctor asciidoctor
 
     def 'should be able to blocks via Block_append'() {
 
@@ -121,7 +116,7 @@ testmacro::target[]
             }
         })
 
-        asciidoctor.javaExtensionRegistry().blockMacro(new BlockMacroProcessor('testmacro'){
+        asciidoctor.javaExtensionRegistry().blockMacro(new BlockMacroProcessor('testmacro') {
             @Override
             StructuralNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
                 createBlock(parent, 'paragraph', expectedContent, [:])

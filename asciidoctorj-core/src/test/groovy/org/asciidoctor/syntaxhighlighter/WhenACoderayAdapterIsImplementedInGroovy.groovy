@@ -4,21 +4,16 @@ import org.asciidoctor.Asciidoctor
 import org.asciidoctor.AttributesBuilder
 import org.asciidoctor.OptionsBuilder
 import org.asciidoctor.SafeMode
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
-import org.junit.runner.RunWith
 import spock.lang.Ignore
 import spock.lang.Specification
 
 import static junit.framework.Assert.assertEquals
 
-@RunWith(ArquillianSputnik)
 class WhenACoderayAdapterIsImplementedInGroovy extends Specification {
 
   public static final String NAME_SYNTAXHIGHLIGHTER = 'coderay4J'
 
-  @ArquillianResource
-  private Asciidoctor asciidoctor
+  private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
   @Ignore('until the latest release also puts the link to the CSS into the header')
   def 'should highlight with coderay'() {

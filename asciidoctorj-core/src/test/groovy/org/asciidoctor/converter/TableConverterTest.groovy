@@ -2,16 +2,11 @@ package org.asciidoctor.converter
 
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.OptionsBuilder
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
-@RunWith(ArquillianSputnik)
 class TableConverterTest extends Specification {
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     def "should convert a table with horizontal alignment"() {
         given:
@@ -39,7 +34,7 @@ class TableConverterTest extends Specification {
         String content = asciidoctor.convert(document, OptionsBuilder.options().standalone(false).backend('tabletestconverter'))
 
         then:
-        content.readLines().collect {it - ~/\s+$/ } == '''HELLO TABLE
+        content.readLines().collect { it - ~/\s+$/ } == '''HELLO TABLE
 
 -- A chapter --
 
@@ -71,7 +66,7 @@ a|
         String content = asciidoctor.convert(document, OptionsBuilder.options().standalone(false).backend('tabletestconverter'))
 
         then:
-        content.readLines().collect {it - ~/\s+$/ } == '''HELLO ASCIIDOCTOR TABLE
+        content.readLines().collect { it - ~/\s+$/ } == '''HELLO ASCIIDOCTOR TABLE
 
 A HEADER       |Second column'''.readLines()
 

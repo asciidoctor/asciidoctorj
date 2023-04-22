@@ -3,18 +3,13 @@ package org.asciidoctor.extension
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.OptionsBuilder
 import org.asciidoctor.ast.Document
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
-@RunWith(ArquillianSputnik)
 class WhenAPreprocessorSetsTheSourceMapOption extends Specification {
 
     static final int NOT_SET = -1
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     static class SourceMapOptionPreprocessor extends Preprocessor {
         @Override
@@ -26,6 +21,7 @@ class WhenAPreprocessorSetsTheSourceMapOption extends Specification {
 
     static class TestTreeprocessor extends Treeprocessor {
         int lineNoFirstSection = 0
+
         @Override
         Document process(Document document) {
             def blocks = document.getBlocks()

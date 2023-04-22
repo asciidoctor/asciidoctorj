@@ -5,10 +5,10 @@ import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
 import org.jruby.Ruby;
 import org.jruby.RubyString;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertThat;
  * It can mix up the JRuby instance when it can see gems from a C-Ruby
  * with native extensions.
  */
-@Category(Polluted.class)
+@Polluted
 public class WhenAnAsciidoctorClassIsInstantiatedInAnEnvironmentWithGemPath {
 
     @Test

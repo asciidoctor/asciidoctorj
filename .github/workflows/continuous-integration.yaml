@@ -14,7 +14,7 @@ jobs:
     name: Build
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 6
       matrix:
         java:
           - '11'
@@ -39,7 +39,6 @@ jobs:
           ./gradlew -S -Pskip.signing check
   build-windows:
     name: Build on Windows
-    runs-on: windows-latest
     strategy:
       fail-fast: false
       max-parallel: 3
@@ -48,6 +47,9 @@ jobs:
           - '11'
           - '17'
           - '19'
+        os:
+          - windows-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -64,6 +66,24 @@ jobs:
         shell: cmd
         run: |
           gradlew.bat -i -S check
+      - name: Upload asciidoctorj-core reports
+        uses: actions/upload-artifact@v3
+        env:
+          os_name: ${{ matrix.os }}
+          java_version: ${{ matrix.java }}
+        if: always()
+        with:
+          name: asciidoctorj-core-reports-${{ env.os_name }}-${{ env.java_version }}
+          path: asciidoctorj-core/build/reports/*
+      - name: Upload asciidoctorj-documentation reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        env:
+          os_name: ${{ matrix.os }}
+          java_version: ${{ matrix.java }}
+        with:
+          name: asciidoctorj-documentation-reports-${{ env.os_name }}-${{ env.java_version }}
+          path: asciidoctorj-documentation/build/reports/*
   test-asciidoctor-upstream:
     name: Test Asciidoctor Upstream
     needs:
@@ -88,16 +108,19 @@ jobs:
       - name: Setup Java
         uses: s4u/setup-maven-action@v1.7.0
         with:
-          distribution: temurin
+          java-distribution: temurin
           java-version: ${{ matrix.java }}
           maven-version: ${{ matrix.maven }}
       - name: Upstream Build
         run: |
           unset GEM_PATH GEM_HOME JRUBY_OPTS
           ./ci/test-asciidoctor-upstream.sh
-      - name: Upload reports
+      - name: Upload asciidoctorj-core reports
         uses: actions/upload-artifact@v3
         if: always()
+        env:
+          os_name: ${{ matrix.os }}
+          java_version: ${{ matrix.java }}
         with:
-          name: asciidoctorj-core-reports
+          name: asciidoctorj-core-reports-upstream-${{ env.os_name }}-${{ env.java_version }}
           path: asciidoctorj-core/build/reports/*

@@ -7,9 +7,6 @@ import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.Footnote
 import org.asciidoctor.ast.StructuralNode
 import org.asciidoctor.jruby.ast.impl.FootnoteImpl
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.contains
@@ -22,13 +19,11 @@ import static org.junit.Assert.assertThat
  * Note that it is a current limitation of asciidoctor that footnotes are not
  * available until after they have been converted for the document.
  */
-@RunWith(ArquillianSputnik)
 class WhenFootnotesAreUsed extends Specification {
 
     static final String CONVERTER_BACKEND = 'footnote'
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     private static List<Footnote> footnotesBeforeConvert
     private static List<Footnote> footnotesAfterConvert

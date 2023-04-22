@@ -3,14 +3,10 @@ package org.asciidoctor.extension
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.OptionsBuilder
 import org.asciidoctor.SafeMode
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
-@RunWith(ArquillianSputnik)
 class WhenABlockMacroProcessorCreatesAList extends Specification {
 
     public static final String LISTMACRO_NAME = 'list'
@@ -21,8 +17,7 @@ class WhenABlockMacroProcessorCreatesAList extends Specification {
     public static final String FIRST_ITEM = 'First item'
     public static final String SECOND_ITEM = 'Second item'
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     private static final String DOCUMENT = '''
 = Section Creation Test

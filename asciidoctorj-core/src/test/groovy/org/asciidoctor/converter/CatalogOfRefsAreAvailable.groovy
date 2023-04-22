@@ -6,9 +6,6 @@ import org.asciidoctor.ast.ContentNode
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.StructuralNode
 import org.hamcrest.BaseMatcher
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.contains
@@ -19,17 +16,17 @@ import static org.junit.Assert.assertThat
 /**
  * Tests that refs can be accessed from converter.
  */
-@RunWith(ArquillianSputnik)
 class CatalogOfRefsAreAvailable extends Specification {
+
     static final String CONVERTER_BACKEND = 'refs'
     static final String NODE_NAME_SECTION = 'section'
     static final String NODE_NAME_PARAGRAPH = 'paragraph'
     static final String NODE_NAME_ULIST = 'ulist'
     static final String NODE_NAME_INLINE_ANCHOR = 'inline_anchor'
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
-    private static Map<String,Object> refs
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
+
+    private static Map<String, Object> refs
 
     static class Converter extends StringConverter {
         Converter(String backend, Map<String, Object> opts) {
@@ -40,13 +37,13 @@ class CatalogOfRefsAreAvailable extends Specification {
          * For this conversion test we do not care about the conversion result,
          * we simply want to to verify that refs are available and as expected.
          */
+
         @Override
         String convert(ContentNode node, String transform, Map<Object, Object> opts) {
             if (node instanceof Document) {
                 def doc = (Document) node
                 refs = doc.catalog.refs
-            }
-            else if (node instanceof StructuralNode) {
+            } else if (node instanceof StructuralNode) {
                 ((StructuralNode) node).content
             }
         }
@@ -166,6 +163,5 @@ An [#${idInline}]*quoted text*
             }
         ] as BaseMatcher<Map<String, Object>>
     }
-
 
 }
