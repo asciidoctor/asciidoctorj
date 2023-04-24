@@ -3,19 +3,14 @@ package org.asciidoctor.integrationguide.extension;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-@RunWith(Arquillian.class)
 public class ContextMenuInlineMacroProcessorTest {
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor;
+    private final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 
     @Test
     public void should_create_context_menu() {
@@ -23,7 +18,6 @@ public class ContextMenuInlineMacroProcessorTest {
         asciidoctor.javaExtensionRegistry().inlineMacro(ContextMenuInlineMacroProcessor.class);
 
         String result = asciidoctor.convert("rightclick:New|Class[]", Options.builder().toFile(false).safe(SafeMode.UNSAFE).build());
-
 
         assertThat(
                 result,

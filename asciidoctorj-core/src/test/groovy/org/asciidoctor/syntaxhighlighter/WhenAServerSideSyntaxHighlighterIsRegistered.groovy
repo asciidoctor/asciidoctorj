@@ -7,21 +7,16 @@ import org.asciidoctor.SafeMode
 import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.Document
 import org.asciidoctor.extension.LocationType
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
-import org.junit.runner.RunWith
 import spock.lang.Specification
 import spock.lang.Unroll
 
-@RunWith(ArquillianSputnik)
 class WhenAServerSideSyntaxHighlighterIsRegistered extends Specification {
 
   public static final String NAME_SYNTAXHIGHLIGHTER = 'test'
 
-  @ArquillianResource
-  private Asciidoctor asciidoctor
+  private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
   static class TestHighlighter implements SyntaxHighlighterAdapter, Highlighter {
 

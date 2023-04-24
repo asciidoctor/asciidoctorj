@@ -2,7 +2,6 @@ jar.enabled = false
 
 ext {
     arquillianWildflyVersion = '3.0.1.Final'
-
     wildflyVersion = '26.0.1.Final'
 }
 
@@ -28,12 +27,13 @@ dependencies {
 
     jbossdist group: 'org.wildfly', name: 'wildfly-dist', version: wildflyVersion, ext: 'zip'
 
-    testImplementation "javax:javaee-api:7.0"
     testCompileOnly project(':asciidoctorj')
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.hamcrest:hamcrest-library:$hamcrestVersion"
-    testImplementation "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
+    testImplementation "javax:javaee-api:7.0"
+    // Arquillian Unit5 support requires 1.7.0.Alpha5
+    // https://github.com/arquillian/arquillian-core/issues/137#issuecomment-726596414
+    testImplementation("org.junit.vintage:junit-vintage-engine")
     testImplementation "org.jsoup:jsoup:$jsoupVersion"
+    testImplementation "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
 
     testRuntimeOnly "org.wildfly.arquillian:wildfly-arquillian-container-managed:$arquillianWildflyVersion"
 }
@@ -74,10 +74,7 @@ task createModule(type: Copy) {
     dependsOn createModuleDescriptor
 }
 
-
 test {
-    useJUnit()
-
     testLogging {
         // events 'passed', 'failed', 'skipped', 'standard_out', 'standard_error'
         // events 'standard_out', 'standard_error'
@@ -104,7 +101,6 @@ test {
     if (JavaVersion.current().isJava11Compatible()) {
         systemProperty('arquillian.launch', 'wildfly-java11')
     }
-
 
     dependsOn createModule
     dependsOn unpackWildfly

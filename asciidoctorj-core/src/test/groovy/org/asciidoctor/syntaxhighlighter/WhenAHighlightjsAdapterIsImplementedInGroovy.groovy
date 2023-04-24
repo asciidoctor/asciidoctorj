@@ -4,26 +4,20 @@ import org.asciidoctor.Asciidoctor
 import org.asciidoctor.AttributesBuilder
 import org.asciidoctor.OptionsBuilder
 import org.asciidoctor.SafeMode
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 import static org.junit.Assert.assertThat
 
-@RunWith(ArquillianSputnik)
 class WhenAHighlightjsAdapterIsImplementedInGroovy extends Specification {
 
     public static final String NAME_SYNTAXHIGHLIGHTER = 'highlight4J'
-    public static final String HIGHLIGHTJS = 'highlightjs'
     public static final String EMPTY_STRING = ''
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     def doc = '''= Test Document
 :nofooter:

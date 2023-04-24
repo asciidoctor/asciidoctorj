@@ -58,7 +58,7 @@ tasks.eclipse.dependsOn jrubyPrepare
 
 jruby {
   defaultRepositories = false
-  defaultVersion = jrubyVersion
+  jrubyVersion = jrubyVersion
   // TODO I'd like to be able to customize the name of the gemInstallDir
 }
 
@@ -86,10 +86,6 @@ javadoc {
   source(project(':asciidoctorj-api').sourceSets.main.allJava)
 }
 
-//jruby {
-//	execVersion = '1.7.20'
-//}
-
 jar {
   bnd(
     ('Bundle-Name'): 'asciidoctorj',
@@ -99,8 +95,8 @@ jar {
 }
 
 test {
-  useJUnit {
-    excludeCategories 'org.asciidoctor.categories.Polluted'
+  useJUnitPlatform() {
+    excludeTags("polluted")
   }
 }
 
@@ -119,8 +115,8 @@ version.asciidoctor: $asciidoctorGemVersion
 jar.dependsOn createVersionFile
 
 task pollutedTest(type: Test) {
-  useJUnit {
-    includeCategories 'org.asciidoctor.categories.Polluted'
+  useJUnitPlatform() {
+    includeTags 'polluted'
   }
   forkEvery = 10
   minHeapSize = '128m'

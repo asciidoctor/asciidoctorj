@@ -3,18 +3,13 @@ package org.asciidoctor.extension
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.OptionsBuilder
 import org.asciidoctor.ast.Document
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
 import java.util.concurrent.atomic.AtomicBoolean
 
-@RunWith(ArquillianSputnik)
 class WhenAPreprocessorIsRegistered extends Specification {
-    
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     public static final int ONE = 1
     public static final int TWO = 2

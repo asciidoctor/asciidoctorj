@@ -3,27 +3,29 @@ package org.asciidoctor.integrationguide.extension;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.log.LogRecord;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.asciidoctor.util.ClasspathHelper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(Arquillian.class)
+
 public class LoggingBlockMacroProcessorTest {
 
-    @ArquillianResource
     private Asciidoctor asciidoctor;
+    private ClasspathHelper classpathResources;
 
-    @ArquillianResource
-    private ClasspathResources classpathResources;
+    @BeforeEach
+    public void beforeEach() {
+        asciidoctor = Asciidoctor.Factory.create();
+        classpathResources = new ClasspathHelper();
+        classpathResources.setClassloader(this.getClass());
+    }
 
     @Test
     public void should_log_from_extension() {
@@ -49,6 +51,5 @@ public class LoggingBlockMacroProcessorTest {
         assertEquals("HelloWorld", logRecords.get(0).getMessage());
 //end::include[]
     }
-
 
 }

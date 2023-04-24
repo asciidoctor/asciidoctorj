@@ -4,15 +4,11 @@ import org.asciidoctor.Asciidoctor
 import org.asciidoctor.OptionsBuilder
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.StructuralNode
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
-import org.junit.runner.RunWith
 import spock.lang.Issue
 import spock.lang.Specification
 
-@RunWith(ArquillianSputnik)
 class WhenATreeProcessorCreatesNodes extends Specification {
 
     public static final String NEW_CODE = 'puts "World"'
@@ -23,8 +19,7 @@ class WhenATreeProcessorCreatesNodes extends Specification {
 
     public static final String ELEM_CODE = 'code'
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     @Issue('https://github.com/asciidoctor/asciidoctorj/issues/513')
     def 'it should be able to copy attributes from another node'() {

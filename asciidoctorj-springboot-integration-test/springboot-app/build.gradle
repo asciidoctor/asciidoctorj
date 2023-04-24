@@ -40,7 +40,3 @@ def getToolchainVersion() {
 bootJar {
 	requiresUnpack '**/asciidoctorj-*.jar'
 }
-
-test {
-	useJUnitPlatform()
-}

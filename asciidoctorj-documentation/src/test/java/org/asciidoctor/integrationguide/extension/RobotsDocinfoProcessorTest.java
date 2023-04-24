@@ -3,25 +3,27 @@ package org.asciidoctor.integrationguide.extension;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
+import org.asciidoctor.util.ClasspathHelper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-@RunWith(Arquillian.class)
+
 public class RobotsDocinfoProcessorTest {
 
-    @ArquillianResource
     private Asciidoctor asciidoctor;
+    private ClasspathHelper classpathResources;
 
-    @ArquillianResource
-    private ClasspathResources classpathResources;
+    @BeforeEach
+    public void beforeEach() {
+        asciidoctor = Asciidoctor.Factory.create();
+        classpathResources = new ClasspathHelper();
+        classpathResources.setClassloader(this.getClass());
+    }
 
     @Test
     public void should_create_anchor_elements_for_inline_macros() {
@@ -47,6 +49,5 @@ public class RobotsDocinfoProcessorTest {
         assertThat(metaElement.attr("content"), is("index,follow"));
 //end::include[]
     }
-
 
 }

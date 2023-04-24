@@ -2,11 +2,9 @@ package org.asciidoctor.integrationguide.converter;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.asciidoctor.util.ClasspathHelper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.net.URL;
@@ -15,22 +13,27 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
 
-@RunWith(Arquillian.class)
 public class TextConverterTest {
 
-    @ArquillianResource
-    private ClasspathResources classpathResources;
+    private Asciidoctor asciidoctor;
+    private ClasspathHelper classpathResources;
+
+    @BeforeEach
+    public void beforeEach() {
+        asciidoctor = Asciidoctor.Factory.create();
+        classpathResources = new ClasspathHelper();
+        classpathResources.setClassloader(this.getClass());
+    }
 
     @Test
-    public void should_use_text_converter_for_conversion(@ArquillianResource Asciidoctor asciidoctor) {
+    public void should_use_text_converter_for_conversion() {
 
 //tag::include[]
         File test_adoc = //...
 //end::include[]
-            classpathResources.getResource("textconvertertest.adoc");
+                classpathResources.getResource("textconvertertest.adoc");
 
 //tag::include[]
 
@@ -63,7 +66,7 @@ public class TextConverterTest {
 
         try {
             URL serviceDir = classpathResources.getResource("converterregistry").toURI().toURL();
-            URLClassLoader tccl = new URLClassLoader(new URL[] { serviceDir });
+            URLClassLoader tccl = new URLClassLoader(new URL[]{serviceDir});
             Thread.currentThread().setContextClassLoader(tccl);
 
             Asciidoctor asciidoctor = Asciidoctor.Factory.create();
@@ -80,7 +83,6 @@ public class TextConverterTest {
         } finally {
             Thread.currentThread().setContextClassLoader(oldTCCL);
         }
-
     }
 
 }

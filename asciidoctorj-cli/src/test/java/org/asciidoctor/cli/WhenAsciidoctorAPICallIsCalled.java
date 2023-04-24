@@ -2,7 +2,7 @@ package org.asciidoctor.cli;
 
 import com.beust.jcommander.JCommander;
 import org.asciidoctor.SafeMode;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Path;

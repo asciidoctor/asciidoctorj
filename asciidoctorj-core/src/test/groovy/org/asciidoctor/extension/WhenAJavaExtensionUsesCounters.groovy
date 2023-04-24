@@ -8,18 +8,14 @@ import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.ContentModel
 import org.asciidoctor.ast.Section
 import org.asciidoctor.ast.StructuralNode
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
 import static org.asciidoctor.ast.ContentModel.SIMPLE
 
 @SuppressWarnings('DuplicateNumberLiteral')
-@RunWith(ArquillianSputnik)
 class WhenAJavaExtensionUsesCounters extends Specification {
 
     public static final String UTF8 = 'UTF-8'
@@ -28,8 +24,7 @@ class WhenAJavaExtensionUsesCounters extends Specification {
 
     public static final String PARAGRAPH_SELECTOR = '.paragraph'
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
 
     def 'using the counter macro should continue the counters set in macros but doesnt'() {

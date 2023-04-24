@@ -5,20 +5,15 @@ import org.asciidoctor.ast.ContentNode
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.Section
 import org.asciidoctor.converter.StringConverter
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
-@RunWith(ArquillianSputnik)
 class WhenADocumentIsRenderedToStream extends Specification {
 
     public static final String HTML5_BACKEND = 'html5'
     public static final String HELLO_WORLD = 'Hello World'
     public static final String EMPTY_STRING = ''
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     static final String TEST_DOC = '''= Test
 
@@ -106,6 +101,7 @@ Hello, World!
         TestConverter(String backend, Map<String, Object> opts) {
             super(backend, opts)
         }
+
         @Override
         String convert(ContentNode node, String transform, Map<Object, Object> opts) {
             if (transform == null) {

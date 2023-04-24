@@ -5,31 +5,33 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.asciidoctor.util.ClasspathHelper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.FileReader;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(Arquillian.class)
+
 public class HighlightJsHighlighterTest {
 
-    @ArquillianResource
     private Asciidoctor asciidoctor;
+    private ClasspathHelper classpathResources;
 
-    @ArquillianResource
-    private ClasspathResources classpathResources;
+    @TempDir
+    public File tempDir;
 
-    @ArquillianResource
-    public TemporaryFolder tempDir;
+    @BeforeEach
+    public void beforeEach() {
+        asciidoctor = Asciidoctor.Factory.create();
+        classpathResources = new ClasspathHelper();
+        classpathResources.setClassloader(this.getClass());
+    }
 
     @Test
     public void should_invoke_syntax_highlighter() {
@@ -105,7 +107,7 @@ public class HighlightJsHighlighterTest {
 //tag::includestylesheetwriter[]
         File toDir = // ...
 //end::includestylesheetwriter[]
-            tempDir.newFolder();
+            tempDir;
 //tag::includestylesheetwriter[]
 
         asciidoctor.syntaxHighlighterRegistry()

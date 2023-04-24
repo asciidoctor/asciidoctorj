@@ -7,19 +7,14 @@ import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.ListItem
 import org.asciidoctor.converter.StringConverter
 import org.asciidoctor.extension.Treeprocessor
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
-@RunWith(ArquillianSputnik)
 class WhenADocumentContainsADefinitionList extends Specification {
 
     static final String TAG_DD = 'dd'
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     def "the definition list should be loaded"() {
 
@@ -170,6 +165,6 @@ Item A::
         then:
         org.jsoup.nodes.Document htmlDoc = Jsoup.parse(result)
         htmlDoc.getElementsByTag(TAG_DD).size() == 1
-        htmlDoc.getElementsByTag(TAG_DD)[0].text() ==  newDescription
+        htmlDoc.getElementsByTag(TAG_DD)[0].text() == newDescription
     }
 }

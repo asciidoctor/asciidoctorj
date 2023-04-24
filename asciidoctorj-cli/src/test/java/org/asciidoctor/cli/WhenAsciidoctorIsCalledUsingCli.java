@@ -1,28 +1,27 @@
 package org.asciidoctor.cli;
 
 import org.asciidoctor.cli.jruby.AsciidoctorInvoker;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
+import org.asciidoctor.util.ClasspathHelper;
+import org.assertj.core.api.Assertions;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 
-@RunWith(Arquillian.class)
 public class WhenAsciidoctorIsCalledUsingCli {
 
     private static final String SAMPLE_FILE = "rendersample.asciidoc";
@@ -31,13 +30,18 @@ public class WhenAsciidoctorIsCalledUsingCli {
 
     private static final String SOURCE_EXTENSION_PATTERN = "\\.asciidoc$";
 
-    @ArquillianResource
-    private ClasspathResources classpath;
+    private static ClasspathHelper classpath;
 
-    @ArquillianResource
-    public TemporaryFolder temporaryFolder;
+    @TempDir
+    public File temporaryFolder;
 
     public String pwd = new File("").getAbsolutePath();
+
+    @BeforeAll
+    static void beforeAll() {
+        classpath = new ClasspathHelper();
+        classpath.setClassloader(WhenAsciidoctorIsCalledUsingCli.class);
+    }
 
     @Test
     public void with_no_options_file_should_be_rendered_in_place_and_in_html5_format() throws IOException {
@@ -116,7 +120,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
 
     @Test
     public void destination_dir_should_render_files_to_ouput_directory() throws IOException {
-        File outputDirectory = temporaryFolder.getRoot();
+        File outputDirectory = temporaryFolder;
 
         File inputFile = classpath.getResource(SAMPLE_FILE);
         String inputPath = inputFile.getPath().substring(pwd.length() + 1);
@@ -127,9 +131,12 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
-    public void empty_input_file_name_should_throw_an_exception() throws IOException {
-        new AsciidoctorInvoker().invoke("");
+    @Test
+    public void empty_input_file_name_should_throw_an_exception() {
+        Throwable throwable = catchThrowable(() -> new AsciidoctorInvoker().invoke(""));
+
+        Assertions.assertThat(throwable)
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -145,9 +152,12 @@ public class WhenAsciidoctorIsCalledUsingCli {
         assertThat(os.toString(), startsWith("Asciidoctor"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void invalid_input_file_should_throw_an_exception() throws IOException {
-        new AsciidoctorInvoker().invoke("myunknown.adoc");
+    @Test
+    public void invalid_input_file_should_throw_an_exception() {
+        Throwable throwable = catchThrowable(() -> new AsciidoctorInvoker().invoke("myunknown.adoc"));
+
+        Assertions.assertThat(throwable)
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

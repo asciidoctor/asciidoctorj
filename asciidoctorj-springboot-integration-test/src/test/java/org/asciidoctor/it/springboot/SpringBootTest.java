@@ -5,8 +5,8 @@ import com.google.gson.reflect.TypeToken;
 import kotlin.collections.ArrayDeque;
 import okhttp3.*;
 import org.awaitility.Awaitility;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
-import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
 import static org.asciidoctor.it.springboot.ProcessHelper.run;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,7 +48,7 @@ public class SpringBootTest {
                 .contains("<h2 id=\"_second_chapter\">Second chapter</h2>");
     }
 
-    @After
+    @AfterEach
     public void cleanup() {
         testProcesses.forEach(Process::destroy);
     }

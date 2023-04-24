@@ -3,14 +3,10 @@ package org.asciidoctor.extension
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.OptionsBuilder
 import org.asciidoctor.SafeMode
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
-import org.junit.runner.RunWith
 import spock.lang.Issue
 import spock.lang.Specification
 
 @Issue('https://github.com/asciidoctor/asciidoctorj/issues/450')
-@RunWith(ArquillianSputnik)
 class WhenAJavaExtensionChecksAttributes extends Specification {
 
 
@@ -21,8 +17,7 @@ Check me
 
 '''
 
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     def "a BlockProcessor should only get String attribute keys"() {
         when:

@@ -6,9 +6,8 @@ import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 import org.asciidoctor.ast.Document
 import org.asciidoctor.extension.LocationType
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+import spock.lang.TempDir
 import spock.lang.Unroll
 
 class WhenASyntaxHighlighterThatWritesStylesheetsIsRegistered extends Specification {
@@ -20,8 +19,8 @@ class WhenASyntaxHighlighterThatWritesStylesheetsIsRegistered extends Specificat
 
   private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
-  @Rule
-  public TemporaryFolder tmp = new TemporaryFolder()
+  @TempDir
+  public File tempDir
 
   static class TestHighlighter implements SyntaxHighlighterAdapter, StylesheetWriter {
 
@@ -72,7 +71,7 @@ System.out.println("Hello World");
 ----
 """
 
-    def toDir = tmp.newFolder()
+    def toDir = tempDir
     asciidoctor.syntaxHighlighterRegistry().register(TestHighlighter, NAME_SYNTAXHIGHLIGHTER)
 
     when:
@@ -94,6 +93,5 @@ System.out.println("Hello World");
     lang   | exists
     'java' | true
     'go'   | false
-
   }
 }

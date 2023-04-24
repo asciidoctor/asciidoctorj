@@ -5,20 +5,15 @@ import org.asciidoctor.OptionsBuilder
 import org.asciidoctor.SafeMode
 import org.asciidoctor.ast.ContentModel
 import org.asciidoctor.ast.Document
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
-@RunWith(ArquillianSputnik)
 class WhenABlockShouldBeDuplicated extends Specification {
-
 
     public static final String VERBATIM = 'verbatim'
     public static final String CLASS_LISTINGBLOCK = '.listingblock'
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     def 'it should be possible to copy the content_model'() {
 
@@ -40,7 +35,6 @@ class WhenABlockShouldBeDuplicated extends Specification {
         document.blocks[0].contentModel == VERBATIM
         document.blocks[1].contentModel == VERBATIM
     }
-
 
 
     def 'it should be possible to copy substitutions'() {

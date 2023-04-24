@@ -3,36 +3,29 @@ package org.asciidoctor.extension
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
-import org.asciidoctor.arquillian.api.Unshared
-import org.asciidoctor.util.ClasspathResources
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
+import org.asciidoctor.util.ClasspathHelper
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import org.junit.Test
-import org.junit.rules.TemporaryFolder
-import org.junit.runner.RunWith
 import spock.lang.Ignore
 import spock.lang.Specification
+import spock.lang.TempDir
 
-@RunWith(ArquillianSputnik)
 class WhenExtensionsAreRegisteredAsService extends Specification {
 
     static final String FILENAME_HTML = 'rendersample.html'
 
-    @ArquillianResource
-    ClasspathResources classpath
-
-    @ArquillianResource(Unshared)
+    ClasspathHelper classpath
     Asciidoctor asciidoctor
-
-    @ArquillianResource
-    TemporaryFolder testFolder
-
     ClassLoader originalTCCL
 
+    @TempDir
+    File testFolder
+
     def setup() {
+        asciidoctor = Asciidoctor.Factory.create()
+        classpath = new ClasspathHelper()
+        classpath.classloader = WhenExtensionsAreRegisteredAsService
         originalTCCL = Thread.currentThread().contextClassLoader
     }
 
@@ -42,14 +35,13 @@ class WhenExtensionsAreRegisteredAsService extends Specification {
 
 
     @Ignore('Test is ignored because currently it is not possible to register two block extensions in same instance. This may require deep changes on Asciidoctor Extensions API')
-    @Test
     def 'extensions should be correctly added'() throws IOException {
 
         when:
         //To avoid registering the same extension over and over for all tests, service is instantiated manually.
         new ArrowsAndBoxesExtension().register(asciidoctor)
 
-        File renderedFile = testFolder.newFile(FILENAME_HTML)
+        File renderedFile = new File(testFolder, FILENAME_HTML)
         Options options = Options.builder()
                 .inPlace(false)
                 .toFile(renderedFile)

@@ -9,24 +9,20 @@ import org.asciidoctor.ast.List
 import org.asciidoctor.ast.ListItem
 import org.asciidoctor.ast.Table
 import org.asciidoctor.extension.Treeprocessor
-import org.jboss.arquillian.spock.ArquillianSputnik
-import org.jboss.arquillian.test.api.ArquillianResource
 import org.jsoup.Jsoup
-import org.junit.runner.RunWith
 import spock.lang.Specification
 
 /**
  * Tests that the unsubstituted text can be retrieved from nodes
  */
-@RunWith(ArquillianSputnik)
 class WhenTheSourceShouldBeAccessed extends Specification {
 
     public static final String SOURCE = 'This paragraph should show {foo}'
     public static final String CONVERTED = 'This paragraph should show bar'
     public static final String P = 'p'
     public static final String TD = 'td'
-    @ArquillianResource
-    private Asciidoctor asciidoctor
+
+    private Asciidoctor asciidoctor = Asciidoctor.Factory.create()
 
     def 'it should be possible to get the raw text from a paragraph'() {
 
