@@ -4,43 +4,45 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.jsoup.Jsoup;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(Arquillian.class)
+@ExtendWith(AsciidoctorExtension.class)
 public class BlockProcessorRegistrationTest {
 
-    @ArquillianResource
+    @AsciidoctorInstance(scope = PER_METHOD)
     private Asciidoctor asciidoctor;
 
     private String document(String blockName, String text) {
         return "= Test\n" +
-            "\n" +
-            "== A section\n" +
-            "\n" +
-            "[" + blockName + "]\n" +
-            text + "\n";
+                "\n" +
+                "== A section\n" +
+                "\n" +
+                "[" + blockName + "]\n" +
+                text + "\n";
     }
 
     public static class AbstractTestProcessor extends BlockProcessor {
         @Override
         public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
             List<String> s = reader.readLines().stream()
-                .map(line -> 
-                    line.chars()
-                        .mapToObj(c -> Character.toString((char) c))
-                        .collect(joining(" ")))
-                .collect(toList());
+                    .map(line ->
+                            line.chars()
+                                    .mapToObj(c -> Character.toString((char) c))
+                                    .collect(joining(" ")))
+                    .collect(toList());
             return createBlock(parent, "paragraph", s);
         }
     }
@@ -56,11 +58,11 @@ public class BlockProcessorRegistrationTest {
         @Override
         public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
             List<String> s = reader.readLines().stream()
-                .map(line ->
-                    line.chars()
-                        .mapToObj(c -> Character.toString((char) c))
-                        .collect(joining(" ")))
-                .collect(toList());
+                    .map(line ->
+                            line.chars()
+                                    .mapToObj(c -> Character.toString((char) c))
+                                    .collect(joining(" ")))
+                    .collect(toList());
             return createBlock(parent, "paragraph", s);
         }
     }
@@ -100,15 +102,15 @@ public class BlockProcessorRegistrationTest {
         check("Y e t A n o t h e r T e s t", result);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRegisterClassWithoutExplicitName() {
-        asciidoctor.javaExtensionRegistry().block(AbstractTestProcessor.class);
+        assertThrows(IllegalArgumentException.class, () -> asciidoctor.javaExtensionRegistry().block(AbstractTestProcessor.class));
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRegisterClassAsClass() {
-        asciidoctor.javaExtensionRegistry().block(AbstractTestProcessor.class);
+        assertThrows(IllegalArgumentException.class, () -> asciidoctor.javaExtensionRegistry().block(AbstractTestProcessor.class));
     }
 
     @Test
@@ -119,10 +121,12 @@ public class BlockProcessorRegistrationTest {
         check("H e l l o E x p l i c i t C l a s s", result);
     }
 
-    @Test(expected = AsciidoctorCoreException.class)
+    @Test
     public void testRegisterClassAsInstance() {
-        asciidoctor.javaExtensionRegistry().block(new AbstractTestProcessor());
-        asciidoctor.convert(document("foo", "Hello Explicit Instance"), OptionsBuilder.options());
+        assertThrows(AsciidoctorCoreException.class, () -> {
+            asciidoctor.javaExtensionRegistry().block(new AbstractTestProcessor());
+            asciidoctor.convert(document("foo", "Hello Explicit Instance"), OptionsBuilder.options());
+        });
     }
 
     @Test
@@ -134,10 +138,9 @@ public class BlockProcessorRegistrationTest {
     }
 
 
-
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRegisterClassWithNameAsClass() {
-        asciidoctor.javaExtensionRegistry().block(TestProcessorWithName.class);
+        assertThrows(IllegalArgumentException.class, () -> asciidoctor.javaExtensionRegistry().block(TestProcessorWithName.class));
     }
 
     @Test

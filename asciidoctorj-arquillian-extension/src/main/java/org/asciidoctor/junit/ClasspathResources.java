@@ -1,5 +1,6 @@
-package org.asciidoctor.util;
+package org.asciidoctor.junit;
 
+import org.asciidoctor.test.extension.ClasspathHelper;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -9,17 +10,19 @@ import org.junit.runners.model.Statement;
  * <p>
  * Delegates to {@link ClasspathHelper}.
  */
-public class ClasspathResources extends ClasspathHelper implements TestRule {
+public class ClasspathResources implements TestRule {
+
+    private ClasspathHelper classpathHelper;
 
     public ClasspathResources() {
     }
 
     public ClasspathResources(Class<?> clazz) {
-        setClassloader(clazz);
+        classpathHelper = new ClasspathHelper(clazz);
     }
 
     protected void before(Class<?> clazz) {
-        super.setClassloader(clazz);
+        classpathHelper = new ClasspathHelper(clazz);
     }
 
     @Override

@@ -3,7 +3,7 @@ package org.asciidoctor.extension
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
-import org.asciidoctor.util.ClasspathHelper
+import org.asciidoctor.test.extension.ClasspathHelper
 import org.asciidoctor.util.TestHttpServer
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -36,8 +36,7 @@ githubcontributors::asciidoctor/asciidoctorj[]
 
     def setup() {
         asciidoctor = Asciidoctor.Factory.create()
-        classpathResources = new ClasspathHelper()
-        classpathResources.classloader = WhenABlockMacroProcessorCreatesATable
+        classpathResources = new ClasspathHelper(WhenABlockMacroProcessorCreatesATable)
         TestHttpServer.start(['http://api.github.com/repos/asciidoctor/asciidoctorj/contributors': classpathResources.getResource('githubcontributors.json')])
     }
 

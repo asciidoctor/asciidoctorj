@@ -5,38 +5,41 @@ import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.ast.PhraseNode;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.jsoup.Jsoup;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Map;
 
 import static java.util.stream.Collectors.joining;
+import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(Arquillian.class)
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class InlineMacroRegistrationTest {
 
-    @ArquillianResource
+    @AsciidoctorInstance(scope = PER_METHOD)
     private Asciidoctor asciidoctor;
 
     private String document(String blockName, String text) {
         return "= Test\n" +
-            "\n" +
-            "== A section\n" +
-            "\n" +
-            "\nHello " + blockName + ":" + text + "[]";
+                "\n" +
+                "== A section\n" +
+                "\n" +
+                "\nHello " + blockName + ":" + text + "[]";
     }
 
     public static class AbstractTestProcessor extends InlineMacroProcessor {
         @Override
         public PhraseNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
             String transformed = target.chars()
-                .mapToObj(c -> Character.isUpperCase(c) ? " " + (char) c : Character.toString((char) c))
-                .collect(joining())
-                .toUpperCase().trim();
+                    .mapToObj(c -> Character.isUpperCase(c) ? " " + (char) c : Character.toString((char) c))
+                    .collect(joining())
+                    .toUpperCase().trim();
             return createPhraseNode(parent, "quoted", transformed);
         }
     }
@@ -52,9 +55,9 @@ public class InlineMacroRegistrationTest {
         @Override
         public PhraseNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
             String transformed = target.chars()
-                .mapToObj(c -> Character.isUpperCase(c) ? " " + (char) c : Character.toString((char) c))
-                .collect(joining())
-                .toUpperCase().trim();
+                    .mapToObj(c -> Character.isUpperCase(c) ? " " + (char) c : Character.toString((char) c))
+                    .collect(joining())
+                    .toUpperCase().trim();
             return createPhraseNode(parent, "quoted", transformed);
         }
     }
@@ -94,9 +97,9 @@ public class InlineMacroRegistrationTest {
         check("Hello YET ANOTHER TEST", result);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRegisterClassWithoutExplicitName() {
-        asciidoctor.javaExtensionRegistry().inlineMacro(AbstractTestProcessor.class);
+        assertThrows(IllegalArgumentException.class, () -> asciidoctor.javaExtensionRegistry().inlineMacro(AbstractTestProcessor.class));
     }
 
 
@@ -108,10 +111,12 @@ public class InlineMacroRegistrationTest {
         check("Hello EXPLICIT CLASS", result);
     }
 
-    @Test(expected = AsciidoctorCoreException.class)
+    @Test
     public void testRegisterClassAsInstance() {
-        asciidoctor.javaExtensionRegistry().inlineMacro(new AbstractTestProcessor());
-        asciidoctor.convert(document("foo", "HelloExplicitInstance"), OptionsBuilder.options());
+        assertThrows(AsciidoctorCoreException.class, () -> {
+            asciidoctor.javaExtensionRegistry().inlineMacro(new AbstractTestProcessor());
+            asciidoctor.convert(document("foo", "HelloExplicitInstance"), OptionsBuilder.options());
+        });
     }
 
     @Test
@@ -123,9 +128,9 @@ public class InlineMacroRegistrationTest {
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRegisterClassWithNameAsClass() {
-        asciidoctor.javaExtensionRegistry().inlineMacro(TestProcessorWithName.class);
+        assertThrows(IllegalArgumentException.class, () -> asciidoctor.javaExtensionRegistry().inlineMacro(TestProcessorWithName.class));
     }
 
     @Test

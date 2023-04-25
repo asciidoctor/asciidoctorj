@@ -1,44 +1,40 @@
 package org.asciidoctor.integrationguide.syntaxhighlighter;
 
-import org.apache.commons.io.IOUtils;
-import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.SafeMode;
-import org.asciidoctor.util.ClasspathHelper;
-import org.junit.jupiter.api.BeforeEach;
+import org.asciidoctor.*;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class HighlightJsHighlighterTest {
 
+    @AsciidoctorInstance
     private Asciidoctor asciidoctor;
-    private ClasspathHelper classpathResources;
+
+    @ClasspathResource("sources.adoc")
+    private File sourcesDocument;
 
     @TempDir
     public File tempDir;
-
-    @BeforeEach
-    public void beforeEach() {
-        asciidoctor = Asciidoctor.Factory.create();
-        classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(this.getClass());
-    }
 
     @Test
     public void should_invoke_syntax_highlighter() {
 //tag::include[]
         File sources_adoc = //...
 //end::include[]
-            classpathResources.getResource("sources.adoc");
+                sourcesDocument;
 
         //tag::include[]
 
@@ -49,7 +45,7 @@ public class HighlightJsHighlighterTest {
             OptionsBuilder.options()
                 .standalone(true) // <2>
                 .toFile(false)
-                .attributes(AttributesBuilder.attributes().sourceHighlighter("myhighlightjs"))); // <3>
+                .attributes(Attributes.builder().sourceHighlighter("myhighlightjs").build())); // <3>
 
         assertThat(result,
             containsString("<script>hljs.initHighlighting()</script>"));
@@ -58,9 +54,7 @@ public class HighlightJsHighlighterTest {
 
     @Test
     public void should_invoke_syntax_highlighter_with_3_params() {
-        File sources_adoc =
-            classpathResources.getResource("sources.adoc");
-
+        File sources_adoc = sourcesDocument;
 
         asciidoctor.syntaxHighlighterRegistry()
             .register(org.asciidoctor.integrationguide.syntaxhighlighter.threeparams.HighlightJsHighlighter.class, "myhighlightjs");
@@ -77,9 +71,7 @@ public class HighlightJsHighlighterTest {
 
     @Test
     public void should_invoke_formatting_syntax_highlighter() {
-        File sources_adoc =
-            classpathResources.getResource("sources.adoc");
-
+        File sources_adoc = sourcesDocument;
 
 //tag::includeformatter[]
 
@@ -90,7 +82,7 @@ public class HighlightJsHighlighterTest {
             OptionsBuilder.options()
                 .standalone(true)
                 .toFile(false)
-                .attributes(AttributesBuilder.attributes().sourceHighlighter("myhighlightjs")));
+                .attributes(Attributes.builder().sourceHighlighter("myhighlightjs").build()));
 
         assertThat(result,
             containsString("<script>hljs.initHighlighting()</script>"));
@@ -101,8 +93,7 @@ public class HighlightJsHighlighterTest {
 
     @Test
     public void should_invoke_stylesheet_writing_syntax_highlighter() throws Exception {
-        File sources_adoc =
-            classpathResources.getResource("sources.adoc");
+        File sources_adoc = sourcesDocument;
 
 //tag::includestylesheetwriter[]
         File toDir = // ...
@@ -132,11 +123,9 @@ public class HighlightJsHighlighterTest {
         File jsFile = new File(toDir, "highlight.min.js");
         assertTrue(jsFile.exists());
 
-        try (FileReader docReader = new FileReader(new File(toDir, "sources.html"))) {
-            String html = IOUtils.toString(docReader);
-            assertThat(html, containsString("<link rel=\"stylesheet\" href=\"github.min.css\">"));
-            assertThat(html, containsString("<script src=\"highlight.min.js\"></script>"));
-        }
+        String html = Files.readString(Path.of(toDir.toURI()).resolve("sources.html"));
+        assertThat(html, containsString("<link rel=\"stylesheet\" href=\"github.min.css\">"));
+        assertThat(html, containsString("<script src=\"highlight.min.js\"></script>"));
 //end::includestylesheetwriter[]
     }
 

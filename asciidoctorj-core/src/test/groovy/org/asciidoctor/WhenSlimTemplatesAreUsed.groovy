@@ -1,7 +1,7 @@
 package org.asciidoctor
 
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor
-import org.asciidoctor.util.ClasspathHelper
+import org.asciidoctor.test.extension.ClasspathHelper
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -9,14 +9,9 @@ import spock.lang.Specification
 
 class WhenSlimTemplatesAreUsed extends Specification {
 
-    ClasspathHelper classpath = new ClasspathHelper()
-
-    def setup() {
-        classpath = new ClasspathHelper()
-        classpath.classloader = WhenSlimTemplatesAreUsed
-    }
-
     Asciidoctor asciidoctor = JRubyAsciidoctor.create()
+
+    ClasspathHelper classpath = new ClasspathHelper(WhenSlimTemplatesAreUsed)
 
     def 'the slim paragraph template should be used when rendering a document inline'() {
         given:

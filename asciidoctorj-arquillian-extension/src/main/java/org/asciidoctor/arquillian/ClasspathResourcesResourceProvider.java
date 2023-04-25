@@ -1,6 +1,6 @@
 package org.asciidoctor.arquillian;
 
-import org.asciidoctor.util.ClasspathResources;
+import org.asciidoctor.junit.ClasspathResources;
 import org.jboss.arquillian.core.api.Instance;
 import org.jboss.arquillian.core.api.annotation.ApplicationScoped;
 import org.jboss.arquillian.core.api.annotation.Inject;

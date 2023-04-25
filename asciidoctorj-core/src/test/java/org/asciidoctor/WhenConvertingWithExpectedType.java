@@ -1,19 +1,20 @@
 package org.asciidoctor;
 
-import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.converter.ObjectConverter;
 import org.asciidoctor.converter.ObjectConverter.ObjectConverterResult;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.File;
 import java.io.OutputStream;
+import java.nio.file.Path;
 
+import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -21,16 +22,16 @@ import static org.assertj.core.api.Assertions.assertThat;
  * - when using `toFile`, `toStream` returns Document, otherwise String.
  * - Java converter returns custom type unless `toFile` ot `toStream` is set.
  */
-@RunWith(Arquillian.class)
+@ExtendWith(AsciidoctorExtension.class)
 public class WhenConvertingWithExpectedType {
 
     private static final String SAMPLE_CONTENT = "= Document Title\n\nThis is the preamble\n";
 
-    @ArquillianResource(Unshared.class)
+    @AsciidoctorInstance(scope = PER_METHOD)
     private Asciidoctor asciidoctor;
 
-    @ArquillianResource
-    private TemporaryFolder testFolder;
+    @TempDir
+    private Path tempFolder;
 
     @Test
     public void shouldReturnNullWhenExpectedTypeIsStringButSetDocument() {
@@ -43,10 +44,10 @@ public class WhenConvertingWithExpectedType {
     }
 
     @Test
-    public void shouldReturnNullWhenExpectedTypeIsDocumentButSetString() throws IOException {
+    public void shouldReturnNullWhenExpectedTypeIsDocumentButSetString() {
         Options options = Options.builder()
                 .safe(SafeMode.UNSAFE)
-                .toFile(testFolder.newFile())
+                .toFile(outputFile())
                 .build();
 
         String inRealityIsDocument = asciidoctor.convert(SAMPLE_CONTENT, options, String.class);
@@ -80,10 +81,10 @@ public class WhenConvertingWithExpectedType {
     }
 
     @Test
-    public void shouldReturnDocumentWhenUsingToFile() throws IOException {
+    public void shouldReturnDocumentWhenUsingToFile() {
         Options options = Options.builder()
                 .safe(SafeMode.UNSAFE)
-                .toFile(testFolder.newFile())
+                .toFile(outputFile())
                 .build();
 
         Document document = asciidoctor.convert(SAMPLE_CONTENT, options, Document.class);
@@ -122,13 +123,12 @@ public class WhenConvertingWithExpectedType {
                 .hasFieldOrPropertyWithValue("value", ObjectConverter.FIXED_RESULT);
     }
 
-
     @Test
-    public void shouldReturnNullWhenExpectingCustomTypeAndUsingToFile() throws IOException {
+    public void shouldReturnNullWhenExpectingCustomTypeAndUsingToFile() {
         Options options = Options.builder()
                 .backend(ObjectConverter.BACKEND)
                 .safe(SafeMode.UNSAFE)
-                .toFile(testFolder.newFile())
+                .toFile(outputFile())
                 .build();
 
         asciidoctor.javaConverterRegistry().register(ObjectConverter.class);
@@ -148,5 +148,9 @@ public class WhenConvertingWithExpectedType {
         ObjectConverterResult document = asciidoctor.convert(SAMPLE_CONTENT, options, ObjectConverterResult.class);
 
         assertThat(document).isNull();
+    }
+
+    private File outputFile() {
+        return tempFolder.resolve("output").toFile();
     }
 }

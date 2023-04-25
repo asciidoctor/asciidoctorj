@@ -33,7 +33,7 @@ dependencies {
   testImplementation "com.google.guava:guava:$guavaVersion"
   testImplementation "org.jsoup:jsoup:$jsoupVersion"
   testImplementation "io.netty:netty-all:$nettyVersion"
-  testImplementation project(':asciidoctorj-arquillian-extension')
+  testImplementation project(':asciidoctorj-test-support')
   compileOnly "org.osgi:osgi.annotation:$osgiVersion"
 }
 
@@ -138,6 +138,3 @@ task pollutedTest(type: Test) {
 }
 
 test.dependsOn pollutedTest
-
-
-

@@ -4,47 +4,46 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.MemoryLogHandler;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.Treeprocessor;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.logging.Logger;
 
+import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-@RunWith(Arquillian.class)
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenConverterIsRegistered {
 
-    @ArquillianResource(Unshared.class)
+    @AsciidoctorInstance(scope = PER_METHOD)
     private Asciidoctor asciidoctor;
 
-    @ArquillianResource
-    private ClasspathResources classpath;
+    @ClasspathResource("simple.adoc")
+    private File simpleDocument;
 
-    @ArquillianResource
-    private TemporaryFolder tmp;
 
-    @After
-    public void cleanUp() {
-        asciidoctor.javaConverterRegistry().unregisterAll();
-    }
+//    @After
+//    public void cleanUp() {
+//        asciidoctor.javaConverterRegistry().unregisterAll();
+//    }
 
     @Test
     public void shouldCleanUpRegistry() {
@@ -134,7 +133,7 @@ public class WhenConverterIsRegistered {
                 if (block instanceof Section && block.getTitle().equals("Test2")) {
                     block.setLevel(42);
                 }
-                for (StructuralNode node: block.getBlocks()) {
+                for (StructuralNode node : block.getBlocks()) {
                     processNode(node);
                 }
             }
@@ -150,11 +149,13 @@ public class WhenConverterIsRegistered {
     }
 
     @Test
-    public void shouldRegisterConverterViaConverterRegistryExecutor() throws Exception {
+    public void shouldRegisterConverterViaConverterRegistryExecutor(
+            @ClasspathResource("serviceloadertest/3") File serviceLoader) throws MalformedURLException {
+
         ClassLoader oldTCCL = Thread.currentThread().getContextClassLoader();
 
         try {
-            Thread.currentThread().setContextClassLoader(new URLClassLoader(new URL[]{classpath.getResource("serviceloadertest/3").toURI().toURL()}));
+            Thread.currentThread().setContextClassLoader(new URLClassLoader(new URL[]{serviceLoader.toURI().toURL()}));
             asciidoctor = JRubyAsciidoctor.create();
             String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", OptionsBuilder.options().backend("extensiontext"));
 
@@ -166,29 +167,27 @@ public class WhenConverterIsRegistered {
 
 
     @Test
-    public void shouldWriteFileWithSuffixFromConverterWithAnnotation() throws Exception {
+    public void shouldWriteFileWithSuffixFromConverterWithAnnotation(@TempDir File tempDir) throws Exception {
 
         asciidoctor.javaConverterRegistry().register(TextConverter.class);
 
-        File todir = tmp.newFolder();
-        asciidoctor.convertFile(classpath.getResource("simple.adoc"), OptionsBuilder.options().backend(TextConverter.DEFAULT_FORMAT).toDir(todir).safe(SafeMode.UNSAFE));
+        File todir = tempDir;
+        asciidoctor.convertFile(simpleDocument, OptionsBuilder.options().backend(TextConverter.DEFAULT_FORMAT).toDir(todir).safe(SafeMode.UNSAFE));
 
         assertThat(new File(todir, "simple.html").exists(), is(false));
         assertThat(new File(todir, "simple.txt").exists(), is(true));
-
     }
 
     @Test
-    public void shouldWriteFileWithSuffixFromConverterThatInvokesSetOutfileSuffix() throws Exception {
+    public void shouldWriteFileWithSuffixFromConverterThatInvokesSetOutfileSuffix(@TempDir File tempDir) {
 
         asciidoctor.javaConverterRegistry().register(TextConverterWithSuffix.class);
 
-        File todir = tmp.newFolder();
-        asciidoctor.convertFile(classpath.getResource("simple.adoc"), OptionsBuilder.options().backend(TextConverterWithSuffix.DEFAULT_FORMAT).toDir(todir).safe(SafeMode.UNSAFE));
+        File todir = tempDir;
+        asciidoctor.convertFile(simpleDocument, OptionsBuilder.options().backend(TextConverterWithSuffix.DEFAULT_FORMAT).toDir(todir).safe(SafeMode.UNSAFE));
 
         assertThat(new File(todir, "simple.html").exists(), is(false));
         assertThat(new File(todir, "simple.text").exists(), is(true));
-
     }
 
 }

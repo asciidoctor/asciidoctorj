@@ -4,32 +4,36 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.jsoup.Jsoup;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import java.util.Map;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static java.util.stream.Collectors.joining;
+import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(Arquillian.class)
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class BlockMacroRegistrationTest {
 
-    @ArquillianResource
+    @AsciidoctorInstance(scope = PER_METHOD)
     private Asciidoctor asciidoctor;
 
     private String document(String blockName, String text) {
         return "= Test\n" +
-            "\n" +
-            "== A section\n" +
-            "\n" +
-            blockName + "::" + text + "[]";
+                "\n" +
+                "== A section\n" +
+                "\n" +
+                blockName + "::" + text + "[]";
     }
 
     public static class AbstractTestProcessor extends BlockMacroProcessor {
@@ -122,11 +126,10 @@ public class BlockMacroRegistrationTest {
         check("YET ANOTHER TEST", result);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRegisterClassWithoutExplicitName() {
-        asciidoctor.javaExtensionRegistry().blockMacro(AbstractTestProcessor.class);
+        assertThrows(IllegalArgumentException.class, () -> asciidoctor.javaExtensionRegistry().blockMacro(AbstractTestProcessor.class));
     }
-
 
     @Test
     public void testRegisterClassAsClassWithExplicitName() {
@@ -136,10 +139,12 @@ public class BlockMacroRegistrationTest {
         check("HELLO EXPLICIT CLASS", result);
     }
 
-    @Test(expected = AsciidoctorCoreException.class)
+    @Test
     public void testRegisterClassAsInstance() {
-        asciidoctor.javaExtensionRegistry().blockMacro(new AbstractTestProcessor());
-        asciidoctor.convert(document("foo", "Hello Explicit Instance"), OptionsBuilder.options());
+        assertThrows(AsciidoctorCoreException.class, () -> {
+            asciidoctor.javaExtensionRegistry().blockMacro(new AbstractTestProcessor());
+            asciidoctor.convert(document("foo", "Hello Explicit Instance"), OptionsBuilder.options());
+        });
     }
 
     @Test
@@ -151,10 +156,9 @@ public class BlockMacroRegistrationTest {
     }
 
 
-
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRegisterClassWithNameAsClass() {
-        asciidoctor.javaExtensionRegistry().blockMacro(TestProcessorWithName.class);
+        assertThrows(IllegalArgumentException.class, () -> asciidoctor.javaExtensionRegistry().blockMacro(TestProcessorWithName.class));
     }
 
     @Test

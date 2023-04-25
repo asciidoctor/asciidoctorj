@@ -3,34 +3,31 @@ package org.asciidoctor.integrationguide.extension;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.util.ClasspathHelper;
-import org.junit.jupiter.api.BeforeEach;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class YellBlockProcessorTest {
 
+    @AsciidoctorInstance
     private Asciidoctor asciidoctor;
-    private ClasspathHelper classpathResources;
 
-    @BeforeEach
-    public void beforeEach() {
-        asciidoctor = Asciidoctor.Factory.create();
-        classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(this.getClass());
-    }
 
     @Test
-    public void should_invoke_block_processor() {
+    public void should_invoke_block_processor(@ClasspathResource("yell-block.adoc") File yellBlock) {
 //tag::include[]
         File yellblock_adoc = //...
 //end::include[]
-            classpathResources.getResource("yell-block.adoc");
+            yellBlock;
 
         //tag::include[]
 
@@ -43,9 +40,9 @@ public class YellBlockProcessorTest {
     }
 
     @Test
-    public void should_invoke_block_processor_with_attributes() {
+    public void should_invoke_block_processor_with_attributes(@ClasspathResource("yell-block-attributes.adoc") File yellBlock) {
         File yellblock_adoc = //...
-            classpathResources.getResource("yell-block-attributes.adoc");
+            yellBlock;
 
         asciidoctor.javaExtensionRegistry().block(YellBlockProcessorWithAttributes.class);
 
@@ -55,9 +52,9 @@ public class YellBlockProcessorTest {
     }
 
     @Test
-    public void should_invoke_block_processor_with_positional_attributes() {
+    public void should_invoke_block_processor_with_positional_attributes(@ClasspathResource("yell-block-positional.adoc") File yellBlock) {
         File yellblock_adoc = //...
-            classpathResources.getResource("yell-block-positional.adoc");
+            yellBlock;
 
         asciidoctor.javaExtensionRegistry().block(YellBlockProcessorWithPositionalAttributes.class);
 

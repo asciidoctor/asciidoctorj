@@ -3,7 +3,7 @@ package org.asciidoctor.extension
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
-import org.asciidoctor.util.ClasspathHelper
+import org.asciidoctor.test.extension.ClasspathHelper
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -24,8 +24,7 @@ class WhenExtensionsAreRegisteredAsService extends Specification {
 
     def setup() {
         asciidoctor = Asciidoctor.Factory.create()
-        classpath = new ClasspathHelper()
-        classpath.classloader = WhenExtensionsAreRegisteredAsService
+        classpath = new ClasspathHelper(WhenExtensionsAreRegisteredAsService)
         originalTCCL = Thread.currentThread().contextClassLoader
     }
 

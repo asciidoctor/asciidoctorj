@@ -1,25 +1,25 @@
 package org.asciidoctor.jruby.internal;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.jruby.RubyBoolean;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.util.Map;
 
-import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.arquillian.api.Unshared;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jruby.RubyBoolean;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-@RunWith(Arquillian.class)
+@ExtendWith(AsciidoctorExtension.class)
 public class WhenDocumentIsRenderedWithPreloading {
 
-    @ArquillianResource(Unshared.class)
+    @AsciidoctorInstance(scope = PER_METHOD)
     private Asciidoctor asciidoctor;
 
     @Test
@@ -31,7 +31,6 @@ public class WhenDocumentIsRenderedWithPreloading {
         ((JRubyAsciidoctor) asciidoctor).rubyGemsPreloader.preloadRequiredLibraries(options);
         RubyBoolean evalScriptlet = (RubyBoolean) ((JRubyAsciidoctor) asciidoctor).rubyRuntime.evalScriptlet("require 'coderay'");
         assertThat(evalScriptlet.isFalse(), is(true));
-
     }
 
     @Test
@@ -43,7 +42,6 @@ public class WhenDocumentIsRenderedWithPreloading {
         ((JRubyAsciidoctor) asciidoctor).rubyGemsPreloader.preloadRequiredLibraries(options);
         RubyBoolean evalScriptlet = (RubyBoolean) ((JRubyAsciidoctor) asciidoctor).rubyRuntime.evalScriptlet("require 'coderay'");
         assertThat(evalScriptlet.isTrue(), is(true));
-
     }
 
     @Test
@@ -54,7 +52,6 @@ public class WhenDocumentIsRenderedWithPreloading {
         ((JRubyAsciidoctor) asciidoctor).rubyGemsPreloader.preloadRequiredLibraries(options);
         RubyBoolean evalScriptlet = (RubyBoolean) ((JRubyAsciidoctor) asciidoctor).rubyRuntime.evalScriptlet("require 'erubis'");
         assertThat(evalScriptlet.isFalse(), is(true));
-
     }
 
     @Test
@@ -65,7 +62,6 @@ public class WhenDocumentIsRenderedWithPreloading {
         ((JRubyAsciidoctor) asciidoctor).rubyGemsPreloader.preloadRequiredLibraries(options);
         RubyBoolean evalScriptlet = (RubyBoolean) ((JRubyAsciidoctor) asciidoctor).rubyRuntime.evalScriptlet("require 'erubis'");
         assertThat(evalScriptlet.isTrue(), is(true));
-
     }
 
     @Test
@@ -76,7 +72,6 @@ public class WhenDocumentIsRenderedWithPreloading {
         ((JRubyAsciidoctor) asciidoctor).rubyGemsPreloader.preloadRequiredLibraries(options);
         RubyBoolean evalScriptlet = (RubyBoolean) ((JRubyAsciidoctor) asciidoctor).rubyRuntime.evalScriptlet("require 'tilt'");
         assertThat(evalScriptlet.isFalse(), is(true));
-
     }
 
     @Test
@@ -88,7 +83,5 @@ public class WhenDocumentIsRenderedWithPreloading {
         ((JRubyAsciidoctor) asciidoctor).rubyGemsPreloader.preloadRequiredLibraries(options);
         RubyBoolean evalScriptlet = (RubyBoolean) ((JRubyAsciidoctor) asciidoctor).rubyRuntime.evalScriptlet("require 'base64'");
         assertThat(evalScriptlet.isFalse(), is(true));
-
     }
-
 }
