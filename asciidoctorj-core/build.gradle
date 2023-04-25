@@ -135,15 +135,6 @@ task pollutedTest(type: Test) {
       }
     }
   }
-
-  reports {
-    html {
-      destination file("$buildDir/reports/pollutedTest")
-    }
-    junitXml {
-      destination file("$buildDir/pollutedTest-result")
-    }
-  }
 }
 
 test.dependsOn pollutedTest

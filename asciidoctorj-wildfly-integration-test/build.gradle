@@ -85,15 +85,6 @@ test {
         }
     }
 
-    reports {
-        html {
-            destination file("$buildDir/reports/integrationTest")
-        }
-        junitXml {
-            destination file("$buildDir/integrationTest")
-        }
-    }
-
     def jbossHome = file("build/wildfly-$wildflyVersion").absolutePath
     systemProperty('jboss.home', jbossHome)
     systemProperty('module.path', jbossHome + "/modules" + File.pathSeparator + file('build/modules').absolutePath)
