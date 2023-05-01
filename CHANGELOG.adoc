@@ -53,6 +53,7 @@ Build Improvement::
 * Fix upstream tests forcing SNAPSHOT on Asciidoctor gem installation (#1123) (@abelsromero)
 * Fix upstream build removing the explicit plugin repository (#1131)
 * Set JUnit5 as default test engine (#1186) (@abelsromero)
+* Removed pollutedTest Gradle task using junit-pioneer (#1193) (@abelsromero)
 
 == 2.5.4 (2022-06-30)
 

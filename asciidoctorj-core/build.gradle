@@ -95,9 +95,7 @@ jar {
 }
 
 test {
-  useJUnitPlatform() {
-    excludeTags("polluted")
-  }
+  useJUnitPlatform()
 }
 
 task createVersionFile {
@@ -112,29 +110,5 @@ version.asciidoctor: $asciidoctorGemVersion
 """
   }
 }
+
 jar.dependsOn createVersionFile
-
-task pollutedTest(type: Test) {
-  useJUnitPlatform() {
-    includeTags 'polluted'
-  }
-  forkEvery = 10
-  minHeapSize = '128m'
-  maxHeapSize = '1024m'
-  jvmArgs '-XX:-UseGCOverheadLimit'
-
-  environment 'GEM_PATH', '/some/path'
-  environment 'GEM_HOME', '/some/other/path'
-
-  testLogging {
-    // events 'passed', 'failed', 'skipped', 'standard_out', 'standard_error'
-    // events 'standard_out', 'standard_error'
-    afterSuite { desc, result ->
-      if (!desc.parent && logger.infoEnabled) {
-        logger.info "Test results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)"
-      }
-    }
-  }
-}
-
-test.dependsOn pollutedTest
