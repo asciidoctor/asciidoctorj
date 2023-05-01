@@ -1,19 +1,19 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.StructuralNode;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class TerminalCommandTreeprocessor extends Treeprocessor {
 
-	private Document document;
+    private Document document;
 
-    public TerminalCommandTreeprocessor() {}
+    public TerminalCommandTreeprocessor() {
+    }
 
     public TerminalCommandTreeprocessor(Map<String, Object> config) {
         super(config);
@@ -22,7 +22,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
     @Override
     public Document process(Document document) {
         this.document = document;
-        processBlock((StructuralNode) this.document);
+        processBlock(this.document);
         return this.document;
     }
 
@@ -32,7 +32,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
 
         for (int i = 0; i < blocks.size(); i++) {
             final StructuralNode currentBlock = blocks.get(i);
-            if(currentBlock instanceof StructuralNode) {
+            if (currentBlock instanceof StructuralNode) {
                 if ("paragraph".equals(currentBlock.getContext())) {
                     List<String> lines = ((Block) currentBlock).getLines();
                     if (lines.size() > 0 && lines.get(0).startsWith("$")) {
@@ -45,6 +45,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
             }
         }
     }
+
     public Block convertToTerminalListing(Block block) {
 
         Map<String, Object> attributes = block.getAttributes();
@@ -63,8 +64,8 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
             }
         }
 
-        return createBlock(this.document, "listing", Arrays.asList(resultLines.toString()), attributes,
-                new HashMap<Object, Object>());
+        return createBlock(this.document, "listing",
+                List.of(resultLines.toString()), attributes, new HashMap<>());
     }
 
 }

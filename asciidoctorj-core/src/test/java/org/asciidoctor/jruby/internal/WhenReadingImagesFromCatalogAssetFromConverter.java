@@ -2,35 +2,37 @@ package org.asciidoctor.jruby.internal;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
-import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ImageReference;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.converter.StringConverter;
 import org.asciidoctor.jruby.ast.impl.TestImageReference;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
+import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(Arquillian.class)
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenReadingImagesFromCatalogAssetFromConverter {
 
-    @ArquillianResource
-    private ClasspathResources classpath;
-
-    @ArquillianResource(Unshared.class)
+    @AsciidoctorInstance(scope = PER_METHOD)
     private Asciidoctor asciidoctor;
+
+    @ClasspathResource("sample-with-images.adoc")
+    private File sampleWithImages;
 
     static final String CONVERTER_BACKEND = "custom-backend";
 
@@ -46,7 +48,7 @@ public class WhenReadingImagesFromCatalogAssetFromConverter {
     private static List<ImageReference> imagesBeforeConvert;
     private static List<ImageReference> imagesAfterConvert;
 
-    @Before
+    @BeforeEach
     public void beforeEach() {
         final var javaConverterRegistry = asciidoctor.javaConverterRegistry();
         javaConverterRegistry.converters().clear();
@@ -109,7 +111,7 @@ public class WhenReadingImagesFromCatalogAssetFromConverter {
 
     private String getAsciiDodWithImagesDocument() {
         try {
-            return Files.readString(classpath.getResource("sample-with-images.adoc").toPath());
+            return Files.readString(sampleWithImages.toPath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

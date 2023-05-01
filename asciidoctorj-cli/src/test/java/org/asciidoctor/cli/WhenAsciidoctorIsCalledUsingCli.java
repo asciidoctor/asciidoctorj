@@ -1,13 +1,14 @@
 package org.asciidoctor.cli;
 
 import org.asciidoctor.cli.jruby.AsciidoctorInvoker;
-import org.asciidoctor.util.ClasspathHelper;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.assertj.core.api.Assertions;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.ByteArrayOutputStream;
@@ -22,31 +23,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 
+@ExtendWith(ClasspathExtension.class)
 public class WhenAsciidoctorIsCalledUsingCli {
 
-    private static final String SAMPLE_FILE = "rendersample.asciidoc";
-    private static final String BROKEN_INCLUDE_ASCIIDOC = "brokeninclude.asciidoc";
-    private static final String TOC_SAMPLE_ASCIIDOC = "tocsample.asciidoc";
+    static final String SOURCE_EXTENSION_PATTERN = "\\.asciidoc$";
 
-    private static final String SOURCE_EXTENSION_PATTERN = "\\.asciidoc$";
+    @ClasspathResource("rendersample.asciidoc")
+    private File renderSampleDocument;
+    @ClasspathResource("brokeninclude.asciidoc")
+    private File brokenIncludeDocument;
+    @ClasspathResource("tocsample.asciidoc")
+    private File tocSampleDocument;
 
-    private static ClasspathHelper classpath;
+    final String pwd = new File("").getAbsolutePath();
 
-    @TempDir
-    public File temporaryFolder;
-
-    public String pwd = new File("").getAbsolutePath();
-
-    @BeforeAll
-    static void beforeAll() {
-        classpath = new ClasspathHelper();
-        classpath.setClassloader(WhenAsciidoctorIsCalledUsingCli.class);
-    }
 
     @Test
-    public void with_no_options_file_should_be_rendered_in_place_and_in_html5_format() throws IOException {
-        File inputFile = classpath.getResource(SAMPLE_FILE);
-        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+    void with_no_options_file_should_be_rendered_in_place_and_in_html5_format() throws IOException {
+        final String inputPath = renderSampleDocument.getPath().substring(pwd.length() + 1);
 
         new AsciidoctorInvoker().invoke(inputPath);
 
@@ -56,9 +50,8 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void should_honor_doctype_defined_in_document_by_default() throws IOException {
-        File inputFile = classpath.getResource("sample-book.adoc");
-        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+    void should_honor_doctype_defined_in_document_by_default(@ClasspathResource("sample-book.adoc") File sampleBookDocument) throws IOException {
+        final String inputPath = sampleBookDocument.getPath().substring(pwd.length() + 1);
 
         new AsciidoctorInvoker().invoke(inputPath);
 
@@ -72,9 +65,8 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void file_should_be_rendered_to_docbook_with_docbook_backend() throws IOException {
-        File inputFile = classpath.getResource(SAMPLE_FILE);
-        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+    void file_should_be_rendered_to_docbook_with_docbook_backend() throws IOException {
+        final String inputPath = renderSampleDocument.getPath().substring(pwd.length() + 1);
 
         new AsciidoctorInvoker().invoke("-b", "docbook", inputPath);
 
@@ -84,9 +76,8 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void single_attributes_should_be_interpreted_as_boolean() throws IOException {
-        File inputFile = classpath.getResource(SAMPLE_FILE);
-        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+    void single_attributes_should_be_interpreted_as_boolean() throws IOException {
+        final String inputPath = renderSampleDocument.getPath().substring(pwd.length() + 1);
 
         new AsciidoctorInvoker().invoke("-a", "linkcss!", inputPath);
 
@@ -102,9 +93,8 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void composed_attributes_should_be_built_as_attributes_map() throws IOException {
-        File inputFile = classpath.getResource(SAMPLE_FILE);
-        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+    void composed_attributes_should_be_built_as_attributes_map() throws IOException {
+        final String inputPath = renderSampleDocument.getPath().substring(pwd.length() + 1);
 
         new AsciidoctorInvoker().invoke("-a", "stylesheet=mystyles.css", "-a", "linkcss", inputPath);
 
@@ -119,20 +109,18 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void destination_dir_should_render_files_to_ouput_directory() throws IOException {
-        File outputDirectory = temporaryFolder;
+    void destination_dir_should_render_files_to_ouput_directory(@TempDir File temporaryFolder) throws IOException {
+        final String inputPath = renderSampleDocument.getPath().substring(pwd.length() + 1);
 
-        File inputFile = classpath.getResource(SAMPLE_FILE);
-        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
-        new AsciidoctorInvoker().invoke("-D", outputDirectory.getAbsolutePath(), inputPath);
+        new AsciidoctorInvoker().invoke("-D", temporaryFolder.getAbsolutePath(), inputPath);
 
-        File expectedFile = new File(outputDirectory, inputFile.getName().replaceFirst(SOURCE_EXTENSION_PATTERN, ".html"));
+        File expectedFile = new File(temporaryFolder, renderSampleDocument.getName().replaceFirst(SOURCE_EXTENSION_PATTERN, ".html"));
         assertThat(expectedFile.exists(), is(true));
     }
 
 
     @Test
-    public void empty_input_file_name_should_throw_an_exception() {
+    void empty_input_file_name_should_throw_an_exception() {
         Throwable throwable = catchThrowable(() -> new AsciidoctorInvoker().invoke(""));
 
         Assertions.assertThat(throwable)
@@ -140,7 +128,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void version_flag_should_print_version_and_exit() throws IOException {
+    void version_flag_should_print_version_and_exit() throws IOException {
         PrintStream oldOs = System.out;
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         System.setOut(new PrintStream(os));
@@ -153,7 +141,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void invalid_input_file_should_throw_an_exception() {
+    void invalid_input_file_should_throw_an_exception() {
         Throwable throwable = catchThrowable(() -> new AsciidoctorInvoker().invoke("myunknown.adoc"));
 
         Assertions.assertThat(throwable)
@@ -161,11 +149,9 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void should_convert_multiple_inputs() throws IOException {
-        File inputFile1 = classpath.getResource(SAMPLE_FILE);
-        String inputPath1 = inputFile1.getPath().substring(pwd.length() + 1);
-        File inputFile2 = classpath.getResource(TOC_SAMPLE_ASCIIDOC);
-        String inputPath2 = inputFile2.getPath().substring(pwd.length() + 1);
+    void should_convert_multiple_inputs() throws IOException {
+        final String inputPath1 = renderSampleDocument.getPath().substring(pwd.length() + 1);
+        final String inputPath2 = tocSampleDocument.getPath().substring(pwd.length() + 1);
 
         new AsciidoctorInvoker().invoke(inputPath1, inputPath2);
 
@@ -179,10 +165,9 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void glob_expression_can_be_used_to_render_AsciiDoc_files() throws IOException {
-        File inputFile = classpath.getResource(TOC_SAMPLE_ASCIIDOC);
-        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
-        String inputGlob = new File(new File(inputPath).getParentFile(), "toc*ple.asciidoc").getPath();
+    void glob_expression_can_be_used_to_render_AsciiDoc_files() throws IOException {
+        final String inputPath = tocSampleDocument.getPath().substring(pwd.length() + 1);
+        final String inputGlob = new File(new File(inputPath).getParentFile(), "toc*ple.asciidoc").getPath();
 
         new AsciidoctorInvoker().invoke(inputGlob);
 
@@ -193,8 +178,8 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void help_option_should_show_usage_information() throws IOException {
-        ByteArrayOutputStream output = redirectStdout();
+    void help_option_should_show_usage_information() throws IOException {
+        final ByteArrayOutputStream output = redirectStdout();
 
         new AsciidoctorInvoker().invoke("--help");
 
@@ -203,8 +188,8 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void no_parameters_should_show_usage_information() throws IOException {
-        ByteArrayOutputStream output = redirectStdout();
+    void no_parameters_should_show_usage_information() throws IOException {
+        final ByteArrayOutputStream output = redirectStdout();
 
         new AsciidoctorInvoker().invoke();
 
@@ -213,10 +198,9 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void output_file_hyphen_symbol_should_render_output_to_stdout() throws IOException {
-        ByteArrayOutputStream output = redirectStdout();
-        File inputFile = classpath.getResource(SAMPLE_FILE);
-        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+    void output_file_hyphen_symbol_should_render_output_to_stdout() throws IOException {
+        final ByteArrayOutputStream output = redirectStdout();
+        final String inputPath = renderSampleDocument.getPath().substring(pwd.length() + 1);
 
         new AsciidoctorInvoker().invoke("-o", "-", inputPath);
 
@@ -227,10 +211,9 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void verbose_option_should_fill_monitor_map() throws IOException {
-        ByteArrayOutputStream output = redirectStdout();
-        File inputFile = classpath.getResource(SAMPLE_FILE);
-        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+    void verbose_option_should_fill_monitor_map() throws IOException {
+        final ByteArrayOutputStream output = redirectStdout();
+        final String inputPath = renderSampleDocument.getPath().substring(pwd.length() + 1);
 
         new AsciidoctorInvoker().invoke("--timings", inputPath);
 
@@ -240,10 +223,9 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void quiet_option_should_not_write_to_console() throws IOException {
-        ByteArrayOutputStream output = redirectStdout();
-        File inputFile = classpath.getResource(BROKEN_INCLUDE_ASCIIDOC);
-        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+    void quiet_option_should_not_write_to_console() throws IOException {
+        final ByteArrayOutputStream output = redirectStdout();
+        final String inputPath = brokenIncludeDocument.getPath().substring(pwd.length() + 1);
 
         new AsciidoctorInvoker().invoke("--quiet", inputPath);
 
@@ -252,9 +234,8 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void should_exit_with_zero_status_even_if_errors_were_logged() throws IOException {
-        File inputFile = classpath.getResource(BROKEN_INCLUDE_ASCIIDOC);
-        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+    void should_exit_with_zero_status_even_if_errors_were_logged() throws IOException {
+        final String inputPath = brokenIncludeDocument.getPath().substring(pwd.length() + 1);
 
         int status = new AsciidoctorInvoker().invoke(inputPath);
 
@@ -262,9 +243,8 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void should_exit_with_nonzero_status_if_logged_severity_was_at_least_failure_level() throws IOException {
-        File inputFile = classpath.getResource(BROKEN_INCLUDE_ASCIIDOC);
-        String inputPath = inputFile.getPath().substring(pwd.length() + 1);
+    void should_exit_with_nonzero_status_if_logged_severity_was_at_least_failure_level() throws IOException {
+        String inputPath = brokenIncludeDocument.getPath().substring(pwd.length() + 1);
 
         int status = new AsciidoctorInvoker().invoke("--failure-level", "warn", inputPath);
 
@@ -272,9 +252,8 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void with_absolute_path_file_should_be_rendered() throws IOException {
-        File inputFile = classpath.getResource(SAMPLE_FILE);
-        String inputPath = inputFile.getAbsolutePath();
+    void with_absolute_path_file_should_be_rendered() throws IOException {
+        String inputPath = renderSampleDocument.getAbsolutePath();
 
         new AsciidoctorInvoker().invoke(inputPath);
 
@@ -284,10 +263,9 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void should_convert_to_subdirectories() throws IOException {
-        File inputFile = classpath.getResource("relative/sub/test.adoc");
-        File srcDir = inputFile.getParentFile().getParentFile();
-        File toDir = new File(srcDir, "target");
+    void should_convert_to_subdirectories(@ClasspathResource("relative/sub/test.adoc") File relativePathDocument) throws IOException {
+        final File srcDir = relativePathDocument.getParentFile().getParentFile();
+        final File toDir = new File(srcDir, "target");
 
         new AsciidoctorInvoker().invoke("-R", srcDir.getPath(), "-D", toDir.getPath(), srcDir.getAbsolutePath() + "/**/*.adoc");
 
@@ -301,5 +279,4 @@ public class WhenAsciidoctorIsCalledUsingCli {
         System.setOut(new PrintStream(output));
         return output;
     }
-
 }

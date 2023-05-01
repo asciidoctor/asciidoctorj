@@ -1,7 +1,11 @@
 apply plugin: 'java'
 
 dependencies {
-    api "junit:junit:${junit4Version}"
+    api(platform("org.junit:junit-bom:$junit5Version"))
+    api "org.junit.jupiter:junit-jupiter-api"
+
+    implementation project(':asciidoctorj-api')
+    testImplementation project(':asciidoctorj')
 }
 
 def javaApiUrl = "https://docs.oracle.com/javase/8/docs/api/"

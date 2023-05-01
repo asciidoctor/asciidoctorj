@@ -5,7 +5,8 @@ import static org.junit.Assert.assertThat;
 
 import org.jruby.RubyString;
 import org.jruby.runtime.builtin.IRubyObject;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 public class WhenEnvironmentVariablesAreSet {
 

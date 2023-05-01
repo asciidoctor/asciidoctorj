@@ -4,7 +4,7 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.arquillian.api.Shared;
 import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
-import org.asciidoctor.util.ClasspathResources;
+import org.asciidoctor.junit.ClasspathResources;
 import org.jboss.arquillian.core.api.InstanceProducer;
 import org.jboss.arquillian.core.api.annotation.ApplicationScoped;
 import org.jboss.arquillian.core.api.annotation.Inject;
@@ -122,7 +122,7 @@ public class AsciidoctorTestObserver {
     }
 
     private boolean isSharedInstanceRequired(Class<?> testClass, Class<?> resourceClass) {
-        for (Field f: SecurityActions.getFieldsWithAnnotation(testClass, ArquillianResource.class)) {
+        for (Field f : SecurityActions.getFieldsWithAnnotation(testClass, ArquillianResource.class)) {
             ArquillianResource arquillianResource = SecurityActions.getAnnotation(f, ArquillianResource.class);
             if (f.getType() == resourceClass && arquillianResource.value() == Shared.class) {
                 return true;
@@ -132,7 +132,7 @@ public class AsciidoctorTestObserver {
     }
 
     private boolean isUnsharedInstanceRequired(Class<?> testClass, Class<?> resourceClass) {
-        for (Field f: SecurityActions.getFieldsWithAnnotation(testClass, ArquillianResource.class)) {
+        for (Field f : SecurityActions.getFieldsWithAnnotation(testClass, ArquillianResource.class)) {
             ArquillianResource arquillianResource = SecurityActions.getAnnotation(f, ArquillianResource.class);
             if (f.getType() == resourceClass &&
                     (arquillianResource.value() == ArquillianResource.class || arquillianResource.value() == Unshared.class)) {

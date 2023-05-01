@@ -132,12 +132,16 @@ subprojects {
   }
 
   dependencies {
-    testImplementation(platform("org.junit:junit-bom:$junit5Version"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-
     testImplementation "org.assertj:assertj-core:$assertjVersion"
     testImplementation "org.hamcrest:hamcrest-library:$hamcrestVersion"
+  }
+
+  if (usesJUnit5(it.project)) {
+    dependencies {
+      testImplementation(platform("org.junit:junit-bom:$junit5Version"))
+      testImplementation("org.junit.jupiter:junit-jupiter-api")
+      testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    }
   }
 
   if (usesSpock(it)) {
@@ -152,8 +156,6 @@ subprojects {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
       }
       testImplementation "org.codehaus.groovy:groovy-all:$groovyVersion"
-
-      testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 
       codenarc("org.codenarc:CodeNarc:$codenarcVersion")
 
@@ -172,13 +174,6 @@ subprojects {
           }
         }
       }
-    }
-  }
-
-  if (usesArquillian(it)) {
-    dependencies {
-      testImplementation "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
-      testImplementation "org.jboss.arquillian.spock:arquillian-spock-container:$arquillianSpockVersion"
     }
   }
 
@@ -202,14 +197,13 @@ subprojects {
 
 }
 
+boolean usesJUnit5(def project) {
+  !(project.name in ['asciidoctorj-arquillian-extension'])
+}
+
 boolean usesSpock(def project) {
   project.name in ['asciidoctorj']
 }
-
-boolean usesArquillian(def project) {
-  project.name in ['asciidoctorj']
-}
-
 
 // apply JRuby and sources/javadocs packaging stuff for all subprojects except the distribution
 configure(subprojects.findAll { !it.isDistribution() }) {

@@ -2,63 +2,57 @@ package org.asciidoctor;
 
 import org.asciidoctor.jruby.DirectoryWalker;
 import org.asciidoctor.jruby.GlobDirectoryWalker;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(Arquillian.class)
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenGlobExpressionIsUsedForScanning {
 
-    @ArquillianResource
-    private ClasspathResources classpath;
+    @ClasspathResource("src")
+    private File pathToWalk;
+
+    @ClasspathResource("src/documents/_sample.adoc")
+    private File hiddenSample;
+
+    @ClasspathResource("src/documents/sample.adoc")
+    private File sample;
+
 
     @Test
     public void all_files_with_given_extension_of_current_directory_should_be_returned() {
-        
-        File pathToWalk = classpath.getResource("src");
+
         DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(pathToWalk.getPath() + File.separator + "documents/*.adoc");
         List<File> asciidocFiles = globDirectoryWalker.scan();
-        
-        assertThat(
-                asciidocFiles,
-                containsInAnyOrder(
-                        classpath.getResource("src/documents/_sample.adoc"), 
-                        classpath.getResource("src/documents/sample.adoc")));
+
+        assertThat(asciidocFiles)
+                .containsExactlyInAnyOrder(hiddenSample, sample);
     }
-    
+
     @Test
     public void all_files_with_given_extension_should_be_returned_recursively() {
-        
-        File pathToWalk = classpath.getResource("src");
+
         DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(pathToWalk.getPath() + File.separator + "**/*.adoc");
         List<File> asciidocFiles = globDirectoryWalker.scan();
-        
-        assertThat(
-                asciidocFiles,
-                containsInAnyOrder(
-                        classpath.getResource("src/documents/_sample.adoc"),
-                        classpath.getResource("src/documents/sample.adoc")));
+
+        assertThat(asciidocFiles)
+                .containsExactlyInAnyOrder(hiddenSample, sample);
     }
-    
+
     @Test
     public void no_should_be_returned_if_glob_expression_does_not_match() {
-        
-        File pathToWalk = classpath.getResource("src");
+
         DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(pathToWalk.getPath() + File.separator + "**/*.a");
         List<File> asciidocFiles = globDirectoryWalker.scan();
-        
-        assertThat(asciidocFiles, is(empty()));
+
+        assertThat(asciidocFiles).isEmpty();
     }
 
     @Test
@@ -67,10 +61,10 @@ public class WhenGlobExpressionIsUsedForScanning {
         final String fileNameInRootDir = "/this_file_does_not_exist.adoc";
 
         DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(fileNameInRootDir);
-
         List<File> asciidocFiles = globDirectoryWalker.scan();
 
-        assertThat(asciidocFiles, contains(new File(fileNameInRootDir).getAbsoluteFile()));
+        assertThat(asciidocFiles)
+                .contains(new File(fileNameInRootDir).getAbsoluteFile());
     }
 
     @Test
@@ -79,10 +73,9 @@ public class WhenGlobExpressionIsUsedForScanning {
         final String fileNameInCurrentWorkingDir = "this_file_does_not_exist.adoc";
 
         DirectoryWalker globDirectoryWalker = new GlobDirectoryWalker(fileNameInCurrentWorkingDir);
-
         List<File> asciidocFiles = globDirectoryWalker.scan();
 
-        assertThat(asciidocFiles, contains(new File(fileNameInCurrentWorkingDir).getAbsoluteFile()));
+        assertThat(asciidocFiles)
+                .containsExactly(new File(fileNameInCurrentWorkingDir).getAbsoluteFile());
     }
-
 }

@@ -1,7 +1,9 @@
 package org.asciidoctor;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.ByteArrayOutputStream;
@@ -14,17 +16,15 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(AsciidoctorExtension.class)
 public class WhenAPdfDocumentIsRenderedToStream {
 
     private static final String BACKEND_PDF = "pdf";
     private static final String ASCIIDOCTOR_DIAGRAM = "asciidoctor-diagram";
 
+    @AsciidoctorInstance
     private Asciidoctor asciidoctor;
 
-    @BeforeEach
-    public void initAsciidoctor() {
-        this.asciidoctor = Asciidoctor.Factory.create();
-    }
 
     @Test
     void should_render_PDF_to_ByteArrayOutputStream(@TempDir File testFolder) throws IOException {

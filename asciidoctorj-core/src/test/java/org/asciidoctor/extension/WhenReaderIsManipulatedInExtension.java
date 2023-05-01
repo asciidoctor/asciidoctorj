@@ -1,79 +1,63 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.arquillian.api.Unshared;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(Arquillian.class)
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenReaderIsManipulatedInExtension {
 
-    @ArquillianResource
-    private ClasspathResources classpath;
-
-    @ArquillianResource(Unshared.class)
+    @AsciidoctorInstance(scope = PER_METHOD)
     private Asciidoctor asciidoctor;
+
+    @ClasspathResource("rendersample.asciidoc")
+    private File renderSample;
+
 
     @Test
     public void currentLineNumberShouldBeReturned() {
-
-        JavaExtensionRegistry javaExtensionRegistry = asciidoctor
-                .javaExtensionRegistry();
+        var javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
 
         javaExtensionRegistry.preprocessor(NumberLinesPreprocessor.class);
 
-        File inputFile = classpath.getResource("rendersample.asciidoc");
-        asciidoctor.convertFile(inputFile, Map.of());
+        asciidoctor.convertFile(renderSample, Map.of());
 
-        File outpuFile = new File(inputFile.getParent(), "rendersample.asciidoc");
-        assertThat(outpuFile.exists(), is(true));
+        File outpuFile = new File(renderSample.getParent(), "rendersample.asciidoc");
+        assertThat(outpuFile).exists();
     }
 
     @Test
     public void hasMoreLinesShouldBeReturned() {
-
-        JavaExtensionRegistry javaExtensionRegistry = asciidoctor
-                .javaExtensionRegistry();
+        var javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
 
         javaExtensionRegistry.preprocessor(HasMoreLinesPreprocessor.class);
 
-        asciidoctor.convertFile(
-                classpath.getResource("rendersample.asciidoc"),
-                Map.of());
+        asciidoctor.convertFile(renderSample, Map.of());
 
-        File inputFile = classpath.getResource("rendersample.asciidoc");
-        asciidoctor.convertFile(inputFile, Map.of());
-
-        File outpuFile = new File(inputFile.getParent(), "rendersample.asciidoc");
-        assertThat(outpuFile.exists(), is(true));
+        File outpuFile = new File(renderSample.getParent(), "rendersample.asciidoc");
+        assertThat(outpuFile).exists();
     }
 
     @Test
     public void isNextLineEmptyShouldBeReturned() {
-
-        JavaExtensionRegistry javaExtensionRegistry = asciidoctor
-                .javaExtensionRegistry();
+        var javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
 
         javaExtensionRegistry.preprocessor(NextLineEmptyPreprocessor.class);
 
-        asciidoctor.convertFile(
-                classpath.getResource("rendersample.asciidoc"),
-                Map.of());
+        asciidoctor.convertFile(renderSample, Map.of());
 
-        File inputFile = classpath.getResource("rendersample.asciidoc");
-        asciidoctor.convertFile(inputFile, Map.of());
-
-        File outpuFile = new File(inputFile.getParent(), "rendersample.asciidoc");
-        assertThat(outpuFile.exists(), is(true));
+        File outpuFile = new File(renderSample.getParent(), "rendersample.asciidoc");
+        assertThat(outpuFile).exists();
     }
 
 }

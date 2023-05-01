@@ -10,10 +10,10 @@ import java.util.Map;
 
 public class YellStaticBlock extends BlockProcessor {
 
-    private static Map<String, Object> configs = new HashMap<String, Object>() {{
-        put(Contexts.KEY, Arrays.asList(Contexts.PARAGRAPH));
-        put(ContentModel.KEY, ContentModel.SIMPLE);
-    }};
+    private static Map<String, Object> configs = Map.of(
+            Contexts.KEY, Arrays.asList(Contexts.PARAGRAPH),
+            ContentModel.KEY, ContentModel.SIMPLE
+    );
 
     public YellStaticBlock(String name) {
         super(name, configs);

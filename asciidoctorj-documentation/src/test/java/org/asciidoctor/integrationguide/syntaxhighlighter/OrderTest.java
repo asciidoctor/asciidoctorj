@@ -4,9 +4,12 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.util.ClasspathHelper;
-import org.junit.jupiter.api.BeforeEach;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -16,27 +19,28 @@ import java.util.stream.Collectors;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class OrderTest {
 
+    @AsciidoctorInstance
     private Asciidoctor asciidoctor;
-    private ClasspathHelper classpathResources;
+
+    @ClasspathResource("syntax-highlighting-order.adoc")
+    private File syntaxHighlightingDocument;
+
+    @ClasspathResource("syntax-highlighting-order-output.txt")
+    private File syntaxHighlightingOutput;
 
     @TempDir(cleanup = CleanupMode.NEVER)
     public File tempDir;
 
-    @BeforeEach
-    public void beforeEach() {
-        asciidoctor = Asciidoctor.Factory.create();
-        classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(this.getClass());
-    }
 
     @Test
     public void should_invoke_syntax_highlighter() throws Exception {
         File sources_adoc = //...
-                classpathResources.getResource("syntax-highlighting-order.adoc");
+                syntaxHighlightingDocument;
         String expectedHighlighterMessages =
-                readFileToString(classpathResources.getResource("syntax-highlighting-order-output.txt"))
+                readFileToString(syntaxHighlightingOutput)
                         .replaceAll("\r\n", "\n");
 
         File toDir = // ...

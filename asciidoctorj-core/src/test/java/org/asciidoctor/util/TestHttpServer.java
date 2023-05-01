@@ -3,27 +3,18 @@ package org.asciidoctor.util;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.DefaultFullHttpResponse;
-import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpResponseStatus;
-import io.netty.handler.codec.http.HttpServerCodec;
-import org.asciidoctor.jruby.internal.IOUtils;
+import io.netty.handler.codec.http.*;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.net.InetSocketAddress;
+import java.nio.file.Files;
 import java.util.Map;
+
+import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
+import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 public class TestHttpServer {
 
@@ -44,7 +35,7 @@ public class TestHttpServer {
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(eventLoopGroup)
                 .channel(NioServerSocketChannel.class)
-                .childHandler(new ChannelInitializer<Channel>() {
+                .childHandler(new ChannelInitializer<>() {
                     @Override
                     protected void initChannel(Channel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
@@ -53,21 +44,16 @@ public class TestHttpServer {
                         pipeline.addLast(new ChannelInboundHandlerAdapter() {
                             @Override
                             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                                FullHttpRequest request = (FullHttpRequest) msg;
-                                File resourceFile = TestHttpServer.instance.resources.get(request.getUri());
+                                final FullHttpRequest request = (FullHttpRequest) msg;
+                                final File resourceFile = TestHttpServer.instance.resources.get(request.getUri());
+                                final HttpVersion protocolVersion = request.getProtocolVersion();
 
                                 if (resourceFile == null) {
                                     ByteBuf notFoundResponse = Unpooled.copiedBuffer("<html><head/><body><h1>Sorry, no content found</h1></body>".getBytes());
-                                    ctx.writeAndFlush(new DefaultFullHttpResponse(request.getProtocolVersion(), HttpResponseStatus.NOT_FOUND, notFoundResponse));
+                                    ctx.writeAndFlush(new DefaultFullHttpResponse(protocolVersion, NOT_FOUND, notFoundResponse));
                                 } else {
-                                    InputStream in = null;
-                                    try {
-                                        in = new FileInputStream(resourceFile);
-                                        String response = IOUtils.readFull(in);
-                                        ctx.writeAndFlush(new DefaultFullHttpResponse(request.getProtocolVersion(), HttpResponseStatus.OK, Unpooled.copiedBuffer(response.getBytes())));
-                                    } finally {
-                                        in.close();
-                                    }
+                                    ByteBuf content = Unpooled.copiedBuffer(Files.readAllBytes(resourceFile.toPath()));
+                                    ctx.writeAndFlush(new DefaultFullHttpResponse(protocolVersion, OK, content));
                                 }
                                 ctx.close();
                             }

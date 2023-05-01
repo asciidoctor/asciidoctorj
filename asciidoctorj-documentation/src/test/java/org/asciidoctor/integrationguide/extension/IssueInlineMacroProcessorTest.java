@@ -2,35 +2,34 @@ package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
-import org.asciidoctor.util.ClasspathHelper;
-import org.junit.jupiter.api.BeforeEach;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class IssueInlineMacroProcessorTest {
 
+    @AsciidoctorInstance
     private Asciidoctor asciidoctor;
-    private ClasspathHelper classpathResources;
 
-    @BeforeEach
-    public void beforeEach() {
-        asciidoctor = Asciidoctor.Factory.create();
-        classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(this.getClass());
-    }
 
     @Test
-    public void should_create_anchor_elements_for_inline_macros() {
+    public void should_create_anchor_elements_for_inline_macros(
+            @ClasspathResource("issue-inline-macro.adoc") File issueinlinemacro) {
 
 //tag::include[]
         File issueinlinemacro_adoc = //...
 //end::include[]
-                classpathResources.getResource("issue-inline-macro.adoc");
+                issueinlinemacro;
+
 //tag::include[]
         asciidoctor.javaExtensionRegistry().inlineMacro(IssueInlineMacroProcessor.class);       // <1>
 
@@ -50,10 +49,11 @@ public class IssueInlineMacroProcessorTest {
     }
 
     @Test
-    public void should_create_anchor_elements_for_inline_macros_with_positional_attributes() {
+    public void should_create_anchor_elements_for_inline_macros_with_positional_attributes(
+            @ClasspathResource("issue-inline-macro-positional.adoc") File issueinlinemacro) {
 
         File issueinlinemacro_adoc = //...
-                classpathResources.getResource("issue-inline-macro-positional.adoc");
+                issueinlinemacro;
 
         asciidoctor.javaExtensionRegistry().inlineMacro(IssueInlineMacroPositionalAttributesProcessor.class);
 

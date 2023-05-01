@@ -4,35 +4,33 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ImageReference;
 import org.asciidoctor.jruby.ast.impl.TestImageReference;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(Arquillian.class)
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenReadingImagesFromCatalogAsset {
 
-    @ArquillianResource
-    private ClasspathResources classpath;
-
-    @ArquillianResource(Unshared.class)
+    @AsciidoctorInstance
     private Asciidoctor asciidoctor;
 
-    @ArquillianResource
-    private TemporaryFolder testFolder;
+    @ClasspathResource("sample-with-images.adoc")
+    private File sampleWithImages;
 
     static final TestImageReference[] BLOCK_IMAGES = new TestImageReference[]{
             new TestImageReference("images/block-image.jpg")
@@ -135,15 +133,14 @@ public class WhenReadingImagesFromCatalogAsset {
     }
 
     @Test
-    public void shouldCatalogAllImagesWhenUsingConvertFile() throws IOException {
+    public void shouldCatalogAllImagesWhenUsingConvertFile(@TempDir Path tempFolder) {
         final Options options = Options.builder()
                 .catalogAssets(true)
                 .safe(SafeMode.UNSAFE)
-                .toFile(testFolder.newFile())
+                .toFile(outputFile(tempFolder))
                 .build();
-        final File file = getAsciiDocWithImagesFile();
 
-        var document = asciidoctor.convertFile(file, options, Document.class);
+        var document = asciidoctor.convertFile(sampleWithImages, options, Document.class);
 
         assertThat(document)
                 .isInstanceOf(Document.class);
@@ -155,11 +152,11 @@ public class WhenReadingImagesFromCatalogAsset {
     }
 
     @Test
-    public void shouldCatalogAllImagesWhenUsingConvert() throws IOException {
+    public void shouldCatalogAllImagesWhenUsingConvert(@TempDir Path tempFolder) {
         final Options options = Options.builder()
                 .catalogAssets(true)
                 .safe(SafeMode.UNSAFE)
-                .toFile(testFolder.newFile())
+                .toFile(outputFile(tempFolder))
                 .build();
         final String content = getAsciiDocWithImagesContent();
 
@@ -176,13 +173,13 @@ public class WhenReadingImagesFromCatalogAsset {
 
     private String getAsciiDocWithImagesContent() {
         try {
-            return Files.readString(getAsciiDocWithImagesFile().toPath());
+            return Files.readString(sampleWithImages.toPath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private File getAsciiDocWithImagesFile() {
-        return classpath.getResource("sample-with-images.adoc");
+    private File outputFile(Path tempFolder) {
+        return tempFolder.resolve("output").toFile();
     }
 }

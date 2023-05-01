@@ -1,48 +1,44 @@
 package org.asciidoctor;
 
-import org.asciidoctor.jruby.internal.IOUtils;
-import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
-import org.asciidoctor.util.ClasspathResources;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenMultipleDocumentsAreRendered {
 
-    @Rule
-    public ClasspathResources classpath = new ClasspathResources();
+    @TempDir
+    public File tempDir;
 
-    @Rule
-    public TemporaryFolder testFolder = new TemporaryFolder();
-
+    @AsciidoctorInstance
     private Asciidoctor asciidoctor;
 
-    @Before
-    public void before() {
-        asciidoctor = JRubyAsciidoctor.create();
-    }
+    @ClasspathResource("documenttitle.adoc")
+    private Path documentTitleDocument;
 
     @Test
-    public void should_render_the_same_document_a_100_times() throws FileNotFoundException {
+    public void should_render_the_same_document_a_100_times() throws IOException {
 //        final MemoryLogHandler memoryLogHandler = registerMemoryLogHandler();
 
-        final File inputFile = classpath.getResource("documenttitle.adoc");
         int i = 0;
         String renderContent = null;
         for (; i < 100; i++) {
-            renderContent = asciidoctor.convert(IOUtils.readFull(new FileInputStream(inputFile)),
-                    options()
+            renderContent = asciidoctor.convert(Files.readString(documentTitleDocument),
+                    Options.builder()
                             .safe(SafeMode.UNSAFE)
-                            .asMap());
+                            .build());
         }
 
         assertThat(i, equalTo(100));

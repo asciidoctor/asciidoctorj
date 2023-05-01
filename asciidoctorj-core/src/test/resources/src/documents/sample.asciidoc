@@ -5,7 +5,7 @@ Doc Writer <thedoc@asciidoctor.org>
 
 Preamble paragraph.
 
-NOTE: This is test, only a test.
+NOTE: This is a test, only a test.
 
 == Section A
 

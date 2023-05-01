@@ -2,39 +2,43 @@ package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.jruby.internal.IOUtils;
-import org.asciidoctor.util.ClasspathHelper;
-import org.junit.jupiter.api.BeforeEach;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.io.FileReader;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class ASTShowcase {
 
+    @AsciidoctorInstance
     private Asciidoctor asciidoctor;
-    private ClasspathHelper classpathResources;
 
-    @BeforeEach
-    public void beforeEach() {
-        asciidoctor = Asciidoctor.Factory.create();
-        classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(this.getClass());
-    }
+    @ClasspathResource("ast-demo.adoc")
+    private File astDemo;
+
+    @ClasspathResource("ast-demo-result.txt")
+    private Path astDemoResult;
+
 
     @Test
     public void createAstStructure() throws Exception {
 
         asciidoctor.javaExtensionRegistry().treeprocessor(ASTExtractorTreeprocessor.class);
 
-        asciidoctor.loadFile(classpathResources.getResource("ast-demo.adoc"), OptionsBuilder.options().asMap());
+        asciidoctor.loadFile(astDemo, OptionsBuilder.options().asMap());
 
         assertThat(
                 ASTExtractorTreeprocessor.result.toString(),
-                is(IOUtils.readFull(new FileReader(classpathResources.getResource("ast-demo-result.txt"))).replaceAll("\\r", "")));
+                is(Files.readString(astDemoResult).replaceAll("\\r", "")));
     }
 
 }

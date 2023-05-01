@@ -5,7 +5,8 @@ import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Collections;
 

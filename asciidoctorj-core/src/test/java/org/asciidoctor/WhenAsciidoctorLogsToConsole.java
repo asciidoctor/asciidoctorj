@@ -9,15 +9,16 @@ import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
 import org.asciidoctor.log.TestLogHandlerService;
-import org.asciidoctor.util.ClasspathResources;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.hamcrest.Matchers;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,29 +30,34 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static org.asciidoctor.OptionsBuilder.options;
+import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-@RunWith(Arquillian.class)
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenAsciidoctorLogsToConsole {
 
-    @ArquillianResource
-    private ClasspathResources classpath = new ClasspathResources();
-
-    @ArquillianResource
-    private TemporaryFolder testFolder;
-
+    @AsciidoctorInstance(scope = PER_METHOD)
     private Asciidoctor asciidoctor;
 
-    @Before
+    @ClasspathResource("documentwithnotexistingfile.adoc")
+    private File documentWithNotExistingFile;
+
+    @ClasspathResource("documentwithinvalidrefs.adoc")
+    private File documentWithInvalidRefs;
+
+    @TempDir
+    private File tempFolder;
+
+
+    @BeforeEach
     public void before() {
-        asciidoctor = Asciidoctor.Factory.create();
         TestLogHandlerService.clear();
     }
 
-    @After
+    @AfterEach
     public void cleanup() throws IOException {
         LogManager.getLogManager().readConfiguration();
         TestLogHandlerService.clear();
@@ -61,7 +67,7 @@ public class WhenAsciidoctorLogsToConsole {
     public void shouldRedirectToJUL() {
         final MemoryLogHandler memoryLogHandler = registerMemoryLogHandler();
 
-        File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
+        File inputFile = documentWithNotExistingFile;
         String renderContent = asciidoctor.convertFile(inputFile,
                 options()
                         .inPlace(true)
@@ -93,7 +99,7 @@ public class WhenAsciidoctorLogsToConsole {
 
         asciidoctor.registerLogHandler(logRecords::add);
 
-        File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
+        File inputFile = documentWithNotExistingFile;
         String renderContent = asciidoctor.convertFile(inputFile,
                 options()
                         .inPlace(true)
@@ -127,7 +133,7 @@ public class WhenAsciidoctorLogsToConsole {
 
         asciidoctor.registerLogHandler(logRecords::add);
 
-        File inputFile = classpath.getResource("documentwithinvalidrefs.adoc");
+        File inputFile = documentWithInvalidRefs;
         String renderContent = asciidoctor.convertFile(inputFile,
                 options()
                         .inPlace(true)
@@ -153,7 +159,7 @@ public class WhenAsciidoctorLogsToConsole {
         asciidoctor.registerLogHandler(logRecords::add);
 
         // Now render via second instance and check that there is no notification
-        File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
+        File inputFile = documentWithNotExistingFile;
         String renderContent1 = secondInstance.convertFile(inputFile,
                 options()
                         .inPlace(true)
@@ -195,7 +201,7 @@ public class WhenAsciidoctorLogsToConsole {
         final LogHandler logHandler = logRecords::add;
         asciidoctor.registerLogHandler(logHandler);
 
-        File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
+        File inputFile = documentWithNotExistingFile;
         String renderContent = asciidoctor.convertFile(inputFile,
                 options()
                         .inPlace(true)
@@ -229,7 +235,7 @@ public class WhenAsciidoctorLogsToConsole {
     @Test
     public void shouldNotifyLogHandlerService() {
 
-        File inputFile = classpath.getResource("documentwithnotexistingfile.adoc");
+        File inputFile = documentWithNotExistingFile;
         String renderContent = asciidoctor.convertFile(inputFile,
                 options()
                         .inPlace(true)
@@ -312,6 +318,5 @@ public class WhenAsciidoctorLogsToConsole {
             assertThat(cause.getMessage(), is(errorMessage));
         }
     }
-
 }
 

@@ -3,34 +3,33 @@ package org.asciidoctor.jruby.internal;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Link;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
+import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(Arquillian.class)
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenReadingLinksFromCatalogAsset {
 
-    @ArquillianResource
-    private ClasspathResources classpath;
-
-    @ArquillianResource(Unshared.class)
+    @AsciidoctorInstance(scope = PER_METHOD)
     private Asciidoctor asciidoctor;
 
-    @ArquillianResource
-    private TemporaryFolder testFolder;
+    @ClasspathResource("sample-with-links.adoc")
+    private File sampleWithLinks;
 
     static final String[] ALL_LINKS = new String[]{
             "https://docs.asciidoctor.org",
@@ -67,7 +66,7 @@ public class WhenReadingLinksFromCatalogAsset {
         final Options options = Options.builder()
                 .catalogAssets(false)
                 .build();
-        final File file = getAsciiDocWithLinksFile();
+        final File file = sampleWithLinks;
 
         Document document = asciidoctor.convertFile(file, options, Document.class);
 
@@ -79,7 +78,7 @@ public class WhenReadingLinksFromCatalogAsset {
     @Test
     public void shouldReturnLinksWhenConvertingFile() {
         final Options options = catalogAssetsEnabled();
-        final File file = getAsciiDocWithLinksFile();
+        final File file = sampleWithLinks;
 
         Document document = asciidoctor.convertFile(file, options, Document.class);
 
@@ -90,11 +89,11 @@ public class WhenReadingLinksFromCatalogAsset {
     }
 
     @Test
-    public void shouldReturnLinksWhenConvertingString() throws IOException {
+    public void shouldReturnLinksWhenConvertingString(@TempDir Path tempFolder) {
         final Options options = Options.builder()
                 .catalogAssets(true)
                 .safe(SafeMode.UNSAFE)
-                .toFile(testFolder.newFile())
+                .toFile(outputFile(tempFolder))
                 .build();
         final String content = getAsciiDocWithLinksContent();
 
@@ -108,19 +107,19 @@ public class WhenReadingLinksFromCatalogAsset {
 
     private String getAsciiDocWithLinksContent() {
         try {
-            return Files.readString(getAsciiDocWithLinksFile().toPath());
+            return Files.readString(sampleWithLinks.toPath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private File getAsciiDocWithLinksFile() {
-        return classpath.getResource("sample-with-links.adoc");
     }
 
     private static Options catalogAssetsEnabled() {
         return Options.builder()
                 .catalogAssets(true)
                 .build();
+    }
+
+    private File outputFile(Path tempFolder) {
+        return tempFolder.resolve("output").toFile();
     }
 }

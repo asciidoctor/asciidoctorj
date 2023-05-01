@@ -1,22 +1,19 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.util.TestHttpServer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
-import java.net.Proxy;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.util.Map;
-
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.util.TestHttpServer;
 
 public class UriIncludeProcessor extends IncludeProcessor {
 
-    public UriIncludeProcessor() {}
+    public UriIncludeProcessor() {
+    }
 
     public UriIncludeProcessor(Map<String, Object> config) {
         super(config);
@@ -29,11 +26,10 @@ public class UriIncludeProcessor extends IncludeProcessor {
 
     @Override
     public void process(Document document, PreprocessorReader reader, String target,
-            Map<String, Object> attributes) {
+                        Map<String, Object> attributes) {
 
         StringBuilder content = readContent(target);
         reader.push_include(content.toString(), target, target, 1, attributes);
-
     }
 
     private StringBuilder readContent(String target) {
@@ -47,7 +43,7 @@ public class UriIncludeProcessor extends IncludeProcessor {
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(openStream));
 
-            String line = null;
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
                 content.append(line);
             }

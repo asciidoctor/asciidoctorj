@@ -1,11 +1,15 @@
 package org.asciidoctor;
 
 import org.asciidoctor.cli.jruby.AsciidoctorInvoker;
+import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,21 +18,17 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenBackendIsRevealJs {
 
+    @AsciidoctorInstance
     private Asciidoctor asciidoctor;
 
-    @BeforeEach
-    public void initAsciidoctor() {
-        this.asciidoctor = Asciidoctor.Factory.create();
-    }
 
     @Test
-    public void should_create_simple_slides() throws IOException {
-        String filename = "sample";
-        File inputFile = new File("build/resources/test/" + filename + ".adoc");
-        File outputFile1 = new File(inputFile.getParentFile(), filename + ".html");
-        removeFileIfItExists(outputFile1);
+    void should_create_simple_slides(@ClasspathResource("sample.adoc") File inputFile) throws IOException {
+        File outputFile = new File(inputFile.getParentFile(), "sample.html");
+        removeFileIfItExists(outputFile);
 
         AsciidoctorInvoker.main(new String[]{
                 "-b", "revealjs",
@@ -37,9 +37,9 @@ public class WhenBackendIsRevealJs {
                 inputFile.getAbsolutePath()
         });
 
-        Document doc = Jsoup.parse(outputFile1, "UTF-8");
+        Document doc = Jsoup.parse(outputFile, "UTF-8");
 
-        assertThat(outputFile1).exists();
+        assertThat(outputFile).exists();
 
         List<String> stylesheets = doc.head().getElementsByTag("link").stream()
                 .filter(element -> "stylesheet".equals(element.attr("rel")))
