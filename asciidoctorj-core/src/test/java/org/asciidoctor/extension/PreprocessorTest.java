@@ -33,7 +33,7 @@ public class PreprocessorTest {
                 "permalink: /sample/\n" +
                 "---\n" +
                 "= Sample Page\n" +
-                ":url-asciidoctor: http://asciidoctor.org\n" +
+                ":url-asciidoctor: https://asciidoctor.org\n" +
                 "\n" +
                 "This is a sample page composed in AsciiDoc.\n" +
                 "Jekyll converts it to HTML using {url-asciidoctor}[Asciidoctor].\n" +

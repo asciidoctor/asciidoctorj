@@ -35,7 +35,7 @@ $ cat ./.jrubyrc
 compat.version=RUBY1_9
 compile.mode=OFF
 $ ./asciidoctorj -V
-AsciidoctorJ 1.5.2 [http://asciidoctor.org]
+AsciidoctorJ 1.5.2 [https://asciidoctor.org]
 Runtime Environment: jruby 1.7.20 (1.9.3)
 ----
 
@@ -47,7 +47,7 @@ Alternatively you can also set any system properties using the environment varia
 ----
 $ export ASCIIDOCTORJ_OPTS=-Djruby.compat.version=RUBY1_9
 $ asciidoctorj -V
-AsciidoctorJ 1.5.2 [http://asciidoctor.org]
+AsciidoctorJ 1.5.2 [https://asciidoctor.org]
 Runtime Environment: jruby 1.7.20 (1.9.3)
 ----
 

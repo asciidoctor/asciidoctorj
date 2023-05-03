@@ -24,7 +24,7 @@ endif::[]
 :dagger: &#8224;
 // URIs:
 ifdef::awestruct[:uri-docs: link:/docs]
-ifndef::awestruct[:uri-docs: http://asciidoctor.org/docs]
+ifndef::awestruct[:uri-docs: https://asciidoctor.org/docs]
 :uri-asciidoctor: {uri-docs}/what-is-asciidoctor
 :uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues

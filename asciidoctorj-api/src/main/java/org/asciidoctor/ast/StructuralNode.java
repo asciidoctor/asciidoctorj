@@ -7,37 +7,37 @@ public interface StructuralNode extends ContentNode {
 
     /**
      * Constant for special character replacement substitution like {@code <} to {@code &amp;lt;}.
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#special-characters">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/subs/special-characters/">Special Character Substitutions</a>
      */
     String SUBSTITUTION_SPECIAL_CHARACTERS = "specialcharacters";
 
     /**
      * Constant for quote replacements like {@code *bold*} to <b>{@code bold}</b>.
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#quotes">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/subs/quotes/">Quotes Substitutions</a>
      */
     String SUBSTITUTION_QUOTES             = "quotes";
 
     /**
      * Constant for attribute replacements like {@code {foo}}.
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#attributes-2">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/subs/attributes/">Attribute References Substitution</a>
      */
     String SUBSTITUTION_ATTRIBUTES         = "attributes";
 
     /**
      * Constant for replacements like {@code (C)} to {@code &#169;}.
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#replacements">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/subs/replacements/">Character Replacement Substitutions</a>
      */
     String SUBSTITUTION_REPLACEMENTS       = "replacements";
 
     /**
      * Constant for macro replacements like {@code mymacro:target[]}.
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#subs-mac">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/subs/macros/">Macro Substitutions</a>
      */
     String SUBSTITUTION_MACROS             = "macros";
 
     /**
      * Constant for post replacements like creating line breaks from a trailing {@code +} in a line.
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#post-replacements">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/subs/post-replacements/">Post Replacement Substitutions</a>
      */
     String SUBSTITUTION_POST_REPLACEMENTS  = "post_replacements";
 
@@ -111,42 +111,42 @@ public interface StructuralNode extends ContentNode {
     /**
      * Returns the list of enabled substitutions.
      * @return A list of substitutions enabled for this node, e.g. <code>["specialcharacters", "quotes", "attributes", "replacements", "macros", "post_replacements"]</code> for paragraphs.
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#subs">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/subs/">Asciidoctor User Manual</a>
      */
     List<String> getSubstitutions();
 
     /**
      * @param substitution the name of a substitution, e.g. {@link #SUBSTITUTION_POST_REPLACEMENTS}
      * @return <code>true</code> if the name of the given substitution is enabled.
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#subs">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/subs/">Asciidoctor User Manual</a>
      */
     boolean isSubstitutionEnabled(String substitution);
 
     /**
      * Removes the given substitution from this node.
      * @param substitution the name of a substitution, e.g. {@link #SUBSTITUTION_QUOTES}
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#subs">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/subs/">Substitutions</a>
      */
     void removeSubstitution(String substitution);
 
     /**
      * Adds the given substitution to this node at the end of the substitution list.
      * @param substitution the name of a substitution, e.g. {@link #SUBSTITUTION_MACROS}
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#subs">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/subs/">Substitutions</a>
      */
     void addSubstitution(String substitution);
 
     /**
      * Adds the given substitution to this node at the beginning of the substitution list.
      * @param substitution the name of a substitution, e.g. {@link #SUBSTITUTION_ATTRIBUTES}
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#subs">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/subs/">Substitutions</a>
      */
     void prependSubstitution(String substitution);
 
     /**
      * Sets the given substitutions on this node overwriting all other substitutions.
      * @param substitution the name of a substitution, e.g. {@link #SUBSTITUTION_SPECIAL_CHARACTERS}
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#subs">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/subs/">Substitutions</a>
      */
     void setSubstitutions(String... substitution);
 
