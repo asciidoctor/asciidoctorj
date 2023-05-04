@@ -104,10 +104,10 @@ public class Attributes {
     }
 
     /**
-     * Allow Asciidoctor to read content from an URI.
-     * Additionally the option {@link SafeMode} must be less than {@link SafeMode#SECURE} to enable inclusion of content from an URI.
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#include-content-from-a-uri">Asciidoctor User Manual</a>
-     * @param allowUriRead {@code true} to enable inclusion of content from an URI
+     * Allow Asciidoctor to read content from a URI.
+     * Additionally, the option {@link SafeMode} must be less than {@link SafeMode#SECURE} to enable inclusion of content from a URI.
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/directives/include-uri/">Include Content by URI</a>
+     * @param allowUriRead {@code true} to enable inclusion of content from a URI
      */
     public void setAllowUriRead(boolean allowUriRead) {
         this.attributes.put(ALLOW_URI_READ, toAsciidoctorFlag(allowUriRead));
@@ -134,7 +134,7 @@ public class Attributes {
      *         <td>print a warning about the missing attribute</td>
      *     </tr>
      * </table>
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#catch-a-missing-or-undefined-attribute">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/attributes/unresolved-references/#missing">Handle Unresolved References: Missing attribute</a>
      * @param attributeMissing One of the constants shown in the table above.
      */
     public void setAttributeMissing(String attributeMissing) {
@@ -154,7 +154,7 @@ public class Attributes {
      *         <td>drop the line that contains this expression (default setting and compliant behavior)</td>
      *     </tr>
      * </table>
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#catch-a-missing-or-undefined-attribute">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/attributes/unresolved-references/#undefined">Handle Unresolved References: Undefined attribute</a>
      * @param attributeUndefined One of the constants shown in the table above.
      */
     public void setAttributeUndefined(String attributeUndefined) {
@@ -182,7 +182,7 @@ public class Attributes {
      *     <li>{@code inline}</li>
      *     <li>{@code manpage}</li>
      * </ul>
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#document-types">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/document/doctype/">Document Type</a>
      * @param docType One of the constants mentioned above.
      */
     public void setDocType(String docType) {
@@ -191,7 +191,7 @@ public class Attributes {
 
     /**
      * Sets the directory to which images are resolved if the image target is a relative path.
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#set-the-images-directory">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/macros/images-directory/">Set the Images Directory</a>
      * @param imagesDir The name of the directory.
      */
     public void setImagesDir(String imagesDir) {
@@ -200,7 +200,7 @@ public class Attributes {
 
     /**
      * Globally sets the source language attribute when rendering source blocks.
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#source-code-blocks">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/verbatim/source-highlighter/#source-language">Source Highlighting: source-language attribute</a>
      * @param sourceLanguage The default source language to use, e.g. {@code Java}.
      */
     public void setSourceLanguage(String sourceLanguage) {
@@ -215,7 +215,7 @@ public class Attributes {
      *     <li>highlightjs</li>
      *     <li>prettify</li>
      * </ul>
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#source-code-blocks">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/verbatim/source-highlighter/#source-highlighter">Source Highlighting: source-highlighter attribute</a>
      * @param sourceHighlighter One of the constants mentioned above.
      */
     public void setSourceHighlighter(String sourceHighlighter) {
@@ -224,7 +224,7 @@ public class Attributes {
 
     /**
      * Defines how many documents can be recursively included.
-     * @see <a href="https://github.com/asciidoctor/asciidoctor/issues/581">Track include depth and enforce maximum depth #581</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/attributes/document-attributes-ref/#security-attributes">Security attributes</a>
      * @param maxIncludeDepth A positive integer.
      */
     public void setMaxIncludeDepth(int maxIncludeDepth) {
@@ -243,7 +243,7 @@ public class Attributes {
 
     /**
      * Enables or disables preserving of line breaks in a paragraph.
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#line-breaks">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/blocks/hard-line-breaks/">Hard Line Breaks</a>
      * @param hardbreaks {@code true} to enable preserving of line breaks in paragraphs
      */
     public void setHardbreaks(boolean hardbreaks) {
@@ -251,8 +251,8 @@ public class Attributes {
     }
 
     /**
-     * Enables or disables caching of content read from URIs
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#include-content-from-a-uri">Asciidoctor User Manual</a>
+     * Enables or disables caching of content read from URIs.
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/directives/include-uri/#caching-uri-content">Caching URI content</a>
      * @param cacheUri {@code true} to enable caching of content read from URIs
      */
     public void setCacheUri(boolean cacheUri) {
@@ -261,7 +261,7 @@ public class Attributes {
 
     /**
      * Enables or disables rendering of the URI scheme when rendering URLs.
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#url">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/macros/links/#hide-uri-scheme/">Hide the URL scheme</a>
      * @param hideUriScheme
      */
     public void setHideUriScheme(boolean hideUriScheme) {
@@ -271,7 +271,7 @@ public class Attributes {
     /**
      * Defines the prefix added to appendix sections.
      * The default value is {@code Appendix}
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#user-appendix">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/sections/appendix/">Appendix</a>
      * @param appendixCaption The string that is prefixed to the section name in the appendix.
      */
     public void setAppendixCaption(String appendixCaption) {
@@ -281,7 +281,7 @@ public class Attributes {
 
     /**
      * Sets the interpreter to use for rendering stems, i.e. equations and formulas.
-     * @see <a href="http://asciidoctor.org/docs/user-manual/#activating-stem-support">Asciidoctor User Manual</a>
+     * @see <a href="https://docs.asciidoctor.org/asciidoc/latest/stem/#activating-stem-support">Activating STEM support</a>
      * @param math The name of the interpreter, i.e. either {@code asciimath} or {@code latexmath}.
      */
     public void setMath(String math) {
@@ -595,9 +595,9 @@ public class Attributes {
 
     /**
      * Sets attributes in string form. An example of a valid string would be:
-     * 
+     * </p>
      * 'toc sectnums source-highlighter=coderay'
-     * 
+     * </p>
      * where you are adding three attributes: toc, sectnums and source-highlighter with value coderay.
      * 
      * @param attributes
@@ -611,9 +611,9 @@ public class Attributes {
 
     /**
      * Sets attributes in array form. An example of a valid array would be:
-     * 
+     * </p>
      * '['toc', 'sectnums']'
-     * 
+     * </p>
      * where you are adding two attributes: toc and sectnums.
      * 
      * @param attributes

@@ -19,10 +19,10 @@
     -b pdf mydocument.adoc". You MUST install a Java runtime such as jre8, corretto8jre, or
     adoptopenjdk8jre yourself. This package doesn't presume to choose for you.
     </description>
-    <projectUrl>http://asciidoctor.org/</projectUrl>
+    <projectUrl>https://asciidoctor.org/</projectUrl>
     <packageSourceUrl>https://github.com/geraldcombs/chocolatey-packages</packageSourceUrl>
     <projectSourceUrl>https://github.com/asciidoctor/asciidoctorj</projectSourceUrl>
-    <docsUrl>http://asciidoctor.org/docs/user-manual/</docsUrl>
+    <docsUrl>https://asciidoctor.org/docs/user-manual/</docsUrl>
     <mailingListUrl>https://asciidoctor.zulipchat.com/</mailingListUrl>
     <bugTrackerUrl>https://github.com/asciidoctor/asciidoctorj/issues</bugTrackerUrl>
     <tags>asciidoctor asciidoc docbook pdf</tags>

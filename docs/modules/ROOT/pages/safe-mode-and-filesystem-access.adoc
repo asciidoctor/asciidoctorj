@@ -25,4 +25,4 @@ String outfile = asciidoctor.convertFile(new File("sample.adoc"), options);
 We are going to explain in more detail options in xref:asciidoctor-api-options.adoc[] section.
 
 // TODO update url when final site is available
-You can read more about safe modes in http://asciidoctor.org/docs/user-manual/#running-asciidoctor-securely
+You can read more about safe modes in https://asciidoctor.org/docs/user-manual/#running-asciidoctor-securely
