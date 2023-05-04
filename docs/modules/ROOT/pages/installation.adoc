@@ -1,5 +1,5 @@
 = Installation
-:url-docs: http://asciidoctor.org/docs
+:url-docs: https://asciidoctor.org/docs
 :url-maven-guide: {url-docs}/install-and-use-asciidoctor-maven-plugin
 :url-gradle-guide: {url-docs}/install-and-use-asciidoctor-gradle-plugin
 

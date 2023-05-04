@@ -19,7 +19,7 @@ Here's how you can add the AsciidoctorJ EPUB3 jar to your Maven dependencies:
 ----
 
 Once you've added the AsciidoctorJ EPUB3 jar to your classpath, you can set the `backend` attribute to `epub3`.
-The document will be converted to the http://idpf.org/epub/30[EPUB3^] format.
+The document will be converted to the https://idpf.org/epub/30[EPUB3^] format.
 
 CAUTION: The [app]_asciidoctor-epub3_ gem is alpha.
 While it can be used successfully, there may be bugs and its functionality may change in incompatible ways before the first stable release.

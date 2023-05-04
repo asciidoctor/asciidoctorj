@@ -1,5 +1,5 @@
 = Asciidoctor Changelog
-:url-asciidoctor: http://asciidoctor.org
+:url-asciidoctor: https://asciidoctor.org
 :url-asciidoc: {url-asciidoctor}/docs/what-is-asciidoc
 :url-repo: https://github.com/asciidoctor/asciidoctorj
 :icons: font
@@ -16,6 +16,10 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 Build / Infrastructure::
 
 * Fix Asciidoctor upstream CI tests (#1178) (@abelsromero)
+
+Documentation::
+
+* Fix invalid 'http://asciidoctor.org' references in docs and JavaDocs (#1195) (@abelsromero)
 
 == 2.5.8 (2023-04-15)
 
