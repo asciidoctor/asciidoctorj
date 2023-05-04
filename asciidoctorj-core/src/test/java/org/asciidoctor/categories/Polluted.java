@@ -1,6 +1,6 @@
 package org.asciidoctor.categories;
 
-import org.junit.jupiter.api.Tag;
+import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,6 +13,10 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Tag("polluted")
+@SetEnvironmentVariable(key = "GEM_PATH", value = Polluted.GEM_PATH)
+@SetEnvironmentVariable(key = "GEM_HOME", value = Polluted.GEM_HOME)
 public @interface Polluted {
+
+    String GEM_PATH = "/some/path";
+    String GEM_HOME = "/some/other/path";
 }
