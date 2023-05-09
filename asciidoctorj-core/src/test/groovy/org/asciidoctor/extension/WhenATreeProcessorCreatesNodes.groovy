@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.StructuralNode
 import org.jsoup.Jsoup
@@ -46,7 +46,7 @@ puts "Hello"
         asciidoctor.javaExtensionRegistry().treeprocessor(tp)
 
         when: 'The document is converted'
-        String html = asciidoctor.convert(document, OptionsBuilder.options().standalone(true))
+        String html = asciidoctor.convert(document, Options.builder().standalone(true).build())
 
         then: 'The second source block uses the same value of the language attribute and highlight as Ruby'
         org.jsoup.nodes.Document htmlDocument = Jsoup.parse(html)

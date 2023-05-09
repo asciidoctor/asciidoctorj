@@ -1,9 +1,6 @@
 package org.asciidoctor.integrationguide.syntaxhighlighter;
 
-import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.SafeMode;
+import org.asciidoctor.*;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
@@ -51,14 +48,16 @@ public class PrismJsHighlighterTest {
             .register(PrismJsHighlighter.class, "prismjs"); // <1>
 
         asciidoctor.convertFile(sources_adoc,
-            OptionsBuilder.options()
+            Options.builder()
                 .standalone(true)
                 .toDir(toDir)
                 .safe(SafeMode.UNSAFE)
-                .attributes(AttributesBuilder.attributes()
+                .attributes(Attributes.builder()
                     .sourceHighlighter("prismjs")           // <1>
                     .copyCss(true)
-                    .linkCss(true)));
+                    .linkCss(true)
+                        .build())
+                    .build());
 
         File docFile = new File(toDir, "sources.html");
 

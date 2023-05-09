@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -38,7 +38,7 @@ a| You can find infos on man:gittutorial[7] or man:git[8, 1].
     def "a InlineMacroProcessor should be able to process table cells"() {
         when:
         asciidoctor.javaExtensionRegistry().inlineMacro(AnnotatedLongInlineMacroProcessor)
-        String result = asciidoctor.convert(INLINE_MACRO_DOCUMENT, OptionsBuilder.options().standalone(false))
+        String result = asciidoctor.convert(INLINE_MACRO_DOCUMENT, Options.builder().standalone(false).build())
 
         then:
         Document doc = Jsoup.parse(result, UTF8)
@@ -49,7 +49,7 @@ a| You can find infos on man:gittutorial[7] or man:git[8, 1].
     def "a InlineMacroProcessor should be able to process table cells with asciidoc style"() {
         when:
         asciidoctor.javaExtensionRegistry().inlineMacro(AnnotatedLongInlineMacroProcessor)
-        String result = asciidoctor.convert(INLINE_MACRO_DOCUMENT_ASCIIDOC_STYLE, OptionsBuilder.options().standalone(false))
+        String result = asciidoctor.convert(INLINE_MACRO_DOCUMENT_ASCIIDOC_STYLE, Options.builder().standalone(false).build())
 
         then:
         Document doc = Jsoup.parse(result, UTF8)

@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.asciidoctor.ast.Document
 import spock.lang.Specification
 
@@ -46,7 +46,7 @@ $secondLine"""
         })
 
         when:
-        asciidoctor.convert(document, OptionsBuilder.options())
+        asciidoctor.convert(document, Map.of())
 
         then:
         preprocessorCalled.get()
@@ -79,7 +79,7 @@ $secondLine"""
         })
 
         when:
-        asciidoctor.convert(document, OptionsBuilder.options())
+        asciidoctor.convert(document, Map.of())
 
         then:
         preprocessorCalled.get()
@@ -103,7 +103,7 @@ $secondLine"""
         })
 
         when:
-        asciidoctor.convert(document, OptionsBuilder.options())
+        asciidoctor.convert(document, Options.builder())
 
         then:
         preprocessorCalled.get()
@@ -134,7 +134,7 @@ $secondLine"""
         })
 
         when:
-        asciidoctor.convert(document, OptionsBuilder.options())
+        asciidoctor.convert(document, Options.builder())
 
         then:
         preprocessorCalled.get()
@@ -168,7 +168,7 @@ $secondLine"""
         })
 
         when:
-        asciidoctor.convert(document, OptionsBuilder.options())
+        asciidoctor.convert(document, Map.of())
 
         then:
         preprocessorCalled.get()

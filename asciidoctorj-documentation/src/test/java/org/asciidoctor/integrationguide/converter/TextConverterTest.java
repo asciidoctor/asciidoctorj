@@ -1,6 +1,7 @@
 package org.asciidoctor.integrationguide.converter;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
@@ -39,9 +40,10 @@ public class TextConverterTest {
 
         String result = asciidoctor.convertFile(
                 test_adoc,
-                OptionsBuilder.options()
+                Options.builder()
                         .backend("text")                                   // <2>
-                        .toFile(false));
+                        .toFile(false)
+                        .build());
 
 //end::include[]
 
@@ -65,9 +67,10 @@ public class TextConverterTest {
 
             String result = asciidoctor.convertFile(
                     test_adoc,
-                    OptionsBuilder.options()
+                    Options.builder()
                             .backend("text")
-                            .toFile(false));
+                            .toFile(false)
+                            .build());
 
             verifyResult(result);
         } finally {

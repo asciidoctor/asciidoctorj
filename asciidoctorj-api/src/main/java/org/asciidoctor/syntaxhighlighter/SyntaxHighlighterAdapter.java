@@ -35,9 +35,12 @@ import java.util.Map;
  *     Asciidoctor asciidoctor;
  *     asciidoctor.syntaxHighlighterRegistry().register(MySyntaxHighligher.class, "mysyntaxhighighter");
  *     asciidoctor.convert(doc,
- *         OptionsBuilder.options()
- *             .attributes(AttributesBuilder.attributes()
- *                 .sourceHighlighter("mysyntaxhighlighter")));</code></pre>
+ *         Options.builder()
+ *             .attributes(Attributes.builder()
+ *                 .sourceHighlighter("mysyntaxhighlighter")
+ *                 .build())
+ *             .build());
+ * </code></pre>
  * </p>
  * <p>A SyntaxHighlighterAdapter is expected to have a constructor with 3 parameters:
  * <dl>

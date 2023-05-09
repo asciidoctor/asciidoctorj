@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.jsoup.Jsoup
 import spock.lang.Specification
 
@@ -27,7 +27,7 @@ class WhenATreeProcessorWorksOnTables extends Specification {
         asciidoctor.javaExtensionRegistry().treeprocessor(TableCreatorTreeProcessor)
 
         when: 'the document is rendered'
-        String content = asciidoctor.convert(EMPTY_DOCUMENT, OptionsBuilder.options().standalone(false))
+        String content = asciidoctor.convert(EMPTY_DOCUMENT, Options.builder().standalone(false).build())
 
         then: 'the resulting document has a table'
         org.jsoup.nodes.Document document = Jsoup.parse(content)
@@ -67,7 +67,7 @@ class WhenATreeProcessorWorksOnTables extends Specification {
 | World | Hello 
 |===
 
-''', OptionsBuilder.options().standalone(false))
+''', Options.builder().standalone(false))
 
         def htmlDocument = Jsoup.parse(content)
 

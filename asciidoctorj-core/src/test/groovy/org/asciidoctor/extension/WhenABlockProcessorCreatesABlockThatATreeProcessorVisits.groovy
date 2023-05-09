@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.ContentModel
@@ -70,7 +70,8 @@ This will be ignored
         asciidoctor.javaExtensionRegistry().treeprocessor(BlockVisitor)
 
         when:
-        asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).standalone(true))
+        def options = Options.builder().safe(SafeMode.SAFE).toFile(false).standalone(true).build()
+        asciidoctor.convert(DOCUMENT, options)
 
         then:
         notThrown(ClassCastException)

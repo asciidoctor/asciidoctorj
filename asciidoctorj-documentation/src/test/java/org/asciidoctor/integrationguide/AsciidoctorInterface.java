@@ -1,6 +1,7 @@
 package org.asciidoctor.integrationguide;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +43,7 @@ public class AsciidoctorInterface {
     public void autocloseAsciidoctorInstance() {
 //tag::autoclose[]
         try (Asciidoctor asciidoctor = Asciidoctor.Factory.create()) {
-            asciidoctor.convert("Hello World", OptionsBuilder.options());
+            asciidoctor.convert("Hello World", Options.builder());
         }
 //end::autoclose[]
     }

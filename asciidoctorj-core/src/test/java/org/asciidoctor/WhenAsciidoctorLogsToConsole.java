@@ -29,7 +29,6 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static org.asciidoctor.OptionsBuilder.options;
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -68,13 +67,11 @@ public class WhenAsciidoctorLogsToConsole {
         final MemoryLogHandler memoryLogHandler = registerMemoryLogHandler();
 
         File inputFile = documentWithNotExistingFile;
-        String renderContent = asciidoctor.convertFile(inputFile,
-                options()
+        asciidoctor.convertFile(inputFile,
+                Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
-                        .attributes(
-                                AttributesBuilder.attributes().allowUriRead(true))
-                        .asMap());
+                        .attributes(Attributes.builder().allowUriRead(true).build()));
 
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
@@ -100,13 +97,11 @@ public class WhenAsciidoctorLogsToConsole {
         asciidoctor.registerLogHandler(logRecords::add);
 
         File inputFile = documentWithNotExistingFile;
-        String renderContent = asciidoctor.convertFile(inputFile,
-                options()
+        asciidoctor.convertFile(inputFile,
+                Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
-                        .attributes(
-                                AttributesBuilder.attributes().allowUriRead(true))
-                        .asMap());
+                        .attributes(Attributes.builder().allowUriRead(true).build()));
 
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
@@ -134,14 +129,12 @@ public class WhenAsciidoctorLogsToConsole {
         asciidoctor.registerLogHandler(logRecords::add);
 
         File inputFile = documentWithInvalidRefs;
-        String renderContent = asciidoctor.convertFile(inputFile,
-                options()
+        asciidoctor.convertFile(inputFile,
+                Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
                         .toFile(false)
-                        .attributes(
-                                AttributesBuilder.attributes().allowUriRead(true))
-                        .asMap());
+                        .attributes(Attributes.builder().allowUriRead(true).build()));
 
         assertThat(logRecords, hasSize(1));
         assertThat(logRecords.get(0).getMessage(), containsString("invalid reference: invalidref"));
@@ -160,13 +153,11 @@ public class WhenAsciidoctorLogsToConsole {
 
         // Now render via second instance and check that there is no notification
         File inputFile = documentWithNotExistingFile;
-        String renderContent1 = secondInstance.convertFile(inputFile,
-                options()
+        secondInstance.convertFile(inputFile,
+                Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
-                        .attributes(
-                                AttributesBuilder.attributes().allowUriRead(true))
-                        .asMap());
+                        .attributes(Attributes.builder().allowUriRead(true).build()));
 
         File expectedFile1 = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile1.delete();
@@ -174,20 +165,18 @@ public class WhenAsciidoctorLogsToConsole {
         assertEquals(0, logRecords.size());
 
         // Now render via first instance and check that notifications appeared.
-        String renderContent = asciidoctor.convertFile(inputFile,
-                options()
+        asciidoctor.convertFile(inputFile,
+                Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
-                        .attributes(
-                                AttributesBuilder.attributes().allowUriRead(true))
-                        .asMap());
+                        .attributes(Attributes.builder().allowUriRead(true).build()));
 
         File expectedFile2 = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile2.delete();
 
         assertEquals(4, logRecords.size());
         assertThat(logRecords.get(0).getMessage(), containsString("include file not found"));
-        final Cursor cursor = (Cursor) logRecords.get(0).getCursor();
+        final Cursor cursor = logRecords.get(0).getCursor();
         assertThat(cursor.getDir().replace('\\', '/'), is(inputFile.getParent().replace('\\', '/')));
         assertThat(cursor.getFile(), is(inputFile.getName()));
         assertThat(cursor.getLineNumber(), is(3));
@@ -202,13 +191,11 @@ public class WhenAsciidoctorLogsToConsole {
         asciidoctor.registerLogHandler(logHandler);
 
         File inputFile = documentWithNotExistingFile;
-        String renderContent = asciidoctor.convertFile(inputFile,
-                options()
+        asciidoctor.convertFile(inputFile,
+                Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
-                        .attributes(
-                                AttributesBuilder.attributes().allowUriRead(true))
-                        .asMap());
+                        .attributes(Attributes.builder().allowUriRead(true).build()));
 
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
@@ -219,12 +206,10 @@ public class WhenAsciidoctorLogsToConsole {
         asciidoctor.unregisterLogHandler(logHandler);
 
         asciidoctor.convertFile(inputFile,
-                options()
+                Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
-                        .attributes(
-                                AttributesBuilder.attributes().allowUriRead(true))
-                        .asMap());
+                        .attributes(Attributes.builder().allowUriRead(true).build()));
 
         File expectedFile2 = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile2.delete();
@@ -236,13 +221,11 @@ public class WhenAsciidoctorLogsToConsole {
     public void shouldNotifyLogHandlerService() {
 
         File inputFile = documentWithNotExistingFile;
-        String renderContent = asciidoctor.convertFile(inputFile,
-                options()
+        asciidoctor.convertFile(inputFile,
+                Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
-                        .attributes(
-                                AttributesBuilder.attributes().allowUriRead(true))
-                        .asMap());
+                        .attributes(Attributes.builder().allowUriRead(true).build()));
 
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
@@ -288,7 +271,7 @@ public class WhenAsciidoctorLogsToConsole {
         asciidoctor.javaExtensionRegistry().block(LoggingProcessor.class);
 
         String renderContent = asciidoctor.convert("= Test\n\n== Something different\n\n[big]\nHello World",
-                options().option("sourcemap", "true").asMap());
+                Options.builder().option("sourcemap", "true").build().map());
 
         assertEquals(1, logRecords.size());
         assertThat(logRecords.get(0).getMessage(), is("Hello Log"));
@@ -309,7 +292,7 @@ public class WhenAsciidoctorLogsToConsole {
         try {
             asciidoctor.convert(
                     "= Test\n\n== Something different\n\n[big]\nHello World",
-                    options().option("sourcemap", "true").asMap());
+                    Options.builder().option("sourcemap", "true").build().map());
         } catch (Throwable t) {
             // then
             assertThat(t.getMessage(), containsString("Failed to load AsciiDoc document"));

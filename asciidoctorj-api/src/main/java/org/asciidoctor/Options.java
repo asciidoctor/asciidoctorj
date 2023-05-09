@@ -1,14 +1,11 @@
 package org.asciidoctor;
 
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
- * AsciidoctorJ conversion options. Each one maps to an option in Asciidoctor.
+ * AsciidoctorJ conversion options.
+ * <p>
  * See https://docs.asciidoctor.org/asciidoctor/latest/api/options/ for further
  * details.
  */
@@ -38,20 +35,7 @@ public class Options {
 
     private Map<String, Object> options = new HashMap<>();
 
-    /**
-     * @deprecated Use {@link Options#builder()} instead.
-     */
-    @Deprecated
-    public Options() {
-        super();
-    }
-
-    /**
-     * @deprecated Use {@link Options#builder()} instead.
-     */
-    @Deprecated
-    public Options(Map<String, Object> options) {
-        this.options = options;
+    Options() {
     }
 
     /**
@@ -60,7 +44,7 @@ public class Options {
     public static OptionsBuilder builder() {
         return new OptionsBuilder();
     }
-    
+
     public void setInPlace(boolean inPlace) {
         this.options.put(IN_PLACE, inPlace);
     }
@@ -117,7 +101,7 @@ public class Options {
     }
 
     /**
-     * Toogle writing output to a file.
+     * Toggle writing output to a file.
      *
      * @param toFile If <code>true</true>, write output to a file in the same directory
      *               as the input file, including header and footer into the output. If
@@ -140,7 +124,7 @@ public class Options {
 
     /**
      * Safe method calls safeMode.getLevel() to put the required level.
-     * 
+     *
      * @param safeMode
      *            enum.
      */
@@ -150,7 +134,7 @@ public class Options {
 
     /**
      * Keeps track of the file and line number for each parsed block. (Useful for tooling applications where the association between the converted output and the source file is important).
-     * 
+     *
      * @param sourcemap
      *            value.
      */
@@ -164,7 +148,7 @@ public class Options {
 
     /**
      * If true, tells the parser to capture images and links in the reference table. (Normally only IDs, footnotes and indexterms are included). The reference table is available via the references property on the document AST object. (Experimental).
-     * 
+     *
      * @param catalogAssets
      *            value.
      */
@@ -198,7 +182,7 @@ public class Options {
 
     /**
      * If true, the source is parsed eagerly (i.e., as soon as the source is passed to the load or load_file API). If false, parsing is deferred until the parse method is explicitly invoked.
-     * 
+     *
      * @param parse
      *            value.
      */

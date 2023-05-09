@@ -6,7 +6,10 @@ import org.asciidoctor.log.Severity;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class AsciidoctorCliOptions {
 
@@ -261,8 +264,6 @@ public class AsciidoctorCliOptions {
     }
 
     public Options parse() throws IOException {
-        AttributesBuilder attributesBuilder = Attributes.builder();
-
         OptionsBuilder optionsBuilder = Options.builder()
                 .backend(this.backend)
                 .safe(this.safeMode)
@@ -296,10 +297,6 @@ public class AsciidoctorCliOptions {
             optionsBuilder.option(Options.STANDALONE, false);
         }
 
-        if (this.sectionNumbers) {
-            attributesBuilder.sectionNumbers(this.sectionNumbers);
-        }
-
         if (this.compact) {
             optionsBuilder.compact(this.compact);
         }
@@ -330,36 +327,36 @@ public class AsciidoctorCliOptions {
             optionsBuilder.inPlace(true);
         }
 
-        attributesBuilder.attributes(getAttributes());
-        optionsBuilder.attributes(attributesBuilder.build());
+        Attributes attributesBuilder = buildAttributes();
+        if (this.sectionNumbers) {
+            attributesBuilder.setSectionNumbers(this.sectionNumbers);
+        }
+        optionsBuilder.attributes(attributesBuilder);
         return optionsBuilder.build();
     }
 
-    public Map<String, Object> getAttributes() {
-
-        Map<String, Object> attributeValues = new HashMap<>();
-
-        for (String attribute : this.attributes) {
-            int equalsIndex;
-            if ((equalsIndex = attribute.indexOf(ATTRIBUTE_SEPARATOR)) > -1) {
-                extractAttributeNameAndValue(attributeValues, attribute, equalsIndex);
+    /**
+     * Returns the attributes injected as List<String> into a structured
+     * {@link Attributes} instance.
+     */
+    // FIXME Should be private, made protected for testing.
+    Attributes buildAttributes() {
+        final AttributesBuilder attributesBuilder = Attributes.builder();
+        for (String attribute : attributes) {
+            int separatorIndex = attribute.indexOf(ATTRIBUTE_SEPARATOR);
+            if (separatorIndex > -1) {
+                final String name = attribute.substring(0, separatorIndex);
+                final String value = attribute.substring(separatorIndex + 1);
+                attributesBuilder.attribute(name, value);
             } else {
-                attributeValues.put(attribute, "");
+                attributesBuilder.attribute(attribute);
             }
         }
-
-        return attributeValues;
-    }
-
-    private void extractAttributeNameAndValue(Map<String, Object> attributeValues, String attribute, int equalsIndex) {
-        String attributeName = attribute.substring(0, equalsIndex);
-        String attributeValue = attribute.substring(equalsIndex + 1);
-
-        attributeValues.put(attributeName, attributeValue);
+        return attributesBuilder.build();
     }
 
     private List<String> splitByPathSeparator(String path) {
-        if (path == null || path.trim().length() == 0) {
+        if (isEmpty(path)) {
             return Collections.emptyList();
         }
         StringTokenizer tokenizer = new StringTokenizer(path, File.pathSeparator);
@@ -368,6 +365,10 @@ public class AsciidoctorCliOptions {
             ret.add(tokenizer.nextToken());
         }
         return ret;
+    }
+
+    private static boolean isEmpty(String path) {
+        return path == null || path.trim().length() == 0;
     }
 
 }

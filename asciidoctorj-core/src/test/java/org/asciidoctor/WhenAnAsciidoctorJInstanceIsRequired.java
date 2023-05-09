@@ -15,7 +15,7 @@ public class WhenAnAsciidoctorJInstanceIsRequired {
         AsciidoctorJRuby asciidoctorj = Asciidoctor.Factory.create().unwrap(AsciidoctorJRuby.class);
         asciidoctorj.rubyExtensionRegistry().loadClass(getClass().getResourceAsStream("/ruby-extensions/YellRubyBlock.rb")).block("yell", "YellRubyBlock");
 
-        String html = asciidoctorj.convert(DOC, OptionsBuilder.options().standalone(false));
+        String html = asciidoctorj.convert(DOC, Options.builder().standalone(false));
 
         assertThat(html, containsString("HELLO WORLD"));
     }

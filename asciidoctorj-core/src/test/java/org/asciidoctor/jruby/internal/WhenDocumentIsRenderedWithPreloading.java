@@ -1,8 +1,8 @@
 package org.asciidoctor.jruby.internal;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.Attributes;
+import org.asciidoctor.Options;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.jruby.RubyBoolean;
@@ -25,8 +25,10 @@ public class WhenDocumentIsRenderedWithPreloading {
     @Test
     public void coderay_gem_should_be_preloaded() {
 
-        Map<String, Object> options = OptionsBuilder.options()
-                .attributes(AttributesBuilder.attributes().sourceHighlighter("coderay").get()).asMap();
+        Map<String, Object> options = Options.builder()
+                .attributes(Attributes.builder().sourceHighlighter("coderay").build())
+                .build()
+                .map();
 
         ((JRubyAsciidoctor) asciidoctor).rubyGemsPreloader.preloadRequiredLibraries(options);
         RubyBoolean evalScriptlet = (RubyBoolean) ((JRubyAsciidoctor) asciidoctor).rubyRuntime.evalScriptlet("require 'coderay'");
@@ -36,8 +38,10 @@ public class WhenDocumentIsRenderedWithPreloading {
     @Test
     public void not_coderay_gem_should_not_be_preloaded() {
 
-        Map<String, Object> options = OptionsBuilder.options()
-                .attributes(AttributesBuilder.attributes().sourceHighlighter("pygments").get()).asMap();
+        Map<String, Object> options = Options.builder()
+                .attributes(Attributes.builder().sourceHighlighter("pygments").build())
+                .build()
+                .map();
 
         ((JRubyAsciidoctor) asciidoctor).rubyGemsPreloader.preloadRequiredLibraries(options);
         RubyBoolean evalScriptlet = (RubyBoolean) ((JRubyAsciidoctor) asciidoctor).rubyRuntime.evalScriptlet("require 'coderay'");
@@ -47,7 +51,10 @@ public class WhenDocumentIsRenderedWithPreloading {
     @Test
     public void erubis_gem_should_be_preloaded() {
 
-        Map<String, Object> options = OptionsBuilder.options().eruby("erubis").asMap();
+        Map<String, Object> options = Options.builder()
+                .eruby("erubis")
+                .build()
+                .map();
 
         ((JRubyAsciidoctor) asciidoctor).rubyGemsPreloader.preloadRequiredLibraries(options);
         RubyBoolean evalScriptlet = (RubyBoolean) ((JRubyAsciidoctor) asciidoctor).rubyRuntime.evalScriptlet("require 'erubis'");
@@ -57,7 +64,10 @@ public class WhenDocumentIsRenderedWithPreloading {
     @Test
     public void not_erubis_gem_should_be_preloaded() {
 
-        Map<String, Object> options = OptionsBuilder.options().eruby("erb").asMap();
+        Map<String, Object> options = Options.builder()
+                .eruby("erb")
+                .build()
+                .map();
 
         ((JRubyAsciidoctor) asciidoctor).rubyGemsPreloader.preloadRequiredLibraries(options);
         RubyBoolean evalScriptlet = (RubyBoolean) ((JRubyAsciidoctor) asciidoctor).rubyRuntime.evalScriptlet("require 'erubis'");
@@ -67,7 +77,10 @@ public class WhenDocumentIsRenderedWithPreloading {
     @Test
     public void template_dir_should_preload_tilt() {
 
-        Map<String, Object> options = OptionsBuilder.options().templateDir(new File(".")).asMap();
+        Map<String, Object> options = Options.builder()
+                .templateDirs(new File("."))
+                .build()
+                .map();
 
         ((JRubyAsciidoctor) asciidoctor).rubyGemsPreloader.preloadRequiredLibraries(options);
         RubyBoolean evalScriptlet = (RubyBoolean) ((JRubyAsciidoctor) asciidoctor).rubyRuntime.evalScriptlet("require 'tilt'");
@@ -77,8 +90,10 @@ public class WhenDocumentIsRenderedWithPreloading {
     @Test
     public void data_uri_gem_should_be_preloaded() {
 
-        Map<String, Object> options = OptionsBuilder.options()
-                .attributes(AttributesBuilder.attributes().dataUri(true).get()).asMap();
+        Map<String, Object> options = Options.builder()
+                .attributes(Attributes.builder().dataUri(true).build())
+                .build()
+                .map();
 
         ((JRubyAsciidoctor) asciidoctor).rubyGemsPreloader.preloadRequiredLibraries(options);
         RubyBoolean evalScriptlet = (RubyBoolean) ((JRubyAsciidoctor) asciidoctor).rubyRuntime.evalScriptlet("require 'base64'");

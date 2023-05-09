@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -30,14 +30,14 @@ section::HelloWorld[]
         asciidoctor.javaExtensionRegistry().blockMacro(BLOCKMACRO_NAME, SectionCreatorBlockMacro)
 
         when:
-        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).standalone(true))
+        def options = Options.builder().safe(SafeMode.SAFE).toFile(false).standalone(true).build()
+        String result = asciidoctor.convert(DOCUMENT, options)
 
         then:
         noExceptionThrown()
         Document htmlDocument = Jsoup.parse(result, UTF_8)
 
         htmlDocument.select(H2).text() == HELLO_WORLD
-
         htmlDocument.select(SECT1_SELECTOR).select(PARAGRAPH_SELECTOR).text() == SectionCreatorBlockMacro.CONTENT
     }
 
@@ -47,16 +47,14 @@ section::HelloWorld[]
         asciidoctor.createGroup().blockMacro(BLOCKMACRO_NAME, SectionCreatorBlockMacro).register()
 
         when:
-        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).standalone(true))
+        def options = Options.builder().safe(SafeMode.SAFE).toFile(false).standalone(true).build()
+        String result = asciidoctor.convert(DOCUMENT, options)
 
         then:
         noExceptionThrown()
         Document htmlDocument = Jsoup.parse(result, UTF_8)
 
         htmlDocument.select(H2).text() == HELLO_WORLD
-
         htmlDocument.select(SECT1_SELECTOR).select(PARAGRAPH_SELECTOR).text() == SectionCreatorBlockMacro.CONTENT
     }
-
-
 }

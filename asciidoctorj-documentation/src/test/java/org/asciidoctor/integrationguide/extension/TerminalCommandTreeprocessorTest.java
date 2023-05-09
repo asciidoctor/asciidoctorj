@@ -36,9 +36,10 @@ public class TerminalCommandTreeprocessorTest {
 
         String referenceResult = asciidoctor.convertFile(
                 referenceDocument,
-                OptionsBuilder.options()
+                Options.builder()
                         .standalone(false)
-                        .toFile(false));
+                        .toFile(false)
+                        .build());
 
 //tag::include[]
         File src = //...
@@ -50,9 +51,10 @@ public class TerminalCommandTreeprocessorTest {
                 .treeprocessor(TerminalCommandTreeprocessor.class); // <1>
         String result = asciidoctor.convertFile(
                 src,
-                OptionsBuilder.options()
+                Options.builder()
                         .standalone(false)
-                        .toFile(false));
+                        .toFile(false)
+                        .build());
 //end::include[]
 
         assertThat(result, is(referenceResult));
@@ -64,9 +66,10 @@ public class TerminalCommandTreeprocessorTest {
 
         String referenceResult = asciidoctor.convertFile(
                 referenceDocument,
-                OptionsBuilder.options()
+                Options.builder()
                         .standalone(false)
-                        .toFile(false));
+                        .toFile(false)
+                        .build());
 
 //tag::include-extension-registry[]
         File src = //...

@@ -141,7 +141,7 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_return_options_from_parsed_string_when_passed_as_map() {
-        Map<String, Object> options = OptionsBuilder.options().compact(true).asMap();
+        Map<String, Object> options = Options.builder().compact(true).build().map();
         Document document = asciidoctor.load(DOCUMENT, options);
 
         Map<Object, Object> documentOptions = document.getOptions();
@@ -195,9 +195,11 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_be_able_to_manipulate_attributes() {
-        Map<String, Object> options = OptionsBuilder.options()
-                .attributes(AttributesBuilder.attributes().dataUri(true))
-                .compact(true).asMap();
+        Map<String, Object> options = Options.builder()
+                .attributes(Attributes.builder().dataUri(true).build())
+                .compact(true)
+                .build()
+                .map();
         Document document = asciidoctor.load(DOCUMENT, options);
         assertThat(document.getAttributes(), hasKey("toc-placement"));
         assertThat(document.hasAttribute("toc-placement"), is(true));
@@ -245,18 +247,22 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_be_able_to_get_icon_uri_string_reference() {
-        Map<String, Object> options = OptionsBuilder.options()
-                .attributes(AttributesBuilder.attributes().dataUri(false))
-                .compact(true).asMap();
+        Map<String, Object> options = Options.builder()
+                .attributes(Attributes.builder().dataUri(false).build())
+                .compact(true)
+                .build()
+                .map();
         Document document = asciidoctor.load(DOCUMENT, options);
         assertThat(document.iconUri("note"), is("./images/icons/note.png"));
     }
 
     @Test
     public void should_be_able_to_get_icon_uri() {
-        Map<String, Object> options = OptionsBuilder.options().safe(SafeMode.SAFE)
-                .attributes(AttributesBuilder.attributes().dataUri(true).icons("font"))
-                .compact(true).asMap();
+        Map<String, Object> options = Options.builder().safe(SafeMode.SAFE)
+                .attributes(Attributes.builder().dataUri(true).icons("font").build())
+                .compact(true)
+                .build()
+                .map();
         Document document = asciidoctor.load(DOCUMENT, options);
         assertThat(document.iconUri("note"),
                 either(
@@ -273,9 +279,11 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_be_able_to_get_image_uri() {
-        Map<String, Object> options = OptionsBuilder.options().safe(SafeMode.SAFE)
-                .attributes(AttributesBuilder.attributes().dataUri(false))
-                .compact(true).asMap();
+        Map<String, Object> options = Options.builder().safe(SafeMode.SAFE)
+                .attributes(Attributes.builder().dataUri(false).build())
+                .compact(true)
+                .build()
+                .map();
         Document document = asciidoctor.load(DOCUMENT, options);
         assertThat(document.imageUri("target.jpg"), is("target.jpg"));
         assertThat(document.imageUri("target.jpg", "imagesdir"), is("target.jpg"));
@@ -291,10 +299,11 @@ public class WhenAsciiDocIsLoadedToDocument {
     public void should_be_able_to_read_asset(
             @ClasspathResource("rendersample.asciidoc") File inputFile) throws IOException {
 
-        Map<String, Object> options = OptionsBuilder.options().safe(SafeMode.SAFE)
-                .attributes(AttributesBuilder.attributes().dataUri(false))
+        Map<String, Object> options = Options.builder().safe(SafeMode.SAFE)
+                .attributes(Attributes.builder().dataUri(false).build())
                 .compact(true)
-                .asMap();
+                .build()
+                .map();
         Document document = asciidoctor.load(DOCUMENT, options);
 
         String content = document.readAsset(inputFile.getAbsolutePath(), new HashMap<>());
@@ -326,7 +335,7 @@ public class WhenAsciiDocIsLoadedToDocument {
             @ClasspathResource("sourcelocation.adoc") File file) {
 
         // When
-        Document document = asciidoctor.loadFile(file, OptionsBuilder.options().sourcemap(true).docType("book").asMap());
+        Document document = asciidoctor.loadFile(file, Options.builder().sourcemap(true).docType("book").build().map());
         Map<Object, Object> selector = new HashMap<>();
         selector.put("context", ":paragraph");
         List<StructuralNode> findBy = document.findBy(selector);

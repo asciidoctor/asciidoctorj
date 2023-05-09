@@ -1,8 +1,8 @@
 package org.asciidoctor.syntaxhighlighter
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.AttributesBuilder
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Attributes
+import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.Document
@@ -54,10 +54,11 @@ System.out.println("Hello World");
     asciidoctor.syntaxHighlighterRegistry().register(TestHighlighter, NAME_SYNTAXHIGHLIGHTER)
 
     when:
-    String html = asciidoctor.convert(doc, OptionsBuilder.options()
+    String html = asciidoctor.convert(doc, Options.builder()
             .safe(SafeMode.UNSAFE)
             .standalone(false)
-            .attributes(AttributesBuilder.attributes().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER)))
+            .attributes(Attributes.builder().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER).build())
+            .build())
 
     org.jsoup.nodes.Document document = Jsoup.parse(html)
 

@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.asciidoctor.ast.Document
 import spock.lang.Specification
 
@@ -46,7 +46,7 @@ Some text
         asciidoctor.javaExtensionRegistry()
                 .preprocessor(new SourceMapOptionPreprocessor())
                 .treeprocessor(treeprocessor)
-        def doc = asciidoctor.load(DOCUMENT, OptionsBuilder.options().asMap())
+        def doc = asciidoctor.load(DOCUMENT, Options.builder().build())
 
         then:
         treeprocessor.lineNoFirstSection == 3
@@ -61,7 +61,7 @@ Some text
         when:
         asciidoctor.javaExtensionRegistry()
                 .treeprocessor(treeprocessor)
-        def doc = asciidoctor.load(DOCUMENT, OptionsBuilder.options().asMap())
+        def doc = asciidoctor.load(DOCUMENT, Options.builder().build())
 
         then:
         treeprocessor.lineNoFirstSection == NOT_SET

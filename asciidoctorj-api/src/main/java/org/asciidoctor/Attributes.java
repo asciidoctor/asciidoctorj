@@ -10,13 +10,12 @@ import java.util.Map;
 public class Attributes {
 
     private static final char ATTRIBUTE_SEPARATOR = '=';
+
     private static Format DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static Format TIME_FORMAT = new SimpleDateFormat("HH:mm:ss z");
 
     public static final String TOC = "toc";
-    public static final String TOC_POSITION = "toc-position";
     public static final String TOC_LEVELS = "toclevels";
-    public static final String TOC_2 = "toc2";
     public static final String BACKEND = Options.BACKEND;
     public static final String TITLE = "title";
     public static final String DOCTYPE = Options.DOCTYPE;
@@ -64,38 +63,9 @@ public class Attributes {
 
     private Map<String, Object> attributes = new LinkedHashMap<>();
 
-    /**
-     * @deprecated Use {@link #builder} instead.
-     */
-    @Deprecated
-    public Attributes() {
-        super();
+    Attributes() {
     }
     
-    /**
-     * @deprecated Use {@link #builder} instead.
-     */
-    @Deprecated
-    public Attributes(Map<String, Object> attributes) {
-        this.attributes = attributes;
-    }
-
-    /**
-     * @deprecated Use {@link #builder} instead.
-     */
-    @Deprecated
-    public Attributes(String[] attributes) {
-        this.setAttributes(attributes);
-    }
-
-    /**
-     * @deprecated Use {@link #builder} instead.
-     */
-    @Deprecated
-    public Attributes(String attributes) {
-        this.setAttributes(attributes);
-    }
-
     /**
      * @return Empty AttributesBuilder instance.
      */
@@ -326,19 +296,6 @@ public class Attributes {
      */
     public void setIgnoreUndefinedAttributes(boolean ignoreUndefinedAttributes) {
         this.attributes.put(IGNORE_UNDEFINED, toAsciidoctorFlag(ignoreUndefinedAttributes));
-    }
-
-    /**
-     * Sets table of contents 2 attribute.
-     * 
-     * @param placement
-     *            where toc is rendered.
-     * @deprecated Use {@link #setTableOfContents(Placement)}
-     */
-    @Deprecated
-    public void setTableOfContents2(Placement placement) {
-        this.attributes.put(TOC_2, toAsciidoctorFlag(true));
-        this.attributes.put(TOC_POSITION, placement.getPosition());
     }
 
     /**

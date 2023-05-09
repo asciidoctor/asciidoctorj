@@ -1,7 +1,7 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.Options;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
 import org.asciidoctor.test.AsciidoctorInstance;
@@ -75,7 +75,7 @@ public class BlockProcessorRegistrationTest {
     @Test
     public void testRegisterNamedClassAsClass() {
         asciidoctor.javaExtensionRegistry().block(AnnotatedTestProcessor.class);
-        final String result = asciidoctor.convert(document(AnnotatedTestProcessor.NAME, "Hello World"), OptionsBuilder.options());
+        final String result = asciidoctor.convert(document(AnnotatedTestProcessor.NAME, "Hello World"), Options.builder());
         check("H e l l o W o r l d", result);
     }
 
@@ -83,14 +83,14 @@ public class BlockProcessorRegistrationTest {
     public void testRegisterNamedClassAsClassWithExplicitName() {
         final String explicitblockname = "explicitblockname";
         asciidoctor.javaExtensionRegistry().block(explicitblockname, AnnotatedTestProcessor.class);
-        final String result = asciidoctor.convert(document(explicitblockname, "Hello Explicit"), OptionsBuilder.options());
+        final String result = asciidoctor.convert(document(explicitblockname, "Hello Explicit"), Options.builder());
         check("H e l l o E x p l i c i t", result);
     }
 
     @Test
     public void testRegisterNamedClassAsInstance() {
         asciidoctor.javaExtensionRegistry().block(new AnnotatedTestProcessor());
-        final String result = asciidoctor.convert(document(AnnotatedTestProcessor.NAME, "Another Test"), OptionsBuilder.options());
+        final String result = asciidoctor.convert(document(AnnotatedTestProcessor.NAME, "Another Test"), Options.builder());
         check("A n o t h e r T e s t", result);
     }
 
@@ -98,7 +98,7 @@ public class BlockProcessorRegistrationTest {
     public void testRegisterNamedClassAsInstanceWithExplicitName() {
         final String blockName = "somename";
         asciidoctor.javaExtensionRegistry().block(blockName, new AnnotatedTestProcessor());
-        final String result = asciidoctor.convert(document(blockName, "Yet Another Test"), OptionsBuilder.options());
+        final String result = asciidoctor.convert(document(blockName, "Yet Another Test"), Options.builder());
         check("Y e t A n o t h e r T e s t", result);
     }
 
@@ -117,7 +117,7 @@ public class BlockProcessorRegistrationTest {
     public void testRegisterClassAsClassWithExplicitName() {
         final String explicitblockname = "anotherexplicitname";
         asciidoctor.javaExtensionRegistry().block(explicitblockname, AbstractTestProcessor.class);
-        final String result = asciidoctor.convert(document(explicitblockname, "Hello Explicit Class"), OptionsBuilder.options());
+        final String result = asciidoctor.convert(document(explicitblockname, "Hello Explicit Class"), Options.builder());
         check("H e l l o E x p l i c i t C l a s s", result);
     }
 
@@ -125,7 +125,7 @@ public class BlockProcessorRegistrationTest {
     public void testRegisterClassAsInstance() {
         assertThrows(AsciidoctorCoreException.class, () -> {
             asciidoctor.javaExtensionRegistry().block(new AbstractTestProcessor());
-            asciidoctor.convert(document("foo", "Hello Explicit Instance"), OptionsBuilder.options());
+            asciidoctor.convert(document("foo", "Hello Explicit Instance"), Options.builder());
         });
     }
 
@@ -133,7 +133,7 @@ public class BlockProcessorRegistrationTest {
     public void testRegisterClassAsInstanceWithExplicitName() {
         final String explicitblockname = "aname";
         asciidoctor.javaExtensionRegistry().block(explicitblockname, new AbstractTestProcessor());
-        final String result = asciidoctor.convert(document(explicitblockname, "Hello Explicit Instance"), OptionsBuilder.options());
+        final String result = asciidoctor.convert(document(explicitblockname, "Hello Explicit Instance"), Options.builder());
         check("H e l l o E x p l i c i t I n s t a n c e", result);
     }
 
@@ -147,14 +147,14 @@ public class BlockProcessorRegistrationTest {
     public void testRegisterClassWithNameAsClassWithExplicitName() {
         final String explicitblockname = "explicitblockname";
         asciidoctor.javaExtensionRegistry().block(explicitblockname, TestProcessorWithName.class);
-        final String result = asciidoctor.convert(document(explicitblockname, "Hello Explicit"), OptionsBuilder.options());
+        final String result = asciidoctor.convert(document(explicitblockname, "Hello Explicit"), Options.builder());
         check("H e l l o E x p l i c i t", result);
     }
 
     @Test
     public void testRegisterClassWithNameAsInstance() {
         asciidoctor.javaExtensionRegistry().block(new TestProcessorWithName());
-        final String result = asciidoctor.convert(document(TestProcessorWithName.NAME, "Another Test"), OptionsBuilder.options());
+        final String result = asciidoctor.convert(document(TestProcessorWithName.NAME, "Another Test"), Options.builder());
         check("A n o t h e r T e s t", result);
     }
 
@@ -162,7 +162,7 @@ public class BlockProcessorRegistrationTest {
     public void testRegisterClassWithNameAsInstanceWithExplicitName() {
         final String blockName = "somename";
         asciidoctor.javaExtensionRegistry().block(blockName, new TestProcessorWithName());
-        final String result = asciidoctor.convert(document(blockName, "Yet Another Test"), OptionsBuilder.options());
+        final String result = asciidoctor.convert(document(blockName, "Yet Another Test"), Options.builder());
         check("Y e t A n o t h e r T e s t", result);
     }
 

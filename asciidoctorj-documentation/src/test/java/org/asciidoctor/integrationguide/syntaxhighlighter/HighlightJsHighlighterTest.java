@@ -42,10 +42,11 @@ public class HighlightJsHighlighterTest {
             .register(HighlightJsHighlighter.class, "myhighlightjs"); // <1>
 
         String result = asciidoctor.convertFile(sources_adoc,
-            OptionsBuilder.options()
+            Options.builder()
                 .standalone(true) // <2>
                 .toFile(false)
-                .attributes(Attributes.builder().sourceHighlighter("myhighlightjs").build())); // <3>
+                .attributes(Attributes.builder().sourceHighlighter("myhighlightjs").build()) // <3>
+                .build());
 
         assertThat(result,
             containsString("<script>hljs.initHighlighting()</script>"));
@@ -60,10 +61,12 @@ public class HighlightJsHighlighterTest {
             .register(org.asciidoctor.integrationguide.syntaxhighlighter.threeparams.HighlightJsHighlighter.class, "myhighlightjs");
 
         String result = asciidoctor.convertFile(sources_adoc,
-            OptionsBuilder.options()
+            Options.builder()
                 .standalone(true)
                 .toFile(false)
-                .attributes(AttributesBuilder.attributes().sourceHighlighter("myhighlightjs")));
+                .attributes(Attributes.builder()
+                        .sourceHighlighter("myhighlightjs")
+                        .build()));
 
         assertThat(result,
             containsString("<script>hljs.initHighlighting()</script>"));
@@ -79,10 +82,12 @@ public class HighlightJsHighlighterTest {
             .register(HighlightJsWithLanguageHighlighter.class, "myhighlightjs");
 
         String result = asciidoctor.convertFile(sources_adoc,
-            OptionsBuilder.options()
+            Options.builder()
                 .standalone(true)
                 .toFile(false)
-                .attributes(Attributes.builder().sourceHighlighter("myhighlightjs").build()));
+                .attributes(Attributes.builder()
+                        .sourceHighlighter("myhighlightjs")
+                        .build()));
 
         assertThat(result,
             containsString("<script>hljs.initHighlighting()</script>"));
@@ -105,14 +110,16 @@ public class HighlightJsHighlighterTest {
             .register(HighlightJsWithOfflineStylesHighlighter.class, "myhighlightjs");
 
         asciidoctor.convertFile(sources_adoc,
-            OptionsBuilder.options()
+            Options.builder()
                 .standalone(true)
                 .toDir(toDir)              // <1>
                 .safe(SafeMode.UNSAFE)
-                .attributes(AttributesBuilder.attributes()
+                .attributes(Attributes.builder()
                     .sourceHighlighter("myhighlightjs")
                     .copyCss(true)         // <1>
-                    .linkCss(true)));
+                    .linkCss(true)
+                    .build())
+                .build());
 
         File docFile = new File(toDir, "sources.html");
         assertTrue(docFile.exists());

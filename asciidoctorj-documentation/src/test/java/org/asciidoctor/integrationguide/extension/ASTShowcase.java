@@ -1,6 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
@@ -34,7 +35,7 @@ public class ASTShowcase {
 
         asciidoctor.javaExtensionRegistry().treeprocessor(ASTExtractorTreeprocessor.class);
 
-        asciidoctor.loadFile(astDemo, OptionsBuilder.options().asMap());
+        asciidoctor.loadFile(astDemo, Options.builder().build());
 
         assertThat(
                 ASTExtractorTreeprocessor.result.toString(),

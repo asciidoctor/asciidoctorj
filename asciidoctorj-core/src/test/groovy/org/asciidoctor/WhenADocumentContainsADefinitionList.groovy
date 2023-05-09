@@ -28,7 +28,7 @@ Item C:: Another description
 '''
 
         when:
-        Document documentNode = asciidoctor.load(document, OptionsBuilder.options().standalone(false).asMap())
+        Document documentNode = asciidoctor.load(document, Options.builder().standalone(false).build())
 
         then:
         DescriptionList list = documentNode.blocks[0]
@@ -107,7 +107,7 @@ Item A::
 
         when:
         asciidoctor.javaConverterRegistry().register(TestConverter, TestConverter.NAME)
-        String result = asciidoctor.convert(document, OptionsBuilder.options().backend(TestConverter.NAME).standalone(false).asMap())
+        String result = asciidoctor.convert(document, Options.builder().backend(TestConverter.NAME).standalone(false).build())
 
         then:
         result == '''TEST DOCUMENT
@@ -129,7 +129,7 @@ Item B::
 
         when:
         asciidoctor.javaConverterRegistry().register(TestConverter, TestConverter.NAME)
-        String result = asciidoctor.convert(document, OptionsBuilder.options().backend(TestConverter.NAME).standalone(false).asMap())
+        String result = asciidoctor.convert(document, Options.builder().backend(TestConverter.NAME).standalone(false).build())
 
         then:
         result == '''TEST DOCUMENT
@@ -160,7 +160,7 @@ Item A::
                 doc
             }
         })
-        String result = asciidoctor.convert(document, OptionsBuilder.options().standalone(false).asMap())
+        String result = asciidoctor.convert(document, Options.builder().standalone(false).build())
 
         then:
         org.jsoup.nodes.Document htmlDoc = Jsoup.parse(result)
