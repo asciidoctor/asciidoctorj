@@ -1,0 +1,170 @@
+== Removal of deprecated methods in `org.asciidoctor.Options`
+
+Several methods in `org.asciidoctor.Options` class that were marked as `@Deprecated` have been removed.
+This has been done to remove duplicated features and simplify the API interaction.
+
+=== Simplification of Options initialization
+
+In v2.5.x the following alternatives to initialize `Options` where possible:
+
+[,java]
+.Using Java Constructor and setters
+----
+Options options = new Options();
+options.setBackend("html5");
+options.setSafe(SafeMode.UNSAFE);
+options.setMkDirs(true);
+----
+
+[,java]
+.Using Map constructor
+----
+Map<String, Object> optionsMap = new HashMap<>();
+optionsMap.put("backend", "html5");
+optionsMap.put("sage", SafeMode.UNSAFE);
+optionsMap.put("mkdirs", true);
+Options options = new Options(optionsMap);
+----
+
+[,java]
+.Using OptionsBuilder.options() and get() methods
+----
+Options options = OptionsBuilder.options()
+    .backend("html5")
+    .mkDirs(true)
+    .safe(SafeMode.UNSAFE)
+    .get();
+----
+
+The new API streamlines the process with a more standard builder approach, in which
+
+* Only interaction with `org.asciidoctor.Options` is required.
+* Nested methods offer IDE completion and creation of immutable instances.
+* Improved code readability through indentation.
+
+From v3.0.x, use the new `builder()` and `build()` methods from `org.asciidoctor.Options`.
+
+[,java]
+.Using Options builder
+----
+Options options = Options.builder()
+    .backend("html5")
+    .mkDirs(true)
+    .safe(SafeMode.UNSAFE)
+    .build();
+----
+
+Note that `Options` setter methods are still available, that means that `Options` instances can still be modified as in this example.
+
+[,java]
+.Using setters on an instance
+----
+Options options = Options.builder().build();
+options.setBackend("html5");
+options.setSafe(SafeMode.UNSAFE);
+options.setMkDirs(true)
+----
+
+[NOTE]
+====
+Free key-value insertion is still possible using:
+
+* `OptionsBuilder::option(String option, Object value)`
+* `Options::setOption(String option, Object value)`
+====
+
+=== Simplification of Attributes injection in Options
+
+The previous API offered the following ways to inject attributes to an `Options` instance.
+
+[,java]
+.Using Attributes instance setter
+----
+Attributes attributes = new Attributes();
+options.setAttributes(attributes);
+----
+
+[,java]
+.Using Map setter
+----
+Map<String, Object> attributesMap = new HashMap<>();
+attributesMap.put("toclevels", 2);
+attributesMap.put("icons", "font");
+options.setAttributes(attributesMap);
+----
+
+Also, in v2.5.x it is possible to pass attributes to an `OptionsBuilder`.
+
+[,java]
+.Using OptionsBuilder's Attributes instance setter
+----
+Attributes attributes = new Attributes();
+Options options = OptionsBuilder.options()
+    .attributes(attributes)
+    .get();
+----
+
+[,java]
+.Using OptionsBuilder's Map setter
+----
+Map<String, Object> attributesMap = new HashMap<>();
+attributesMap.put("toclevels", 2);
+attributesMap.put("icons", "font");
+Options options = OptionsBuilder.options()
+    .attributes(attributesMap)
+    .get();
+----
+
+[,java]
+.Using OptionsBuilder's AttributesBuilder setter
+----
+AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
+Options options = OptionsBuilder.options()
+    .attributes(attributesBuilder)
+    .get();
+----
+
+All these alternatives have been unified in two methods for `Options` and one for `OptionsBuilder`.
+
+[,java]
+.Using Attributes setter in Options
+----
+Attributes attributes = Attributes.builder()
+    .icons("font")
+    .build();
+
+Options options = Options.builder().build();
+options.setAttributes(attributes);
+----
+
+[,java]
+.Using attributes Map setter in Options
+----
+Map<String, Object> attributesMap = new HashMap<>();
+attributesMap.put("toclevels", 2);
+attributesMap.put("icons", "font");
+
+Options options = Options.builder().build();
+options.setAttributes(attributesMap);
+----
+
+[,java]
+.Using Attributes instance setter in OptionsBuilder
+----
+Attributes attributes = Attributes.builder()
+    .icons("font")
+    .build();
+Options options = Options.builder()
+    .attributes(attributes)
+    .build();
+----
+
+[NOTE]
+====
+Free key-value or string insertion is still possible using:
+
+* `AttributesBuilder::attribute(String attributeName)`
+* `AttributesBuilder::attribute(String attributeName, Object attributeValue)`
+* `Attributes::setAttributes(String attributes)`
+* `Attributes::setAttributes(String... attributes)`
+====
