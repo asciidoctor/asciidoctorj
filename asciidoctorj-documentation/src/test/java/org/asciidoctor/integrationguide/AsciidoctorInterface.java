@@ -43,7 +43,8 @@ public class AsciidoctorInterface {
     public void autocloseAsciidoctorInstance() {
 //tag::autoclose[]
         try (Asciidoctor asciidoctor = Asciidoctor.Factory.create()) {
-            asciidoctor.convert("Hello World", Options.builder());
+            Options emptyOptions = Options.builder().build();
+            asciidoctor.convert("Hello World", emptyOptions);
         }
 //end::autoclose[]
     }

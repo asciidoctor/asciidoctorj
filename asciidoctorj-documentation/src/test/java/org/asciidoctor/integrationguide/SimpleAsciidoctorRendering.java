@@ -1,11 +1,10 @@
 package org.asciidoctor.integrationguide;
 
-import java.io.File;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
-import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
+
+import java.io.File;
 
 public class SimpleAsciidoctorRendering {
 
@@ -15,6 +14,7 @@ public class SimpleAsciidoctorRendering {
                 new File(args[0]),
                 Options.builder()                               // <3>
                         .toFile(true)
-                        .safe(SafeMode.UNSAFE));
+                        .safe(SafeMode.UNSAFE)
+                        .build());
     }
 }

@@ -778,8 +778,7 @@ public class WhenJavaExtensionIsRegistered {
         javaExtensionRegistry.inlineMacro("say", "org.asciidoctor.extension.SayMacro");
 
         String adoc = "Hello say:word[]!";
-        String content = asciidoctor.convert(adoc,
-                options().toFile(false));
+        String content = asciidoctor.convert(adoc, options().toFile(false).build());
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element p = doc.getElementsByTag("p").first();

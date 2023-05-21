@@ -71,7 +71,8 @@ public class WhenAsciidoctorLogsToConsole {
                 Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
-                        .attributes(Attributes.builder().allowUriRead(true).build()));
+                        .attributes(Attributes.builder().allowUriRead(true).build())
+                        .build());
 
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
@@ -101,7 +102,8 @@ public class WhenAsciidoctorLogsToConsole {
                 Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
-                        .attributes(Attributes.builder().allowUriRead(true).build()));
+                        .attributes(Attributes.builder().allowUriRead(true).build())
+                        .build());
 
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
@@ -134,7 +136,8 @@ public class WhenAsciidoctorLogsToConsole {
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
                         .toFile(false)
-                        .attributes(Attributes.builder().allowUriRead(true).build()));
+                        .attributes(Attributes.builder().allowUriRead(true).build())
+                        .build());
 
         assertThat(logRecords, hasSize(1));
         assertThat(logRecords.get(0).getMessage(), containsString("invalid reference: invalidref"));
@@ -157,7 +160,8 @@ public class WhenAsciidoctorLogsToConsole {
                 Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
-                        .attributes(Attributes.builder().allowUriRead(true).build()));
+                        .attributes(Attributes.builder().allowUriRead(true).build())
+                        .build());
 
         File expectedFile1 = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile1.delete();
@@ -169,7 +173,8 @@ public class WhenAsciidoctorLogsToConsole {
                 Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
-                        .attributes(Attributes.builder().allowUriRead(true).build()));
+                        .attributes(Attributes.builder().allowUriRead(true).build())
+                        .build());
 
         File expectedFile2 = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile2.delete();
@@ -195,7 +200,8 @@ public class WhenAsciidoctorLogsToConsole {
                 Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
-                        .attributes(Attributes.builder().allowUriRead(true).build()));
+                        .attributes(Attributes.builder().allowUriRead(true).build())
+                        .build());
 
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
@@ -209,12 +215,12 @@ public class WhenAsciidoctorLogsToConsole {
                 Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
-                        .attributes(Attributes.builder().allowUriRead(true).build()));
+                        .attributes(Attributes.builder().allowUriRead(true).build())
+                        .build());
 
         File expectedFile2 = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile2.delete();
         assertEquals(0, logRecords.size());
-
     }
 
     @Test
@@ -225,7 +231,8 @@ public class WhenAsciidoctorLogsToConsole {
                 Options.builder()
                         .inPlace(true)
                         .safe(SafeMode.SERVER)
-                        .attributes(Attributes.builder().allowUriRead(true).build()));
+                        .attributes(Attributes.builder().allowUriRead(true).build())
+                        .build());
 
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
@@ -271,7 +278,7 @@ public class WhenAsciidoctorLogsToConsole {
         asciidoctor.javaExtensionRegistry().block(LoggingProcessor.class);
 
         String renderContent = asciidoctor.convert("= Test\n\n== Something different\n\n[big]\nHello World",
-                Options.builder().option("sourcemap", "true").build().map());
+                Options.builder().option("sourcemap", "true").build());
 
         assertEquals(1, logRecords.size());
         assertThat(logRecords.get(0).getMessage(), is("Hello Log"));
@@ -292,7 +299,7 @@ public class WhenAsciidoctorLogsToConsole {
         try {
             asciidoctor.convert(
                     "= Test\n\n== Something different\n\n[big]\nHello World",
-                    Options.builder().option("sourcemap", "true").build().map());
+                    Options.builder().option("sourcemap", "true").build());
         } catch (Throwable t) {
             // then
             assertThat(t.getMessage(), containsString("Failed to load AsciiDoc document"));

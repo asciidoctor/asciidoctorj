@@ -67,7 +67,7 @@ class WhenATreeProcessorWorksOnTables extends Specification {
 | World | Hello 
 |===
 
-''', Options.builder().standalone(false))
+''', Options.builder().standalone(false).build())
 
         def htmlDocument = Jsoup.parse(content)
 

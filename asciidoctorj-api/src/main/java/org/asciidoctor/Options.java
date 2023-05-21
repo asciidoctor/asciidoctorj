@@ -33,7 +33,7 @@ public class Options {
     public static final String PARSE = "parse";
     public static final String PARSE_HEADER_ONLY = "parse_header_only";
 
-    private Map<String, Object> options = new HashMap<>();
+    private final Map<String, Object> options = new HashMap<>();
 
     Options() {
     }

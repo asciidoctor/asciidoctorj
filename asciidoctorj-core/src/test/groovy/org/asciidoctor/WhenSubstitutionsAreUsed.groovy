@@ -11,6 +11,7 @@ import static org.asciidoctor.ast.StructuralNode.SUBSTITUTION_ATTRIBUTES
 import static org.asciidoctor.ast.StructuralNode.SUBSTITUTION_REPLACEMENTS
 import static org.asciidoctor.ast.StructuralNode.SUBSTITUTION_MACROS
 import static org.asciidoctor.ast.StructuralNode.SUBSTITUTION_POST_REPLACEMENTS
+import static org.asciidoctor.util.OptionsTestHelper.emptyOptions
 
 class WhenSubstitutionsAreUsed extends Specification {
 
@@ -33,7 +34,7 @@ System.out.println("Hello World");
 '''
 
         when:
-        Document doc = asciidoctor.load(document, Map.of())
+        Document doc = asciidoctor.load(document, emptyOptions())
         Block paragraph = doc.blocks[0].blocks[0]
         Block source = doc.blocks[0].blocks[1]
 
@@ -58,11 +59,11 @@ Second test paragraph {foo}
 
         when:
         asciidoctor.javaExtensionRegistry().treeprocessor(TestTreeprocessor)
-        Document doc = asciidoctor.load(document, Map.of())
+        Document doc = asciidoctor.load(document, emptyOptions())
         Block firstparagraph = doc.blocks[0].blocks[0]
         Block secondparagraph = doc.blocks[0].blocks[1]
 
-        String html = asciidoctor.convert(document, Map.of())
+        String html = asciidoctor.convert(document, emptyOptions())
 
         then:
         firstparagraph.substitutions == [SUBSTITUTION_SPECIAL_CHARACTERS, SUBSTITUTION_QUOTES, SUBSTITUTION_ATTRIBUTES, SUBSTITUTION_REPLACEMENTS, SUBSTITUTION_MACROS, SUBSTITUTION_POST_REPLACEMENTS]
@@ -93,11 +94,11 @@ System.out.println("{foo}");
 
         when:
         asciidoctor.javaExtensionRegistry().treeprocessor(TestTreeprocessor)
-        Document doc = asciidoctor.load(document, Map.of())
+        Document doc = asciidoctor.load(document, emptyOptions())
         Block firstparagraph = doc.blocks[0].blocks[0]
         Block secondparagraph = doc.blocks[0].blocks[1]
 
-        String html = asciidoctor.convert(document, Options.builder())
+        String html = asciidoctor.convert(document, emptyOptions())
 
         then:
         firstparagraph.substitutions == [SUBSTITUTION_SPECIAL_CHARACTERS, SUBSTITUTION_QUOTES, SUBSTITUTION_ATTRIBUTES, SUBSTITUTION_REPLACEMENTS, SUBSTITUTION_MACROS, SUBSTITUTION_POST_REPLACEMENTS]
@@ -139,10 +140,10 @@ First test paragraph *{foo}
 
         when:
         asciidoctor.javaExtensionRegistry().treeprocessor(PrependSubstitutionTestTreeprocessor)
-        Document doc = asciidoctor.load(document, Map.of())
+        Document doc = asciidoctor.load(document, emptyOptions())
         Block firstparagraph = doc.blocks[0].blocks[0]
 
-        String html = asciidoctor.convert(document, Map.of())
+        String html = asciidoctor.convert(document, emptyOptions())
 
         then:
         firstparagraph.substitutions == [SUBSTITUTION_ATTRIBUTES, SUBSTITUTION_SPECIAL_CHARACTERS, SUBSTITUTION_QUOTES, SUBSTITUTION_ATTRIBUTES, SUBSTITUTION_REPLACEMENTS, SUBSTITUTION_MACROS, SUBSTITUTION_POST_REPLACEMENTS]
@@ -177,7 +178,7 @@ First test paragraph *{foo}
 
         when:
         asciidoctor.javaExtensionRegistry().treeprocessor(SetSubstitutionTestTreeprocessor)
-        Document doc = asciidoctor.load(document, Options.builder().build())
+        Document doc = asciidoctor.load(document, emptyOptions())
         Block firstparagraph = doc.blocks[0].blocks[0]
 
         String html = asciidoctor.convert(document, Options.builder().build())

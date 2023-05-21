@@ -1,7 +1,10 @@
 package org.asciidoctor
 
+
 import org.asciidoctor.ast.Section
 import spock.lang.Specification
+
+import static org.asciidoctor.util.OptionsTestHelper.emptyOptions
 
 class WhenADocumentContainsNumberedSections extends Specification {
 
@@ -18,7 +21,7 @@ class WhenADocumentContainsNumberedSections extends Specification {
             '''.stripIndent()
 
         when:
-        def document = asciidoctor.load source, [:]
+        def document = asciidoctor.load(source, emptyOptions())
 
         then:
         final appendix = (Section) document.blocks[0]
@@ -36,7 +39,7 @@ class WhenADocumentContainsNumberedSections extends Specification {
             '''.stripIndent()
 
         when:
-        def document = asciidoctor.load source, [:]
+        def document = asciidoctor.load(source, emptyOptions())
 
         then:
         final section = (Section) document.blocks[0]
@@ -58,7 +61,7 @@ class WhenADocumentContainsNumberedSections extends Specification {
             '''.stripIndent()
 
         when:
-        def document = asciidoctor.load source, [:]
+        def document = asciidoctor.load(source, emptyOptions())
 
         then:
         final part = (Section) document.blocks[0]

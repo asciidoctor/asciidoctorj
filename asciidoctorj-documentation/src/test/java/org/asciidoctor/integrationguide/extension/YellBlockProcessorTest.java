@@ -33,7 +33,7 @@ public class YellBlockProcessorTest {
 
         asciidoctor.javaExtensionRegistry().block(YellBlockProcessor.class); // <1>
 
-        String result = asciidoctor.convertFile(yellblock_adoc, Options.builder().toFile(false));
+        String result = asciidoctor.convertFile(yellblock_adoc, Options.builder().toFile(false).build());
 
         assertThat(result, containsString("I REALLY MEAN IT"));              // <2>
 //end::include[]

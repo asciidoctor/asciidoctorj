@@ -1,9 +1,11 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.ast.StructuralNode
 import org.asciidoctor.ast.Document
+import org.asciidoctor.ast.StructuralNode
 import spock.lang.Specification
+
+import static org.asciidoctor.util.OptionsTestHelper.emptyOptions
 
 class WhenAstIsIterated extends Specification {
 
@@ -30,7 +32,7 @@ A list with items
 
     def "getDocument should always return the same instance"() {
         when:
-        Document document = asciidoctor.load(DOCUMENT, [:])
+        Document document = asciidoctor.load(DOCUMENT, emptyOptions())
         List<StructuralNode>  allBlocks = document.findBy([:])
 
         then:
@@ -40,7 +42,7 @@ A list with items
 
     def "getParent should always return the same instance"() {
         when:
-        Document document = asciidoctor.load(DOCUMENT, [:])
+        Document document = asciidoctor.load(DOCUMENT, emptyOptions())
         def allBlocks = document.findBy([:])
 
         then: 'Every block of the document should return the same node as the parent from getParent()'

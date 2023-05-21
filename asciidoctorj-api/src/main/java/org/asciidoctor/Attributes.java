@@ -61,7 +61,7 @@ public class Attributes {
     public static final String HIDE_URI_SCHEME = "hide-uri-scheme";
     public static final String COMPAT_MODE = "compat-mode";
 
-    private Map<String, Object> attributes = new LinkedHashMap<>();
+    private final Map<String, Object> attributes = new LinkedHashMap<>();
 
     Attributes() {
     }

@@ -59,7 +59,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .hiddenUriScheme(true)
                 .build();
 
-        String content = asciidoctor.convert("The AsciiDoc project is located at https://asciidoc.org.", Options.builder().attributes(attributes));
+        String content = asciidoctor.convert("The AsciiDoc project is located at https://asciidoc.org.", Options.builder().attributes(attributes).build());
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
@@ -75,7 +75,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .compatMode(CompatMode.LEGACY)
                 .build();
 
-        String content = asciidoctor.convert("The `AsciiDoc {version}` project.", Options.builder().attributes(attributes));
+        String content = asciidoctor.convert("The `AsciiDoc {version}` project.", Options.builder().attributes(attributes).build());
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element code = doc.getElementsByTag("code").first();
@@ -90,7 +90,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .attribute("version", "1.0.0")
                 .build();
 
-        String content = asciidoctor.convert("The `AsciiDoc {version}` project.", Options.builder().attributes(attributes));
+        String content = asciidoctor.convert("The `AsciiDoc {version}` project.", Options.builder().attributes(attributes).build());
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element code = doc.getElementsByTag("code").first();
@@ -105,7 +105,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .cacheUri(true)
                 .build();
 
-        String content = asciidoctor.convert("read my lips", Options.builder().attributes(attributes));
+        String content = asciidoctor.convert("read my lips", Options.builder().attributes(attributes).build());
 
         assertThat(content, is(notNullValue()));
 
@@ -158,7 +158,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Attributes attributes = Attributes.builder().hardbreaks(true).build();
 
-        String content = asciidoctor.convert("read\nmy\nlips", Options.builder().attributes(attributes));
+        String content = asciidoctor.convert("read\nmy\nlips", Options.builder().attributes(attributes).build());
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element paragraph = doc.getElementsByAttributeValue("class", "paragraph").first();
@@ -854,7 +854,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Attributes attributes = Attributes.builder()
                 .icons(Attributes.IMAGE_ICONS)
                 .build();
-        Map<String, Object> options = Options.builder().attributes(attributes).build().map();
+        Options options = Options.builder().attributes(attributes).build();
 
         String result = asciidoctor.convert(Files.readString(documentWithNote.toPath()), options);
         result = result.replaceAll("<img(.*?)>", "<img$1/>");
@@ -871,7 +871,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Attributes attributes = Attributes.builder()
                 .icons(Attributes.FONT_ICONS)
                 .build();
-        Map<String, Object> options = Options.builder().attributes(attributes).build().map();
+        Options options = Options.builder().attributes(attributes).build();
 
         String result = asciidoctor.convert(toString(content), options);
         assertRenderedFontAwesomeAdmonitionIcon(result);
@@ -888,7 +888,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 .icons(Attributes.IMAGE_ICONS)
                 .iconsDir("icons")
                 .build();
-        Map<String, Object> options = Options.builder().attributes(attributes).build().map();
+        Options options = Options.builder().attributes(attributes).build();
 
         String renderContent = asciidoctor.convert(toString(content), options);
 
@@ -983,5 +983,4 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 inputStream);
         return parse;
     }
-
 }
