@@ -1,0 +1,73 @@
+== Removal of deprecated methods in `org.asciidoctor.Asciidoctor`
+
+Several methods in `org.asciidoctor.Asciidoctor` that were marked as `@Deprecated` have been removed.
+
+=== Removal of methods using `Map<String,Object>` as options input
+
+To streamline the API, only methods using `Options` instances have been left in the `org.asciidoctor.Asciidoctor`.
+That means that the following methods are no longer available.
+
+[,java]
+.Removed convert methods
+----
+String convert(String content, Map<String, Object> options);
+String convertFile(File file, Map<String, Object> options);
+
+void convert(Reader contentReader, Writer rendererWriter, Map<String, Object> options) throws IOException;
+
+<T> T convert(String content, Map<String, Object> options, Class<T> expectedResult);
+<T> T convertFile(File file, Map<String, Object> options, Class<T> expectedResult);
+
+String[] convertDirectory(Iterable<File> directoryWalker, Map<String, Object> options);
+String[] convertFiles(Collection<File> files, Map<String, Object> options);
+----
+
+[,java]
+.Removed load methods
+----
+Document load(String content, Map<String, Object> options);
+Document loadFile(File file, Map<String, Object> options);
+----
+
+For each of the methods above there's an equivalent using `org.asciidoctor.Options`.
+Use those when migrating to v3.0.0.
+
+=== Removal of methods using `OptionsBuilder` as options input
+
+Likewise to the methods seen in the previous section, the following methods are also no longer available.
+
+[,java]
+.Removed convert methods
+----
+String convert(String content, OptionsBuilder options);
+String convertFile(File file, OptionsBuilder options);
+
+void convert(Reader contentReader, Writer rendererWriter, OptionsBuilder options) throws IOException;
+
+<T> T convert(String content, OptionsBuilder options, Class<T> expectedResult);
+<T> T convertFile(File file, OptionsBuilder options, Class<T> expectedResult);
+
+String[] convertDirectory(Iterable<File> directoryWalker, OptionsBuilder options);
+String[] convertFiles(Collection<File> files, OptionsBuilder options);
+----
+
+For each of the methods above there's an equivalent using `org.asciidoctor.Options`.
+Use those when migrating to v3.0.0.
+
+=== Removal of methods `readDocumentHeader`
+
+All implementations of `Asciidoctor::readDocumentHeader` have been removed because the same feature can be obtained using `load` with the `parse_header_only` option.
+
+[,java]
+.Using load to obtain Document header
+----
+Options options = Options.builder().option("parse_header_only", true).build();
+Document document = asciidoctor.loadFile(documentHeaders, options);
+
+List<Author> authors = document.getAuthors();
+RevisionInfo revisionInfo = document.getRevisionInfo();
+String doctitle = document.getDoctitle();
+Title structuredDoctitle = document.getStructuredDoctitle();
+----
+
+As a consequence, class `org.asciidoctor.ast.DocumentHeader` has been also removed.

@@ -57,3 +57,5 @@ Attributes attributes = Attributes.builder()
     .build();
 Map<String, Object> attributesMap = attributes.map();
 ----
+
+include::partial$removal-of-deprecated-methods-in-asciidoctor.adoc[]
