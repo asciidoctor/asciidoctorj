@@ -1,0 +1,49 @@
+== Removal of `asMap` from OptionsBuilder and AttributesBuilder
+
+In v2.5.x it is possible to obtain the backing `Map<String,Object>` for both options and attributes.
+
+[,java]
+.Obtaining backing Map for OptionsBuilder
+----
+Map<String, Object> optionsMap = Options.builder()
+    .backend("html5")
+    .mkDirs(true)
+    .safe(SafeMode.UNSAFE)
+    .asMap();
+----
+
+[,java]
+.Obtaining backing Map for AttributesBuilder
+----
+Map<String, Object> attributesMap = Attributes.builder()
+    .icons("font")
+    .sectionNumbers(true)
+    .asMap();
+----
+
+To remove feature duplication and avoid confusion between values in the actual `org.asciidoctor.Attributes` and `org.asciidoctor.Options` and their respective builders, `asMap` it's no longer available in both builders.
+
+To obtain the backing up, use the `map()` method from the actual `org.asciidoctor.Attributes` and `org.asciidoctor.Options` instances.
+
+IMPORTANT: `Options::map()` and `Attributes::map()` are marked as deprecated and subject to change at some point, but are still maintained and safe to use in v3.0.x.
+
+[,java]
+.Obtaining backing Map for Options
+----
+Options options = Options.builder()
+    .backend("html5")
+    .mkDirs(true)
+    .safe(SafeMode.UNSAFE)
+    .build();
+Map<String, Object> optionsMap = options.map();
+----
+
+[,java]
+.Obtaining backing Map for Attributes
+----
+Attributes attributes = Attributes.builder()
+    .icons("font")
+    .sectionNumbers(true)
+    .build();
+Map<String, Object> attributesMap = attributes.map();
+----
