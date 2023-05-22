@@ -8,15 +8,6 @@ public interface Reader {
      * Get the 1-based offset of the current line.
      *
      * @return 1-based offset.
-     * @deprecated Please use {@link #getLineNumber()}
-     */
-    @Deprecated
-    int getLineno();
-
-    /**
-     * Get the 1-based offset of the current line.
-     *
-     * @return 1-based offset.
      */
     int getLineNumber();
 
@@ -45,7 +36,7 @@ public interface Reader {
 
     /**
      * Peek at the next line and check if it's empty (i.e., whitespace only)
-     *
+     * <p>
      * This method Does not consume the line from the stack.
      *
      * @return True if the there are no more lines or if the next line is empty
@@ -73,15 +64,8 @@ public interface Reader {
      *
      * @return the String of the next line of the source data if data is present or
      * nulll if there is no more data.
-    */
-    String readLine();
-
-    /**
-     * @return A copy of the String List of lines remaining in this Reader
-     * @deprecated Use {@link #getLines()}
      */
-    @Deprecated
-    List<String> lines();
+    String readLine();
 
     /**
      * @return A copy of the String List of lines remaining in this Reader
@@ -90,7 +74,7 @@ public interface Reader {
 
     /**
      * Push the String line onto the beginning of the Array of source data.
-     *
+     * <p>
      * Since this line was (assumed to be) previously retrieved through the
      * reader, it is marked as seen.
      */
@@ -98,7 +82,7 @@ public interface Reader {
 
     /**
      * Push multiple lines onto the beginning of the Array of source data.
-     *
+     * <p>
      * Since this lines were (assumed to be) previously retrieved through the
      * reader, they are marked as seen.
      */
@@ -107,7 +91,7 @@ public interface Reader {
     /**
      * Peek at the next line of source data. Processes the line, if not
      * already marked as processed, but does not consume it.
-     *
+     * <p>
      * This method will probe the reader for more lines.
      */
     String peekLine();
@@ -130,7 +114,6 @@ public interface Reader {
     boolean advance();
 
     /**
-     *
      * Public: Advance to the end of the reader, consuming all remaining lines
      */
     void terminate();

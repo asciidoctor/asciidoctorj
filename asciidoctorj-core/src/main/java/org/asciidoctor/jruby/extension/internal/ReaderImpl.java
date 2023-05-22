@@ -1,13 +1,13 @@
 package org.asciidoctor.jruby.extension.internal;
 
-import java.util.List;
-
 import org.asciidoctor.extension.Reader;
 import org.asciidoctor.jruby.internal.RubyObjectWrapper;
 import org.jruby.Ruby;
 import org.jruby.RubyArray;
 import org.jruby.RubyClass;
 import org.jruby.runtime.builtin.IRubyObject;
+
+import java.util.List;
 
 public class ReaderImpl extends RubyObjectWrapper implements Reader {
 
@@ -23,12 +23,6 @@ public class ReaderImpl extends RubyObjectWrapper implements Reader {
 
         RubyClass readerClass = runtime.getModule("Asciidoctor").getClass("Reader");
         return new ReaderImpl(readerClass.callMethod("new", rubyLines));
-    }
-
-    @Override
-    @Deprecated
-    public int getLineno() {
-        return getLineNumber();
     }
 
     @Override
@@ -69,11 +63,6 @@ public class ReaderImpl extends RubyObjectWrapper implements Reader {
     @Override
     public String readLine() {
         return getString("read_line");
-    }
-
-    @Override
-    public List<String> lines() {
-        return getList("lines", String.class);
     }
 
     @Override

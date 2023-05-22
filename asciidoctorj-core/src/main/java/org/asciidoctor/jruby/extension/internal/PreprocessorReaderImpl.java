@@ -15,22 +15,11 @@ public class PreprocessorReaderImpl extends ReaderImpl implements PreprocessorRe
     }
 
     @Override
-    public void push_include(String data, String file, String path, int lineNumber, Map<String, Object> attributes) {
-        pushInclude(data, file, path, lineNumber, attributes);
-    }
-
-    @Override
     public void pushInclude(String data, String file, String path, int lineNumber, Map<String, Object> attributes) {
         RubyHash attributeHash = RubyHash.newHash(getRuntime());
         attributeHash.putAll(attributes);
 
         getRubyProperty("push_include", data, file, path, lineNumber, attributes);
-    }
-
-    @Override
-    @Deprecated
-    public Document document() {
-        return getDocument();
     }
 
     @Override

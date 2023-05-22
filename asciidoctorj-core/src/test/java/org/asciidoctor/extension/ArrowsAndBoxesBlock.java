@@ -22,7 +22,7 @@ public class ArrowsAndBoxesBlock extends BlockProcessor {
     public Object process(StructuralNode parent, Reader reader,
             Map<String, Object> attributes) {
 
-        List<String> lines = reader.lines();
+        List<String> lines = reader.getLines();
 
         StringBuilder outputLines = new StringBuilder();
         outputLines.append("<pre class=\"arrows-and-boxes\">");
