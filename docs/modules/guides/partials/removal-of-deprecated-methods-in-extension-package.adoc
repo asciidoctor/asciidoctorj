@@ -1,0 +1,20 @@
+== Removal of deprecated methods in `org.asciidoctor.extension` package
+
+Several methods under `org.asciidoctor.extension that were marked as `@Deprecated` have been removed.
+The new methods align better with Java naming patterns and are easily identifiable.
+
+[,java]
+.Removed deprecated methods
+----
+PreprocessorReader::push_include
+Reader::getLineno
+Reader::lines
+----
+
+[,java]
+.Final methods
+----
+PreprocessorReader::pushInclude
+Reader::getLineNumber
+Reader::getLines
+----

@@ -17,3 +17,7 @@ include::partial$removal-of-deprecated-asMap-from-builders.adoc[]
 include::partial$removal-of-deprecated-methods-in-asciidoctor.adoc[]
 
 include::partial$removal-of-deprecated-methods-in-document.adoc[]
+
+include::partial$removal-of-deprecated-constants-in-BlockProcessor.adoc[]
+
+include::partial$removal-of-deprecated-methods-in-extension-package.adoc[]

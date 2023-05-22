@@ -37,7 +37,9 @@ Improvement::
 * Return Document AST when using convert or convertFile with appropriate options (#1171) (@abelsromero)
 * Expose Links in the catalog (#1183) (@abelsromero)
 * BREAKING: Remove deprecated methods in Options, OptionsBuilder, Attributes & AttributesBuilder (#1199) (@abelsromero)
-* BREAKING: Remove deprecated Asciidoctor interface (#1201) (@abelsromero)
+* BREAKING: Remove deprecated methods from Asciidoctor interface (#1201) (@abelsromero)
+* BREAKING: Remove deprecated methods from Document interface (#1202) (@abelsromero)
+* BREAKING: Remove deprecated methods and constants from extension package (#1203) (@abelsromero)
 
 Bug Fixes::
 
