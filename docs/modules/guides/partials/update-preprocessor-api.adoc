@@ -1,0 +1,43 @@
+== Update Preprocessors
+
+In earlier versions of AsciidoctorJ (up to 2.5.x), Preprocessors were provided with a Reader object that they had to modify directly.
+Unlike the Ruby implementation, the Java implementation of Asciidoctor did not support Preprocessors to return a new Reader.
+
+To address this limitation, AsciidoctorJ 3.0.0 has introduced a fix, enabling Preprocessors to create and return a new Reader.
+This enhancement allows Preprocessors to have more flexibility and enables a cleaner implementation.
+
+If you have existing Preprocessors, it is essential to update the signature of their process method to return a Reader object, even if the implementation does not create a new Reader object and returns null.
+
+The following example shows how to update a Preprocessor to return a new Reader:
+
+.Preprocessor for AsciidoctorJ 2.5.x
+[,java]
+----
+    public static class MyPreprocessor extends Preprocessor {
+
+        @Override
+        public void process(Document document, PreprocessorReader reader) {
+            // Do something with the reader
+        }
+    }
+----
+
+To ensure compatibility with AsciidoctorJ 3.0.0, the process method of the Preprocessor needs to be modified to return a Reader.
+However, if you wish to maintain the same behavior as before, the method can simply return null.
+
+.Preprocessor for AsciidoctorJ 3.x.x
+[,java]
+----
+    public static class MyPreprocessor extends Preprocessor {
+
+        @Override
+        public Reader process(Document document, PreprocessorReader reader) {
+            // Do something with the reader
+            return null;
+        }
+    }
+----
+
+You may find it helpful to review the methods Processor::newReader and PreprocessorReader::read to simplify your code when creating a new Reader and reading the content of the existing Reader.
+
+However, please note that following the steps mentioned above will be sufficient to migrate your existing processor.

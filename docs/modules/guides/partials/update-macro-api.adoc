@@ -1,0 +1,75 @@
+== Update Macro Processors
+
+In the earlier version of AsciidoctorJ (2.5.x), the signature of Macro Processors required the implementation to return an unrestricted Object.
+However, the specific type that a Macro Processor had to return was unclear, making it difficult to understand the necessary implementation steps.
+
+To address this issue, AsciidoctorJ 3.x.x has introduced the following changes:
+
+`InlineMacroProcessor::process`::
+The implementation of this method now needs to return a PhraseNode.
+Please update your code accordingly to ensure that the returned value is of type PhraseNode.
+`BlockMacroProcessor::process`::
+The implementation of this method now needs to return a StructuralNode.
+Make sure to modify your implementation to return a StructuralNode as required.
+
+Moreover, there was a problem with the first parameter of the process method in InlineMacroProcessors.
+Previously, it incorrectly expected a PhraseNode as the first parameter.
+
+To resolve this issue, AsciidoctorJ 3.x.x has rectified the first parameter of InlineMacroProcessor::process to be a StructuralNode.
+Please ensure that you update your code accordingly to reflect this change.
+
+If you have any further questions or concerns, please refer to the updated documentation.
+
+=== Update Inline Macro Processors
+
+If your existing InlineMacroProcessor looks like this for AsciidoctorJ 2.5.x:
+
+[,java]
+----
+    public class TestInlineMacro extends InlineMacroProcessor {
+        @Override
+        public Object process(ContentNode parent, String target, Map<String, Object> attributes) {
+            return createPhraseNode(parent, "quoted", "This is from an Inline Macro");
+        }
+    }
+----
+
+then you have to change it to this for AsciidoctorJ 3.x.x:
+
+[,java]
+----
+    public class TestInlineMacro extends InlineMacroProcessor {
+        @Override
+        public PhraseNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
+            return createPhraseNode(parent, "quoted", "This is from an Inline Macro");
+        }
+    }
+----
+
+In the above example you can see that the return type and the type of the first parameter of the process method have changed.
+
+=== Update Block Macro Processors
+
+If your existing BlockMacroProcessor looks like this for AsciidoctorJ 2.5.x:
+
+[,java]
+----
+    public class TestBlockMacro extends BlockMacroProcessor {
+        @Override
+        public Object process(StructuralNode parent, String target, Map<String, Object> attributes) {
+            return createBlock(parent, "paragraph", "This is from a Block Macro");
+        }
+    }
+----
+
+then you have to change it to this for AsciidoctorJ 3.x.x:
+
+[,java]
+----
+    public class TestBlockMacro extends BlockMacroProcessor {
+        @Override
+        public StructuralNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
+            return createBlock(parent, "paragraph", "This is from a Block Macro");
+        }
+    }
+----

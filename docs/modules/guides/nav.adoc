@@ -1,6 +1,6 @@
 * Help & Guides
 ** Updating to New Releases
-***xref:api-migration-guide-v25x-to-v30.adoc[]
+*** xref:api-migration-guide-v25x-to-v30.adoc[]
 *** xref:extension-migration-guide-16-to-20.adoc[]
 *** xref:extension-migration-guide-15-to-16.adoc[]
 ** Running in Frameworks
