@@ -1,6 +1,5 @@
 package org.asciidoctor;
 
-import com.google.common.io.CharStreams;
 import org.asciidoctor.jruby.AsciiDocDirectoryWalker;
 import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
 import org.asciidoctor.test.AsciidoctorInstance;
@@ -24,8 +23,6 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static org.asciidoctor.AttributesBuilder.attributes;
-import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.isEmptyString;
@@ -97,7 +94,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
         FileReader inputAsciidoctorFile = new FileReader(renderSampleDocument);
         StringWriter rendererWriter = new StringWriter();
-        asciidoctor.convert(inputAsciidoctorFile, rendererWriter, options().asMap());
+        asciidoctor.convert(inputAsciidoctorFile, rendererWriter, options().build().map());
 
         StringBuffer renderedContent = rendererWriter.getBuffer();
         assertRenderedFile(renderedContent.toString());
@@ -116,7 +113,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     @Test
     public void file_document_should_be_rendered_into_current_directory_using_options_class() {
 
-        Options options = options().inPlace(true).get();
+        Options options = options().inPlace(true).build();
         String renderContent = asciidoctor.convertFile(renderSampleDocument, options);
 
         File expectedFile = new File(renderSampleDocument.getParent(), "rendersample.html");
@@ -131,7 +128,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     public void file_document_should_be_rendered_into_current_directory() {
 
         String renderContent = asciidoctor.convertFile(renderSampleDocument, options()
-                .inPlace(true).asMap());
+                .inPlace(true).build().map());
 
         File expectedFile = new File(renderSampleDocument.getParent(), "rendersample.html");
 
@@ -180,7 +177,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     @Test
     public void file_document_should_be_rendered_into_foreign_directory_using_options_class() {
 
-        Options options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(tempFolder).get();
+        Options options = options().inPlace(false).safe(SafeMode.UNSAFE).toDir(tempFolder).build();
 
         String renderContent = asciidoctor.convertFile(renderSampleDocument, options);
 
@@ -193,8 +190,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     @Test
     public void docbook_document_should_be_rendered_into_current_directory() {
 
-        Map<String, Object> attributes = attributes().backend("docbook").asMap();
-        Map<String, Object> options = options().inPlace(true).attributes(attributes).asMap();
+        Attributes attributes = Attributes.builder().backend("docbook").build();
+        Map<String, Object> options = options().inPlace(true).attributes(attributes).build().map();
 
         String renderContent = asciidoctor.convertFile(renderSampleDocument, options);
 
@@ -209,8 +206,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     @Test
     public void docbook_document_should_be_rendered_into_current_directory_using_options_class() {
 
-        Attributes attributes = attributes().backend("docbook").get();
-        Options options = options().inPlace(true).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().backend("docbook").build();
+        Options options = options().inPlace(true).attributes(attributes).build();
 
         String renderContent = asciidoctor.convertFile(renderSampleDocument, options);
 
@@ -225,7 +222,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     @Test
     public void docbook_document_should_be_rendered_into_current_directory_using_options_backend_attribute() {
 
-        Options options = options().inPlace(true).backend("docbook").get();
+        Options options = options().inPlace(true).backend("docbook").build();
 
         String renderContent = asciidoctor.convertFile(renderSampleDocument, options);
 
@@ -247,8 +244,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
         customDate.set(Calendar.MONTH, 11);
         customDate.set(Calendar.DATE, 5);
 
-        Map<String, Object> attributes = attributes().localDate(customDate.getTime()).asMap();
-        Map<String, Object> options = options().attributes(attributes).asMap();
+        Attributes attributes = Attributes.builder().localDate(customDate.getTime()).build();
+        Map<String, Object> options = options().attributes(attributes).build().map();
 
         String render_file = asciidoctor.convert(Files.readString(documentWithDate), options);
         assertRenderedLocalDateContent(render_file, "2012-12-05.");
@@ -265,8 +262,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
         customTime.set(Calendar.MINUTE, 15);
         customTime.set(Calendar.SECOND, 0);
 
-        Map<String, Object> attributes = attributes().localTime(customTime.getTime()).asMap();
-        Map<String, Object> options = options().attributes(attributes).asMap();
+        Attributes attributes = Attributes.builder().localTime(customTime.getTime()).build();
+        Map<String, Object> options = options().attributes(attributes).build().map();
 
         String render_file = asciidoctor.convert(Files.readString(documentWithDate), options);
 
@@ -289,7 +286,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     public void all_files_from_a_collection_should_be_rendered_into_an_array() {
 
         String[] allRenderedFiles = asciidoctor.convertFiles(
-                List.of(renderSampleDocument), options().toFile(false).get());
+                List.of(renderSampleDocument), options().toFile(false).build());
         assertThat(allRenderedFiles, is(arrayWithSize(1)));
     }
 
@@ -362,10 +359,6 @@ public class WhenAnAsciidoctorClassIsInstantiated {
         assertThat(renderFileSource, hasXPath("/div/div[@class='sectionbody']"));
     }
 
-    private static String toString(InputStream inputStream) throws IOException {
-        return CharStreams.toString(new InputStreamReader(inputStream));
-    }
-
     private static org.w3c.dom.Document inputStream2Document(InputStream inputStream) throws IOException, SAXException,
             ParserConfigurationException {
         DocumentBuilderFactory newInstance = DocumentBuilderFactory.newInstance();
@@ -374,4 +367,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
         return parse;
     }
 
+    private OptionsBuilder options() {
+        return Options.builder();
+    }
 }

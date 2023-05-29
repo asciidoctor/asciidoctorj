@@ -24,8 +24,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.Map;
 
-import static org.asciidoctor.AttributesBuilder.attributes;
-import static org.asciidoctor.OptionsBuilder.options;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
@@ -57,9 +55,11 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void qualified_http_url_inline_with_hide_uri_scheme_set() {
 
-        Attributes attributes = attributes().hiddenUriScheme(true).get();
+        Attributes attributes = Attributes.builder()
+                .hiddenUriScheme(true)
+                .build();
 
-        String content = asciidoctor.convert("The AsciiDoc project is located at https://asciidoc.org.", OptionsBuilder.options().attributes(attributes));
+        String content = asciidoctor.convert("The AsciiDoc project is located at https://asciidoc.org.", Options.builder().attributes(attributes));
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
@@ -70,9 +70,12 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void compat_mode_should_change_how_document_is_rendered_to_legacy_system() {
 
-        Attributes attributes = attributes().attribute("version", "1.0.0").compatMode(CompatMode.LEGACY).get();
+        Attributes attributes = Attributes.builder()
+                .attribute("version", "1.0.0")
+                .compatMode(CompatMode.LEGACY)
+                .build();
 
-        String content = asciidoctor.convert("The `AsciiDoc {version}` project.", OptionsBuilder.options().attributes(attributes));
+        String content = asciidoctor.convert("The `AsciiDoc {version}` project.", Options.builder().attributes(attributes));
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element code = doc.getElementsByTag("code").first();
@@ -83,9 +86,11 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void no_compat_mode_should_change_how_document_is_rendered_to_new_system() {
 
-        Attributes attributes = attributes().attribute("version", "1.0.0").get();
+        Attributes attributes = Attributes.builder()
+                .attribute("version", "1.0.0")
+                .build();
 
-        String content = asciidoctor.convert("The `AsciiDoc {version}` project.", OptionsBuilder.options().attributes(attributes));
+        String content = asciidoctor.convert("The `AsciiDoc {version}` project.", Options.builder().attributes(attributes));
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element code = doc.getElementsByTag("code").first();
@@ -96,9 +101,11 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void should_preload_open_cache_uri_gem() {
 
-        Attributes attributes = attributes().cacheUri(true).get();
+        Attributes attributes = Attributes.builder()
+                .cacheUri(true)
+                .build();
 
-        String content = asciidoctor.convert("read my lips", OptionsBuilder.options().attributes(attributes));
+        String content = asciidoctor.convert("read my lips", Options.builder().attributes(attributes));
 
         assertThat(content, is(notNullValue()));
 
@@ -108,10 +115,14 @@ public class WhenAttributesAreUsedInAsciidoctor {
     public void should_add_AsciiMath_delimiters_around_math_block_content_if_math_attribute_not_latexmath(
             @ClasspathResource("math.asciidoc") File sourceDocument) throws IOException {
 
-        Attributes attributes = attributes().math("asciimath").get();
+        Attributes attributes = Attributes.builder().math("asciimath").build();
 
-        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
-                .toDir(tempFolder).attributes(attributes).get();
+        Options options = Options.builder()
+                .inPlace(false)
+                .safe(SafeMode.UNSAFE)
+                .toDir(tempFolder)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(sourceDocument, options);
 
@@ -124,10 +135,14 @@ public class WhenAttributesAreUsedInAsciidoctor {
     public void should_use_custom_appendix_caption_if_specified(
             @ClasspathResource("appendix.asciidoc") File appendixDocument) throws IOException {
 
-        Attributes attributes = attributes().appendixCaption("App").get();
+        Attributes attributes = Attributes.builder().appendixCaption("App").build();
 
-        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
-                .toDir(tempFolder).attributes(attributes).get();
+        Options options = Options.builder()
+                .inPlace(false)
+                .safe(SafeMode.UNSAFE)
+                .toDir(tempFolder)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(appendixDocument, options);
 
@@ -141,9 +156,9 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void should_add_a_hardbreak_at_end_of_each_line_when_hardbreaks_option_is_set() {
 
-        Attributes attributes = attributes().hardbreaks(true).get();
+        Attributes attributes = Attributes.builder().hardbreaks(true).build();
 
-        String content = asciidoctor.convert("read\nmy\nlips", OptionsBuilder.options().attributes(attributes));
+        String content = asciidoctor.convert("read\nmy\nlips", Options.builder().attributes(attributes));
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element paragraph = doc.getElementsByAttributeValue("class", "paragraph").first();
@@ -155,13 +170,13 @@ public class WhenAttributesAreUsedInAsciidoctor {
     public void sect_num_levels_attribute_should_only_number_levels_up_to_value_defined_by_sectnumlevels_attribute(
             @ClasspathResource("multiple_levels.asciidoc") File multiLevelDocument) throws IOException {
 
-        Attributes attributes = attributes().sectionNumbers(true).sectNumLevels(2).get();
+        Attributes attributes = Attributes.builder().sectionNumbers(true).sectNumLevels(2).build();
 
-        Options options = options()
+        Options options = Options.builder()
                 .inPlace(false)
                 .safe(SafeMode.UNSAFE)
                 .toDir(tempFolder).attributes(attributes)
-                .get();
+                .build();
 
         asciidoctor.convertFile(multiLevelDocument, options);
 
@@ -176,10 +191,14 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void no_footer_attribute_should_not_show_footer_info() throws IOException {
 
-        Attributes attributes = attributes().noFooter(true).get();
+        Attributes attributes = Attributes.builder().noFooter(true).build();
 
-        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
-                .toDir(tempFolder).attributes(attributes).get();
+        Options options = Options.builder()
+                .inPlace(false)
+                .safe(SafeMode.UNSAFE)
+                .toDir(tempFolder)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(renderSample, options);
 
@@ -192,11 +211,11 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
     @Test
     public void show_title_true_attribute_should_show_title_on_embedded_document() {
-        final Options options = options()
-                .attributes(attributes().showTitle(true).get())
+        final Options options = Options.builder()
+                .attributes(Attributes.builder().showTitle(true).build())
                 .toFile(false)
                 .standalone(false)
-                .get();
+                .build();
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(renderSample, options));
 
@@ -206,11 +225,11 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
     @Test
     public void show_title_false_then_true_attribute_should_show_title_on_embedded_document() {
-        final Options options = options()
-                .attributes(attributes().showTitle(false).showTitle(true).get())
+        final Options options = Options.builder()
+                .attributes(Attributes.builder().showTitle(false).showTitle(true).build())
                 .toFile(false)
                 .standalone(false)
-                .get();
+                .build();
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(renderSample, options));
 
@@ -220,11 +239,11 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
     @Test
     public void show_title_false_attribute_should_hide_title_on_embedded_document() {
-        final Options options = options()
-                .attributes(attributes().showTitle(false).get())
+        final Options options = Options.builder()
+                .attributes(Attributes.builder().showTitle(false).build())
                 .toFile(false)
                 .standalone(false)
-                .get();
+                .build();
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(renderSample, options));
 
@@ -233,11 +252,11 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
     @Test
     public void show_title_true_then_false_attribute_should_hide_title_on_embedded_document() {
-        final Options options = options()
-                .attributes(attributes().showTitle(true).showTitle(false).get())
+        final Options options = Options.builder()
+                .attributes(Attributes.builder().showTitle(true).showTitle(false).build())
                 .toFile(false)
                 .standalone(false)
-                .get();
+                .build();
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(renderSample, options));
 
@@ -247,11 +266,11 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void show_title_true_attribute_should_show_title_on_standalone_document() {
 
-        final Options options = options()
-                .attributes(attributes().showTitle(true).get())
+        final Options options = Options.builder()
+                .attributes(Attributes.builder().showTitle(true).build())
                 .toFile(false)
                 .standalone(true)
-                .get();
+                .build();
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(renderSample, options));
 
@@ -262,11 +281,11 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void show_title_false_attribute_should_hide_title_on_standalone_document() {
 
-        final Options options = options()
-                .attributes(attributes().showTitle(false).get())
+        final Options options = Options.builder()
+                .attributes(Attributes.builder().showTitle(false).build())
                 .toFile(false)
                 .standalone(true)
-                .get();
+                .build();
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(renderSample, options));
 
@@ -276,11 +295,11 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void show_title_true_then_false_attribute_should_hide_title_on_standalone_document() {
 
-        final Options options = options()
-                .attributes(attributes().showTitle(false).get())
+        final Options options = Options.builder()
+                .attributes(Attributes.builder().showTitle(false).build())
                 .toFile(false)
                 .standalone(true)
-                .get();
+                .build();
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(renderSample, options));
 
@@ -291,10 +310,14 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void source_highlighter_attribute_should_add_required_javascript_libraries_as_highlighter() throws IOException {
 
-        Attributes attributes = attributes().sourceHighlighter("prettify").get();
+        Attributes attributes = Attributes.builder().sourceHighlighter("prettify").build();
 
-        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
-                .toDir(tempFolder).attributes(attributes).get();
+        Options options = Options.builder()
+                .inPlace(false)
+                .safe(SafeMode.UNSAFE)
+                .toDir(tempFolder)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(renderSample, options);
 
@@ -307,11 +330,11 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void render_content_without_attributes_should_embed_css_by_default() throws IOException {
 
-        Options options = options()
+        Options options = Options.builder()
                 .inPlace(false)
                 .safe(SafeMode.UNSAFE)
                 .toDir(tempFolder)
-                .get();
+                .build();
 
         asciidoctor.convertFile(renderSample, options);
 
@@ -328,8 +351,8 @@ public class WhenAttributesAreUsedInAsciidoctor {
     public void should_skip_front_matter_if_specified_by_skip_front_matter_attribute(
             @ClasspathResource("renderwithfrontmatter.adoc") File renderWithFrontMatter) {
 
-        Attributes attributes = attributes().skipFrontMatter(true).get();
-        Options options = options().toFile(false).inPlace(false).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().skipFrontMatter(true).build();
+        Options options = Options.builder().toFile(false).inPlace(false).attributes(attributes).build();
 
         String content = asciidoctor.convertFile(renderWithFrontMatter, options);
         Document doc = Jsoup.parse(content, "UTF-8");
@@ -342,8 +365,8 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void set_anchors_attribute_should_add_anchor_to_sections() {
 
-        Attributes attributes = attributes().setAnchors(true).get();
-        Options options = options().inPlace(false).toFile(false).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().setAnchors(true).build();
+        Options options = Options.builder().inPlace(false).toFile(false).attributes(attributes).build();
 
         String content = asciidoctor.convertFile(renderSample, options);
 
@@ -358,8 +381,8 @@ public class WhenAttributesAreUsedInAsciidoctor {
     public void ignore_undefined_attributes_should_keep_lines_with_undefined_attributes(
             @ClasspathResource("documentwithundefinedattribute.asciidoc") File sourceDocument) {
 
-        Attributes attributes = attributes().ignoreUndefinedAttributes(true).get();
-        Options options = options().toFile(false).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().ignoreUndefinedAttributes(true).build();
+        Options options = Options.builder().toFile(false).attributes(attributes).build();
 
         String renderContent = asciidoctor.convertFile(
                 sourceDocument,
@@ -454,8 +477,8 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void attribute_missing_should_drop_line_should_drop_line_with_reference_to_missing_attribute_if_attribute_missing_attribute_is_drop_line() {
 
-        Attributes attributes = attributes().attributeMissing("drop-line").get();
-        Options options = options().attributes(attributes).get();
+        Attributes attributes = Attributes.builder().attributeMissing("drop-line").build();
+        Options options = Options.builder().attributes(attributes).build();
 
         String renderContent = asciidoctor.convert("This is\n"
                 + "blah blah {foobarbaz}\n" + "all there is.", options);
@@ -467,8 +490,8 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void attribute_undefined_should_not_drop_line_with_attribute_unassignment_if_attribute_undefined_is_drop() {
 
-        Attributes attributes = attributes().attributeUndefined("drop").get();
-        Options options = options().attributes(attributes).get();
+        Attributes attributes = Attributes.builder().attributeUndefined("drop").build();
+        Options options = Options.builder().attributes(attributes).build();
 
         String renderContent = asciidoctor.convert(":foo:\n\n{set:foo!}\n{foo}yes", options);
 
@@ -480,31 +503,13 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void table_of_content_should_be_placeable() throws IOException {
 
-        Attributes attributes = attributes().tableOfContents(Placement.RIGHT).get();
-        Options options = options().inPlace(false)
+        Attributes attributes = Attributes.builder().tableOfContents(Placement.RIGHT).build();
+        Options options = Options.builder()
+                .inPlace(false)
                 .toFile(new File(tempFolder, "toc2sample.html"))
-                .safe(SafeMode.UNSAFE).attributes(attributes).get();
-
-        asciidoctor.convertFile(toc2Sample, options);
-
-        File renderedFile = new File(tempFolder, "toc2sample.html");
-        Document doc = Jsoup.parse(renderedFile, "UTF-8");
-        Elements body = doc.select("body");
-        String classAttribute = body.attr("class");
-        String[] classAttributes = classAttribute.split(" ");
-        assertThat(classAttributes, hasItemInArray("toc2"));
-        assertThat(classAttributes, hasItemInArray("toc-right"));
-
-        renderedFile.delete();
-    }
-
-    @Test
-    public void table_of_content_2_should_be_placeable() throws IOException {
-
-        Attributes attributes = attributes().tableOfContents2(Placement.RIGHT).get();
-        Options options = options().inPlace(false)
-                .toFile(new File(tempFolder, "toc2sample.html"))
-                .safe(SafeMode.UNSAFE).attributes(attributes).get();
+                .safe(SafeMode.UNSAFE)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(toc2Sample, options);
 
@@ -522,9 +527,13 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void setting_linkcss_as_false_in_string_should_embed_css_file() throws IOException {
 
-        Attributes attributes = attributes("linkcss!").get();
-        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
-                .toDir(tempFolder).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().attribute("linkcss!").build();
+        Options options = Options.builder()
+                .inPlace(false)
+                .safe(SafeMode.UNSAFE)
+                .toDir(tempFolder)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(renderSample, options);
 
@@ -543,8 +552,13 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void setting_toc_attribute_and_numbered_in_string_form_table_of_contents_should_be_generated() throws IOException {
 
-        Attributes attributes = attributes("toc sectnums").get();
-        Options options = options().inPlace(false).toDir(tempFolder).safe(SafeMode.UNSAFE).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().arguments("toc sectnums").build();
+        Options options = Options.builder()
+                .inPlace(false)
+                .toDir(tempFolder)
+                .safe(SafeMode.UNSAFE)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(tocSample, options);
 
@@ -559,8 +573,17 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void setting_toc_attribute_and_numbered_in_array_form_table_of_contents_should_be_generated() throws IOException {
 
-        Attributes attributes = attributes(new String[]{"toc", "sectnums"}).get();
-        Options options = options().inPlace(false).toDir(tempFolder).safe(SafeMode.UNSAFE).attributes(attributes).get();
+        Attributes attributes = Attributes.builder()
+                .attribute("toc")
+                .attribute("sectnums")
+                .build();
+
+        Options options = Options.builder()
+                .inPlace(false)
+                .toDir(tempFolder)
+                .safe(SafeMode.UNSAFE)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(tocSample, options);
 
@@ -575,8 +598,8 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void unsetting_toc_attribute_table_of_contents_should_not_be_generated() {
 
-        Attributes attributes = attributes().tableOfContents(false).get();
-        Options options = options().toFile(false).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().tableOfContents(false).build();
+        Options options = Options.builder().toFile(false).attributes(attributes).build();
 
         String renderContent = asciidoctor.convertFile(tocSample, options);
 
@@ -590,10 +613,14 @@ public class WhenAttributesAreUsedInAsciidoctor {
     public void styleSheetName_is_set_custom_stylesheet_should_be_used_()
             throws IOException {
 
-        Attributes attributes = attributes().linkCss(true)
-                .styleSheetName("mycustom.css").get();
-        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
-                .toDir(tempFolder).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().linkCss(true)
+                .styleSheetName("mycustom.css").build();
+        Options options = Options.builder()
+                .inPlace(false)
+                .safe(SafeMode.UNSAFE)
+                .toDir(tempFolder)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(renderSample, options);
 
@@ -608,9 +635,13 @@ public class WhenAttributesAreUsedInAsciidoctor {
     public void unsetting_styleSheetName_should_leave_document_without_style()
             throws IOException {
 
-        Attributes attributes = attributes().unsetStyleSheet().get();
-        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
-                .toDir(tempFolder).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().unsetStyleSheet().build();
+        Options options = Options.builder()
+                .inPlace(false)
+                .safe(SafeMode.UNSAFE)
+                .toDir(tempFolder)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(renderSample, options);
 
@@ -624,12 +655,13 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void styles_dir_is_set_css_routes_should_use_it() throws IOException {
 
-        Attributes attributes = attributes().stylesDir("./styles")
-                .linkCss(true).styleSheetName("mycustom.css").get();
-        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
+        Attributes attributes = Attributes.builder().stylesDir("./styles")
+                .linkCss(true).styleSheetName("mycustom.css").build();
+        Options options = Options.builder().inPlace(false).safe(SafeMode.UNSAFE)
                 .toDir(tempFolder)
                 .mkDirs(true)
-                .attributes(attributes).get();
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(renderSample, options);
 
@@ -643,9 +675,13 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void unsetting_linkcss_should_embed_css_file() throws IOException {
 
-        Attributes attributes = attributes().linkCss(false).get();
-        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
-                .toDir(tempFolder).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().linkCss(false).build();
+        Options options = Options.builder()
+                .inPlace(false)
+                .safe(SafeMode.UNSAFE)
+                .toDir(tempFolder)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(renderSample, options);
 
@@ -664,9 +700,13 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void linkcss_should_not_embed_css_file() throws IOException {
 
-        Attributes attributes = attributes().linkCss(true).get();
-        Options options = options().inPlace(false).safe(SafeMode.UNSAFE)
-                .toDir(tempFolder).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().linkCss(true).build();
+        Options options = Options.builder()
+                .inPlace(false)
+                .safe(SafeMode.UNSAFE)
+                .toDir(tempFolder)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(renderSample, options);
 
@@ -679,9 +719,12 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
     @Test
     public void copycss_with_in_place_should_copy_css_to_rendered_directory() {
-        Attributes attributes = attributes().linkCss(true).copyCss(true).get();
-        Options options = options().inPlace(true).safe(SafeMode.UNSAFE)
-                .attributes(attributes).get();
+        Attributes attributes = Attributes.builder().linkCss(true).copyCss(true).build();
+        Options options = Options.builder()
+                .inPlace(true)
+                .safe(SafeMode.UNSAFE)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(renderSample, options);
 
@@ -693,9 +736,12 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
     @Test
     public void copycss_negated_with_in_place_should_not_copy_css_to_rendered_directory() {
-        Attributes attributes = attributes().copyCss(false).get();
-        Options options = options().inPlace(true).safe(SafeMode.UNSAFE)
-                .attributes(attributes).get();
+        Attributes attributes = Attributes.builder().copyCss(false).build();
+        Options options = Options.builder()
+                .inPlace(true)
+                .safe(SafeMode.UNSAFE)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(renderSample, options);
 
@@ -711,9 +757,12 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void copycss_and_linkcss_negated_should_not_copy_css_to_rendered_file() {
 
-        Attributes attributes = attributes().copyCss(true).linkCss(false).get();
-        Options options = options().inPlace(true).safe(SafeMode.UNSAFE)
-                .attributes(attributes).get();
+        Attributes attributes = Attributes.builder().copyCss(true).linkCss(false).build();
+        Options options = Options.builder()
+                .inPlace(true)
+                .safe(SafeMode.UNSAFE)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(renderSample, options);
 
@@ -729,10 +778,13 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void copycss_with_to_file_should_copy_css_to_to_file_directory() {
 
-        Attributes attributes = attributes().linkCss(true).copyCss(true).get();
-        Options options = options().inPlace(false)
+        Attributes attributes = Attributes.builder().linkCss(true).copyCss(true).build();
+        Options options = Options.builder()
+                .inPlace(false)
                 .toFile(new File(tempFolder, "output.html"))
-                .safe(SafeMode.UNSAFE).attributes(attributes).get();
+                .safe(SafeMode.UNSAFE)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(renderSample, options);
 
@@ -744,9 +796,13 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void copycss_with_to_dir_should_copy_css_to_to_dir_directory() {
 
-        Attributes attributes = attributes().linkCss(true).copyCss(true).get();
-        Options options = options().inPlace(false).toDir(tempFolder)
-                .safe(SafeMode.UNSAFE).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().linkCss(true).copyCss(true).build();
+        Options options = Options.builder()
+                .inPlace(false)
+                .toDir(tempFolder)
+                .safe(SafeMode.UNSAFE)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convertFile(renderSample, options);
 
@@ -758,10 +814,13 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void copycss_with_render_to_file_should_copy_css_to_to_file_directory() {
 
-        Attributes attributes = attributes().linkCss(true).copyCss(true).get();
-        Options options = options().inPlace(false)
+        Attributes attributes = Attributes.builder().linkCss(true).copyCss(true).build();
+        Options options = Options.builder()
+                .inPlace(false)
                 .toFile(new File(tempFolder, "output.html"))
-                .safe(SafeMode.UNSAFE).attributes(attributes).get();
+                .safe(SafeMode.UNSAFE)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convert("This is Asciidoctor", options);
 
@@ -773,9 +832,13 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void copycss_with_render_to_dir_should_copy_css_to_to_dir_directory() {
 
-        Attributes attributes = attributes().linkCss(true).copyCss(true).get();
-        Options options = options().inPlace(false).toDir(tempFolder)
-                .safe(SafeMode.UNSAFE).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().linkCss(true).copyCss(true).build();
+        Options options = Options.builder()
+                .inPlace(false)
+                .toDir(tempFolder)
+                .safe(SafeMode.UNSAFE)
+                .attributes(attributes)
+                .build();
 
         asciidoctor.convert("This is Asciidoctor", options);
 
@@ -788,9 +851,10 @@ public class WhenAttributesAreUsedInAsciidoctor {
     public void string_content_with_icons_enabled_should_be_rendered()
             throws IOException, SAXException, ParserConfigurationException {
 
-        Map<String, Object> attributes = attributes().icons(
-                Attributes.IMAGE_ICONS).asMap();
-        Map<String, Object> options = options().attributes(attributes).asMap();
+        Attributes attributes = Attributes.builder()
+                .icons(Attributes.IMAGE_ICONS)
+                .build();
+        Map<String, Object> options = Options.builder().attributes(attributes).build().map();
 
         String result = asciidoctor.convert(Files.readString(documentWithNote.toPath()), options);
         result = result.replaceAll("<img(.*?)>", "<img$1/>");
@@ -804,9 +868,10 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         InputStream content = new FileInputStream(documentWithNote);
 
-        Map<String, Object> attributes = attributes().icons(
-                Attributes.FONT_ICONS).asMap();
-        Map<String, Object> options = options().attributes(attributes).asMap();
+        Attributes attributes = Attributes.builder()
+                .icons(Attributes.FONT_ICONS)
+                .build();
+        Map<String, Object> options = Options.builder().attributes(attributes).build().map();
 
         String result = asciidoctor.convert(toString(content), options);
         assertRenderedFontAwesomeAdmonitionIcon(result);
@@ -819,9 +884,11 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         InputStream content = new FileInputStream(documentWithNote);
 
-        Map<String, Object> attributes = attributes()
-                .icons(Attributes.IMAGE_ICONS).iconsDir("icons").asMap();
-        Map<String, Object> options = options().attributes(attributes).asMap();
+        Attributes attributes = Attributes.builder()
+                .icons(Attributes.IMAGE_ICONS)
+                .iconsDir("icons")
+                .build();
+        Map<String, Object> options = Options.builder().attributes(attributes).build().map();
 
         String renderContent = asciidoctor.convert(toString(content), options);
 
@@ -835,11 +902,11 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void linkattrs_should_make_asciidoctor_render_link_macro_attributes() {
 
-        Attributes attributes = attributes().linkAttrs(true).get();
-        Options options = options().attributes(attributes).get();
+        Attributes attributes = Attributes.builder().linkAttrs(true).build();
+        Options options = Options.builder().attributes(attributes).build();
 
         String content = asciidoctor.convert(
-                "http://google.com[Google, window=\"_blank\"]", options);
+                "https://google.com[Google, window=\"_blank\"]", options);
 
         Document doc = Jsoup.parse(content);
         Elements image = doc.select("a[target]");
@@ -852,8 +919,8 @@ public class WhenAttributesAreUsedInAsciidoctor {
     @Test
     public void experimental_flag_should_enable_experimental_features_like_keyboard_shortcuts() {
 
-        Attributes attributes = attributes().experimental(true).get();
-        Options options = options().attributes(attributes).get();
+        Attributes attributes = Attributes.builder().experimental(true).build();
+        Options options = Options.builder().attributes(attributes).build();
 
         String content = asciidoctor.convert("kbd:[F11]", options);
 
@@ -867,9 +934,9 @@ public class WhenAttributesAreUsedInAsciidoctor {
     public void iconfont_attributes_should_be_used_for_using_custom_font_css_icons()
             throws URISyntaxException, IOException {
 
-        Attributes attributes = attributes().icons(Attributes.FONT_ICONS)
-                .iconFontRemote(true).iconFontCdn(new URI("http://mycdn/css/font-awesome.min.css")).get();
-        Options options = options().inPlace(true).attributes(attributes).get();
+        Attributes attributes = Attributes.builder().icons(Attributes.FONT_ICONS)
+                .iconFontRemote(true).iconFontCdn(new URI("http://mycdn/css/font-awesome.min.css")).build();
+        Options options = Options.builder().inPlace(true).attributes(attributes).build();
 
         asciidoctor.convertFile(documentWithNote, options);
 

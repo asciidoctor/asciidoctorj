@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 import org.asciidoctor.ast.ContentModel
 import org.asciidoctor.ast.Document
@@ -28,7 +28,7 @@ class WhenABlockShouldBeDuplicated extends Specification {
     '''
 
         when:
-        Document document = asciidoctor.load(asciidoctorSource, OptionsBuilder.options().safe(SafeMode.SAFE).asMap())
+        Document document = asciidoctor.load(asciidoctorSource, Options.builder().safe(SafeMode.SAFE).build())
 
         then:
         document.blocks.size() == 2
@@ -52,7 +52,8 @@ This will be ignored
     '''
 
         when:
-        org.jsoup.nodes.Document html = Jsoup.parse(asciidoctor.convert(asciidoctorSource, OptionsBuilder.options().safe(SafeMode.SAFE).standalone(false).asMap()))
+        def options = Options.builder().safe(SafeMode.SAFE).standalone(false).build()
+        org.jsoup.nodes.Document html = Jsoup.parse(asciidoctor.convert(asciidoctorSource, options))
 
         then:
         html.select(CLASS_LISTINGBLOCK).get(0).text() == 'This will be ignored'

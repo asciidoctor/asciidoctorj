@@ -1,8 +1,8 @@
 package org.asciidoctor.syntaxhighlighter
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.AttributesBuilder
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Attributes
+import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -42,10 +42,11 @@ func main() {
         asciidoctor.syntaxHighlighterRegistry().register(HighlightJsHighlighter, NAME_SYNTAXHIGHLIGHTER)
 
         when:
-        String html = asciidoctor.convert(doc, OptionsBuilder.options()
+        String html = asciidoctor.convert(doc, Options.builder()
                 .safe(SafeMode.UNSAFE)
                 .standalone(true)
-                .attributes(AttributesBuilder.attributes().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER)))
+                .attributes(Attributes.builder().sourceHighlighter(NAME_SYNTAXHIGHLIGHTER).build())
+                .build())
 
         then:
         Document document = Jsoup.parse(html)
@@ -61,10 +62,11 @@ func main() {
     def 'should autoregister from extension'() {
 
         when:
-        asciidoctor.convert(doc, OptionsBuilder.options()
+        asciidoctor.convert(doc, Options.builder()
                 .safe(SafeMode.UNSAFE)
                 .standalone(true)
-                .attributes(AttributesBuilder.attributes().sourceHighlighter(HighlightJsExtension.NAME_HIGHLIGHTER)))
+                .attributes(Attributes.builder().sourceHighlighter(HighlightJsExtension.NAME_HIGHLIGHTER).build())
+                .build())
 
         then:
         assertThat(ObservableHighlightJsHighlighter.called, is(equalTo(2)))

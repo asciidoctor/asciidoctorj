@@ -1,0 +1,73 @@
+== Removal of deprecated methods in `org.asciidoctor.Attributes`
+
+Several methods in `org.asciidoctor.Attributes` class that were marked as `@Deprecated` have been removed.
+This has been done to remove duplicated features and simplify the API interaction.
+
+=== Simplification of Attributes initialization
+
+In v2.5.x the following alternatives to initialize `Attributes` where possible:
+
+[,java]
+.Using Java Constructor and setters
+----
+Attributes attributes = new Attributes();
+attributes.setIcons("font");
+attributes.setNoFooter(true);
+----
+
+[,java]
+.Using Map constructor
+----
+Map<String, Object> attributesMap = new HashMap<>();
+attributesMap.put("toclevels", 2);
+attributesMap.put("icons", "font");
+Attributes attributes = new Attributes(attributesMap);
+----
+
+[,java]
+.Using AttributesBuilder.attributes() and get() methods
+----
+Attributes attributes = AttributesBuilder.attributes()
+    .icons("dont")
+    .noFooter(true)
+    .get();
+----
+
+The new API streamlines the process with a more standard builder approach, in which
+
+* Only interaction with `org.asciidoctor.Attributes` is required.
+* Nested methods offer IDE completion and creation of immutable instances.
+* Improved code readability through indentation.
+
+From v3.0.x, use the new `builder()` and `build()` methods from `org.asciidoctor.Attributes`.
+
+[,java]
+.Using Attributes builder
+----
+Attributes attributes = Attributes.builder()
+    .icons("dont")
+    .noFooter(true)
+    .build();
+----
+
+Note that `Attributes` setter methods are still available, that means that `Attributes` instances can still be modified as in this example.
+
+[,java]
+.Using setters on an instance
+----
+Attributes attributes = Attributes.builder().build();
+attributes.setIcons("font");
+attributes.setNoFooter(true);
+----
+
+[NOTE]
+====
+Free key-value insertion is still possible using:
+
+* `AttributesBuilder::attribute(String attributeName)`
+* `AttributesBuilder::attribute(String attributeName, Object attributeValue)`
+* `Attributes::setAttribute(String attributeName, Object attributeValue)`
+* `Attributes::setAttributes(String attributes)`
+* `Attributes::setAttributes(String... attributes)`
+* `Attributes::setAttributes(Map<String, Object> attributes)`
+====

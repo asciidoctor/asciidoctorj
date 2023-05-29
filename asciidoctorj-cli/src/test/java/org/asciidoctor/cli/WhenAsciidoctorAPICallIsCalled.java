@@ -33,7 +33,7 @@ public class WhenAsciidoctorAPICallIsCalled {
         assertThat(asciidoctorCliOptions.getSafeMode()).isEqualTo(SafeMode.UNSAFE);
         assertThat(asciidoctorCliOptions.getBackend()).isEqualTo("docbook");
         assertThat(asciidoctorCliOptions.getParameters()).containsExactly("file.adoc");
-        assertThat(asciidoctorCliOptions.getAttributes())
+        assertThat(asciidoctorCliOptions.buildAttributes().map())
                 .containsEntry("myAttribute", "myValue")
                 .containsEntry("sectnums", "")
                 .containsEntry("copycss!", "");

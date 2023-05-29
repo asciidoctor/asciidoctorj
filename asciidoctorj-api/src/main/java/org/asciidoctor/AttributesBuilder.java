@@ -2,7 +2,6 @@ package org.asciidoctor;
 
 import java.net.URI;
 import java.util.Date;
-import java.util.Map;
 
 public class AttributesBuilder {
 
@@ -12,43 +11,6 @@ public class AttributesBuilder {
 		super();
 	}
 
-	/**
-	 * Creates attributes builder.
-	 * @deprecated Use {@link Attributes#builder()} instead.
-	 * 
-	 * @return attributes builder.
-	 */
-	@Deprecated
-	public static AttributesBuilder attributes() {
-		return new AttributesBuilder();
-	}
-
-	/**
-     * Creates attributes builder.
-	 * @deprecated Use {@link Attributes#builder()} with {@link #arguments(String...)} instead.
-     * 
-     * @return attributes builder.
-     */
-	@Deprecated
-    public static AttributesBuilder attributes(String[] arguments) {
-        AttributesBuilder attributesBuilder = new AttributesBuilder();
-        attributesBuilder.arguments(arguments);
-        return attributesBuilder;
-    }
-
-    /**
-     * Creates attributes builder.
-	 * @deprecated Use {@link Attributes#builder()} with {@link #arguments(String)} instead.
-     * 
-     * @return attributes builder.
-     */
-    @Deprecated
-    public static AttributesBuilder attributes(String arguments) {
-        AttributesBuilder attributesBuilder = new AttributesBuilder();
-        attributesBuilder.arguments(arguments);
-        return attributesBuilder;
-    }
-	
     /**
      * Source language attribute.
      * @param sourceLanguage value.
@@ -146,18 +108,6 @@ public class AttributesBuilder {
      */
     public AttributesBuilder tableOfContents(Placement placement) {
         this.attributes.setTableOfContents(placement);
-        return this;
-    }
-    
-    /**
-     * Sets table of contents 2 attribute.
-     * @param placement where toc is rendered.
-     * @return this instance.
-	 * @deprecated Use {@link #tableOfContents(Placement)}
-     */
-    @Deprecated
-    public AttributesBuilder tableOfContents2(Placement placement) {
-        this.attributes.setTableOfContents2(placement);
         return this;
     }
     
@@ -559,28 +509,16 @@ public class AttributesBuilder {
 	}
 
 	/**
-	 * Adds all attributes.
-	 * 
-	 * @param attributes
-	 *            map.
-	 * @return this instance.
-	 */
-	public AttributesBuilder attributes(Map<String, Object> attributes) {
-		this.attributes.setAttributes(attributes);
-		return this;
-	}
-
-	/**
 	 * Sets attributes in string form. An example of a valid string would be:
-	 * 
+	 *
 	 * 'toc sectnums source-highlighter=coderay'
-	 * 
+	 *
 	 * where you are adding three attributes: toc, sectnums and
 	 * source-highlighter with value coderay.
-	 * 
+	 *
 	 * @param attributes
 	 *            in string format.
-	 * 
+	 *
 	 * @return this instance.
 	 */
 	public AttributesBuilder arguments(String attributes) {
@@ -590,38 +528,19 @@ public class AttributesBuilder {
 
 	/**
 	 * Sets attributes in array form. An example of a valid array would be:
-	 * 
+	 *
 	 * '['toc', 'sectnums']'
-	 * 
+	 *
 	 * where you are adding two attributes: toc and sectnums.
-	 * 
+	 *
 	 * @param attributes
 	 *            in array format.
-	 * 
+	 *
 	 * @return this instance.
 	 */
 	public AttributesBuilder arguments(String... attributes) {
 		this.attributes.setAttributes(attributes);
 		return this;
-	}
-
-	/**
-	 * Gets a map with configured options.
-	 * @deprecated Use {@link #build()} instead. 
-	 * 
-	 * @return map with all options. By default an empty map is returned.
-	 */
-	@Deprecated
-	public Map<String, Object> asMap() {
-		return this.attributes.map();
-	}
-
-	/**
-	 * @deprecated Use {@link #build()} instead.
-	 */
-	@Deprecated
-	public Attributes get() {
-		return this.attributes;
 	}
 
 	/**

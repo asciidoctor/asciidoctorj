@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.asciidoctor.ast.ContentModel
 import org.asciidoctor.jruby.internal.AsciidoctorCoreException
 import spock.lang.Specification
@@ -39,7 +39,7 @@ Parsing will crash when processing this block
         asciidoctor.javaExtensionRegistry().block(blockProcessor)
 
         when:
-        asciidoctor.convert(document, OptionsBuilder.options().toFile(false))
+        asciidoctor.convert(document, Options.builder().toFile(false).build())
 
         then:
         Exception e = thrown()
@@ -54,7 +54,7 @@ Parsing will crash when processing this block
         asciidoctor.javaExtensionRegistry().block('modify', ConfigModifyingBlockProcessor)
 
         when:
-        asciidoctor.convert(document, OptionsBuilder.options().toFile(false))
+        asciidoctor.convert(document, Options.builder().toFile(false).build())
 
         then:
         Exception e = thrown()

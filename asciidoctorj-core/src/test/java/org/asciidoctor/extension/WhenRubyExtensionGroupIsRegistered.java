@@ -1,6 +1,8 @@
 package org.asciidoctor.extension;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Options;
+import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.test.AsciidoctorInstance;
@@ -19,7 +21,6 @@ import java.io.File;
 import java.util.Iterator;
 
 import static java.util.Collections.singletonList;
-import static org.asciidoctor.OptionsBuilder.options;
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -52,7 +53,7 @@ public class WhenRubyExtensionGroupIsRegistered {
                         "\n" +
                         "[rubyyell]\n" +
                         "The time is now. Get a move on.",
-                options().toFile(false).get());
+                options().toFile(false).build());
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
@@ -75,7 +76,7 @@ public class WhenRubyExtensionGroupIsRegistered {
                         "\n" +
                         "[yell]\n" +
                         "The time is now. Get a move on.",
-                options().toFile(false).get());
+                options().toFile(false).build());
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
@@ -93,7 +94,7 @@ public class WhenRubyExtensionGroupIsRegistered {
         {
             String contentWithoutBlock = asciidoctor.convertFile(
                     sampleWithRubyYellBlock,
-                    options().toFile(false).get());
+                    options().toFile(false).build());
 
             Document docWithoutBlock = Jsoup.parse(contentWithoutBlock, "UTF-8");
             Elements elementsWithoutBlock = docWithoutBlock.getElementsByClass("paragraph");
@@ -104,7 +105,7 @@ public class WhenRubyExtensionGroupIsRegistered {
             extensionGroup.register();
             String content = asciidoctor.convertFile(
                     sampleWithRubyYellBlock,
-                    options().toFile(false).get());
+                    options().toFile(false).build());
 
             Document doc = Jsoup.parse(content, "UTF-8");
             Elements elements = doc.getElementsByClass("paragraph");
@@ -116,7 +117,7 @@ public class WhenRubyExtensionGroupIsRegistered {
 
             String contentWithoutBlock = asciidoctor.convertFile(
                     sampleWithRubyYellBlock,
-                    options().toFile(false).get());
+                    options().toFile(false).build());
 
             Document docWithoutBlock = Jsoup.parse(contentWithoutBlock, "UTF-8");
             Elements elementsWithoutBlock = docWithoutBlock.getElementsByClass("paragraph");
@@ -137,7 +138,7 @@ public class WhenRubyExtensionGroupIsRegistered {
         String content = asciidoctor.convert(
                 ".My Gist\n" +
                         "mygist::123456[]",
-                options().toFile(false).get());
+                options().toFile(false).build());
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByTag("script");
@@ -157,7 +158,7 @@ public class WhenRubyExtensionGroupIsRegistered {
         String content = asciidoctor.convert(
                 ".My Gist\n" +
                         "gist::42[]",
-                options().toFile(false).get());
+                options().toFile(false).build());
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByTag("script");
@@ -178,7 +179,7 @@ public class WhenRubyExtensionGroupIsRegistered {
                 "= Man Inline Macro Extension\n" +
                         "\n" +
                         "See myman:gittutorial[7] to get started.",
-                options().toFile(false).get());
+                options().toFile(false).build());
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByTag("a");
@@ -199,7 +200,7 @@ public class WhenRubyExtensionGroupIsRegistered {
                 "= Man Inline Macro Extension\n" +
                         "\n" +
                         "See man:dockertutorial[7] to get started.",
-                options().toFile(false).get());
+                options().toFile(false).build());
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByTag("a");
@@ -221,7 +222,7 @@ public class WhenRubyExtensionGroupIsRegistered {
                         " > Hello, World!\n" +
                         "\n" +
                         " $ gem install asciidoctor",
-                options().toFile(false).get());
+                options().toFile(false).build());
 
         final Document document = Jsoup.parse(content);
         final TextNode commandElement = document.getElementsByClass("command").get(0).textNodes().get(0);
@@ -242,7 +243,7 @@ public class WhenRubyExtensionGroupIsRegistered {
 
         String content = asciidoctor.convert(
                 "Read &sect;2 and it&apos;ll all be clear.",
-                options().toFile(false).get());
+                options().toFile(false).build());
 
         System.out.println(content);
         assertThat(content, containsString("Read &#167;2 and it&#39;ll all be clear."));
@@ -260,7 +261,7 @@ public class WhenRubyExtensionGroupIsRegistered {
                         "\n" +
                         "include::response[]" +
                         "",
-                options().toFile(false).safe(SafeMode.SAFE).get());
+                options().toFile(false).safe(SafeMode.SAFE).build());
 
         final Document document = Jsoup.parse(content);
         assertThat(
@@ -292,7 +293,7 @@ public class WhenRubyExtensionGroupIsRegistered {
                         "{front-matter}\n" +
                         "---\n" +
                         "....",
-                options().toFile(false).get());
+                options().toFile(false).build());
 
         final Document document = Jsoup.parse(content);
         final Element contentElement = document.getElementsByClass("content").get(0);
@@ -327,7 +328,7 @@ public class WhenRubyExtensionGroupIsRegistered {
                         "* hidden till clicked            \n" +
                         "* hidden till clicked 2          \n" +
                         "====                             ",
-                options().toFile(false).safe(SafeMode.SAFE).standalone(true).get());
+                options().toFile(false).safe(SafeMode.SAFE).standalone(true).build());
 
         final Document document = Jsoup.parse(content);
         final Iterator<Element> elems = document.getElementsByTag("style").iterator();
@@ -341,4 +342,7 @@ public class WhenRubyExtensionGroupIsRegistered {
         assertTrue("Could not find style element that should have been added by docinfo processor:\n" + document, found);
     }
 
+    private OptionsBuilder options() {
+        return Options.builder();
+    }
 }

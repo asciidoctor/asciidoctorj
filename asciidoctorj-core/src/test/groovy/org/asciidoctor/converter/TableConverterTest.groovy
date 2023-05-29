@@ -1,7 +1,7 @@
 package org.asciidoctor.converter
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import spock.lang.Specification
 
 class TableConverterTest extends Specification {
@@ -31,7 +31,8 @@ class TableConverterTest extends Specification {
         asciidoctor.javaConverterRegistry().register(TableTestConverter, 'tabletestconverter')
 
         when:
-        String content = asciidoctor.convert(document, OptionsBuilder.options().standalone(false).backend('tabletestconverter'))
+        def options = Options.builder().standalone(false).backend('tabletestconverter').build()
+        String content = asciidoctor.convert(document, options)
 
         then:
         content.readLines().collect { it - ~/\s+$/ } == '''HELLO TABLE
@@ -63,7 +64,8 @@ a|
         asciidoctor.javaConverterRegistry().register(TableTestConverter, 'tabletestconverter')
 
         when:
-        String content = asciidoctor.convert(document, OptionsBuilder.options().standalone(false).backend('tabletestconverter'))
+        def options = Options.builder().standalone(false).backend('tabletestconverter').build()
+        String content = asciidoctor.convert(document, options)
 
         then:
         content.readLines().collect { it - ~/\s+$/ } == '''HELLO ASCIIDOCTOR TABLE

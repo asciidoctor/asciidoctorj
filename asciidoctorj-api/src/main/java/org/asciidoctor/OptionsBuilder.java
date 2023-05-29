@@ -18,17 +18,6 @@ public class OptionsBuilder {
     }
 
     /**
-     * Creates options builder instance.
-     * @deprecated Use {@link Options#builder()} instead.
-     * 
-     * @return options builder instance.
-     */
-    @Deprecated
-    public static OptionsBuilder options() {
-        return new OptionsBuilder();
-    }
-
-    /**
      * Sets backend option.
      * 
      * @param backend
@@ -82,22 +71,6 @@ public class OptionsBuilder {
     }
 
     /**
-     * Sets template directory.
-     *
-     * @deprecated Use {@link #templateDirs(File...)} instead.
-     *
-     * @param templateDir
-     *            directory where templates are stored.
-     * @return this instance.
-     * @deprecated Use {@link #templateDirs(File...)} instead.
-     */
-    @Deprecated
-    public OptionsBuilder templateDir(File templateDir) {
-        this.options.setTemplateDirs(templateDir.getAbsolutePath());
-        return this;
-    }
-
-    /**
      * Sets template directories.
      * 
      * @param templateDirs
@@ -137,20 +110,6 @@ public class OptionsBuilder {
 
     /**
      * Sets attributes used for rendering input.
-     * @deprecated Use {@link #attributes(Attributes)} instead.
-     * 
-     * @param attributes
-     *            map.
-     * @return this instance.
-     */
-    @Deprecated
-    public OptionsBuilder attributes(Map<String, Object> attributes) {
-        this.options.setAttributes(attributes);
-        return this;
-    }
-
-    /**
-     * Sets attributes used for rendering input.
      * 
      * @param attributes
      *            map.
@@ -158,20 +117,6 @@ public class OptionsBuilder {
      */
     public OptionsBuilder attributes(Attributes attributes) {
         this.options.setAttributes(attributes);
-        return this;
-    }
-
-    /**
-     * Sets attributes used for rendering input.
-     * @deprecated Use {@link #attributes(Attributes)} instead. 
-     * 
-     * @param attributes
-     *            builder.
-     * @return this instance.
-     */
-    @Deprecated
-    public OptionsBuilder attributes(AttributesBuilder attributes) {
-        this.options.setAttributes(attributes.asMap());
         return this;
     }
 
@@ -358,25 +303,6 @@ public class OptionsBuilder {
     public OptionsBuilder baseDir(File baseDir) {
         this.options.setBaseDir(baseDir.getAbsolutePath());
         return this;
-    }
-
-    /**
-     * Gets a map with configured options.
-     * @deprecated Use {@link #build()} instead.
-     * 
-     * @return map with all options. By default, an empty map is returned.
-     */
-    @Deprecated
-    public Map<String, Object> asMap() {
-        return this.options.map();
-    }
-
-    /**
-     * @deprecated Use {@link #build()} instead.
-     */
-    @Deprecated
-    public Options get() {
-        return this.options;
     }
 
     /**

@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -31,7 +31,8 @@ list::HelloWorld[]
         asciidoctor.javaExtensionRegistry().blockMacro(LISTMACRO_NAME, new ListCreatorBlockMacro('olist'))
 
         when:
-        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).standalone(false))
+        def standalone = Options.builder().safe(SafeMode.SAFE).toFile(false).standalone(false).build()
+        String result = asciidoctor.convert(DOCUMENT, standalone)
 
         then:
         noExceptionThrown()
@@ -52,7 +53,8 @@ list::HelloWorld[]
         asciidoctor.javaExtensionRegistry().blockMacro(LISTMACRO_NAME, new ListCreatorBlockMacro('ulist'))
 
         when:
-        String result = asciidoctor.convert(DOCUMENT, OptionsBuilder.options().safe(SafeMode.SAFE).toFile(false).standalone(false))
+        def options = Options.builder().safe(SafeMode.SAFE).toFile(false).standalone(false).build()
+        String result = asciidoctor.convert(DOCUMENT, options)
 
         then:
         noExceptionThrown()

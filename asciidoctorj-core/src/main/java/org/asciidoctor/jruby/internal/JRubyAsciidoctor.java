@@ -337,7 +337,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
     @Override
     public <T> T convert(String content, OptionsBuilder options, Class<T> expectedResult) {
-        return convert(content, options.asMap(), expectedResult);
+        return convert(content, options.build(), expectedResult);
     }
 
     @Override
@@ -354,7 +354,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
     @Override
     public void convert(Reader contentReader, Writer rendererWriter, OptionsBuilder options) throws IOException {
-        this.convert(contentReader, rendererWriter, options.asMap());
+        this.convert(contentReader, rendererWriter, options.build());
     }
 
     @Override
@@ -421,12 +421,12 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
     @Override
     public String convertFile(File file, OptionsBuilder options) {
-        return convertFile(file, options.asMap(), String.class);
+        return convertFile(file, options.build(), String.class);
     }
 
     @Override
     public <T> T convertFile(File file, OptionsBuilder options, Class<T> expectedResult) {
-        return convertFile(file, options.asMap(), expectedResult);
+        return convertFile(file, options.build(), expectedResult);
     }
 
     @Override
@@ -442,7 +442,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
     @Override
     public String[] convertDirectory(Iterable<File> directoryWalker, OptionsBuilder options) {
-        return convertDirectory(directoryWalker, options.asMap());
+        return convertDirectory(directoryWalker, options.build());
     }
 
     @Override
@@ -458,7 +458,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
     @Override
     public String[] convertFiles(Collection<File> files, OptionsBuilder options) {
-        return convertFiles(files, options.asMap());
+        return convertFiles(files, options.build());
     }
 
     @Override

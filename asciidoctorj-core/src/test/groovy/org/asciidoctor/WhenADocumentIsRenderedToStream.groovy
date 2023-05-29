@@ -31,9 +31,10 @@ Hello World
 
         when:
         asciidoctor.convert(TEST_DOC,
-                OptionsBuilder.options()
+                Options.builder()
                         .backend(HTML5_BACKEND)
-                        .toStream(out))
+                        .toStream(out)
+                        .build())
 
         String result = new String(out.toByteArray())
 
@@ -50,13 +51,15 @@ Hello World
 
         when:
         asciidoctor.convert(TEST_DOC,
-                OptionsBuilder.options()
+                Options.builder()
                         .backend(HTML5_BACKEND)
-                        .toStream(out1))
+                        .toStream(out1)
+                        .build())
         asciidoctor.convert(TEST_DOC,
-                OptionsBuilder.options()
+                Options.builder()
                         .backend(HTML5_BACKEND)
-                        .toStream(out2))
+                        .toStream(out2)
+                        .build())
 
         String result1 = new String(out1.toByteArray())
         String result2 = new String(out2.toByteArray())
@@ -71,16 +74,17 @@ Hello World
         given:
         def out = new ByteArrayOutputStream()
         asciidoctor.javaConverterRegistry().register(TestConverter, TestConverter.TEST_BACKEND_NAME)
-        def testdoc = '''== Test
+        def testDoc = '''== Test
 
 Hello, World!
 '''
 
         when:
-        asciidoctor.convert(testdoc,
-                OptionsBuilder.options()
+        asciidoctor.convert(testDoc,
+                Options.builder()
                         .backend(TestConverter.TEST_BACKEND_NAME)
-                        .toStream(out))
+                        .toStream(out)
+                        .build())
 
         String result = new String(out.toByteArray())
 

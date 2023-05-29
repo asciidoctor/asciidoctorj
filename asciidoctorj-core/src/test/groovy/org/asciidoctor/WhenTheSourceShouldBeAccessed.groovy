@@ -37,7 +37,7 @@ This paragraph should show {foo}
 
 '''
         when:
-        Document doc = asciidoctor.load(document, OptionsBuilder.options().asMap())
+        Document doc = asciidoctor.load(document, Map.of())
         Block block = doc.blocks[0].blocks[0]
 
         then:
@@ -60,7 +60,7 @@ This paragraph should show {foo}
 
 '''
         when:
-        Document doc = asciidoctor.load(document, OptionsBuilder.options().asMap())
+        Document doc = asciidoctor.load(document, Map.of())
         List list = doc.blocks[0].blocks[0]
         ListItem listItem = list.items[0]
 
@@ -90,7 +90,7 @@ That::
 
 '''
         when:
-        Document doc = asciidoctor.load(document, OptionsBuilder.options().asMap())
+        Document doc = asciidoctor.load(document, Map.of())
         DescriptionList list = doc.blocks[0].blocks[0]
         DescriptionListEntry listItem = list.items[0]
 
@@ -117,7 +117,7 @@ and should continue here'''
 
 '''
         when:
-        Document doc = asciidoctor.load(document, OptionsBuilder.options().asMap())
+        Document doc = asciidoctor.load(document, Map.of())
         Table table = doc.blocks[0].blocks[0]
         Cell cell = table.body[0].cells[0]
 
@@ -147,7 +147,7 @@ xxx
                 doc
             }
         })
-        String html = asciidoctor.convert(document, OptionsBuilder.options().standalone(false).asMap())
+        String html = asciidoctor.convert(document,Options.builder().standalone(false).build())
         org.jsoup.nodes.Document doc = Jsoup.parse(html)
 
         then:
@@ -175,7 +175,7 @@ xxx
                 doc
             }
         })
-        String html = asciidoctor.convert(document, OptionsBuilder.options().standalone(false).asMap())
+        String html = asciidoctor.convert(document, Options.builder().standalone(false).build())
         org.jsoup.nodes.Document doc = Jsoup.parse(html)
 
         then:
@@ -207,7 +207,7 @@ xxx
                 doc
             }
         })
-        String html = asciidoctor.convert(document, OptionsBuilder.options().standalone(false).asMap())
+        String html = asciidoctor.convert(document, Options.builder().standalone(false).build())
         org.jsoup.nodes.Document doc = Jsoup.parse(html)
 
         then:

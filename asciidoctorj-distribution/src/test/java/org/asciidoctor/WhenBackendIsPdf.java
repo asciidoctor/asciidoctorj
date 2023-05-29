@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static org.asciidoctor.OptionsBuilder.options;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
@@ -34,14 +33,14 @@ public class WhenBackendIsPdf {
         // The asciidoctor-pdf backend returns the converter itself on convert.
         // If the result should be written to a file the write method will convert to a PDF stream
         // Therefore, if the result should not be written to a file the PDF converter should be returned.
-        IRubyObject o = asciidoctor.convert(DOCUMENT, options().backend("pdf").get(), IRubyObject.class);
+        IRubyObject o = asciidoctor.convert(DOCUMENT, options().backend("pdf").build(), IRubyObject.class);
         assertThat(o.getMetaClass().getRealClass().getName()).isEqualTo("Asciidoctor::PDF::Converter");
     }
 
     @Test
     void pdf_should_include_images(@ClasspathResource("image-sample.adoc") File inputFile) throws IOException {
 
-        asciidoctor.convertFile(inputFile, options().backend("pdf").safe(SafeMode.UNSAFE).get());
+        asciidoctor.convertFile(inputFile, options().backend("pdf").safe(SafeMode.UNSAFE).build());
 
         File outputFile = new File(inputFile.getParentFile(), "image-sample.pdf");
         assertThat(outputFile).exists();
@@ -56,7 +55,7 @@ public class WhenBackendIsPdf {
     @Test
     void pdf_source_code_should_be_highlighted(@ClasspathResource("code-sample.adoc") File inputFile) throws IOException {
 
-        asciidoctor.convertFile(inputFile, options().backend("pdf").safe(SafeMode.UNSAFE).get());
+        asciidoctor.convertFile(inputFile, options().backend("pdf").safe(SafeMode.UNSAFE).build());
 
         File outputFile = new File(inputFile.getParentFile(), "code-sample.pdf");
         assertThat(outputFile).exists();
@@ -78,9 +77,13 @@ public class WhenBackendIsPdf {
 
     @Test
     void pdf_should_not_fail_with_empty_tables(@ClasspathResource("empty-table.adoc") File inputFile) {
-        asciidoctor.convertFile(inputFile, options().backend("pdf").safe(SafeMode.SAFE).get());
+        asciidoctor.convertFile(inputFile, options().backend("pdf").safe(SafeMode.SAFE).build());
 
         File outputFile = new File(inputFile.getParentFile(), "empty-table.pdf");
         assertThat(outputFile).exists();
+    }
+
+    private static OptionsBuilder options() {
+        return Options.builder();
     }
 }

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 
-import static org.asciidoctor.OptionsBuilder.options;
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,7 +30,7 @@ public class WhenCustomTemplatesAreUsed {
     @Test
     public void document_should_be_rendered_using_given_template_dir() {
 
-        Options options = options().templateDir(html5TweaksDir).toFile(false).get();
+        Options options = Options.builder().templateDirs(html5TweaksDir).toFile(false).build();
         String renderContent = asciidoctor.convertFile(renderSample, options);
 
         Document doc = Jsoup.parse(renderContent, "UTF-8");

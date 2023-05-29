@@ -30,12 +30,13 @@ public class WhenSourceHighlightingIsUsed {
     @Test
     public void should_render_with_rouge() {
         String html = asciidoctor.convert(DOCUMENT,
-                OptionsBuilder.options()
+                Options.builder()
                         .standalone(true)
                         .safe(SafeMode.UNSAFE)
                         .attributes(
-                                AttributesBuilder.attributes()
-                                        .sourceHighlighter("rouge")));
+                                Attributes.builder()
+                                        .sourceHighlighter("rouge")
+                                        .build()));
 
         Document doc = Jsoup.parse(html);
 
@@ -46,12 +47,13 @@ public class WhenSourceHighlightingIsUsed {
     @Test
     public void should_render_with_coderay() {
         String html = asciidoctor.convert(DOCUMENT,
-                OptionsBuilder.options()
+                Options.builder()
                         .standalone(true)
                         .safe(SafeMode.UNSAFE)
                         .attributes(
-                                AttributesBuilder.attributes()
-                                        .sourceHighlighter("coderay")));
+                                Attributes.builder()
+                                        .sourceHighlighter("coderay")
+                                        .build()));
 
 
         Document doc = Jsoup.parse(html);

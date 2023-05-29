@@ -1,17 +1,15 @@
 package org.asciidoctor.converter
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.asciidoctor.ast.ContentNode
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.StructuralNode
 import org.hamcrest.BaseMatcher
 import spock.lang.Specification
 
-import static org.hamcrest.Matchers.contains
+import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.Matchers.containsInAnyOrder
-import static org.hamcrest.Matchers.empty
-import static org.junit.Assert.assertThat
 
 /**
  * Tests that refs can be accessed from converter.
@@ -55,7 +53,7 @@ class CatalogOfRefsAreAvailable extends Specification {
     }
 
     def convert(String document) {
-        asciidoctor.convert(document, OptionsBuilder.options().backend(CONVERTER_BACKEND))
+        asciidoctor.convert(document, Options.builder().backend(CONVERTER_BACKEND).build())
     }
 
     def 'when there are no refs in source doc, refs should be empty'() {
@@ -66,7 +64,7 @@ class CatalogOfRefsAreAvailable extends Specification {
         convert(document)
 
         then:
-        assertThat(refs.entrySet(), empty())
+        refs.entrySet().empty
     }
 
     def 'when a ref is is in source doc, it should be accessible from converter'() {
@@ -78,7 +76,7 @@ class CatalogOfRefsAreAvailable extends Specification {
         convert(document)
 
         then:
-        assertThat(refs.keySet(), contains(idSectionA))
+        refs.keySet().contains(idSectionA)
         assertThat(refs, hasIdPointingToNodeNamed(idSectionA, NODE_NAME_SECTION))
     }
 
@@ -140,27 +138,27 @@ An [#${idInline}]*quoted text*
 
     private hasIdPointingToNodeNamed(final id, final expectedNodeName) {
         [
-            matches: { refs ->
-                if (refs.get(id)) {
-                    refs.get(id).nodeName == expectedNodeName
-                }
-            },
-            describeTo: { description ->
-                description.appendText('ref id ')
-                        .appendValue(id)
-                        .appendText(' pointing to node named ')
-                        .appendValue(expectedNodeName)
-            },
-            describeMismatch: { refs, description ->
-                if (!refs.get(id)) {
-                    description.appendText('did not find id ')
+                matches         : { refs ->
+                    if (refs.get(id)) {
+                        refs.get(id).nodeName == expectedNodeName
+                    }
+                },
+                describeTo      : { description ->
+                    description.appendText('ref id ')
                             .appendValue(id)
-                            .appendText(' in refs')
-                } else {
-                    description.appendText('instead found id pointing to ')
-                            .appendValue(refs.get(id).nodeName)
+                            .appendText(' pointing to node named ')
+                            .appendValue(expectedNodeName)
+                },
+                describeMismatch: { refs, description ->
+                    if (!refs.get(id)) {
+                        description.appendText('did not find id ')
+                                .appendValue(id)
+                                .appendText(' in refs')
+                    } else {
+                        description.appendText('instead found id pointing to ')
+                                .appendValue(refs.get(id).nodeName)
+                    }
                 }
-            }
         ] as BaseMatcher<Map<String, Object>>
     }
 

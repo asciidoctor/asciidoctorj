@@ -2,7 +2,7 @@ package org.asciidoctor.extension
 
 import groovy.transform.CompileStatic
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.ContentModel
@@ -46,7 +46,7 @@ The attribute for counterb: {counter:counterb}
 '''
         when:
         asciidoctor.javaExtensionRegistry().blockMacro(TestBlockMacroProcessor)
-        String result = asciidoctor.convert(document, OptionsBuilder.options().standalone(true).safe(SafeMode.SERVER))
+        String result = asciidoctor.convert(document, Options.builder().standalone(true).safe(SafeMode.SERVER).build())
 
         then:
         Document doc = Jsoup.parse(result, UTF8)
@@ -78,7 +78,7 @@ The attribute for counterb: {counter:counterb}
 '''
         when:
         asciidoctor.javaExtensionRegistry().treeprocessor(TestTreeProcessor)
-        String result = asciidoctor.convert(document, OptionsBuilder.options().standalone(true).safe(SafeMode.SERVER))
+        String result = asciidoctor.convert(document, Options.builder().standalone(true).safe(SafeMode.SERVER).build())
 
         then:
         Document doc = Jsoup.parse(result, UTF8)
@@ -104,7 +104,7 @@ testmacro::countera[]
 '''
         when:
         asciidoctor.javaExtensionRegistry().blockMacro(TestBlockMacroWithInitialCounterProcessor)
-        String result = asciidoctor.convert(document, OptionsBuilder.options().standalone(true).safe(SafeMode.SERVER))
+        String result = asciidoctor.convert(document, Options.builder().standalone(true).safe(SafeMode.SERVER).build())
 
         then:
         Document doc = Jsoup.parse(result, UTF8)

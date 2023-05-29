@@ -1,7 +1,7 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Options
 import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.Document
 import org.asciidoctor.ast.Section
@@ -47,7 +47,7 @@ more text
         })
 
         when:
-        String result = asciidoctor.convert(this.document, OptionsBuilder.options().standalone(false))
+        String result = asciidoctor.convert(this.document, Options.builder().standalone(false).build())
 
         then:
         org.jsoup.nodes.Document htmlDocument = Jsoup.parse(result)
@@ -81,7 +81,7 @@ And this as well
         })
 
         when:
-        String result = asciidoctor.convert(document, OptionsBuilder.options().standalone(false))
+        String result = asciidoctor.convert(document, Options.builder().standalone(false).build())
 
         then:
         org.jsoup.nodes.Document htmlDocument = Jsoup.parse(result)
@@ -124,7 +124,7 @@ testmacro::target[]
         })
 
         when:
-        String result = asciidoctor.convert(document, OptionsBuilder.options().standalone(false))
+        String result = asciidoctor.convert(document, Options.builder().standalone(false).build())
 
         then:
         result.contains(expectedContent)

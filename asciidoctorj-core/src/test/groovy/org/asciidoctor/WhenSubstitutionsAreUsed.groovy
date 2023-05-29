@@ -33,7 +33,7 @@ System.out.println("Hello World");
 '''
 
         when:
-        Document doc = asciidoctor.load(document, OptionsBuilder.options().asMap())
+        Document doc = asciidoctor.load(document, Map.of())
         Block paragraph = doc.blocks[0].blocks[0]
         Block source = doc.blocks[0].blocks[1]
 
@@ -58,11 +58,11 @@ Second test paragraph {foo}
 
         when:
         asciidoctor.javaExtensionRegistry().treeprocessor(TestTreeprocessor)
-        Document doc = asciidoctor.load(document, OptionsBuilder.options().asMap())
+        Document doc = asciidoctor.load(document, Map.of())
         Block firstparagraph = doc.blocks[0].blocks[0]
         Block secondparagraph = doc.blocks[0].blocks[1]
 
-        String html = asciidoctor.convert(document, OptionsBuilder.options().asMap())
+        String html = asciidoctor.convert(document, Map.of())
 
         then:
         firstparagraph.substitutions == [SUBSTITUTION_SPECIAL_CHARACTERS, SUBSTITUTION_QUOTES, SUBSTITUTION_ATTRIBUTES, SUBSTITUTION_REPLACEMENTS, SUBSTITUTION_MACROS, SUBSTITUTION_POST_REPLACEMENTS]
@@ -93,11 +93,11 @@ System.out.println("{foo}");
 
         when:
         asciidoctor.javaExtensionRegistry().treeprocessor(TestTreeprocessor)
-        Document doc = asciidoctor.load(document, OptionsBuilder.options().asMap())
+        Document doc = asciidoctor.load(document, Map.of())
         Block firstparagraph = doc.blocks[0].blocks[0]
         Block secondparagraph = doc.blocks[0].blocks[1]
 
-        String html = asciidoctor.convert(document, OptionsBuilder.options().asMap())
+        String html = asciidoctor.convert(document, Options.builder())
 
         then:
         firstparagraph.substitutions == [SUBSTITUTION_SPECIAL_CHARACTERS, SUBSTITUTION_QUOTES, SUBSTITUTION_ATTRIBUTES, SUBSTITUTION_REPLACEMENTS, SUBSTITUTION_MACROS, SUBSTITUTION_POST_REPLACEMENTS]
@@ -112,10 +112,10 @@ System.out.println("{foo}");
     static class TestTreeprocessor extends Treeprocessor {
         @Override
         Document process(Document document) {
-            if (document.blocks()[0].blocks[1].isSubstitutionEnabled(SUBSTITUTION_ATTRIBUTES)) {
-                document.blocks()[0].blocks[1].removeSubstitution(SUBSTITUTION_ATTRIBUTES)
+            if (document.blocks[0].blocks[1].isSubstitutionEnabled(SUBSTITUTION_ATTRIBUTES)) {
+                document.blocks[0].blocks[1].removeSubstitution(SUBSTITUTION_ATTRIBUTES)
             } else {
-                document.blocks()[0].blocks[1].addSubstitution(SUBSTITUTION_ATTRIBUTES)
+                document.blocks[0].blocks[1].addSubstitution(SUBSTITUTION_ATTRIBUTES)
             }
             document
         }
@@ -139,10 +139,10 @@ First test paragraph *{foo}
 
         when:
         asciidoctor.javaExtensionRegistry().treeprocessor(PrependSubstitutionTestTreeprocessor)
-        Document doc = asciidoctor.load(document, OptionsBuilder.options().asMap())
-        Block firstparagraph = doc.blocks()[0].blocks[0]
+        Document doc = asciidoctor.load(document, Map.of())
+        Block firstparagraph = doc.blocks[0].blocks[0]
 
-        String html = asciidoctor.convert(document, OptionsBuilder.options().asMap())
+        String html = asciidoctor.convert(document, Map.of())
 
         then:
         firstparagraph.substitutions == [SUBSTITUTION_ATTRIBUTES, SUBSTITUTION_SPECIAL_CHARACTERS, SUBSTITUTION_QUOTES, SUBSTITUTION_ATTRIBUTES, SUBSTITUTION_REPLACEMENTS, SUBSTITUTION_MACROS, SUBSTITUTION_POST_REPLACEMENTS]
@@ -154,7 +154,7 @@ First test paragraph *{foo}
     static class PrependSubstitutionTestTreeprocessor extends Treeprocessor {
         @Override
         Document process(Document document) {
-            document.blocks()[0].blocks[0].prependSubstitution(SUBSTITUTION_ATTRIBUTES)
+            document.blocks[0].blocks[0].prependSubstitution(SUBSTITUTION_ATTRIBUTES)
             document
         }
     }

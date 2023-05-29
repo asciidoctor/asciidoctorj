@@ -1,8 +1,8 @@
 package org.asciidoctor.syntaxhighlighter
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.AttributesBuilder
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Attributes
+import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 import spock.lang.Ignore
 import spock.lang.Specification
@@ -38,19 +38,23 @@ func main() {
     asciidoctor.syntaxHighlighterRegistry().register(CoderayHighlighter, NAME_SYNTAXHIGHLIGHTER)
 
     when:
-    String htmlJava = asciidoctor.convert(doc, OptionsBuilder.options()
+    String htmlJava = asciidoctor.convert(doc, Options.builder()
             .safe(SafeMode.UNSAFE)
             .standalone(true)
-            .attributes(AttributesBuilder.attributes()
+            .attributes(Attributes.builder()
                 .sourceHighlighter(NAME_SYNTAXHIGHLIGHTER)
-                .linkCss(true)))
+                .linkCss(true)
+                .build())
+            .build())
 
-    String htmlRuby = asciidoctor.convert(doc, OptionsBuilder.options()
+    String htmlRuby = asciidoctor.convert(doc, Options.builder()
             .safe(SafeMode.UNSAFE)
             .standalone(true)
-            .attributes(AttributesBuilder.attributes()
+            .attributes(Attributes.builder()
                 .sourceHighlighter('coderay')
-                .linkCss(true)))
+                .linkCss(true)
+                .build())
+            .build())
 
     then:
     // Cannot use `htmlRuby == htmlJava` because it fails with OOM

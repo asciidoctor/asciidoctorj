@@ -30,7 +30,7 @@ import org.asciidoctor.ast.Section;
 
 //...
 Document document = asciidoctor.load(DOCUMENT, Options.builder().build()); // <1>
-Section section = (Section) document.blocks().get(1); // <2>
+Section section = (Section) document.getBlocks().get(1); // <2>
 
 assertThat(section.index(), is(0)); // <3>
 assertThat(section.sectname(), is("sect1"));
