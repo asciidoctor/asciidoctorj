@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Improvement::
+
+* Upgrade to asciidoctor 2.0.20 (#1209)
+
 Build / Infrastructure::
 
 * Fix Asciidoctor upstream CI tests (#1178) (@abelsromero)
@@ -37,7 +41,7 @@ Bug Fixes::
 
 Improvement::
 
-* Upgrade to asciidoctorj 2.0.18 (#1126)
+* Upgrade to asciidoctor 2.0.18 (#1126)
 * Upgrade to asciidoctorj-diagram 2.2.4 (#1140)
 * Upgrade to jruby 9.3.10.0 (#1138) (@alexlevinfr)
 
