@@ -18,7 +18,7 @@ Improvement::
 * BREAKING: Fix Macro APIs to take StructuralNodes and return Phrase- or StructuralNodes. (#1084)
 * BREAKING: Allow Preprocessor extensions to create new Readers and replace the original Reader. (#1081)
 * Add command line option --failure-level to force non-zero exit code from AsciidoctorJ CLI if specified logging level is reached. (#1114)
-* Upgrade to asciidoctorj 2.0.18 (#1125)
+* Upgrade to asciidoctorj 2.0.20 (#1208)
 * Upgrade to asciidoctorj-pdf 2.3.7 (#1182)
 * Upgrade to asciidoctorj-diagram 2.2.7
 * Upgrade to JRuby 9.4.1.0 (#1141)
