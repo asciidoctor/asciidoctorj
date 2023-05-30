@@ -30,13 +30,7 @@ public class WhenSourceHighlightingIsUsed {
     @Test
     public void should_render_with_rouge() {
         String html = asciidoctor.convert(DOCUMENT,
-                Options.builder()
-                        .standalone(true)
-                        .safe(SafeMode.UNSAFE)
-                        .attributes(
-                                Attributes.builder()
-                                        .sourceHighlighter("rouge")
-                                        .build()));
+                sourceHighlighter("rouge"));
 
         Document doc = Jsoup.parse(html);
 
@@ -47,18 +41,21 @@ public class WhenSourceHighlightingIsUsed {
     @Test
     public void should_render_with_coderay() {
         String html = asciidoctor.convert(DOCUMENT,
-                Options.builder()
-                        .standalone(true)
-                        .safe(SafeMode.UNSAFE)
-                        .attributes(
-                                Attributes.builder()
-                                        .sourceHighlighter("coderay")
-                                        .build()));
-
+                sourceHighlighter("coderay"));
 
         Document doc = Jsoup.parse(html);
 
         assertThat("No elements were highlighted", doc.select("pre.CodeRay span.class").size(), greaterThan(0));
         assertThat("CSS was not added", html, containsString(".CodeRay .class"));
+    }
+
+    private static Options sourceHighlighter(String sourceHighlighter) {
+        return Options.builder()
+                .standalone(true)
+                .safe(SafeMode.UNSAFE)
+                .attributes(Attributes.builder()
+                        .sourceHighlighter(sourceHighlighter)
+                        .build())
+                .build();
     }
 }

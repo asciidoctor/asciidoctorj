@@ -23,7 +23,7 @@ public class AsciidoctorServlet extends HttpServlet {
         resp.setStatus(200);
         try (InputStreamReader reader = new InputStreamReader(req.getInputStream());
              OutputStreamWriter writer = new OutputStreamWriter(resp.getOutputStream())) {
-            asciidoctor.convert(reader, writer, Options.builder());
+            asciidoctor.convert(reader, writer, Options.builder().build());
         }
     }
 }

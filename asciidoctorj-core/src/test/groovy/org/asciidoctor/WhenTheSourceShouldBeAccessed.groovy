@@ -12,6 +12,8 @@ import org.asciidoctor.extension.Treeprocessor
 import org.jsoup.Jsoup
 import spock.lang.Specification
 
+import static org.asciidoctor.util.OptionsTestHelper.emptyOptions
+
 /**
  * Tests that the unsubstituted text can be retrieved from nodes
  */
@@ -37,7 +39,7 @@ This paragraph should show {foo}
 
 '''
         when:
-        Document doc = asciidoctor.load(document, Map.of())
+        Document doc = asciidoctor.load(document, emptyOptions())
         Block block = doc.blocks[0].blocks[0]
 
         then:
@@ -60,7 +62,7 @@ This paragraph should show {foo}
 
 '''
         when:
-        Document doc = asciidoctor.load(document, Map.of())
+        Document doc = asciidoctor.load(document, emptyOptions())
         List list = doc.blocks[0].blocks[0]
         ListItem listItem = list.items[0]
 
@@ -90,7 +92,7 @@ That::
 
 '''
         when:
-        Document doc = asciidoctor.load(document, Map.of())
+        Document doc = asciidoctor.load(document, emptyOptions())
         DescriptionList list = doc.blocks[0].blocks[0]
         DescriptionListEntry listItem = list.items[0]
 
@@ -117,7 +119,7 @@ and should continue here'''
 
 '''
         when:
-        Document doc = asciidoctor.load(document, Map.of())
+        Document doc = asciidoctor.load(document, emptyOptions())
         Table table = doc.blocks[0].blocks[0]
         Cell cell = table.body[0].cells[0]
 

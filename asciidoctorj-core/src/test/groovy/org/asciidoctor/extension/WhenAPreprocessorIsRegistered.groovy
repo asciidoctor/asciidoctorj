@@ -1,11 +1,12 @@
 package org.asciidoctor.extension
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.Options
 import org.asciidoctor.ast.Document
 import spock.lang.Specification
 
 import java.util.concurrent.atomic.AtomicBoolean
+
+import static org.asciidoctor.util.OptionsTestHelper.emptyOptions
 
 class WhenAPreprocessorIsRegistered extends Specification {
 
@@ -46,7 +47,7 @@ $secondLine"""
         })
 
         when:
-        asciidoctor.convert(document, Map.of())
+        asciidoctor.convert(document, emptyOptions())
 
         then:
         preprocessorCalled.get()
@@ -79,7 +80,7 @@ $secondLine"""
         })
 
         when:
-        asciidoctor.convert(document, Map.of())
+        asciidoctor.convert(document, emptyOptions())
 
         then:
         preprocessorCalled.get()
@@ -103,7 +104,7 @@ $secondLine"""
         })
 
         when:
-        asciidoctor.convert(document, Options.builder())
+        asciidoctor.convert(document, emptyOptions())
 
         then:
         preprocessorCalled.get()
@@ -134,7 +135,7 @@ $secondLine"""
         })
 
         when:
-        asciidoctor.convert(document, Options.builder())
+        asciidoctor.convert(document, emptyOptions())
 
         then:
         preprocessorCalled.get()
@@ -168,7 +169,7 @@ $secondLine"""
         })
 
         when:
-        asciidoctor.convert(document, Map.of())
+        asciidoctor.convert(document, emptyOptions())
 
         then:
         preprocessorCalled.get()

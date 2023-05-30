@@ -4,12 +4,11 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.PhraseNode;
 import org.asciidoctor.ast.StructuralNode;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.asciidoctor.util.OptionsTestHelper.emptyOptions;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
 
@@ -32,7 +31,6 @@ public class WhenTheInlineMacroProcessorRunsTwice {
     }
 
     private String convert(Asciidoctor asciidoctor) {
-        return asciidoctor.convert("example:alpha.bravo[format=test]", Collections.emptyMap());
+        return asciidoctor.convert("example:alpha.bravo[format=test]", emptyOptions());
     }
-
 }

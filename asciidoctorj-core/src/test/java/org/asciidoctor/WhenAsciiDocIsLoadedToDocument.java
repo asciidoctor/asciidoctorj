@@ -16,9 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toList;
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
+import static org.asciidoctor.util.OptionsTestHelper.emptyOptions;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -72,12 +72,12 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_return_empty_sources_when_document_is_null() {
-        assertEmptySources(asciidoctor.load(null, Options.builder().build()));
+        assertEmptySources(asciidoctor.load(null, emptyOptions()));
     }
 
     @Test
     public void should_return_empty_sources_when_document_is_empty() {
-        assertEmptySources(asciidoctor.load(null, Options.builder().build()));
+        assertEmptySources(asciidoctor.load(null, emptyOptions()));
     }
 
     private static void assertEmptySources(Document document) {
@@ -89,7 +89,7 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_return_section_blocks() {
-        Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
+        Document document = asciidoctor.load(DOCUMENT, emptyOptions());
         Section section = (Section) document.getBlocks().get(1);
         assertThat(section.getIndex(), is(0));
         assertThat(section.getSectionName(), either(is("sect1")).or(is("section")));
@@ -98,16 +98,14 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_return_blocks_from_a_document() {
-
-        Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
+        Document document = asciidoctor.load(DOCUMENT, emptyOptions());
         assertThat(document.getDoctitle(), is("Document Title"));
         assertThat(document.getBlocks(), hasSize(3));
     }
 
     @Test
     public void should_return_a_document_object_from_string() {
-
-        Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
+        Document document = asciidoctor.load(DOCUMENT, emptyOptions());
         assertThat(document.getDoctitle(), is("Document Title"));
     }
 
@@ -127,30 +125,16 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_find_elements_from_document() {
+        Document document = asciidoctor.load(DOCUMENT, emptyOptions());
+        List<StructuralNode> findBy = document.findBy(Map.of("context", ":image"));
 
-        Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
-        Map<Object, Object> selector = new HashMap<>();
-        selector.put("context", ":image");
-        List<StructuralNode> findBy = document.findBy(selector);
         assertThat(findBy, hasSize(2));
-
         assertThat((String) findBy.get(0).getAttributes().get("target"), is("tiger.png"));
         assertThat(findBy.get(0).getLevel(), greaterThan(0));
-
     }
 
     @Test
-    public void should_return_options_from_parsed_string_when_passed_as_map() {
-        Map<String, Object> options = Options.builder().compact(true).build().map();
-        Document document = asciidoctor.load(DOCUMENT, options);
-
-        Map<Object, Object> documentOptions = document.getOptions();
-
-        assertThat((Boolean) documentOptions.get("compact"), is(true));
-    }
-
-    @Test
-    public void should_return_options_from_parsed_string_when_passed_as_options_object() {
+    public void should_return_options_from_parsed_string() {
         Options options = Options.builder()
                 .compact(true)
                 .build();
@@ -162,7 +146,7 @@ public class WhenAsciiDocIsLoadedToDocument {
     }
 
     @Test
-    public void should_return_options_from_parsed_file_when_passed_as_options_object(
+    public void should_return_options_from_parsed_file(
             @ClasspathResource("sourcelocation.adoc") File resource) {
 
         Options options = Options.builder()
@@ -177,29 +161,28 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_return_node_name() {
-        Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
+        Document document = asciidoctor.load(DOCUMENT, emptyOptions());
         assertThat(document.getNodeName(), is("document"));
     }
 
     @Test
     public void should_return_if_it_is_inline() {
-        Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
+        Document document = asciidoctor.load(DOCUMENT, emptyOptions());
         assertThat(document.isInline(), is(false));
     }
 
     @Test
     public void should_return_if_it_is_block() {
-        Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
+        Document document = asciidoctor.load(DOCUMENT, emptyOptions());
         assertThat(document.isBlock(), is(true));
     }
 
     @Test
     public void should_be_able_to_manipulate_attributes() {
-        Map<String, Object> options = Options.builder()
+        Options options = Options.builder()
                 .attributes(Attributes.builder().dataUri(true).build())
                 .compact(true)
-                .build()
-                .map();
+                .build();
         Document document = asciidoctor.load(DOCUMENT, options);
         assertThat(document.getAttributes(), hasKey("toc-placement"));
         assertThat(document.hasAttribute("toc-placement"), is(true));
@@ -209,7 +192,7 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_be_able_to_get_roles() {
-        Document document = asciidoctor.load(ROLE, new HashMap<>());
+        Document document = asciidoctor.load(ROLE, emptyOptions());
         StructuralNode abstractBlock = document.getBlocks().get(0);
         assertThat(abstractBlock.getRole(), is("famous"));
         assertThat(abstractBlock.hasRole("famous"), is(true));
@@ -220,7 +203,7 @@ public class WhenAsciiDocIsLoadedToDocument {
     @Test
     public void should_be_able_to_add_role() {
         final String tmpRole = "tmpRole";
-        Document document = asciidoctor.load(ROLE, new HashMap<>());
+        Document document = asciidoctor.load(ROLE, emptyOptions());
         StructuralNode abstractBlock = document.getBlocks().get(0);
         assertThat(abstractBlock.hasRole(tmpRole), is(false));
         abstractBlock.addRole(tmpRole);
@@ -230,7 +213,7 @@ public class WhenAsciiDocIsLoadedToDocument {
     @Test
     public void should_be_able_to_remove_role() {
         final String famousRole = "famous";
-        Document document = asciidoctor.load(ROLE, new HashMap<>());
+        Document document = asciidoctor.load(ROLE, emptyOptions());
         StructuralNode abstractBlock = document.getBlocks().get(0);
         assertThat(abstractBlock.hasRole(famousRole), is(true));
         abstractBlock.removeRole(famousRole);
@@ -239,7 +222,7 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_be_able_to_get_reftext() {
-        Document document = asciidoctor.load(REFTEXT, new HashMap<>());
+        Document document = asciidoctor.load(REFTEXT, emptyOptions());
         StructuralNode abstractBlock = document.getBlocks().get(0);
         assertThat(abstractBlock.getReftext(), is("the first section"));
         assertThat(abstractBlock.isReftext(), is(true));
@@ -247,22 +230,20 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_be_able_to_get_icon_uri_string_reference() {
-        Map<String, Object> options = Options.builder()
+        Options options = Options.builder()
                 .attributes(Attributes.builder().dataUri(false).build())
                 .compact(true)
-                .build()
-                .map();
+                .build();
         Document document = asciidoctor.load(DOCUMENT, options);
         assertThat(document.iconUri("note"), is("./images/icons/note.png"));
     }
 
     @Test
     public void should_be_able_to_get_icon_uri() {
-        Map<String, Object> options = Options.builder().safe(SafeMode.SAFE)
+        Options options = Options.builder().safe(SafeMode.SAFE)
                 .attributes(Attributes.builder().dataUri(true).icons("font").build())
                 .compact(true)
-                .build()
-                .map();
+                .build();
         Document document = asciidoctor.load(DOCUMENT, options);
         assertThat(document.iconUri("note"),
                 either(
@@ -273,17 +254,16 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_be_able_to_get_media_uri() {
-        Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
+        Document document = asciidoctor.load(DOCUMENT, emptyOptions());
         assertThat(document.mediaUri("target"), is("target"));
     }
 
     @Test
     public void should_be_able_to_get_image_uri() {
-        Map<String, Object> options = Options.builder().safe(SafeMode.SAFE)
+        Options options = Options.builder().safe(SafeMode.SAFE)
                 .attributes(Attributes.builder().dataUri(false).build())
                 .compact(true)
-                .build()
-                .map();
+                .build();
         Document document = asciidoctor.load(DOCUMENT, options);
         assertThat(document.imageUri("target.jpg"), is("target.jpg"));
         assertThat(document.imageUri("target.jpg", "imagesdir"), is("target.jpg"));
@@ -291,7 +271,7 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_be_able_to_normalize_web_path() {
-        Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
+        Document document = asciidoctor.load(DOCUMENT, emptyOptions());
         assertThat(document.normalizeWebPath("target", null, true), is("target"));
     }
 
@@ -299,11 +279,10 @@ public class WhenAsciiDocIsLoadedToDocument {
     public void should_be_able_to_read_asset(
             @ClasspathResource("rendersample.asciidoc") File inputFile) throws IOException {
 
-        Map<String, Object> options = Options.builder().safe(SafeMode.SAFE)
+        Options options = Options.builder().safe(SafeMode.SAFE)
                 .attributes(Attributes.builder().dataUri(false).build())
                 .compact(true)
-                .build()
-                .map();
+                .build();
         Document document = asciidoctor.load(DOCUMENT, options);
 
         String content = document.readAsset(inputFile.getAbsolutePath(), new HashMap<>());
@@ -314,7 +293,7 @@ public class WhenAsciiDocIsLoadedToDocument {
     public void should_be_able_to_set_attribute() {
         final Object attributeName = "testattribute";
         final Object attributeValue = "testvalue";
-        Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
+        Document document = asciidoctor.load(DOCUMENT, emptyOptions());
         assertThat(document.setAttribute(attributeName, attributeValue, true), is(true));
         assertThat(document.getAttribute(attributeName), is(attributeValue));
         assertThat(document.getAttributes().get(attributeName), is(attributeValue));
@@ -324,7 +303,7 @@ public class WhenAsciiDocIsLoadedToDocument {
     public void should_be_able_to_set_attribute_on_attributes_map() {
         final String attributeName = "testattribute";
         final Object attributeValue = "testvalue";
-        Document document = asciidoctor.load(DOCUMENT, new HashMap<>());
+        Document document = asciidoctor.load(DOCUMENT, emptyOptions());
         document.getAttributes().put(attributeName, attributeValue);
         assertThat(document.getAttribute(attributeName), is(attributeValue));
         assertThat(document.getAttributes().get(attributeName), is(attributeValue));
@@ -335,23 +314,23 @@ public class WhenAsciiDocIsLoadedToDocument {
             @ClasspathResource("sourcelocation.adoc") File file) {
 
         // When
-        Document document = asciidoctor.loadFile(file, Options.builder().sourcemap(true).docType("book").build().map());
+        Document document = asciidoctor.loadFile(file, Options.builder().sourcemap(true).docType("book").build());
         Map<Object, Object> selector = new HashMap<>();
         selector.put("context", ":paragraph");
         List<StructuralNode> findBy = document.findBy(selector);
 
         // Then
-        StructuralNode block1 = findBy.get(0);
-        assertThat(block1.getSourceLocation().getLineNumber(), is(3));
-        assertThat(block1.getSourceLocation().getPath(), is(file.getName()));
-        assertThat(block1.getSourceLocation().getFile(), is(file.getName()));
-        assertThat(block1.getSourceLocation().getDir(), is(file.getParent().replaceAll("\\\\", "/")));
+        Cursor sourceLocation1 = findBy.get(0).getSourceLocation();
+        assertThat(sourceLocation1.getLineNumber(), is(3));
+        assertThat(sourceLocation1.getPath(), is(file.getName()));
+        assertThat(sourceLocation1.getFile(), is(file.getName()));
+        assertThat(sourceLocation1.getDir(), is(file.getParent().replaceAll("\\\\", "/")));
 
-        StructuralNode block2 = findBy.get(1);
-        assertThat(block2.getSourceLocation().getLineNumber(), is(8));
-        assertThat(block2.getSourceLocation().getPath(), is(file.getName()));
-        assertThat(block2.getSourceLocation().getFile(), is(file.getName()));
-        assertThat(block2.getSourceLocation().getDir(), is(file.getParent().replaceAll("\\\\", "/")));
+        Cursor sourceLocation2 = findBy.get(1).getSourceLocation();
+        assertThat(sourceLocation2.getLineNumber(), is(8));
+        assertThat(sourceLocation2.getPath(), is(file.getName()));
+        assertThat(sourceLocation2.getFile(), is(file.getName()));
+        assertThat(sourceLocation2.getDir(), is(file.getParent().replaceAll("\\\\", "/")));
     }
 
     @Test
@@ -367,7 +346,7 @@ public class WhenAsciiDocIsLoadedToDocument {
                 "paragraph\n" +
                 "\n";
 
-        Document document = asciidoctor.load(documentWithAttributes, new HashMap<>());
+        Document document = asciidoctor.load(documentWithAttributes, emptyOptions());
         List<StructuralNode> blocks = document.getBlocks();
 
         Section section = (Section) blocks.get(1);
@@ -398,7 +377,7 @@ public class WhenAsciiDocIsLoadedToDocument {
                 + "And herein lies the problem.\n"
                 + "\n";
 
-        Document document = asciidoctor.load(documentWithPreambleAndSection, new HashMap<>());
+        Document document = asciidoctor.load(documentWithPreambleAndSection, emptyOptions());
         List<StructuralNode> blocks = document.getBlocks();
 
         StructuralNode preambleContainer = blocks.get(0);
@@ -414,24 +393,24 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     @Test
     public void should_be_able_to_get_parent_from_document() {
-        String s = "== A small Example\n" +
+        String content = "== A small Example\n" +
                 "\n" +
                 "Lorem ipsum dolor sit amet:\n";
 
-        Document document = asciidoctor.load(s, new HashMap<>());
+        Document document = asciidoctor.load(content, emptyOptions());
         assertThat(document.getParent(), nullValue());
     }
 
     @Test
     public void should_read_caption() {
-        String s = "[caption=\"Table A. \"]\n" +
+        String content = "[caption=\"Table A. \"]\n" +
                 ".A formal table\n" +
                 "|===\n" +
                 "|Cell in column 1, row 1\n" +
                 "|Cell in column 2, row 1\n" +
                 "|===";
 
-        Document document = asciidoctor.load(s, new HashMap<>());
+        Document document = asciidoctor.load(content, emptyOptions());
         assertThat(document.getBlocks(), notNullValue());
         assertThat(document.getBlocks().size(), is(1));
         assertThat(document.getBlocks().get(0).getCaption(), is("Table A. "));
@@ -443,7 +422,7 @@ public class WhenAsciiDocIsLoadedToDocument {
                 "\n" +
                 "Preamble...";
 
-        Document document = asciidoctor.load(content, emptyMap());
+        Document document = asciidoctor.load(content, emptyOptions());
 
         List<Author> authors = document.getAuthors();
         assertThat(authors, hasSize(0));
@@ -456,7 +435,7 @@ public class WhenAsciiDocIsLoadedToDocument {
                 "\n" +
                 "Preamble...";
 
-        Document document = asciidoctor.load(content, emptyMap());
+        Document document = asciidoctor.load(content, emptyOptions());
 
         List<Author> authors = document.getAuthors();
         assertThat(authors, hasSize(1));
@@ -478,7 +457,7 @@ public class WhenAsciiDocIsLoadedToDocument {
                 "\n" +
                 "Preamble...";
 
-        Document document = asciidoctor.load(content, emptyMap());
+        Document document = asciidoctor.load(content, emptyOptions());
 
         List<Author> authors = document.getAuthors();
         assertThat(authors, hasSize(1));
@@ -499,7 +478,7 @@ public class WhenAsciiDocIsLoadedToDocument {
                 "\n" +
                 "Preamble...";
 
-        Document document = asciidoctor.load(content, emptyMap());
+        Document document = asciidoctor.load(content, emptyOptions());
 
         List<Author> authors = document.getAuthors();
         assertThat(authors, hasSize(2));
@@ -529,7 +508,7 @@ public class WhenAsciiDocIsLoadedToDocument {
                 "\n" +
                 "Preamble...";
 
-        Document document = asciidoctor.load(content, emptyMap());
+        Document document = asciidoctor.load(content, emptyOptions());
 
         RevisionInfo revisionInfo = document.getRevisionInfo();
 
@@ -619,8 +598,7 @@ public class WhenAsciiDocIsLoadedToDocument {
     }
 
     private Document loadDocument(String source) {
-        Options options = Options.builder().build();
-        return asciidoctor.load(source, options);
+        return asciidoctor.load(source, emptyOptions());
     }
 
     static String asciidocWithSections() {

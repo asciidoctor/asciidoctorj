@@ -56,7 +56,7 @@ public class WhenConverterIsRegistered {
     public void shouldRegisterAndExecuteGivenConverter() {
         asciidoctor.javaConverterRegistry().register(TextConverter.class, "test");
 
-        String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend("test"));
+        String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend("test").build());
 
         assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
     }
@@ -67,7 +67,7 @@ public class WhenConverterIsRegistered {
         asciidoctor.javaConverterRegistry().register(TextConverter.class);
         asciidoctor.javaConverterRegistry().register(DummyConverter.class);
 
-        String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend(TextConverter.DEFAULT_FORMAT));
+        String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend(TextConverter.DEFAULT_FORMAT).build());
 
         assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
     }
@@ -77,7 +77,7 @@ public class WhenConverterIsRegistered {
         // Register as default converter
         asciidoctor.javaConverterRegistry().register(DummyConverter.class);
 
-        String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend("Undefined"));
+        String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend("Undefined").build());
 
         assertThat(result, is("Dummy"));
     }
@@ -95,7 +95,7 @@ public class WhenConverterIsRegistered {
         try {
             asciidoctor.javaConverterRegistry().register(TextConverter.class);
 
-            String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend(TextConverter.DEFAULT_FORMAT));
+            asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend(TextConverter.DEFAULT_FORMAT).build());
 
             assertThat(handler.getLogRecords(), hasSize(1));
             assertThat(handler.getLogRecords().get(0).getMessage(), is("Now we're logging"));
@@ -142,7 +142,7 @@ public class WhenConverterIsRegistered {
                 "\n" +
                 "== Test" +
                 "\n" +
-                "== Test2\n", Options.builder().backend("test3").standalone(false));
+                "== Test2\n", Options.builder().backend("test3").standalone(false).build());
 
         assertEquals("== 1 Test ==\n" +
                 "== 42 Test2 ==", result);
@@ -157,7 +157,7 @@ public class WhenConverterIsRegistered {
         try {
             Thread.currentThread().setContextClassLoader(new URLClassLoader(new URL[]{serviceLoader.toURI().toURL()}));
             asciidoctor = JRubyAsciidoctor.create();
-            String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend("extensiontext"));
+            String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend("extensiontext").build());
 
             assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
         } finally {
@@ -168,26 +168,21 @@ public class WhenConverterIsRegistered {
 
     @Test
     public void shouldWriteFileWithSuffixFromConverterWithAnnotation(@TempDir File tempDir) {
-
         asciidoctor.javaConverterRegistry().register(TextConverter.class);
 
-        File todir = tempDir;
-        asciidoctor.convertFile(simpleDocument, Options.builder().backend(TextConverter.DEFAULT_FORMAT).toDir(todir).safe(SafeMode.UNSAFE));
+        asciidoctor.convertFile(simpleDocument, Options.builder().backend(TextConverter.DEFAULT_FORMAT).toDir(tempDir).safe(SafeMode.UNSAFE).build());
 
-        assertThat(new File(todir, "simple.html").exists(), is(false));
-        assertThat(new File(todir, "simple.txt").exists(), is(true));
+        assertThat(new File(tempDir, "simple.html").exists(), is(false));
+        assertThat(new File(tempDir, "simple.txt").exists(), is(true));
     }
 
     @Test
     public void shouldWriteFileWithSuffixFromConverterThatInvokesSetOutfileSuffix(@TempDir File tempDir) {
-
         asciidoctor.javaConverterRegistry().register(TextConverterWithSuffix.class);
 
-        File todir = tempDir;
-        asciidoctor.convertFile(simpleDocument, Options.builder().backend(TextConverterWithSuffix.DEFAULT_FORMAT).toDir(todir).safe(SafeMode.UNSAFE));
+        asciidoctor.convertFile(simpleDocument, Options.builder().backend(TextConverterWithSuffix.DEFAULT_FORMAT).toDir(tempDir).safe(SafeMode.UNSAFE).build());
 
-        assertThat(new File(todir, "simple.html").exists(), is(false));
-        assertThat(new File(todir, "simple.text").exists(), is(true));
+        assertThat(new File(tempDir, "simple.html").exists(), is(false));
+        assertThat(new File(tempDir, "simple.text").exists(), is(true));
     }
-
 }

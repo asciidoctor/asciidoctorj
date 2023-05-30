@@ -21,8 +21,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 
+import static org.asciidoctor.util.OptionsTestHelper.emptyOptions;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.isEmptyString;
@@ -49,16 +52,14 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
     @Test
     public void should_accept_empty_string_as_empty_content_when_output_is_String() {
-        Options basicOptions = Options.builder().build();
-        String result = asciidoctor.convert("", basicOptions);
+        String result = asciidoctor.convert("", emptyOptions());
 
         assertThat(result, isEmptyString());
     }
 
     @Test
     public void should_accept_null_string_as_empty_content_when_output_is_String() {
-        Options basicOptions = Options.builder().build();
-        String result = asciidoctor.convert(null, basicOptions);
+        String result = asciidoctor.convert(null, emptyOptions());
 
         assertThat(result, isEmptyString());
     }
@@ -78,10 +79,9 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
     @Test
     public void should_fail_when_reader_is_null() {
-        Options basicOptions = Options.builder().build();
         StringWriter writer = new StringWriter();
 
-        Throwable throwable = Assertions.catchThrowable(() -> asciidoctor.convert(null, writer, basicOptions));
+        Throwable throwable = Assertions.catchThrowable(() -> asciidoctor.convert(null, writer, emptyOptions()));
 
         Assertions.assertThat(throwable)
                 .isInstanceOf(NullPointerException.class)
@@ -94,7 +94,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
         FileReader inputAsciidoctorFile = new FileReader(renderSampleDocument);
         StringWriter rendererWriter = new StringWriter();
-        asciidoctor.convert(inputAsciidoctorFile, rendererWriter, options().build().map());
+        asciidoctor.convert(inputAsciidoctorFile, rendererWriter, emptyOptions());
 
         StringBuffer renderedContent = rendererWriter.getBuffer();
         assertRenderedFile(renderedContent.toString());
@@ -127,8 +127,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     @Test
     public void file_document_should_be_rendered_into_current_directory() {
 
-        String renderContent = asciidoctor.convertFile(renderSampleDocument, options()
-                .inPlace(true).build().map());
+        Options inPlaceOptions = options().inPlace(true).build();
+        String renderContent = asciidoctor.convertFile(renderSampleDocument, inPlaceOptions);
 
         File expectedFile = new File(renderSampleDocument.getParent(), "rendersample.html");
 
@@ -191,7 +191,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     public void docbook_document_should_be_rendered_into_current_directory() {
 
         Attributes attributes = Attributes.builder().backend("docbook").build();
-        Map<String, Object> options = options().inPlace(true).attributes(attributes).build().map();
+        Options options = options().inPlace(true).attributes(attributes).build();
 
         String renderContent = asciidoctor.convertFile(renderSampleDocument, options);
 
@@ -245,7 +245,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
         customDate.set(Calendar.DATE, 5);
 
         Attributes attributes = Attributes.builder().localDate(customDate.getTime()).build();
-        Map<String, Object> options = options().attributes(attributes).build().map();
+        Options options = options().attributes(attributes).build();
 
         String render_file = asciidoctor.convert(Files.readString(documentWithDate), options);
         assertRenderedLocalDateContent(render_file, "2012-12-05.");
@@ -263,7 +263,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
         customTime.set(Calendar.SECOND, 0);
 
         Attributes attributes = Attributes.builder().localTime(customTime.getTime()).build();
-        Map<String, Object> options = options().attributes(attributes).build().map();
+        Options options = options().attributes(attributes).build();
 
         String render_file = asciidoctor.convert(Files.readString(documentWithDate), options);
 
@@ -277,7 +277,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     public void string_content_document_should_be_rendered_into_default_backend() throws IOException, SAXException,
             ParserConfigurationException {
 
-        String render_file = asciidoctor.convert(Files.readString(renderSampleDocument.toPath()), new HashMap<>());
+        String render_file = asciidoctor.convert(Files.readString(renderSampleDocument.toPath()), emptyOptions());
 
         assertRenderedFile(render_file);
     }

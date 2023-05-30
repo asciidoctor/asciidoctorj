@@ -5,6 +5,8 @@ import org.asciidoctor.ast.Block
 import org.asciidoctor.ast.Document
 import spock.lang.Specification
 
+import static org.asciidoctor.util.OptionsTestHelper.emptyOptions
+
 class RubyAttributesMapDecoratorSpecification extends Specification {
 
     public static final String ATTR_ONE = '1'
@@ -25,7 +27,7 @@ Lorem ipsum dolor
     def "should consistently show positional attributes as string keys"() {
 
         when:
-        Document document = asciidoctor.load(documentWithPositionalAttribute, new HashMap<String, Object>())
+        Document document = asciidoctor.load(documentWithPositionalAttribute, emptyOptions())
 
         Block block = (Block) document.getBlocks().get(0)
         Map<String, Object> attributes = block.getAttributes()
@@ -42,7 +44,7 @@ Lorem ipsum dolor
     def "should remove positional attributes by string keys"() {
 
         given: 'a block with a positional attribute'
-        Document document = asciidoctor.load(documentWithPositionalAttribute, new HashMap<String, Object>())
+        Document document = asciidoctor.load(documentWithPositionalAttribute, emptyOptions())
 
         Block block = (Block) document.getBlocks().get(0)
 
@@ -63,14 +65,14 @@ Lorem ipsum dolor
 
     def "should return previous value on put"() {
         given: 'a block with a positional attribute'
-        Document document = asciidoctor.load(documentWithPositionalAttribute, new HashMap<String, Object>())
+        Document document = asciidoctor.load(documentWithPositionalAttribute, emptyOptions())
 
         Block block = (Block) document.getBlocks().get(0)
 
         when: 'I put another value for the positional attribute 1'
         def attributes = block.getAttributes()
         def newValue = 42
-        def previousValue = attributes.put(ATTR_ONE, newValue)
+        String previousValue = attributes.put(ATTR_ONE, newValue)
 
         then: 'put returned the previous value'
         previousValue.startsWith(blockStyle)

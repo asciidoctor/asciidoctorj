@@ -2,15 +2,12 @@ package org.asciidoctor.jruby.internal;
 
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
-import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.DocumentHeader;
 import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
-import org.asciidoctor.jruby.ast.impl.DocumentHeaderImpl;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.jruby.converter.internal.ConverterRegistryExecutor;
 import org.asciidoctor.jruby.extension.internal.ExtensionRegistryExecutor;
@@ -161,50 +158,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
         return rubyRuntime;
     }
 
-    private DocumentHeader toDocumentHeader(Document document) {
-
-        Document documentImpl = (Document) NodeConverter.createASTNode(document);
-
-        return DocumentHeaderImpl.createDocumentHeader(
-                documentImpl.getStructuredDoctitle(),
-                documentImpl.getDoctitle(),
-                documentImpl.getAuthors(),
-                document.getAttributes());
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public DocumentHeader readDocumentHeader(File file) {
-
-        RubyHash rubyHash = getParseHeaderOnlyOption();
-
-        Document document = (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load_file", rubyRuntime.newString(file.getAbsolutePath()), rubyHash));
-
-        return toDocumentHeader(document);
-    }
-
-    @Override
-    public DocumentHeader readDocumentHeader(String content) {
-
-        RubyHash rubyHash = getParseHeaderOnlyOption();
-
-        Document document = (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load", rubyRuntime.newString(content), rubyHash));
-        return toDocumentHeader(document);
-    }
-
-    @Override
-    public DocumentHeader readDocumentHeader(Reader contentReader) {
-        String content = IOUtils.readFull(contentReader);
-        return this.readDocumentHeader(content);
-    }
-
-    private RubyHash getParseHeaderOnlyOption() {
-        Map<String, Object> options = new HashMap<>();
-        options.put("parse_header_only", true);
-        return RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-    }
-
-    private List<String> convertAllFiles(Map<String, Object> options, final Iterable<File> asciidoctorFiles) {
+    private List<String> convertAllFiles(Options options, final Iterable<File> asciidoctorFiles) {
         List<String> asciidoctorContent = new ArrayList<>();
         for (File asciidoctorFile : asciidoctorFiles) {
             String renderedFile = convertFile(asciidoctorFile, options);
@@ -272,11 +226,6 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
         return rubyRuntime.getModule("Asciidoctor");
     }
 
-    @Override
-    public String convert(String content, Map<String, Object> options) {
-        return convert(content, options, String.class);
-    }
-
     public <T> T convert(String content, Map<String, Object> options, Class<T> expectedResult) {
 
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
@@ -331,38 +280,13 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     }
 
     @Override
-    public String convert(String content, OptionsBuilder options) {
-        return convert(content, options, String.class);
-    }
-
-    @Override
-    public <T> T convert(String content, OptionsBuilder options, Class<T> expectedResult) {
-        return convert(content, options.build(), expectedResult);
-    }
-
-    @Override
-    public void convert(Reader contentReader, Writer rendererWriter, Map<String, Object> options) throws IOException {
-        String content = IOUtils.readFull(contentReader);
-        String renderedContent = convert(content, options);
+    public void convert(Reader contentReader, Writer rendererWriter, Options options) throws IOException {
+        final String content = IOUtils.readFull(contentReader);
+        final String renderedContent = convert(content, options);
         IOUtils.writeFull(rendererWriter, renderedContent);
     }
 
-    @Override
-    public void convert(Reader contentReader, Writer rendererWriter, Options options) throws IOException {
-        this.convert(contentReader, rendererWriter, options.map());
-    }
-
-    @Override
-    public void convert(Reader contentReader, Writer rendererWriter, OptionsBuilder options) throws IOException {
-        this.convert(contentReader, rendererWriter, options.build());
-    }
-
-    @Override
-    public String convertFile(File file, Map<String, Object> options) {
-        return convertFile(file, options, String.class);
-    }
-
-    @Override
+    // @Override
     public <T> T convertFile(File file, Map<String, Object> options, Class<T> expectedResult) {
 
         this.rubyGemsPreloader.preloadRequiredLibraries(options);
@@ -420,52 +344,15 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     }
 
     @Override
-    public String convertFile(File file, OptionsBuilder options) {
-        return convertFile(file, options.build(), String.class);
-    }
-
-    @Override
-    public <T> T convertFile(File file, OptionsBuilder options, Class<T> expectedResult) {
-        return convertFile(file, options.build(), expectedResult);
-    }
-
-    @Override
-    public String[] convertDirectory(Iterable<File> directoryWalker, Map<String, Object> options) {
+    public String[] convertDirectory(Iterable<File> directoryWalker, Options options) {
         List<String> asciidoctorContent = convertAllFiles(options, directoryWalker);
         return asciidoctorContent.toArray(new String[0]);
     }
 
     @Override
-    public String[] convertDirectory(Iterable<File> directoryWalker, Options options) {
-        return convertDirectory(directoryWalker, options.map());
-    }
-
-    @Override
-    public String[] convertDirectory(Iterable<File> directoryWalker, OptionsBuilder options) {
-        return convertDirectory(directoryWalker, options.build());
-    }
-
-    @Override
-    public String[] convertFiles(Collection<File> files, Map<String, Object> options) {
-        List<String> asciidoctorContent = convertAllFiles(options, files);
-        return asciidoctorContent.toArray(new String[0]);
-    }
-
-    @Override
     public String[] convertFiles(Collection<File> asciidoctorFiles, Options options) {
-        return convertFiles(asciidoctorFiles, options.map());
-    }
-
-    @Override
-    public String[] convertFiles(Collection<File> files, OptionsBuilder options) {
-        return convertFiles(files, options.build());
-    }
-
-    @Override
-    public Document load(String content, Map<String, Object> options) {
-        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-        return (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load",
-                rubyRuntime.newString(content), rubyHash));
+        List<String> asciidoctorContent = convertAllFiles(options, asciidoctorFiles);
+        return asciidoctorContent.toArray(new String[0]);
     }
 
     @Override
@@ -476,17 +363,8 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     }
 
     @Override
-    public Document loadFile(File file, Map<String, Object> options) {
-        RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-
-        return (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load_file",
-                rubyRuntime.newString(file.getAbsolutePath()), rubyHash));
-    }
-
-    @Override
     public Document loadFile(File file, Options options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options.map());
-
         return (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load_file",
                 rubyRuntime.newString(file.getAbsolutePath()), rubyHash));
     }

@@ -66,7 +66,8 @@ public class HighlightJsHighlighterTest {
                 .toFile(false)
                 .attributes(Attributes.builder()
                         .sourceHighlighter("myhighlightjs")
-                        .build()));
+                        .build())
+                .build());
 
         assertThat(result,
             containsString("<script>hljs.initHighlighting()</script>"));
@@ -87,7 +88,8 @@ public class HighlightJsHighlighterTest {
                 .toFile(false)
                 .attributes(Attributes.builder()
                         .sourceHighlighter("myhighlightjs")
-                        .build()));
+                        .build())
+                    .build());
 
         assertThat(result,
             containsString("<script>hljs.initHighlighting()</script>"));
