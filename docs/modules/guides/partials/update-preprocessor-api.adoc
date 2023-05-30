@@ -38,6 +38,6 @@ However, if you wish to maintain the same behavior as before, the method can sim
     }
 ----
 
-You may find it helpful to review the methods Processor::newReader and PreprocessorReader::read to simplify your code when creating a new Reader and reading the content of the existing Reader.
+You may find it helpful to review the methods `Processor::newReader` and `PreprocessorReader::read` to simplify your code when creating a new Reader and reading the content of the existing Reader.
 
 However, please note that following the steps mentioned above will be sufficient to migrate your existing processor.

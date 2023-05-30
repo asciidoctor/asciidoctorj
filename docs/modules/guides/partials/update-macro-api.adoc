@@ -6,16 +6,16 @@ However, the specific type that a Macro Processor had to return was unclear, mak
 To address this issue, AsciidoctorJ 3.x.x has introduced the following changes:
 
 `InlineMacroProcessor::process`::
-The implementation of this method now needs to return a PhraseNode.
-Please update your code accordingly to ensure that the returned value is of type PhraseNode.
+The implementation of this method now needs to return a `PhraseNode`.
+Please update your code accordingly to ensure that the returned value is of type `PhraseNode`.
 `BlockMacroProcessor::process`::
-The implementation of this method now needs to return a StructuralNode.
-Make sure to modify your implementation to return a StructuralNode as required.
+The implementation of this method now needs to return a `StructuralNode`.
+Make sure to modify your implementation to return a `StructuralNode` as required.
 
 Moreover, there was a problem with the first parameter of the process method in InlineMacroProcessors.
-Previously, it incorrectly expected a PhraseNode as the first parameter.
+Previously, it incorrectly expected a `PhraseNode` as the first parameter.
 
-To resolve this issue, AsciidoctorJ 3.x.x has rectified the first parameter of InlineMacroProcessor::process to be a StructuralNode.
+To resolve this issue, AsciidoctorJ 3.x.x has rectified the first parameter of `InlineMacroProcessor::process` to be a `StructuralNode`.
 Please ensure that you update your code accordingly to reflect this change.
 
 If you have any further questions or concerns, please refer to the updated documentation.
