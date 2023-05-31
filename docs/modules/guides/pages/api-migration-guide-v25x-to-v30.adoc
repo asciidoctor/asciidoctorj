@@ -59,3 +59,7 @@ Map<String, Object> attributesMap = attributes.map();
 ----
 
 include::partial$removal-of-deprecated-methods-in-asciidoctor.adoc[]
+
+include::partial$update-preprocessor-api.adoc[]
+
+include::partial$update-macro-api.adoc[]
