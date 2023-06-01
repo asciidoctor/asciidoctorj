@@ -32,12 +32,6 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
     }
 
     @Override
-    @Deprecated
-    public boolean basebackend(String backend) {
-        return isBasebackend(backend);
-    }
-
-    @Override
     public Map<Object, Object> getOptions() {
         return RubyHashUtil.convertRubyHashMapToMap((RubyHash) getRubyProperty("options"));
     }
@@ -52,18 +46,11 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
         Object doctitle = getRubyProperty("doctitle", options);
 
         return toJava((IRubyObject) doctitle, Title.class);
-
     }
 
     @Override
     public String getDoctitle() {
         return getString("doctitle");
-    }
-
-    @Override
-    @Deprecated
-    public String doctitle() {
-        return getDoctitle();
     }
 
     @Override

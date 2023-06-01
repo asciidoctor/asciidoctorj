@@ -18,18 +18,11 @@ public interface Document extends StructuralNode {
     String getDoctitle();
 
     /**
-     * @deprecated Please use {@link #getDoctitle()}
-     * @return The title as a String.
-     * @see Title
-     */
-    @Deprecated
-    String doctitle();
-
-    /**
      * Gets the author(s) information as defined in the author line
      * in the document header, or in author &amp; email attributes.
      *
-     * @return authors information
+     * @return The authors information
+     * @see Author
      */
     List<Author> getAuthors();
 
@@ -37,32 +30,24 @@ public interface Document extends StructuralNode {
      * Make the raw source for the Document available.
      * Trailing white characters (spaces, line breaks, etc.) are removed.
      *
-     * @return raw content as String
+     * @return Raw content as String
      */
     String getSource();
 
     /**
      * Make the raw source lines for the Document available.
      *
-     * @return raw content as List<String>
+     * @return Raw content as List<String>
      */
     List<String> getSourceLines();
 
     /**
-     * @return basebackend attribute value
+     * @return 'basebackend' attribute value
      */
     boolean isBasebackend(String backend);
 
     /**
-     * @deprecated Please use {@link #isBasebackend(String)}
-     * @return basebackend attribute value
-     */
-    @Deprecated
-    boolean basebackend(String backend);
-
-    /**
-     *
-     * @return options defined in document.
+     * @return Options defined in the document
      */
     Map<Object, Object> getOptions();
 
@@ -70,8 +55,9 @@ public interface Document extends StructuralNode {
      * Gets the current counter with the given name and increases its value.
      * At the first invocation the counter will return 1.
      * After the call the value of the counter is set to the returned value plus 1.
-     * @param name
-     * @return
+     *
+     * @param name name of the counter
+     * @return Value before increment plus 1
      */
     int getAndIncrementCounter(String name);
 
@@ -79,24 +65,25 @@ public interface Document extends StructuralNode {
      * Gets the current counter with the given name and increases its value.
      * At the first invocation the counter will return the given initial value.
      * After the call the value of the counter is set to the returned value plus 1.
-     * @param name
-     * @param initialValue
-     * @return
+     *
+     * @param name         name of the counter
+     * @param initialValue value to start counter from
+     * @return Value before increment plus 1
      */
     int getAndIncrementCounter(String name, int initialValue);
 
     /**
-     * @return Whether the sourcemap is enabled.
+     * @return Whether the sourcemap is enabled
      */
     boolean isSourcemap();
 
     /**
      * Toggles the sourcemap option.
-     *
+     * <p>
      * This method must be called before the document is parsed, such as
      * from a Preprocessor extension. Otherwise, it has no effect.
      *
-     * @param state The state in which to put the sourcemap (true = on, false = off).
+     * @param state State in which to put the sourcemap (true = on, false = off)
      */
     void setSourcemap(boolean state);
 
@@ -104,9 +91,8 @@ public interface Document extends StructuralNode {
     /**
      * The catalog contains data collected by asciidoctor that is useful to a converter.
      *
-     * Note that the catalog is not part of the asciidoctor public API and is subject to change.
-     *
-     * @return catalog
+     * @return Catalog assets
+     * @see Catalog
      */
     Catalog getCatalog();
 
@@ -115,6 +101,7 @@ public interface Document extends StructuralNode {
      * The revision information with: date, number and remark.
      *
      * @return revisionInfo
+     * @see RevisionInfo
      */
     RevisionInfo getRevisionInfo();
 }

@@ -1,0 +1,19 @@
+== Removal of deprecated methods in `org.asciidoctor.ast.Document`
+
+Several methods in `org.asciidoctor.ast.Document` that were marked as `@Deprecated` have been removed.
+
+For each of the removed methods, the equivalent can be found below.
+
+[,java]
+.Removed deprecated methods
+----
+String doctitle()
+boolean basebackend(String backend)
+----
+
+[,java]
+.Final methods
+----
+String getDoctitle()
+boolean isBasebackend(String backend)
+----
