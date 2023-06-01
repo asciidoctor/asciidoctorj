@@ -29,12 +29,6 @@ public class DescriptionListImpl extends StructuralNodeImpl implements Descripti
     }
 
     @Override
-    @Deprecated
-    public String render() {
-        return getString("render");
-    }
-
-    @Override
     public String convert() {
         return getString("convert");
     }

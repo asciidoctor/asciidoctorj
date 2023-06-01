@@ -18,12 +18,6 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
     }
 
     @Override
-    @Deprecated
-    public String title() {
-        return getTitle();
-    }
-
-    @Override
     public String getTitle() {
         return getString("title");
     }
@@ -44,12 +38,6 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
     }
 
     @Override
-    @Deprecated
-    public String style() {
-        return getStyle();
-    }
-
-    @Override
     public String getStyle() {
         return getString("style");
     }
@@ -57,12 +45,6 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
     @Override
     public void setStyle(String style) {
         setString("style", style);
-    }
-
-    @Override
-    @Deprecated
-    public List<StructuralNode> blocks() {
-        return getBlocks();
     }
 
     @Override
@@ -74,12 +56,6 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
     @Override
     public void append(StructuralNode block) {
         getRubyObject().callMethod(runtime.getCurrentContext(), "<<", ((StructuralNodeImpl) block).getRubyObject());
-    }
-
-    @Override
-    @Deprecated
-    public Object content() {
-        return getContent();
     }
 
     @Override
@@ -113,7 +89,7 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
 
     @Override
     public String getContentModel() {
-    	return getString("content_model");
+        return getString("content_model");
     }
 
     @Override

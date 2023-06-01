@@ -24,12 +24,6 @@ public class ListImpl extends StructuralNodeImpl implements List {
     }
 
     @Override
-    @Deprecated
-    public String render() {
-        return getString("render");
-    }
-
-    @Override
     public String convert() {
         return getString("convert");
     }

@@ -10,26 +10,8 @@ public class SectionImpl extends StructuralNodeImpl implements Section {
     }
 
     @Override
-    @Deprecated
-    public int index() {
-        return getIndex();
-    }
-
-    @Override
     public int getIndex() {
         return getInt("index");
-    }
-
-    @Override
-    @Deprecated
-    public int number() {
-        return getNumber();
-    }
-
-    @Override
-    @Deprecated
-    public int getNumber() {
-        return getInt("number");
     }
 
     @Override
@@ -38,31 +20,13 @@ public class SectionImpl extends StructuralNodeImpl implements Section {
     }
 
     @Override
-    @Deprecated
-    public String sectname() {
-        return getSectionName();
-    }
-
-    @Override
     public String getSectionName() {
         return getString("sectname");
     }
 
     @Override
-    @Deprecated
-    public boolean special() {
-        return isSpecial();
-    }
-
-    @Override
     public boolean isSpecial() {
         return getBoolean("special");
-    }
-
-    @Override
-    @Deprecated
-    public boolean numbered() {
-        return isNumbered();
     }
 
     @Override

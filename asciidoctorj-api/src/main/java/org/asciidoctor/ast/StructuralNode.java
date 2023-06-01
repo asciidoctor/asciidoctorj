@@ -41,32 +41,15 @@ public interface StructuralNode extends ContentNode {
      */
     String SUBSTITUTION_POST_REPLACEMENTS  = "post_replacements";
 
-    /**
-     * @deprecated Please use {@linkplain #getTitle()} instead
-     */
-    @Deprecated
-    String title();
     String getTitle();
     void setTitle(String title);
 
     String getCaption();
     void setCaption(String caption);
 
-    /**
-     * @deprecated Please use {@linkplain #getStyle()} instead
-     */
-    @Deprecated
-    String style();
     String getStyle();
 
     void setStyle(String style);
-
-    /**
-     * @return The list of child blocks of this block
-     * @deprecated Please use {@linkplain #getBlocks()} instead
-     */
-    @Deprecated
-    List<StructuralNode> blocks();
 
     /**
      * @return The list of child blocks of this block
@@ -79,11 +62,6 @@ public interface StructuralNode extends ContentNode {
      */
     void append(StructuralNode block);
 
-    /**
-     * @deprecated Please use {@linkplain #getContent()} instead
-     */
-    @Deprecated
-    Object content();
     Object getContent();
     String convert();
     List<StructuralNode> findBy(Map<Object, Object> selector);

@@ -10,12 +10,6 @@ public class PhraseNodeImpl extends ContentNodeImpl implements PhraseNode {
     }
 
     @Override
-    @Deprecated
-    public String render() {
-        return getString("render");
-    }
-
-    @Override
     public String convert() {
         return getString("convert");
     }

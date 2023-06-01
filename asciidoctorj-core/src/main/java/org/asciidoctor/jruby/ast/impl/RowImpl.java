@@ -17,7 +17,7 @@ public class RowImpl extends RubyObjectWrapper implements Row {
 
     @Override
     public List<Cell> getCells() {
-        return new RubyBlockListDecorator<Cell>((RubyArray) getRubyObject());
+        return new RubyBlockListDecorator<>((RubyArray) getRubyObject());
     }
 
     public RubyArray getRubyCells() {
