@@ -21,3 +21,5 @@ include::partial$removal-of-deprecated-methods-in-document.adoc[]
 include::partial$removal-of-deprecated-constants-in-BlockProcessor.adoc[]
 
 include::partial$removal-of-deprecated-methods-in-extension-package.adoc[]
+
+include::partial$removal-of-deprecated-methods-in-ast-package.adoc[]
