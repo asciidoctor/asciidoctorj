@@ -106,7 +106,7 @@ public class WhenJavaExtensionIsRegistered {
         public void process(Document document, PreprocessorReader reader, String target,
                             Map<String, Object> attributes) {
             StringBuilder content = readContent(target);
-            reader.push_include(content.toString(), target, target, 1, attributes);
+            reader.pushInclude(content.toString(), target, target, 1, attributes);
         }
 
         private StringBuilder readContent(String target) {
@@ -174,7 +174,7 @@ public class WhenJavaExtensionIsRegistered {
             public void process(Document document, PreprocessorReader reader, String target,
                                 Map<String, Object> attributes) {
                 StringBuilder content = readContent(target);
-                reader.push_include(content.toString(), target, target, 1, attributes);
+                reader.pushInclude(content.toString(), target, target, 1, attributes);
             }
 
             private StringBuilder readContent(String target) {

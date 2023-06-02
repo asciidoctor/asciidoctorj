@@ -1,0 +1,38 @@
+== Removal of deprecated constants from `org.asciidoctor.extension.BlockProcessor`
+
+All constants in `org.asciidoctor.extension.BlockProcessor` class that were marked as `@Deprecated` have been removed.
+
+You can find the new values in `org.asciidoctor.extension.Contexts` interface.
+See the table below for the equivalencies.
+
+|===
+|Deprecated value |Contexts value
+
+|CONTEXTS
+|KEY
+
+|CONTEXT_OPEN
+|OPEN
+
+|CONTEXT_EXAMPLE
+|EXAMPLE
+
+|CONTEXT_SIDEBAR
+|SIDEBAR
+
+|CONTEXT_LITERAL
+|LITERAL
+
+|CONTEXT_LISTING
+|LISTING
+
+|CONTEXT_QUOTE
+|QUOTE
+
+|CONTEXT_PASS
+|PASS
+
+|CONTEXT_PARAGRAPH
+|PARAGRAPH
+
+|===

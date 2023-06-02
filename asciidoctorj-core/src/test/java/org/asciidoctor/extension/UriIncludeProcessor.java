@@ -29,7 +29,7 @@ public class UriIncludeProcessor extends IncludeProcessor {
                         Map<String, Object> attributes) {
 
         StringBuilder content = readContent(target);
-        reader.push_include(content.toString(), target, target, 1, attributes);
+        reader.pushInclude(content.toString(), target, target, 1, attributes);
     }
 
     private StringBuilder readContent(String target) {

@@ -32,7 +32,7 @@ public class PositionalAttrsIncludeProcessor extends IncludeProcessor {
             str += "," + it.next().getValue();
         }
 
-        reader.push_include(str, target, target, 1, attributes);
+        reader.pushInclude(str, target, target, 1, attributes);
 
     }
 
