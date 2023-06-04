@@ -1,0 +1,131 @@
+== Removal of deprecated methods in `org.asciidoctor.ast` package
+
+Several methods under `org.asciidoctor.ast` that were marked as `@Deprecated` have been removed.
+The new methods align better with Java naming patterns and are easily identifiable.
+
+Here follows the list of affected interfaces, describing for each one the removed methods and the substitutions.
+
+=== Block
+
+[,java]
+.Removed deprecated methods
+----
+List<String> lines()
+String source()
+----
+
+[,java]
+.Final methods
+----
+List<String> getLines()
+String getSource()
+----
+
+=== DescriptionList, PhraseNode and List
+
+[,java]
+.Removed deprecated method
+----
+String render()
+----
+
+[,java]
+.Final method
+----
+String convert()
+----
+
+=== ContentNode
+
+[,java]
+.Removed deprecated methods
+----
+String id()
+ContentNode parent()
+String context()
+Document document()
+String role()
+
+Object getAttr(Object name, Object defaultValue, boolean inherit)
+Object getAttr(Object name, Object defaultValue)
+Object getAttr(Object name)
+
+boolean hasAttr(Object name)
+boolean hasAttr(Object name, boolean inherited)
+
+boolean isAttr(Object name, Object expected)
+boolean isAttr(Object name, Object expected, boolean inherit)
+
+boolean setAttr(Object name, Object value, boolean overwrite)
+----
+
+[,java]
+.Final methods
+----
+String getId()
+ContentNode getParent()
+String getContext()
+Document getDocument()
+String getRole()
+
+Object getAttribute(Object name, Object defaultValue, boolean inherit)
+Object getAttribute(Object name, Object defaultValue)
+Object getAttribute(Object name)
+
+boolean hasAttribute(Object name)
+boolean hasAttribute(Object name, boolean inherited)
+
+boolean isAttribute(Object name, Object expected)
+boolean isAttribute(Object name, Object expected, boolean inherit)
+
+boolean setAttribute(Object name, Object value, boolean overwrite)
+----
+
+=== Section
+
+On top of the methods replaced by Java getters, both `number` and `getNumber` are replaced by `getNumeral`.
+This is done to support non-number numerals.
+
+[,java]
+.Removed deprecated methods
+----
+int index()
+int number()
+int getNumber()
+
+String sectname()
+boolean special()
+
+boolean numbered()
+----
+
+[,java]
+.Final methods
+----
+int getIndex()
+String getNumeral()
+
+String getSectionName()
+boolean isSpecial()
+
+boolean isNumbered()
+----
+
+=== StructuralNode
+
+[,java]
+.Removed deprecated methods
+----
+Object content()
+String style()
+String title()
+List<StructuralNode> blocks()
+----
+
+.Final methods
+----
+Object getContent()
+String getStyle()
+String getTitle()
+List<StructuralNode> getBlocks()
+----

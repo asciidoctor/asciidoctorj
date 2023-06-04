@@ -20,6 +20,7 @@ public interface DescriptionListEntry {
      *     return doc;
      *   }
      * }</pre></code>
+     *
      * @param description The new description for this description list entry,
      */
     void setDescription(final ListItem description);

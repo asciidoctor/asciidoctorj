@@ -32,7 +32,7 @@ public class AuthorImpl implements Author {
     }
 
     private static String aref(RubyStruct s, String key) {
-        return (String) JavaEmbedUtils.rubyToJava(s.aref(s.getRuntime().newString(key)));
+        return JavaEmbedUtils.rubyToJava(s.aref(s.getRuntime().newString(key)));
     }
 
     public String getFullName() {

@@ -20,12 +20,6 @@ public abstract class ContentNodeImpl extends RubyObjectWrapper implements Conte
     }
 
     @Override
-    @Deprecated
-    public String id() {
-        return getId();
-    }
-
-    @Override
     public String getId() {
         return getString("id");
     }
@@ -36,31 +30,14 @@ public abstract class ContentNodeImpl extends RubyObjectWrapper implements Conte
     }
 
     @Override
-    @Deprecated
-    public String context() {
-        return getContext();
-    }
-
-    @Override
     public String getContext() {
         return getString("context");
     }
 
-    @Override
-    @Deprecated
-    public ContentNode parent() {
-        return getParent();
-    }
 
     @Override
     public ContentNode getParent() {
         return NodeConverter.createASTNode(getRubyProperty("parent"));
-    }
-
-    @Override
-    @Deprecated
-    public Document document() {
-        return getDocument();
     }
 
     @Override
@@ -89,24 +66,6 @@ public abstract class ContentNodeImpl extends RubyObjectWrapper implements Conte
     }
 
     @Override
-    @Deprecated
-    public Object getAttr(Object name, Object defaultValue, boolean inherit) {
-        return getAttribute(name, defaultValue, inherit);
-    }
-
-    @Override
-    @Deprecated
-    public Object getAttr(Object name, Object defaultValue) {
-        return getAttribute(name, defaultValue);
-    }
-
-    @Override
-    @Deprecated
-    public Object getAttr(Object name) {
-        return getAttribute(name);
-    }
-
-    @Override
     public Object getAttribute(Object name, Object defaultValue, boolean inherit) {
         return JavaEmbedUtils.rubyToJava(getRubyProperty("attr", name, defaultValue, inherit));
     }
@@ -122,18 +81,6 @@ public abstract class ContentNodeImpl extends RubyObjectWrapper implements Conte
     }
 
     @Override
-    @Deprecated
-    public boolean isAttr(Object name, Object expected, boolean inherit) {
-        return isAttribute(name, expected, inherit);
-    }
-
-    @Override
-    @Deprecated
-    public boolean isAttr(Object name, Object expected) {
-        return isAttribute(name, expected);
-    }
-
-    @Override
     public boolean isAttribute(Object name, Object expected, boolean inherit) {
         return getBoolean("attr?", name, expected, inherit);
     }
@@ -144,18 +91,6 @@ public abstract class ContentNodeImpl extends RubyObjectWrapper implements Conte
     }
 
     @Override
-    @Deprecated
-    public boolean hasAttr(Object name) {
-        return hasAttribute(name);
-    }
-
-    @Override
-    @Deprecated
-    public boolean hasAttr(Object name, boolean inherited) {
-        return hasAttribute(name, inherited);
-    }
-
-    @Override
     public boolean hasAttribute(Object name) {
         return getBoolean("attr?", name);
     }
@@ -163,12 +98,6 @@ public abstract class ContentNodeImpl extends RubyObjectWrapper implements Conte
     @Override
     public boolean hasAttribute(Object name, boolean inherited) {
         return getBoolean("attr?", name, null, inherited);
-    }
-
-    @Override
-    @Deprecated
-    public boolean setAttr(Object name, Object value, boolean overwrite) {
-        return setAttribute(name, value, overwrite);
     }
 
     @Override
@@ -189,12 +118,6 @@ public abstract class ContentNodeImpl extends RubyObjectWrapper implements Conte
     @Override
     public String getRole() {
         return getString("role");
-    }
-
-    @Override
-    @Deprecated
-    public String role() {
-        return getRole();
     }
 
     @Override
