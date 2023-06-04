@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Improvement::
+
+* Upgrade to JRuby 9.4.2.0 (#1215) (@abelsromero)
+
 == 2.5.9 (2023-06-01)
 
 Improvement::
