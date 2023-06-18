@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Bug Fixes::
+
+* 'UnsupportedOperationException' when passing immutable Map as options to 'createPhraseNode' (#1221) (@abelsromero)
+
 Improvement::
 
 * BREAKING: Fix Macro APIs to take StructuralNodes and return Phrase- or StructuralNodes. (#1084)

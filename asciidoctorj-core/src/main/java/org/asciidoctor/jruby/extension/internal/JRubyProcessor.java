@@ -159,19 +159,21 @@ public class JRubyProcessor implements Processor {
     public Block createBlock(StructuralNode parent, String context, String content, Map<String, Object> attributes,
                              Map<Object, Object> options) {
 
-        options.put(Options.SOURCE, content);
-        options.put(Options.ATTRIBUTES, attributes);
+        Map<Object, Object> optionsCopy = new HashMap<>(options);
+        optionsCopy.put(Options.SOURCE, content);
+        optionsCopy.put(Options.ATTRIBUTES, attributes);
 
-        return createBlock(parent, context, options);
+        return createBlock(parent, context, optionsCopy);
     }
 
     @Override
     public Block createBlock(StructuralNode parent, String context, List<String> content, Map<String, Object> attributes,
                              Map<Object, Object> options) {
 
-        options.put(Options.SOURCE, content);
-        options.put(Options.ATTRIBUTES, new HashMap<>(attributes));
-        return createBlock(parent, context, options);
+        Map<Object, Object> optionsCopy = new HashMap<>(options);
+        optionsCopy.put(Options.SOURCE, content);
+        optionsCopy.put(Options.ATTRIBUTES, new HashMap<>(attributes));
+        return createBlock(parent, context, optionsCopy);
     }
 
     @Override
@@ -179,10 +181,11 @@ public class JRubyProcessor implements Processor {
 
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
-        options.put(Options.ATTRIBUTES, attributes);
+        Map<Object, Object> optionsCopy = new HashMap<>(options);
+        optionsCopy.put(Options.ATTRIBUTES, attributes);
 
         RubyHash convertMapToRubyHashWithSymbols = RubyHashUtil.convertMapToRubyHashWithSymbolsIfNecessary(rubyRuntime,
-                options);
+                optionsCopy);
 
         RubyArray rubyText = rubyRuntime.newArray();
         rubyText.addAll(text);
@@ -200,9 +203,10 @@ public class JRubyProcessor implements Processor {
 
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
-        options.put(Options.ATTRIBUTES, RubyHashUtil.convertMapToRubyHashWithStrings(rubyRuntime, attributes));
+        Map<String, Object> optionsCopy = new HashMap<>(options);
+        optionsCopy.put(Options.ATTRIBUTES, RubyHashUtil.convertMapToRubyHashWithStrings(rubyRuntime, attributes));
 
-        RubyHash convertedOptions = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+        RubyHash convertedOptions = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, optionsCopy);
 
         IRubyObject[] parameters = {
                 ((ContentNodeImpl) parent).getRubyObject(),
@@ -306,8 +310,9 @@ public class JRubyProcessor implements Processor {
                                                Map<String, Object> attributes,
                                                Map<Object, Object> options) {
 
-        options.put(Options.ATTRIBUTES, new HashMap<>(attributes));
-        return createList(parent, context, options);
+        HashMap<Object, Object> optionsCopy = new HashMap<>(options);
+        optionsCopy.put(Options.ATTRIBUTES, new HashMap<>(attributes));
+        return createList(parent, context, optionsCopy);
     }
 
     @Override
@@ -330,14 +335,14 @@ public class JRubyProcessor implements Processor {
     public ListItem createListItem(final org.asciidoctor.ast.List parent, final String text) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
-        return (ListItem) NodeConverter.createASTNode(rubyRuntime, NodeConverter.NodeType.LIST_ITEM_CLASS, ListImpl.class.cast(parent).getRubyObject(), rubyRuntime.newString(text));
+        return (ListItem) NodeConverter.createASTNode(rubyRuntime, NodeConverter.NodeType.LIST_ITEM_CLASS, ((ListImpl) parent).getRubyObject(), rubyRuntime.newString(text));
     }
 
     @Override
     public ListItem createListItem(final org.asciidoctor.ast.DescriptionList parent, final String text) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
-        return (ListItem) NodeConverter.createASTNode(rubyRuntime, NodeConverter.NodeType.LIST_ITEM_CLASS, DescriptionListImpl.class.cast(parent).getRubyObject(), rubyRuntime.newString(text));
+        return (ListItem) NodeConverter.createASTNode(rubyRuntime, NodeConverter.NodeType.LIST_ITEM_CLASS, ((DescriptionListImpl) parent).getRubyObject(), rubyRuntime.newString(text));
     }
 
     /**
