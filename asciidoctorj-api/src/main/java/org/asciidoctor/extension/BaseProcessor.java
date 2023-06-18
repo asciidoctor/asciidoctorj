@@ -219,9 +219,10 @@ public class BaseProcessor implements Processor {
 
     @Override
     public Block createBlock(StructuralNode parent, String context, String content, Map<String, Object> attributes, Map<Object, Object> options) {
-        options.put(Options.SOURCE, content);
-        options.put(Options.ATTRIBUTES, attributes);
-        return createBlock(parent, context, options);
+        Map<Object, Object> optionsCopy = new HashMap<>(options);
+        optionsCopy.put(Options.SOURCE, content);
+        optionsCopy.put(Options.ATTRIBUTES, attributes);
+        return createBlock(parent, context, optionsCopy);
     }
 
     @Override
@@ -237,11 +238,11 @@ public class BaseProcessor implements Processor {
     @Override
     public Block createBlock(StructuralNode parent, String context, List<String> content, Map<String, Object> attributes,
                              Map<Object, Object> options) {
+        Map<Object, Object> optionsCopy = new HashMap<>(options);
+        optionsCopy.put(Options.SOURCE, content);
+        optionsCopy.put(Options.ATTRIBUTES, new HashMap<>(attributes));
 
-        options.put(Options.SOURCE, content);
-        options.put(Options.ATTRIBUTES, new HashMap<>(attributes));
-
-        return createBlock(parent, context, options);
+        return createBlock(parent, context, optionsCopy);
     }
 
     @Override
