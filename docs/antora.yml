@@ -3,16 +3,16 @@ title: AsciidoctorJ
 version: '2.5'
 asciidoc:
   attributes:
-    release-version: 2.5.7
-    artifact-version: 2.5.7
+    release-version: 2.5.10
+    artifact-version: 2.5.10
     asciidoctorj-epub3-version: 1.5.1
     asciidoctorj-pdf-version: 1.6.2
-    jruby-version: 9.3.8.0
-    url-jruby: http://jruby.org
+    jruby-version: 9.4.2.0
+    url-jruby: https://www.jruby.org/
     url-gradle: https://gradle.org
     url-repo: https://github.com/asciidoctor/asciidoctorj
     url-tilt: https://github.com/rtomayko/tilt
-    url-font-awesome: http://fortawesome.github.io/Font-Awesome
+    url-font-awesome: https://fontawesome.com
     url-highlightjs: https://highlightjs.org
     url-prismjs: https://prismjs.com
 nav:
