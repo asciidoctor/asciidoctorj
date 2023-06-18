@@ -19,6 +19,10 @@ Improvement::
 
 * Upgrade to JRuby 9.4.2.0 (#1215) (@abelsromero)
 
+Build / Infrastructure::
+
+* Ignore 'docs/**' changes in CI(#1226) (@abelsromero)
+
 == 2.5.9 (2023-06-01)
 
 Improvement::
