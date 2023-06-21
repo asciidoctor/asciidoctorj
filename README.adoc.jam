@@ -3,11 +3,14 @@
 ////
 {%@rot13 Guvf vf n trarengrq svyr. QB ABG RQVG!!!!!
 Gb zbqvsl guvf svyr rqvg ERNQZR.nqbp.wnz va gur fnzr qverpgbel%}\
+{%@snip:properties gradle.properties%}
 {%@define VERSION_XPATH=//metadata/versioning/release%}\
+{%#define ASCIIDOCTORJ_VERSION={%@snip version%}%}\
+{%#define ASCIIDOCTORJ_API_VERSION={%@snip version%}%}\
 {%@snip:xml MVN_ASCIIDOCTORJ=https://repo.maven.apache.org/maven2/org/asciidoctor/asciidoctorj/maven-metadata.xml%}\
-{%#define ASCIIDOCTORJ_VERSION={%MVN_ASCIIDOCTORJ {%VERSION_XPATH%}%}%}\
+{%#define ASCIIDOCTORJ_LAST_RELEASE={%MVN_ASCIIDOCTORJ {%VERSION_XPATH%}%}%}\
 {%@snip:xml MVN_ASCIIDOCTORJ_API=https://repo.maven.apache.org/maven2/org/asciidoctor/asciidoctorj-api/maven-metadata.xml%}\
-{%#define ASCIIDOCTORJ_API_VERSION={%MVN_ASCIIDOCTORJ_API {%VERSION_XPATH%}%}%}\
+{%#define ASCIIDOCTORJ_API_LAST_RELEASE={%MVN_ASCIIDOCTORJ_API {%VERSION_XPATH%}%}%}\
 {%@snip:xml MVN_ASCIIDOCTORJ_EPUB3=https://repo.maven.apache.org/maven2/org/asciidoctor/asciidoctorj-epub3/maven-metadata.xml%}\
 {%#define ASCIIDOCTORJ_EPUB3_VERSION={%MVN_ASCIIDOCTORJ_EPUB3 {%VERSION_XPATH%}%}%}\
 {%@snip:xml MVN_ASCIIDOCTORJ_PDF=https://repo.maven.apache.org/maven2/org/asciidoctor/asciidoctorj-pdf/maven-metadata.xml%}\
@@ -43,11 +46,14 @@ endif::[]
 ifdef::awestruct[:uri-docs: link:/docs]
 ifndef::awestruct[:uri-docs: https://asciidoctor.org/docs]
 :uri-asciidoctor: {uri-docs}/what-is-asciidoctor
-:uri-repo: https://github.com/asciidoctor/asciidoctorj
+:github-url: https://github.com/
+:uri-repo: {github-url}asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-zulip: https://asciidoctor.zulipchat.com/
-:artifact-version: {%ASCIIDOCTORJ_VERSION%}
-:api-version: {%ASCIIDOCTORJ_API_VERSION%}
+:artifact-version: {%ASCIIDOCTORJ_LAST_RELEASE%}
+:artifact-dev-version: {%ASCIIDOCTORJ_VERSION%}
+:api-version: {%ASCIIDOCTORJ_API_LAST_RELEASE%}
+:api-dev-version: {%ASCIIDOCTORJ_API_VERSION%}
 :asciidoctorj-epub3-version: {%ASCIIDOCTORJ_EPUB3_VERSION%}
 :asciidoctorj-pdf-version: {%ASCIIDOCTORJ_PDF_VERSION%}
 :maven-search: http://search.maven.org/
@@ -59,7 +65,7 @@ ifndef::awestruct[:uri-docs: https://asciidoctor.org/docs]
 :uri-maven-artifact-api-file: {maven-search}remotecontent?filepath=org/asciidoctor/asciidoctorj-api/{artifact-version}/asciidoctorj-api-{artifact-version}
 :uri-maven-guide: {uri-docs}/install-and-use-asciidoctor-maven-plugin
 :uri-gradle-guide: {uri-docs}/install-and-use-asciidoctor-gradle-plugin
-:uri-tilt: https://github.com/rtomayko/tilt
+:uri-tilt: {github-url}rtomayko/tilt
 :uri-font-awesome: http://fortawesome.github.io/Font-Awesome
 :uri-gradle: https://gradle.org
 :uri-chocolatey: https://chocolatey.org
@@ -70,7 +76,7 @@ Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of
 You can find the documentation for integrating Asciidoctor in your JVM based language of choice at the https://docs.asciidoctor.org/asciidoctorj/latest/[Asciidoctor Docs site].
 
 ifdef::badges[]
-image:https://github.com/asciidoctor/asciidoctorj/workflows/Build%20Main/badge.svg?event=push[Build Status (Github Actions)]
+image:{github-url}asciidoctor/asciidoctorj/workflows/Build%20Main/badge.svg?event=push[Build Status (Github Actions)]
 image:https://img.shields.io/badge/zulip-join_chat-brightgreen.svg[project chat,link=https://asciidoctor.zulipchat.com/]
 endif::[]
 
@@ -110,6 +116,9 @@ The artifact information can be found in the tables below.
 |===
 
 CAUTION: The artifactId changed to `asciidoctorj` starting in 1.5.0.
+The latest version released in the repository may be an alpha version.
+You may consider using the latest stable version instead.
+The document you are currently reading describes the version {api-dev-version}.
 
 == Quick win: using the command line interface
 
@@ -352,7 +361,7 @@ TIP: We strongly recommend that you use Gradle via the https://www.timroes.de/20
 
 To clone the project, compile the source and build the artifacts (i.e., jars) locally, run:
 
- $ git clone https://github.com/asciidoctor/asciidoctorj
+ $ git clone {github-url}asciidoctor/asciidoctorj
    cd asciidoctorj
    ./gradlew assemble
 
@@ -400,7 +409,7 @@ Then, import the project into Eclipse using menu:File[Import,General,Existing Pr
 === Continuous integration
 
 Continuous integration for the AsciidoctorJ project is performed by GitHub Actions.
-You can find recent build results, including the build status of pull requests, on the https://github.com/asciidoctor/asciidoctorj/actions[asciidoctor/asciidoctorj] page.
+You can find recent build results, including the build status of pull requests, on the {github-url}asciidoctor/asciidoctorj/actions[asciidoctor/asciidoctorj] page.
 
 === Release and publish the artifacts
 

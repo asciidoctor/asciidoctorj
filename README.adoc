@@ -3,6 +3,7 @@
 ////
 This is a generated file. DO NOT EDIT!!!!!
 To modify this file edit README.adoc.jam in the same directory
+
 ////
 Alex Soto <https://github.com/lordofthejars[@lordofthejars]>; Dan Allen <https://github.com/mojavelinux[@mojavelinux]>; Robert Panzer <https://github.com/robertpanzer[@robertpanzer]>
 // Settings:
@@ -33,11 +34,14 @@ endif::[]
 ifdef::awestruct[:uri-docs: link:/docs]
 ifndef::awestruct[:uri-docs: https://asciidoctor.org/docs]
 :uri-asciidoctor: {uri-docs}/what-is-asciidoctor
-:uri-repo: https://github.com/asciidoctor/asciidoctorj
+:github-url: https://github.com/
+:uri-repo: {github-url}asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-zulip: https://asciidoctor.zulipchat.com/
 :artifact-version: 3.0.0-alpha.1
+:artifact-dev-version: 3.0.0-alpha.2-SNAPSHOT
 :api-version: 3.0.0-alpha.1
+:api-dev-version: 3.0.0-alpha.2-SNAPSHOT
 :asciidoctorj-epub3-version: 1.5.1
 :asciidoctorj-pdf-version: 2.3.7
 :maven-search: http://search.maven.org/
@@ -49,7 +53,7 @@ ifndef::awestruct[:uri-docs: https://asciidoctor.org/docs]
 :uri-maven-artifact-api-file: {maven-search}remotecontent?filepath=org/asciidoctor/asciidoctorj-api/{artifact-version}/asciidoctorj-api-{artifact-version}
 :uri-maven-guide: {uri-docs}/install-and-use-asciidoctor-maven-plugin
 :uri-gradle-guide: {uri-docs}/install-and-use-asciidoctor-gradle-plugin
-:uri-tilt: https://github.com/rtomayko/tilt
+:uri-tilt: {github-url}rtomayko/tilt
 :uri-font-awesome: http://fortawesome.github.io/Font-Awesome
 :uri-gradle: https://gradle.org
 :uri-chocolatey: https://chocolatey.org
@@ -60,7 +64,7 @@ Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of
 You can find the documentation for integrating Asciidoctor in your JVM based language of choice at the https://docs.asciidoctor.org/asciidoctorj/latest/[Asciidoctor Docs site].
 
 ifdef::badges[]
-image:https://github.com/asciidoctor/asciidoctorj/workflows/Build%20Main/badge.svg?event=push[Build Status (Github Actions)]
+image:{github-url}asciidoctor/asciidoctorj/workflows/Build%20Main/badge.svg?event=push[Build Status (Github Actions)]
 image:https://img.shields.io/badge/zulip-join_chat-brightgreen.svg[project chat,link=https://asciidoctor.zulipchat.com/]
 endif::[]
 
@@ -100,6 +104,9 @@ The artifact information can be found in the tables below.
 |===
 
 CAUTION: The artifactId changed to `asciidoctorj` starting in 1.5.0.
+The latest version released in the repository may be an alpha version.
+You may consider using the latest stable version instead.
+The document you are currently reading describes the version {api-dev-version}.
 
 == Quick win: using the command line interface
 
@@ -342,7 +349,7 @@ TIP: We strongly recommend that you use Gradle via the https://www.timroes.de/20
 
 To clone the project, compile the source and build the artifacts (i.e., jars) locally, run:
 
- $ git clone https://github.com/asciidoctor/asciidoctorj
+ $ git clone {github-url}asciidoctor/asciidoctorj
    cd asciidoctorj
    ./gradlew assemble
 
@@ -390,7 +397,7 @@ Then, import the project into Eclipse using menu:File[Import,General,Existing Pr
 === Continuous integration
 
 Continuous integration for the AsciidoctorJ project is performed by GitHub Actions.
-You can find recent build results, including the build status of pull requests, on the https://github.com/asciidoctor/asciidoctorj/actions[asciidoctor/asciidoctorj] page.
+You can find recent build results, including the build status of pull requests, on the {github-url}asciidoctor/asciidoctorj/actions[asciidoctor/asciidoctorj] page.
 
 === Release and publish the artifacts
 
