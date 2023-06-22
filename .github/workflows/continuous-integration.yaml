@@ -2,12 +2,14 @@ name: Build Main
 on:
   push:
     branches:
-      - main
       - v2.5.x
+    paths-ignore:
+      - 'docs/**'
   pull_request:
     branches:
-      - main
       - v2.5.x
+    paths-ignore:
+      - 'docs/**'
   schedule:
     - cron: '0 0 * * *'
 
