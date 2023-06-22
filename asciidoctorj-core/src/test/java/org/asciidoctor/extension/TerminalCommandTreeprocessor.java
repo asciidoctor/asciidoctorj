@@ -4,7 +4,7 @@ import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.StructuralNode;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +32,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
 
         for (int i = 0; i < blocks.size(); i++) {
             final StructuralNode currentBlock = blocks.get(i);
-            if (currentBlock instanceof StructuralNode) {
+            if (currentBlock != null) {
                 if ("paragraph".equals(currentBlock.getContext())) {
                     List<String> lines = ((Block) currentBlock).getLines();
                     if (lines.size() > 0 && lines.get(0).startsWith("$")) {
@@ -57,7 +57,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
         for (String line : lines) {
             if (line.startsWith("$")) {
                 resultLines.append("<span class=\"command\">")
-                        .append(line.substring(2, line.length()))
+                        .append(line.substring(2))
                         .append("</span>");
             } else {
                 resultLines.append(line);
@@ -65,7 +65,7 @@ public class TerminalCommandTreeprocessor extends Treeprocessor {
         }
 
         return createBlock(this.document, "listing",
-                List.of(resultLines.toString()), attributes, new HashMap<>());
+                List.of(resultLines.toString()), attributes, Collections.emptyMap());
     }
 
 }
