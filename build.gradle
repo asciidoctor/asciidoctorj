@@ -59,9 +59,9 @@ ext {
   // jar versions
   arquillianVersion = '1.6.0.Final'
   arquillianSpockVersion = '1.0.0.CR1'
-  asciidoctorjPdfVersion = '1.6.2'
+  asciidoctorjPdfVersion = '2.3.7'
   asciidoctorjEpub3Version = '1.5.1'
-  asciidoctorjDiagramVersion = '2.2.7'
+  asciidoctorjDiagramVersion = '2.2.7' // 2.2.8+ requires Java 11
   asciidoctorjDiagramDitaaMiniVersion = '1.0.3'
   asciidoctorjDiagramPlantumlVersion = '1.2023.5'
   asciidoctorjRevealJsVersion = '4.1.0'
