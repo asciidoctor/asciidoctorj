@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Bug Fixes::
+
+* 'UnsupportedOperationException' when passing immutable Map as options to 'createPhraseNode' (#1221) (@abelsromero)
+
 Improvement::
 
 * BREAKING: Fix Macro APIs to take StructuralNodes and return Phrase- or StructuralNodes. (#1084)
@@ -59,6 +63,7 @@ Build Improvement::
 * Fix upstream build removing the explicit plugin repository (#1131)
 * Set JUnit5 as default test engine (#1186) (@abelsromero)
 * Removed pollutedTest Gradle task using junit-pioneer (#1193) (@abelsromero)
+* Ignore 'docs/**' changes in CI (#1225) (@abelsromero)
 
 Documentation::
 

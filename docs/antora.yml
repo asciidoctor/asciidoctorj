@@ -1,18 +1,19 @@
 name: asciidoctorj
 title: AsciidoctorJ
-version: '2.5'
+version: '3.0'
+prerelease: '.0-alpha.1'
 asciidoc:
   attributes:
-    release-version: 2.5.7
-    artifact-version: 2.5.7
+    release-version: 3.0.0-alpha.1
+    artifact-version: 3.0.0-alpha.1
     asciidoctorj-epub3-version: 1.5.1
-    asciidoctorj-pdf-version: 1.6.0
-    jruby-version: 9.3.8.0
-    url-jruby: http://jruby.org
+    asciidoctorj-pdf-version: 2.3.6
+    jruby-version: 9.4.1.0
+    url-jruby: https://www.jruby.org/
     url-gradle: https://gradle.org
     url-repo: https://github.com/asciidoctor/asciidoctorj
     url-tilt: https://github.com/rtomayko/tilt
-    url-font-awesome: http://fortawesome.github.io/Font-Awesome
+    url-font-awesome: https://fontawesome.com
     url-highlightjs: https://highlightjs.org
     url-prismjs: https://prismjs.com
 nav:
