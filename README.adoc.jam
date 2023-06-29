@@ -1,9 +1,21 @@
-
+{%@comment dual%}
 = AsciidoctorJ: Java bindings for Asciidoctor
 ////
-This is a generated file. DO NOT EDIT!!!!!
-To modify this file edit README.adoc.jam in the same directory
-
+{%@rot13 Guvf vf n trarengrq svyr. QB ABG RQVG!!!!!
+Gb zbqvsl guvf svyr rqvg ERNQZR.nqbp.wnz va gur fnzr qverpgbel%}\
+{%@snip:properties gradle.properties%}
+{%@define VERSION_XPATH=//metadata/versioning/release%}\
+{%#define ASCIIDOCTORJ_VERSION={%@snip version%}%}\
+{%#define ASCIIDOCTORJ_API_VERSION={%@snip version%}%}\
+{%@snip:xml MVN_ASCIIDOCTORJ=https://repo.maven.apache.org/maven2/org/asciidoctor/asciidoctorj/maven-metadata.xml%}\
+{%#define ASCIIDOCTORJ_LAST_RELEASE={%MVN_ASCIIDOCTORJ {%VERSION_XPATH%}%}%}\
+{%@snip:xml MVN_ASCIIDOCTORJ_API=https://repo.maven.apache.org/maven2/org/asciidoctor/asciidoctorj-api/maven-metadata.xml%}\
+{%#define ASCIIDOCTORJ_API_LAST_RELEASE={%MVN_ASCIIDOCTORJ_API {%VERSION_XPATH%}%}%}\
+{%@snip:xml MVN_ASCIIDOCTORJ_EPUB3=https://repo.maven.apache.org/maven2/org/asciidoctor/asciidoctorj-epub3/maven-metadata.xml%}\
+{%#define ASCIIDOCTORJ_EPUB3_VERSION={%MVN_ASCIIDOCTORJ_EPUB3 {%VERSION_XPATH%}%}%}\
+{%@snip:xml MVN_ASCIIDOCTORJ_PDF=https://repo.maven.apache.org/maven2/org/asciidoctor/asciidoctorj-pdf/maven-metadata.xml%}\
+{%#define ASCIIDOCTORJ_PDF_VERSION={%MVN_ASCIIDOCTORJ_PDF {%VERSION_XPATH%}%}%}\
+{%@define artifactQuery($X)={maven-search}#{%@urlencode search|ga|1|g:"org.asciidoctor" AND a:"asciidoctorj-api" AND v:"%}{artifact-version}{%@urlencode "%}%}
 ////
 Alex Soto <https://github.com/lordofthejars[@lordofthejars]>; Dan Allen <https://github.com/mojavelinux[@mojavelinux]>; Robert Panzer <https://github.com/robertpanzer[@robertpanzer]>
 // Settings:
@@ -38,18 +50,18 @@ ifndef::awestruct[:uri-docs: https://asciidoctor.org/docs]
 :uri-repo: {github-url}asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
 :uri-zulip: https://asciidoctor.zulipchat.com/
-:artifact-version: 3.0.0-alpha.1
-:artifact-dev-version: 3.0.0-alpha.2-SNAPSHOT
-:api-version: 3.0.0-alpha.1
-:api-dev-version: 3.0.0-alpha.2-SNAPSHOT
-:asciidoctorj-epub3-version: 1.5.1
-:asciidoctorj-pdf-version: 2.3.7
+:artifact-version: {%ASCIIDOCTORJ_LAST_RELEASE%}
+:artifact-dev-version: {%ASCIIDOCTORJ_VERSION%}
+:api-version: {%ASCIIDOCTORJ_API_LAST_RELEASE%}
+:api-dev-version: {%ASCIIDOCTORJ_API_VERSION%}
+:asciidoctorj-epub3-version: {%ASCIIDOCTORJ_EPUB3_VERSION%}
+:asciidoctorj-pdf-version: {%ASCIIDOCTORJ_PDF_VERSION%}
 :maven-search: http://search.maven.org/
-:uri-maven-artifact-query: {maven-search}#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22+AND+a%3A%22asciidoctorj-api%22+AND+v%3A%22{artifact-version}%22
+:uri-maven-artifact-query: {%artifactQuery /asciidoctorj%}
 :uri-maven-artifact-file: {maven-search}remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
-:uri-maven-artifact-api-query: {maven-search}#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22+AND+a%3A%22asciidoctorj-api%22+AND+v%3A%22{artifact-version}%22
-:uri-maven-artifact-detail: {maven-search}%23artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
-:uri-maven-artifact-api-detail: {maven-search}%23artifactdetails%7Corg.asciidoctor%7Casciidoctorj-api%7C{artifact-version}%7Cjar
+:uri-maven-artifact-api-query: {%artifactQuery /asciidoctorj-api%}
+:uri-maven-artifact-detail: {maven-search}{%@urlencode #artifactdetails|org.asciidoctor|asciidoctorj|%}{artifact-version}{%@urlencode |jar%}
+:uri-maven-artifact-api-detail: {maven-search}{%@urlencode #artifactdetails|org.asciidoctor|asciidoctorj-api|%}{artifact-version}{%@urlencode |jar%}
 :uri-maven-artifact-api-file: {maven-search}remotecontent?filepath=org/asciidoctor/asciidoctorj-api/{artifact-version}/asciidoctorj-api-{artifact-version}
 :uri-maven-guide: {uri-docs}/install-and-use-asciidoctor-maven-plugin
 :uri-gradle-guide: {uri-docs}/install-and-use-asciidoctor-gradle-plugin

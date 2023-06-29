@@ -10,6 +10,7 @@ dependencies {
     testImplementation("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
         transitive = false
     }
+    testImplementation "com.javax0.jamal:jamal-all:$jamalVersion"
 }
 
 compileTestJava {
