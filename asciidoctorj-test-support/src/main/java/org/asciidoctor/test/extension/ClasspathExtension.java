@@ -51,7 +51,7 @@ public class ClasspathExtension implements TestInstancePostProcessor, BeforeEach
     }
 
     @Override
-    public void beforeEach(ExtensionContext context) throws Exception {
+    public void beforeEach(ExtensionContext context) {
         context.getTestInstance()
                 .ifPresent(testInstance -> {
                     getStore(context)

@@ -1,22 +1,23 @@
 package org.asciidoctor.util.pdf;
 
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.contentstream.operator.color.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.common.PDStream;
-import org.apache.pdfbox.util.PDFTextStripper;
-import org.apache.pdfbox.util.ResourceLoader;
-import org.apache.pdfbox.util.TextPosition;
+import org.apache.pdfbox.pdmodel.graphics.color.PDColor;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.text.TextPosition;
 
 import java.awt.*;
-import java.io.IOException;
-import java.util.*;
+import java.io.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * Parses a PDF document looking for certain words, if found it stores the
  * associated colors.
- *
+ * <p>
  * Note: currently stores the color of the last character in fact.
+ * Based on https://svn.apache.org/viewvc/pdfbox/trunk/examples/src/main/java/org/apache/pdfbox/examples/util/PrintTextColors.java?revision=1904918&view=markup
  *
  * @author abelsromero
  */
@@ -29,46 +30,29 @@ public class ColorsProcessor extends PDFTextStripper {
     /**
      * List of words mapped to the different colors in which they appear
      */
-    private Map<String,List<Color>> colors = new HashMap<String,List<Color>>();
+    private Map<String, List<Color>> colors = new HashMap<>();
 
-    /**
-     * Constructor
-     *
-     * @param words Words to look for into the document
-     *
-     * @throws java.io.IOException If there is an error loading text stripper properties.
-     */
-    public ColorsProcessor(String... words) throws IOException {
-        super(ResourceLoader.loadProperties(
-                "pdfbox/resources/ColorsProcessor.properties", true));
-        super.setSortByPosition(true);
+    public ColorsProcessor(String... words) {
+        addOperator(new SetStrokingColorSpace(this));
+        addOperator(new SetNonStrokingColorSpace(this));
+        addOperator(new SetStrokingDeviceCMYKColor(this));
+        addOperator(new SetNonStrokingDeviceCMYKColor(this));
+        addOperator(new SetNonStrokingDeviceRGBColor(this));
+        addOperator(new SetStrokingDeviceRGBColor(this));
+        addOperator(new SetNonStrokingDeviceGrayColor(this));
+        addOperator(new SetStrokingDeviceGrayColor(this));
+        addOperator(new SetStrokingColor(this));
+        addOperator(new SetStrokingColorN(this));
+        addOperator(new SetNonStrokingColor(this));
+        addOperator(new SetNonStrokingColorN(this));
+        setSortByPosition(true);
         this.words = Arrays.asList(words);
     }
 
-    /**
-     * Parses a document extracting the colors for the specified words in
-     * the constructor
-     *
-     * @param filename PDF document path
-     */
-    public void parse (String filename) throws IOException {
-        PDDocument document = null;
-        try {
-            document = PDDocument.load(filename, false);
-            List allPages = document.getDocumentCatalog().getAllPages();
-            for( int i=0; i<allPages.size(); i++ ) {
-                PDPage page = (PDPage)allPages.get( i );
-                PDStream contents = page.getContents();
-                if (contents != null) {
-                    processStream( page, page.getResources(),
-                        page.getContents().getStream() );
-                }
-            }
-        } finally {
-            if (document != null) {
-                document.close();
-            }
-        }
+    public void parse(String filename) throws IOException {
+        PDDocument document = Loader.loadPDF(new File(filename));
+        Writer dummy = new OutputStreamWriter(new ByteArrayOutputStream());
+        writeText(document, dummy);
     }
 
     /**
@@ -82,69 +66,63 @@ public class ColorsProcessor extends PDFTextStripper {
     /**
      * Color of the previous character
      */
-    private Color previousColor;
+    private PDColor previousColor;
 
     /**
      * Terminal signs using to split words
-     *
+     * <p>
      * Note: \00A0: non break space
      */
     private static final List<String> TERMINALS = Arrays.asList(" ", "\n", "\t", "(", ")", "\u00A0");
 
     /**
      * Processes text events.
-     *
+     * <p>
      * Stores characters in a buffer until a terminal symbol is found
      * (e.g. space), then treats the characters stored as a single word.
      *
      * @param text The text to be processed
      */
     @Override
-    protected void processTextPosition( TextPosition text ) {
-        String chars = text.getCharacter();
+    protected void processTextPosition(TextPosition text) {
+//        super.processTextPosition(text);
+
+        String chars = text.toString();
         // Some line breaks do not enter here, I ignore why
         if (TERMINALS.contains(chars)) {
             String word = charsBuffer.toString();
             if (words.contains(word)) {
-                addColor(charsBuffer.toString(), previousColor);
+                registerColor(charsBuffer.toString(), previousColor);
             }
             charsBuffer = new StringBuffer();
         } else {
             charsBuffer.append(chars);
             previousText = text;
-            try {
-                previousColor = getGraphicsState().getNonStrokingColor().getJavaColor();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            previousColor = getGraphicsState().getNonStrokingColor();
         }
-
     }
 
-    /**
-     * Adds a color mapping to the colors attribute
-     *
-     * @param word Word to add
-     * @param color Color of the word
-     */
-    private void addColor(String word, Color color) {
+    private void registerColor(String word, PDColor color) {
         List<Color> values = colors.get(word);
         if (values == null) {
-            List<Color> aux = new ArrayList<Color>();
-            aux.add(color);
+            List<Color> aux = new ArrayList<>();
+            aux.add(toRGB(color));
             colors.put(word, aux);
         } else {
-            values.add(color);
+            values.add(toRGB(color));
         }
     }
 
-    /**
-     * Returns the words and their colors after parsing a file
-     *
-     * @return List of found images
-     */
+    private Color toRGB(PDColor pdColor) {
+        float[] components = pdColor.getComponents();
+        // Rough conversion, but enough for out tests
+        int r = Float.valueOf(256 * components[0]).intValue();
+        int g = Float.valueOf(256 * components[1]).intValue();
+        int b = Float.valueOf(256 * components[2]).intValue();
+        return new Color(r, g, b);
+    }
+
     public Map<String, List<Color>> getColors() {
         return colors;
     }
-
 }

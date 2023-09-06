@@ -5,76 +5,42 @@ package org.asciidoctor.util.pdf;
  *
  * @author abelsromero
  */
-public class Image {
+public final class Image {
 
     // Page where the image is localed
-    private int page;
-
+    private final int page;
     // Position inside the page
-    private float xPosition;
-    private float yPosition;
-
+    private final float xPosition;
+    private final float yPosition;
     // size in pixels
-    private int originalWidth;
-    private int originalHeight;
+    private final int originalWidth;
+    private final int originalHeight;
 
-    // size in pixels
-    private int renderedWidth;
-    private int renderedHeight;
+    Image(int page, float xPosition, float yPosition, int originalWidth, int originalHeight) {
+        this.page = page;
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        this.originalWidth = originalWidth;
+        this.originalHeight = originalHeight;
+    }
 
     public int getPage() {
         return page;
     }
 
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public float getXPosition() {
+    public float getxPosition() {
         return xPosition;
     }
 
-    public void setXPosition(float xPosition) {
-        this.xPosition = xPosition;
-    }
-
-   public float getYPosition() {
+    public float getyPosition() {
         return yPosition;
-    }
-
-    public void setYPosition(float yPosition) {
-        this.yPosition = yPosition;
     }
 
     public int getOriginalWidth() {
         return originalWidth;
     }
 
-    public void setOriginalWidth(int originalWidth) {
-        this.originalWidth = originalWidth;
-    }
-
     public int getOriginalHeight() {
         return originalHeight;
-    }
-
-    public void setOriginalHeight(int originalHeight) {
-        this.originalHeight = originalHeight;
-    }
-
-    public int getRenderedWidth() {
-        return renderedWidth;
-    }
-
-    public void setRenderedWidth(int renderedWidth) {
-        this.renderedWidth = renderedWidth;
-    }
-
-    public int getRenderedHeight() {
-        return renderedHeight;
-    }
-
-    public void setRenderedHeight(int renderedHeight) {
-        this.renderedHeight = renderedHeight;
     }
 }
