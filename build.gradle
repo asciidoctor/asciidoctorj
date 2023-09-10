@@ -80,7 +80,7 @@ ext {
   nettyVersion = '4.1.58.Final'
   saxonVersion = '9.9.0-2'
   xmlMatchersVersion = '1.0-RC1'
-  pdfboxVersion = '1.8.16'
+  pdfboxVersion = '3.0.0'
 
   // gem versions
   asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '2.0.20'
