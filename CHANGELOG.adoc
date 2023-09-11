@@ -25,7 +25,7 @@ Improvement::
 * Upgrade to asciidoctorj 2.0.20 (#1208)
 * Upgrade to asciidoctorj-pdf 2.3.7 (#1182)
 * Upgrade to asciidoctorj-diagram 2.2.7
-* Upgrade to JRuby 9.4.1.0 (#1141)
+* Upgrade to JRuby 9.4.3.0 (#1234)
 * Upgrade to tilt 2.0.11 (#1109)
 * Upgrade to asciimath 2.0.4 (#1109)
 * Expose `sectnum` property in Section interface (#1121)
