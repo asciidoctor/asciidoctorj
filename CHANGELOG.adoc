@@ -16,6 +16,7 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 Bug Fixes::
 
 * 'UnsupportedOperationException' when passing immutable Map as options to 'createPhraseNode' (#1221) (@abelsromero)
+* -s CLI option should be changed to -e to align with Asciidoctor (#1237) (@mojavelinux)
 
 Improvement::
 
