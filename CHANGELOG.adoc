@@ -13,11 +13,6 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
-Bug Fixes::
-
-* 'UnsupportedOperationException' when passing immutable Map as options to 'createPhraseNode' (#1221) (@abelsromero)
-* -s CLI option should be changed to -e to align with Asciidoctor (#1237) (@mojavelinux)
-
 Improvement::
 
 * BREAKING: Fix Macro APIs to take StructuralNodes and return Phrase- or StructuralNodes. (#1084)
@@ -54,6 +49,8 @@ Bug Fixes::
 * Avoid throwing an exception when using AsciidoctorJ CLI and reading input from stdin (#1105) (@AlexCzar)
 * Remove destinationDir Option from API (use toDir instead) (#853, #941) (@abelsromero)
 * Fix ConcurrentModificationException when converting to stream concurrently (#1158) (@rocketraman)
+* 'UnsupportedOperationException' when passing immutable Map as options to 'createPhraseNode' (#1221) (@abelsromero)
+* -s CLI option should be changed to -e to align with Asciidoctor (#1237) (@mojavelinux)
 
 Build Improvement::
 
