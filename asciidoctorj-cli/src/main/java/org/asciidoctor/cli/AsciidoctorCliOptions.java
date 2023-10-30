@@ -24,9 +24,9 @@ public class AsciidoctorCliOptions {
     public static final String TEMPLATE_DIR = "-T";
     public static final String TEMPLATE_ENGINE = "-E";
     public static final String COMPACT = "-C";
-    public static final String ERUBY = "-e";
-    public static final String SECTION_NUMBERS = "-n";
+    public static final String EMBEDDED = "-e";
     public static final String NO_HEADER_FOOTER = "-s";
+    public static final String SECTION_NUMBERS = "-n";
     public static final String SAFE = "-S";
     public static final String OUTFILE = "-o";
     public static final String DOCTYPE = "-d";
@@ -37,16 +37,16 @@ public class AsciidoctorCliOptions {
     public static final char ATTRIBUTE_SEPARATOR = '=';
     public static final String TIMINGS_OPTION_NAME = "timings";
 
-    @Parameter(names = {VERBOSE, "--verbose"}, description = "enable verbose mode (default: false)")
+    @Parameter(names = {VERBOSE, "--verbose"}, description = "enable verbose mode")
     private boolean verbose = false;
 
-    @Parameter(names = {TIMINGS, "--timings"}, description = "enable timings mode (default: false)")
+    @Parameter(names = {TIMINGS, "--timings"}, description = "enable timings mode")
     private boolean timings = false;
 
     @Parameter(names = {VERSION, "--version"}, description = "display the version and runtime environment")
     private boolean version = false;
 
-    @Parameter(names = {BACKEND, "--backend"}, description = "set output format backend (default: html5)")
+    @Parameter(names = {BACKEND, "--backend"}, description = "set output format backend")
     private String backend = "html5";
 
     @Parameter(names = {DOCTYPE, "--doctype"}, description = "document type to use when rendering output: [article, book, inline] (default: article)")
@@ -61,16 +61,19 @@ public class AsciidoctorCliOptions {
     @Parameter(names = {SAFE, "--safe-mode"}, converter = SafeModeConverter.class, description = "set safe mode level explicitly: [unsafe, safe, server, secure] (default: unsafe)")
     private SafeMode safeMode = SafeMode.UNSAFE;
 
-    @Parameter(names = {NO_HEADER_FOOTER, "--no-header-footer"}, description = "suppress output of header and footer (default: false)")
+    @Parameter(names = {NO_HEADER_FOOTER, "--no-header-footer"}, description = "suppress output of header and footer")
     private boolean noHeaderFooter = false;
+
+    @Parameter(names = {EMBEDDED, "--embedded"}, description = "suppress enclosing document structure and output an embedded document")
+    private boolean embedded = false;
 
     @Parameter(names = {SECTION_NUMBERS, "--section-numbers"}, description = "auto-number section titles; disabled by default")
     private boolean sectionNumbers = false;
 
-    @Parameter(names = {ERUBY, "--eruby"}, description = "specify eRuby implementation to render built-in templates: [erb, erubis] (default: erb)")
+    @Parameter(names = {"--eruby"}, description = "specify eRuby implementation to render built-in templates: [erb, erubis]")
     private String eruby = "erb";
 
-    @Parameter(names = {COMPACT, "--compact"}, description = "compact the output by removing blank lines (default: false)")
+    @Parameter(names = {COMPACT, "--compact"}, description = "compact the output by removing blank lines")
     private boolean compact = false;
 
     @Parameter(names = {TEMPLATE_ENGINE, "--template-engine"}, description = "template engine to use for the custom render templates (loads gem on demand)")
@@ -88,7 +91,7 @@ public class AsciidoctorCliOptions {
     @Parameter(names = {SOURCE_DIR, "--source-dir"}, description = "source directory (requires destination directory)")
     private String sourceDir;
 
-    @Parameter(names = {"--trace"}, description = "include backtrace information on errors (default: false)")
+    @Parameter(names = {"--trace"}, description = "include backtrace information on errors")
     private boolean trace = false;
 
     @Parameter(names = {HELP, "--help"}, help = true, description = "show this message")
@@ -97,10 +100,10 @@ public class AsciidoctorCliOptions {
     @Parameter(names = {ATTRIBUTE, "--attribute"}, description = "a list of attributes, in the form key or key=value pair, to set on the document")
     private List<String> attributes = new ArrayList<>();
 
-    @Parameter(names = {QUIET, "--quiet"}, description = "suppress warnings (default: false)")
+    @Parameter(names = {QUIET, "--quiet"}, description = "suppress warnings")
     private boolean quiet = false;
 
-    @Parameter(names = {"--failure-level"}, converter = SeverityConverter.class, description = "set minimum log level that yields a non-zero exit code: [info, warning, error, fatal] (default: fatal) ")
+    @Parameter(names = {"--failure-level"}, converter = SeverityConverter.class, description = "set minimum log level that yields a non-zero exit code.")
     private Severity failureLevel = Severity.FATAL;
 
     @Parameter(names = {REQUIRE, "--require"}, description = "require the specified library before executing the processor (using require)")
@@ -293,6 +296,10 @@ public class AsciidoctorCliOptions {
             optionsBuilder.safe(SafeMode.SAFE);
         }
 
+        if (this.embedded) {
+            optionsBuilder.option(Options.STANDALONE, false);
+        }
+
         if (this.noHeaderFooter) {
             optionsBuilder.option(Options.STANDALONE, false);
         }
@@ -368,7 +375,7 @@ public class AsciidoctorCliOptions {
     }
 
     private static boolean isEmpty(String path) {
-        return path == null || path.trim().length() == 0;
+        return path == null || path.trim().isEmpty();
     }
 
 }
