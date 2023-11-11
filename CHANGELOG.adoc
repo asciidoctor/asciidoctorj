@@ -25,6 +25,7 @@ Improvement::
 * Remove deprecated methods from Document interface (#1202) (@abelsromero)
 * Remove deprecated methods and constants from extension package (#1203) (@abelsromero)
 * Remove deprecated methods from ast package (#1204) (@abelsromero)
+* Add Automatic-Module-Name manifest entry to core, api, and cli for reserving stable JPMS module names (#1240) (@leadpony)
 
 Bug Fixes::
 

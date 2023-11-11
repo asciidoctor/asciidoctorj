@@ -23,5 +23,10 @@ jar {
     ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj-cli',
     ('Import-Package'): 'com.beust.jcommander;resolution:=optional, *'
   )
+  manifest {
+    attributes(
+      'Automatic-Module-Name': 'org.asciidoctor.asciidoctorj.cli'
+    )
+  }
   metaInf { from "$buildDir/version-info/" }
 }

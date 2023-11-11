@@ -11,6 +11,11 @@ jar {
     ('Bundle-Name'): 'asciidoctorj-api',
     ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj-api',
   )
+  manifest {
+    attributes(
+      'Automatic-Module-Name': 'org.asciidoctor.asciidoctorj.api'
+    )
+  }
 }
 
 ext.publicationName = "mavenAsciidoctorJApi"

@@ -91,6 +91,11 @@ jar {
     ('Bundle-Name'): 'asciidoctorj',
     ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj'
   )
+  manifest {
+    attributes(
+      'Automatic-Module-Name': 'org.asciidoctor.asciidoctorj'
+    )
+  }
   metaInf { from "$buildDir/version-info/" }
 }
 
