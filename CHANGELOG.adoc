@@ -29,7 +29,6 @@ Improvement::
 
 Bug Fixes::
 
-* Fix CLI target file location for source files relative to source dir (#1135) (@AlexCzar)
 * -s CLI option should be changed to -e to align with Asciidoctor (#1237) (@mojavelinux)
 
 === Compatible changes
@@ -60,6 +59,7 @@ Bug Fixes::
 * Cell nodes do not inherit from StructuralNode (#1086) (@rahmanusta)
 * Avoid throwing an exception when using AsciidoctorJ CLI and reading input from stdin (#1105) (@AlexCzar)
 * Remove destinationDir Option from API (use toDir instead) (#853, #941) (@abelsromero)
+* Fix CLI target file location for source files relative to source dir (#1135) (@AlexCzar)
 * Fix ConcurrentModificationException when converting to stream concurrently (#1158) (@rocketraman)
 * 'UnsupportedOperationException' when passing immutable Map as options to 'createPhraseNode' (#1221) (@abelsromero)
 
@@ -73,6 +73,7 @@ Build Improvement::
 * Set JUnit5 as default test engine (#1186) (@abelsromero)
 * Removed pollutedTest Gradle task using junit-pioneer (#1193) (@abelsromero)
 * Ignore 'docs/**' changes in CI (#1225) (@abelsromero)
+* Add test for ensuring that asciidoctor version is available in CLI (#1230) (@abelsromero)
 
 Documentation::
 

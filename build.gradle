@@ -200,6 +200,7 @@ subprojects {
       // Allow junit-pioneer environment manipulation on Windows + Java17+
       jvmArgs = ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
     }
+    systemProperty 'org.asciidoctor.asciidoctorj-test.version.asciidoctorj', asciidoctorGemVersion
   }
 
 }

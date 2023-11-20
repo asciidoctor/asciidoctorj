@@ -90,9 +90,6 @@ public class AsciidoctorInvoker {
 
     private String getAsciidoctorJVersion() {
         InputStream in = getClass().getResourceAsStream("/META-INF/asciidoctorj-version.properties");
-        if (in == null) {
-            return "N/A";
-        }
         Properties versionProps = new Properties();
         try {
             versionProps.load(in);

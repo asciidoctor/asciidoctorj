@@ -86,6 +86,20 @@ javadoc {
   source(project(':asciidoctorj-api').sourceSets.main.allJava)
 }
 
+task createVersionFile {
+  inputs.property('version.asciidoctor', asciidoctorGemVersion)
+  inputs.property('version.asciidoctorj', project.version)
+  outputs.dir("${buildDir}/version-info")
+
+  doLast {
+    file("${buildDir}/version-info/asciidoctorj-version.properties", ).text = """
+version.asciidoctorj: ${project.version}
+version.asciidoctor: $asciidoctorGemVersion
+"""
+  }
+}
+
+
 jar {
   bnd(
     ('Bundle-Name'): 'asciidoctorj',
@@ -96,24 +110,12 @@ jar {
       'Automatic-Module-Name': 'org.asciidoctor.asciidoctorj'
     )
   }
-  metaInf { from "$buildDir/version-info/" }
+  metaInf {
+    from createVersionFile
+  }
 }
 
 test {
   useJUnitPlatform()
 }
 
-task createVersionFile {
-  inputs.property('version.asciidoctor', asciidoctorGemVersion)
-  inputs.property('version.asciidoctorj', project.version)
-  outputs.dir("$buildDir/version-info")
-
-  doLast {
-    file("$buildDir/version-info/asciidoctorj-version.properties").text = """
-version.asciidoctorj: ${project.version}
-version.asciidoctor: $asciidoctorGemVersion
-"""
-  }
-}
-
-jar.dependsOn createVersionFile
