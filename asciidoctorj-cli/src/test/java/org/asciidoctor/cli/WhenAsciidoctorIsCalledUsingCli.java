@@ -283,9 +283,14 @@ public class WhenAsciidoctorIsCalledUsingCli {
             System.setOut(sysout);
             new AsciidoctorInvoker().invoke("--version");
             String result = out.toString(StandardCharsets.UTF_8);
+            String expected = System.getProperty("org.asciidoctor.asciidoctorj-test.version.asciidoctorj");
+            Assertions.assertThat(expected)
+                    .as("Bad test setup, could not determine expected Asciidoctor version")
+                    .isNotEmpty();
+            expected = expected.replace("-SNAPSHOT", "");
             Assertions.assertThat(result)
                     // Needs to be updated when version changes
-                    .contains("2.0.20");
+                    .contains(expected);
         } finally {
             System.setOut(previousSystemOut);
         }
