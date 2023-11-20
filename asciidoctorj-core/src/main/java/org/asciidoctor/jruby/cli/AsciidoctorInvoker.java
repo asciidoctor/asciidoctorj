@@ -160,6 +160,8 @@ public class AsciidoctorInvoker {
             return;
         }
 
+        options.setMkDirs(true);
+
         findInvalidInputFile(inputFiles)
                 .ifPresent(inputFile -> {
                     System.err.println("asciidoctor: FAILED: input file(s) '"
