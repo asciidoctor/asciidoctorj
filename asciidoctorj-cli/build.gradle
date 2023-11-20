@@ -28,5 +28,4 @@ jar {
       'Automatic-Module-Name': 'org.asciidoctor.asciidoctorj.cli'
     )
   }
-  metaInf { from "$buildDir/version-info/" }
 }

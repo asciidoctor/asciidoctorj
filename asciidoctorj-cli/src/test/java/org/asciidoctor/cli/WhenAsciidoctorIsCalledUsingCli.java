@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.hamcrest.CoreMatchers.is;
@@ -273,6 +274,23 @@ public class WhenAsciidoctorIsCalledUsingCli {
         assertThat(expectedFile.exists(), is(true));
         expectedFile.delete();
     }
+
+    @Test
+    void should_print_version() throws IOException {
+        PrintStream previousSystemOut = System.out;
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+            PrintStream sysout = new PrintStream(out)){
+            System.setOut(sysout);
+            new AsciidoctorInvoker().invoke("--version");
+            String result = out.toString(StandardCharsets.UTF_8);
+            Assertions.assertThat(result)
+                    // Needs to be updated when version changes
+                    .contains("2.0.20");
+        } finally {
+            System.setOut(previousSystemOut);
+        }
+    }
+
 
     private ByteArrayOutputStream redirectStdout() {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
