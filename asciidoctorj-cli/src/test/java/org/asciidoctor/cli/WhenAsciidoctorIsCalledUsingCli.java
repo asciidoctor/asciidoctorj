@@ -279,7 +279,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     void should_print_version() throws IOException {
         PrintStream previousSystemOut = System.out;
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-            PrintStream sysout = new PrintStream(out)){
+             PrintStream sysout = new PrintStream(out)) {
             System.setOut(sysout);
             new AsciidoctorInvoker().invoke("--version");
             String result = out.toString(StandardCharsets.UTF_8);
@@ -289,7 +289,6 @@ public class WhenAsciidoctorIsCalledUsingCli {
                     .isNotEmpty();
             expected = expected.replace("-SNAPSHOT", "");
             Assertions.assertThat(result)
-                    // Needs to be updated when version changes
                     .contains(expected);
         } finally {
             System.setOut(previousSystemOut);
