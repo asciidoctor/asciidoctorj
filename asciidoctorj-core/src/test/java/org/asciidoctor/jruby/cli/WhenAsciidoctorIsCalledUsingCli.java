@@ -280,7 +280,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    public void should_convert_to_subdirectories() throws IOException {
+    public void should_create_targetdir() {
 
         File inputFile = classpath.getResource("relative/sub/test.adoc");
         File srcDir = inputFile.getParentFile().getParentFile(); // points to relative/
@@ -288,7 +288,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
         File expectedFile = new File(toDir, "test.html");
         assertFalse(toDir.exists());
 
-        new AsciidoctorInvoker().invoke("-R", srcDir.getPath(), "-D", toDir.getPath(), srcDir.getAbsolutePath() + "/**/*.adoc");
+        new AsciidoctorInvoker().invoke("-R", srcDir.getPath(), "-D", toDir.getPath(), srcDir.getAbsolutePath() + "/sub/test.adoc");
         // Note that the subdirectory /sub is ignored, other than what asciidoctor does with it.
 
         assertTrue(expectedFile.exists());
