@@ -20,6 +20,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.StringStartsWith.startsWith;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Arquillian.class)
 public class WhenAsciidoctorIsCalledUsingCli {
@@ -274,6 +276,22 @@ public class WhenAsciidoctorIsCalledUsingCli {
         File expectedFile = new File(inputPath.replaceFirst("\\.asciidoc$", ".html"));
 
         assertThat(expectedFile.exists(), is(true));
+        expectedFile.delete();
+    }
+
+    @Test
+    public void should_create_targetdir() {
+
+        File inputFile = classpath.getResource("relative/sub/test.adoc");
+        File srcDir = inputFile.getParentFile().getParentFile(); // points to relative/
+        File toDir = new File(temporaryFolder.getRoot(), getClass().getSimpleName());
+        File expectedFile = new File(toDir, "test.html");
+        assertFalse(toDir.exists());
+
+        new AsciidoctorInvoker().invoke("-R", srcDir.getPath(), "-D", toDir.getPath(), srcDir.getAbsolutePath() + "/sub/test.adoc");
+        // Note that the subdirectory /sub is ignored, other than what asciidoctor does with it.
+
+        assertTrue(expectedFile.exists());
         expectedFile.delete();
     }
 

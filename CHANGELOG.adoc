@@ -17,6 +17,10 @@ Improvement::
 
 * Upgrade to JRuby 9.4.3.0 (#1235) (@headius)
 
+Bug Fixes::
+
+* CLI should set :mkdirs option by default (#1241) (@mojavelinux)
+
 == 2.5.10 (2023-06-04)
 
 Improvement::
