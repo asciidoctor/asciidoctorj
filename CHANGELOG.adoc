@@ -74,6 +74,7 @@ Build Improvement::
 * Removed pollutedTest Gradle task using junit-pioneer (#1193) (@abelsromero)
 * Ignore 'docs/**' changes in CI (#1225) (@abelsromero)
 * Add test for ensuring that asciidoctor version is available in CLI (#1230) (@abelsromero)
+* Run tests on Java 21 (#1236) (@abelsromero)
 
 Documentation::
 
