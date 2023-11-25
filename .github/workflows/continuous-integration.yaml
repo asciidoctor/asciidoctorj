@@ -24,6 +24,7 @@ jobs:
           - '8'
           - '11'
           - '17'
+          - '21'
         os:
           - ubuntu-latest
           - macos-latest
@@ -51,6 +52,7 @@ jobs:
         java:
           - '11'
           - '17'
+          - '21'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -79,6 +81,7 @@ jobs:
         java:
           - '11'
           - '17'
+          - '21'
         os:
           - ubuntu-latest
         maven:
