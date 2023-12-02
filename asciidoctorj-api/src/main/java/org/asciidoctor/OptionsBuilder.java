@@ -2,7 +2,6 @@ package org.asciidoctor;
 
 import java.io.File;
 import java.io.OutputStream;
-import java.util.Map;
 
 /**
  * Fluent Options API for AsciidoctorJ.
@@ -160,7 +159,7 @@ public class OptionsBuilder {
      * @return this instance.
      */
     public OptionsBuilder toDir(File directory) {
-        this.options.setToDir(directory.getAbsolutePath());
+        this.options.setToDir(directory.getPath());
         return this;
     }
 
@@ -266,20 +265,6 @@ public class OptionsBuilder {
     }
 
     /**
-     * Source directory.
-     *
-     * This must be used alongside {@link #toDir(File)}.
-     *
-     * @param srcDir
-     *            source directory.
-     * @return this instance.
-     */
-    public OptionsBuilder sourceDir(File srcDir) {
-        this.options.setSourceDir(srcDir.getAbsolutePath());
-        return this;
-    }
-
-    /**
      * Sets a custom or unlisted option.
      * 
      * @param option
@@ -301,7 +286,7 @@ public class OptionsBuilder {
      * @return this instance.
      */
     public OptionsBuilder baseDir(File baseDir) {
-        this.options.setBaseDir(baseDir.getAbsolutePath());
+        this.options.setBaseDir(baseDir.getPath());
         return this;
     }
 

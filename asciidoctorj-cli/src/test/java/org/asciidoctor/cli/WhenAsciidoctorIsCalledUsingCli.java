@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.hamcrest.CoreMatchers.is;
@@ -142,11 +143,13 @@ public class WhenAsciidoctorIsCalledUsingCli {
     }
 
     @Test
-    void invalid_input_file_should_throw_an_exception() {
-        Throwable throwable = catchThrowable(() -> new AsciidoctorInvoker().invoke("myunknown.adoc"));
+    void invalid_input_file_should_throw_an_exception() throws IOException {
+        final ByteArrayOutputStream output = redirectStderr();
+        new AsciidoctorInvoker().invoke("myunknown.adoc");
 
-        Assertions.assertThat(throwable)
-                .isInstanceOf(IllegalArgumentException.class);
+        String outputConsole = output.toString();
+        Assertions.assertThat(outputConsole)
+                .startsWith("No such file or directory - myunknown.adoc");
     }
 
     @Test
@@ -213,13 +216,14 @@ public class WhenAsciidoctorIsCalledUsingCli {
 
     @Test
     void verbose_option_should_fill_monitor_map() throws IOException {
-        final ByteArrayOutputStream output = redirectStdout();
+        final ByteArrayOutputStream output = redirectStderr();
         final String inputPath = renderSampleDocument.getPath().substring(pwd.length() + 1);
 
         new AsciidoctorInvoker().invoke("--timings", inputPath);
 
         String outputConsole = output.toString();
-        assertThat(outputConsole, startsWith("  Time to read and parse source:"));
+        Assertions.assertThat(outputConsole.lines().collect(Collectors.toList()))
+                .anySatisfy(line -> Assertions.assertThat(line).startsWith("  Time to read and parse source:"));
         assertThat(outputConsole, not(containsString("null")));
     }
 
@@ -299,6 +303,12 @@ public class WhenAsciidoctorIsCalledUsingCli {
     private ByteArrayOutputStream redirectStdout() {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         System.setOut(new PrintStream(output));
+        return output;
+    }
+
+    private ByteArrayOutputStream redirectStderr() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        System.setErr(new PrintStream(output));
         return output;
     }
 }

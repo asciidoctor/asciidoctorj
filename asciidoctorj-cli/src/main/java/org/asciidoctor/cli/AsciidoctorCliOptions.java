@@ -1,14 +1,20 @@
 package org.asciidoctor.cli;
 
 import com.beust.jcommander.Parameter;
-import org.asciidoctor.*;
+import org.asciidoctor.Attributes;
+import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.Options;
+import org.asciidoctor.SafeMode;
 import org.asciidoctor.log.Severity;
+import org.jruby.Ruby;
+import org.jruby.RubyHash;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 public class AsciidoctorCliOptions {
@@ -16,6 +22,7 @@ public class AsciidoctorCliOptions {
     public static final String LOAD_PATHS = "-I";
     public static final String REQUIRE = "-r";
     public static final String QUIET = "-q";
+    public static final String WARNINGS = "-w";
     public static final String ATTRIBUTE = "-a";
     public static final String HELP = "-h";
     public static final String DESTINATION_DIR = "-D";
@@ -47,7 +54,7 @@ public class AsciidoctorCliOptions {
     private boolean version = false;
 
     @Parameter(names = {BACKEND, "--backend"}, description = "set output format backend")
-    private String backend = "html5";
+    private String backend;
 
     @Parameter(names = {DOCTYPE, "--doctype"}, description = "document type to use when rendering output: [article, book, inline] (default: article)")
     private String doctype;
@@ -70,8 +77,8 @@ public class AsciidoctorCliOptions {
     @Parameter(names = {SECTION_NUMBERS, "--section-numbers"}, description = "auto-number section titles; disabled by default")
     private boolean sectionNumbers = false;
 
-    @Parameter(names = {"--eruby"}, description = "specify eRuby implementation to render built-in templates: [erb, erubis]")
-    private String eruby = "erb";
+    @Parameter(names = {"--eruby"}, description = "specify eRuby implementation to render built-in templates: [erb, erubis]; default erb")
+    private String eruby;
 
     @Parameter(names = {COMPACT, "--compact"}, description = "compact the output by removing blank lines")
     private boolean compact = false;
@@ -102,6 +109,9 @@ public class AsciidoctorCliOptions {
 
     @Parameter(names = {QUIET, "--quiet"}, description = "suppress warnings")
     private boolean quiet = false;
+
+    @Parameter(names = {WARNINGS, "--warnings"}, description = "suppress warnings")
+    private boolean warnings = false;
 
     @Parameter(names = {"--failure-level"}, converter = SeverityConverter.class, description = "set minimum log level that yields a non-zero exit code.")
     private Severity failureLevel = Severity.FATAL;
@@ -266,80 +276,69 @@ public class AsciidoctorCliOptions {
         return !isOutFileOption() && !isDestinationDirOption() && !isOutputStdout();
     }
 
-    public Options parse() throws IOException {
-        OptionsBuilder optionsBuilder = Options.builder()
-                .backend(this.backend)
-                .safe(this.safeMode)
-                .eruby(this.eruby)
-                .option(Options.STANDALONE, true);
+    public RubyHash parse(Ruby ruby) throws IOException {
 
-        if (isDoctypeOption()) {
-            optionsBuilder.docType(this.doctype);
+        RubyHash opts = new RubyHash(ruby);
+        Map attributes = buildAttributes();
+
+        opts.put(ruby.newSymbol(Options.STANDALONE), true);
+        opts.put(ruby.newSymbol(Options.WARNINGS), false);
+
+        if (this.backend != null) {
+            attributes.put(Options.BACKEND, this.backend);
         }
-
-        if (isInputStdin()) {
-            optionsBuilder.toStream(System.out);
-            if (outFile == null) {
-                outFile = "-";
-            }
+        if (this.doctype != null) {
+            attributes.put(Options.DOCTYPE, this.doctype);
         }
-
-        if (isOutFileOption() && !isOutputStdout()) {
-            optionsBuilder.toFile(new File(this.outFile));
-        }
-
-        if (isOutputStdout()) {
-            optionsBuilder.toStream(System.out);
-        }
-
-        if (this.safe) {
-            optionsBuilder.safe(SafeMode.SAFE);
-        }
-
         if (this.embedded) {
-            optionsBuilder.option(Options.STANDALONE, false);
+            opts.put(ruby.newSymbol(Options.STANDALONE), false);
         }
-
+        if (this.outFile != null) {
+            opts.put(ruby.newSymbol("output_file"), this.outFile);
+        }
+        if (this.safe) {
+            opts.put(ruby.newSymbol(Options.SAFE), SafeMode.SAFE.getLevel());
+        }
+        if (this.safeMode != null) {
+            opts.put(ruby.newSymbol("safe"), this.safeMode.getLevel());
+        }
         if (this.noHeaderFooter) {
-            optionsBuilder.option(Options.STANDALONE, false);
+            opts.put(ruby.newSymbol(Options.STANDALONE), false);
         }
-
-        if (this.compact) {
-            optionsBuilder.compact(this.compact);
-        }
-
-        if (isBaseDirOption()) {
-            optionsBuilder.baseDir(new File(this.baseDir).getCanonicalFile());
-        }
-
-        if (isTemplateEngineOption()) {
-            optionsBuilder.templateEngine(this.templateEngine);
-        }
-
-        if (isTemplateDirOption()) {
-            for (String templateDir : this.templateDir) {
-                optionsBuilder.templateDirs(new File(templateDir).getCanonicalFile());
-            }
-        }
-
-        if (isDestinationDirOption() && !isOutputStdout()) {
-            optionsBuilder.toDir(new File(this.destinationDir).getCanonicalFile());
-
-            if (isSourceDirOption()) {
-                optionsBuilder.sourceDir(new File(this.sourceDir).getCanonicalFile());
-            }
-        }
-
-        if (isInPlaceRequired()) {
-            optionsBuilder.inPlace(true);
-        }
-
-        Attributes attributesBuilder = buildAttributes();
         if (this.sectionNumbers) {
-            attributesBuilder.setSectionNumbers(this.sectionNumbers);
+            attributes.put("sectnums", "");
         }
-        optionsBuilder.attributes(attributesBuilder);
-        return optionsBuilder.build();
+        if (this.eruby != null) {
+            opts.put(ruby.newSymbol(Options.ERUBY), this.eruby);
+        }
+        if (isTemplateDirOption()) {
+            opts.put(ruby.newSymbol(Options.TEMPLATE_DIRS), this.templateDir.toArray(new String[0]));
+        }
+        if (isTemplateEngineOption()) {
+            opts.put(ruby.newSymbol(Options.TEMPLATE_ENGINE), this.templateEngine);
+        }
+        if (this.baseDir != null) {
+            opts.put(ruby.newSymbol(Options.BASEDIR), this.baseDir);
+        }
+        if (this.destinationDir != null) {
+            opts.put(ruby.newSymbol("destination_dir"), this.destinationDir);
+        }
+        if (this.trace) {
+            opts.put(ruby.newSymbol(Options.TRACE), true);
+        }
+        if (this.timings) {
+            opts.put(ruby.newSymbol("timings"), true);
+        }
+        if (this.warnings) {
+            opts.put(ruby.newSymbol(Options.WARNINGS), true);
+        }
+        if (!attributes.isEmpty()) {
+            opts.put(ruby.newSymbol(Options.ATTRIBUTES), attributes);
+        }
+        if (this.isSourceDirOption()) {
+            opts.put(ruby.newSymbol("source_dir"), this.sourceDir);
+        }
+        return opts;
     }
 
     /**
@@ -347,7 +346,7 @@ public class AsciidoctorCliOptions {
      * {@link Attributes} instance.
      */
     // FIXME Should be private, made protected for testing.
-    Attributes buildAttributes() {
+    Map buildAttributes() {
         final AttributesBuilder attributesBuilder = Attributes.builder();
         for (String attribute : attributes) {
             int separatorIndex = attribute.indexOf(ATTRIBUTE_SEPARATOR);
@@ -359,7 +358,7 @@ public class AsciidoctorCliOptions {
                 attributesBuilder.attribute(attribute);
             }
         }
-        return attributesBuilder.build();
+        return attributesBuilder.build().map();
     }
 
     private List<String> splitByPathSeparator(String path) {

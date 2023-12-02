@@ -3,6 +3,7 @@ package org.asciidoctor.jruby.internal;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.jruby.Ruby;
+import org.jruby.RubyHash;
 
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class RubyGemsPreloader {
             REVEALJS, "require 'asciidoctor-revealjs'"
     );
 
-    private Ruby rubyRuntime;
+    private final Ruby rubyRuntime;
 
     public RubyGemsPreloader(Ruby rubyRuntime) {
         this.rubyRuntime = rubyRuntime;
@@ -71,12 +72,49 @@ public class RubyGemsPreloader {
         }
     }
 
+    public void preloadRequiredLibrariesCommandLine(RubyHash opts) {
+        Ruby ruby = opts.getRuntime();
+        if (opts.containsKey(ruby.newSymbol(Options.ATTRIBUTES))) {
+            Map<String, Object> attributes = (Map<String, Object>) opts.get(ruby.newSymbol(Options.ATTRIBUTES));
+
+            if (CODERAY.equals(attributes.get(Attributes.SOURCE_HIGHLIGHTER))) {
+                preloadLibrary(Attributes.SOURCE_HIGHLIGHTER);
+            }
+
+            if (attributes.containsKey(Attributes.CACHE_URI)) {
+                preloadLibrary(Attributes.CACHE_URI);
+            }
+
+            if (attributes.containsKey(Attributes.DATA_URI)) {
+                preloadLibrary(Attributes.DATA_URI);
+            }
+            if ("epub3".equals(attributes.get(Options.BACKEND))) {
+                preloadLibrary(EPUB3);
+            }
+            if ("pdf".equals(attributes.get(Options.BACKEND))) {
+                preloadLibrary(PDF);
+            }
+            if ("revealjs".equals(attributes.get(Options.BACKEND))) {
+                preloadLibrary(REVEALJS);
+            }
+        }
+
+        if (ERUBIS.equals(opts.get(ruby.newSymbol(Options.ERUBY)))) {
+            preloadLibrary(Options.ERUBY);
+        }
+
+        if (opts.containsKey(ruby.newSymbol(Options.TEMPLATE_DIRS))) {
+            preloadLibrary(Options.TEMPLATE_DIRS);
+        }
+
+    }
+
     private void preloadLibrary(String option) {
         this.rubyRuntime.evalScriptlet(optionToRequiredGem.get(option));
     }
 
     private boolean isOptionWithValue(Map<String, Object> attributes, String attribute, String value) {
-        return attributes.get(attribute).equals(value);
+        return value.equals(attributes.get(attribute));
     }
 
     private boolean isOptionSet(Map<String, Object> attributes, String attribute) {

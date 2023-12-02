@@ -1,8 +1,6 @@
 package org.asciidoctor.cli.jruby;
 
 import com.beust.jcommander.JCommander;
-import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.Options;
 import org.asciidoctor.cli.AsciidoctorCliOptions;
 import org.asciidoctor.cli.MaxSeverityLogHandler;
 import org.asciidoctor.jruby.DirectoryWalker;
@@ -10,8 +8,12 @@ import org.asciidoctor.jruby.GlobDirectoryWalker;
 import org.asciidoctor.jruby.internal.IOUtils;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
+import org.asciidoctor.jruby.internal.RubyGemsPreloader;
 import org.asciidoctor.jruby.internal.RubyUtils;
 import org.jruby.Main;
+import org.jruby.Ruby;
+import org.jruby.RubyClass;
+import org.jruby.RubyHash;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.io.File;
@@ -19,10 +21,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 import java.util.stream.Collectors;
-
-import static org.asciidoctor.cli.AsciidoctorCliOptions.TIMINGS_OPTION_NAME;
 
 public class AsciidoctorInvoker {
 
@@ -61,29 +64,20 @@ public class AsciidoctorInvoker {
             MaxSeverityLogHandler maxSeverityLogHandler = new MaxSeverityLogHandler();
             asciidoctor.registerLogHandler(maxSeverityLogHandler);
 
-            Options options = asciidoctorCliOptions.parse();
-
             if (asciidoctorCliOptions.isRequire()) {
                 for (String require : asciidoctorCliOptions.getRequire()) {
                     RubyUtils.requireLibrary(asciidoctor.getRubyRuntime(), require);
                 }
             }
 
-            setTimingsMode(asciidoctor, asciidoctorCliOptions, options);
-
             setVerboseLevel(asciidoctor, asciidoctorCliOptions);
 
-            convertInput(asciidoctor, options, inputFiles);
+            convertInput(asciidoctor, asciidoctorCliOptions, inputFiles);
 
             if (asciidoctorCliOptions.getFailureLevel().compareTo(maxSeverityLogHandler.getMaxSeverity()) <= 0) {
                 return 1;
             }
 
-            if (asciidoctorCliOptions.isTimings()) {
-                Map<String, Object> optionsMap = options.map();
-                IRubyObject timings = (IRubyObject) optionsMap.get(TIMINGS_OPTION_NAME);
-                timings.callMethod(JRubyRuntimeContext.get(asciidoctor).getCurrentContext(), "print_report");
-            }
         }
         return 0;
     }
@@ -96,13 +90,6 @@ public class AsciidoctorInvoker {
             return versionProps.getProperty("version.asciidoctorj");
         } catch (IOException e) {
             return "N/A";
-        }
-    }
-
-    private void setTimingsMode(Asciidoctor asciidoctor, AsciidoctorCliOptions asciidoctorCliOptions, Options options) {
-        if (asciidoctorCliOptions.isTimings()) {
-            options.setOption(TIMINGS_OPTION_NAME,
-                    JRubyRuntimeContext.get(asciidoctor).evalScriptlet("Asciidoctor::Timings.new"));
         }
     }
 
@@ -150,46 +137,17 @@ public class AsciidoctorInvoker {
         return new URLClassLoader(cpUrls.toArray(new URL[cpUrls.size()]));
     }
 
-    private void convertInput(Asciidoctor asciidoctor, Options options, List<File> inputFiles) {
+    private void convertInput(JRubyAsciidoctor asciidoctor, AsciidoctorCliOptions cliOptions, List<File> inputFiles) throws IOException {
+        Ruby ruby = JRubyRuntimeContext.get(asciidoctor);
+        RubyHash opts = cliOptions.parse(ruby);
 
-        if (inputFiles.size() == 1 && "-".equals(inputFiles.get(0).getName())) {
-            asciidoctor.convert(readInputFromStdIn(), options);
-            return;
-        }
+        new RubyGemsPreloader(asciidoctor.getRubyRuntime()).preloadRequiredLibrariesCommandLine(opts);
 
-        options.setMkDirs(true);
+        opts.put(ruby.newSymbol("input_files"), inputFiles.stream().map(f -> ruby.newString(f.getPath())).collect(Collectors.toList()));
 
-        findInvalidInputFile(inputFiles)
-                .ifPresent(inputFile -> {
-                    System.err.println("asciidoctor: FAILED: input file(s) '"
-                            + inputFile.getAbsolutePath()
-                            + "' missing or cannot be read");
-                    throw new IllegalArgumentException(
-                            "asciidoctor: FAILED: input file(s) '"
-                                    + inputFile.getAbsolutePath()
-                                    + "' missing or cannot be read");
-                });
-
-        final Optional<File> toDir = getAbsolutePathFromOption(options, Options.TO_DIR);
-        final Optional<File> srcDir = getAbsolutePathFromOption(options, Options.SOURCE_DIR);
-
-        inputFiles.forEach(inputFile -> {
-            if (toDir.isPresent() && srcDir.isPresent()) {
-                if (inputFile.getAbsolutePath().startsWith(srcDir.get().getAbsolutePath())) {
-                    String relativePath = srcDir.get().toURI().relativize(inputFile.getParentFile().getAbsoluteFile().toURI()).getPath();
-                    String absolutePath = new File(toDir.get(), relativePath).getAbsolutePath();
-                    options.setToDir(absolutePath);
-                }
-            }
-            asciidoctor.convertFile(inputFile, options);
-        });
-    }
-
-    private Optional<File> getAbsolutePathFromOption(Options options, String name) {
-        return Optional.ofNullable(options.map().get(name))
-                .filter(String.class::isInstance)
-                .map(String.class::cast)
-                .map(File::new);
+        RubyClass invokerClass = ruby.getModule("AsciidoctorJ").getModule("Cli").getClass("Invoker");
+        IRubyObject invoker = invokerClass.newInstance(ruby.getCurrentContext(), opts);
+        invoker.callMethod(ruby.getCurrentContext(), "invoke!");
     }
 
     private Optional<File> findInvalidInputFile(List<File> inputFiles) {

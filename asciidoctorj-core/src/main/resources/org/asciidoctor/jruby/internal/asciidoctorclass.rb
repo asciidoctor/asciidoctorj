@@ -1,3 +1,9 @@
+require 'java'
+require 'asciidoctor'
+require 'asciidoctor/cli'
+require 'asciidoctor/extensions'
+
+
 module AsciidoctorJ
     include_package 'org.asciidoctor'
     module Extensions
@@ -6,11 +12,19 @@ module AsciidoctorJ
         # This is necessary to run against both Asciidoctor 1.5.5 and 1.5.6
         TreeProcessor = Treeprocessor unless defined? TreeProcessor
     end
-end
 
-require 'java'
-require 'asciidoctor'
-require 'asciidoctor/extensions'
+    module Cli
+        class Invoker < Asciidoctor::Cli::Invoker
+            def initialize options
+                @documents = []
+                @out = nil
+                @err = nil
+                @code = 0
+                @options = options
+            end
+        end
+    end
+end
 
 module AsciidoctorModule
 
