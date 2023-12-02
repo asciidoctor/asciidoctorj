@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 
@@ -31,10 +32,10 @@ public class GlobDirectoryWalker implements DirectoryWalker {
 
         String unglobbedPart = globExpression.substring(0, indexOfUnglobbedPart + 1);
 
-        this.rootDirectory = new File(unglobbedPart).getAbsoluteFile();
+        this.rootDirectory = unglobbedPart.isEmpty() ? null : new File(unglobbedPart);
         this.globExpression = globExpression.substring(indexOfUnglobbedPart + 1);
         checkInput(rootDirectory);
-        this.canonicalRootDir = getCanonicalPath(rootDirectory);
+        this.canonicalRootDir = getCanonicalPath(Optional.ofNullable(rootDirectory).orElseGet(() -> new File(".")));
     }
 
     /**
@@ -88,6 +89,9 @@ public class GlobDirectoryWalker implements DirectoryWalker {
     }
 
     private void checkInput(File rootDir) {
+        if (rootDir == null) {
+            return;
+        }
         if (!rootDir.exists()) {
             throw new IllegalArgumentException("Directory does not exist: "
                     + rootDir);
@@ -137,7 +141,7 @@ public class GlobDirectoryWalker implements DirectoryWalker {
     private void findFilesThroughMatchingDirectories(File dir,
             List<Pattern> includes) {
         for (String fileName : dir.list()) {
-            List<Pattern> matchingIncludes = new ArrayList<Pattern>(
+            List<Pattern> matchingIncludes = new ArrayList<>(
                     includes.size());
             for (Pattern include : includes) {
                 if (include.matches(fileName)) {

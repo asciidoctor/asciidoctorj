@@ -39,7 +39,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
     private RubyClass extensionGroupClass;
 
-    private List<LogHandler> logHandlers = new ArrayList<>();
+    private final List<LogHandler> logHandlers = new ArrayList<>();
 
     public JRubyAsciidoctor() {
         this(createRubyRuntime(Collections.singletonMap(GEM_PATH, null), new ArrayList<>(), null));
@@ -293,9 +293,6 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
         String currentDirectory = rubyRuntime.getCurrentDirectory();
 
-        if (options.containsKey(Options.BASEDIR)) {
-            rubyRuntime.setCurrentDirectory((String) options.get(Options.BASEDIR));
-        }
 
         final Object toFileOption = options.get(Options.TO_FILE);
         if (toFileOption instanceof OutputStream) {
@@ -306,7 +303,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
 
         try {
             IRubyObject object = getAsciidoctorModule().callMethod("convert_file",
-                    rubyRuntime.newString(file.getAbsolutePath()), rubyHash);
+                    rubyRuntime.newString(file.toString()), rubyHash);
             return adaptReturn(object, expectedResult);
         } catch (RaiseException e) {
             logger.severe(e.getMessage());

@@ -19,7 +19,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import static org.asciidoctor.cli.AsciidoctorCliOptions.TIMINGS_OPTION_NAME;
@@ -61,31 +65,31 @@ public class AsciidoctorInvoker {
             MaxSeverityLogHandler maxSeverityLogHandler = new MaxSeverityLogHandler();
             asciidoctor.registerLogHandler(maxSeverityLogHandler);
 
-            Options options = asciidoctorCliOptions.parse();
-
             if (asciidoctorCliOptions.isRequire()) {
                 for (String require : asciidoctorCliOptions.getRequire()) {
                     RubyUtils.requireLibrary(asciidoctor.getRubyRuntime(), require);
                 }
             }
 
-            setTimingsMode(asciidoctor, asciidoctorCliOptions, options);
 
             setVerboseLevel(asciidoctor, asciidoctorCliOptions);
 
-            convertInput(asciidoctor, options, inputFiles);
+            convertInput(asciidoctor, asciidoctorCliOptions, inputFiles);
 
             if (asciidoctorCliOptions.getFailureLevel().compareTo(maxSeverityLogHandler.getMaxSeverity()) <= 0) {
                 return 1;
             }
 
-            if (asciidoctorCliOptions.isTimings()) {
-                Map<String, Object> optionsMap = options.map();
-                IRubyObject timings = (IRubyObject) optionsMap.get(TIMINGS_OPTION_NAME);
-                timings.callMethod(JRubyRuntimeContext.get(asciidoctor).getCurrentContext(), "print_report");
-            }
         }
         return 0;
+    }
+
+    private static void printTimingsReport(AsciidoctorCliOptions asciidoctorCliOptions, Options options, JRubyAsciidoctor asciidoctor) {
+        if (asciidoctorCliOptions.isTimings()) {
+            Map<String, Object> optionsMap = options.map();
+            IRubyObject timings = (IRubyObject) optionsMap.get(TIMINGS_OPTION_NAME);
+            timings.callMethod(JRubyRuntimeContext.get(asciidoctor).getCurrentContext(), "print_report");
+        }
     }
 
     private String getAsciidoctorJVersion() {
@@ -150,14 +154,31 @@ public class AsciidoctorInvoker {
         return new URLClassLoader(cpUrls.toArray(new URL[cpUrls.size()]));
     }
 
-    private void convertInput(Asciidoctor asciidoctor, Options options, List<File> inputFiles) {
+    private static char RS = '\\';
+    private static char FS = '/';
 
-        if (inputFiles.size() == 1 && "-".equals(inputFiles.get(0).getName())) {
-            asciidoctor.convert(readInputFromStdIn(), options);
-            return;
+    private void convertInput(JRubyAsciidoctor asciidoctor, AsciidoctorCliOptions cliOptions, List<File> inputFiles) throws IOException {
+
+        Map<String, Object> opts = cliOptions.parse();
+
+        String absSrcdirPosix = null;
+        String outFile = cliOptions.getOutFile();
+        boolean nonPosixEnv = File.separatorChar == '\\';
+        if (cliOptions.getSourceDir() != null) {
+            absSrcdirPosix = new File(cliOptions.getSourceDir()).getCanonicalPath();
+            if (nonPosixEnv && absSrcdirPosix.indexOf(RS) >= 0) {
+                absSrcdirPosix = absSrcdirPosix.replace(RS, FS);
+            }
         }
 
-        options.setMkDirs(true);
+        boolean stdin = false;
+
+        if (inputFiles.size() == 1 && "-".equals(inputFiles.get(0).getName())) {
+            if (outFile == null) {
+                outFile = inputFiles.get(0).getName();
+            }
+            stdin = true;
+        }
 
         findInvalidInputFile(inputFiles)
                 .ifPresent(inputFile -> {
@@ -170,19 +191,56 @@ public class AsciidoctorInvoker {
                                     + "' missing or cannot be read");
                 });
 
-        final Optional<File> toDir = getAbsolutePathFromOption(options, Options.TO_DIR);
-        final Optional<File> srcDir = getAbsolutePathFromOption(options, Options.SOURCE_DIR);
+        String toFile = null;
+        if ("-".equals(outFile)) {
+            opts.put(Options.TO_FILE, System.out);
+        } else if (outFile != null) {
+            opts.put(Options.MKDIRS, true);
+            toFile = outFile;
+            opts.put(Options.TO_FILE, toFile);
+        } else {
+            opts.put(Options.MKDIRS, true);
+            opts.put(Options.TO_FILE, null);
+        }
 
-        inputFiles.forEach(inputFile -> {
-            if (toDir.isPresent() && srcDir.isPresent()) {
-                if (inputFile.getAbsolutePath().startsWith(srcDir.get().getAbsolutePath())) {
-                    String relativePath = srcDir.get().toURI().relativize(inputFile.getParentFile().getAbsoluteFile().toURI()).getPath();
-                    String absolutePath = new File(toDir.get(), relativePath).getAbsolutePath();
-                    options.setToDir(absolutePath);
+        if (stdin) {
+            Options inputOpts = Options.builder().build();
+            inputOpts.map().putAll(opts);
+            if (cliOptions.isTimings()) {
+                setTimingsMode(asciidoctor, cliOptions, inputOpts);
+                asciidoctor.convert(readInputFromStdIn(), inputOpts);
+                printTimingsReport(cliOptions, inputOpts, asciidoctor);
+            } else {
+                asciidoctor.convert(readInputFromStdIn(), inputOpts, String.class);
+            }
+        } else {
+            for (File inputFile : inputFiles) {
+
+                Options inputOpts = Options.builder().build();
+                inputOpts.map().putAll(opts);
+                if (absSrcdirPosix != null && cliOptions.getDestinationDir() != null && !cliOptions.getDestinationDir().isEmpty()) {
+                    String absIndir = inputFile.getCanonicalFile().getParent();
+                    String absIndirPosix = null;
+                    if (nonPosixEnv) {
+                        absIndirPosix = absIndir.indexOf(RS) >= 0 ? absIndir.replace(RS, FS) : absIndir;
+                    } else {
+                        absIndirPosix = absIndir;
+                    }
+                    if (absIndirPosix.startsWith(absSrcdirPosix)) {
+                        inputOpts.setToDir(cliOptions.getDestinationDir() + absIndir.substring(absSrcdirPosix.length()));
+                    }
+                }
+
+                if (cliOptions.isTimings()) {
+                    setTimingsMode(asciidoctor, cliOptions, inputOpts);
+                    asciidoctor.convertFile(inputFile, inputOpts);
+                    printTimingsReport(cliOptions, inputOpts, asciidoctor);
+                } else {
+                    asciidoctor.convertFile(inputFile, inputOpts);
                 }
             }
-            asciidoctor.convertFile(inputFile, options);
-        });
+
+        }
     }
 
     private Optional<File> getAbsolutePathFromOption(Options options, String name) {

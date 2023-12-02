@@ -25,7 +25,7 @@ public class RubyGemsPreloader {
             REVEALJS, "require 'asciidoctor-revealjs'"
     );
 
-    private Ruby rubyRuntime;
+    private final Ruby rubyRuntime;
 
     public RubyGemsPreloader(Ruby rubyRuntime) {
         this.rubyRuntime = rubyRuntime;
@@ -76,7 +76,7 @@ public class RubyGemsPreloader {
     }
 
     private boolean isOptionWithValue(Map<String, Object> attributes, String attribute, String value) {
-        return attributes.get(attribute).equals(value);
+        return value.equals(attributes.get(attribute));
     }
 
     private boolean isOptionSet(Map<String, Object> attributes, String attribute) {
