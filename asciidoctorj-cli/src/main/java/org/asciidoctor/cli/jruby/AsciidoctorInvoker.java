@@ -243,13 +243,6 @@ public class AsciidoctorInvoker {
         }
     }
 
-    private Optional<File> getAbsolutePathFromOption(Options options, String name) {
-        return Optional.ofNullable(options.map().get(name))
-                .filter(String.class::isInstance)
-                .map(String.class::cast)
-                .map(File::new);
-    }
-
     private Optional<File> findInvalidInputFile(List<File> inputFiles) {
         return inputFiles.stream()
                 .filter(inputFile -> !inputFile.canRead())
