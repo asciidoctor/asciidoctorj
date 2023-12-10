@@ -13,6 +13,7 @@ public class Options {
 
     public static final String IN_PLACE = "in_place";
     public static final String WARNINGS = "warnings";
+    public static final String TIMINGS = "timings";
     public static final String ATTRIBUTES = "attributes";
     public static final String TEMPLATE_DIRS = "template_dirs";
     public static final String TEMPLATE_ENGINE = "template_engine";

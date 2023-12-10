@@ -6,6 +6,9 @@ import org.jruby.Ruby;
 import org.jruby.RubyHash;
 
 import java.util.Map;
+import java.util.Objects;
+
+import static java.util.Collections.emptyMap;
 
 public class RubyGemsPreloader {
 
@@ -32,6 +35,13 @@ public class RubyGemsPreloader {
         this.rubyRuntime = rubyRuntime;
     }
 
+    /**
+     * Preload required libraries based on the options passed to the AsciidoctorJ API.
+     * This method should only be used if a document is converted via the AsciidoctorJ API.
+     * @param options The map with options that will be passed to the AsciidoctorJ API.
+     *                This is usually obtained by calling Options.map() on an Options instance.
+     *                The attributes are passed as a nested Map with String keys and String values.
+     */
     public void preloadRequiredLibraries(Map<String, Object> options) {
 
         if (options.containsKey(Options.ATTRIBUTES)) {
@@ -59,23 +69,29 @@ public class RubyGemsPreloader {
             preloadLibrary(Options.TEMPLATE_DIRS);
         }
 
-        if (isOptionSet(options, Options.BACKEND) && "epub3".equalsIgnoreCase((String) options.get(Options.BACKEND))) {
-            preloadLibrary(EPUB3);
-        }
-
-        if (isOptionSet(options, Options.BACKEND) && "pdf".equalsIgnoreCase((String) options.get(Options.BACKEND))) {
-            preloadLibrary(PDF);
-        }
-
-        if (isOptionSet(options, Options.BACKEND) && "revealjs".equalsIgnoreCase((String) options.get(Options.BACKEND))) {
-            preloadLibrary(REVEALJS);
+        if (isOptionSet(options, Options.BACKEND)) {
+            if ("epub3".equalsIgnoreCase(Objects.toString(options.get(Options.BACKEND)))) {
+                preloadLibrary(EPUB3);
+            } else if ("pdf".equalsIgnoreCase(Objects.toString(options.get(Options.BACKEND)))) {
+                preloadLibrary(PDF);
+            } else if ("revealjs".equalsIgnoreCase(Objects.toString(options.get(Options.BACKEND)))) {
+                preloadLibrary(REVEALJS);
+            }
         }
     }
 
+    /**
+     * Preload required libraries based on the options passed in the command line.
+     * This method is only to be used from the CLI module, since it relies on how command line arguments map
+     * to attributes and options expected by the Asciidoctor::Cli::Invoker.
+     * @param opts The options that will be passed to the Asciidoctor::Cli::Invoker.
+     *             Should be a Hash with RubySymbol keys and arbitrary values.
+     *             The attributes are passed as a nested Hash with String keys and String values.
+     */
     public void preloadRequiredLibrariesCommandLine(RubyHash opts) {
         Ruby ruby = opts.getRuntime();
         if (opts.containsKey(ruby.newSymbol(Options.ATTRIBUTES))) {
-            Map<String, Object> attributes = (Map<String, Object>) opts.get(ruby.newSymbol(Options.ATTRIBUTES));
+            Map<String, Object> attributes = (Map<String, Object>) opts.getOrDefault(ruby.newSymbol(Options.ATTRIBUTES), emptyMap());
 
             if (CODERAY.equals(attributes.get(Attributes.SOURCE_HIGHLIGHTER))) {
                 preloadLibrary(Attributes.SOURCE_HIGHLIGHTER);
@@ -88,13 +104,12 @@ public class RubyGemsPreloader {
             if (attributes.containsKey(Attributes.DATA_URI)) {
                 preloadLibrary(Attributes.DATA_URI);
             }
+
             if ("epub3".equals(attributes.get(Options.BACKEND))) {
                 preloadLibrary(EPUB3);
-            }
-            if ("pdf".equals(attributes.get(Options.BACKEND))) {
+            } else if ("pdf".equals(attributes.get(Options.BACKEND))) {
                 preloadLibrary(PDF);
-            }
-            if ("revealjs".equals(attributes.get(Options.BACKEND))) {
+            } else if ("revealjs".equals(attributes.get(Options.BACKEND))) {
                 preloadLibrary(REVEALJS);
             }
         }

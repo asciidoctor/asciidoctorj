@@ -5,16 +5,10 @@ import org.asciidoctor.cli.AsciidoctorCliOptions;
 import org.asciidoctor.cli.MaxSeverityLogHandler;
 import org.asciidoctor.jruby.DirectoryWalker;
 import org.asciidoctor.jruby.GlobDirectoryWalker;
-import org.asciidoctor.jruby.internal.IOUtils;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
-import org.asciidoctor.jruby.internal.RubyGemsPreloader;
 import org.asciidoctor.jruby.internal.RubyUtils;
 import org.jruby.Main;
-import org.jruby.Ruby;
-import org.jruby.RubyClass;
-import org.jruby.RubyHash;
-import org.jruby.runtime.builtin.IRubyObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +17,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -131,33 +124,15 @@ public class AsciidoctorInvoker {
                     cpUrls.add(f.toURI().toURL());
                 }
             } catch (Exception e) {
-                System.err.println(String.format("asciidoctor: WARNING: Could not resolve classpath '%s': %s", cp, e.getMessage()));
+                System.err.printf("asciidoctor: WARNING: Could not resolve classpath '%s': %s%n", cp, e.getMessage());
             }
         }
-        return new URLClassLoader(cpUrls.toArray(new URL[cpUrls.size()]));
+        return new URLClassLoader(cpUrls.toArray(new URL[0]));
     }
 
     private void convertInput(JRubyAsciidoctor asciidoctor, AsciidoctorCliOptions cliOptions, List<File> inputFiles) throws IOException {
-        Ruby ruby = JRubyRuntimeContext.get(asciidoctor);
-        RubyHash opts = cliOptions.parse(ruby);
-
-        new RubyGemsPreloader(asciidoctor.getRubyRuntime()).preloadRequiredLibrariesCommandLine(opts);
-
-        opts.put(ruby.newSymbol("input_files"), inputFiles.stream().map(f -> ruby.newString(f.getPath())).collect(Collectors.toList()));
-
-        RubyClass invokerClass = ruby.getModule("AsciidoctorJ").getModule("Cli").getClass("Invoker");
-        IRubyObject invoker = invokerClass.newInstance(ruby.getCurrentContext(), opts);
-        invoker.callMethod(ruby.getCurrentContext(), "invoke!");
-    }
-
-    private Optional<File> findInvalidInputFile(List<File> inputFiles) {
-        return inputFiles.stream()
-                .filter(inputFile -> !inputFile.canRead())
-                .findFirst();
-    }
-
-    private String readInputFromStdIn() {
-        return IOUtils.readFull(System.in);
+        AsciidoctorRubyInvoker invoker = new AsciidoctorRubyInvoker(asciidoctor);
+        invoker.invoke(inputFiles, cliOptions);
     }
 
     private List<File> getInputFiles(AsciidoctorCliOptions asciidoctorCliOptions) {
@@ -170,12 +145,12 @@ public class AsciidoctorInvoker {
         }
 
         return parameters.stream()
-                .map(globExpression -> new GlobDirectoryWalker(globExpression))
+                .map(GlobDirectoryWalker::new)
                 .flatMap(walker -> walker.scan().stream())
                 .collect(Collectors.toList());
     }
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String[] args) throws IOException {
 
         // Process .jrubyrc file
         Main.processDotfile();

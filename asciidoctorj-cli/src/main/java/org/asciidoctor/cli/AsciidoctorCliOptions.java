@@ -10,7 +10,6 @@ import org.jruby.Ruby;
 import org.jruby.RubyHash;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -42,7 +41,6 @@ public class AsciidoctorCliOptions {
     public static final String VERBOSE = "-v";
     public static final String TIMINGS = "-t";
     public static final char ATTRIBUTE_SEPARATOR = '=';
-    public static final String TIMINGS_OPTION_NAME = "timings";
 
     @Parameter(names = {VERBOSE, "--verbose"}, description = "enable verbose mode")
     private boolean verbose = false;
@@ -276,7 +274,7 @@ public class AsciidoctorCliOptions {
         return !isOutFileOption() && !isDestinationDirOption() && !isOutputStdout();
     }
 
-    public RubyHash parse(Ruby ruby) throws IOException {
+    public RubyHash parse(Ruby ruby) {
 
         RubyHash opts = new RubyHash(ruby);
         Map attributes = buildAttributes();
@@ -300,13 +298,13 @@ public class AsciidoctorCliOptions {
             opts.put(ruby.newSymbol(Options.SAFE), SafeMode.SAFE.getLevel());
         }
         if (this.safeMode != null) {
-            opts.put(ruby.newSymbol("safe"), this.safeMode.getLevel());
+            opts.put(ruby.newSymbol(Options.SAFE), this.safeMode.getLevel());
         }
         if (this.noHeaderFooter) {
             opts.put(ruby.newSymbol(Options.STANDALONE), false);
         }
         if (this.sectionNumbers) {
-            attributes.put("sectnums", "");
+            attributes.put(Attributes.SECTION_NUMBERS, "");
         }
         if (this.eruby != null) {
             opts.put(ruby.newSymbol(Options.ERUBY), this.eruby);
@@ -327,7 +325,7 @@ public class AsciidoctorCliOptions {
             opts.put(ruby.newSymbol(Options.TRACE), true);
         }
         if (this.timings) {
-            opts.put(ruby.newSymbol("timings"), true);
+            opts.put(ruby.newSymbol(Options.TIMINGS), true);
         }
         if (this.warnings) {
             opts.put(ruby.newSymbol(Options.WARNINGS), true);
