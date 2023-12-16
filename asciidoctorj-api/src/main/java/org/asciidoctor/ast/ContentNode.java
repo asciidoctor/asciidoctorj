@@ -32,6 +32,9 @@ public interface ContentNode {
     @Deprecated
     String context();
     String getContext();
+
+    void setContext(String context);
+
     /**
      * @deprecated Use {@linkplain #getDocument()}  instead.
      */
