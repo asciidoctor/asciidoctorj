@@ -13,7 +13,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 public class AsciidoctorCliOptions {
@@ -277,16 +276,16 @@ public class AsciidoctorCliOptions {
     public RubyHash parse(Ruby ruby) {
 
         RubyHash opts = new RubyHash(ruby);
-        Map attributes = buildAttributes();
+        Attributes attributes = buildAttributes();
 
         opts.put(ruby.newSymbol(Options.STANDALONE), true);
         opts.put(ruby.newSymbol(Options.WARNINGS), false);
 
         if (this.backend != null) {
-            attributes.put(Options.BACKEND, this.backend);
+            attributes.setAttribute(Options.BACKEND, this.backend);
         }
         if (this.doctype != null) {
-            attributes.put(Options.DOCTYPE, this.doctype);
+            attributes.setAttribute(Options.DOCTYPE, this.doctype);
         }
         if (this.embedded) {
             opts.put(ruby.newSymbol(Options.STANDALONE), false);
@@ -304,7 +303,7 @@ public class AsciidoctorCliOptions {
             opts.put(ruby.newSymbol(Options.STANDALONE), false);
         }
         if (this.sectionNumbers) {
-            attributes.put(Attributes.SECTION_NUMBERS, "");
+            attributes.setAttribute(Attributes.SECTION_NUMBERS, "");
         }
         if (this.eruby != null) {
             opts.put(ruby.newSymbol(Options.ERUBY), this.eruby);
@@ -331,7 +330,7 @@ public class AsciidoctorCliOptions {
             opts.put(ruby.newSymbol(Options.WARNINGS), true);
         }
         if (!attributes.isEmpty()) {
-            opts.put(ruby.newSymbol(Options.ATTRIBUTES), attributes);
+            opts.put(ruby.newSymbol(Options.ATTRIBUTES), attributes.map());
         }
         if (this.isSourceDirOption()) {
             opts.put(ruby.newSymbol("source_dir"), this.sourceDir);
@@ -344,7 +343,7 @@ public class AsciidoctorCliOptions {
      * {@link Attributes} instance.
      */
     // FIXME Should be private, made protected for testing.
-    Map buildAttributes() {
+    Attributes buildAttributes() {
         final AttributesBuilder attributesBuilder = Attributes.builder();
         for (String attribute : attributes) {
             int separatorIndex = attribute.indexOf(ATTRIBUTE_SEPARATOR);
@@ -356,7 +355,7 @@ public class AsciidoctorCliOptions {
                 attributesBuilder.attribute(attribute);
             }
         }
-        return attributesBuilder.build().map();
+        return attributesBuilder.build();
     }
 
     private List<String> splitByPathSeparator(String path) {

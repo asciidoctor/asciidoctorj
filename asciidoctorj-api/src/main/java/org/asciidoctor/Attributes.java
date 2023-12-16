@@ -593,7 +593,7 @@ public class Attributes {
 
     private void extractAttributeNameAndValue(String attribute, int equalsIndex) {
         String attributeName = attribute.substring(0, equalsIndex);
-        String attributeValue = attribute.substring(equalsIndex + 1, attribute.length());
+        String attributeValue = attribute.substring(equalsIndex + 1);
 
         this.attributes.put(attributeName, attributeValue);
     }
@@ -618,6 +618,10 @@ public class Attributes {
 
     private static String toTime(Date time) {
         return TIME_FORMAT.format(time);
+    }
+
+    public boolean isEmpty() {
+        return this.attributes.isEmpty();
     }
 
     /**
