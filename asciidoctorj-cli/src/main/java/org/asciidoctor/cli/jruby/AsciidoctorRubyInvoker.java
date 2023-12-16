@@ -33,7 +33,7 @@ public class AsciidoctorRubyInvoker {
     public void invoke(List<File> inputFiles, AsciidoctorCliOptions cliOptions) {
         RubyHash opts = cliOptions.parse(ruby);
 
-        new RubyGemsPreloader(asciidoctor.getRubyRuntime()).preloadRequiredLibrariesCommandLine(opts);
+        new RubyGemsPreloader(asciidoctor.getRubyRuntime()).preloadRequiredLibraries(opts);
 
         opts.put(ruby.newSymbol("input_files"), inputFiles.stream().map(f -> ruby.newString(f.getPath())).collect(Collectors.toList()));
 

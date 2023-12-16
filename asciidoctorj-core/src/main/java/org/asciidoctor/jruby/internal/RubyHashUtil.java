@@ -109,13 +109,11 @@ public class RubyHashUtil {
         return keyType instanceof CharSequence;
     }
 
-    public static Map<Object, Object> convertRubyHashMapToMap(Map<Object, Object> rubyHashMap) {
+    public static Map<Object, Object> convertRubyHashMapToMap(Map<? super String, Object> rubyHashMap) {
 
-        Map<Object, Object> map = new HashMap<Object, Object>();
+        Map<Object, Object> map = new HashMap<>();
 
-        Set<Entry<Object, Object>> elements = rubyHashMap.entrySet();
-
-        for (Entry<Object, Object> element : elements) {
+        for (Entry<? super String, Object> element : rubyHashMap.entrySet()) {
             if(element.getKey() instanceof RubySymbol) {
                 map.put(toJavaString((RubySymbol)element.getKey()), toJavaObject(element.getValue()));
             } else {
@@ -129,7 +127,7 @@ public class RubyHashUtil {
 
     public static Map<String, Object> convertRubyHashMapToStringObjectMap(RubyHash rubyHashMap) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
 
         Set<Entry<Object, Object>> elements = rubyHashMap.entrySet();
 

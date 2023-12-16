@@ -3,12 +3,9 @@ package org.asciidoctor.jruby.internal;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.jruby.Ruby;
-import org.jruby.RubyHash;
 
 import java.util.Map;
-import java.util.Objects;
-
-import static java.util.Collections.emptyMap;
+import java.util.Optional;
 
 public class RubyGemsPreloader {
 
@@ -42,11 +39,11 @@ public class RubyGemsPreloader {
      *                This is usually obtained by calling Options.map() on an Options instance.
      *                The attributes are passed as a nested Map with String keys and String values.
      */
-    public void preloadRequiredLibraries(Map<String, Object> options) {
+    public void preloadRequiredLibraries(Map<? super String, Object> options) {
 
-        if (options.containsKey(Options.ATTRIBUTES)) {
-            Map<String, Object> attributes = (Map<String, Object>) options.get(Options.ATTRIBUTES);
-
+        Map<Object, Object> opts = RubyHashUtil.convertRubyHashMapToMap(options);
+        Map<String, Object> attributes = (Map<String, Object>) opts.get(Options.ATTRIBUTES);
+        if (attributes != null) {
             if (isOptionSet(attributes, Attributes.SOURCE_HIGHLIGHTER)
                     && isOptionWithValue(attributes, Attributes.SOURCE_HIGHLIGHTER, CODERAY)) {
                 preloadLibrary(Attributes.SOURCE_HIGHLIGHTER);
@@ -61,78 +58,37 @@ public class RubyGemsPreloader {
             }
         }
 
-        if (isOptionSet(options, Options.ERUBY) && isOptionWithValue(options, Options.ERUBY, ERUBIS)) {
+        if (isOptionSet(opts, Options.ERUBY) && isOptionWithValue(opts, Options.ERUBY, ERUBIS)) {
             preloadLibrary(Options.ERUBY);
         }
 
-        if (isOptionSet(options, Options.TEMPLATE_DIRS)) {
+        if (isOptionSet(opts, Options.TEMPLATE_DIRS)) {
             preloadLibrary(Options.TEMPLATE_DIRS);
         }
 
-        if (isOptionSet(options, Options.BACKEND)) {
-            if ("epub3".equalsIgnoreCase(Objects.toString(options.get(Options.BACKEND)))) {
-                preloadLibrary(EPUB3);
-            } else if ("pdf".equalsIgnoreCase(Objects.toString(options.get(Options.BACKEND)))) {
-                preloadLibrary(PDF);
-            } else if ("revealjs".equalsIgnoreCase(Objects.toString(options.get(Options.BACKEND)))) {
-                preloadLibrary(REVEALJS);
-            }
-        }
-    }
-
-    /**
-     * Preload required libraries based on the options passed in the command line.
-     * This method is only to be used from the CLI module, since it relies on how command line arguments map
-     * to attributes and options expected by the Asciidoctor::Cli::Invoker.
-     * @param opts The options that will be passed to the Asciidoctor::Cli::Invoker.
-     *             Should be a Hash with RubySymbol keys and arbitrary values.
-     *             The attributes are passed as a nested Hash with String keys and String values.
-     */
-    public void preloadRequiredLibrariesCommandLine(RubyHash opts) {
-        Ruby ruby = opts.getRuntime();
-        if (opts.containsKey(ruby.newSymbol(Options.ATTRIBUTES))) {
-            Map<String, Object> attributes = (Map<String, Object>) opts.getOrDefault(ruby.newSymbol(Options.ATTRIBUTES), emptyMap());
-
-            if (CODERAY.equals(attributes.get(Attributes.SOURCE_HIGHLIGHTER))) {
-                preloadLibrary(Attributes.SOURCE_HIGHLIGHTER);
-            }
-
-            if (attributes.containsKey(Attributes.CACHE_URI)) {
-                preloadLibrary(Attributes.CACHE_URI);
-            }
-
-            if (attributes.containsKey(Attributes.DATA_URI)) {
-                preloadLibrary(Attributes.DATA_URI);
-            }
-
-            if ("epub3".equals(attributes.get(Options.BACKEND))) {
-                preloadLibrary(EPUB3);
-            } else if ("pdf".equals(attributes.get(Options.BACKEND))) {
-                preloadLibrary(PDF);
-            } else if ("revealjs".equals(attributes.get(Options.BACKEND))) {
-                preloadLibrary(REVEALJS);
-            }
-        }
-
-        if (ERUBIS.equals(opts.get(ruby.newSymbol(Options.ERUBY)))) {
-            preloadLibrary(Options.ERUBY);
-        }
-
-        if (opts.containsKey(ruby.newSymbol(Options.TEMPLATE_DIRS))) {
-            preloadLibrary(Options.TEMPLATE_DIRS);
-        }
-
+        Optional.ofNullable(opts.get(Options.BACKEND))
+                .or(() -> Optional.ofNullable(attributes).map(a -> a.get(Attributes.BACKEND)))
+                .map(Object::toString)
+                .ifPresent(backend -> {
+                    if ("epub3".equalsIgnoreCase(backend)) {
+                        preloadLibrary(EPUB3);
+                    } else if ("pdf".equalsIgnoreCase(backend)) {
+                        preloadLibrary(PDF);
+                    } else if ("revealjs".equalsIgnoreCase(backend)) {
+                        preloadLibrary(REVEALJS);
+                    }
+                });
     }
 
     private void preloadLibrary(String option) {
         this.rubyRuntime.evalScriptlet(optionToRequiredGem.get(option));
     }
 
-    private boolean isOptionWithValue(Map<String, Object> attributes, String attribute, String value) {
+    private boolean isOptionWithValue(Map<? super String, Object> attributes, String attribute, String value) {
         return value.equals(attributes.get(attribute));
     }
 
-    private boolean isOptionSet(Map<String, Object> attributes, String attribute) {
+    private boolean isOptionSet(Map<? super String, Object> attributes, String attribute) {
         return attributes.containsKey(attribute);
     }
 
