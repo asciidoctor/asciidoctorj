@@ -6,12 +6,14 @@ import java.util.*;
 /**
  * AsciidoctorJ conversion options.
  * <p>
- * See https://docs.asciidoctor.org/asciidoctor/latest/api/options/ for further
+ * See <a href="https://docs.asciidoctor.org/asciidoctor/latest/api/options/">https://docs.asciidoctor.org/asciidoctor/latest/api/options/</a> for further
  * details.
  */
 public class Options {
 
     public static final String IN_PLACE = "in_place";
+    public static final String WARNINGS = "warnings";
+    public static final String TIMINGS = "timings";
     public static final String ATTRIBUTES = "attributes";
     public static final String TEMPLATE_DIRS = "template_dirs";
     public static final String TEMPLATE_ENGINE = "template_engine";
@@ -24,10 +26,10 @@ public class Options {
     public static final String ERUBY = "eruby";
     public static final String CATALOG_ASSETS = "catalog_assets";
     public static final String COMPACT = "compact";
-    public static final String SOURCE_DIR = "source_dir";
     public static final String BACKEND = "backend";
     public static final String DOCTYPE = "doctype";
     public static final String BASEDIR = "base_dir";
+    public static final String TRACE = "trace";
     public static final String TEMPLATE_CACHE = "template_cache";
     public static final String SOURCE = "source";
     public static final String PARSE = "parse";
@@ -158,10 +160,6 @@ public class Options {
 
     public void setCompact(boolean compact) {
         this.options.put(COMPACT, compact);
-    }
-
-    public void setSourceDir(String srcDir) {
-        this.options.put(SOURCE_DIR, srcDir);
     }
 
     public void setBackend(String backend) {

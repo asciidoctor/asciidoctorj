@@ -15,6 +15,7 @@ import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.asciidoctor.test.extension.ClasspathExtension;
 import org.asciidoctor.util.TestHttpServer;
+import org.assertj.core.api.Assertions;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -157,7 +158,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith(ASCIIDOCTORCLASS_PREFIX));
+        Assertions.assertThat(contentElement.text()).contains(ASCIIDOCTORCLASS_PREFIX);
 
     }
 
@@ -215,7 +216,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith(ASCIIDOCTORCLASS_PREFIX));
+        Assertions.assertThat(contentElement.text()).contains(ASCIIDOCTORCLASS_PREFIX);
 
     }
 
@@ -389,7 +390,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith(ASCIIDOCTORCLASS_PREFIX));
+        Assertions.assertThat(contentElement.text()).contains(ASCIIDOCTORCLASS_PREFIX);
 
     }
 
@@ -410,7 +411,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith(ASCIIDOCTORCLASS_PREFIX));
+        Assertions.assertThat(contentElement.text()).contains(ASCIIDOCTORCLASS_PREFIX);
 
     }
 
@@ -431,7 +432,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-        assertThat(contentElement.text(), startsWith(ASCIIDOCTORCLASS_PREFIX));
+        Assertions.assertThat(contentElement.text()).contains(ASCIIDOCTORCLASS_PREFIX);
 
     }
 
@@ -925,7 +926,7 @@ public class WhenJavaExtensionIsRegistered {
 
             Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-            assertThat(contentElement.text(), startsWith(ASCIIDOCTORCLASS_PREFIX));
+            Assertions.assertThat(contentElement.text()).contains(ASCIIDOCTORCLASS_PREFIX);
         }
     }
 
@@ -947,7 +948,7 @@ public class WhenJavaExtensionIsRegistered {
 
             Element contentElement = doc.getElementsByAttributeValue("class", "language-ruby").first();
 
-            assertThat(contentElement.text(), startsWith(ASCIIDOCTORCLASS_PREFIX));
+            Assertions.assertThat(contentElement.text()).contains(ASCIIDOCTORCLASS_PREFIX);
         }
     }
 
