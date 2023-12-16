@@ -18,6 +18,8 @@ public interface ContentNode {
 
     String getContext();
 
+    void setContext(String context);
+
     Document getDocument();
 
     boolean isInline();

@@ -34,6 +34,11 @@ public abstract class ContentNodeImpl extends RubyObjectWrapper implements Conte
         return getString("context");
     }
 
+    @Override
+    public void setContext(String context) {
+        setString("context", context);
+
+    }
 
     @Override
     public ContentNode getParent() {
