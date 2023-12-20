@@ -59,7 +59,7 @@ ext {
   // jar versions
   arquillianVersion = '1.6.0.Final'
   arquillianSpockVersion = '1.0.0.CR1'
-  asciidoctorjPdfVersion = '2.3.7'
+  asciidoctorjPdfVersion = '2.3.10'
   asciidoctorjEpub3Version = '1.5.1'
   asciidoctorjDiagramVersion = '2.2.7' // 2.2.8+ requires Java 11
   asciidoctorjDiagramDitaaMiniVersion = '1.0.3'
@@ -69,7 +69,7 @@ ext {
   guavaVersion = '18.0'
   hamcrestVersion = '1.3'
   jcommanderVersion = '1.82'
-  jrubyVersion = '9.4.3.0'
+  jrubyVersion = '9.4.5.0'
   jsoupVersion = '1.14.3'
   junitVersion = '4.13.2'
   assertjVersion = '3.19.0'
