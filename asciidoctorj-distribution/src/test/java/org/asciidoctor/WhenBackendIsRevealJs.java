@@ -1,9 +1,7 @@
 package org.asciidoctor;
 
 import org.asciidoctor.cli.jruby.AsciidoctorInvoker;
-import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
-import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.asciidoctor.test.extension.ClasspathExtension;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,12 +16,8 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
+@ExtendWith({ClasspathExtension.class})
 public class WhenBackendIsRevealJs {
-
-    @AsciidoctorInstance
-    private Asciidoctor asciidoctor;
-
 
     @Test
     void should_create_simple_slides(@ClasspathResource("sample.adoc") File inputFile) throws IOException {
@@ -33,7 +27,7 @@ public class WhenBackendIsRevealJs {
         AsciidoctorInvoker.main(new String[]{
                 "-b", "revealjs",
                 "-r", "asciidoctor-diagram",
-                "-a", "revealjsdir=https://cdn.jsdelivr.net/npm/reveal.js@3.9.2",
+                "-a", "revealjsdir=https://cdn.jsdelivr.net/npm/reveal.js@4.1.2",
                 inputFile.getAbsolutePath()
         });
 
@@ -46,8 +40,8 @@ public class WhenBackendIsRevealJs {
                 .map(element -> element.attr("href"))
                 .collect(toList());
         assertThat(stylesheets)
-                .contains("https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/reveal.css",
-                        "https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/theme/black.css");
+                .contains("https://cdn.jsdelivr.net/npm/reveal.js@4.1.2/dist/reveal.css",
+                        "https://cdn.jsdelivr.net/npm/reveal.js@4.1.2/dist/theme/black.css");
 
         Element diagramSlide = doc.selectFirst("#diagram");
         assertThat(diagramSlide).isNotNull();

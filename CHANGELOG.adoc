@@ -40,9 +40,10 @@ Improvement::
 
 * Add command line option --failure-level to force non-zero exit code from AsciidoctorJ CLI if specified logging level is reached. (#1114)
 * Upgrade to asciidoctorj 2.0.20 (#1208)
-* Upgrade to asciidoctorj-pdf 2.3.7 (#1182)
-* Upgrade to asciidoctorj-diagram 2.2.7
-* Upgrade to JRuby 9.4.3.0 (#1234)
+* Upgrade to asciidoctorj-pdf 2.3.10 (#1256)
+* Upgrade to asciidoctorj-revealjs 5.1.0 (#1256)
+* Upgrade to asciidoctorj-diagram 2.2.14 (#1256)
+* Upgrade to JRuby 9.4.5.0 (#1256)
 * Upgrade to tilt 2.0.11 (#1109)
 * Upgrade to asciimath 2.0.4 (#1109)
 * Expose `sectnum` property in Section interface (#1121)
@@ -68,9 +69,8 @@ Bug Fixes::
 
 Build Improvement::
 
-* Upgrade build to Gradle 8.0.1 (#1141)
+* Upgrade build to Gradle 8.5 (#1256)
 * Upgrade Spring Boot test to 3.0.0 (#1134)
-* Run tests on Java 19 (#1563)
 * Fix upstream tests forcing SNAPSHOT on Asciidoctor gem installation (#1123) (@abelsromero)
 * Fix upstream build removing the explicit plugin repository (#1131)
 * Set JUnit5 as default test engine (#1186) (@abelsromero)

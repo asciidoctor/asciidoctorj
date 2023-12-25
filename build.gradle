@@ -23,9 +23,9 @@ buildscript {
 
 // modern plugins config
 plugins {
-  id "io.sdkman.vendors" version "2.0.0"
+  id "io.sdkman.vendors" version "3.0.0"
   id "signing"
-  id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
+  id "io.github.gradle-nexus.publish-plugin" version "1.3.0"
   id 'com.github.jruby-gradle.base' version '2.0.1'
   id 'codenarc'
 }
@@ -61,21 +61,21 @@ ext {
   // jar versions
   arquillianVersion = '1.6.0.Final'
   arquillianSpockVersion = '1.0.0.CR1'
-  asciidoctorjPdfVersion = '2.3.7'
+  asciidoctorjPdfVersion = '2.3.10'
   asciidoctorjEpub3Version = '1.5.1'
-  asciidoctorjDiagramVersion = '2.2.7'
+  asciidoctorjDiagramVersion = '2.2.13'
   asciidoctorjDiagramDitaaMiniVersion = '1.0.3'
-  asciidoctorjDiagramPlantumlVersion = '1.2023.5'
-  asciidoctorjRevealJsVersion = '4.1.0'
-  commonsioVersion = '2.11.0'
+  asciidoctorjDiagramPlantumlVersion = '1.2023.12'
+  asciidoctorjRevealJsVersion = '5.1.0'
+  commonsioVersion = '2.15.1'
   guavaVersion = '18.0'
   hamcrestVersion = '1.3'
   jcommanderVersion = '1.82'
   jrubyVersion = '9.4.5.0'
-  jsoupVersion = '1.14.3'
+  jsoupVersion = '1.17.1'
   junit4Version = '4.13.2'
-  junit5Version = '5.9.2'
-  junitPioneerVersion = '2.0.1'
+  junit5Version = '5.10.1'
+  junitPioneerVersion = '2.2.0'
   assertjVersion = '3.24.2'
   nettyVersion = '4.1.58.Final'
   saxonVersion = '9.9.0-2'
