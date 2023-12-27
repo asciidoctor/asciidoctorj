@@ -15,8 +15,7 @@ task distributionAvailable() {
 
     doLast {
         String errorMsg = "Distribution is not available at $sdkman.url"
-
-        HttpURLConnection connection = sdkman.url.toURL().openConnection()
+        HttpURLConnection connection = sdkman.url.get().toURL().openConnection()
         connection.setRequestMethod("HEAD")
         connection.connect()
 
