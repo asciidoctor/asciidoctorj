@@ -91,7 +91,7 @@ Similarly to AsciidoctorJ extensions, the Log Handling API provides an alternate
 
 Start creating a normal LogHandler implementation.
 
-[source,Java]
+[source,java]
 ----
 package my.asciidoctor.log.MemoryLogHandler;
 
