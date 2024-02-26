@@ -27,6 +27,7 @@ Improvement::
 * Remove deprecated methods from ast package (#1204) (@abelsromero)
 * Add Automatic-Module-Name manifest entry to core, api, and cli for reserving stable JPMS module names (#1240) (@leadpony)
 * Remove Java 'requires open access' module warning in modern Java versions (#1246)
+* Add Reader.getSource() and Reader.getSourceLines() (#1262)
 
 Bug Fixes::
 

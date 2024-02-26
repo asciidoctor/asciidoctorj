@@ -71,6 +71,16 @@ public class ReaderImpl extends RubyObjectWrapper implements Reader {
     }
 
     @Override
+    public String getSource() {
+        return getString("source");
+    }
+
+    @Override
+    public List<String> getSourceLines() {
+        return getList("source_lines", String.class);
+    }
+
+    @Override
     public void restoreLine(String line) {
         getRubyProperty("unshift_line", line);
     }
