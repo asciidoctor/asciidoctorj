@@ -178,7 +178,7 @@ $secondLine"""
     def 'should be able to get source and source lines'() {
         given:
 
-        String source = ""
+        String source = ''
         List<String> sourceLines = []
 
         asciidoctor.javaExtensionRegistry().preprocessor(new Preprocessor() {
