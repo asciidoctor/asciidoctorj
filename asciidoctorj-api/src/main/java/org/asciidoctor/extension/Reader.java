@@ -79,8 +79,8 @@ public interface Reader {
     String getSource();
 
     /**
-     * Get the document source as a String Array of lines.
-     * @return the document source as a String Array of lines.
+     * Get the document source as a List of Strings.
+     * @return the document source as a List of Strings.
      */
     List<String> getSourceLines();
 
