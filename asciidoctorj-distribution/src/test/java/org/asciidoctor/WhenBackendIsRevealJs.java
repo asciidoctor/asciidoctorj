@@ -12,21 +12,10 @@ import java.io.IOException;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.asciidoctor.OptionsBuilder.options;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 public class WhenBackendIsRevealJs {
-
-    private Asciidoctor asciidoctor;
-
-    @Before
-    public void initAsciidoctor() {
-        this.asciidoctor = Asciidoctor.Factory.create();
-    }
 
     @Test
     public void should_create_simple_slides() throws IOException {
@@ -38,7 +27,7 @@ public class WhenBackendIsRevealJs {
         AsciidoctorInvoker.main(new String[]{
             "-b", "revealjs",
             "-r", "asciidoctor-diagram",
-            "-a", "revealjsdir=https://cdn.jsdelivr.net/npm/reveal.js@3.9.2",
+            "-a", "revealjsdir=https://cdn.jsdelivr.net/npm/reveal.js@4.1.2",
             inputFile.getAbsolutePath()
         });
 
@@ -51,9 +40,8 @@ public class WhenBackendIsRevealJs {
             .map(element -> element.attr("href"))
             .collect(toList());
         assertThat(stylesheets,
-            hasItems(
-                "https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/reveal.css",
-                "https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/theme/black.css"));
+                hasItems("https://cdn.jsdelivr.net/npm/reveal.js@4.1.2/dist/reveal.css",
+                        "https://cdn.jsdelivr.net/npm/reveal.js@4.1.2/dist/theme/black.css"));
 
         Element diagramSlide = doc.selectFirst("#diagram");
         assertThat(diagramSlide, notNullValue());
