@@ -175,4 +175,27 @@ $secondLine"""
         preprocessorCalled.get()
     }
 
+    def 'should be able to get source and source lines'() {
+        given:
+
+        String source = ''
+        List<String> sourceLines = []
+
+        asciidoctor.javaExtensionRegistry().preprocessor(new Preprocessor() {
+            @Override
+            Reader process(Document doc, PreprocessorReader reader) {
+                source = reader.source
+                sourceLines = reader.sourceLines
+                reader
+            }
+        })
+
+        when:
+        asciidoctor.convert(document, emptyOptions())
+
+        then:
+        source == document
+        sourceLines == [firstLine, secondLine]
+    }
+
 }
