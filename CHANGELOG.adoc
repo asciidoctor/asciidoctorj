@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Improvement::
+
+* Add Reader.getSource() and Reader.getSourceLines() (#1262)
+
 == 2.5.10 (2023-12-20)
 
 Improvement::
