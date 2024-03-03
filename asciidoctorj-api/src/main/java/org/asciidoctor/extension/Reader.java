@@ -79,6 +79,18 @@ public interface Reader {
     List<String> lines();
 
     /**
+     * Returns the source lines for this Reader joined as a String
+     * @return The source lines for this Reader joined as a String
+     */
+    String getSource();
+
+    /**
+     * Get the document source as a List of Strings.
+     * @return the document source as a List of Strings.
+     */
+    List<String> getSourceLines();
+
+    /**
      * Push the String line onto the beginning of the Array of source data.
      *
      * Since this line was (assumed to be) previously retrieved through the
