@@ -13,6 +13,8 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+== 2.5.12 (2024-03-10)
+
 Improvement::
 
 * Add Reader.getSource() and Reader.getSourceLines() (#1262)
@@ -24,7 +26,7 @@ Improvement::
 * Upgrade to asciidoctorj-reveal.js 5.1.0 (#1267)
 * Upgrade to asciidoctorj-epub3.js 2.1.0 (#1268)
 
-== 2.5.10 (2023-12-20)
+== 2.5.11 (2023-12-20)
 
 Improvement::
 
