@@ -16,12 +16,13 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 Improvement::
 
 * Add Reader.getSource() and Reader.getSourceLines() (#1262)
-* Upgrade to asciidoctor 2.0.21 (#1267)
+* Upgrade to asciidoctor 2.0.22 (#1268)
 * Upgrade to JRuby 9.4.6.0 (#1267)
-* Upgrade to asciidoctorj-pdf 2.3.13 (#1267)
+* Upgrade to asciidoctorj-pdf 2.3.14 (#1268)
 * Upgrade to asciidoctorj-diagram 2.3.0 (#1267)
 * Upgrade to asciidoctorj-diagram-plantuml 1.2024.3 (#1267)
 * Upgrade to asciidoctorj-reveal.js 5.1.0 (#1267)
+* Upgrade to asciidoctorj-epub3.js 2.1.0 (#1268)
 
 == 2.5.10 (2023-12-20)
 
