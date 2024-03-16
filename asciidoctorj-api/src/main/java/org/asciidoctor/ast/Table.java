@@ -53,4 +53,10 @@ public interface Table extends StructuralNode {
      */
     void setGrid(String grid);
 
+    /**
+     * Computes the percentual column widths for all columns.
+     * Before calling this method all columns must have been added to the Table by adding them to
+     * {@link #getColumns()} and the desired widths must have been set by calling {@link Column#setWidth(int)}.
+     */
+    void assignColumnWidths();
 }
