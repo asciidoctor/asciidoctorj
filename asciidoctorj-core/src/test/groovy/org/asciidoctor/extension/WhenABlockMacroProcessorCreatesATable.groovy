@@ -19,8 +19,9 @@ class WhenABlockMacroProcessorCreatesATable extends Specification {
     public static final String IMG_ELEMENT = 'img'
     public static final String COL  = 'col'
     public static final String STYLE  = 'style'
-    public static final String WIDTH_20  = 'width: 20%'
-    public static final String WIDTH_40  = 'width: 40%'
+    public static final String WIDTH  = 'width'
+    public static final String WIDTH_20  = '20%'
+    public static final String WIDTH_40  = '40%'
     public static final String CONTRIBUTOR = 'bob'
     public static final String BLOCKMACRO_NAME = 'githubcontributors'
 
@@ -69,9 +70,9 @@ githubcontributors::asciidoctor/asciidoctorj[]
 
         Elements cols = htmlDocument.select(COL)
         cols.size() == 3
-        cols.get(0).attr(STYLE).contains(WIDTH_20)
-        cols.get(1).attr(STYLE).contains(WIDTH_40)
-        cols.get(2).attr(STYLE).contains(WIDTH_40)
+        cols.get(0).attr(STYLE).contains(WIDTH_20) || cols.get(0).attr(WIDTH).equals(WIDTH_20)
+        cols.get(1).attr(STYLE).contains(WIDTH_40) || cols.get(1).attr(WIDTH).equals(WIDTH_40)
+        cols.get(2).attr(STYLE).contains(WIDTH_40) || cols.get(2).attr(WIDTH).equals(WIDTH_40)
 
         htmlDocument.select('table').hasClass('grid-rows')
 
