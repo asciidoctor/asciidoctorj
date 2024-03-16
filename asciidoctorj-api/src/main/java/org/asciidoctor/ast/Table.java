@@ -57,4 +57,5 @@ public interface Table extends StructuralNode {
      */
     void setGrid(String grid);
 
+    void assignColumnWidths();
 }

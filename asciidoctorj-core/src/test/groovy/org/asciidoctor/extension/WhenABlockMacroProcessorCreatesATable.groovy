@@ -7,6 +7,7 @@ import org.asciidoctor.test.extension.ClasspathHelper
 import org.asciidoctor.util.TestHttpServer
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.jsoup.select.Elements
 import spock.lang.Specification
 import spock.lang.TempDir
 
@@ -16,6 +17,10 @@ class WhenABlockMacroProcessorCreatesATable extends Specification {
     public static final String SECOND_TD = 'td:nth-child(2)'
     public static final String THIRD_TD = 'td:nth-child(3)'
     public static final String IMG_ELEMENT = 'img'
+    public static final String COL  = 'col'
+    public static final String STYLE  = 'style'
+    public static final String WIDTH_20  = 'width: 20%'
+    public static final String WIDTH_40  = 'width: 40%'
     public static final String CONTRIBUTOR = 'bob'
     public static final String BLOCKMACRO_NAME = 'githubcontributors'
 
@@ -61,6 +66,12 @@ githubcontributors::asciidoctor/asciidoctorj[]
 
         then:
         Document htmlDocument = Jsoup.parse(resultFile, 'UTF-8')
+
+        Elements cols = htmlDocument.select(COL)
+        cols.size() == 3
+        cols.get(0).attr(STYLE).contains(WIDTH_20)
+        cols.get(1).attr(STYLE).contains(WIDTH_40)
+        cols.get(2).attr(STYLE).contains(WIDTH_40)
 
         htmlDocument.select('table').hasClass('grid-rows')
 

@@ -31,10 +31,16 @@ class GithubContributorsBlockMacro extends BlockMacroProcessor {
 
         // Create the columns 'Login' and 'Contributions'
         Column avatarColumn = createTableColumn(table, 0)
+        avatarColumn.width = 1
         Column loginColumn = createTableColumn(table, 1)
+        loginColumn.width = 2
         Column contributionsColumn = createTableColumn(table, 2)
+        contributionsColumn.width = 2
         contributionsColumn.horizontalAlignment = Table.HorizontalAlignment.CENTER
-
+        table.columns << avatarColumn
+        table.columns << loginColumn
+        table.columns << contributionsColumn
+        table.assignColumnWidths()
         // Create the single header row with the column titles
         Row headerRow = createTableRow(table)
         headerRow.cells << createTableCell(avatarColumn, 'Avatar')
