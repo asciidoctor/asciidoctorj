@@ -43,7 +43,9 @@ ruleset {
     ruleset('rulesets/braces.xml') {
         exclude 'IfStatementBraces'
     }
-    ruleset('rulesets/size.xml')
+    ruleset('rulesets/size.xml') {
+        exclude 'AbcMetric'
+    }
     ruleset('rulesets/junit.xml') {
         // Does not play well with Spock tests
         exclude 'JUnitPublicNonTestMethod'

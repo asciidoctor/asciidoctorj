@@ -12,6 +12,7 @@ import org.asciidoctor.util.TestHttpServer
 class GithubContributorsBlockMacro extends BlockMacroProcessor {
 
     private static final String IMAGE = 'image'
+    private static final String WIDTHS = 'widths'
 
     GithubContributorsBlockMacro(String macroName) {
         super(macroName)
@@ -29,12 +30,22 @@ class GithubContributorsBlockMacro extends BlockMacroProcessor {
         table.grid = 'rows'
         table.title = "Github contributors of $target"
 
+        List<Integer> widths = [1,2,2]
+        if (attributes.containsKey(WIDTHS)) {
+            widths = (attributes[WIDTHS] as String).split(',').collect {Integer.parseInt(it) }
+        }
         // Create the columns 'Login' and 'Contributions'
         Column avatarColumn = createTableColumn(table, 0)
+        avatarColumn.width = widths[0]
         Column loginColumn = createTableColumn(table, 1)
+        loginColumn.width = widths[1]
         Column contributionsColumn = createTableColumn(table, 2)
+        contributionsColumn.width = widths[2]
         contributionsColumn.horizontalAlignment = Table.HorizontalAlignment.CENTER
-
+        table.columns << avatarColumn
+        table.columns << loginColumn
+        table.columns << contributionsColumn
+        table.assignColumnWidths()
         // Create the single header row with the column titles
         Row headerRow = createTableRow(table)
         headerRow.cells << createTableCell(avatarColumn, 'Avatar')
