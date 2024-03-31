@@ -7,6 +7,7 @@ import org.asciidoctor.jruby.internal.RubyBlockListDecorator;
 import org.asciidoctor.jruby.internal.RubyObjectWrapper;
 import org.jruby.RubyArray;
 import org.jruby.RubyNil;
+import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.AbstractList;
@@ -70,6 +71,26 @@ public class TableImpl extends StructuralNodeImpl implements Table {
     @Override
     public List<Row> getHeader() {
         return rows.getHeader();
+    }
+
+    @Override
+    public void assignColumnWidths() {
+        int widthBase = 0;
+        RubyArray autowidthCols = getRuntime().newArray();
+        for (Column column : getColumns()) {
+            int width = column.getWidth();
+            if (width < 0) {
+                autowidthCols.add(((ColumnImpl)column).getRubyObject());
+            } else {
+                widthBase += width;
+            }
+        }
+        ThreadContext threadContext = getRuntime().getThreadService().getCurrentContext();
+
+        getRubyObject().callMethod(threadContext, "assign_column_widths", new IRubyObject[] {
+                getRuntime().newFixnum(widthBase),
+                autowidthCols.isEmpty() ? getRuntime().getNil() : autowidthCols
+        });
     }
 
     private class Rows extends RubyObjectWrapper {
