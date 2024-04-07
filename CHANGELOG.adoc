@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Bug Fixes::
+
+* Column#setWidth is ignored (#1265) (@Vampire)
+
 == 2.5.12 (2024-03-10)
 
 Improvement::
