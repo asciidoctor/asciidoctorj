@@ -13,6 +13,12 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Improvement::
+
+* Upgrade to asciidoctor 2.0.23 (#1272)
+* Upgrade to asciidoctorj-epub3 2.1.3 (#1272)
+* Upgrade to JRuby 9.4.7.0 (#1272)
+
 Bug Fixes::
 
 * Column#setWidth is ignored (#1265) (@Vampire)
