@@ -30,7 +30,7 @@ foreach ($f in @('tools\chocolateyinstall.ps1', 'tools\chocolateyinstall.ps1')) 
 > choco pack
 
 # Test the package. You'll probably have to run this as administrator.
-> choco install .\asciidoctorj.x.y.z.nupkg -dv -s .
+> choco install asciidoctorj --version="x.y.z" --source="C:\Users\gerald\Development\asciidoctorj\chocolatey"
 > where asciidoctorj
 > asciidoctorj --help
 > asciidoctorj ...other test commands
@@ -38,7 +38,7 @@ foreach ($f in @('tools\chocolateyinstall.ps1', 'tools\chocolateyinstall.ps1')) 
 # Log into https://chocolatey.org/account and copy your API key.
 # (This assumes you don't have a key set in your Chocolatey config.)
 # Push the package to chocolatey.org.
-> choco push --api-key=your-api-key asciidoctorj.x.y.z.nupkg
+> choco push --source="'https://push.chocolatey.org/'" --api-key=your-api-key asciidoctorj.x.y.z.nupkg
 ----
 
 . Add back whitespace:

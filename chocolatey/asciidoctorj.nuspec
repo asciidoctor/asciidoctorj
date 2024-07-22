@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>asciidoctorj</id>
     <title>AsciidoctorJ (Install)</title>
-    <version>2.5.7</version>
+    <version>2.5.13</version>
     <!--
       https://github.com/asciidoctor/asciidoctorj/graphs/contributors
       https://github.com/asciidoctor/asciidoctor/graphs/contributors
@@ -26,7 +26,7 @@
     <mailingListUrl>https://asciidoctor.zulipchat.com/</mailingListUrl>
     <bugTrackerUrl>https://github.com/asciidoctor/asciidoctorj/issues</bugTrackerUrl>
     <tags>asciidoctor asciidoc docbook pdf</tags>
-    <copyright>2012-2022 Dan Allen, Ryan Waldron and the Asciidoctor Project</copyright>
+    <copyright>Dan Allen, Ryan Waldron and the Asciidoctor Project</copyright>
     <licenseUrl>https://raw.githubusercontent.com/asciidoctor/asciidoctorj/main/LICENSE.txt</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <!-- <iconUrl>https://raw.githubusercontent.com/asciidoctor/brand/main/logo/logo-fill-color.svg?sanitize=true</iconUrl> -->
