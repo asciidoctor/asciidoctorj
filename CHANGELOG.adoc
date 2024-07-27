@@ -33,6 +33,7 @@ Bug Fixes::
 
 * -s CLI option should be changed to -e to align with Asciidoctor (#1237) (@mojavelinux)
 * Column#setWidth is ignored (#1265) (@Vampire)
+* Fix unresolvable dependency of JRuby Gradle plugin. (#1275)
 
 === Compatible changes
 
