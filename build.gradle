@@ -20,7 +20,8 @@ buildscript {
           exclude module: 'grolifant'
           exclude module: 'okhttp-digest'
         }
-        classpath 'org.ysb33r.gradle:grolifant:0.17.0'    }
+        classpath 'org.ysb33r.gradle:grolifant:0.17.0'
+    }
 }
 
 // modern plugins config
