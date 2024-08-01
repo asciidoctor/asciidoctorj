@@ -2,7 +2,6 @@ package org.asciidoctor.it.springboot;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import kotlin.collections.ArrayDeque;
 import okhttp3.*;
 import org.awaitility.Awaitility;
 import org.junit.After;
@@ -10,20 +9,20 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
-import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
 import static org.asciidoctor.it.springboot.ProcessHelper.run;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpringBootTest {
 
-    final List<Process> testProcesses = new ArrayDeque<>();
+    final List<Process> testProcesses = new ArrayList<>();
 
 
     @Test

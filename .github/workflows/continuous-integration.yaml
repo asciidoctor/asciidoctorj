@@ -21,7 +21,6 @@ jobs:
       max-parallel: 4
       matrix:
         java:
-          - '8'
           - '11'
           - '17'
         os:

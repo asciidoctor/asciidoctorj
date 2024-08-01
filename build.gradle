@@ -16,6 +16,11 @@ buildscript {
     }
     dependencies {
         classpath "biz.aQute.bnd:biz.aQute.bnd.gradle:5.3.0"
+        classpath("com.github.jruby-gradle:jruby-gradle-plugin:2.0.1") {
+          exclude module: 'grolifant'
+          exclude module: 'okhttp-digest'
+        }
+        classpath 'org.ysb33r.gradle:grolifant:0.17.0'
     }
 }
 
@@ -24,7 +29,8 @@ plugins {
   id "io.sdkman.vendors" version "2.0.0"
   id "signing"
   id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
-  id 'com.github.jruby-gradle.base' version '2.0.0'
+  // Moved to dependency in buildscript. See https://github.com/asciidoctor/asciidoctorj/issues/1275
+  // id 'com.github.jruby-gradle.base' version '2.0.1'
   id 'codenarc'
 }
 

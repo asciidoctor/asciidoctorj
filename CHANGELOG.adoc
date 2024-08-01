@@ -50,6 +50,7 @@ Improvement::
 Bug Fixes::
 
 * CLI should set :mkdirs option by default (#1241) (@mojavelinux)
+* Fix unresolvable dependency of JRuby Gradle plugin. (#1275)
 
 == 2.5.10 (2023-06-04)
 
