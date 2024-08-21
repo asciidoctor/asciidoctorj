@@ -71,7 +71,7 @@ ext {
   asciidoctorjEpub3Version = '2.1.3'
   asciidoctorjDiagramVersion = '2.3.1'
   asciidoctorjDiagramDitaaMiniVersion = '1.0.3'
-  asciidoctorjDiagramJsyntraxVersion = '1.38.1'
+  asciidoctorjDiagramJsyntraxVersion = '1.38.2'
   asciidoctorjDiagramBatikVersion = '1.17'
   asciidoctorjDiagramPlantumlVersion = '1.2024.5'
   asciidoctorjRevealJsVersion = '5.1.0'
