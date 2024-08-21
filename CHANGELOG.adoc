@@ -46,6 +46,7 @@ Improvement::
 * Upgrade to asciidoctorj-pdf 2.3.18 (#1280)
 * Upgrade to asciidoctorj-revealjs 5.1.0 (#1256)
 * Upgrade to asciidoctorj-diagram 2.3.1 (#1280)
+* Upgrade to asciidoctorj-diagram-jsyntrax 1.38.2 (#1282)
 * Upgrade to JRuby 9.4.8.0 (#1280)
 * Upgrade to tilt 2.0.11 (#1109)
 * Upgrade to asciimath 2.0.4 (#1109)
