@@ -1,27 +1,35 @@
 = Running AsciidoctorJ with Spring Boot
-:url-springboot-docs: https://docs.spring.io/spring-boot/docs/current
+:url-springboot-docs: https://docs.spring.io/spring-boot/
+:url-asciidoctor-gh-org: https://github.com/asciidoctor
 
 Due to Spring Boot's packaging system, Asciidoctorj won't work out of the box from a single JAR application.
 Luckily Spring Boot plugins for Gradle and Maven provide options to fix it.
 
+Below you can find the required configurations to apply to Maven and Gradle.
+But read about {url-springboot-docs}/how-to/build.html#howto.build.extract-specific-libraries-when-an-executable-jar-runs[extracting libraries during runtime] for the details.
+
 == Gradle configuration
 
 You just need to add the following configuration to your Gradle build.
+This will include not only AsciidoctorJ but others that also require unpacking like {url-asciidoctor-gh-org}/asciidoctorj-pdf[asciidoctor-pdf] or {url-asciidoctor-gh-org}/asciidoctorj-diagram[asciidoctorj-diagram].
 
-
-```groovy
+[,groovy]
+----
 bootJar {
 	requiresUnpack '**/asciidoctorj-*.jar'
 }
-```
-
-For full details, check the official {url-springboot-docs}/gradle-plugin/reference/htmlsingle/#packaging-executable-configuring-unpacking[Spring Boot Gradle Plugin documentation].
+----
 
 == Maven configuration
 
 Similarly, for the Maven plugin add the following configuration to your POM.
+However, unlike in Gradle, wildcards are not allowed and dependencies need to be described one by one.
 
-```xml
+TIP: Run `mvn dependency:tree` to find all required dependencies, including transitive ones.
+See this https://github.com/asciidoctor/asciidoctorj/issues/1286#issuecomment-2394769356[example] for a full configuration.
+
+[,xml]
+----
 <plugin>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-maven-plugin</artifactId>
@@ -34,8 +42,4 @@ Similarly, for the Maven plugin add the following configuration to your POM.
         </requiresUnpack>
     </configuration>
 </plugin>
-```
-
-For full details, check the official {url-springboot-docs}/maven-plugin/reference/htmlsingle/#goals-repackage[Spring Boot Maven Plugin documentation].
-
-
+----
