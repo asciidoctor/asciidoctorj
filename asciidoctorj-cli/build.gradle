@@ -4,7 +4,7 @@ apply plugin: 'biz.aQute.bnd.builder'
 dependencies {
   api project(':asciidoctorj-api')
   api project(':asciidoctorj')
-  implementation "com.beust:jcommander:$jcommanderVersion"
+  implementation "org.jcommander:jcommander:$jcommanderVersion"
 
   testImplementation (project(':asciidoctorj-test-support')) {
     exclude group: 'junit', module: 'junit'
