@@ -78,7 +78,7 @@ ext {
   commonsioVersion = '2.15.1'
   guavaVersion = '18.0'
   hamcrestVersion = '1.3'
-  jcommanderVersion = '1.82'
+  jcommanderVersion = '2.0'
   jrubyVersion = '9.4.8.0'
   jsoupVersion = '1.17.1'
   junit4Version = '4.13.2'
