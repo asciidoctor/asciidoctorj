@@ -4,7 +4,7 @@ sdkman {
     consumerKey = project.sdkman_consumer_key
     consumerToken = project.sdkman_consumer_token
     candidate = rootProject.name
-    version = rootProject.version
+    version = project.version
     hashtag = "#asciidoctorj"
     url = "https://repo1.maven.org/maven2/org/asciidoctor/asciidoctorj/${rootProject.version}/asciidoctorj-${rootProject.version}-bin.zip"
 }

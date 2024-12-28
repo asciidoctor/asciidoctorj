@@ -63,7 +63,7 @@ task createModuleDescriptor(type: Copy) {
     into "build/modules/org/asciidoctor/asciidoctorj/main"
     filter {
         it
-                .replaceAll('@@version@@', project(':asciidoctorj').version)
+                .replaceAll('@@version@@', project.version)
                 .replaceAll('@@jrubyVersion@@', jrubyVersion)
     }
 }
