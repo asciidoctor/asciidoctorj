@@ -13,6 +13,12 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Build Improvement::
+
+* Move to new plugin suite org.ysb33r.jruby for installing ruby gems (#1293)
+* Upgrade build to Gradle 8.12 (#1293)
+
+
 == 3.0.0 (2024-08-25)
 
 Build Improvement::

@@ -1,7 +1,10 @@
 apply plugin: 'java-library'
 apply plugin: 'groovy'
 apply plugin: 'biz.aQute.bnd.builder'
-apply plugin: 'com.github.jruby-gradle.base'
+apply plugin: 'org.ysb33r.jruby.base'
+apply plugin: 'org.ysb33r.jruby.resolver'
+
+import org.ysb33r.gradle.jruby.api.base.tasks.JRubyPrepare
 
 project.ext.publicationName = "mavenAsciidoctorJ"
 
@@ -12,21 +15,27 @@ repositories {
   ruby.gems()
 }
 
+configurations {
+  runtimeGems {
+    canBeResolved(true)
+  }
+}
+
 dependencies {
   api project(':asciidoctorj-api')
   api "org.jruby:jruby:$jrubyVersion"
 
-  gems "rubygems:asciidoctor:$asciidoctorGemVersion"
-  gems "rubygems:asciimath:$asciimathGemVersion"
-  gems "rubygems:coderay:$coderayGemVersion"
-  gems "rubygems:rouge:$rougeGemVersion"
-  gems "rubygems:erubis:$erubisGemVersion"
-  gems "rubygems:haml:$hamlGemVersion"
-  gems "rubygems:open-uri-cached:$openUriCachedGemVersion"
-  gems "rubygems:slim:$slimGemVersion"
-  gems "rubygems:thread_safe:$threadSafeGemVersion"
-  gems "rubygems:tilt:$tiltGemVersion"
-  gems "rubygems:concurrent-ruby:$concurrentRubyGemVersion"
+  runtimeGems "rubygems:asciidoctor:$asciidoctorGemVersion"
+  runtimeGems "rubygems:asciimath:$asciimathGemVersion"
+  runtimeGems "rubygems:coderay:$coderayGemVersion"
+  runtimeGems "rubygems:rouge:$rougeGemVersion"
+  runtimeGems "rubygems:erubis:$erubisGemVersion"
+  runtimeGems "rubygems:haml:$hamlGemVersion"
+  runtimeGems "rubygems:open-uri-cached:$openUriCachedGemVersion"
+  runtimeGems "rubygems:slim:$slimGemVersion"
+  runtimeGems "rubygems:thread_safe:$threadSafeGemVersion"
+  runtimeGems "rubygems:tilt:$tiltGemVersion"
+  runtimeGems "rubygems:concurrent-ruby:$concurrentRubyGemVersion"
   // TODO could use dependency replacement feature to fix version of Saxon-HE
   testImplementation("org.xmlmatchers:xml-matchers:$xmlMatchersVersion") { exclude module: 'Saxon-HE' }
   testImplementation "net.sf.saxon:Saxon-HE:$saxonVersion"
@@ -45,7 +54,8 @@ def gemFiles = fileTree("${project.buildDir}/.gems") {
 
 apply from: rootProject.file('gradle/versioncheck.gradle')
 
-jrubyPrepare {
+tasks.named('gemPrepare', JRubyPrepare) {
+  gemConfiguration = configurations.runtimeGems
   doLast {
     copy { // bundles the gems inside this artifact
       from gemFiles
@@ -53,14 +63,8 @@ jrubyPrepare {
     }
   }
 }
-tasks.eclipse.dependsOn jrubyPrepare
+tasks.eclipse.dependsOn gemPrepare
 
-
-jruby {
-  defaultRepositories = false
-  jrubyVersion = jrubyVersion
-  // TODO I'd like to be able to customize the name of the gemInstallDir
-}
 
 ext {
   // path to use for the prepared jruby gems
@@ -70,14 +74,14 @@ ext {
 sourceSets {
   main {
     //let's register an output folder on the main SourceSet:
-    output.dir(preparedGems, builtBy: 'jrubyPrepare')
+    output.dir(preparedGems, builtBy: 'gemPrepare')
     //it is now a part of the 'main' classpath and will be a part of the jar
   }
 }
 
 // QUESTION is this the right place to insert this task dependency in the lifecycle?
 // IMPORTANT The TMP or TEMP environment variable must be set for the gem install command to work on Windows
-processResources.dependsOn jrubyPrepare
+processResources.dependsOn gemPrepare
 
 
 javadoc {
