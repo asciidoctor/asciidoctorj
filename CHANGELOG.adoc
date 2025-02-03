@@ -17,6 +17,7 @@ Build Improvement::
 
 * Move to new plugin suite org.ysb33r.jruby for installing ruby gems (#1293)
 * Upgrade build to Gradle 8.12 (#1293)
+* Upgrade gh action upload-artifact to v4 (#1294)
 
 
 == 3.0.0 (2024-08-25)
