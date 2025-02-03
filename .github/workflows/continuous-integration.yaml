@@ -75,7 +75,7 @@ jobs:
         run: |
           gradlew.bat -i -S check
       - name: Upload asciidoctorj-core reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         env:
           os_name: ${{ matrix.os }}
           java_version: ${{ matrix.java }}
@@ -84,7 +84,7 @@ jobs:
           name: asciidoctorj-core-reports-${{ env.os_name }}-${{ env.java_version }}
           path: asciidoctorj-core/build/reports/*
       - name: Upload asciidoctorj-documentation reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         env:
           os_name: ${{ matrix.os }}
@@ -125,7 +125,7 @@ jobs:
           unset GEM_PATH GEM_HOME JRUBY_OPTS
           ./ci/test-asciidoctor-upstream.sh
       - name: Upload asciidoctorj-core reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         env:
           os_name: ${{ matrix.os }}
