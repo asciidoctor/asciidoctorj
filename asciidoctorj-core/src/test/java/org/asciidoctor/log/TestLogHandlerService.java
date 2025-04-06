@@ -2,6 +2,7 @@ package org.asciidoctor.log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestLogHandlerService implements LogHandler {
 
@@ -13,6 +14,12 @@ public class TestLogHandlerService implements LogHandler {
 
     public static void clear() {
         logRecords.clear();
+    }
+
+    public static AtomicInteger instancesCount = new AtomicInteger();
+
+    public TestLogHandlerService() {
+        instancesCount.incrementAndGet();
     }
 
     @Override

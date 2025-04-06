@@ -255,6 +255,13 @@ public class WhenAsciidoctorLogsToConsole {
         }
     }
 
+    @Test
+    public void shouldCreateNewLogHandlersOnCreateAsciidoctor() {
+        asciidoctor.convert("Test", Options.builder().build());
+        asciidoctor.convert("Test", Options.builder().build());
+        assertEquals(2, TestLogHandlerService.instancesCount.get());
+    }
+
     @Name("big")
     public static class LoggingProcessor extends BlockProcessor {
 
