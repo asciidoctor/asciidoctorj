@@ -257,8 +257,11 @@ public class WhenAsciidoctorLogsToConsole {
 
     @Test
     public void shouldCreateNewLogHandlersOnCreateAsciidoctor() {
+        TestLogHandlerService.instancesCount.set(0);
+        Asciidoctor asciidoctor = Asciidoctor.Factory.create();
         asciidoctor.convert("Test", Options.builder().build());
-        asciidoctor.convert("Test", Options.builder().build());
+        Asciidoctor asciidoctor2 = Asciidoctor.Factory.create();
+        asciidoctor2.convert("Test", Options.builder().build());
         assertEquals(2, TestLogHandlerService.instancesCount.get());
     }
 
