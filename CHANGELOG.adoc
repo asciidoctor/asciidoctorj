@@ -21,6 +21,10 @@ Build Improvement::
 
 == 3.0.0 (2024-08-25)
 
+Bug Fixes::
+
+* Create new log handler for each instance of Asciidoctor (#1297) (@dhendriks)
+
 Build Improvement::
 
 * Upgrade JCommander version and coordinates to v2.0 (#1290)
