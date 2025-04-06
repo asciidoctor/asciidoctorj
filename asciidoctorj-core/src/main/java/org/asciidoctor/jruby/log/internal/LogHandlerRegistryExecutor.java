@@ -6,8 +6,6 @@ import org.asciidoctor.log.LogHandler;
 import java.util.ServiceLoader;
 
 public class LogHandlerRegistryExecutor {
-    private ServiceLoader<LogHandler> logHandlerServiceLoader = ServiceLoader
-        .load(LogHandler.class);
 
     private AsciidoctorJRuby asciidoctor;
 
@@ -16,6 +14,9 @@ public class LogHandlerRegistryExecutor {
     }
 
     public void registerAllLogHandlers() {
+        ServiceLoader<LogHandler> logHandlerServiceLoader = ServiceLoader
+                .load(LogHandler.class);
+
         for (LogHandler logHandler: logHandlerServiceLoader) {
             asciidoctor.registerLogHandler(logHandler);
         }
