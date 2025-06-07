@@ -39,7 +39,6 @@ dependencies {
   // TODO could use dependency replacement feature to fix version of Saxon-HE
   testImplementation("org.xmlmatchers:xml-matchers:$xmlMatchersVersion") { exclude module: 'Saxon-HE' }
   testImplementation "net.sf.saxon:Saxon-HE:$saxonVersion"
-  testImplementation "com.google.guava:guava:$guavaVersion"
   testImplementation "org.jsoup:jsoup:$jsoupVersion"
   testImplementation "io.netty:netty-all:$nettyVersion"
   testImplementation project(':asciidoctorj-test-support')
