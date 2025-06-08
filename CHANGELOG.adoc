@@ -13,6 +13,17 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Improvements::
+
+* Upgrade to asciidoctorj-pdf 2.3.19 (#1300)
+* Upgrade to asciidoctorj-epub 2.2.0 (#1300)
+* Upgrade to asciidoctorj-revealjs 5.2.0 (#1300)
+* Upgrade to jruby 9.4.9.0 (#1300)
+
+Bug Fixes::
+
+* Create new log handler for each instance of Asciidoctor (#1297) (@dhendriks)
+
 Build Improvement::
 
 * Move to new plugin suite org.ysb33r.jruby for installing ruby gems (#1293)
@@ -21,10 +32,6 @@ Build Improvement::
 
 
 == 3.0.0 (2024-08-25)
-
-Bug Fixes::
-
-* Create new log handler for each instance of Asciidoctor (#1297) (@dhendriks)
 
 Build Improvement::
 

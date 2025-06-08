@@ -1,6 +1,5 @@
 package org.asciidoctor;
 
-import com.google.common.io.CharStreams;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
@@ -22,8 +21,8 @@ import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.util.Map;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
@@ -970,7 +969,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
     }
 
     private static String toString(InputStream inputStream) throws IOException {
-        return CharStreams.toString(new InputStreamReader(inputStream));
+        return new String(inputStream.readAllBytes(), UTF_8);
     }
 
     private static org.w3c.dom.Document inputStream2Document(
