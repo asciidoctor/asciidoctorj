@@ -63,8 +63,7 @@ ext {
   statusIsRelease = (status == 'release')
 
   // jar versions
-  arquillianVersion = '1.6.0.Final'
-  arquillianSpockVersion = '1.0.0.CR1'
+  arquillianVersion = '1.9.2.Final'
   asciidoctorjPdfVersion = '2.3.19'
   asciidoctorjEpub3Version = '2.2.0'
   asciidoctorjDiagramVersion = '2.3.2'
@@ -73,20 +72,19 @@ ext {
   asciidoctorjDiagramBatikVersion = '1.17'
   asciidoctorjDiagramPlantumlVersion = '1.2025.2'
   asciidoctorjRevealJsVersion = '5.2.0'
-  commonsioVersion = '2.15.1'
-  guavaVersion = '18.0'
-  hamcrestVersion = '1.3'
+  commonsioVersion = '2.19.0'
+  hamcrestVersion = '2.2'
   jcommanderVersion = '2.0'
   jrubyVersion = '9.4.9.0'
   jsoupVersion = '1.20.1'
   junit4Version = '4.13.2'
   junit5Version = '5.13.1'
-  junitPioneerVersion = '2.2.0'
-  assertjVersion = '3.24.2'
-  nettyVersion = '4.1.58.Final'
-  saxonVersion = '9.9.0-2'
+  junitPioneerVersion = '2.3.0'
+  assertjVersion = '3.27.3'
+  nettyVersion = '4.2.2.Final'
+  saxonVersion = '9.9.1-8'
   xmlMatchersVersion = '1.0-RC1'
-  pdfboxVersion = '3.0.0'
+  pdfboxVersion = '3.0.5'
 
   // gem versions
   asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '2.0.23'
@@ -95,7 +93,7 @@ ext {
   rougeGemVersion = '3.30.0'
 
   codenarcVersion = '3.2.0'
-  groovyVersion = '3.0.17'
+  groovyVersion = '3.0.25'
   erubisGemVersion = '2.7.0'
   hamlGemVersion = '5.2.2'
   openUriCachedGemVersion = '0.0.5'

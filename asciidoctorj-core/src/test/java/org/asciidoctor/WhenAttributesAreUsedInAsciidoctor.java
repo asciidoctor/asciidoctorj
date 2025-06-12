@@ -25,7 +25,6 @@ import java.nio.file.Files;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
 import static org.junit.Assert.assertEquals;
 import static org.xmlmatchers.xpath.HasXPath.hasXPath;
 
