@@ -120,5 +120,10 @@ jar {
 
 test {
   useJUnitPlatform()
+  jvmArgs(
+          // required for junitpioneer for the test WhenAnAsciidoctorClassIsInstantiatedInAnEnvironmentWithGemPath
+          '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+          '--add-opens', 'java.base/java.util=ALL-UNNAMED',
+  )
 }
 

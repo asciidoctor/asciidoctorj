@@ -75,7 +75,7 @@ ext {
   commonsioVersion = '2.19.0'
   hamcrestVersion = '2.2'
   jcommanderVersion = '2.0'
-  jrubyVersion = '9.4.12.1'
+  jrubyVersion = '10.0.0.1'
   jsoupVersion = '1.20.1'
   junit4Version = '4.13.2'
   junit5Version = '5.13.1'
@@ -235,19 +235,8 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.
     withJavadocJar()
     withSourcesJar()
     toolchain {
-      languageVersion.set(JavaLanguageVersion.of(getToolchainVersion()))
+      languageVersion.set(JavaLanguageVersion.of(21))
     }
   }
 
-}
-
-// Windows workaround to fix invalid toolchain detection
-def getToolchainVersion() {
-  if (DefaultNativePlatform.getCurrentOperatingSystem().isWindows()) {
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21))
-      return 21
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17))
-      return 17
-  }
-  return 11
 }
