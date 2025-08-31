@@ -18,7 +18,7 @@ Improvements::
 * Upgrade to asciidoctorj-pdf 2.3.19 (#1300)
 * Upgrade to asciidoctorj-epub 2.2.0 (#1300)
 * Upgrade to asciidoctorj-revealjs 5.2.0 (#1300)
-* Upgrade to JRuby 9.4.12.1 (#1301)
+* Upgrade to JRuby 9.4.14.0 (#1313)
 
 Bug Fixes::
 
