@@ -8,6 +8,7 @@ asciidoc:
     asciidoctorj-epub3-version: 1.5.1
     asciidoctorj-pdf-version: 2.3.6
     jruby-version: 9.4.1.0
+    url-jbang: https://www.jbang.dev/
     url-jruby: https://www.jruby.org/
     url-gradle: https://gradle.org
     url-repo: https://github.com/asciidoctor/asciidoctorj
