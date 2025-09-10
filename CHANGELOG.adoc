@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Documentation::
+
+* cli.adoc - describe how to run AsciidoctorJ using JBang
+
 Improvements::
 
 * Upgrade to asciidoctorj-pdf 2.3.19 (#1300)

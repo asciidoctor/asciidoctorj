@@ -3,10 +3,11 @@
 :url-chocolatey: https://chocolatey.org
 :url-sdkman: https://sdkman.io
 
-There are two basic ways to make AsciidoctorJ available as a command line tool.
+There are three basic ways to make AsciidoctorJ available as a command line tool.
 
 * Manual installation using the binary distribution.
-* Automatic installation using a package manager like {url-sdkman}[SDKMAN^] or {url-chocolatey}[Chocolatey^].
+* Automated installation using a package manager like {url-sdkman}[SDKMAN^] or {url-chocolatey}[Chocolatey^].
+* Directly running AsciidoctorJ using JBang.
 
 == Manual distribution installation
 
@@ -48,7 +49,9 @@ Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj -b pdf -o READTHIS.pdf R
 Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat -b pdf -o READTHIS.pdf README.adoc
 ----
 
-== Linux and MacOS installation
+== Automated distribution installation
+
+=== Linux and MacOS
 
 A {url-sdkman}[SDKMAN!] candidate is available for easy installation in Linux and MacOS.
 This will install the binary distribution and set up the PATH automatically.
@@ -56,7 +59,7 @@ This will install the binary distribution and set up the PATH automatically.
  $ sdk install asciidoctorj
  $ asciidoctorj -b pdf README.adoc
 
-== Windows installation
+=== Windows
 
 A {url-chocolatey}[Chocolatey] package is available which installs the
 asciidoctorj-{artifact-version}-bin.zip Maven artifact along with a
@@ -67,3 +70,19 @@ from the command line.
   C:\> where asciidoctorj
   C:\ProgramData\chocolatey\bin\asciidoctorj.exe
   C:\> asciidoctorj -b pdf README.adoc
+
+== Running AsciidoctorJ using JBang
+
+{url-jbang}[JBang] enables you to run AsciidoctorJ without needing to install it first. As an added benefit, JBang automatically uses the most recent version of AsciidoctorJ, updating it automatically on subsequent runs.
+
+.Linux and MacOS
+[source,shellscript]
+----
+ $ jbang run asciidoctorj@asciidoctor -b pdf README.adoc
+----
+
+.Windows
+[source,shellscript]
+----
+C:\> jbang run asciidoctorj@asciidoctor -b pdf README.adoc
+----
