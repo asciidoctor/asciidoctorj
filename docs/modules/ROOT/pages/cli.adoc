@@ -6,7 +6,7 @@
 There are three basic ways to make AsciidoctorJ available as a command line tool.
 
 * Manual installation using the binary distribution.
-* Automatic installation using a package manager like {url-sdkman}[SDKMAN^] or {url-chocolatey}[Chocolatey^].
+* Automated installation using a package manager like {url-sdkman}[SDKMAN^] or {url-chocolatey}[Chocolatey^].
 * Directly running AsciidoctorJ using JBang.
 
 == Manual distribution installation
@@ -49,7 +49,7 @@ Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj -b pdf -o READTHIS.pdf R
 Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat -b pdf -o READTHIS.pdf README.adoc
 ----
 
-== Automatic distribution installation
+== Automated distribution installation
 
 === Linux and MacOS
 
