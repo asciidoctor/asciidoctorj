@@ -64,13 +64,13 @@ ext {
 
   // jar versions
   arquillianVersion = '1.9.2.Final'
-  asciidoctorjPdfVersion = '2.3.19'
+  asciidoctorjPdfVersion = '2.3.23'
   asciidoctorjEpub3Version = '2.2.0'
-  asciidoctorjDiagramVersion = '2.3.2'
+  asciidoctorjDiagramVersion = '3.0.1'
   asciidoctorjDiagramDitaaMiniVersion = '1.0.3'
   asciidoctorjDiagramJsyntraxVersion = '1.38.2'
   asciidoctorjDiagramBatikVersion = '1.17'
-  asciidoctorjDiagramPlantumlVersion = '1.2025.2'
+  asciidoctorjDiagramPlantumlVersion = '1.2025.3'
   asciidoctorjRevealJsVersion = '5.2.0'
   commonsioVersion = '2.19.0'
   hamcrestVersion = '2.2'
@@ -87,7 +87,7 @@ ext {
   pdfboxVersion = '3.0.5'
 
   // gem versions
-  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '2.0.23'
+  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '2.0.26'
   asciimathGemVersion = '2.0.4'
   coderayGemVersion = '1.1.3'
   rougeGemVersion = '3.30.0'
