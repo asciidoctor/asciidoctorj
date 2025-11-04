@@ -13,6 +13,8 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+== 3.0.1 (2025-11-04)
+
 Documentation::
 
 * cli.adoc - describe how to run AsciidoctorJ using JBang
