@@ -21,8 +21,6 @@ jobs:
       max-parallel: 6
       matrix:
         java:
-          - '11'
-          - '17'
           - '21'
         distribution:
           - 'temurin'
@@ -50,8 +48,6 @@ jobs:
       max-parallel: 3
       matrix:
         java:
-          - '11'
-          - '17'
           - '21'
         distribution:
           - 'temurin'
@@ -102,8 +98,6 @@ jobs:
       max-parallel: 2
       matrix:
         java:
-          - '11'
-          - '17'
           - '21'
         os:
           - ubuntu-latest

@@ -104,10 +104,12 @@ version.asciidoctor: $asciidoctorGemVersion
 
 
 jar {
-  bnd(
-    ('Bundle-Name'): 'asciidoctorj',
-    ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj'
-  )
+   bundle {
+    bnd(
+      'Bundle-Name': 'asciidoctorj',
+      'Bundle-SymbolicName': 'org.asciidoctor.asciidoctorj'
+    )
+  }
   manifest {
     attributes(
       'Automatic-Module-Name': 'org.asciidoctor.asciidoctorj'
@@ -120,5 +122,10 @@ jar {
 
 test {
   useJUnitPlatform()
+  jvmArgs(
+          // required for junitpioneer for the test WhenAnAsciidoctorClassIsInstantiatedInAnEnvironmentWithGemPath
+          '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+          '--add-opens', 'java.base/java.util=ALL-UNNAMED',
+  )
 }
 

@@ -18,11 +18,13 @@ apply from: rootProject.file('gradle/publish.gradle')
 apply from: rootProject.file('gradle/signing.gradle')
 
 jar {
-  bnd(
-    ('Bundle-Name'): 'asciidoctorj-cli',
-    ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj-cli',
-    ('Import-Package'): 'com.beust.jcommander;resolution:=optional, *'
-  )
+  bundle {
+    bnd(
+      'Bundle-Name': 'asciidoctorj-cli',
+      'Bundle-SymbolicName': 'org.asciidoctor.asciidoctorj-cli',
+      'Import-Package': 'com.beust.jcommander;resolution:=optional, *'
+    )
+  }
   manifest {
     attributes(
       'Automatic-Module-Name': 'org.asciidoctor.asciidoctorj.cli'

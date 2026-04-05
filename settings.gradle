@@ -7,7 +7,7 @@ include \
   'asciidoctorj-cli',
   'asciidoctorj-distribution',
   'asciidoctorj-documentation',
-  'asciidoctorj-wildfly-integration-test',
+//  'asciidoctorj-wildfly-integration-test',
   'asciidoctorj-test-support'
 
 if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {

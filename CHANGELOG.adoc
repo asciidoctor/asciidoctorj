@@ -13,6 +13,24 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+=== Breaking changes
+
+Improvements::
+
+* Upgrade to JRuby 10.0.4.0. Requires Java 21 (#1308)
+
+=== Compatible changes
+
+Improvements::
+
+* Upgrade to asciidoctorj-diagram 3.2.1 (#1308)
+* Upgrade to asciidoctorj-diagram-plantuml 1.2026.2 (#1308)
+
+Build Improvement::
+
+* Upgrade build to Gradle 9.4.1 (#1308)
+
+
 == 3.0.1 (2025-11-06)
 
 Documentation::

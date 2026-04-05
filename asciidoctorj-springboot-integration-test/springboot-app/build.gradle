@@ -25,16 +25,8 @@ dependencies {
 
 java {
 	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(getToolchainVersion()))
+		languageVersion.set(JavaLanguageVersion.of(21))
 	}
-}
-
-def getToolchainVersion() {
-	if (DefaultNativePlatform.getCurrentOperatingSystem().isWindows()) {
-		if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21))
-			return 21
-	}
-	return 17
 }
 
 bootJar {

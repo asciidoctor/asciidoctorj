@@ -7,10 +7,12 @@ dependencies {
 
 
 jar {
-  bnd(
-    ('Bundle-Name'): 'asciidoctorj-api',
-    ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj-api',
-  )
+  bundle {
+    bnd(
+      'Bundle-Name': 'asciidoctorj-api',
+      'Bundle-SymbolicName': 'org.asciidoctor.asciidoctorj-api',
+    )
+  }
   manifest {
     attributes(
       'Automatic-Module-Name': 'org.asciidoctor.asciidoctorj.api'
