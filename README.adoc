@@ -91,10 +91,12 @@ asciidoctorj README.adoc
 
 The options are the options of the `asciidoctor` command (`asciidoctorj --help`), except:
 
-* `-r` loads a Java class that implements `org.asciidoctor.jruby.extension.spi.ExtensionRegistry` (which registers extensions) instead of a Ruby library;
-* `-I` adds a directory or a jar to the class path (to load the classes required with `-r`).
+* `-r` loads a Java class instead of a Ruby library: a registry (`ExtensionRegistry`, `ConverterRegistry` or `SyntaxHighlighterRegistry`, in the `org.asciidoctor.jruby.*.spi` packages), which is registered, a converter (annotated with `@ConverterFor`) or an extension (a processor, such as a `BlockProcessor` annotated with `@Name`); `-r` also accepts a jar, whose services (`META-INF/services`) are loaded;
+* `-I` adds a directory or a jar to the class path, whose services (`META-INF/services`) are loaded and whose classes can be required with `-r`.
 
-The `-r` and `-I` options are not available in the native executables, since classes can't be loaded at runtime.
+For instance, `asciidoctorj -r my-extensions.jar README.adoc` converts the document with the extensions that the jar registers as services.
+
+The native executables can't load classes at runtime: `-I` and `-r FILE.jar` fail, and `-r` can only load the classes that the executable contains.
 The command line interface can also be run with Java: `java -jar asciidoctorj-cli-{artifact-version}.jar`, with the jars of the implementation and of the API (`asciidoctorj-{artifact-version}.jar` and `asciidoctorj-api-{artifact-version}.jar`) in the same directory.
 
 === Windows installation
