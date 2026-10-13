@@ -1,0 +1,46 @@
+= Smoke Test Document
+Doc Writer <doc.writer@example.org>
+v1.0, 2026-01-01
+:toc:
+:sectnums:
+:icons: font
+:source-highlighter: highlight.js
+:experimental:
+:stem: latexmath
+
+A paragraph with *strong*, _emphasis_, `monospace`, a link:https://asciidoctor.org[link], kbd:[Ctrl+C] and a footnote.footnote:[The footnote text.]
+Non-ASCII text: Ünïcödé, 日本語, 🚀.
+
+== Lists and Tables
+
+. first
+.. nested
+. second
++
+NOTE: An admonition attached to a list item.
+
+[cols="1,2",options="header"]
+|===
+|Name |Description
+|alpha |The first letter
+|beta a|
+* an AsciiDoc cell
+|===
+
+== Source and Includes
+
+[source,java]
+----
+public class Hello { // <1>
+}
+----
+<1> A callout.
+
+include::partial.adoc[]
+
+See <<_lists_and_tables>> and xref:partial.adoc#included[the included section].
+
+[latexmath]
+++++
+\sqrt{4} = 2
+++++

@@ -1,5 +1,7 @@
 package org.asciidoctor.extension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
@@ -16,7 +18,6 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.asciidoctor.util.OptionsTestHelper.emptyOptions;
-import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(AsciidoctorExtension.class)
@@ -168,6 +169,6 @@ public class BlockProcessorRegistrationTest {
 
 
     private void check(String expected, String html) {
-        assertEquals(expected, Jsoup.parse(html).select("div.paragraph > p").first().text());
+        assertThat(Jsoup.parse(html).select("div.paragraph > p").first().text()).isEqualTo(expected);
     }
 }

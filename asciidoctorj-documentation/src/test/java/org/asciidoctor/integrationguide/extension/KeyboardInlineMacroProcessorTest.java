@@ -1,5 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
@@ -8,8 +10,6 @@ import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith(AsciidoctorExtension.class)
 public class KeyboardInlineMacroProcessorTest {
@@ -25,10 +25,7 @@ public class KeyboardInlineMacroProcessorTest {
 
         String result = asciidoctor.convert("ctrl:S[]", Options.builder().toFile(false).safe(SafeMode.UNSAFE).build());
 
-        assertThat(
-                result,
-                containsString(
-                        "<kbd>Ctrl</kbd>+<kbd>S</kbd>"));
+        assertThat(result).contains("<kbd>Ctrl</kbd>+<kbd>S</kbd>");
 
     }
 }

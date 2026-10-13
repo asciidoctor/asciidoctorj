@@ -1,5 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.test.AsciidoctorInstance;
@@ -11,8 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class LsIncludeProcessorTest {
@@ -40,9 +40,7 @@ public class LsIncludeProcessorTest {
 
         String result = asciidoctor.convertFile(lsinclude_adoc, Options.builder().toFile(false).build());
 
-        assertThat(
-                result,
-                containsString(firstFileName));
+        assertThat(result).contains(firstFileName);
 //end::include[]
     }
 
