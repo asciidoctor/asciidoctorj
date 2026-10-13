@@ -1,5 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
@@ -8,8 +10,6 @@ import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith(AsciidoctorExtension.class)
 public class ImageInlineMacroProcessorTest {
@@ -25,9 +25,6 @@ public class ImageInlineMacroProcessorTest {
 
         String result = asciidoctor.convert("foo:1234[]", Options.builder().toFile(false).safe(SafeMode.UNSAFE).build());
 
-        assertThat(
-                result,
-                containsString(
-                        "<img src=\"http://foo.bar/1234\" alt=\"Image not available\" width=\"64\" height=\"64\">"));
+        assertThat(result).contains("<img src=\"http://foo.bar/1234\" alt=\"Image not available\" width=\"64\" height=\"64\">");
     }
 }

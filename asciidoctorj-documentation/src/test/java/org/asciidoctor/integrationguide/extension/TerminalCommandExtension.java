@@ -4,7 +4,7 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 
 //tag::include-extension-registry[]
-import org.asciidoctor.extension.spi.ExtensionRegistry;
+import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
 
 public class TerminalCommandExtension implements ExtensionRegistry { // <1>
   @Override

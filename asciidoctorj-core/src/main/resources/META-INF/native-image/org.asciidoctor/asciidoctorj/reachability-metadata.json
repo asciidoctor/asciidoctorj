@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "glob": "org/asciidoctor/data/**"
+    },
+    {
+      "glob": "org/asciidoctor/asciidoctorj.properties"
+    }
+  ]
+}

@@ -1,254 +1,47 @@
-import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
-
-import java.time.Duration
-
-/*
-    adding the plugin jars to the classpath to apply them later.
-    currently the new plugins DSL does apply them directly.
-    there are other limitations too. See https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block
-    we don't need to apply the jruby plugin on the rootProject.
-*/
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-        mavenCentral()
-        maven { url "https//oss.sonatype.org/content/repositories/snapshots/" }
-    }
-    dependencies {
-        classpath "biz.aQute.bnd:biz.aQute.bnd.gradle:5.3.0"
-    }
-}
-
-// modern plugins config
 plugins {
-  id 'org.ysb33r.jruby.resolver'    version '2.0.0'
-  id 'org.ysb33r.jruby.base' version '2.0.0'
-
-  id "io.sdkman.vendors" version "3.0.0"
-  id "signing"
-  id "io.github.gradle-nexus.publish-plugin" version "1.3.0"
-  // Moved to dependency in buildscript. See https://github.com/asciidoctor/asciidoctorj/issues/1275
-  // id 'com.github.jruby-gradle.base' version '2.0.1'
-  id 'codenarc'
+    alias(libs.plugins.spring.boot) apply false
 }
 
-// TIP use -PpublishRelease=true to active release behavior regardless of the version
-status = project.hasProperty('publishRelease') && project.publishRelease.toBoolean() ?
-    'release' : ((version == 'unspecified' || version.endsWith('-SNAPSHOT')) ? 'snapshot' : 'release')
-
-// using ExpandoMetaClass to add isDistribution() Method to Project instances...
-Project.metaClass.isDistribution = { delegate.getName().endsWith("-distribution") }
-
-nexusPublishing {
-  repositories {
-    sonatype {
-      nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
-      snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
-      if (project.hasProperty("sonatypeUsername")) {
-        username = project.sonatypeUsername
-      }
-      if (project.hasProperty("sonatypePassword")) {
-        password = project.sonatypePassword
-      }
-    }
-  }
-  clientTimeout = Duration.ofMinutes(5)
-}
-
-
-ext {
-  buildDateTime = new Date()
-  (buildDateOnly, buildTimeOnly) = new java.text.SimpleDateFormat('yyyy-MM-dd HH:mm:ss.SSSZ').format(buildDateTime).split(' ')
-  statusIsRelease = (status == 'release')
-
-  // jar versions
-  arquillianVersion = '1.9.2.Final'
-  asciidoctorjPdfVersion = '2.3.23'
-  asciidoctorjEpub3Version = '2.2.0'
-  asciidoctorjDiagramVersion = '3.0.1'
-  asciidoctorjDiagramDitaaMiniVersion = '1.0.3'
-  asciidoctorjDiagramJsyntraxVersion = '1.38.2'
-  asciidoctorjDiagramBatikVersion = '1.17'
-  asciidoctorjDiagramPlantumlVersion = '1.2025.3'
-  asciidoctorjRevealJsVersion = '5.2.0'
-  commonsioVersion = '2.19.0'
-  hamcrestVersion = '2.2'
-  jcommanderVersion = '2.0'
-  jrubyVersion = '9.4.14.0'
-  jsoupVersion = '1.20.1'
-  junit4Version = '4.13.2'
-  junit5Version = '5.13.1'
-  junitPioneerVersion = '2.3.0'
-  assertjVersion = '3.27.3'
-  nettyVersion = '4.2.2.Final'
-  saxonVersion = '9.9.1-8'
-  xmlMatchersVersion = '1.0-RC1'
-  pdfboxVersion = '3.0.5'
-
-  // gem versions
-  asciidoctorGemVersion = project.hasProperty('asciidoctorGemVersion') ? project.asciidoctorGemVersion : '2.0.26'
-  asciimathGemVersion = '2.0.4'
-  coderayGemVersion = '1.1.3'
-  rougeGemVersion = '3.30.0'
-
-  codenarcVersion = '3.2.0'
-  groovyVersion = '3.0.25'
-  erubisGemVersion = '2.7.0'
-  hamlGemVersion = '5.2.2'
-  openUriCachedGemVersion = '0.0.5'
-  slimGemVersion = '4.1.0'
-  concurrentRubyGemVersion = '1.1.7'
-  spockVersion = '2.3-groovy-3.0'
-  threadSafeGemVersion = '0.3.6'
-  tiltGemVersion = '2.0.11'
-  osgiVersion = '7.0.0'
-}
-
-allprojects {
-  group = 'org.asciidoctor'
-  defaultTasks 'check'
-}
+def junitBom = libs.junit.bom
 
 subprojects {
-  // NOTE applying Java plugin changes the status; take steps to preserve value
-  def _status = status
-  apply plugin: 'java-library'
-  apply plugin: 'groovy'
-
-  status = _status
-
-  plugins.withType(JavaPlugin) {
-    project.tasks.withType(JavaCompile) { task ->
-      if (project.hasProperty("showDeprecation")) {
-        options.compilerArgs << "-Xlint:deprecation"
-      }
-      if (project.hasProperty("showUnchecked")) {
-        options.compilerArgs << "-Xlint:unchecked"
-      }
-    }
-  }
-
-  repositories {
-    if (project.hasProperty('useMavenLocal') && project.useMavenLocal.toBoolean()) {
-      mavenLocal()
-    }
-    mavenCentral()
-  }
-
-  dependencies {
-    testImplementation "org.assertj:assertj-core:$assertjVersion"
-    testImplementation "org.hamcrest:hamcrest-library:$hamcrestVersion"
-  }
-
-  if (usesJUnit5(it.project)) {
-    dependencies {
-      testImplementation(platform("org.junit:junit-bom:$junit5Version"))
-      testImplementation "org.junit.jupiter:junit-jupiter-api"
-      testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
-      testImplementation "org.junit.jupiter:junit-jupiter-params"
-      testImplementation "org.junit-pioneer:junit-pioneer:$junitPioneerVersion"
-    }
-  }
-
-  if (usesSpock(it)) {
-    apply plugin: 'codenarc'
-
-    codenarc {
-      configFile = rootProject.file('config/codenarc/codenarc.groovy')
-    }
+    apply plugin: 'java-library'
 
     dependencies {
-      testImplementation("org.spockframework:spock-core:$spockVersion") {
-        exclude group: 'org.hamcrest', module: 'hamcrest-core'
-      }
-      testImplementation "org.codehaus.groovy:groovy-all:$groovyVersion"
+        testImplementation platform(junitBom)
+        testImplementation 'org.junit.jupiter:junit-jupiter'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
 
-      codenarc("org.codenarc:CodeNarc:$codenarcVersion")
+    tasks.withType(JavaCompile).configureEach {
+        options.release = 17
+        options.encoding = 'UTF-8'
+        options.compilerArgs += ['-Xmaxerrs', '10000']
+    }
 
-      constraints {
-        ["groovy",
-         "groovy-ant",
-         "groovy-groovydoc",
-         "groovy-json",
-         "groovy-xml",
-        ].each {
-          codenarc ("org.codehaus.groovy:$it") {
-            version {
-              strictly "$groovyVersion"
-              because "Use same groovy version as project"
+    tasks.withType(Test).configureEach {
+        useJUnitPlatform()
+        testLogging {
+            events 'failed'
+            exceptionFormat = 'full'
+        }
+    }
+}
+
+// the modules published to a Maven repository (e.g., ./gradlew publishToMavenLocal)
+configure(subprojects.findAll { it.name in ['asciidoctorj-api', 'asciidoctorj-test-support', 'asciidoctorj-core', 'asciidoctorj-cli'] }) {
+    apply plugin: 'maven-publish'
+
+    java {
+        withSourcesJar()
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = base.archivesName.get()
+                from components.java
             }
-          }
         }
-      }
     }
-  }
-
-  test {
-    useJUnitPlatform()
-
-    forkEvery = 10
-    minHeapSize = '256m'
-    maxHeapSize = '2048m'
-
-    testLogging {
-      // events 'passed', 'failed', 'skipped', 'standard_out', 'standard_error'
-      // events 'standard_out', 'standard_error'
-      afterSuite { desc, result ->
-        if (!desc.parent && logger.infoEnabled) {
-          logger.info "Test results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)"
-        }
-      }
-    }
-    if (DefaultNativePlatform.getCurrentOperatingSystem().isWindows()) {
-      // Allow junit-pioneer environment manipulation on Windows + Java17+
-      jvmArgs = ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
-    }
-    systemProperty 'org.asciidoctor.asciidoctorj-test.version.asciidoctorj', asciidoctorGemVersion
-  }
-
-}
-
-boolean usesJUnit5(def project) {
-  !(project.name in ['asciidoctorj-arquillian-extension'])
-}
-
-boolean usesSpock(def project) {
-  project.name in ['asciidoctorj']
-}
-
-// apply JRuby and sources/javadocs packaging stuff for all subprojects except the distribution
-configure(subprojects.findAll { !it.isDistribution() }) {
-
-  apply from: rootProject.file('gradle/eclipse.gradle')
-  apply plugin: 'idea'
-
-  javadoc {
-    // Oracle JDK11+ likes to fail the build over spoiled HTML
-    options.addStringOption('Xdoclint:none', '-quiet')
-  }
-}
-
-configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.endsWith('-documentation')}) {
-
-  java {
-    withJavadocJar()
-    withSourcesJar()
-    toolchain {
-      languageVersion.set(JavaLanguageVersion.of(getToolchainVersion()))
-    }
-  }
-
-}
-
-// Windows workaround to fix invalid toolchain detection
-def getToolchainVersion() {
-  if (DefaultNativePlatform.getCurrentOperatingSystem().isWindows()) {
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21))
-      return 21
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17))
-      return 17
-  }
-  return 11
 }

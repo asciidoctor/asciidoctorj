@@ -32,7 +32,7 @@ So most of the time you simply get an Asciidoctor instance like this:
 [source,java,indent=0]
 .Default way to create an Asciidoctor instance
 ----
-include::example$org/asciidoctor/integrationguide/AsciidoctorInterface.java[tags=create]
+include::example$org/asciidoctor/integrationguide/AsciidoctorInterfaceTest.java[tags=create]
 ----
 
 As Asciidoctor instances can be created they can also be explicitly destroyed to free resources used in particular by the Ruby runtime associated with it.
@@ -42,7 +42,7 @@ After calling this method every other method call on the instance will fail!
 [source,java,indent=0]
 .Destroying an Asciidoctor instance
 ----
-include::example$org/asciidoctor/integrationguide/AsciidoctorInterface.java[tags=shutdown]
+include::example$org/asciidoctor/integrationguide/AsciidoctorInterfaceTest.java[tags=shutdown]
 ----
 
 The Asciidoctor interface also implements the interface `java.io.AutoCloseable` which also shuts down the Ruby runtime.
@@ -51,7 +51,7 @@ Therefore the previous example is equivalent to this:
 [source,java,indent=0]
 .Automatically destroying an Asciidoctor instance
 ----
-include::example$org/asciidoctor/integrationguide/AsciidoctorInterface.java[tags=autoclose]
+include::example$org/asciidoctor/integrationguide/AsciidoctorInterfaceTest.java[tags=autoclose]
 ----
 
 To convert AsciiDoc documents the Asciidoctor interface provides four methods:

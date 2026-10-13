@@ -1,8 +1,0 @@
-= Title
-:doctype: book
-
-= Part 1
-
-== Chapter 1
-
-It was a dark and stormy night.
