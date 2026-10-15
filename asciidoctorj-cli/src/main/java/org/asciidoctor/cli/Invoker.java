@@ -254,6 +254,7 @@ public class Invoker {
             println(errOut, "  Use --trace to show backtrace");
         } finally {
             thread.setContextClassLoader(contextClassLoader);
+            options.closeClassLoader();
             julLogger.setLevel(julLevel);
         }
     }
