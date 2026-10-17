@@ -39,9 +39,13 @@ configure(subprojects.findAll { it.name in ['asciidoctorj-api', 'asciidoctorj-te
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                artifactId = base.archivesName.get()
                 from components.java
             }
         }
+    }
+
+    // NOTE the build script of the module sets the archive name after this block is applied
+    afterEvaluate {
+        publishing.publications.mavenJava.artifactId = base.archivesName.get()
     }
 }
