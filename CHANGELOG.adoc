@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
+Improvements::
+
+* Add `ExtensionGroup#blockMacro(String, BlockMacroProcessor)` and `ExtensionGroup#inlineMacro(String, InlineMacroProcessor)`, like `JavaExtensionRegistry`
+
 Bug Fixes::
 
 * `BaseProcessor#createList(StructuralNode, String, Map)` ignored the options
