@@ -47,6 +47,28 @@ list::HelloWorld[]
         items.get(1).text() == SECOND_ITEM
     }
 
+    def "the ordered list created with options should appear in the resulting document"() {
+
+        given:
+        asciidoctor.javaExtensionRegistry().blockMacro(LISTMACRO_NAME, new ListCreatorBlockMacro('olist', true))
+
+        when:
+        def options = Options.builder().safe(SafeMode.SAFE).toFile(false).standalone(false).build()
+        String result = asciidoctor.convert(DOCUMENT, options)
+
+        then:
+        noExceptionThrown()
+        Document htmlDocument = Jsoup.parse(result, UTF_8)
+
+        htmlDocument.select(OL).size() == 1
+        def ol = htmlDocument.select(OL).first()
+        ol.attr('start') == '42'
+        def items = ol.select(LI)
+        items.size() == 2
+        items.get(0).text() == FIRST_ITEM
+        items.get(1).text() == SECOND_ITEM
+    }
+
     def "the unordered list should appear in the resulting document"() {
 
         given:
