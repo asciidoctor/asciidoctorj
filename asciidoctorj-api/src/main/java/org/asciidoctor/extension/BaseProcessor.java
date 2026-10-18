@@ -142,7 +142,7 @@ public class BaseProcessor implements Processor {
 
     @Override
     public org.asciidoctor.ast.List createList(StructuralNode parent, String context, Map<Object, Object> options) {
-        return delegate.createList(parent, context);
+        return delegate.createList(parent, context, options);
     }
 
     @Override
