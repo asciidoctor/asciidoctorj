@@ -1,14 +1,17 @@
 = AsciidoctorJ API: notes for 4.0
 :toc:
+:url-issues: https://github.com/asciidoctor/asciidoctorj/issues
 
 This document lists what seems improvable or inconsistent in the AsciidoctorJ API (`asciidoctorj-api`), found while implementing it on top of the pure Java implementation.
 The API is currently implemented as is (unchanged), so these notes are questions for the maintainers: could we make breaking changes in 4.0 to improve these points?
+
+The points that can be addressed without a breaking change are proposed to AsciidoctorJ 3.x: the related issues and pull requests are linked below.
 
 == Ruby and JRuby specific API
 
 * `Asciidoctor#rubyExtensionRegistry()`, `RubyExtensionRegistry`, `Asciidoctor#requireLibrary(String...)`, `Asciidoctor#requireLibraries(Collection)` and the `ruby*` methods of `ExtensionGroup` (`requireRubyLibrary`, `loadRubyClass`, `rubyBlock`, etc.) only make sense with a Ruby runtime.
 The implementation throws an `UnsupportedOperationException`.
-Could they be deprecated in 3.x and removed in 4.0?
+Could they be deprecated in 3.x and removed in 4.0? ({url-issues}/1325[#1325])
 * `Asciidoctor#shutdown()` tears down the Ruby runtime: there's nothing to shut down anymore (and `close()` already exists).
 * `Asciidoctor#asciidoctorVersion()` returns the version of Asciidoctor (Ruby) embedded in AsciidoctorJ.
 There's no embedded Asciidoctor anymore: the implementation returns the version of AsciidoctorJ.
@@ -20,9 +23,9 @@ They are always null (they could report the Java class and method that logged th
 
 Applications depend on classes of the JRuby implementation (`asciidoctorj-core`), which are not part of the API:
 
-* the service provider interfaces `org.asciidoctor.jruby.extension.spi.ExtensionRegistry`, `org.asciidoctor.jruby.converter.spi.ConverterRegistry` and `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry` (used to register extensions, converters and syntax highlighters automatically);
-* the directory walkers `org.asciidoctor.jruby.AsciiDocDirectoryWalker` and `org.asciidoctor.jruby.GlobDirectoryWalker` (used with `Asciidoctor#convertDirectory`);
-* the exception `org.asciidoctor.jruby.internal.AsciidoctorCoreException`, thrown when a conversion fails (the API doesn't define an exception, so the applications catch this internal class).
+* the service provider interfaces `org.asciidoctor.jruby.extension.spi.ExtensionRegistry`, `org.asciidoctor.jruby.converter.spi.ConverterRegistry` and `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry` (used to register extensions, converters and syntax highlighters automatically), see {url-issues}/1333[#1333] and {url-issues}/1332[#1332];
+* the directory walkers `org.asciidoctor.jruby.AsciiDocDirectoryWalker` and `org.asciidoctor.jruby.GlobDirectoryWalker` (used with `Asciidoctor#convertDirectory`), see {url-issues}/1334[#1334];
+* the exception `org.asciidoctor.jruby.internal.AsciidoctorCoreException`, thrown when a conversion fails (the API doesn't define an exception, so the applications catch this internal class), see {url-issues}/1330[#1330] and {url-issues}/1331[#1331].
 
 The implementation provides them with the same names for compatibility.
 Could they move to the API (e.g., `org.asciidoctor.extension.spi`, `org.asciidoctor.util`) in 4.0?
@@ -51,10 +54,13 @@ Enums (or plain names) would be more natural in Java.
 
 == Extensions
 
-* `BaseProcessor#createList(StructuralNode parent, String context, Map<Object, Object> options)` ignores the options (it calls `createList(parent, context)`), which looks like a bug.
-* `ExtensionGroup` has no `blockMacro(String, BlockMacroProcessor)` nor `inlineMacro(String, InlineMacroProcessor)`, unlike `JavaExtensionRegistry`.
-* A processor class registered without a name gets its names from the `@Name` annotations, including the meta-annotations (an annotation annotated with `@Name`), and is registered once per name with `JavaExtensionRegistry`, whereas `ExtensionGroup` only reads a direct `@Name` annotation (and fails later, when the document is converted).
+* [.line-through]#`BaseProcessor#createList(StructuralNode parent, String context, Map<Object, Object> options)` ignores the options (it calls `createList(parent, context)`), which looks like a bug.#
+Fixed in 3.x ({url-issues}/1326[#1326], {url-issues}/1327[#1327]).
+* [.line-through]#`ExtensionGroup` has no `blockMacro(String, BlockMacroProcessor)` nor `inlineMacro(String, InlineMacroProcessor)`, unlike `JavaExtensionRegistry`.#
+Added in 3.x ({url-issues}/1328[#1328], {url-issues}/1329[#1329]).
+* A processor class registered without a name gets its names from the `@Name` annotations, including the meta-annotations (an annotation annotated with `@Name`), and is registered once per name with `JavaExtensionRegistry`, whereas `ExtensionGroup` only reads a direct `@Name` annotation (and fails later, when the document is converted), see {url-issues}/1335[#1335].
 * The `ContentModel` annotation is in the `org.asciidoctor.ast` package, whereas the other annotations of the processors (`Name`, `Contexts`, etc.) are in `org.asciidoctor.extension`.
+Moving it is a breaking change (ambiguous reference when both packages are imported on demand), see {url-issues}/1336[#1336].
 * `Processor#setConfig` can only be called in the constructor (it throws an `IllegalStateException` once the processor is registered), whereas `getConfig()` returns a mutable map and `updateConfig` can be called anytime.
 * `Processor#createTableRow(Table parent)` doesn't use the parent.
 * The overloads of `Processor#createBlock` for a String and a List of lines are ambiguous when the content is null (e.g., an image block): `createBlock(parent, "image", (String) null, attributes)`.
