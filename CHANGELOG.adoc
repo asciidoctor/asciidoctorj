@@ -16,6 +16,7 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 Improvements::
 
 * Add `ExtensionGroup#blockMacro(String, BlockMacroProcessor)` and `ExtensionGroup#inlineMacro(String, InlineMacroProcessor)`, like `JavaExtensionRegistry`
+* Add the service provider interfaces `org.asciidoctor.extension.spi.ExtensionRegistry`, `org.asciidoctor.converter.spi.ConverterRegistry` and `org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry` to the API, and deprecate the interfaces of the `org.asciidoctor.jruby` packages (their implementations are still loaded)
 
 Bug Fixes::
 
