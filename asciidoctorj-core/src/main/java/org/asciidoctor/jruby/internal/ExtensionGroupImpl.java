@@ -394,12 +394,36 @@ public class ExtensionGroupImpl implements ExtensionGroup {
   }
 
   @Override
+  public ExtensionGroup blockMacro(final String blockName, final BlockMacroProcessor blockMacroProcessor) {
+    final RubyClass rubyClass = BlockMacroProcessorProxy.register(asciidoctor, blockMacroProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(IRubyObject registry) {
+        registry.callMethod(rubyRuntime.getCurrentContext(), "block_macro", new IRubyObject[]{rubyClass, rubyRuntime.newSymbol(blockName)});
+      }
+    });
+    return this;
+  }
+
+  @Override
   public ExtensionGroup blockMacro(final BlockMacroProcessor blockMacroProcessor) {
     final RubyClass rubyClass = BlockMacroProcessorProxy.register(asciidoctor, blockMacroProcessor);
     registrators.add(new Registrator() {
       @Override
       public void register(IRubyObject registry) {
         registry.callMethod(rubyRuntime.getCurrentContext(), "block_macro", new IRubyObject[]{rubyClass, rubyRuntime.newSymbol(blockMacroProcessor.getName())});
+      }
+    });
+    return this;
+  }
+
+  @Override
+  public ExtensionGroup inlineMacro(final String name, final InlineMacroProcessor inlineMacroProcessor) {
+    final RubyClass rubyClass = InlineMacroProcessorProxy.register(asciidoctor, inlineMacroProcessor);
+    registrators.add(new Registrator() {
+      @Override
+      public void register(IRubyObject registry) {
+        registry.callMethod(rubyRuntime.getCurrentContext(), "inline_macro", new IRubyObject[]{rubyClass, rubyRuntime.newSymbol(name)});
       }
     });
     return this;
