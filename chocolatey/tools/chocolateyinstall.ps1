@@ -4,23 +4,24 @@
 
 $ErrorActionPreference = 'Stop'; # stop on all errors
 
-$adocjVersion = '1.0.0-rc.1'
+$adocjVersion = '2.5.13'
 $packageName  = 'asciidoctorj'
 $toolsDir     = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-# the native executable for Windows published on the GitHub release
-$url          = "https://github.com/yuzutech/asciidoctorj/releases/download/v$($adocjVersion)/asciidoctorj-$($adocjVersion)-windows-amd64.zip"
+$url          = "https://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/$($adocjVersion)/asciidoctorj-$($adocjVersion)-bin.zip"
 
 $packageArgs = @{
   packageName   = $packageName
   unzipLocation = $toolsDir
-  url64bit      = $url
-  # the checksum of the archive is listed in the SHA256SUMS file of the GitHub release
-  checksum64    = 'f9261a6e0f605bae5dc0f37c3050b090edccf411b7eca8c8cf758379e255e11b'
-  checksumType64 = 'sha256'
+  url           = $url
+  checksum      = '67b420378c2887fdb330de2eb2d614a249224532eccc26c6f2ebe8330f878c38'
+  checksumType  = 'sha256'
 }
 
 ## Main helper functions - these have error handling tucked into them already
 ## see https://github.com/chocolatey/choco/wiki/HelpersReference
 
-# NOTE Chocolatey automatically creates a shim for asciidoctorj.exe (and removes it on uninstall)
 Install-ChocolateyZipPackage @packageArgs
+
+# XXX Check for java.exe
+
+Install-BinFile -name 'asciidoctorj' -path "$toolsDir\asciidoctorj-$($adocjVersion)\bin\asciidoctorj.bat"

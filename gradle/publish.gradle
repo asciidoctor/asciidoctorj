@@ -1,0 +1,87 @@
+apply plugin: 'maven-publish'
+
+publishing {
+    publications.create(project.ext.publicationName, MavenPublication) {
+
+        from components.java
+
+        pom {
+            name = project.name
+            description = project.description
+            url = 'https://github.com/asciidoctor/asciidoctorj'
+
+            scm {
+                url = 'https://github.com/asciidoctor/asciidoctorj'
+            }
+
+            licenses {
+                license {
+                    name = 'The Apache Software License, Version 2.0'
+                    url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution = 'repo'
+                }
+            }
+            developers {
+                developer {
+                    id = 'asotobu'
+                    name = 'Alex Soto Bueno'
+                    email = 'asotobu@gmail.com'
+                    timezone = '1'
+                    roles = ['Contributor']
+                }
+                developer {
+                    id = 'mojavelinux'
+                    name = 'Dan Allen'
+                    email = 'dan.j.allen@gmail.com'
+                    timezone = '-7'
+                    roles = ['Contributor']
+                }
+                developer {
+                    id = 'abelsromero'
+                    name = 'Abel Salgado Romero'
+                    email = 'abelromero@gmail.com'
+                    timezone = '1'
+                    roles = ['Contributor']
+                }
+                developer {
+                    id = 'robertpanzer'
+                    name = 'Robert Panzer'
+                    email = 'robert.panzer.pb@gmail.com'
+                    timezone = '1'
+                    roles = ['Project Lead']
+                }
+            }
+        }
+    }
+}
+
+// QUESTION should we move manifest creation to general Java plugin config?
+jar {
+  manifest {
+    attributes \
+      'Built-By': System.properties['user.name'],
+      'Created-By': "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})".toString(),
+      'Build-Date': buildDateOnly,
+      //'Build-Time': buildTimeOnly,
+      //'Specification-Title': project.name,
+      //'Specification-Version': project.version,
+      //'Specification-Vendor': 'asciidoctor.org',
+      'Implementation-Title': project.name,
+      'Implementation-Version': project.version,
+      'Implementation-Vendor': 'asciidoctor.org'
+  }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "local"
+            // change URLs to point to your repos, e.g. http://my.org/repo
+            def releasesRepoUrl = "${rootProject.buildDir}/repos/releases"
+            def snapshotsRepoUrl = "${rootProject.buildDir}/repos/snapshots"
+            url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+        }
+    }
+}
+
+

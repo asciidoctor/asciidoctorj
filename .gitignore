@@ -37,3 +37,8 @@ build/
 .DS_Store
 ### Project ###
 .idea/workspace.xml
+
+### Restored from the JRuby build ###
+bin/
+target/
+out/

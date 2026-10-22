@@ -1,0 +1,3 @@
+=== Second chapter
+
+Sample document to be included.

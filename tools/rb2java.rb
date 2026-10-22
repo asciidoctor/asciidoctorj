@@ -477,7 +477,7 @@ class Rb2Java
     candidate
   end
 
-  # the CLI tests (in the asciidoctorj-cli module) extend the class that provides the CLI helpers
+  # the CLI tests (in the asciidoctorj-native-cli module) extend the class that provides the CLI helpers
   CLI_TESTS = %w(InvokerTest OptionsTest)
 
   def base_class

@@ -1,0 +1,27 @@
+= Test document
+Foo Bar <foo@bar.com>
+
+This document demonstrates the AST of an Asciidoctor document
+
+== The first section
+
+A section has some nice paragraphs and maybe lists:
+
+=== A subsection
+
+- One
+- Two
+- Three
+
+Or even tables
+
+|===
+| Key | Value
+|===
+
+and sources as well
+
+[source,ruby]
+----
+puts 'Hello, World!'
+----

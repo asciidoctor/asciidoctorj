@@ -1,0 +1,60 @@
+name: Native CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['docs/**']
+  pull_request:
+    paths-ignore: ['docs/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# the tests of the native implementation are run by the main build (continuous-integration.yaml), on Java 17 or newer
+jobs:
+  native:
+    name: native (${{ matrix.platform }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux-amd64
+          - os: ubuntu-24.04-arm
+            platform: linux-arm64
+          - os: macos-latest
+            platform: macos-arm64
+          - os: windows-latest
+            platform: windows-amd64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      # Gradle 8.12 doesn't run on Java 25: build the CLI jar with Java 21, then the native image with GraalVM 25
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v5
+      - name: Build CLI jar
+        run: ./gradlew :asciidoctorj-native-cli:assemble
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '25'
+          distribution: graalvm-community
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build native image
+        shell: bash
+        run: tools/build-native.sh
+      - name: Smoke test
+        shell: bash
+        run: tools/native-smoke-test/run.sh asciidoctorj-native-cli/build/native/asciidoctorj asciidoctorj-native-cli/build/libs/asciidoctorj-native-cli-*[0-9T].jar
+      - name: Upload native executable
+        uses: actions/upload-artifact@v7
+        with:
+          name: asciidoctorj-native-${{ matrix.platform }}
+          path: asciidoctorj-native-cli/build/native/asciidoctorj${{ runner.os == 'Windows' && '.exe' || '' }}

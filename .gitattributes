@@ -5,3 +5,4 @@
 *.asciidoc eol=lf
 *.bat eol=crlf
 *.jar binary
+CHANGELOG.adoc merge=union

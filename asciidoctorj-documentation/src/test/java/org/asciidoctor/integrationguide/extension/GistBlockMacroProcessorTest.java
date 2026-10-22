@@ -1,7 +1,5 @@
 package org.asciidoctor.integrationguide.extension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.test.AsciidoctorInstance;
@@ -13,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class GistBlockMacroProcessorTest {
@@ -34,7 +34,10 @@ public class GistBlockMacroProcessorTest {
 
         String result = asciidoctor.convertFile(gistmacro_adoc, Options.builder().toFile(false).build());
 
-        assertThat(result).contains("<script src=\"https://gist.github.com/myaccount/1234abcd.js\">"); // <2>
+        assertThat(
+                result,
+                containsString(
+                        "<script src=\"https://gist.github.com/myaccount/1234abcd.js\">")); // <2>
 //end::include[]
     }
 
@@ -45,10 +48,22 @@ public class GistBlockMacroProcessorTest {
 
         String result = asciidoctor.convertFile(gistmacro_adoc, Options.builder().toFile(false).build());
 
-        assertThat(result).contains("<script src=\"https://gist.github.com/myaccount/1234abcd.js\"/></script>");
-        assertThat(result).contains("<script src=\"https://gitlab.com/-/snippets/2228798.js\"></script>");
-        assertThat(result).contains("<script src=\"https://gitlab.com/gitlab-org/gitlab-foss/-/snippets/1717978.js\"></script>");
-        assertThat(result).contains("<script src=\"https://gitlab.com/gitlab-org/gitlab-foss/-/snippets/1717979.js\"></script>");
+        assertThat(
+                result,
+                containsString(
+                        "<script src=\"https://gist.github.com/myaccount/1234abcd.js\"/></script>"));
+        assertThat(
+                result,
+                containsString(
+                        "<script src=\"https://gitlab.com/-/snippets/2228798.js\"></script>"));
+        assertThat(
+                result,
+                containsString(
+                        "<script src=\"https://gitlab.com/gitlab-org/gitlab-foss/-/snippets/1717978.js\"></script>"));
+        assertThat(
+                result,
+                containsString(
+                        "<script src=\"https://gitlab.com/gitlab-org/gitlab-foss/-/snippets/1717979.js\"></script>"));
     }
 
 }

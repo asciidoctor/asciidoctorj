@@ -1,8 +1,21 @@
-description = 'JUnit 5 extensions to test AsciidoctorJ and its extensions'
+apply plugin: 'java'
 
 dependencies {
-    api project(':asciidoctorj-api')
-    api platform(libs.junit.bom)
-    api 'org.junit.jupiter:junit-jupiter-api'
-    testImplementation libs.assertj
+    api(platform("org.junit:junit-bom:$junit5Version"))
+    api "org.junit.jupiter:junit-jupiter-api"
+
+    implementation project(':asciidoctorj-api')
+    testImplementation project(':asciidoctorj')
 }
+
+def javaApiUrl = "https://docs.oracle.com/javase/8/docs/api/"
+def junitURL = "https://junit.org/junit4/javadoc/latest"
+
+javadoc {
+    options.links(javaApiUrl, junitURL)
+}
+
+ext.publicationName = "mavenAsciidoctorJTestSupport"
+
+apply from: rootProject.file('gradle/publish.gradle')
+apply from: rootProject.file('gradle/signing.gradle')

@@ -6,7 +6,9 @@ If any implementation of the SPI interface is present on the classpath, it will 
 
 To create an autoloadable extension you should do the next steps:
 
-Create a class that implements `org.asciidoctor.jruby.extension.spi.ExtensionRegistry`.
+Create a class that implements `org.asciidoctor.extension.spi.ExtensionRegistry`.
+
+NOTE: The former interface `org.asciidoctor.jruby.extension.spi.ExtensionRegistry` is deprecated, but the implementations declared in `META-INF/services/org.asciidoctor.jruby.extension.spi.ExtensionRegistry` are still loaded.
 
 [source,java]
 .org.asciidoctor.extension.integratorguide.TerminalCommandExtension.java
@@ -17,12 +19,12 @@ include::example$org/asciidoctor/integrationguide/extension/TerminalCommandExten
 <2> AsciidoctorJ will automatically run the `register` method. The method is responsible for registering all extensions.
 <3> All required Java extensions are registered.
 
-Next, you need to create a file called `org.asciidoctor.jruby.extension.spi.ExtensionRegistry` inside `META-INF/services` with the implementation's full qualified name.
+Next, you need to create a file called `org.asciidoctor.extension.spi.ExtensionRegistry` inside `META-INF/services` with the implementation's full qualified name.
 
 [source]
-.META-INF/services/org.asciidoctor.jruby.extension.spi.ExtensionRegistry
+.META-INF/services/org.asciidoctor.extension.spi.ExtensionRegistry
 ----
-include::example$extensionregistry/META-INF/services/org.asciidoctor.jruby.extension.spi.ExtensionRegistry[]
+include::example$extensionregistry/META-INF/services/org.asciidoctor.extension.spi.ExtensionRegistry[]
 ----
 
 And that's all.

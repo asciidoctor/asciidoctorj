@@ -1,0 +1,18 @@
+= Images Example
+Doc Writer <doc.writer@example.org>
+ifndef::imagesdir[:imagesdir: images]
+
+This is a simple example to show images usage.
+
+== Introduction
+
+This project does something.
+We just haven't decided what that is yet.
+
+== Images
+
+.Sunset with scaling
+image::sunset.jpg[scaledwidth=50%]
+
+.Sunset without scaling
+image::sunset.jpg[scaledwidth=100%]

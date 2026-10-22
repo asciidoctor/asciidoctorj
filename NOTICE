@@ -2,7 +2,7 @@ AsciidoctorJ
 
 AsciidoctorJ is licensed under the Apache License, Version 2.0 (see LICENSE.txt).
 
-The implementation of AsciidoctorJ (asciidoctorj-core) is a port to Java of Asciidoctor
+The native implementation of AsciidoctorJ (asciidoctorj-native) is a port to Java of Asciidoctor
 (https://github.com/asciidoctor/asciidoctor), including its stylesheets and data files,
 which is licensed under the MIT License:
 

@@ -1,0 +1,40 @@
+description = 'A pure Java port of the Asciidoctor AsciiDoc processor'
+
+base {
+    archivesName = 'asciidoctorj-native'
+}
+
+dependencies {
+    api project(':asciidoctorj-api')
+    // the tests of the AsciidoctorJ API (imported from AsciidoctorJ)
+    testImplementation project(':asciidoctorj-test-support')
+    testImplementation libs.assertj
+    testImplementation libs.jsoup
+    testImplementation libs.xmlunit.assertj
+}
+
+// inject the project version, which is reported by Asciidoctor.VERSION
+processResources {
+    def version = project.version
+    inputs.property 'version', version
+    filesMatching('org/asciidoctor/asciidoctorj.properties') {
+        expand version: version
+    }
+}
+
+// share the test helpers (and fixtures) with the CLI tests
+configurations {
+    testArtifacts {
+        canBeConsumed = true
+        canBeResolved = false
+    }
+}
+
+tasks.register('testJar', Jar) {
+    archiveClassifier = 'tests'
+    from sourceSets.test.output
+}
+
+artifacts {
+    testArtifacts testJar
+}

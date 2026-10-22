@@ -1,0 +1,98 @@
+= Source code highlighting
+:source-highlighter: rouge
+
+This document shows some code highlighting examples.
+
+== Ruby example
+
+[source,ruby]
+.Inline Ruby code
+----
+=begin
+This program will
+print "Hello world".
+=end
+
+puts 'Hello world'
+----
+
+== Java example
+
+[source,java]
+.Inline Java code
+----
+/**
+ * This is a Java "Hello world" example.
+ * @param args arguments
+ *
+ * @since 1.3
+ */
+public class Test {
+  public static void main(String[] args) {
+    System.out.println("Hello World!");
+  }
+}
+----
+
+== Groovy example
+
+[source,groovy]
+.Included Groovy code
+----
+include::code_examples/groovy.groovy[]
+----
+
+== Scala example
+
+[source,scala]
+.Inline Scala code
+----
+/**
+ * This is a simple scala example
+ */
+object HelloWorld {
+  def main(args: Array[String]) {
+    println("Hello, world!")
+  }
+}
+----
+
+== HTML example
+
+[source,html]
+.Inline HTML code
+----
+<HTML>
+   <head>
+      <title>
+         A Small Hello
+      </title>
+   </head>
+    <body>
+       <h1>Hi</h1>
+       <div class="hello">This is very minimal "hello world" HTML document.</div>
+    </body>
+</HTML>
+----
+
+== JavaScript example
+
+[source,javascript]
+.Inline JavaScript code
+----
+if (console.log) {
+  // greeting silently
+  console.log('Hello World!!')
+} else {
+  // greeting in a pop up window
+  alert('Hello World!')
+}
+----
+
+== CoffeeScript example
+
+[source,coffeescript]
+.Included CoffeeScript code
+----
+include::code_examples/coffeeScript.coffee[]
+----

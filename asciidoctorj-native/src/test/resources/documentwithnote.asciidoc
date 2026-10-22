@@ -1,0 +1,1 @@
+NOTE: This is an admonition note.

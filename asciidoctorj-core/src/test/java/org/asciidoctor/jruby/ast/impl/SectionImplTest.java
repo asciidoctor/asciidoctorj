@@ -120,7 +120,7 @@ public class SectionImplTest {
 
         Document document = asciidoctor.load(content, Options.builder().build());
 
-        Section section = (Section) document.getBlocks().get(0);
+        SectionImpl section = (SectionImpl) document.getBlocks().get(0);
         assertThat(section.isNumbered()).isEqualTo(sectnums);
     }
 

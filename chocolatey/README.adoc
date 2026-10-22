@@ -1,35 +1,36 @@
-= AsciidoctorJ Chocolatey package
+= AsciidoctorJ Chocolatey package.
 
-This directory contains the necessary configuration files for creating a https://chocolatey.org/[Chocolatey] package based on the native executable for Windows ([.path]_asciidoctorj-x.y.z-windows-amd64.zip_) published on the GitHub release.
-The native executable doesn't require a Java runtime.
+This directory contains the necessary configuration files for
+creating a https://chocolatey.org/[Chocolatey] package based on a
+designated "asciidoctorj-x.y.z-bin.zip" file.
 
-Complete instructions on creating Chocolatey packages can be found at https://chocolatey.org/docs/create-packages.
+Complete instructions on creating Chocolatey packages can be found at
+https://chocolatey.org/docs/create-packages.
 
 == Quick Instructions
 
-. Set the desired package version in [.path]_asciidoctorj.nuspec_ and [.path]_tools\chocolateyinstall.ps1_.
-
-. Set the checksum of the archive in [.path]_tools\chocolateyinstall.ps1_ (listed in the [.path]_SHA256SUMS_ file of the GitHub release).
+. Set the desired package version in 'asciidoctorj.nuspec' and
+  'tools\chocolateyinstall.ps1'.
 
 . Commit your changes.
 
 . Chocolatey doesn't like whitespace in its packaging files. In PowerShell, run the following from the current directory:
-+
+
 ----
-foreach ($f in @('tools\chocolateyinstall.ps1')) {
+foreach ($f in @('tools\chocolateyinstall.ps1', 'tools\chocolateyinstall.ps1')) {
   gc $f | ? {$_ -notmatch "^\s*#"} | % {$_ -replace '(^.*?)\s*?[^``]#.*','$1'} | Out-File $f+".~" -en utf8; mv -fo $f+".~" $f
 }
 ----
 
 . Run the following commands:
-+
+
 ----
 # Create the package
 > cd c:\to\this\directory
 > choco pack
 
 # Test the package. You'll probably have to run this as administrator.
-> choco install asciidoctorj --version="x.y.z" --source="c:\to\this\directory"
+> choco install asciidoctorj --version="x.y.z" --source="C:\Users\gerald\Development\asciidoctorj\chocolatey"
 > where asciidoctorj
 > asciidoctorj --help
 > asciidoctorj ...other test commands
@@ -41,7 +42,7 @@ foreach ($f in @('tools\chocolateyinstall.ps1')) {
 ----
 
 . Add back whitespace:
-+
+
 ----
 git checkout -- tools
 ----

@@ -1,7 +1,5 @@
 package org.asciidoctor.integrationguide.extension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
@@ -12,6 +10,8 @@ import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith(AsciidoctorExtension.class)
 public class RobotsDocinfoProcessorTest {
@@ -39,9 +39,9 @@ public class RobotsDocinfoProcessorTest {
 
         org.jsoup.nodes.Document document = Jsoup.parse(result); // <4>
         Element metaElement = document.head().children().last();
-        assertThat(metaElement.tagName()).isEqualTo("meta");
-        assertThat(metaElement.attr("name")).isEqualTo("robots");
-        assertThat(metaElement.attr("content")).isEqualTo("index,follow");
+        assertThat(metaElement.tagName(), is("meta"));
+        assertThat(metaElement.attr("name"), is("robots"));
+        assertThat(metaElement.attr("content"), is("index,follow"));
 //end::include[]
     }
 
