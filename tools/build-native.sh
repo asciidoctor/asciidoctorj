@@ -5,7 +5,7 @@
 # Usage: tools/build-native.sh [native-image options]
 set -euo pipefail
 cd "$(dirname "$0")/.."
-jar=$(ls asciidoctorj-cli/build/libs/asciidoctorj-cli-*.jar | grep -v -e '-sources' -e '-javadoc' -e '-tests' | head -1)
+jar=$(ls asciidoctorj-cli/build/libs/asciidoctorj-native-cli-*.jar | grep -v -e '-sources' -e '-javadoc' -e '-tests' | head -1)
 native_image=native-image
 case "$(uname -s)" in MINGW* | MSYS* | CYGWIN*) native_image=native-image.cmd ;; esac
 if [ -n "${GRAALVM_HOME:-}" ]; then native_image="$GRAALVM_HOME/bin/$native_image"; fi
