@@ -1,7 +1,7 @@
 description = 'A pure Java port of the Asciidoctor AsciiDoc processor'
 
 base {
-    archivesName = 'asciidoctorj'
+    archivesName = 'asciidoctorj-native'
 }
 
 dependencies {

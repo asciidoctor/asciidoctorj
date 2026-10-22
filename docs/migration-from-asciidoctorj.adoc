@@ -3,6 +3,7 @@
 
 AsciidoctorJ 4 is a pure Java implementation of Asciidoctor: it doesn't run the Ruby implementation on JRuby anymore.
 It implements the API of AsciidoctorJ 3 (`asciidoctorj-api`) unchanged, so most applications and extensions should work without any change.
+The JRuby implementation is still published as `org.asciidoctor:asciidoctorj`: an application depends on one or the other, not both.
 This guide lists what changes.
 
 == Coordinates
@@ -13,7 +14,7 @@ This guide lists what changes.
 
 |Maven coordinates
 |`org.asciidoctor:asciidoctorj` (+ `asciidoctorj-api`, JRuby and the gems)
-|`org.asciidoctor:asciidoctorj` (+ `asciidoctorj-api`, no other dependency)
+|`org.asciidoctor:asciidoctorj-native` (+ `asciidoctorj-api`, no other dependency)
 
 |Java version
 |11+
