@@ -71,7 +71,7 @@ jobs:
           path: |
             asciidoctorj-cli/build/libs/asciidoctorj-native-${{ steps.versions.outputs.version }}.jar
             asciidoctorj-cli/build/libs/asciidoctorj-api-${{ steps.versions.outputs.version }}.jar
-            asciidoctorj-cli/build/libs/asciidoctorj-cli-${{ steps.versions.outputs.version }}.jar
+            asciidoctorj-cli/build/libs/asciidoctorj-native-cli-${{ steps.versions.outputs.version }}.jar
           if-no-files-found: error
 
   native:
@@ -108,7 +108,7 @@ jobs:
         run: tools/build-native.sh
       - name: Smoke test
         shell: bash
-        run: tools/native-smoke-test/run.sh asciidoctorj-cli/build/native/asciidoctorj "asciidoctorj-cli/build/libs/asciidoctorj-cli-$VERSION.jar"
+        run: tools/native-smoke-test/run.sh asciidoctorj-cli/build/native/asciidoctorj "asciidoctorj-cli/build/libs/asciidoctorj-native-cli-$VERSION.jar"
       - name: Package native executable
         shell: bash
         run: |

@@ -1,5 +1,9 @@
 description = 'The command line interface of AsciidoctorJ'
 
+base {
+    archivesName = 'asciidoctorj-native-cli'
+}
+
 dependencies {
     implementation project(':asciidoctorj-core')
     testImplementation project(path: ':asciidoctorj-core', configuration: 'testArtifacts')
