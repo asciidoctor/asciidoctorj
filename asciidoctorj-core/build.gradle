@@ -1,40 +1,124 @@
-description = 'A pure Java port of the Asciidoctor AsciiDoc processor'
+apply plugin: 'java-library'
+apply plugin: 'groovy'
+apply plugin: 'biz.aQute.bnd.builder'
+apply plugin: 'org.ysb33r.jruby.base'
+apply plugin: 'org.ysb33r.jruby.resolver'
 
-base {
-    archivesName = 'asciidoctorj-native'
+import org.ysb33r.gradle.jruby.api.base.tasks.JRubyPrepare
+
+project.ext.publicationName = "mavenAsciidoctorJ"
+
+apply from: rootProject.file('gradle/publish.gradle')
+apply from: rootProject.file('gradle/signing.gradle')
+
+repositories {
+  ruby.gems()
+}
+
+configurations {
+  runtimeGems {
+    canBeResolved(true)
+  }
 }
 
 dependencies {
-    api project(':asciidoctorj-api')
-    // the tests of the AsciidoctorJ API (imported from AsciidoctorJ)
-    testImplementation project(':asciidoctorj-test-support')
-    testImplementation libs.assertj
-    testImplementation libs.jsoup
-    testImplementation libs.xmlunit.assertj
+  api project(':asciidoctorj-api')
+  api "org.jruby:jruby:$jrubyVersion"
+
+  runtimeGems "rubygems:asciidoctor:$asciidoctorGemVersion"
+  runtimeGems "rubygems:asciimath:$asciimathGemVersion"
+  runtimeGems "rubygems:coderay:$coderayGemVersion"
+  runtimeGems "rubygems:rouge:$rougeGemVersion"
+  runtimeGems "rubygems:erubis:$erubisGemVersion"
+  runtimeGems "rubygems:haml:$hamlGemVersion"
+  runtimeGems "rubygems:open-uri-cached:$openUriCachedGemVersion"
+  runtimeGems "rubygems:slim:$slimGemVersion"
+  runtimeGems "rubygems:thread_safe:$threadSafeGemVersion"
+  runtimeGems "rubygems:tilt:$tiltGemVersion"
+  runtimeGems "rubygems:concurrent-ruby:$concurrentRubyGemVersion"
+  // TODO could use dependency replacement feature to fix version of Saxon-HE
+  testImplementation("org.xmlmatchers:xml-matchers:$xmlMatchersVersion") { exclude module: 'Saxon-HE' }
+  testImplementation "net.sf.saxon:Saxon-HE:$saxonVersion"
+  testImplementation "org.jsoup:jsoup:$jsoupVersion"
+  testImplementation "io.netty:netty-all:$nettyVersion"
+  testImplementation project(':asciidoctorj-test-support')
+  compileOnly "org.osgi:osgi.annotation:$osgiVersion"
 }
 
-// inject the project version, which is reported by Asciidoctor.VERSION
-processResources {
-    def version = project.version
-    inputs.property 'version', version
-    filesMatching('org/asciidoctor/asciidoctorj.properties') {
-        expand version: version
+def gemFiles = fileTree("${project.buildDir}/.gems") {
+  include 'specifications/*.gemspec'
+  include 'gems/*/lib/**'
+  include "gems/asciidoctor-*/data/**"
+}
+
+apply from: rootProject.file('gradle/versioncheck.gradle')
+
+tasks.named('gemPrepare', JRubyPrepare) {
+  gemConfiguration = configurations.runtimeGems
+  doLast {
+    copy { // bundles the gems inside this artifact
+      from gemFiles
+      into preparedGems
     }
+  }
+}
+tasks.eclipse.dependsOn gemPrepare
+
+
+ext {
+  // path to use for the prepared jruby gems
+  preparedGems = new File("$buildDir/preparedGems")
 }
 
-// share the test helpers (and fixtures) with the CLI tests
-configurations {
-    testArtifacts {
-        canBeConsumed = true
-        canBeResolved = false
-    }
+sourceSets {
+  main {
+    //let's register an output folder on the main SourceSet:
+    output.dir(preparedGems, builtBy: 'gemPrepare')
+    //it is now a part of the 'main' classpath and will be a part of the jar
+  }
 }
 
-tasks.register('testJar', Jar) {
-    archiveClassifier = 'tests'
-    from sourceSets.test.output
+// QUESTION is this the right place to insert this task dependency in the lifecycle?
+// IMPORTANT The TMP or TEMP environment variable must be set for the gem install command to work on Windows
+processResources.dependsOn gemPrepare
+
+
+javadoc {
+  classpath = sourceSets.main.output + sourceSets.main.compileClasspath + project(':asciidoctorj-test-support').sourceSets.test.output
+
+  source(project(':asciidoctorj-api').sourceSets.main.allJava)
 }
 
-artifacts {
-    testArtifacts testJar
+task createVersionFile {
+  inputs.property('version.asciidoctor', asciidoctorGemVersion)
+  inputs.property('version.asciidoctorj', project.version)
+  outputs.dir("${buildDir}/version-info")
+
+  doLast {
+    file("${buildDir}/version-info/asciidoctorj-version.properties", ).text = """
+version.asciidoctorj: ${project.version}
+version.asciidoctor: $asciidoctorGemVersion
+"""
+  }
 }
+
+
+jar {
+  bnd(
+    ('Bundle-Name'): 'asciidoctorj',
+    ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj'
+  )
+  manifest {
+    attributes(
+      'Automatic-Module-Name': 'org.asciidoctor.asciidoctorj'
+    )
+  }
+  metaInf {
+    from createVersionFile
+  }
+}
+
+test {
+  useJUnitPlatform()
+}
+

@@ -1,0 +1,14 @@
+= Include other files
+:sectnums:
+
+== First chapter
+
+Sample document to be included.
+
+==== More First
+
+Some more
+
+== Second chapter
+
+Sample document to be included.

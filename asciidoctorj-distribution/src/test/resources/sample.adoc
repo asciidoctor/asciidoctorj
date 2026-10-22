@@ -1,0 +1,22 @@
+= Reveal.js Sample document
+:source-highlighter: highlightjs
+:data-uri:
+
+== Slide 1
+
+This is a slide
+
+== Slide 2 with some code
+
+[source,java]
+----
+System.out.println("Hello World");
+----
+
+[[diagram]]
+== Slide 3 with a diagram
+
+[plantuml,test,svg]
+----
+A --> B
+----

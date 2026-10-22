@@ -1,0 +1,7 @@
+= First chapter
+
+Sample document to be included.
+
+=== More First
+
+Some more

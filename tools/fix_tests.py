@@ -12,12 +12,12 @@ import textwrap
 from pathlib import Path
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent
-# the CLI tests are located in the asciidoctorj-cli module, the other tests in the asciidoctorj-core module
+# the CLI tests are located in the asciidoctorj-native-cli module, the other tests in the asciidoctorj-native module
 CLI_TESTS = {'InvokerTest', 'OptionsTest'}
 
 
 def test_dir(test):
-    module = 'asciidoctorj-cli' if test in CLI_TESTS else 'asciidoctorj-core'
+    module = 'asciidoctorj-native-cli' if test in CLI_TESTS else 'asciidoctorj-native'
     return PROJECT_DIR / module / 'src/test/java/org/asciidoctor/core'
 
 # test class -> list of (old, new) literal replacements (old may be a compiled regex)
@@ -37,7 +37,7 @@ MEMBERS = {}
 COMMON_REPLACEMENTS = [
     # the value of an attribute is not typed
     (re.compile(r'Strings\.(strip|rstrip|lstrip|chomp)\((\w+\.getAttribute\([^()]*\))\)'), r'Strings.\1(str(\2))'),
-    # the tests are run from the asciidoctorj-core module, where the fixtures are located in src/test/resources
+    # the tests are run from the asciidoctorj-native module, where the fixtures are located in src/test/resources
     ('"test/', '"src/test/resources/'),
     # Java strings are always Unicode
     (re.compile(r'\n[ \t]*assertEquals\([^\n]*Encoding\.UTF_8\);'), ''),

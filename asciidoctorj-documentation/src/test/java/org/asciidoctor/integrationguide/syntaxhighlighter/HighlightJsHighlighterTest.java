@@ -1,7 +1,5 @@
 package org.asciidoctor.integrationguide.syntaxhighlighter;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.asciidoctor.*;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
@@ -15,6 +13,8 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
@@ -48,7 +48,8 @@ public class HighlightJsHighlighterTest {
                 .attributes(Attributes.builder().sourceHighlighter("myhighlightjs").build()) // <3>
                 .build());
 
-        assertThat(result).contains("<script>hljs.initHighlighting()</script>");
+        assertThat(result,
+            containsString("<script>hljs.initHighlighting()</script>"));
 //end::include[]
     }
 
@@ -68,7 +69,8 @@ public class HighlightJsHighlighterTest {
                         .build())
                 .build());
 
-        assertThat(result).contains("<script>hljs.initHighlighting()</script>");
+        assertThat(result,
+            containsString("<script>hljs.initHighlighting()</script>"));
     }
 
     @Test
@@ -89,8 +91,10 @@ public class HighlightJsHighlighterTest {
                         .build())
                     .build());
 
-        assertThat(result).contains("<script>hljs.initHighlighting()</script>");
-        assertThat(result).contains("<code class='java'>public static class Test");
+        assertThat(result,
+            containsString("<script>hljs.initHighlighting()</script>"));
+        assertThat(result,
+            containsString("<code class='java'>public static class Test"));
 //end::includeformatter[]
     }
 
@@ -129,8 +133,8 @@ public class HighlightJsHighlighterTest {
         assertTrue(jsFile.exists());
 
         String html = Files.readString(Path.of(toDir.toURI()).resolve("sources.html"));
-        assertThat(html).contains("<link rel=\"stylesheet\" href=\"github.min.css\">");
-        assertThat(html).contains("<script src=\"highlight.min.js\"></script>");
+        assertThat(html, containsString("<link rel=\"stylesheet\" href=\"github.min.css\">"));
+        assertThat(html, containsString("<script src=\"highlight.min.js\"></script>"));
 //end::includestylesheetwriter[]
     }
 
