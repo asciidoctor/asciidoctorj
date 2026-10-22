@@ -1,1 +1,2 @@
-org.asciidoctor.core.api.extension.ProcessorFactoryImpl
+
+org.asciidoctor.jruby.internal.ProcessorFactoryImpl

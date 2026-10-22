@@ -1,0 +1,21 @@
+def hasSigningKey = project.hasProperty("signing.keyId") || project.findProperty("signingKey")
+
+if (hasSigningKey && !project.hasProperty('skip.signing')) {
+    apply plugin: 'signing'
+    sign(project)
+}
+
+void sign(Project project) {
+    project.signing {
+        required { project.gradle.taskGraph.hasTask("required") }
+        def signingKeyId = project.findProperty("signingKeyId")
+        def signingKey = project.findProperty("signingKey")
+        def signingPassword = project.findProperty("signingPassword")
+        if (signingKeyId) {
+            useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+        } else if (signingKey) {
+            useInMemoryPgpKeys(signingKey, signingPassword)
+        }
+        sign publishing.publications[project.ext.publicationName]
+    }
+}

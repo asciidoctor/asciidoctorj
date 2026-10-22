@@ -6,7 +6,9 @@ If any implementation of the SPI interface is present on the classpath, it will 
 
 To create an autoloadable extension you should do the next steps:
 
-Create a class that implements `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry`.
+Create a class that implements `org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry`.
+
+NOTE: The former interface `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry` is deprecated, but the implementations declared in `META-INF/services/org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry` are still loaded.
 
 [source,java]
 .org.asciidoctor.integrationguide.syntaxhighlighter.HighlightJsExtension.java
@@ -18,12 +20,12 @@ include::example$org/asciidoctor/integrationguide/syntaxhighlighter/HighlightJsE
 The method is responsible for registering all extensions.
 <3> All required syntax highlighters are registered.
 
-Next, you need to create a file called `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry` inside `META-INF/services` with the implementation's full qualified name.
+Next, you need to create a file called `org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry` inside `META-INF/services` with the implementation's full qualified name.
 
 [source,java]
-.META-INF/services/org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry
+.META-INF/services/org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry
 ----
-include::example$syntaxhighlighterregistry/META-INF/services/org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry[]
+include::example$syntaxhighlighterregistry/META-INF/services/org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry[]
 ----
 
 And that's all.

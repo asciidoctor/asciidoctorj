@@ -1,12 +1,24 @@
-description = 'The API of AsciidoctorJ'
+apply plugin: 'biz.aQute.bnd.builder'
 
 dependencies {
-    // the OSGi annotations (@Export) are only needed at compile time
-    compileOnly libs.osgi.annotation
+  compileOnly "org.osgi:osgi.annotation:$osgiVersion"
+  testRuntimeOnly "org.osgi:osgi.annotation:$osgiVersion"
 }
 
+
 jar {
-    manifest {
-        attributes 'Automatic-Module-Name': 'org.asciidoctor.asciidoctorj.api'
-    }
+  bnd(
+    ('Bundle-Name'): 'asciidoctorj-api',
+    ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj-api',
+  )
+  manifest {
+    attributes(
+      'Automatic-Module-Name': 'org.asciidoctor.asciidoctorj.api'
+    )
+  }
 }
+
+ext.publicationName = "mavenAsciidoctorJApi"
+
+apply from: rootProject.file('gradle/publish.gradle')
+apply from: rootProject.file('gradle/signing.gradle')

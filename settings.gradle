@@ -1,14 +1,29 @@
-rootProject.name = 'asciidoctorj-parent'
+rootProject.name = 'asciidoctorj'
 
-dependencyResolutionManagement {
-    repositories {
-        mavenCentral()
-    }
+include \
+  'asciidoctorj',
+  'asciidoctorj-arquillian-extension',
+  'asciidoctorj-api',
+  'asciidoctorj-cli',
+  'asciidoctorj-distribution',
+  'asciidoctorj-documentation',
+  'asciidoctorj-wildfly-integration-test',
+  'asciidoctorj-test-support'
+
+if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+    include \
+        'asciidoctorj-springboot-integration-test',
+        'asciidoctorj-springboot-integration-test:springboot-app'
 }
 
-include 'asciidoctorj-api',
-        'asciidoctorj-test-support',
-        'asciidoctorj-core',
-        'asciidoctorj-cli',
-        'asciidoctorj-documentation',
-        'asciidoctorj-springboot-integration-test'
+project(':asciidoctorj').projectDir = file('asciidoctorj-core')
+
+
+// the native implementation (a pure Java port of Asciidoctor), published as org.asciidoctor:asciidoctorj-native
+if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+    include \
+        'asciidoctorj-native',
+        'asciidoctorj-native-cli',
+        'asciidoctorj-native-documentation',
+        'asciidoctorj-native-springboot-integration-test'
+}

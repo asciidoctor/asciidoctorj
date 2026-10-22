@@ -1,7 +1,5 @@
 package org.asciidoctor.integrationguide.syntaxhighlighter;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.asciidoctor.*;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
@@ -17,6 +15,8 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class PrismJsHighlighterTest {
@@ -63,8 +63,8 @@ public class PrismJsHighlighterTest {
 
         Document document = Jsoup.parse(docFile, "UTF-8");
         Elements keywords = document.select("div.content pre.highlight code span.token.keyword"); // <2>
-        assertThat(keywords).isNotEmpty();
-        assertThat(keywords.first().text()).isEqualTo("public");
+        assertThat(keywords, not(empty()));
+        assertThat(keywords.first().text(), is("public"));
 //end::include[]
     }
 

@@ -1,7 +1,5 @@
 package org.asciidoctor.integrationguide.extension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
@@ -17,6 +15,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class TerminalCommandTreeprocessorTest {
@@ -57,7 +57,7 @@ public class TerminalCommandTreeprocessorTest {
                         .build());
 //end::include[]
 
-        assertThat(result).isEqualTo(referenceResult);
+        assertThat(result, is(referenceResult));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class TerminalCommandTreeprocessorTest {
                             .toFile(false)
                             .build());
 //end::include-extension-registry[]
-            assertThat(result).isEqualTo(referenceResult);
+            assertThat(result, is(referenceResult));
         } finally {
             Thread.currentThread().setContextClassLoader(oldTCCL);
         }

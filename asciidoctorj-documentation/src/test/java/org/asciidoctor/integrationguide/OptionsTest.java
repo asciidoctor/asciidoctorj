@@ -1,7 +1,5 @@
 package org.asciidoctor.integrationguide;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
@@ -10,7 +8,6 @@ import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.asciidoctor.test.extension.ClasspathExtension;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.CleanupMode;
@@ -19,6 +16,8 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.nio.file.Files;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
@@ -41,13 +40,11 @@ public class OptionsTest {
                                 .standalone(false)   // <2>
                                 .build());           // <3>
 
-        assertThat(result).startsWith("<div ");
+        assertThat(result, startsWith("<div "));
 //end::simpleOptionsExampleEmbeddableDocument[]
     }
 
     @Test
-
-    @Disabled("Asciidoctor PDF is a Ruby gem, which is not supported by this implementation")
     public void options_for_pdf_document() {
 //tag::optionsPDFBackend[]
         File targetFile = // ...
@@ -63,7 +60,7 @@ public class OptionsTest {
                         .safe(SafeMode.UNSAFE)
                         .build());
 
-        assertThat(targetFile.length()).isGreaterThan(0L);
+        assertThat(targetFile.length(), greaterThan(0L));
 //end::optionsPDFBackend[]
     }
 
@@ -88,7 +85,7 @@ public class OptionsTest {
                         .toFile(false)         // <2>
                         .build());
 
-        assertThat(result).contains("This is included content");
+        assertThat(result, containsString("This is included content"));
 //end::unsafeConversion[]
     }
 
@@ -108,7 +105,9 @@ public class OptionsTest {
                         .build());
 
         assertTrue(targetFile.exists());
-        assertThat(Files.readString(targetFile.toPath())).contains("<p>Hello World");
+        assertThat(
+                Files.readString(targetFile.toPath()),
+                containsString("<p>Hello World"));
 //end::optionToFile[]
     }
 
@@ -129,8 +128,8 @@ public class OptionsTest {
                                             .attribute("foo", "bar")   // <3>
                                             .build())
                             .build());
-        assertThat(result).contains("<i class=\"fa icon-note\" title=\"Note\"></i>");
-        assertThat(result).contains("<p>bar</p>");
+        assertThat(result, containsString("<i class=\"fa icon-note\" title=\"Note\"></i>"));
+        assertThat(result, containsString("<p>bar</p>"));
 //end::attributeFontIcons[]
     }
 

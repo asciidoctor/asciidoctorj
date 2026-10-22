@@ -1,7 +1,5 @@
 package org.asciidoctor.integrationguide.extension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
@@ -14,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class YellBlockProcessorTest {
@@ -35,7 +35,7 @@ public class YellBlockProcessorTest {
 
         String result = asciidoctor.convertFile(yellblock_adoc, Options.builder().toFile(false).build());
 
-        assertThat(result).contains("I REALLY MEAN IT");              // <2>
+        assertThat(result, containsString("I REALLY MEAN IT"));              // <2>
 //end::include[]
     }
 
@@ -48,7 +48,7 @@ public class YellBlockProcessorTest {
 
         String result = asciidoctor.convertFile(yellblock_adoc, Options.builder().toFile(false).build());
 
-        assertThat(result).contains("I REALLY MEAN IT!!!");
+        assertThat(result, containsString("I REALLY MEAN IT!!!"));
     }
 
     @Test
@@ -60,6 +60,6 @@ public class YellBlockProcessorTest {
 
         String result = asciidoctor.convertFile(yellblock_adoc, Options.builder().toFile(false).build());
 
-        assertThat(result).contains("I REALLY MEAN IT!!!!!");
+        assertThat(result, containsString("I REALLY MEAN IT!!!!!"));
     }
 }

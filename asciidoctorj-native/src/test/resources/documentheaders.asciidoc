@@ -1,0 +1,7 @@
+= Sample Document
+Doc Writer <doc.writer@asciidoc.org>; John Smith <john.smith@asciidoc.org>
+v1.0, 2013-05-20: First draft
+:title: Sample Document
+:tags: [document, example]
+
+Preamble...

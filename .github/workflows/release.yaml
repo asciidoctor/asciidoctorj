@@ -1,0 +1,26 @@
+name: Release
+
+on: workflow_dispatch
+
+env:
+  ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.GPG_KEY_ID }}
+  ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}
+  ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSPHRASE }}
+  ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.OSS_SONATYPE_USERNAME }}
+  ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.OSS_SONATYPE_PASSWORD }}
+
+jobs:
+  release:
+    environment: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      - name: Build
+        run: |
+          unset GEM_PATH GEM_HOME JRUBY_OPTS
+          ./gradlew --no-daemon clean build
+          ./gradlew --no-daemon publishToSonatype closeSonatypeStagingRepository

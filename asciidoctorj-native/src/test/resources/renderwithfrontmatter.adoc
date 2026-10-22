@@ -1,0 +1,10 @@
+---
+layout: post
+title: Document Title
+author: username
+tags: [ first, second ]
+---
+= Document Title
+Author Name
+
+preamble

@@ -1,0 +1,22 @@
+Document             context: document  
+  Block              context: preamble  
+    Block            context: paragraph 
+                    This document demon...
+  Section            context: section    level: 1
+    Block            context: paragraph 
+                    A section has some ...
+    Section          context: section    level: 2
+      List           context: ulist     
+        ListItem     context: list_item 
+                    One
+        ListItem     context: list_item 
+                    Two
+        ListItem     context: list_item 
+                    Three
+      Block          context: paragraph 
+                    Or even tables
+      Table          context: table      style: table
+      Block          context: paragraph 
+                    and sources as well
+      Block          context: listing    style: source
+                    puts 'Hello, World!'

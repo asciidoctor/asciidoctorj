@@ -1,35 +1,31 @@
-description = 'The command line interface of AsciidoctorJ'
-
-base {
-    archivesName = 'asciidoctorj-native-cli'
-}
+apply plugin: 'java-library'
+apply plugin: 'biz.aQute.bnd.builder'
 
 dependencies {
-    implementation project(':asciidoctorj-core')
-    testImplementation project(path: ':asciidoctorj-core', configuration: 'testArtifacts')
+  api project(':asciidoctorj-api')
+  api project(':asciidoctorj')
+  implementation "org.jcommander:jcommander:$jcommanderVersion"
+
+  testImplementation (project(':asciidoctorj-test-support')) {
+    exclude group: 'junit', module: 'junit'
+  }
+  testImplementation "org.jsoup:jsoup:$jsoupVersion"
 }
 
-test {
-    // the tests use the fixtures of the core module (src/test/resources/fixtures)
-    workingDir = project(':asciidoctorj-core').projectDir
-    // and write (then delete) files in these fixtures, like the tests of the core module:
-    // don't run them at the same time (org.gradle.parallel)
-    mustRunAfter ':asciidoctorj-core:test'
-}
+project.ext.publicationName = "mavenAsciidoctorJCli"
+
+apply from: rootProject.file('gradle/publish.gradle')
+apply from: rootProject.file('gradle/signing.gradle')
 
 jar {
-    def runtimeClasspath = configurations.runtimeClasspath
-    manifest {
-        attributes 'Main-Class': 'org.asciidoctor.cli.Invoker'
-        // the core jar is expected next to the CLI jar
-        attributes 'Class-Path': runtimeClasspath.elements.map { it.collect { it.asFile.name }.join(' ') }
-    }
+  bnd(
+    ('Bundle-Name'): 'asciidoctorj-cli',
+    ('Bundle-SymbolicName'): 'org.asciidoctor.asciidoctorj-cli',
+    ('Import-Package'): 'com.beust.jcommander;resolution:=optional, *'
+  )
+  manifest {
+    attributes(
+      'Automatic-Module-Name': 'org.asciidoctor.asciidoctorj.cli'
+    )
+  }
 }
-
-// copy the core jar next to the CLI jar, so that java -jar works from the build/libs directory
-def copyRuntimeDependencies = tasks.register('copyRuntimeDependencies', Copy) {
-    from configurations.runtimeClasspath
-    into layout.buildDirectory.dir('libs')
-}
-
-assemble.dependsOn copyRuntimeDependencies

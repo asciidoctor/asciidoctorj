@@ -1,0 +1,5 @@
+=== Empty table
+
+[cols="2s,3", grid="none", frame="none"]
+|===
+|===

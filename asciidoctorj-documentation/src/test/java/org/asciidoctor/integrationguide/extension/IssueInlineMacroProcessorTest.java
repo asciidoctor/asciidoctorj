@@ -1,7 +1,5 @@
 package org.asciidoctor.integrationguide.extension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.test.AsciidoctorInstance;
@@ -13,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class IssueInlineMacroProcessorTest {
@@ -35,10 +35,15 @@ public class IssueInlineMacroProcessorTest {
 
         String result = asciidoctor.convertFile(issueinlinemacro_adoc, Options.builder().toFile(false).build());
 
-        assertThat(result).contains("<a href=\"https://github.com/asciidoctor/asciidoctorj/issues/333\""); // <2>
+        assertThat(
+                result,
+                containsString(
+                        "<a href=\"https://github.com/asciidoctor/asciidoctorj/issues/333\"")); // <2>
 
-        assertThat(result).contains(// <2>
-                        "<a href=\"https://github.com/asciidoctor/asciidoctorj-groovy-dsl/issues/2\"");
+        assertThat(
+                result,
+                containsString(                                                                 // <2>
+                        "<a href=\"https://github.com/asciidoctor/asciidoctorj-groovy-dsl/issues/2\""));
 
 //end::include[]
     }
@@ -54,10 +59,15 @@ public class IssueInlineMacroProcessorTest {
 
         String result = asciidoctor.convertFile(issueinlinemacro_adoc, Options.builder().toFile(false).build());
 
-        assertThat(result).contains("<a href=\"https://github.com/asciidoctor/asciidoctorj/issues/334\""); // <2>
+        assertThat(
+                result,
+                containsString(
+                        "<a href=\"https://github.com/asciidoctor/asciidoctorj/issues/334\"")); // <2>
 
-        assertThat(result).contains(// <2>
-                        "<a href=\"https://github.com/asciidoctor/asciidoctorj-groovy-dsl/issues/3\"");
+        assertThat(
+                result,
+                containsString(                                                                 // <2>
+                        "<a href=\"https://github.com/asciidoctor/asciidoctorj-groovy-dsl/issues/3\""));
 
     }
 

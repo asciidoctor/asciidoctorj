@@ -1,4 +1,4 @@
-// Usage: java -cp asciidoctorj-core/build/classes/java/main:asciidoctorj-core/build/resources/main:asciidoctorj-api/build/classes/java/main tools/compare/ConvertJava.java <list-file> <root> <out-dir>
+// Usage: java -cp asciidoctorj-native/build/classes/java/main:asciidoctorj-native/build/resources/main:asciidoctorj-api/build/classes/java/main tools/compare/ConvertJava.java <list-file> <root> <out-dir>
 import org.asciidoctor.core.*;
 
 import java.nio.file.*;

@@ -1,0 +1,9 @@
+= This is a title
+
+== A few images
+
+A block image
+
+image::images/block-image.jpg[]
+
+An inlined image image:images/inline-image.png[] in the text.

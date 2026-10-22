@@ -1,0 +1,35 @@
+description = 'The command line interface of AsciidoctorJ'
+
+base {
+    archivesName = 'asciidoctorj-native-cli'
+}
+
+dependencies {
+    implementation project(':asciidoctorj-native')
+    testImplementation project(path: ':asciidoctorj-native', configuration: 'testArtifacts')
+}
+
+test {
+    // the tests use the fixtures of the core module (src/test/resources/fixtures)
+    workingDir = project(':asciidoctorj-native').projectDir
+    // and write (then delete) files in these fixtures, like the tests of the core module:
+    // don't run them at the same time (org.gradle.parallel)
+    mustRunAfter ':asciidoctorj-native:test'
+}
+
+jar {
+    def runtimeClasspath = configurations.runtimeClasspath
+    manifest {
+        attributes 'Main-Class': 'org.asciidoctor.cli.Invoker'
+        // the core jar is expected next to the CLI jar
+        attributes 'Class-Path': runtimeClasspath.elements.map { it.collect { it.asFile.name }.join(' ') }
+    }
+}
+
+// copy the core jar next to the CLI jar, so that java -jar works from the build/libs directory
+def copyRuntimeDependencies = tasks.register('copyRuntimeDependencies', Copy) {
+    from configurations.runtimeClasspath
+    into layout.buildDirectory.dir('libs')
+}
+
+assemble.dependsOn copyRuntimeDependencies
