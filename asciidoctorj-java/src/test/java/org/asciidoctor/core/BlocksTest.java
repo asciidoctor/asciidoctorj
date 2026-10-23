@@ -1388,10 +1388,10 @@ public class BlocksTest extends TestHelper {
         @DisplayName("should process block with CRLF line endings")
         void shouldProcessBlockWithCRLFLineEndings() throws Exception {
             var input = """
-                    ----\u000d
-                    source line 1\u000d
-                    source line 2\u000d
-                    ----\u000d
+                    ----\r
+                    source line 1\r
+                    source line 2\r
+                    ----\r
                     """;
             var output = convertStringToEmbedded(input);
             assertXpath("/*[@class=\"listingblock\"]//pre", output, 1);

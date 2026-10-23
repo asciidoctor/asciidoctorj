@@ -591,10 +591,10 @@ public class ReaderTest extends TestHelper {
             @DisplayName("should clean CRLF from end of lines")
             void shouldCleanCRLFFromEndOfLines() throws Exception {
                 var input = """
-                        source\u000d
-                        with\u000d
-                        CRLF\u000d
-                        line endings\u000d
+                        source\r
+                        with\r
+                        CRLF\r
+                        line endings\r
                         """;
                 for (var lines : list(input, lines(input), split(input, Asciidoctor.LF), join(split(input, Asciidoctor.LF), Asciidoctor.LF))) {
                     var doc = new Document(lines);
