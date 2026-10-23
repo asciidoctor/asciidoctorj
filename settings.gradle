@@ -19,5 +19,4 @@ project(':asciidoctorj').projectDir = file('asciidoctorj-core')
 include \
   'asciidoctorj-java',
   'asciidoctorj-java-cli',
-  'asciidoctorj-java-documentation',
-  'asciidoctorj-java-springboot-integration-test'
+  'asciidoctorj-java-documentation'
