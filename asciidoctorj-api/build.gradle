@@ -5,11 +5,6 @@ dependencies {
   testRuntimeOnly "org.osgi:osgi.annotation:$osgiVersion"
 }
 
-// the API can be used by an application that runs on Java 11, even though both implementations require a newer version
-tasks.named('compileJava') {
-  options.release = 11
-}
-
 
 jar {
   bnd(
