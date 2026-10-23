@@ -13,6 +13,10 @@ class TableTestConverter extends StringConverter {
     public static final String NEWLINE = '\n'
     public static final String NEWLINE_2 = NEWLINE * 2
 
+    TableTestConverter() {
+        super('???', null)
+    }
+
     TableTestConverter(String backend, Map<String, Object> opts) {
         super(backend, opts)
     }
