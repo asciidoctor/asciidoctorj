@@ -1,9 +1,11 @@
 package org.asciidoctor.jruby.converter.internal;
 
+import org.asciidoctor.converter.spi.ConverterRegistry;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
-import org.asciidoctor.jruby.converter.spi.ConverterRegistry;
 
+import java.util.HashSet;
 import java.util.ServiceLoader;
+import java.util.Set;
 
 public class ConverterRegistryExecutor {
 
@@ -13,12 +15,18 @@ public class ConverterRegistryExecutor {
         this.asciidoctor = asciidoctor;
     }
 
+    @SuppressWarnings("deprecation")
     public void registerAllConverters() {
-        ServiceLoader<ConverterRegistry> converterRegistryServiceLoader = ServiceLoader
-                .load(ConverterRegistry.class);
-
-        for (ConverterRegistry converterRegistry : converterRegistryServiceLoader) {
+        Set<Class<?>> registeredClasses = new HashSet<>();
+        for (ConverterRegistry converterRegistry : ServiceLoader.load(ConverterRegistry.class)) {
+            registeredClasses.add(converterRegistry.getClass());
             converterRegistry.register(asciidoctor);
+        }
+        // Skip the implementations also declared with the new service
+        for (ConverterRegistry converterRegistry : ServiceLoader.load(org.asciidoctor.jruby.converter.spi.ConverterRegistry.class)) {
+            if (registeredClasses.add(converterRegistry.getClass())) {
+                converterRegistry.register(asciidoctor);
+            }
         }
     }
 }

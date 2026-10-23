@@ -81,4 +81,15 @@ class WhenExtensionsAreRegisteredAsService extends Specification {
         ExtensionRegistryExecutor2.asciidoctor == asciidoctor2
     }
 
+    def "an extension registry declared with both the new and the deprecated service should be called once"() {
+
+        when:
+        URLClassLoader tccl = new URLClassLoader(classpath.getResource('serviceloadertest/4').toURI().toURL() as URL[])
+        Thread.currentThread().contextClassLoader = tccl
+        Asciidoctor.Factory.create()
+
+        then:
+        ExtensionRegistryExecutor3.callCount == 1
+    }
+
 }
