@@ -1,0 +1,16 @@
+= smoketest(1)
+:doctype: manpage
+:manmanual: Smoke Test Manual
+:mansource: Smoke Test
+
+== Name
+
+smoketest - verify the native image
+
+== Synopsis
+
+*smoketest* [_OPTION_]... _FILE_...
+
+== Description
+
+The *smoketest* command verifies the native image.

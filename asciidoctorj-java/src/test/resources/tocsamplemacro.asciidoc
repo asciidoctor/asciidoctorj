@@ -1,0 +1,11 @@
+= Title
+
+The preamble.
+
+== First chapter
+first chapter
+
+toc::[]
+
+== Second chapter
+second chapter

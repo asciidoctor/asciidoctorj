@@ -1,0 +1,215 @@
+= AsciidoctorJ Java: Asciidoctor for the JVM, in pure Java
+Alex Soto <https://github.com/lordofthejars[@lordofthejars]>; Dan Allen <https://github.com/mojavelinux[@mojavelinux]>; Robert Panzer <https://github.com/robertpanzer[@robertpanzer]>
+// Settings:
+:compat-mode!:
+:page-layout: base
+:toc: macro
+:toclevels: 2
+:experimental:
+:source-language: java
+:language: {source-language}
+ifndef::env-github[:icons: font]
+ifdef::env-github[]
+:badges:
+:!toc-title:
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+// URIs:
+:uri-docs: https://docs.asciidoctor.org
+:uri-asciidoctor: https://asciidoctor.org
+:uri-asciidoctor-repo: https://github.com/asciidoctor/asciidoctor
+:uri-repo: https://github.com/asciidoctor/asciidoctorj
+:uri-issues: {uri-repo}/issues
+:uri-zulip: https://asciidoctor.zulipchat.com/
+:artifact-version: 4.0.0
+
+{uri-repo}[AsciidoctorJ] is the official library for running {uri-asciidoctor}[Asciidoctor] on the JVM.
+Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of a parsed AsciiDoc document from Java and other JVM languages.
+
+The Java implementation of AsciidoctorJ (`org.asciidoctor:asciidoctorj-java`) is a pure Java implementation of Asciidoctor (Java 17 or newer, no runtime dependency): it doesn't run Asciidoctor (Ruby) on JRuby.
+The JRuby implementation is still published as `org.asciidoctor:asciidoctorj` (see xref:../README.adoc[]): an application depends on one or the other, not both.
+Both implement the same API (`asciidoctorj-api`); see the xref:docs/migration-from-asciidoctorj.adoc[migration guide] for the differences.
+
+You can find the documentation for integrating Asciidoctor in your JVM based language of choice at the {uri-docs}/asciidoctorj/latest/[Asciidoctor Docs site].
+
+ifdef::badges[]
+image:https://github.com/asciidoctor/asciidoctorj/workflows/Build%20Main/badge.svg?event=push[Build Status (GitHub Actions)]
+image:https://img.shields.io/badge/zulip-join_chat-brightgreen.svg[project chat,link=https://asciidoctor.zulipchat.com/]
+endif::[]
+
+toc::[]
+
+== Distribution
+
+AsciidoctorJ is published to Maven Central:
+
+[cols="2,2,4"]
+|===
+|Group Id |Artifact Id |Description
+
+|org.asciidoctor
+|asciidoctorj-java
+|The implementation (which depends on the API)
+
+|org.asciidoctor
+|asciidoctorj-api
+|The API
+
+|org.asciidoctor
+|asciidoctorj-java-cli
+|The command line interface
+
+|org.asciidoctor
+|asciidoctorj-test-support
+|JUnit 5 extensions to test applications and extensions (e.g., inject an `Asciidoctor` instance)
+|===
+
+== Using the command line interface
+
+The command line interface runs with Java, with the jars of the implementation and of the API (`asciidoctorj-java-{artifact-version}.jar` and `asciidoctorj-api-<version>.jar`, the API being versioned with the JRuby implementation) in the same directory as `asciidoctorj-java-cli-{artifact-version}.jar`.
+Verify that it runs (it displays the various run options available):
+
+[source,shell,subs=attributes+]
+----
+java -jar asciidoctorj-java-cli-{artifact-version}.jar --help
+----
+
+Next, convert an AsciiDoc file, such as this README, to HTML:
+
+[source,shell,subs=attributes+]
+----
+java -jar asciidoctorj-java-cli-{artifact-version}.jar README.adoc
+----
+
+The options are the options of the `asciidoctor` command (`--help`), except:
+
+* `-r` loads a Java class instead of a Ruby library: a registry (`ExtensionRegistry`, `ConverterRegistry` or `SyntaxHighlighterRegistry`, in the `org.asciidoctor.jruby.*.spi` packages), which is registered, a converter (annotated with `@ConverterFor`) or an extension (a processor, such as a `BlockProcessor` annotated with `@Name`); `-r` also accepts a jar, whose services (`META-INF/services`) are loaded;
+* `-I` adds a directory or a jar to the class path, whose services (`META-INF/services`) are loaded and whose classes can be required with `-r`.
+
+For instance, `java -jar asciidoctorj-java-cli-{artifact-version}.jar -r my-extensions.jar README.adoc` converts the document with the extensions that the jar registers as services.
+
+== Installation
+
+To start using AsciidoctorJ, add the dependency to your build:
+
+[source,xml]
+[subs="specialcharacters,attributes"]
+.Declaring the dependency in a Maven build file (i.e., pom.xml)
+----
+<dependencies>
+  <dependency>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctorj-java</artifactId>
+    <version>{artifact-version}</version>
+  </dependency>
+</dependencies>
+----
+
+[source,groovy]
+[subs="specialcharacters,attributes"]
+.Declaring the dependency in a Gradle build file (e.g., build.gradle)
+----
+dependencies {
+  implementation 'org.asciidoctor:asciidoctorj-java:{artifact-version}'
+}
+----
+
+Then convert a document with the API:
+
+[source,java]
+----
+import java.io.File;
+
+import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Options;
+import org.asciidoctor.SafeMode;
+import org.asciidoctor.ast.Document;
+
+try (Asciidoctor asciidoctor = Asciidoctor.Factory.create()) {
+    String html = asciidoctor.convert("Hello, *AsciiDoc*!", Options.builder()
+        .safe(SafeMode.SAFE)
+        .standalone(false)
+        .build());
+
+    Document doc = asciidoctor.loadFile(new File("README.adoc"), Options.builder().build());
+    System.out.println(doc.getDoctitle());
+}
+----
+
+[TIP]
+====
+In addition to using AsciidoctorJ directly, you can invoke it as part of your build using the Maven or Gradle plugin:
+
+- {uri-docs}/maven-tools/latest/[Asciidoctor Maven Tools]
+- {uri-docs}/gradle-plugin/latest/[Asciidoctor Gradle Plugin]
+====
+
+=== Features
+
+* The AsciidoctorJ API: conversion, loading of documents and access to the AST (`Document`, `Section`, `Block`, `List`, `Table`, `PhraseNode`...)
+* Converters: HTML 5, DocBook 5 and man page, and custom converters written in Java (including converters producing something else than a String)
+* Extensions written in Java: preprocessor, tree processor, postprocessor, include processor, docinfo processor, block, block macro and inline macro processors
+* Syntax highlighting with highlight.js and Prettify, and syntax highlighters written in Java
+* Logging (`LogHandler`)
+
+The features that rely on Ruby are not supported: Ruby extensions and libraries (gems, e.g., Asciidoctor PDF or Asciidoctor Diagram), the syntax highlighters that require a gem (Rouge, CodeRay, Pygments) and the converter templates (Tilt).
+
+== Development
+
+AsciidoctorJ is built with Gradle (using the Gradle Wrapper) and JDK 21 (the Gradle toolchain); the Java implementation is compiled for Java 17.
+
+[source,shell]
+----
+./gradlew build
+----
+
+Run a single test class:
+
+[source,shell]
+----
+./gradlew :asciidoctorj-java:test --tests DocumentTest
+----
+
+Run the tests on Java 17 (the minimum supported version, which must be installed):
+
+[source,shell]
+----
+./gradlew -PtestJavaVersion=17 :asciidoctorj-java:test
+----
+
+=== Project layout
+
+[horizontal]
+`asciidoctorj-api`:: the API (`org.asciidoctor:asciidoctorj-api`)
+`asciidoctorj-java`:: the implementation (`org.asciidoctor:asciidoctorj-java`): the port of Asciidoctor in `org.asciidoctor.core` (a flat package mirroring `lib/asciidoctor`, plus `converter`, `extension`, `syntaxhighlighter` and `log`), the implementation of the API in `org.asciidoctor.core.api`, the test suite of Asciidoctor translated to JUnit 5 (`org.asciidoctor.core`) and the tests of the API (`org.asciidoctor`)
+`asciidoctorj-java-cli`:: the command line interface (`org.asciidoctor:asciidoctorj-java-cli`), and its tests (which use the test helpers and fixtures of `asciidoctorj-java`)
+`asciidoctorj-test-support`:: JUnit 5 extensions to test AsciidoctorJ and its extensions (e.g., inject an `Asciidoctor` instance or a classpath resource)
+`asciidoctorj-java-documentation`:: the tests that back the code snippets of the documentation
+`docs`:: the documentation (Antora), the migration guide, the notes about the API and the status of the port
+`tools`:: the scripts used to translate the tests of Asciidoctor (`rb2java.rb`, `fix_tests.py`, `regen.sh`) and to compare the output with Asciidoctor (`compare`)
+
+=== Following Asciidoctor
+
+The implementation is a port of {uri-asciidoctor-repo}[Asciidoctor] that follows the Ruby source file by file (one Java class per Ruby class, same method order), so that the changes made to Asciidoctor can be ported easily.
+It follows the main branch of Asciidoctor (commit `52871a02`).
+The test translation tools expect Asciidoctor to be checked out next to this project (`../asciidoctor`).
+The status of the port and the improvement backlog are tracked in xref:docs/port-status.adoc[].
+
+=== Continuous integration
+
+The project is built and tested on Linux, macOS and Windows with Java 21, and the tests of the Java implementation are also run on Linux with Java 17, by GitHub Actions (`.github/workflows/continuous-integration.yaml`).
+
+== Resources
+
+The source code for AsciidoctorJ, including the latest developments and issues, can be found in the project's {uri-repo}[repository] on GitHub.
+If you identify an issue while using AsciidoctorJ, please don't hesitate to {uri-issues}[file a bug report].
+Also, don't forget to join the {uri-zulip}[Asciidoctor Zulip community], where you can ask questions and leave comments.
+
+== License
+
+AsciidoctorJ is released under the Apache License, Version 2.0 (see xref:../LICENSE.txt[]).
+The implementation is a port of Asciidoctor, which is released under the MIT License (see xref:../NOTICE[]).

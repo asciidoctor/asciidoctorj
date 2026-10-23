@@ -111,13 +111,27 @@ allprojects {
   defaultTasks 'check'
 }
 
-subprojects {
+// the modules of the Java implementation are configured at the end of this file
+boolean isJavaImplementation(def project) {
+  project.name.startsWith('asciidoctorj-java')
+}
+
+configure(subprojects.findAll { !isJavaImplementation(it) }) {
   // NOTE applying Java plugin changes the status; take steps to preserve value
   def _status = status
   apply plugin: 'java-library'
   apply plugin: 'groovy'
 
   status = _status
+
+  // the JRuby implementation, the API and the test support run on Java 11 (the Spring Boot application of the integration test requires Java 17)
+  if (it.name != 'springboot-app') {
+    plugins.withType(JavaPlugin) {
+      tasks.named('compileJava') {
+        options.release = 11
+      }
+    }
+  }
 
   plugins.withType(JavaPlugin) {
     project.tasks.withType(JavaCompile) { task ->
@@ -219,7 +233,7 @@ boolean usesSpock(def project) {
 }
 
 // apply JRuby and sources/javadocs packaging stuff for all subprojects except the distribution
-configure(subprojects.findAll { !it.isDistribution() }) {
+configure(subprojects.findAll { !it.isDistribution() && !isJavaImplementation(it) }) {
 
   apply from: rootProject.file('gradle/eclipse.gradle')
   apply plugin: 'idea'
@@ -230,25 +244,81 @@ configure(subprojects.findAll { !it.isDistribution() }) {
   }
 }
 
-configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.endsWith('-documentation')}) {
+configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.endsWith('-documentation') && !isJavaImplementation(it) }) {
 
   java {
     withJavadocJar()
     withSourcesJar()
     toolchain {
-      languageVersion.set(JavaLanguageVersion.of(getToolchainVersion()))
+      languageVersion.set(JavaLanguageVersion.of(21))
     }
   }
 
 }
 
-// Windows workaround to fix invalid toolchain detection
-def getToolchainVersion() {
-  if (DefaultNativePlatform.getCurrentOperatingSystem().isWindows()) {
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21))
-      return 21
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17))
-      return 17
+// the Java implementation (a pure Java port of Asciidoctor) requires Java 17
+def junitBom = libs.junit.bom
+
+configure(subprojects.findAll { isJavaImplementation(it) }) {
+  apply plugin: 'java-library'
+
+  version = javaImplementationVersion
+
+  java {
+    toolchain {
+      languageVersion.set(JavaLanguageVersion.of(21))
+    }
   }
-  return 11
+
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    testImplementation platform(junitBom)
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+  }
+
+  tasks.withType(JavaCompile).configureEach {
+    options.release = 17
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-Xmaxerrs', '10000']
+  }
+
+  tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    testLogging {
+      events 'failed'
+      exceptionFormat = 'full'
+    }
+    // the tests can be run on the minimum supported version of Java with -PtestJavaVersion=17
+    if (project.hasProperty('testJavaVersion')) {
+      javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(project.testJavaVersion)
+      }
+    }
+  }
+}
+
+// the modules of the Java implementation published to a Maven repository (e.g., ./gradlew publishToMavenLocal)
+configure(subprojects.findAll { it.name in ['asciidoctorj-java', 'asciidoctorj-java-cli'] }) {
+  apply plugin: 'maven-publish'
+
+  java {
+    withSourcesJar()
+  }
+
+  publishing {
+    publications {
+      mavenJava(MavenPublication) {
+        from components.java
+      }
+    }
+  }
+
+  // NOTE the build script of the module sets the archive name after this block is applied
+  afterEvaluate {
+    publishing.publications.mavenJava.artifactId = base.archivesName.get()
+  }
 }

@@ -1,0 +1,6 @@
+<div<%= @id && %( id="#{@id}") %> class="<%= ['paragraph',role].compact * ' ' %>"><%
+if title? %>
+<div class="title"><%= title %></div><%
+end %>
+<p><%= content %></p>
+</div>

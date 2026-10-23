@@ -1,0 +1,25 @@
+= TODO: Document Title
+v1.0, 2013-10-12
+
+:type: object.type
+
+[literal]
+TODO: This is description
+
+[Images]
+image::src/some{sp}image{sp}1.JPG[TODO title1,link="link1.html"]
+image::src/some{sp}image{sp}2.JPG[TODO title2,link="link2.html"]
+
+[Open]
+--
+[role=text-center]
+some text with attributes
+
+image::src/image_in_text.jpg
+
+[role=text-center]
+and more text
+
+[role=text-center]
+and even more text
+--

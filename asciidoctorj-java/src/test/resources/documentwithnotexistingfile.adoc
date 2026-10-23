@@ -1,0 +1,9 @@
+= My Document
+
+include::unexistingdoc.adoc[]
+
+include::unexistingdoc.adoc[]
+
+include::https://raw.githubusercontent.com/asciidoctor/asciidoctorj/e47a2c01c563fa624ca61e1bc58e264a114f7fb5/asciidoctorj-core/src/test/resources/rendersample.asciidoc[]
+
+include::unexistingdoc.adoc[]

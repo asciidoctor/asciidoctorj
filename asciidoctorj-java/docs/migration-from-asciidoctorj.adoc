@@ -1,0 +1,67 @@
+= Migrating from the JRuby implementation
+:toc:
+
+The Java implementation of AsciidoctorJ (`org.asciidoctor:asciidoctorj-java`) is a pure Java implementation of Asciidoctor: it doesn't run the Ruby implementation on JRuby.
+It implements the same API (`asciidoctorj-api`) as the JRuby implementation, so most applications and extensions should work without any change.
+The JRuby implementation is still published as `org.asciidoctor:asciidoctorj`: an application depends on one or the other, not both.
+This guide lists what changes when an application switches from the JRuby implementation to the Java implementation.
+
+== Coordinates
+
+[cols="1,1,1"]
+|===
+| |JRuby implementation |Java implementation
+
+|Maven coordinates
+|`org.asciidoctor:asciidoctorj` (+ `asciidoctorj-api`, JRuby and the gems)
+|`org.asciidoctor:asciidoctorj-java` (+ `asciidoctorj-api`, no other dependency)
+
+|Java version
+|11+
+|17+
+
+|Command line interface
+|`org.asciidoctor:asciidoctorj-cli` (+ JCommander), distribution (zip)
+|`org.asciidoctor:asciidoctorj-java-cli` (no dependency)
+|===
+
+The options of the command line interface are the options of the `asciidoctor` command, except `-r`, which loads a Java class (an `ExtensionRegistry`, a `ConverterRegistry`, a `SyntaxHighlighterRegistry`, a converter or an extension) or a jar whose services are loaded (instead of a Ruby library), and `-I`, which adds a directory or a jar, whose services are loaded, to the class path.
+
+== API
+
+The API (`org.asciidoctor.Asciidoctor`, `org.asciidoctor.ast`, `org.asciidoctor.extension`, `org.asciidoctor.converter`, `org.asciidoctor.log`, `org.asciidoctor.syntaxhighlighter`) is the API of the JRuby implementation.
+`Asciidoctor.Factory.create()` creates an instance of the implementation (`org.asciidoctor.core.api.CoreAsciidoctor`), which is registered as a service.
+
+Like in the JRuby implementation, each `Asciidoctor` instance has its own extensions, converters, syntax highlighters and log handlers.
+Creating an instance is cheap since there's no Ruby runtime to start.
+
+The following classes of the JRuby implementation, which are not part of the API but are used by applications, are provided with the same names for compatibility:
+
+* the service provider interfaces `org.asciidoctor.jruby.extension.spi.ExtensionRegistry`, `org.asciidoctor.jruby.converter.spi.ConverterRegistry` and `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry`;
+* the directory walkers `org.asciidoctor.jruby.AsciiDocDirectoryWalker` and `org.asciidoctor.jruby.GlobDirectoryWalker`;
+* the exception thrown when a conversion fails, `org.asciidoctor.jruby.internal.AsciidoctorCoreException`.
+
+== Not supported
+
+The features that rely on Ruby are not supported:
+
+* Ruby extensions: `Asciidoctor#rubyExtensionRegistry()` and the `ruby*` methods of `ExtensionGroup` throw an `UnsupportedOperationException`;
+* Ruby libraries and gems: `Asciidoctor#requireLibrary(String...)` and `Asciidoctor#requireLibraries(Collection)` throw an `UnsupportedOperationException`.
+This includes the gems wrapped by AsciidoctorJ (e.g., Asciidoctor PDF, Asciidoctor EPUB3, Asciidoctor Diagram, Asciidoctor reveal.js);
+* the syntax highlighters that require a gem (Rouge, CodeRay, Pygments): highlight.js and Prettify are supported, as well as the syntax highlighters written in Java;
+* converter templates (Tilt): the `template_dirs` option is ignored;
+* the JRuby specific classes: `AsciidoctorJRuby` and `JRubyAsciidoctor` (e.g., to create an instance with a gem path, load paths or a class loader).
+
+== Behavior changes
+
+* `Asciidoctor#asciidoctorVersion()` returns the version of AsciidoctorJ, since there's no embedded Asciidoctor (Ruby).
+* When the output is written to an `OutputStream` (`Options.builder().toStream(…)`), the stream is not closed after the output is written.
+* `LogRecord#getSourceFileName()` and `LogRecord#getSourceMethodName()` are null (they were extracted from the Ruby backtrace).
+* A String option that starts with a colon (e.g., `":compound"`) is still interpreted as a Ruby symbol, except the `source` option of `Processor#createBlock` (the JRuby implementation also converted the lines of the source that start with a colon).
+
+== Implementation
+
+The implementation itself (`org.asciidoctor.core`) is a port of Asciidoctor (Ruby) that follows its structure (one Java class per Ruby class) and has a static API similar to the API of Asciidoctor (e.g., `org.asciidoctor.core.Asciidoctor.convert(input, options)`).
+It's not part of the API of AsciidoctorJ: applications should use the API, which is stable.
+
+The questions about the API for the maintainers (e.g., the breaking changes that could be made in 4.0 to improve it) are listed in xref:api-notes.adoc[].
