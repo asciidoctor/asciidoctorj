@@ -255,6 +255,12 @@ configure(subprojects.findAll { isJavaImplementation(it) }) {
 
   version = javaImplementationVersion
 
+  java {
+    toolchain {
+      languageVersion.set(JavaLanguageVersion.of(21))
+    }
+  }
+
   repositories {
     mavenCentral()
   }
@@ -276,6 +282,12 @@ configure(subprojects.findAll { isJavaImplementation(it) }) {
     testLogging {
       events 'failed'
       exceptionFormat = 'full'
+    }
+    // the tests can be run on the minimum supported version of Java with -PtestJavaVersion=17
+    if (project.hasProperty('testJavaVersion')) {
+      javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(project.testJavaVersion)
+      }
     }
   }
 }

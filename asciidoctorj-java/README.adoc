@@ -177,7 +177,7 @@ The features that rely on Ruby are not supported: Ruby extensions and libraries 
 
 == Development
 
-AsciidoctorJ is built with Gradle (using the Gradle Wrapper) and JDK 17 or newer.
+AsciidoctorJ is built with Gradle (using the Gradle Wrapper) and JDK 21 (the Gradle toolchain); the Java implementation is compiled for Java 17.
 
 [source,shell]
 ----
@@ -189,6 +189,13 @@ Run a single test class:
 [source,shell]
 ----
 ./gradlew :asciidoctorj-java:test --tests DocumentTest
+----
+
+Run the tests on Java 17 (the minimum supported version, which must be installed):
+
+[source,shell]
+----
+./gradlew -PtestJavaVersion=17 :asciidoctorj-java:test
 ----
 
 === Project layout
@@ -227,7 +234,8 @@ The jars contain the native image configuration (`META-INF/native-image`), so th
 
 === Continuous integration
 
-The project is built and tested on Linux, macOS and Windows with Java 17, and on Linux with Java 25, and the native executables are built and tested on each platform, by GitHub Actions (`.github/workflows/ci.yml`).
+The project is built and tested on Linux, macOS and Windows with Java 21 (`.github/workflows/continuous-integration.yaml`).
+The tests of the Java implementation are also run on Linux with Java 17, and the native executables are built and tested on each platform (`.github/workflows/java-ci.yml`).
 
 === Release
 
