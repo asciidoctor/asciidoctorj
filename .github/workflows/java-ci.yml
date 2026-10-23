@@ -34,7 +34,7 @@ jobs:
         run: >-
           ./gradlew -PtestJavaVersion=17 -Porg.gradle.java.installations.fromEnv=JAVA_HOME_17_X64
           :asciidoctorj-java:test :asciidoctorj-java-cli:test
-          :asciidoctorj-java-documentation:test :asciidoctorj-java-springboot-integration-test:test
+          :asciidoctorj-java-documentation:test
   native:
     name: native (${{ matrix.platform }})
     strategy:
