@@ -7,12 +7,3 @@ dependencies {
     testImplementation libs.jsoup
     testImplementation libs.commons.io
 }
-
-sourceSets {
-    test {
-        java {
-            // PrismJsHighlighter relies on Nashorn, which is not available since Java 15 (like in AsciidoctorJ)
-            exclude '**/PrismJsHighlighter*.java'
-        }
-    }
-}
