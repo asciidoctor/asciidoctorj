@@ -631,6 +631,23 @@ public class WhenJavaExtensionGroupIsRegistered {
     }
 
     @Test
+    public void a_block_macro_extension_instance_with_name_should_be_executed_when_macro_is_detected() {
+
+        this.asciidoctor.createGroup()
+                .blockMacro("gist", new GistMacro("othername", new HashMap<>()))
+                .register();
+
+        String content = asciidoctor.convertFile(
+                sampleWithGistMacro,
+                Options.builder().toFile(false).build());
+
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
+        Element script = doc.getElementsByTag("script").first();
+
+        assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
+    }
+
+    @Test
     public void a_block_macro_as_string_extension_should_be_executed_when_macro_is_detected() {
 
         this.asciidoctor.createGroup()
@@ -691,6 +708,25 @@ public class WhenJavaExtensionGroupIsRegistered {
 
         this.asciidoctor.createGroup()
                 .inlineMacro("man", ManpageMacro.class)
+                .register();
+
+        String content = asciidoctor.convertFile(
+                sampleWithManLink,
+                Options.builder().toFile(false).build());
+
+        org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
+        Element link = doc.getElementsByTag("a").first();
+        assertThat(link.attr("href"), is("gittutorial.html"));
+
+        final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
+        assertThat(logRecords, hasSize(0));
+    }
+
+    @Test
+    public void an_inline_macro_extension_instance_with_name_should_be_executed_when_an_inline_macro_is_detected() {
+
+        this.asciidoctor.createGroup()
+                .inlineMacro("man", new ManpageMacro("othername", new HashMap<>()))
                 .register();
 
         String content = asciidoctor.convertFile(

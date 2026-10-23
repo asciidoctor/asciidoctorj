@@ -25,10 +25,10 @@ class WhenABlockMacroProcessorCreatesAList extends Specification {
 list::HelloWorld[]
 '''
 
-    def "the ordered list should appear in the resulting document"() {
+    def "the ordered list should appear in the resulting document (attributes in options: #attributesInOptions)"() {
 
         given:
-        asciidoctor.javaExtensionRegistry().blockMacro(LISTMACRO_NAME, new ListCreatorBlockMacro('olist'))
+        asciidoctor.javaExtensionRegistry().blockMacro(LISTMACRO_NAME, new ListCreatorBlockMacro('olist', attributesInOptions))
 
         when:
         def standalone = Options.builder().safe(SafeMode.SAFE).toFile(false).standalone(false).build()
@@ -45,6 +45,9 @@ list::HelloWorld[]
         items.size() == 2
         items.get(0).text() == FIRST_ITEM
         items.get(1).text() == SECOND_ITEM
+
+        where:
+        attributesInOptions << [false, true]
     }
 
     def "the unordered list should appear in the resulting document"() {
