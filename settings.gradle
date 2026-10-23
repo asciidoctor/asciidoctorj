@@ -19,11 +19,11 @@ if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
 project(':asciidoctorj').projectDir = file('asciidoctorj-core')
 
 
-// the native implementation (a pure Java port of Asciidoctor), published as org.asciidoctor:asciidoctorj-native
+// the Java implementation (a pure Java port of Asciidoctor), published as org.asciidoctor:asciidoctorj-java
 if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
     include \
-        'asciidoctorj-native',
-        'asciidoctorj-native-cli',
-        'asciidoctorj-native-documentation',
-        'asciidoctorj-native-springboot-integration-test'
+        'asciidoctorj-java',
+        'asciidoctorj-java-cli',
+        'asciidoctorj-java-documentation',
+        'asciidoctorj-java-springboot-integration-test'
 }

@@ -13,7 +13,7 @@ rm -rf "$out"; mkdir -p "$out"
 (cd "$root" && find . -name "*.${EXT:-adoc}" -not -path '*/node_modules/*' -not -path '*/.git/*' | sed 's|^\./||' | sort) > "$out/files.txt"
 echo "$name: $(wc -l < "$out/files.txt") files"
 ruby -I "$rb/lib" "$here/convert_ruby.rb" "$out/files.txt" "$root" "$out/ruby" &
-"$java" -cp "$project/asciidoctorj-native/build/classes/java/main:$project/asciidoctorj-native/build/resources/main:$project/asciidoctorj-api/build/classes/java/main" "$here/ConvertJava.java" "$out/files.txt" "$root" "$out/java"
+"$java" -cp "$project/asciidoctorj-java/build/classes/java/main:$project/asciidoctorj-java/build/resources/main:$project/asciidoctorj-api/build/classes/java/main" "$here/ConvertJava.java" "$out/files.txt" "$root" "$out/java"
 wait
 : > "$out/html.diff"; : > "$out/log.diff"; ndiff=0; nlog=0
 while read -r rel; do
