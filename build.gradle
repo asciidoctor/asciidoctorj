@@ -124,6 +124,15 @@ configure(subprojects.findAll { !isJavaImplementation(it) }) {
 
   status = _status
 
+  // the JRuby implementation, the API and the test support run on Java 11 (the Spring Boot application of the integration test requires Java 17)
+  if (it.name != 'springboot-app') {
+    plugins.withType(JavaPlugin) {
+      tasks.named('compileJava') {
+        options.release = 11
+      }
+    }
+  }
+
   plugins.withType(JavaPlugin) {
     project.tasks.withType(JavaCompile) { task ->
       if (project.hasProperty("showDeprecation")) {
