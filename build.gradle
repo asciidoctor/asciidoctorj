@@ -241,21 +241,10 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.
     withJavadocJar()
     withSourcesJar()
     toolchain {
-      languageVersion.set(JavaLanguageVersion.of(getToolchainVersion()))
+      languageVersion.set(JavaLanguageVersion.of(21))
     }
   }
 
-}
-
-// Windows workaround to fix invalid toolchain detection
-def getToolchainVersion() {
-  if (DefaultNativePlatform.getCurrentOperatingSystem().isWindows()) {
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21))
-      return 21
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17))
-      return 17
-  }
-  return 11
 }
 
 // the Java implementation (a pure Java port of Asciidoctor) requires Java 17
@@ -265,6 +254,12 @@ configure(subprojects.findAll { isJavaImplementation(it) }) {
   apply plugin: 'java-library'
 
   version = javaImplementationVersion
+
+  java {
+    toolchain {
+      languageVersion.set(JavaLanguageVersion.of(21))
+    }
+  }
 
   repositories {
     mavenCentral()
@@ -287,6 +282,12 @@ configure(subprojects.findAll { isJavaImplementation(it) }) {
     testLogging {
       events 'failed'
       exceptionFormat = 'full'
+    }
+    // the tests can be run on the minimum supported version of Java with -PtestJavaVersion=17
+    if (project.hasProperty('testJavaVersion')) {
+      javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(project.testJavaVersion)
+      }
     }
   }
 }

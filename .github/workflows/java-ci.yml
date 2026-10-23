@@ -15,8 +15,26 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# the tests of the Java implementation are run by the main build (continuous-integration.yaml), on Java 17 or newer
+# the tests of the Java implementation are run on Java 21 by the main build (continuous-integration.yaml)
 jobs:
+  test-java-17:
+    name: test (Java 17)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # the build requires Java 21, the tests run on Java 17 (the minimum version supported by the Java implementation)
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: |
+            17
+            21
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Test
+        run: >-
+          ./gradlew -PtestJavaVersion=17 -Porg.gradle.java.installations.fromEnv=JAVA_HOME_17_X64
+          :asciidoctorj-java:test :asciidoctorj-java-cli:test
+          :asciidoctorj-java-documentation:test :asciidoctorj-java-springboot-integration-test:test
   native:
     name: native (${{ matrix.platform }})
     strategy:
@@ -39,7 +57,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-      - uses: gradle/actions/setup-gradle@v5
+      - uses: gradle/actions/setup-gradle@v6
       - name: Build CLI jar
         run: ./gradlew :asciidoctorj-java-cli:assemble
       - uses: graalvm/setup-graalvm@v1
