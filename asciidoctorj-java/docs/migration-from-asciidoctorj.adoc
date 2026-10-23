@@ -22,7 +22,7 @@ This guide lists what changes when an application switches from the JRuby implem
 
 |Command line interface
 |`org.asciidoctor:asciidoctorj-cli` (+ JCommander), distribution (zip)
-|`org.asciidoctor:asciidoctorj-java-cli` (no dependency), native executables (Linux, macOS, Windows)
+|`org.asciidoctor:asciidoctorj-java-cli` (no dependency)
 |===
 
 The options of the command line interface are the options of the `asciidoctor` command, except `-r`, which loads a Java class (an `ExtensionRegistry`, a `ConverterRegistry`, a `SyntaxHighlighterRegistry`, a converter or an extension) or a jar whose services are loaded (instead of a Ruby library), and `-I`, which adds a directory or a jar, whose services are loaded, to the class path.

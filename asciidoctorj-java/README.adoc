@@ -24,10 +24,7 @@ endif::[]
 :uri-asciidoctor-repo: https://github.com/asciidoctor/asciidoctor
 :uri-repo: https://github.com/asciidoctor/asciidoctorj
 :uri-issues: {uri-repo}/issues
-:uri-releases: {uri-repo}/releases
 :uri-zulip: https://asciidoctor.zulipchat.com/
-:uri-graalvm: https://www.graalvm.org/
-:uri-chocolatey: https://chocolatey.org
 :artifact-version: 4.0.0
 
 {uri-repo}[AsciidoctorJ] is the official library for running {uri-asciidoctor}[Asciidoctor] on the JVM.
@@ -71,43 +68,29 @@ AsciidoctorJ is published to Maven Central:
 |JUnit 5 extensions to test applications and extensions (e.g., inject an `Asciidoctor` instance)
 |===
 
-The command line interface is also available as native executables for Linux (amd64 and arm64), macOS (arm64) and Windows (amd64), which don't require a Java runtime, on the {uri-releases}[GitHub releases].
-
 == Using the command line interface
 
-Download the native executable for your platform from the {uri-releases}[GitHub releases] and extract it.
+The command line interface runs with Java, with the jars of the implementation and of the API (`asciidoctorj-java-{artifact-version}.jar` and `asciidoctorj-api-<version>.jar`, the API being versioned with the JRuby implementation) in the same directory as `asciidoctorj-java-cli-{artifact-version}.jar`.
 Verify that it runs (it displays the various run options available):
 
-[source,shell]
+[source,shell,subs=attributes+]
 ----
-asciidoctorj --help
+java -jar asciidoctorj-java-cli-{artifact-version}.jar --help
 ----
 
 Next, convert an AsciiDoc file, such as this README, to HTML:
 
-[source,shell]
+[source,shell,subs=attributes+]
 ----
-asciidoctorj README.adoc
+java -jar asciidoctorj-java-cli-{artifact-version}.jar README.adoc
 ----
 
-The options are the options of the `asciidoctor` command (`asciidoctorj --help`), except:
+The options are the options of the `asciidoctor` command (`--help`), except:
 
 * `-r` loads a Java class instead of a Ruby library: a registry (`ExtensionRegistry`, `ConverterRegistry` or `SyntaxHighlighterRegistry`, in the `org.asciidoctor.jruby.*.spi` packages), which is registered, a converter (annotated with `@ConverterFor`) or an extension (a processor, such as a `BlockProcessor` annotated with `@Name`); `-r` also accepts a jar, whose services (`META-INF/services`) are loaded;
 * `-I` adds a directory or a jar to the class path, whose services (`META-INF/services`) are loaded and whose classes can be required with `-r`.
 
-For instance, `asciidoctorj -r my-extensions.jar README.adoc` converts the document with the extensions that the jar registers as services.
-
-The native executables can't load classes at runtime: `-I` and `-r FILE.jar` fail, and `-r` can only load the classes that the executable contains.
-The command line interface can also be run with Java: `java -jar asciidoctorj-java-cli-{artifact-version}.jar`, with the jars of the implementation and of the API (`asciidoctorj-java-{artifact-version}.jar` and `asciidoctorj-api-<version>.jar`, the API being versioned with the JRuby implementation) in the same directory.
-
-=== Windows installation
-
-A {uri-chocolatey}[Chocolatey] package installs the native executable for Windows:
-
-----
-C:\> choco install asciidoctorj-java
-C:\> asciidoctorj README.adoc
-----
+For instance, `java -jar asciidoctorj-java-cli-{artifact-version}.jar -r my-extensions.jar README.adoc` converts the document with the extensions that the jar registers as services.
 
 == Installation
 
@@ -206,9 +189,8 @@ Run the tests on Java 17 (the minimum supported version, which must be installed
 `asciidoctorj-java-cli`:: the command line interface (`org.asciidoctor:asciidoctorj-java-cli`), and its tests (which use the test helpers and fixtures of `asciidoctorj-java`)
 `asciidoctorj-test-support`:: JUnit 5 extensions to test AsciidoctorJ and its extensions (e.g., inject an `Asciidoctor` instance or a classpath resource)
 `asciidoctorj-java-documentation`:: the tests that back the code snippets of the documentation
-`chocolatey`:: the Chocolatey package, which installs the native executable for Windows
 `docs`:: the documentation (Antora), the migration guide, the notes about the API and the status of the port
-`tools`:: the scripts used to translate the tests of Asciidoctor (`rb2java.rb`, `fix_tests.py`, `regen.sh`), to compare the output with Asciidoctor (`compare`) and to build and test the native executable (`build-native.sh`, `native-smoke-test`)
+`tools`:: the scripts used to translate the tests of Asciidoctor (`rb2java.rb`, `fix_tests.py`, `regen.sh`) and to compare the output with Asciidoctor (`compare`)
 
 === Following Asciidoctor
 
@@ -217,23 +199,9 @@ It follows the main branch of Asciidoctor (commit `52871a02`).
 The test translation tools expect Asciidoctor to be checked out next to this project (`../asciidoctor`).
 The status of the port and the improvement backlog are tracked in xref:docs/port-status.adoc[].
 
-=== Native executable
-
-The command line interface can be compiled to a native executable with {uri-graalvm}[GraalVM] (JDK 25):
-
-[source,shell]
-----
-./gradlew :asciidoctorj-java-cli:assemble
-tools/build-native.sh
-./asciidoctorj-java-cli/build/native/asciidoctorj -o - README.adoc
-----
-
-The jars contain the native image configuration (`META-INF/native-image`), so the library can also be embedded in another native application.
-`tools/native-smoke-test/run.sh` verifies the native executable (and compares its output with the output of the JVM when the jar is specified).
-
 === Continuous integration
 
-The project is built and tested on Linux, macOS and Windows with Java 21, the tests of the Java implementation are also run on Linux with Java 17, and the native executables are built and tested on each platform, by GitHub Actions (`.github/workflows/continuous-integration.yaml`).
+The project is built and tested on Linux, macOS and Windows with Java 21, and the tests of the Java implementation are also run on Linux with Java 17, by GitHub Actions (`.github/workflows/continuous-integration.yaml`).
 
 == Resources
 
