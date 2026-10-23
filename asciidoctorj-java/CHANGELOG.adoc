@@ -23,11 +23,10 @@ Differences with the JRuby implementation::
 * Ruby extensions and Ruby libraries (gems) are not supported (`Asciidoctor#rubyExtensionRegistry()`, `Asciidoctor#requireLibrary`), as well as the syntax highlighters that require a gem (Rouge, CodeRay, Pygments) and the converter templates (Tilt)
 * The JRuby specific classes (`AsciidoctorJRuby`, `JRubyAsciidoctor`) are not available
 * The `-r` option of the command line interface loads a Java class (an `ExtensionRegistry`, `ConverterRegistry` or `SyntaxHighlighterRegistry`, a converter or an extension) or a jar whose services are loaded (instead of a Ruby library); the services of the directories and jars added with `-I` are loaded
-* No distribution (zip, tar): the command line interface is available as native executables (Linux, macOS, Windows) published on the GitHub release
+* No distribution (zip, tar)
 * No Arquillian extension (`asciidoctorj-arquillian-extension`)
 
 Improvements::
 
 * Pure Java implementation of Asciidoctor (port of Asciidoctor 2.0.x, main branch), with no runtime dependency
-* The command line interface has no dependency (JCommander is not used anymore) and is available as native executables (GraalVM)
-* The Chocolatey package installs the native executable for Windows (no Java runtime required)
+* The command line interface has no dependency (JCommander is not used anymore)
