@@ -52,10 +52,10 @@ You can find the documentation for integrating Asciidoctor in your JVM based lan
 
 [NOTE]
 ====
-This repository also contains a native implementation of AsciidoctorJ: a pure Java port of Asciidoctor, which doesn't require JRuby.
-It implements the same API (`asciidoctorj-api`) and is published as `org.asciidoctor:asciidoctorj-native` (and `org.asciidoctor:asciidoctorj-native-cli` for the command line interface).
+This repository also contains a Java implementation of AsciidoctorJ: a pure Java port of Asciidoctor, which doesn't require JRuby.
+It implements the same API (`asciidoctorj-api`) and is published as `org.asciidoctor:asciidoctorj-java` (and `org.asciidoctor:asciidoctorj-java-cli` for the command line interface).
 An application depends on one implementation or the other, not both.
-See link:asciidoctorj-native/README.adoc[].
+See link:asciidoctorj-java/README.adoc[].
 ====
 
 ifdef::badges[]
