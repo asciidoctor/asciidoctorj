@@ -21,8 +21,6 @@ jobs:
       max-parallel: 6
       matrix:
         java:
-          - '11'
-          - '17'
           - '21'
         distribution:
           - 'temurin'
@@ -31,10 +29,10 @@ jobs:
           - macos-latest
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v6
         with:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java }}
@@ -50,8 +48,6 @@ jobs:
       max-parallel: 3
       matrix:
         java:
-          - '11'
-          - '17'
           - '21'
         distribution:
           - 'temurin'
@@ -59,10 +55,10 @@ jobs:
           - windows-latest
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v6
         with:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java }}
@@ -75,7 +71,7 @@ jobs:
         run: |
           gradlew.bat -i -S check
       - name: Upload asciidoctorj-core reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         env:
           os_name: ${{ matrix.os }}
           java_version: ${{ matrix.java }}
@@ -84,7 +80,7 @@ jobs:
           name: asciidoctorj-core-reports-${{ env.os_name }}-${{ env.java_version }}
           path: asciidoctorj-core/build/reports/*
       - name: Upload asciidoctorj-documentation reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         env:
           os_name: ${{ matrix.os }}
@@ -102,8 +98,6 @@ jobs:
       max-parallel: 2
       matrix:
         java:
-          - '11'
-          - '17'
           - '21'
         os:
           - ubuntu-latest
@@ -111,11 +105,11 @@ jobs:
           - '3.9.4'
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
       - name: Setup Java
-        uses: s4u/setup-maven-action@v1.7.0
+        uses: s4u/setup-maven-action@v1.22.0
         with:
           java-distribution: temurin
           java-version: ${{ matrix.java }}
@@ -125,7 +119,7 @@ jobs:
           unset GEM_PATH GEM_HOME JRUBY_OPTS
           ./ci/test-asciidoctor-upstream.sh
       - name: Upload asciidoctorj-core reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         env:
           os_name: ${{ matrix.os }}
