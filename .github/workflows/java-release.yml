@@ -66,7 +66,7 @@ jobs:
         run: >-
           ./gradlew -PjavaImplementationVersion=${{ steps.versions.outputs.version }}
           :asciidoctorj-java:build :asciidoctorj-java-cli:build
-          :asciidoctorj-java-documentation:build :asciidoctorj-java-springboot-integration-test:build
+          :asciidoctorj-java-documentation:build
       - name: Upload jars
         uses: actions/upload-artifact@v7
         with:

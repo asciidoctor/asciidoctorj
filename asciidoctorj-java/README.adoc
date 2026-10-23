@@ -206,7 +206,6 @@ Run the tests on Java 17 (the minimum supported version, which must be installed
 `asciidoctorj-java-cli`:: the command line interface (`org.asciidoctor:asciidoctorj-java-cli`), and its tests (which use the test helpers and fixtures of `asciidoctorj-java`)
 `asciidoctorj-test-support`:: JUnit 5 extensions to test AsciidoctorJ and its extensions (e.g., inject an `Asciidoctor` instance or a classpath resource)
 `asciidoctorj-java-documentation`:: the tests that back the code snippets of the documentation
-`asciidoctorj-java-springboot-integration-test`:: checks that AsciidoctorJ works in a Spring Boot executable jar (nested jars)
 `chocolatey`:: the Chocolatey package, which installs the native executable for Windows
 `docs`:: the documentation (Antora), the migration guide, the notes about the API and the status of the port
 `tools`:: the scripts used to translate the tests of Asciidoctor (`rb2java.rb`, `fix_tests.py`, `regen.sh`), to compare the output with Asciidoctor (`compare`) and to build and test the native executable (`build-native.sh`, `native-smoke-test`)
