@@ -111,12 +111,12 @@ allprojects {
   defaultTasks 'check'
 }
 
-// the modules of the native implementation are configured at the end of this file
-boolean isNative(def project) {
-  project.name.startsWith('asciidoctorj-native')
+// the modules of the Java implementation are configured at the end of this file
+boolean isJavaImplementation(def project) {
+  project.name.startsWith('asciidoctorj-java')
 }
 
-configure(subprojects.findAll { !isNative(it) }) {
+configure(subprojects.findAll { !isJavaImplementation(it) }) {
   // NOTE applying Java plugin changes the status; take steps to preserve value
   def _status = status
   apply plugin: 'java-library'
@@ -224,7 +224,7 @@ boolean usesSpock(def project) {
 }
 
 // apply JRuby and sources/javadocs packaging stuff for all subprojects except the distribution
-configure(subprojects.findAll { !it.isDistribution() && !isNative(it) }) {
+configure(subprojects.findAll { !it.isDistribution() && !isJavaImplementation(it) }) {
 
   apply from: rootProject.file('gradle/eclipse.gradle')
   apply plugin: 'idea'
@@ -235,7 +235,7 @@ configure(subprojects.findAll { !it.isDistribution() && !isNative(it) }) {
   }
 }
 
-configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.endsWith('-documentation') && !isNative(it) }) {
+configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.endsWith('-documentation') && !isJavaImplementation(it) }) {
 
   java {
     withJavadocJar()
@@ -258,13 +258,13 @@ def getToolchainVersion() {
   return 11
 }
 
-// the native implementation (a pure Java port of Asciidoctor) requires Java 17
+// the Java implementation (a pure Java port of Asciidoctor) requires Java 17
 def junitBom = libs.junit.bom
 
-configure(subprojects.findAll { isNative(it) }) {
+configure(subprojects.findAll { isJavaImplementation(it) }) {
   apply plugin: 'java-library'
 
-  version = nativeVersion
+  version = javaImplementationVersion
 
   repositories {
     mavenCentral()
@@ -291,8 +291,8 @@ configure(subprojects.findAll { isNative(it) }) {
   }
 }
 
-// the native modules published to a Maven repository (e.g., ./gradlew publishToMavenLocal)
-configure(subprojects.findAll { it.name in ['asciidoctorj-native', 'asciidoctorj-native-cli'] }) {
+// the modules of the Java implementation published to a Maven repository (e.g., ./gradlew publishToMavenLocal)
+configure(subprojects.findAll { it.name in ['asciidoctorj-java', 'asciidoctorj-java-cli'] }) {
   apply plugin: 'maven-publish'
 
   java {
