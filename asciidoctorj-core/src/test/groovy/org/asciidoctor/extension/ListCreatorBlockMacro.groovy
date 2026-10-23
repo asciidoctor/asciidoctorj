@@ -7,9 +7,11 @@ import org.asciidoctor.ast.StructuralNode
 class ListCreatorBlockMacro extends BlockMacroProcessor {
 
     String context
+    boolean attributesInOptions
 
-    ListCreatorBlockMacro(String context) {
+    ListCreatorBlockMacro(String context, boolean attributesInOptions = false) {
         this.context = context
+        this.attributesInOptions = attributesInOptions
     }
 
     @Override
@@ -19,7 +21,13 @@ class ListCreatorBlockMacro extends BlockMacroProcessor {
         attrs['start'] = '42'
         def opts = new HashMap<Object, Object>()
 
-        org.asciidoctor.ast.List list = createList(parent, context, attrs, opts)
+        org.asciidoctor.ast.List list
+        if (attributesInOptions) {
+            opts['attributes'] = attrs
+            list = createList(parent, context, opts)
+        } else {
+            list = createList(parent, context, attrs, opts)
+        }
 
         list.getBlocks().add(createListItem(list, 'First item'))
         list.getBlocks().add(createListItem(list, 'Second item'))

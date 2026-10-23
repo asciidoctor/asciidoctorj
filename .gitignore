@@ -1,44 +1,14 @@
-.gradle/
+bin/
 build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-.kotlin
-
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
+target/
+.classpath
+.project
+.settings/
+/.gradle/
 *.iml
 *.ipr
+*.iws
+.idea/
 
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-### VS Code ###
-.vscode/
-
-### Mac OS ###
-.DS_Store
-### Project ###
-.idea/workspace.xml
-
-### Restored from the JRuby build ###
-bin/
-target/
+# Strange directories that IntelliJ seems to create now 
 out/
