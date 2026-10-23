@@ -127,3 +127,62 @@ jobs:
         with:
           name: asciidoctorj-core-reports-upstream-${{ env.os_name }}-${{ env.java_version }}
           path: asciidoctorj-core/build/reports/*
+  test-java-17:
+    name: Test Java implementation on Java 17
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # the build requires Java 21, the tests run on Java 17 (the minimum version supported by the Java implementation)
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: |
+            17
+            21
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Test
+        run: >-
+          ./gradlew -PtestJavaVersion=17 -Porg.gradle.java.installations.fromEnv=JAVA_HOME_17_X64
+          :asciidoctorj-java:test :asciidoctorj-java-cli:test
+          :asciidoctorj-java-documentation:test
+  build-native:
+    name: Build native executable (${{ matrix.platform }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux-amd64
+          - os: ubuntu-24.04-arm
+            platform: linux-arm64
+          - os: macos-latest
+            platform: macos-arm64
+          - os: windows-latest
+            platform: windows-amd64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      # Gradle 8.12 doesn't run on Java 25: build the CLI jar with Java 21, then the native image with GraalVM 25
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Build CLI jar
+        run: ./gradlew :asciidoctorj-java-cli:assemble
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '25'
+          distribution: graalvm-community
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build native image
+        shell: bash
+        run: tools/build-native.sh
+      - name: Smoke test
+        shell: bash
+        run: tools/native-smoke-test/run.sh asciidoctorj-java-cli/build/native/asciidoctorj asciidoctorj-java-cli/build/libs/asciidoctorj-java-cli-*[0-9T].jar
+      - name: Upload native executable
+        uses: actions/upload-artifact@v7
+        with:
+          name: asciidoctorj-java-${{ matrix.platform }}
+          path: asciidoctorj-java-cli/build/native/asciidoctorj${{ runner.os == 'Windows' && '.exe' || '' }}

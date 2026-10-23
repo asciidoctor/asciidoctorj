@@ -40,7 +40,7 @@ Both implement the same API (`asciidoctorj-api`); see the xref:docs/migration-fr
 You can find the documentation for integrating Asciidoctor in your JVM based language of choice at the {uri-docs}/asciidoctorj/latest/[Asciidoctor Docs site].
 
 ifdef::badges[]
-image:https://github.com/asciidoctor/asciidoctorj/actions/workflows/java-ci.yml/badge.svg?event=push[Build Status (GitHub Actions)]
+image:https://github.com/asciidoctor/asciidoctorj/workflows/Build%20Main/badge.svg?event=push[Build Status (GitHub Actions)]
 image:https://img.shields.io/badge/zulip-join_chat-brightgreen.svg[project chat,link=https://asciidoctor.zulipchat.com/]
 endif::[]
 
@@ -233,12 +233,7 @@ The jars contain the native image configuration (`META-INF/native-image`), so th
 
 === Continuous integration
 
-The project is built and tested on Linux, macOS and Windows with Java 21 (`.github/workflows/continuous-integration.yaml`).
-The tests of the Java implementation are also run on Linux with Java 17, and the native executables are built and tested on each platform (`.github/workflows/java-ci.yml`).
-
-=== Release
-
-See xref:../CONTRIBUTING.adoc[].
+The project is built and tested on Linux, macOS and Windows with Java 21, the tests of the Java implementation are also run on Linux with Java 17, and the native executables are built and tested on each platform, by GitHub Actions (`.github/workflows/continuous-integration.yaml`).
 
 == Resources
 
