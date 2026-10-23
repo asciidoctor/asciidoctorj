@@ -1,0 +1,2 @@
+# the resources (e.g., the default stylesheet) and the test fixtures must keep LF line endings, like in Asciidoctor
+* text=auto eol=lf
