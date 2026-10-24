@@ -1,7 +1,6 @@
 package org.asciidoctor;
 
 import org.asciidoctor.jruby.AsciiDocDirectoryWalker;
-import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
@@ -332,7 +331,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
     @Test
     public void an_exception_should_be_thrown_if_backend_cannot_be_resolved() {
-        assertThrows(AsciidoctorCoreException.class, () -> {
+        assertThrows(AsciidoctorException.class, () -> {
             final Options options = Options.builder()
                     .inPlace(true)
                     .backend("mybackend")

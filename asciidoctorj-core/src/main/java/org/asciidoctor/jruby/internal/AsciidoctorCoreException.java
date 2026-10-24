@@ -1,6 +1,8 @@
 package org.asciidoctor.jruby.internal;
 
-public class AsciidoctorCoreException extends RuntimeException {
+import org.asciidoctor.AsciidoctorException;
+
+public class AsciidoctorCoreException extends AsciidoctorException {
 
     public AsciidoctorCoreException(Throwable e) {
         super(e);
