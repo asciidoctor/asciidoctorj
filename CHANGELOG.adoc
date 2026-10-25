@@ -23,6 +23,10 @@ Bug Fixes::
 
 * `BaseProcessor#createList(StructuralNode, String, Map)` ignored the options
 
+Build / Infrastructure::
+
+* Add the Java implementation, a pure Java port of Asciidoctor published as `org.asciidoctor:asciidoctorj-java` and `org.asciidoctor:asciidoctorj-java-cli` (see asciidoctorj-java/README.adoc)
+
 == 3.0.1 (2025-11-06)
 
 Documentation::

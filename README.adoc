@@ -50,6 +50,14 @@ Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of
 
 You can find the documentation for integrating Asciidoctor in your JVM based language of choice at the https://docs.asciidoctor.org/asciidoctorj/latest/[Asciidoctor Docs site].
 
+[NOTE]
+====
+This repository also contains a Java implementation of AsciidoctorJ: a pure Java port of Asciidoctor, which doesn't require JRuby.
+It implements the same API (`asciidoctorj-api`) and is published as `org.asciidoctor:asciidoctorj-java` (and `org.asciidoctor:asciidoctorj-java-cli` for the command line interface).
+An application depends on one implementation or the other, not both.
+See link:asciidoctorj-java/README.adoc[].
+====
+
 ifdef::badges[]
 image:https://github.com/asciidoctor/asciidoctorj/workflows/Build%20Main/badge.svg?event=push[Build Status (Github Actions)]
 image:https://img.shields.io/badge/zulip-join_chat-brightgreen.svg[project chat,link=https://asciidoctor.zulipchat.com/]

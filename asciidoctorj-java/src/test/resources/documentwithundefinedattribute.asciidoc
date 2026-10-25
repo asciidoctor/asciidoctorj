@@ -1,0 +1,2 @@
+Line 1: This line should appear in the output.
+Line 2: A {bogus-attribute}! This time, this line should appear in the output.

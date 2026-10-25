@@ -1,0 +1,7 @@
+[libraries]
+assertj = "org.assertj:assertj-core:3.27.7"
+commons-io = "commons-io:commons-io:2.22.0"
+jsoup = "org.jsoup:jsoup:1.23.2"
+junit-bom = "org.junit:junit-bom:6.1.3"
+osgi-annotation = "org.osgi:osgi.annotation:7.0.0"
+xmlunit-assertj = "org.xmlunit:xmlunit-assertj3:2.14.0"
