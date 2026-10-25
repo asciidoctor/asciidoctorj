@@ -5,7 +5,34 @@ You can find recent build results, including the build status of pull requests, 
 
 == Release and publish the artifacts
 
-To build and publish a release the following properties have to be set, for example in the file ~/.gradle/gradle.properties:
+Releases are made by the https://github.com/asciidoctor/asciidoctorj/actions/workflows/release.yaml[Release] workflow, which is started by hand from the `main` branch with the following inputs:
+
+`releaseVersion`:: the version to release, e.g. `3.0.2`.
+`nextVersion`:: the next development version, e.g. `3.0.3-SNAPSHOT`.
+Defaults to the next patch version (or, for a pre-release such as `4.0.0-alpha.1`, to `4.0.0-SNAPSHOT`).
+
+Before starting it, make sure that the `== Unreleased` section of `CHANGELOG.adoc` describes all the changes of the release.
+
+The workflow:
+
+. sets the release version in `gradle.properties`, replaces `== Unreleased` with `== <releaseVersion> (<date>)` in `CHANGELOG.adoc`, commits `Release v<releaseVersion>` and tags it `v<releaseVersion>`
+. builds the release with `./gradlew clean build`
+. sets the next development version in `gradle.properties`, adds a new `== Unreleased` section to `CHANGELOG.adoc` and commits `Prepare next development iteration <nextVersion>`
+. pushes the commits and the tag to `main`
+. publishes the artifacts to Maven Central with `./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository`
+. creates the GitHub release, using the section of `CHANGELOG.adoc` converted to Markdown by `ci/release-notes.rb` as release notes
+. waits until the distribution is available on Maven Central and publishes it to SDKMAN with `./gradlew asciidoctorj-distribution:sdkMajorRelease` (`sdkMinorRelease` for a pre-release, so that it is not made the default version)
+
+The workflow runs in the `release` environment, which provides the following secrets:
+
+* `GPG_KEY_ID`, `GPG_PRIVATE_KEY` and `GPG_PASSPHRASE` to sign the artifacts
+* `OSS_SONATYPE_USERNAME` and `OSS_SONATYPE_PASSWORD` to publish the artifacts to Maven Central
+* `SDKMAN_CONSUMER_KEY` and `SDKMAN_CONSUMER_TOKEN` to publish the release to SDKMAN
+
+=== Release by hand
+
+If needed, a release can still be made from a local machine.
+The following properties have to be set, for example in the file ~/.gradle/gradle.properties:
 
 .~/.gradle/gradle.properties
 [source,properties]
@@ -22,49 +49,35 @@ sonatypePassword=...
 ----
 <1> Settings for signing the artifacts
 <2> Credentials for publishing a new release to sdkman
-<3> Credentials for publishing artifacts to oss.sonatype.org
+<3> Credentials for publishing artifacts to Maven Central
 
-The following steps are necessary to build a new release:
+Then run the same steps as the workflow:
 
-. Update the version in gradle.properties to a release version, i.e. from `2.4.4-SNAPSHOT` to `2.4.4`.
+. Update the version in gradle.properties to a release version, i.e. from `3.0.2-SNAPSHOT` to `3.0.2`, replace `== Unreleased` with `== 3.0.2 (<date>)` in `CHANGELOG.adoc`, then commit and tag:
++
+----
+# git commit -am "Release v3.0.2"
+# git tag v3.0.2
+----
 . Build the release with
 +
 ----
 # ./gradlew clean build
 ----
-. After testing publish all artifacts to a local repository under `build/repos` with
+. Publish the artifacts to Maven Central with
 +
 ----
-# ./gradlew publishAllPublicationsToLocalRepository -i
+# ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
 ----
-. When everything is fine publish the artifacts to a staging repository on https://oss.sonatype.org and close the repository:
-+
-----
-# ./gradlew publishAllPublicationsToSonatypeRepository -i
-# ./gradlew closeRepository -i
-----
-. Visit https://oss.sonatype.org/#stagingRepositories[] and check the staging repository.
-The artifacts are not published yet.
-The repository URL shown there can be used for testing this version before publishing to Maven central.
-. When everything is fine publish the artifacts in the staging repository by clicking the "Release" button.
-Alternatively you can release it with
-+
-----
-# ./gradlew releaseRepository
-----
-. Publish the new version to sdkman with
+. Create the GitHub release, using the output of `ruby ci/release-notes.rb 3.0.2` as release notes.
+. Once the distribution is available on Maven Central, publish the new version to sdkman with
 +
 ----
 # ./gradlew asciidoctorj-distribution:sdkMajorRelease
 ----
-. Commit everything and assign a tag:
+. Upgrade the version to the next version by changing the version property in gradle.properties to `version=3.0.3-SNAPSHOT`, add a new `== Unreleased` section to `CHANGELOG.adoc`, commit and push the commits and the tag:
 +
 ----
-# git commit -m "Release v2.x.y"
-# git tag v2.x.y
-----
-. Upgrade the version to the next version by changing the version property in gradle.properties to `version=2.x.y+1-SNAPSHOT` and commit:
-+
-----
-git commit -m "Prepare next release"
+# git commit -am "Prepare next development iteration 3.0.3-SNAPSHOT"
+# git push origin main v3.0.2
 ----
