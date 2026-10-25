@@ -1,2 +1,3 @@
 *.adoc		eol=lf
 *.asciidoc  eol=lf
+CHANGELOG.adoc merge=union
