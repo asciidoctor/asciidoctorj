@@ -87,7 +87,7 @@ java -jar asciidoctorj-java-cli-{artifact-version}.jar README.adoc
 
 The options are the options of the `asciidoctor` command (`--help`), except:
 
-* `-r` loads a Java class instead of a Ruby library: a registry (`ExtensionRegistry`, `ConverterRegistry` or `SyntaxHighlighterRegistry`, in the `org.asciidoctor.jruby.*.spi` packages), which is registered, a converter (annotated with `@ConverterFor`) or an extension (a processor, such as a `BlockProcessor` annotated with `@Name`); `-r` also accepts a jar, whose services (`META-INF/services`) are loaded;
+* `-r` loads a Java class instead of a Ruby library: a registry (`ExtensionRegistry`, `ConverterRegistry` or `SyntaxHighlighterRegistry`, in the `org.asciidoctor.*.spi` packages of the API, or the deprecated ones of the `org.asciidoctor.jruby.*.spi` packages), which is registered, a converter (annotated with `@ConverterFor`) or an extension (a processor, such as a `BlockProcessor` annotated with `@Name`); `-r` also accepts a jar, whose services (`META-INF/services`) are loaded;
 * `-I` adds a directory or a jar to the class path, whose services (`META-INF/services`) are loaded and whose classes can be required with `-r`.
 
 For instance, `java -jar asciidoctorj-java-cli-{artifact-version}.jar -r my-extensions.jar README.adoc` converts the document with the extensions that the jar registers as services.

@@ -1,10 +1,12 @@
 package org.asciidoctor.jruby.internal;
 
+import org.asciidoctor.AsciidoctorException;
+
 /**
  * The exception thrown when a conversion fails (kept in its original package for compatibility with AsciidoctorJ 3,
- * since the API doesn't define an exception).
+ * applications should catch {@link AsciidoctorException}).
  */
-public class AsciidoctorCoreException extends RuntimeException {
+public class AsciidoctorCoreException extends AsciidoctorException {
 
     public AsciidoctorCoreException(Throwable e) {
         super(e);

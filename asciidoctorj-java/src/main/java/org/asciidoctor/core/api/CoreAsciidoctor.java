@@ -7,11 +7,13 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -19,6 +21,7 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.converter.JavaConverterRegistry;
+import org.asciidoctor.converter.spi.ConverterRegistry;
 import org.asciidoctor.core.api.ast.NodeConverter;
 import org.asciidoctor.core.api.converter.ConverterProxy;
 import org.asciidoctor.core.api.converter.JavaConverterRegistryImpl;
@@ -38,8 +41,7 @@ import org.asciidoctor.core.syntaxhighlighter.SyntaxHighlighterFactory;
 import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
-import org.asciidoctor.jruby.converter.spi.ConverterRegistry;
-import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
+import org.asciidoctor.extension.spi.ExtensionRegistry;
 import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
@@ -69,20 +71,43 @@ public class CoreAsciidoctor implements Asciidoctor, LogHandler {
     /**
      * Registers the extensions, converters, syntax highlighters and log handlers that are registered as services.
      */
+    @SuppressWarnings("deprecation")
     private void processRegistrations() {
-        for (ExtensionRegistry registry : load(ExtensionRegistry.class)) {
+        for (ExtensionRegistry registry : load(ExtensionRegistry.class,
+                org.asciidoctor.jruby.extension.spi.ExtensionRegistry.class)) {
             registry.register(this);
         }
-        for (ConverterRegistry registry : load(ConverterRegistry.class)) {
+        for (ConverterRegistry registry : load(ConverterRegistry.class,
+                org.asciidoctor.jruby.converter.spi.ConverterRegistry.class)) {
             registry.register(this);
         }
-        for (org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry registry
-                : load(org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry.class)) {
+        for (org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry registry
+                : load(org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry.class,
+                        org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry.class)) {
             registry.register(this);
         }
         for (LogHandler logHandler : load(LogHandler.class)) {
             registerLogHandler(logHandler);
         }
+    }
+
+    /**
+     * @return the implementations of the service of the API, followed by the implementations of its deprecated
+     * service (of the {@code org.asciidoctor.jruby} packages) that aren't also declared with the service of the API
+     */
+    private static <S> List<S> load(Class<S> service, Class<? extends S> deprecatedService) {
+        List<S> services = new ArrayList<>();
+        Set<Class<?>> classes = new HashSet<>();
+        for (S s : load(service)) {
+            classes.add(s.getClass());
+            services.add(s);
+        }
+        for (S s : load(deprecatedService)) {
+            if (classes.add(s.getClass())) {
+                services.add(s);
+            }
+        }
+        return services;
     }
 
     private static <S> Iterable<S> load(Class<S> service) {

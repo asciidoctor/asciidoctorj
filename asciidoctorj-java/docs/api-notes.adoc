@@ -23,12 +23,15 @@ They are always null (they could report the Java class and method that logged th
 
 Applications depend on classes of the JRuby implementation (`asciidoctorj-core`), which are not part of the API:
 
-* the service provider interfaces `org.asciidoctor.jruby.extension.spi.ExtensionRegistry`, `org.asciidoctor.jruby.converter.spi.ConverterRegistry` and `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry` (used to register extensions, converters and syntax highlighters automatically), see {url-issues}/1333[#1333] and {url-issues}/1332[#1332];
-* the directory walkers `org.asciidoctor.jruby.AsciiDocDirectoryWalker` and `org.asciidoctor.jruby.GlobDirectoryWalker` (used with `Asciidoctor#convertDirectory`), see {url-issues}/1334[#1334];
-* the exception `org.asciidoctor.jruby.internal.AsciidoctorCoreException`, thrown when a conversion fails (the API doesn't define an exception, so the applications catch this internal class), see {url-issues}/1330[#1330] and {url-issues}/1331[#1331].
+* [.line-through]#the service provider interfaces `org.asciidoctor.jruby.extension.spi.ExtensionRegistry`, `org.asciidoctor.jruby.converter.spi.ConverterRegistry` and `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry` (used to register extensions, converters and syntax highlighters automatically).#
+Added to the API in 3.x as `org.asciidoctor.extension.spi.ExtensionRegistry`, `org.asciidoctor.converter.spi.ConverterRegistry` and `org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry`; the interfaces of the `org.asciidoctor.jruby` packages extend them and are deprecated ({url-issues}/1333[#1333], {url-issues}/1332[#1332]).
+Like the JRuby implementation, `CoreAsciidoctor` loads the services of the API, and still loads the deprecated ones (once if a class is declared with both services);
+* [.line-through]#the exception `org.asciidoctor.jruby.internal.AsciidoctorCoreException`, thrown when a conversion fails (the API doesn't define an exception, so the applications catch this internal class).#
+Added to the API in 3.x as `org.asciidoctor.AsciidoctorException`, the superclass of `AsciidoctorCoreException` ({url-issues}/1330[#1330], {url-issues}/1331[#1331]);
+* the directory walkers `org.asciidoctor.jruby.AsciiDocDirectoryWalker` and `org.asciidoctor.jruby.GlobDirectoryWalker` (used with `Asciidoctor#convertDirectory`), see {url-issues}/1334[#1334] (not started).
 
 The implementation provides them with the same names for compatibility.
-Could they move to the API (e.g., `org.asciidoctor.extension.spi`, `org.asciidoctor.util`) in 4.0?
+The remaining classes could move to the API (e.g., `org.asciidoctor.util`) in 4.0.
 
 == Asciidoctor
 
