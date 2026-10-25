@@ -20,6 +20,7 @@ env:
   ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.OSS_SONATYPE_PASSWORD }}
   RELEASE_VERSION: ${{ inputs.releaseVersion }}
   NEXT_VERSION: ${{ inputs.nextVersion }}
+  CHANGELOG_RELEASE_HEADING: '{version} ({date})'
 
 jobs:
   release:
@@ -36,6 +37,9 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
       - name: Check the versions
         run: |
           if [[ ! "$RELEASE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]] || [[ "$RELEASE_VERSION" == *-SNAPSHOT ]]; then
@@ -59,18 +63,25 @@ jobs:
             echo "::error::The tag v$RELEASE_VERSION already exists"
             exit 1
           fi
-          if ! grep -q '^== Unreleased$' CHANGELOG.adoc; then
-            echo "::error::CHANGELOG.adoc has no '== Unreleased' section"
-            exit 1
-          fi
           echo "Releasing $RELEASE_VERSION, next version $NEXT_VERSION"
       - name: Prepare the release
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          echo "PREVIOUS_TAG=$(git describe --tags --abbrev=0)" >> "$GITHUB_ENV"
           sed -i "s/^version=.*/version=$RELEASE_VERSION/" gradle.properties
-          sed -i "s/^== Unreleased$/== $RELEASE_VERSION ($(date -u +%F))/" CHANGELOG.adoc
+          # roll the "Unreleased" section into "<version> (<date>)" and start a new "Unreleased" section
+          npx --yes @bestikk/changelog@1.1.0 release "$RELEASE_VERSION" --release-heading "$CHANGELOG_RELEASE_HEADING"
+          # the documentation on main describes the latest final release
+          if [[ "$RELEASE_VERSION" != *-* ]]; then
+            gradle_version() { sed -n "s/^ *$1 = '\(.*\)'/\1/p" build.gradle; }
+            sed -i -E \
+              -e "s/^version: .*/version: '${RELEASE_VERSION%.*}'/" \
+              -e "s/^(    (release|artifact)-version:).*/\1 $RELEASE_VERSION/" \
+              -e "s/^(    asciidoctorj-pdf-version:).*/\1 $(gradle_version asciidoctorjPdfVersion)/" \
+              -e "s/^(    asciidoctorj-epub3-version:).*/\1 $(gradle_version asciidoctorjEpub3Version)/" \
+              -e "s/^(    jruby-version:).*/\1 $(gradle_version jrubyVersion)/" \
+              docs/antora.yml
+          fi
           git commit -am "Release v$RELEASE_VERSION"
           git tag "v$RELEASE_VERSION"
       - name: Build
@@ -80,7 +91,6 @@ jobs:
       - name: Prepare the next development iteration
         run: |
           sed -i "s/^version=.*/version=$NEXT_VERSION/" gradle.properties
-          sed -i "0,/^== /s/^== /== Unreleased\n\n&/" CHANGELOG.adoc
           git commit -am "Prepare next development iteration $NEXT_VERSION"
       # push before publishing, so that a release that cannot be tagged on main is never published
       - name: Push the commits and the tag
@@ -94,8 +104,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          ruby ci/release-notes.rb "$RELEASE_VERSION" > "$RUNNER_TEMP/release-notes.md"
-          printf '\n\n**Full Changelog**: %s/%s/compare/%s...v%s\n' "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$PREVIOUS_TAG" "$RELEASE_VERSION" >> "$RUNNER_TEMP/release-notes.md"
+          npx --yes @bestikk/changelog@1.1.0 notes "$RELEASE_VERSION" --release-heading "$CHANGELOG_RELEASE_HEADING" > "$RUNNER_TEMP/release-notes.md"
           prerelease=$([[ "$RELEASE_VERSION" == *-* ]] && echo --prerelease || true)
           gh release create "v$RELEASE_VERSION" --title "v$RELEASE_VERSION" --notes-file "$RUNNER_TEMP/release-notes.md" $prerelease
       - name: Wait for the distribution on Maven Central

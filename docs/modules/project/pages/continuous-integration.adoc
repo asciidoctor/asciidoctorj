@@ -11,16 +11,19 @@ Releases are made by the https://github.com/asciidoctor/asciidoctorj/actions/wor
 `nextVersion`:: the next development version, e.g. `3.0.3-SNAPSHOT`.
 Defaults to the next patch version (or, for a pre-release such as `4.0.0-alpha.1`, to `4.0.0-SNAPSHOT`).
 
-Before starting it, make sure that the `== Unreleased` section of `CHANGELOG.adoc` describes all the changes of the release.
+Before starting it, make sure that the `== Unreleased` section of `CHANGELOG.adoc` describes all the changes of the release, grouped in category sections such as `=== Improvements` or `=== Bug Fixes`.
 
 The workflow:
 
-. sets the release version in `gradle.properties`, replaces `== Unreleased` with `== <releaseVersion> (<date>)` in `CHANGELOG.adoc`, commits `Release v<releaseVersion>` and tags it `v<releaseVersion>`
+. sets the release version in `gradle.properties`
+. rolls the `== Unreleased` section of `CHANGELOG.adoc` into `== <releaseVersion> (<date>)` and starts a new `== Unreleased` section, with https://github.com/bestikk/bestikk-changelog[bestikk-changelog]
+. for a final release, updates the version of the documentation and the versions it mentions (AsciidoctorJ, AsciidoctorJ PDF, AsciidoctorJ EPUB3 and JRuby, taken from `build.gradle`) in `docs/antora.yml`
+. commits `Release v<releaseVersion>` and tags it `v<releaseVersion>`
 . builds the release with `./gradlew clean build`
-. sets the next development version in `gradle.properties`, adds a new `== Unreleased` section to `CHANGELOG.adoc` and commits `Prepare next development iteration <nextVersion>`
+. sets the next development version in `gradle.properties` and commits `Prepare next development iteration <nextVersion>`
 . pushes the commits and the tag to `main`
 . publishes the artifacts to Maven Central with `./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository`
-. creates the GitHub release, using the section of `CHANGELOG.adoc` converted to Markdown by `ci/release-notes.rb` as release notes
+. creates the GitHub release, using the section of `CHANGELOG.adoc` converted to Markdown by bestikk-changelog as release notes
 . waits until the distribution is available on Maven Central and publishes it to SDKMAN with `./gradlew asciidoctorj-distribution:sdkMajorRelease` (`sdkMinorRelease` for a pre-release, so that it is not made the default version)
 
 The workflow runs in the `release` environment, which provides the following secrets:
@@ -53,9 +56,11 @@ sonatypePassword=...
 
 Then run the same steps as the workflow:
 
-. Update the version in gradle.properties to a release version, i.e. from `3.0.2-SNAPSHOT` to `3.0.2`, replace `== Unreleased` with `== 3.0.2 (<date>)` in `CHANGELOG.adoc`, then commit and tag:
+. Update the version in gradle.properties to a release version, i.e. from `3.0.2-SNAPSHOT` to `3.0.2`, and the versions in `docs/antora.yml`.
+Roll the `== Unreleased` section of `CHANGELOG.adoc` into `== 3.0.2 (<date>)`, then commit and tag:
 +
 ----
+# npx @bestikk/changelog release 3.0.2 --release-heading "{version} ({date})"
 # git commit -am "Release v3.0.2"
 # git tag v3.0.2
 ----
@@ -69,13 +74,13 @@ Then run the same steps as the workflow:
 ----
 # ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
 ----
-. Create the GitHub release, using the output of `ruby ci/release-notes.rb 3.0.2` as release notes.
+. Create the GitHub release, using the output of `npx @bestikk/changelog notes 3.0.2 --release-heading "{version} ({date})"` as release notes.
 . Once the distribution is available on Maven Central, publish the new version to sdkman with
 +
 ----
 # ./gradlew asciidoctorj-distribution:sdkMajorRelease
 ----
-. Upgrade the version to the next version by changing the version property in gradle.properties to `version=3.0.3-SNAPSHOT`, add a new `== Unreleased` section to `CHANGELOG.adoc`, commit and push the commits and the tag:
+. Upgrade the version to the next version by changing the version property in gradle.properties to `version=3.0.3-SNAPSHOT`, commit and push the commits and the tag:
 +
 ----
 # git commit -am "Prepare next development iteration 3.0.3-SNAPSHOT"
