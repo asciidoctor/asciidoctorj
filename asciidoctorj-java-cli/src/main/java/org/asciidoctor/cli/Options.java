@@ -28,6 +28,7 @@ import java.util.zip.GZIPInputStream;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.converter.Converter;
+import org.asciidoctor.converter.spi.ConverterRegistry;
 import org.asciidoctor.extension.BlockMacroProcessor;
 import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.extension.DocinfoProcessor;
@@ -38,10 +39,9 @@ import org.asciidoctor.extension.Postprocessor;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.extension.Processor;
 import org.asciidoctor.extension.Treeprocessor;
-import org.asciidoctor.jruby.converter.spi.ConverterRegistry;
-import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
-import org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry;
+import org.asciidoctor.extension.spi.ExtensionRegistry;
 import org.asciidoctor.log.Severity;
+import org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry;
 
 /**
  * List of options that can be specified on the command line.

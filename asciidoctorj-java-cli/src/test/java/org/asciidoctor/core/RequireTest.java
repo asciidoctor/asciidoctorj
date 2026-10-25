@@ -70,7 +70,7 @@ public class RequireTest extends CliTestHelper {
                     package com.example;
 
                     import org.asciidoctor.Asciidoctor;
-                    import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
+                    import org.asciidoctor.extension.spi.ExtensionRegistry;
 
                     public class FooterExtensionRegistry implements ExtensionRegistry {
                         @Override
@@ -105,7 +105,7 @@ public class RequireTest extends CliTestHelper {
                     package com.example;
 
                     import org.asciidoctor.Asciidoctor;
-                    import org.asciidoctor.jruby.converter.spi.ConverterRegistry;
+                    import org.asciidoctor.converter.spi.ConverterRegistry;
 
                     public class TextConverterRegistry implements ConverterRegistry {
                         @Override
@@ -139,7 +139,7 @@ public class RequireTest extends CliTestHelper {
         assertEquals(0, compiler.run(null, null, null, args.toArray(String[]::new)));
         Path servicesDir = classesDir.resolve("META-INF/services");
         Files.createDirectories(servicesDir);
-        Files.writeString(servicesDir.resolve("org.asciidoctor.jruby.extension.spi.ExtensionRegistry"),
+        Files.writeString(servicesDir.resolve("org.asciidoctor.extension.spi.ExtensionRegistry"),
                 "com.example.FooterExtensionRegistry\n");
         copyClasses(tmpDir.resolve("classes-without-services"));
         jarFile = tmpDir.resolve("extensions.jar");

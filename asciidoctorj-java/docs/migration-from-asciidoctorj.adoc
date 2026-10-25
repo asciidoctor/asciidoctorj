@@ -37,9 +37,9 @@ Creating an instance is cheap since there's no Ruby runtime to start.
 
 The following classes of the JRuby implementation, which are not part of the API but are used by applications, are provided with the same names for compatibility:
 
-* the service provider interfaces `org.asciidoctor.jruby.extension.spi.ExtensionRegistry`, `org.asciidoctor.jruby.converter.spi.ConverterRegistry` and `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry`;
+* the deprecated service provider interfaces `org.asciidoctor.jruby.extension.spi.ExtensionRegistry`, `org.asciidoctor.jruby.converter.spi.ConverterRegistry` and `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry` (the ones of the API, `org.asciidoctor.extension.spi.ExtensionRegistry`, `org.asciidoctor.converter.spi.ConverterRegistry` and `org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry`, should be used instead);
 * the directory walkers `org.asciidoctor.jruby.AsciiDocDirectoryWalker` and `org.asciidoctor.jruby.GlobDirectoryWalker`;
-* the exception thrown when a conversion fails, `org.asciidoctor.jruby.internal.AsciidoctorCoreException`.
+* the exception thrown when a conversion fails, `org.asciidoctor.jruby.internal.AsciidoctorCoreException` (applications should catch its superclass of the API, `org.asciidoctor.AsciidoctorException`).
 
 == Not supported
 

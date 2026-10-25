@@ -97,4 +97,17 @@ public class WhenExtensionsAreRegisteredAsServiceTest {
         assertThat(ExtensionRegistryExecutor2.asciidoctor).isEqualTo(asciidoctor2);
     }
 
+    @Test
+    @DisplayName("an extension registry declared with both the new and the deprecated service should be called once")
+    public void anExtensionRegistryDeclaredWithBothServicesShouldBeCalledOnce() throws Exception {
+
+        // when:
+        URLClassLoader tccl = new URLClassLoader(new URL[] {classpath.getResource("serviceloadertest/4").toURI().toURL()});
+        Thread.currentThread().setContextClassLoader(tccl);
+        Asciidoctor.Factory.create();
+
+        // then:
+        assertThat(ExtensionRegistryExecutor3.callCount).isEqualTo(1);
+    }
+
 }

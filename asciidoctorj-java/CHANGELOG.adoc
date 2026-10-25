@@ -30,3 +30,5 @@ Improvements::
 
 * Pure Java implementation of Asciidoctor (port of Asciidoctor 2.0.x, main branch), with no runtime dependency
 * The command line interface has no dependency (JCommander is not used anymore)
+* Load the services of the service provider interfaces of the API (`org.asciidoctor.extension.spi.ExtensionRegistry`, `org.asciidoctor.converter.spi.ConverterRegistry` and `org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry`), as well as the deprecated ones of the `org.asciidoctor.jruby` packages
+* `AsciidoctorCoreException` extends `AsciidoctorException` of the API
