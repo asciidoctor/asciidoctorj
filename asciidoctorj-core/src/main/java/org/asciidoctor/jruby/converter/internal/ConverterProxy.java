@@ -36,10 +36,37 @@ import java.util.Map;
 
 public class ConverterProxy<T> extends RubyObject {
 
+    private static final String ASCIIDOCTORJ_CONVERTER_INSTANCE = "AsciidoctorJConverterInstance";
+
     protected static final String METHOD_NAME_INITIALIZE = "initialize";
+    protected static final String METHOD_NAME_CONVERT = "convert";
+
     private final JRubyAsciidoctor asciidoctor;
 
     private T output;
+
+    public static <U, T  extends Converter<U> & OutputFormatWriter<U>> IRubyObject register(JRubyAsciidoctor asciidoctor, T converter) {
+        Ruby rubyRuntime = asciidoctor.getRubyRuntime();
+        RubyModule module = rubyRuntime.defineModule(getModuleName(converter.getClass()));
+        RubyClass clazz = module.getClass(converter.getClass().getSimpleName());
+        if (clazz == null) {
+            clazz = module.defineClassUnder(
+                    converter.getClass().getSimpleName(),
+                    rubyRuntime.getObject(),
+                    new ConverterProxy.InstanceAllocator(asciidoctor));
+            includeModule(clazz, "Asciidoctor", "Converter");
+            includeModule(clazz, "Asciidoctor", "Converter", "BackendTraits");
+
+            clazz.defineAnnotatedMethod(ConverterProxy.class, "initializeInstance");
+            clazz.defineAnnotatedMethod(ConverterProxy.class, "convertInstance");
+
+            includeModule(clazz, "Asciidoctor", "Writer");
+            clazz.defineAnnotatedMethod(ConverterProxy.class, "write");
+        }
+        RubyHash param = RubyHash.newHash(rubyRuntime);
+        param.put(rubyRuntime.newSymbol(ASCIIDOCTORJ_CONVERTER_INSTANCE), converter);
+        return clazz.newInstance(rubyRuntime.getCurrentContext(), param, Block.NULL_BLOCK);
+    }
 
     public static <U, T  extends Converter<U> & OutputFormatWriter<U>> RubyClass register(JRubyAsciidoctor asciidoctor, final Class<T> converterClass) {
         Ruby rubyRuntime = asciidoctor.getRubyRuntime();
@@ -79,6 +106,23 @@ public class ConverterProxy<T> extends RubyObject {
         }
     }
 
+    public static class InstanceAllocator implements ObjectAllocator {
+        private Converter converter;
+        private final JRubyAsciidoctor asciidoctor;
+
+        public InstanceAllocator(JRubyAsciidoctor asciidoctor) {
+            this.asciidoctor = asciidoctor;
+        }
+        @Override
+        public IRubyObject allocate(Ruby runtime, RubyClass rubyClass) {
+            return new ConverterProxy(runtime, rubyClass, asciidoctor);
+        }
+
+        public Converter getConverter() {
+            return converter;
+        }
+    }
+
     private final Class<? extends Converter> converterClass;
 
     private Converter<T> delegate;
@@ -89,7 +133,13 @@ public class ConverterProxy<T> extends RubyObject {
         this.asciidoctor = asciidoctor;
     }
 
-    @JRubyMethod(required = 1, optional = 1)
+    public ConverterProxy(Ruby runtime, RubyClass metaClass, JRubyAsciidoctor asciidoctor) {
+        super(runtime, metaClass);
+        this.converterClass = null;
+        this.asciidoctor = asciidoctor;
+    }
+
+    @JRubyMethod(name = METHOD_NAME_INITIALIZE, required = 1, optional = 1)
     public IRubyObject initialize(ThreadContext context, IRubyObject[] args) {
         try {
             String backend = (String) JavaEmbedUtils.rubyToJava(getRuntime(), args[0], String.class);
@@ -112,14 +162,8 @@ public class ConverterProxy<T> extends RubyObject {
             }
 
             return null;
-        } catch (InstantiationException e) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             // TODO: Do some proper logging in the catch clauses?
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         } catch (Throwable e) {
             throw new RuntimeException(e);
@@ -130,7 +174,7 @@ public class ConverterProxy<T> extends RubyObject {
         String outfileSuffix = this.delegate.getOutfileSuffix();
         if (outfileSuffix == null && delegate.getClass().getAnnotation(ConverterFor.class) != null) {
             ConverterFor converterAnnotation = delegate.getClass().getAnnotation(ConverterFor.class);
-            if (converterAnnotation.suffix() != ConverterFor.UNDEFINED) {
+            if (!ConverterFor.UNDEFINED.equals(converterAnnotation.suffix())) {
                 outfileSuffix = converterAnnotation.suffix();
                 this.delegate.setOutfileSuffix(outfileSuffix);
             }
@@ -138,8 +182,45 @@ public class ConverterProxy<T> extends RubyObject {
         return outfileSuffix;
     }
 
-    @JRubyMethod(required = 1, optional = 2)
+    @JRubyMethod(name = METHOD_NAME_CONVERT, required = 1, optional = 2)
     public IRubyObject convert(ThreadContext context, IRubyObject[] args) {
+        ContentNode node = NodeConverter.createASTNode(args[0]);
+
+        T ret = null;
+        if (args.length == 1) {
+            ret = delegate.convert(
+                    node,
+                    null,
+                    Collections.emptyMap());
+        } else if (args.length == 2) {
+            ret = delegate.convert(
+                    node,
+                    (String) JavaEmbedUtils.rubyToJava(getRuntime(), args[1], String.class),
+                    Collections.emptyMap());//RubyString.objAsString(context, args[1]).asJavaString());
+        } else if (args.length == 3) {
+            ret = (T) delegate.convert(
+                    node,
+                    (String) JavaEmbedUtils.rubyToJava(getRuntime(), args[1], String.class),
+                    (Map) JavaEmbedUtils.rubyToJava(getRuntime(), args[2], Map.class));
+        }
+        this.output = ret;
+        return JavaEmbedUtils.javaToRuby(getRuntime(), ret);
+    }
+
+    @JRubyMethod(name = METHOD_NAME_INITIALIZE, required = 1, optional = 1)
+    public IRubyObject initializeInstance(ThreadContext context, IRubyObject[] args) {
+        try {
+            RubyHash param = (RubyHash) args[0];
+            delegate = (Converter<T>) param.get(context.getRuntime().newSymbol(ASCIIDOCTORJ_CONVERTER_INSTANCE));
+            return null;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @JRubyMethod(name = METHOD_NAME_CONVERT, required = 1, optional = 2)
+    public IRubyObject convertInstance(ThreadContext context, IRubyObject[] args) {
         ContentNode node = NodeConverter.createASTNode(args[0]);
 
         T ret = null;

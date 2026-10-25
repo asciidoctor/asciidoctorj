@@ -4,6 +4,8 @@ import java.util.Map;
 
 public interface JavaConverterRegistry {
 
+    <U, T  extends Converter<U> & OutputFormatWriter<U>> void register(T converterClass, String... backends);
+
     <U, T  extends Converter<U> & OutputFormatWriter<U>> void register(Class<T> converterClass, String... backends);
 
     Class<?> resolve(String backend);
