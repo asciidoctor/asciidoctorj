@@ -315,13 +315,15 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup block(final Class<? extends BlockProcessor> blockProcessor) {
-    final RubyClass rubyClass = BlockProcessorProxy.register(asciidoctor, blockProcessor);
-    registrators.add(new Registrator() {
-      @Override
-      public void register(IRubyObject registry) {
-        registry.callMethod(rubyRuntime.getCurrentContext(), "block", new IRubyObject[]{rubyClass, rubyRuntime.newSymbol(BlockProcessorProxy.getName(blockProcessor))});
-      }
-    });
+    for (String name : AbstractProcessorProxy.getNames(blockProcessor)) {
+      final RubyClass rubyClass = BlockProcessorProxy.register(asciidoctor, blockProcessor);
+      registrators.add(new Registrator() {
+        @Override
+        public void register(IRubyObject registry) {
+          registry.callMethod(rubyRuntime.getCurrentContext(), "block", new IRubyObject[]{rubyClass, rubyRuntime.newSymbol(name)});
+        }
+      });
+    }
     return this;
   }
 
@@ -363,13 +365,15 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup blockMacro(final Class<? extends BlockMacroProcessor> blockMacroProcessor) {
-    final RubyClass rubyClass = BlockMacroProcessorProxy.register(asciidoctor, blockMacroProcessor);
-    registrators.add(new Registrator() {
-      @Override
-      public void register(IRubyObject registry) {
-        registry.callMethod(rubyRuntime.getCurrentContext(), "block_macro", new IRubyObject[]{rubyClass, rubyRuntime.newSymbol(AbstractProcessorProxy.getName(blockMacroProcessor))});
-      }
-    });
+    for (String name : AbstractProcessorProxy.getNames(blockMacroProcessor)) {
+      final RubyClass rubyClass = BlockMacroProcessorProxy.register(asciidoctor, blockMacroProcessor);
+      registrators.add(new Registrator() {
+        @Override
+        public void register(IRubyObject registry) {
+          registry.callMethod(rubyRuntime.getCurrentContext(), "block_macro", new IRubyObject[]{rubyClass, rubyRuntime.newSymbol(name)});
+        }
+      });
+    }
     return this;
   }
 
@@ -455,13 +459,15 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
   @Override
   public ExtensionGroup inlineMacro(final Class<? extends InlineMacroProcessor> inlineMacroProcessor) {
-    final RubyClass rubyClass = InlineMacroProcessorProxy.register(asciidoctor, inlineMacroProcessor);
-    registrators.add(new Registrator() {
-      @Override
-      public void register(IRubyObject registry) {
-        registry.callMethod(rubyRuntime.getCurrentContext(), "inline_macro", new IRubyObject[]{rubyClass, rubyRuntime.newSymbol(AbstractProcessorProxy.getName(inlineMacroProcessor))});
-      }
-    });
+    for (String name : AbstractProcessorProxy.getNames(inlineMacroProcessor)) {
+      final RubyClass rubyClass = InlineMacroProcessorProxy.register(asciidoctor, inlineMacroProcessor);
+      registrators.add(new Registrator() {
+        @Override
+        public void register(IRubyObject registry) {
+          registry.callMethod(rubyRuntime.getCurrentContext(), "inline_macro", new IRubyObject[]{rubyClass, rubyRuntime.newSymbol(name)});
+        }
+      });
+    }
     return this;
   }
 
