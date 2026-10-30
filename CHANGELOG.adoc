@@ -21,6 +21,7 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 === Bug Fixes
 
+* `ExtensionGroup` class-based block, block macro, and inline macro registrations now recognize `@Name` annotations declared on processor meta-annotations
 * `BaseProcessor#createList(StructuralNode, String, Map)` ignored the options
 
 == 3.0.1 (2025-11-06)
