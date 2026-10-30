@@ -13,23 +13,23 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 == Unreleased
 
-Improvements::
+=== Improvements
 
 * Add `ExtensionGroup#blockMacro(String, BlockMacroProcessor)` and `ExtensionGroup#inlineMacro(String, InlineMacroProcessor)`, like `JavaExtensionRegistry`
 * Add the service provider interfaces `org.asciidoctor.extension.spi.ExtensionRegistry`, `org.asciidoctor.converter.spi.ConverterRegistry` and `org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry` to the API, and deprecate the interfaces of the `org.asciidoctor.jruby` packages (their implementations are still loaded)
 * Add `AsciidoctorException` to the API, the superclass of `AsciidoctorCoreException`, so that applications don't have to catch an internal class when a conversion fails
 
-Bug Fixes::
+=== Bug Fixes
 
 * `BaseProcessor#createList(StructuralNode, String, Map)` ignored the options
 
 == 3.0.1 (2025-11-06)
 
-Documentation::
+=== Documentation
 
 * cli.adoc - describe how to run AsciidoctorJ using JBang
 
-Improvements::
+=== Improvements
 
 * Upgrade to asciidoctorj-pdf 2.3.26 (#1316)
 * Upgrade to asciidoctorj-epub 2.2.0 (#1300)
@@ -37,11 +37,11 @@ Improvements::
 * Upgrade to asciidoctorj-revealjs 5.2.0 (#1300)
 * Upgrade to JRuby 9.4.14.0 (#1313)
 
-Bug Fixes::
+=== Bug Fixes
 
 * Create new log handler for each instance of Asciidoctor (#1297) (@dhendriks)
 
-Build Improvement::
+=== Build Improvement
 
 * Move to new plugin suite org.ysb33r.jruby for installing ruby gems (#1293)
 * Upgrade build to Gradle 8.12 (#1293)
@@ -50,13 +50,13 @@ Build Improvement::
 
 == 3.0.0 (2024-08-25)
 
-Build Improvement::
+=== Build Improvement
 
 * Upgrade JCommander version and coordinates to v2.0 (#1290)
 
 === Breaking changes
 
-Improvement::
+==== Improvement
 
 * Fix Macro APIs to take StructuralNodes and return Phrase- or StructuralNodes. (#1084)
 * Allow Preprocessor extensions to create new Readers and replace the original Reader. (#1081)
@@ -70,7 +70,7 @@ Improvement::
 * Remove Java 'requires open access' module warning in modern Java versions (#1246)
 * Add Reader.getSource() and Reader.getSourceLines() (#1262)
 
-Bug Fixes::
+==== Bug Fixes
 
 * -s CLI option should be changed to -e to align with Asciidoctor (#1237) (@mojavelinux)
 * Column#setWidth is ignored (#1265) (@Vampire)
@@ -78,7 +78,7 @@ Bug Fixes::
 
 === Compatible changes
 
-Improvement::
+==== Improvement
 
 * Add `setContext` function to StructuralNode.
 
@@ -103,7 +103,7 @@ Improvement::
 * Return Document AST when using convert or convertFile with appropriate options (#1171) (@abelsromero)
 * Expose Links in the catalog (#1183) (@abelsromero)
 
-Bug Fixes::
+==== Bug Fixes
 
 * Cell nodes do not inherit from StructuralNode (#1086) (@rahmanusta)
 * Avoid throwing an exception when using AsciidoctorJ CLI and reading input from stdin (#1105) (@AlexCzar)
@@ -112,7 +112,7 @@ Bug Fixes::
 * Fix ConcurrentModificationException when converting to stream concurrently (#1158) (@rocketraman)
 * 'UnsupportedOperationException' when passing immutable Map as options to 'createPhraseNode' (#1221) (@abelsromero)
 
-Build Improvement::
+==== Build Improvement
 
 * Upgrade build to Gradle 8.5 (#1256)
 * Upgrade Spring Boot test to 3.0.0 (#1134)
@@ -124,24 +124,24 @@ Build Improvement::
 * Add test for ensuring that asciidoctor version is available in CLI (#1230) (@abelsromero)
 * Run tests on Java 21 (#1236) (@abelsromero)
 
-Documentation::
+==== Documentation
 
 * Fix invalid 'http://asciidoctor.org' references in docs and JavaDocs (#1195) (@abelsromero)
 
 == 2.5.4 (2022-06-30)
 
-Improvement::
+=== Improvement
 
 * Upgrade to asciidoctorj-diagram 2.2.3 (#1091)
 * Upgrade to jcommander 1.81 (#1079)
 * Upgrade to JRuby 9.3.4.0 (#1085)
 * Upgrade to Rouge 3.28.0 (#1085)
 
-Bug Fixes::
+=== Bug Fixes
 
 * Make DescriptionList.getBlocks() return null instead of a List of DescriptionListItems resulting in a ClassCastException (#1082) (@someth2say)
 
-Build Improvement::
+=== Build Improvement
 
 * Upgrade to gradle 7.4.2 (#1086)
 * Upgrade to Wildfly 26.0.1 for integration test (#1085)
@@ -149,11 +149,11 @@ Build Improvement::
 * Fix gem version check task (#1087)
 * Release from Github Actions (#1090)
 
-Documentation::
+=== Documentation
 
 == 2.5.3 (2022-01-12)
 
-Improvement::
+=== Improvement
 
 * Upgrade to asciidoctorj 2.0.17 (#1074)
 * Upgrade to asciidoctorj-pdf 1.6.2 (#1073)
@@ -162,12 +162,12 @@ Improvement::
 * Upgrade to rouge 3.27.0 (#1073)
 * Upgrade CLI to use JCommander 1.81 (@abelsromero) (#1067)
 
-Build Improvement::
+=== Build Improvement
 
 * Add Java17 to CI pipelines (@abelsromero) (#1055)
 * Improve pipelines to better display Asciidoctor test upstream (@abelsromero) (#1057)
 
-Documentation::
+=== Documentation
 
 * Clarify execution order for extensions (@rockyallen) (#1068)
 * Added docs for attributes and positional attributes in extensions (#1072)
@@ -176,18 +176,18 @@ Documentation::
 
 == 2.5.2 (2021-08-08)
 
-Improvement::
+=== Improvement
 
 * Upgrade to asciidoctorj 2.0.16 (#1052)
 * Upgrade to asciidoctorj-pdf 1.6.0 (#1040)
 
-Bug Fixes::
+=== Bug Fixes
 
 * Avoid using of deprecated attributes toc2 and toc-placement.
   Deprecated Attributes.setTableOfContents2().
   Added new constants Placement.PREAMBLE and Placement.MACRO as parameters for Attributes.setTableOfConstants(). (@abelsromero) (#1037)
 
-Build Improvement::
+=== Build Improvement
 
 * Use JavaCompile options.release instead of sourceCompatibility and targetCompatibility to target Java 8 (#1042)
 * Upgrade nexus publishing and staging to new gradle-nexus.publish-plugin (#1043)
@@ -195,27 +195,27 @@ Build Improvement::
 
 == 2.5.1 (2021-05-04)
 
-Improvement::
+=== Improvement
 
 * Upgrade to asciidoctor 2.0.15 (#1026)
 * Upgrade to asciidoctor-epub 1.5.1 (#1030)
 
-Bug Fixes::
+=== Bug Fixes
 
 * Fix performance regression in v2.5.0 with asciidoctorj-pdf and concurrent-ruby (@kedar-joshi) (#1032)
 
-Build Improvement::
+=== Build Improvement
 
 * Upgrade to sdkman vendor plugin 2.0.0
 * Remove builds on appveyor (#1027)
 
-Build / Infrastructure::
+=== Build / Infrastructure
 
 * Upgrade test dependencies on Arquillian and Spock (#1031)
 
 == 2.5.0 (2021-04-27)
 
-Improvement::
+=== Improvement
 
 * Allow defining `@Name` as a meta annotation on Block and Inline Macros (@uniqueck) (#898)
 * Upgrade to jruby 9.2.17.0 (#1004)
@@ -226,7 +226,7 @@ Improvement::
 * Deprecated methods Asciidoctor, Options and Attributes API scheduled for future removal (@abelsromero)(#1015)
 * Add pushInclude to PreprocessorReaderImpl and deprecate push_include (@abelsromero) (#1020)
 
-Build Improvement::
+=== Build Improvement
 
 * Fix wildfly integration test on Java 16 (@abelsromero) (#1002)
 * Upgrade Gradle to 7.0.0 (#1001)
@@ -234,13 +234,13 @@ Build Improvement::
 * Update gradle plugin biz.aQute.bnd to 5.3.0 (#1001)
 * Run Github actions for main branch (#1017)
 
-Documentation::
+=== Documentation
 
 * Add Spring Boot integration test and usage guide (@abelsromero) (#994, #995)
 
 == 2.4.3 (2021-02-12)
 
-Improvement::
+=== Improvement
 
 * Upgrade to asciidoctorj-pdf 1.5.4 (#986)
 * Upgrade to asciidoctorj-revealjs 4.1.0 (#986)
@@ -249,14 +249,14 @@ Improvement::
 * Upgrade to rouge 3.26.0 (#986)
 * Add constant for attribute toclevel (@l0wlik34G6) (#984)
 
-Build Improvement::
+=== Build Improvement
 
 * Publish directly to Maven Central (#988)
 * Upgrade Gradle to 6.8.2 (#988)
 
 == 2.4.2 (2020-11-10)
 
-Improvement::
+=== Improvement
 
 * AST now provides access to document catalog footnotes and refs (@lread) (#968)
 * Upgrade to Asciidoctor 2.0.12 (#972)
@@ -267,41 +267,41 @@ Improvement::
 
 == 2.4.1 (2020-09-10)
 
-Build::
+=== Build
 
 * Make SyntaxHighlighter test independent of highlight.js version (@abelsromero) (#955)
 
-Bug Fixes::
+=== Bug Fixes
 
   * Fix NullPointerException when a document contains an empty table with PDF backend (@anthonyroussel) (#944)
 
-Improvement::
+=== Improvement
 
   * Upgrade to JRuby 9.2.13.0 (#948)
 
 == 2.4.0 (2020-07-19)
 
-Improvement::
+=== Improvement
 
  * Add method StructuralNode.setLevel() (@Mogztter) (#931)
  * Upgrade to JRuby 9.2.12.0 removing the last illegal access warnings (#935)
  * Upgrade to Asciidoctor EPUB3 1.5.0-alpha.16 (#939)
  * Upgrade to Rouge 3.21.0
 
-Build::
+=== Build
 
 * Fix upstream build to adapt to changes in Ruby Highlightjs syntax highlighter (#940)
 
 == 2.3.1 (2020-06-17)
 
-Bug Fixes::
+=== Bug Fixes
 
   * Inline macro attribute parsing changes after first document conversion (@wilkinsona) (#926)
   * Upgrade to Rouge 3.20.0, fixing error `uninitialized constant Rouge::Lexers` problem (@ahus1) (#925)
 
 == 2.3.0 (2020-05-02)
 
-Improvement::
+=== Improvement
 
   * Add asciidoctor-revealjs to distribution (#910)
   * Upgrade to Asciidoctor PDF 1.5.3
@@ -309,18 +309,18 @@ Improvement::
   * Upgrade to Asciidoctor Diagram 2.0.2
   * Upgrade to JRuby 9.2.11.1
 
-Bug Fixes::
+=== Bug Fixes
 
   * Add missing factory methods to create Lists. (@glisicivan) (#916)
     The API `Processor.createList()` is experimental and may change with any release until declared to be stable.
 
-Documentation::
+=== Documentation
 
   * Update documentation to show how to create an Asciidoctor instance with GEM_PATH (#890)
   * Adds GitHub icons to admonitions sections in README (#893)
   * Updates CI note in README to replace TravisCI by GH Actions (@abelsromero) (#938)
 
-Build::
+=== Build
 
   * Upgrade to jruby-gradle-plugin 2.0.0
   * Remove CI build on TravisCI (#918)
@@ -331,7 +331,7 @@ Known Limitations:
 
 == 2.2.0 (2019-12-17)
 
-Improvement::
+=== Improvement
 
   * Upgrade to JCommander 1.72 (@Fiouz) (#782)
   * Set logger name on logged log records (@lread) (#834)
@@ -342,28 +342,28 @@ Improvement::
   * Upgrade to Rouge 3.12.0
   * Use headless jdk on all platforms (@nicerloop) (#863)
 
-Bug Fixes::
+=== Bug Fixes
 
   * Remove exception protection from LogHandler in `JRubyAsciidoctor` to align behaviour with `AbstractConverter`  (@abelsromero) (#844)
   * Make Asciidoctor API AutoClosable (@rmannibucau) (#849)
   * Fix reading input from stdin and writing to stdout (@nicerloop) (#865)
   * Assign distinct Osgi Bundle-SymbolicNames to asciidoctorj-api.jar and asciidoctorj.jar (@rmannibucau) (#878)
 
-Build::
+=== Build
 
   * Upgrade to Gradle 5.6.3 (@Fiouz) (#747 #856)
   * Support build from paths with whitespace (@Fiouz) (#836)
   * OSGi: switch to biz.aQute.bnd plugin (@Fiouz) (#855)
   * Fix publishing to Bintray with Gradle 5.6.3 (@Fiouz) (#862)
 
-Documentation::
+=== Documentation
 
   * Update README about running on WildFly (@anthonyvdotbe) (#848)
   * link to tarball; add Quick Win section (@il-pazzo) (#854)
 
 == 2.1.0 (2019-06-22)
 
-Improvements::
+=== Improvements
 
   * Add the command line option -R to specify the source root directory (@4lber10 & @ysb33r) (#822)
   * Add sourcemap, catalog_assets and parse to OptionBuilder (@jmini) (#825)
@@ -372,92 +372,92 @@ Improvements::
   * Upgrade to Asciidoctor PDF 1.5.0-alpha.18
   * Added an experimental API to write Syntax Highlighters in Java (#826)
 
-Documentation::
+=== Documentation
 
   * Clarify that an InlineMacroProcessor should return a PhraseNode and that Strings are deprecated. (@jmini) (#823)
 
 == 2.0.0 (2019-04-24)
 
-Enhancements::
+=== Enhancements
 
-Improvements::
+=== Improvements
 
   * Upgrade to Asciidoctor 2.0.8
   * Upgrade to asciidoctor-pdf 1.5.0-alpha.17 (#809)
   * Add Rouge source highlighter to asciidoctor.jar (#806)
 
-Bug Fixes::
+=== Bug Fixes
 
   {nbsp}
 
 == 2.0.0-RC.3 (2019-04-18)
 
-Enhancements::
+=== Enhancements
 
   * Extended version info printed by `asciidoctorj --version` to show versions of Asciidoctor and AsciidoctorJ separately (@abelsromero) (#791)
   * Allow custom converters to log (#801)
 
-Improvements::
+=== Improvements
 
   * Upgrade to JRuby 9.2.7.0 (#796)
 
-Bug Fixes::
+=== Bug Fixes
 
   * Fix logger registration when creating AsciidoctorJ instance with Asciidoctor.Factory.create (@ahus1) (#790)
 
 == 2.0.0-RC.2 (2019-04-09)
 
-Enhancements::
+=== Enhancements
 
   * Add section numeral API (@vmj) (#785)
 
-Improvements::
+=== Improvements
 
   * Upgrade to Asciidoctor 2.0.6
   * Upgrade to Asciidoctor ePub3 1.5.9
 
-Bug Fixes::
+=== Bug Fixes
 
   * Fix logger implementation (#786)
 
 == 2.0.0-RC.1 (2019-03-27)
 
-Enhancements::
+=== Enhancements
 
   * Move the Asciidoctor interface into the asciidoctorj-module (@Mogztter) (#760)
   * Remove deprecated render() methods from Asciidoctor interface (@Mogztter) (#760)
 
-Improvements::
+=== Improvements
 
   * Upgrade to JRuby 9.2.6.0. This version of AsciidoctorJ is incompatible with any version of JRuby <= 9.2.5.0
   * Upgrade to Asciidoctor 2.0.2
   * Upgrade to Asciidoctor Diagram 1.5.16
 
-Bug Fixes::
+=== Bug Fixes
 
   * Fix extension initialization in OSGi environments (#754)
   * Remove reference to RubyExtensionRegistryImpl from RubyExtensionRegistry (#759)
   * Don't return null from List.blocks() and DefinitionList.blocks() (@jensnerche) (#761)
   * Move org.asciidoctor.spi.ProcessorFactory to org.asciidoctor.extension (@jensnerche) (#762)
 
-Documentation::
+=== Documentation
 
   * Update documentation for running AsciidoctorJ in OSGi (@twasyl) (#765)
 
-Build / Infrastructure::
+=== Build / Infrastructure
 
   * Fix jruby-maven-plugin and upstream build (@mkristian) (#777)
 
 == 1.6.1 (2018-10-28)
 
-Enhancements::
+=== Enhancements
 
   * Upgrade asciidoctorj-diagram to 1.5.12
 
-Bug Fixes::
+=== Bug Fixes
 
   * Fix registration of extension as instances (#754)
 
-Documentation::
+=== Documentation
 
   * Add extension migration guide
