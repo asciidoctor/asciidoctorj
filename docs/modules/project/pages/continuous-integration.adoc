@@ -74,7 +74,7 @@ Roll the `== Unreleased` section of `CHANGELOG.adoc` into `== 3.0.2 (<date>)`, t
 ----
 # ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
 ----
-. Create the GitHub release, using the output of `npx @bestikk/changelog notes 3.0.2 --release-heading "{version} ({date})"` as release notes.
+. Create the GitHub release, using the output of `npx @bestikk/changelog notes 3.0.2 --release-heading "\{version} (\{date})"` as release notes.
 . Once the distribution is available on Maven Central, publish the new version to sdkman with
 +
 ----
