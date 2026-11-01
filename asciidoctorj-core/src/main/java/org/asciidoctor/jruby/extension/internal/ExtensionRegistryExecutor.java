@@ -1,9 +1,11 @@
 package org.asciidoctor.jruby.extension.internal;
 
+import org.asciidoctor.extension.spi.ExtensionRegistry;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
-import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
 
+import java.util.HashSet;
 import java.util.ServiceLoader;
+import java.util.Set;
 
 public class ExtensionRegistryExecutor {
 
@@ -13,12 +15,18 @@ public class ExtensionRegistryExecutor {
         this.asciidoctor = asciidoctor;
     }
 
+    @SuppressWarnings("deprecation")
     public void registerAllExtensions() {
-        ServiceLoader<ExtensionRegistry> extensionRegistryServiceLoader = ServiceLoader
-                .load(ExtensionRegistry.class);
-        
-        for (ExtensionRegistry extensionRegistry : extensionRegistryServiceLoader) {
+        Set<Class<?>> registeredClasses = new HashSet<>();
+        for (ExtensionRegistry extensionRegistry : ServiceLoader.load(ExtensionRegistry.class)) {
+            registeredClasses.add(extensionRegistry.getClass());
             extensionRegistry.register(asciidoctor);
+        }
+        // Skip the implementations also declared with the new service
+        for (ExtensionRegistry extensionRegistry : ServiceLoader.load(org.asciidoctor.jruby.extension.spi.ExtensionRegistry.class)) {
+            if (registeredClasses.add(extensionRegistry.getClass())) {
+                extensionRegistry.register(asciidoctor);
+            }
         }
     }
 }

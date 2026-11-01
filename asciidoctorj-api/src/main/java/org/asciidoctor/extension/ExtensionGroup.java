@@ -58,8 +58,10 @@ public interface ExtensionGroup {
   ExtensionGroup blockMacro(Class<? extends BlockMacroProcessor> blockMacroProcessor);
   ExtensionGroup blockMacro(String blockName, String blockMacroProcessor);
   ExtensionGroup blockMacro(String blockMacroProcessor);
+  ExtensionGroup blockMacro(String blockName, BlockMacroProcessor blockMacroProcessor);
   ExtensionGroup blockMacro(BlockMacroProcessor blockMacroProcessor);
 
+  ExtensionGroup inlineMacro(String name, InlineMacroProcessor inlineMacroProcessor);
   ExtensionGroup inlineMacro(InlineMacroProcessor inlineMacroProcessor);
   ExtensionGroup inlineMacro(String name, Class<? extends InlineMacroProcessor> inlineMacroProcessor);
   ExtensionGroup inlineMacro(Class<? extends InlineMacroProcessor> inlineMacroProcessor);

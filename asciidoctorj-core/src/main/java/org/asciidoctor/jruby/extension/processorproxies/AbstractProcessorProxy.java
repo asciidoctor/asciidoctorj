@@ -23,9 +23,12 @@ import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.jruby.util.RegexpOptions;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
 
@@ -232,11 +235,23 @@ public class AbstractProcessorProxy<T extends Processor> extends RubyObject {
         return RubyRegexp.newRegexp(runtime, regexp.toString(), RegexpOptions.NULL_OPTIONS);
     }
 
-    public static String getName(Class<? extends Processor> processor) {
-        if (processor.isAnnotationPresent(Name.class)) {
-            Name name = processor.getAnnotation(Name.class);
-            return name.value();
+    public static Set<String> getNames(Class<? extends Processor> processor) {
+        Set<String> names = new LinkedHashSet<>();
+        collectNames(processor.getAnnotations(), new LinkedHashSet<>(), names);
+        if (names.isEmpty()) {
+            throw new IllegalArgumentException(processor + " must be registered with a name or it must have a Name annotation!");
         }
-        throw new IllegalArgumentException("Processor " + processor + " has no @Name annotation!");
+        return names;
+    }
+
+    private static void collectNames(Annotation[] annotations, Set<Class<? extends Annotation>> visited, Set<String> names) {
+        for (Annotation annotation : annotations) {
+            Class<? extends Annotation> annotationType = annotation.annotationType();
+            if (annotationType == Name.class) {
+                names.add(((Name) annotation).value());
+            } else if (visited.add(annotationType)) {
+                collectNames(annotationType.getAnnotations(), visited, names);
+            }
+        }
     }
 }

@@ -90,6 +90,24 @@ public class BlockMacroRegistrationTest {
     }
 
     @Test
+    public void testExtensionGroupRegistersClassWithMetaNameAnnotation() {
+        asciidoctor.createGroup().blockMacro(AnnotatedTestProcessorWithMetaNameAnnotation.class).register();
+        check("HELLO WORLD", asciidoctor.convert(document(MetaNameAnnotation.NAME, "Hello World"), emptyOptions()));
+    }
+
+    @Test
+    public void testExtensionGroupRegistersClassWithMultipleNameAnnotations() {
+        asciidoctor.createGroup().blockMacro(AnnotatedTestProcessorWithMultipleNameAnnotations.class).register();
+        check("HELLO WORLD", asciidoctor.convert(document(MetaNameAnnotation.NAME, "Hello World"), emptyOptions()));
+        check("HELLO WORLD", asciidoctor.convert(document(AnnotatedTestProcessorWithMultipleNameAnnotations.NAME, "Hello World"), emptyOptions()));
+    }
+
+    @Test
+    public void testExtensionGroupRejectsClassWithoutNameDuringConfiguration() {
+        assertThrows(IllegalArgumentException.class, () -> asciidoctor.createGroup().blockMacro(AbstractTestProcessor.class));
+    }
+
+    @Test
     public void testRegisterClassWithMetaNameAnnotation() {
         asciidoctor.javaExtensionRegistry().blockMacro(AnnotatedTestProcessorWithMetaNameAnnotation.class);
         final String result = asciidoctor.convert(document(MetaNameAnnotation.NAME, "Hello World"), emptyOptions());
