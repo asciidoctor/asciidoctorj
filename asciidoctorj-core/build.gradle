@@ -27,6 +27,7 @@ dependencies {
 
   runtimeGems "rubygems:asciidoctor:$asciidoctorGemVersion"
   runtimeGems "rubygems:asciimath:$asciimathGemVersion"
+  runtimeGems "rubygems:logger:$loggerGemVersion"
   runtimeGems "rubygems:coderay:$coderayGemVersion"
   runtimeGems "rubygems:rouge:$rougeGemVersion"
   runtimeGems "rubygems:erubis:$erubisGemVersion"

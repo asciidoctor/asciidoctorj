@@ -94,6 +94,7 @@ ext {
 
   codenarcVersion = '3.2.0'
   groovyVersion = '3.0.25'
+  loggerGemVersion = '1.7.0'
   erubisGemVersion = '2.7.0'
   hamlGemVersion = '5.2.2'
   openUriCachedGemVersion = '0.0.5'
