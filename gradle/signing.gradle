@@ -7,7 +7,7 @@ if (hasSigningKey && !project.hasProperty('skip.signing')) {
 
 void sign(Project project) {
     project.signing {
-        required { project.gradle.taskGraph.hasTask("required") }
+        required = { project.gradle.taskGraph.hasTask("required") }
         def signingKeyId = project.findProperty("signingKeyId")
         def signingKey = project.findProperty("signingKey")
         def signingPassword = project.findProperty("signingPassword")

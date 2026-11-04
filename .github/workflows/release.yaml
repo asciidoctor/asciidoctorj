@@ -36,7 +36,7 @@ jobs:
       - uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '21'
       - uses: actions/setup-node@v7
         with:
           node-version: '24'

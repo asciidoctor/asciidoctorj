@@ -15,14 +15,21 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 
 === Improvements
 
+* BREAKING: Upgrade to JRuby 10.1.1.0. Requires Java 21 (#1308)
 * Add `ExtensionGroup#blockMacro(String, BlockMacroProcessor)` and `ExtensionGroup#inlineMacro(String, InlineMacroProcessor)`, like `JavaExtensionRegistry`
 * Add the service provider interfaces `org.asciidoctor.extension.spi.ExtensionRegistry`, `org.asciidoctor.converter.spi.ConverterRegistry` and `org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry` to the API, and deprecate the interfaces of the `org.asciidoctor.jruby` packages (their implementations are still loaded)
 * Add `AsciidoctorException` to the API, the superclass of `AsciidoctorCoreException`, so that applications don't have to catch an internal class when a conversion fails
+* Upgrade to asciidoctorj-diagram 3.2.1 (#1308)
+* Upgrade to asciidoctorj-diagram-plantuml 1.2026.2 (#1308)
 
 === Bug Fixes
 
 * `ExtensionGroup` class-based block, block macro, and inline macro registrations now recognize `@Name` annotations declared on processor meta-annotations
 * `BaseProcessor#createList(StructuralNode, String, Map)` ignored the options
+
+Build Improvement::
+
+* Upgrade build to Gradle 9.4.1 (#1308)
 
 == 3.0.1 (2025-11-06)
 
