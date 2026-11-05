@@ -81,3 +81,49 @@ The implementation doesn't close a stream it didn't open (the caller owns it).
 * `Footnote#getIndex()` returns a `Long` (an `int` would be enough).
 * `StructuralNode#findBy(Map<Object, Object> selector)` takes an untyped selector whose keys and values may be Ruby symbols (e.g., `":context"`, `":listing"`); a typed selector (e.g., a builder) would be easier to use.
 * `ContentNode#getAttribute(Object name)` and the related methods take an `Object` name, whereas the attribute names are Strings (`ContentNode#getAttributes()` returns a `Map<String, Object>`).
+
+== Gaps found while porting a converter
+
+Asciidoctor EPUB3 was ported to Java (https://github.com/ggrossetie/asciidoctor-epub3/tree/java-impl[branch `java-impl`]).
+Ideally, the converter would only depend on the API, so that it works with both the JRuby and the pure Java implementations.
+It currently depends on the implementation (`org.asciidoctor.core`) because the API doesn't cover what the Ruby converter uses.
+
+=== Missing, no clean workaround
+
+* `Document#syntax_highlighter`: the converter needs the syntax highlighter of the document (`docinfo?`, `docinfo`, `highlight?`, `format`, `write_stylesheet?`, `write_stylesheet`) to link the stylesheet of the highlighter in each chapter, write it in a separate file and format the listings.
+`SyntaxHighlighterAdapter` is meant to implement a syntax highlighter, not to use the active one.
+* `Document#docinfo(location, suffix)`: the converter inserts a backend-specific docinfo (`-epub.html`) in each chapter.
+Without it, the converter has to reimplement the resolution of the docinfo files (`docinfo` attribute, `docinfodir`, safe mode, `docinfosubs`).
+* `AbstractNode#xreftext(xrefstyle)`: used to resolve the text of a cross reference without a label (only `getReftext()` is available, without the `xrefstyle` logic and the captions).
+* Backend traits: only the outfilesuffix can be set (`setOutfileSuffix`, `@ConverterFor(suffix)`).
+There's no way to set the basebackend (e.g., `html`, so that `ifdef::basebackend-html[]` works), the htmlsyntax (`xml`, for self-closing tags) or the support of templates.
+* `OutputFormatWriter#write(T output, OutputStream out)` doesn't give access to the target file, whereas Asciidoctor's `Writer#write(output, target)` does.
+The converter needs the file to extract the EPUB next to it (`ebook-extract`) and to validate it with EPUBCheck (`ebook-validate`); reading the `outfile` attribute during the conversion is a workaround.
+* Extension groups activated per document (`Extensions.register do ... end`): the Ruby converter sets attributes (`listing-caption`, `sectids`, etc.) before the document is parsed, only when the backend is `epub3`.
+`JavaExtensionRegistry` registers processors, but there's no hook called when the extensions are activated for a document (a `Preprocessor` is close, but not equivalent).
+* `Section.generate_id(title, document)` and `Document#first_section`: used by a tree processor to generate the ids of the document and the preamble (which are used as chapter file names).
+* The parent cell of a nested document (an AsciiDoc table cell): the Ruby converter stores the cell in an instance variable of the inner document to find the enclosing chapter (see https://github.com/asciidoctor/asciidoctor/issues/4380[asciidoctor#4380]).
+The API can't navigate from an inner document to its cell, nor attach data to a node.
+* `Document#parent_document` and `Document#base_dir`: needed to resolve the output directory (`to_dir`) and the path of the media files from a nested document.
+
+=== Missing, but can be worked around (with possible differences)
+
+* `Document#doctitle(partition: true, use_fallback: true)`: `getStructuredDoctitle()` doesn't fall back to the `untitled-label` attribute.
+* `Document#doctype`: read the `doctype` attribute instead.
+* `Section#sectnum(delimiter, append)`: only `getSectnum(delimiter)` is available (a part is numbered with `getNumeral() + ":"`).
+* `AbstractBlock#alt`: reading the `alt` attribute skips the substitutions (special characters, replacements).
+* `AbstractBlock#captioned_title`: rebuild it from `getCaption()` and `getTitle()`.
+* `AbstractNode#set_option`: use `setAttribute(name + "-option", "", true)`.
+* `Document#set_attribute`, which honors the locked attributes and applies the attribute substitutions: `ContentNode#setAttribute(name, value, overwrite)` does neither.
+* `AbstractBlock#sections`: filter `getBlocks()`.
+* `AttributeList#parse_into` (to parse the attributes of an image macro in an attribute value) and `Helpers.uriish?`: the converter has to reimplement them.
+* Node identity (e.g., `ref_chapter == our_chapter`) relies on the implementation returning the same wrapper for the same node.
+
+=== Suggested additions
+
+* `Document`: `getSyntaxHighlighter()` (returning a consumer-side interface), `getDocinfo(location, suffix)`, `getDoctitle(options)` with fallback, `getDoctype()`, `getFirstSection()`, `getParentDocument()`, `getBaseDir()`, `generateId(title)`.
+* `ContentNode`: `getXreftext(xrefstyle)`, `setOption(name)`, `getAlt()`.
+* `StructuralNode`: `getCaptionedTitle()`.
+* `Section`: `getSectnum(delimiter, append)`.
+* Converters: backend traits (e.g., `@ConverterFor(basebackend = ..., htmlsyntax = ...)` or setters), a write method that receives the target file, and a hook to configure the document when the extensions are activated.
+* A way to get the cell of an inner document (depends on asciidoctor#4380).
