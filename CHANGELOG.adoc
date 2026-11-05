@@ -21,7 +21,7 @@ Breaking Changes::
 * Java 17 is the minimum supported version
 * Ruby extensions and Ruby libraries (gems) are not supported anymore (`Asciidoctor#rubyExtensionRegistry()`, `Asciidoctor#requireLibrary`), as well as the syntax highlighters that require a gem (Rouge, CodeRay, Pygments) and the converter templates (Tilt)
 * Remove the JRuby specific classes (`AsciidoctorJRuby`, `JRubyAsciidoctor`)
-* The `-r` option of the command line interface loads a Java class that implements `ExtensionRegistry` (instead of a Ruby library)
+* The `-r` option of the command line interface loads a Java class (an `ExtensionRegistry`, `ConverterRegistry` or `SyntaxHighlighterRegistry`, a converter or an extension) or a jar whose services are loaded (instead of a Ruby library); the services of the directories and jars added with `-I` are loaded
 * Remove the distribution (zip, tar), replaced by native executables (Linux, macOS, Windows) published on the GitHub release
 * Remove the Arquillian extension (`asciidoctorj-arquillian-extension`) and the WildFly integration test
 

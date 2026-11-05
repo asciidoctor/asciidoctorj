@@ -1,6 +1,7 @@
 package org.asciidoctor.cli;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -26,7 +27,20 @@ import java.util.zip.GZIPInputStream;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.SafeMode;
+import org.asciidoctor.converter.Converter;
+import org.asciidoctor.extension.BlockMacroProcessor;
+import org.asciidoctor.extension.BlockProcessor;
+import org.asciidoctor.extension.DocinfoProcessor;
+import org.asciidoctor.extension.IncludeProcessor;
+import org.asciidoctor.extension.InlineMacroProcessor;
+import org.asciidoctor.extension.JavaExtensionRegistry;
+import org.asciidoctor.extension.Postprocessor;
+import org.asciidoctor.extension.Preprocessor;
+import org.asciidoctor.extension.Processor;
+import org.asciidoctor.extension.Treeprocessor;
+import org.asciidoctor.jruby.converter.spi.ConverterRegistry;
 import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
+import org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry;
 import org.asciidoctor.log.Severity;
 
 /**
@@ -46,10 +60,21 @@ public class Options extends LinkedHashMap<String, Object> {
     private static final List<String> FAILURE_LEVELS = List.of("info", "INFO", "warning", "WARNING", "error", "ERROR",
             "fatal", "FATAL");
 
-    /** The class loader used to load the required classes (extended by the load paths). */
+    // NOTE classes can't be loaded at runtime by a native executable (GraalVM)
+    private static final boolean NATIVE_IMAGE = System.getProperty("org.graalvm.nativeimage.imagecode") != null;
+
+    /**
+     * The class loader used to load the required classes and the services (extended by the load paths and the
+     * required JAR files).
+     */
     private ClassLoader classLoader = Options.class.getClassLoader();
     // the extension registries loaded with the -r option, which are applied to the Asciidoctor instance
     private final List<ExtensionRegistry> extensionRegistries = new ArrayList<>();
+    // the converter registries, syntax highlighter registries, converters and extensions loaded with the -r option
+    private final List<ConverterRegistry> converterRegistries = new ArrayList<>();
+    private final List<SyntaxHighlighterRegistry> syntaxHighlighterRegistries = new ArrayList<>();
+    private final List<Class<?>> converterClasses = new ArrayList<>();
+    private final List<Consumer<JavaExtensionRegistry>> processorRegistrations = new ArrayList<>();
 
     public Options(Map<String, Object> options) {
         if (options == null) {
@@ -180,25 +205,43 @@ public class Options extends LinkedHashMap<String, Object> {
                 remove("attributes");
             }
 
+            // the class path is made of the load paths and of the required JAR files (whose services are loaded)
+            List<String> classPath = new ArrayList<>();
             if (get("load_paths") instanceof List<?> loadPaths) {
                 List<String> uniqueLoadPaths = new ArrayList<>(new LinkedHashSet<>(stringList(loadPaths)));
                 put("load_paths", uniqueLoadPaths);
-                classLoader = createClassLoader(uniqueLoadPaths);
+                classPath.addAll(uniqueLoadPaths);
             }
-
+            List<String> uniqueRequires = List.of();
             if (get("requires") instanceof List<?> requires) {
-                List<String> uniqueRequires = new ArrayList<>(new LinkedHashSet<>(stringList(requires)));
+                uniqueRequires = new ArrayList<>(new LinkedHashSet<>(stringList(requires)));
                 put("requires", uniqueRequires);
                 for (String path : uniqueRequires) {
+                    if (isJar(path)) {
+                        if (!isFile(path)) {
+                            return failToRequire(path, new FileNotFoundException(path));
+                        }
+                        classPath.add(path);
+                    }
+                }
+            }
+            if (!classPath.isEmpty()) {
+                if (NATIVE_IMAGE) {
+                    puts(System.err, "asciidoctor: FAILED: the native executable can't load classes at runtime "
+                            + "(-I DIRECTORY, -r FILE.jar)");
+                    puts(System.err, "  Run AsciidoctorJ with Java to load extensions, converters and syntax "
+                            + "highlighters: java -jar asciidoctorj-cli.jar");
+                    return 1;
+                }
+                classLoader = createClassLoader(classPath);
+            }
+            for (String path : uniqueRequires) {
+                // NOTE the services of a required JAR file are loaded by the Asciidoctor instance
+                if (!isJar(path)) {
                     try {
                         require(path);
                     } catch (ReflectiveOperationException | LinkageError | ClassCastException e) {
-                        if (Boolean.TRUE.equals(get("trace"))) {
-                            throw new IllegalStateException("cannot load such class -- " + path, e);
-                        }
-                        puts(System.err, "asciidoctor: FAILED: '" + path + "' could not be loaded");
-                        puts(System.err, "  Use --trace to show backtrace");
-                        return 1;
+                        return failToRequire(path, e);
                     }
                 }
             }
@@ -291,7 +334,9 @@ public class Options extends LinkedHashMap<String, Object> {
                         "may be specified more than once"),
                 path -> appendAll("load_paths", Arrays.asList(path.split(File.pathSeparator))));
         opts.on("-r", "--require CLASS", null,
-                List.of("load the specified class (an implementation of ExtensionRegistry, which registers extensions)",
+                List.of("load the specified class (an implementation of ExtensionRegistry, ConverterRegistry,",
+                        "SyntaxHighlighterRegistry, Converter or of an extension, such as a BlockProcessor)",
+                        "or JAR file (whose services are loaded)",
                         "may be specified more than once"),
                 path -> appendAll("requires", List.of(path)));
         opts.on(null, "--log-level LEVEL", LOG_LEVELS,
@@ -392,16 +437,71 @@ public class Options extends LinkedHashMap<String, Object> {
         return new URLClassLoader(urls.toArray(URL[]::new), Options.class.getClassLoader());
     }
 
+    private int failToRequire(String path, Throwable cause) {
+        if (Boolean.TRUE.equals(get("trace"))) {
+            throw new IllegalStateException("cannot load such class -- " + path, cause);
+        }
+        puts(System.err, "asciidoctor: FAILED: '" + path + "' could not be loaded");
+        if (NATIVE_IMAGE) {
+            puts(System.err, "  The native executable can only load the classes it contains; "
+                    + "run AsciidoctorJ with Java to load other classes");
+        }
+        puts(System.err, "  Use --trace to show backtrace");
+        return 1;
+    }
+
+    private static boolean isJar(String path) {
+        return path.toLowerCase(Locale.ROOT).endsWith(".jar");
+    }
+
     /**
-     * Loads the class with the specified name. If the class is an {@link ExtensionRegistry} (the service provider
-     * interface used to register extensions automatically), it will register its extensions with the Asciidoctor
-     * instance.
+     * Loads the class with the specified name. If the class is a registry (the service provider interfaces used to
+     * register extensions, converters and syntax highlighters automatically), a converter or an extension (a processor),
+     * it will be registered with the Asciidoctor instance.
      */
     private void require(String className) throws ReflectiveOperationException {
         Class<?> clazz = Class.forName(className, true, classLoader);
         if (ExtensionRegistry.class.isAssignableFrom(clazz)) {
             extensionRegistries.add((ExtensionRegistry) clazz.getConstructor().newInstance());
+        } else if (ConverterRegistry.class.isAssignableFrom(clazz)) {
+            converterRegistries.add((ConverterRegistry) clazz.getConstructor().newInstance());
+        } else if (SyntaxHighlighterRegistry.class.isAssignableFrom(clazz)) {
+            syntaxHighlighterRegistries.add((SyntaxHighlighterRegistry) clazz.getConstructor().newInstance());
+        } else if (Converter.class.isAssignableFrom(clazz)) {
+            converterClasses.add(clazz);
+        } else if (Processor.class.isAssignableFrom(clazz)) {
+            Consumer<JavaExtensionRegistry> registration = processorRegistration(clazz);
+            if (registration == null) {
+                throw new ClassCastException("unsupported extension type: " + clazz.getName());
+            }
+            processorRegistrations.add(registration);
         }
+    }
+
+    /**
+     * @return the function that registers the extension (a processor) with the extension registry, according to its
+     * type, or null if the type isn't supported
+     */
+    @SuppressWarnings("unchecked")
+    private static Consumer<JavaExtensionRegistry> processorRegistration(Class<?> clazz) {
+        if (Preprocessor.class.isAssignableFrom(clazz)) {
+            return registry -> registry.preprocessor((Class<? extends Preprocessor>) clazz);
+        } else if (Treeprocessor.class.isAssignableFrom(clazz)) {
+            return registry -> registry.treeprocessor((Class<? extends Treeprocessor>) clazz);
+        } else if (Postprocessor.class.isAssignableFrom(clazz)) {
+            return registry -> registry.postprocessor((Class<? extends Postprocessor>) clazz);
+        } else if (IncludeProcessor.class.isAssignableFrom(clazz)) {
+            return registry -> registry.includeProcessor((Class<? extends IncludeProcessor>) clazz);
+        } else if (DocinfoProcessor.class.isAssignableFrom(clazz)) {
+            return registry -> registry.docinfoProcessor((Class<? extends DocinfoProcessor>) clazz);
+        } else if (BlockProcessor.class.isAssignableFrom(clazz)) {
+            return registry -> registry.block((Class<? extends BlockProcessor>) clazz);
+        } else if (BlockMacroProcessor.class.isAssignableFrom(clazz)) {
+            return registry -> registry.blockMacro((Class<? extends BlockMacroProcessor>) clazz);
+        } else if (InlineMacroProcessor.class.isAssignableFrom(clazz)) {
+            return registry -> registry.inlineMacro((Class<? extends InlineMacroProcessor>) clazz);
+        }
+        return null;
     }
 
     /**
@@ -409,6 +509,28 @@ public class Options extends LinkedHashMap<String, Object> {
      */
     public List<ExtensionRegistry> getExtensionRegistries() {
         return extensionRegistries;
+    }
+
+    /**
+     * @return the class loader used to load the required classes and the services, which includes the load paths
+     * (-I) and the required JAR files (-r)
+     */
+    public ClassLoader getClassLoader() {
+        return classLoader;
+    }
+
+    /**
+     * Registers the registries, the converters and the extensions loaded with the -r option with the Asciidoctor instance.
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public void registerRequired(Asciidoctor asciidoctor) {
+        extensionRegistries.forEach(registry -> registry.register(asciidoctor));
+        converterRegistries.forEach(registry -> registry.register(asciidoctor));
+        syntaxHighlighterRegistries.forEach(registry -> registry.register(asciidoctor));
+        for (Class<?> converterClass : converterClasses) {
+            asciidoctor.javaConverterRegistry().register((Class) converterClass);
+        }
+        processorRegistrations.forEach(registration -> registration.accept(asciidoctor.javaExtensionRegistry()));
     }
 
     private static boolean isFile(String path) {

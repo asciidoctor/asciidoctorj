@@ -20,7 +20,6 @@ import java.util.logging.Level;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.core.Timings;
-import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
@@ -125,11 +124,14 @@ public class Invoker {
         java.util.logging.Logger julLogger = java.util.logging.Logger.getLogger(JUL_LOGGER_NAME);
         Level julLevel = julLogger.getLevel();
         julLogger.setLevel(Level.OFF);
+        // NOTE the Asciidoctor instance loads the services (extensions, converters, etc.) with the context class
+        // loader, which includes the load paths (-I) and the required JAR files (-r)
+        Thread thread = Thread.currentThread();
+        ClassLoader contextClassLoader = thread.getContextClassLoader();
+        thread.setContextClassLoader(options.getClassLoader());
         try (Asciidoctor asciidoctor = Asciidoctor.Factory.create()) {
             asciidoctor.registerLogHandler(logHandler);
-            for (ExtensionRegistry registry : options.getExtensionRegistries()) {
-                registry.register(asciidoctor);
-            }
+            options.registerRequired(asciidoctor);
             for (Map.Entry<String, Object> entry : options.entrySet()) {
                 String key = entry.getKey();
                 Object val = entry.getValue();
@@ -251,6 +253,7 @@ public class Invoker {
                     : e.getMessage());
             println(errOut, "  Use --trace to show backtrace");
         } finally {
+            thread.setContextClassLoader(contextClassLoader);
             julLogger.setLevel(julLevel);
         }
     }
