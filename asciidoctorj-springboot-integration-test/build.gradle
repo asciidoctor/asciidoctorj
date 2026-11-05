@@ -1,14 +1,18 @@
-jar.enabled = false
+apply plugin: libs.plugins.spring.boot.get().pluginId
+
+description = 'Checks that AsciidoctorJ works in a Spring Boot executable jar (nested jars)'
 
 dependencies {
-    testCompileOnly project(':asciidoctorj')
-
-    testImplementation "commons-io:commons-io:$commonsioVersion"
-    testImplementation "org.awaitility:awaitility:4.2.0"
-    testImplementation "com.squareup.okhttp3:okhttp:4.10.0"
-    testImplementation "com.google.code.gson:gson:2.10.1"
+    implementation platform(libs.spring.boot.dependencies)
+    implementation project(':asciidoctorj-core')
+    implementation 'org.springframework.boot:spring-boot-starter'
 }
 
-tasks.withType(Test) {
-    dependsOn(':asciidoctorj-springboot-integration-test:springboot-app:assemble')
+// run the executable jar (i.e., test against the executable jar, not the classes)
+test {
+    def bootJarFile = tasks.named('bootJar').flatMap { it.archiveFile }
+    inputs.file bootJarFile
+    doFirst {
+        systemProperty 'app.jar', bootJarFile.get().asFile.absolutePath
+    }
 }

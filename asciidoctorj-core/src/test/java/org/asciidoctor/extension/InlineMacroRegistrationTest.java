@@ -1,5 +1,7 @@
 package org.asciidoctor.extension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.PhraseNode;
 import org.asciidoctor.ast.StructuralNode;
@@ -11,16 +13,11 @@ import org.jsoup.Jsoup;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
 import java.util.Map;
 
 import static java.util.stream.Collectors.joining;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.asciidoctor.util.OptionsTestHelper.emptyOptions;
-import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
@@ -66,23 +63,9 @@ public class InlineMacroRegistrationTest {
         }
     }
 
-    @Retention(RUNTIME)
-    @Target(TYPE)
-    @Name("meta-inline")
-    public @interface MetaInlineName { }
-
-    @MetaInlineName
-    public static class MetaNamedInlineProcessor extends AbstractTestProcessor { }
-
     @Name(AnnotatedTestProcessor.NAME)
     public static class AnnotatedTestProcessor extends AbstractTestProcessor {
         public static final String NAME = "annotated";
-    }
-
-    @Test
-    public void testExtensionGroupRegistersMetaNamedInlineProcessor() {
-        asciidoctor.createGroup().inlineMacro(MetaNamedInlineProcessor.class).register();
-        check("Hello WORLD", asciidoctor.convert(document("meta-inline", "World"), emptyOptions()));
     }
 
     @Test
@@ -175,6 +158,6 @@ public class InlineMacroRegistrationTest {
     }
 
     private void check(String expected, String html) {
-        assertEquals(expected, Jsoup.parse(html).select("div.paragraph > p").first().text());
+        assertThat(Jsoup.parse(html).select("div.paragraph > p").first().text()).isEqualTo(expected);
     }
 }

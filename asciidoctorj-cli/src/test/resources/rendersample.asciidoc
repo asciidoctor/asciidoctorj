@@ -1,6 +1,0 @@
-= Document Title
-
-
-== Section A
-
-*Section A* paragraph.

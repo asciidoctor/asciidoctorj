@@ -1,0 +1,167 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to release (e.g., 4.0.0)
+        required: true
+      next-version:
+        description: Next development version (default, the next patch version, e.g., 4.0.1-SNAPSHOT, or the same version after a prerelease)
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.versions.outputs.version }}
+      next-version: ${{ steps.versions.outputs.next-version }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Validate versions
+        id: versions
+        shell: bash
+        env:
+          VERSION: ${{ inputs.version }}
+          NEXT_VERSION: ${{ inputs.next-version }}
+        run: |
+          if [[ ! $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]] || [[ $VERSION == *-SNAPSHOT ]]; then
+            echo "::error::Invalid release version: $VERSION"
+            exit 1
+          fi
+          if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" > /dev/null; then
+            echo "::error::Tag v$VERSION already exists"
+            exit 1
+          fi
+          if [ -z "$NEXT_VERSION" ]; then
+            if [[ $VERSION == *-* ]]; then
+              # after a prerelease (e.g., 2.0.0-rc.1), continue the development of the same version
+              NEXT_VERSION="${VERSION%%-*}-SNAPSHOT"
+            else
+              IFS=. read -r major minor patch <<< "$VERSION"
+              NEXT_VERSION="$major.$minor.$((patch + 1))-SNAPSHOT"
+            fi
+          fi
+          if [[ $NEXT_VERSION != *-SNAPSHOT ]]; then
+            echo "::error::Next development version must end with -SNAPSHOT: $NEXT_VERSION"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "next-version=$NEXT_VERSION" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@v5
+      - name: Build and test
+        run: ./gradlew build -Pversion=${{ steps.versions.outputs.version }}
+      - name: Upload jars
+        uses: actions/upload-artifact@v7
+        with:
+          name: jars
+          # the core and API jars are copied next to the CLI jar, which references them in its manifest
+          path: |
+            asciidoctorj-cli/build/libs/asciidoctorj-${{ steps.versions.outputs.version }}.jar
+            asciidoctorj-cli/build/libs/asciidoctorj-api-${{ steps.versions.outputs.version }}.jar
+            asciidoctorj-cli/build/libs/asciidoctorj-cli-${{ steps.versions.outputs.version }}.jar
+          if-no-files-found: error
+
+  native:
+    needs: prepare
+    name: native (${{ matrix.platform }})
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux-amd64
+          - os: ubuntu-24.04-arm
+            platform: linux-arm64
+          - os: macos-latest
+            platform: macos-arm64
+          - os: windows-latest
+            platform: windows-amd64
+    runs-on: ${{ matrix.os }}
+    env:
+      VERSION: ${{ needs.prepare.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '25'
+          distribution: graalvm-community
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download jars
+        uses: actions/download-artifact@v7
+        with:
+          name: jars
+          path: asciidoctorj-cli/build/libs
+      - name: Build native image
+        shell: bash
+        run: tools/build-native.sh
+      - name: Smoke test
+        shell: bash
+        run: tools/native-smoke-test/run.sh asciidoctorj-cli/build/native/asciidoctorj "asciidoctorj-cli/build/libs/asciidoctorj-cli-$VERSION.jar"
+      - name: Package native executable
+        shell: bash
+        run: |
+          mkdir dist
+          archive="asciidoctorj-$VERSION-${{ matrix.platform }}"
+          if [ "$RUNNER_OS" = Windows ]; then
+            (cd asciidoctorj-cli/build/native && 7z a "../../../dist/$archive.zip" asciidoctorj.exe)
+          else
+            tar -czf "dist/$archive.tar.gz" -C asciidoctorj-cli/build/native asciidoctorj
+          fi
+      - name: Upload native executable
+        uses: actions/upload-artifact@v7
+        with:
+          name: native-${{ matrix.platform }}
+          path: dist/*
+          if-no-files-found: error
+
+  release:
+    needs: [prepare, native]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      VERSION: ${{ needs.prepare.outputs.version }}
+      NEXT_VERSION: ${{ needs.prepare.outputs.next-version }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Download release assets
+        uses: actions/download-artifact@v7
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Compute checksums
+        working-directory: dist
+        run: sha256sum * > SHA256SUMS && cat SHA256SUMS
+      - name: Configure Git
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+      - name: Commit and tag release version
+        run: |
+          sed -i "s/^version=.*/version=$VERSION/" gradle.properties
+          git commit -am "chore(release): $VERSION"
+          git tag -a "v$VERSION" -m "Release $VERSION"
+          git push origin "v$VERSION"
+      - name: Create GitHub release
+        run: |
+          prerelease=
+          if [[ $VERSION == *-* ]]; then prerelease=--prerelease; fi
+          gh release create "v$VERSION" dist/* --verify-tag --title "$VERSION" --generate-notes $prerelease
+      - name: Bump to next development version
+        run: |
+          sed -i "s/^version=.*/version=$NEXT_VERSION/" gradle.properties
+          git commit -am "chore(release): prepare next development iteration ($NEXT_VERSION)"
+          git push origin HEAD:main

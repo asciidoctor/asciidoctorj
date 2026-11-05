@@ -3,7 +3,6 @@ package org.asciidoctor.extension;
 import org.asciidoctor.ast.Document;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.hamcrest.CoreMatchers.is;
 
 public class NumberLinesPreprocessor extends Preprocessor {
 

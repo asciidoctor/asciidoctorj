@@ -1,0 +1,83 @@
+= AsciidoctorJ API: notes for 4.0
+:toc:
+
+This document lists what seems improvable or inconsistent in the AsciidoctorJ API (`asciidoctorj-api`), found while implementing it on top of the pure Java implementation.
+The API is currently implemented as is (unchanged), so these notes are questions for the maintainers: could we make breaking changes in 4.0 to improve these points?
+
+== Ruby and JRuby specific API
+
+* `Asciidoctor#rubyExtensionRegistry()`, `RubyExtensionRegistry`, `Asciidoctor#requireLibrary(String...)`, `Asciidoctor#requireLibraries(Collection)` and the `ruby*` methods of `ExtensionGroup` (`requireRubyLibrary`, `loadRubyClass`, `rubyBlock`, etc.) only make sense with a Ruby runtime.
+The implementation throws an `UnsupportedOperationException`.
+Could they be deprecated in 3.x and removed in 4.0?
+* `Asciidoctor#shutdown()` tears down the Ruby runtime: there's nothing to shut down anymore (and `close()` already exists).
+* `Asciidoctor#asciidoctorVersion()` returns the version of Asciidoctor (Ruby) embedded in AsciidoctorJ.
+There's no embedded Asciidoctor anymore: the implementation returns the version of AsciidoctorJ.
+Should it be renamed (e.g., `version()`) or report the version of Asciidoctor (Ruby) that the implementation follows?
+* `LogRecord#getSourceFileName()` and `LogRecord#getSourceMethodName()` are extracted from the Ruby backtrace.
+They are always null (they could report the Java class and method that logged the message, but it's costly).
+
+== Classes outside of the API
+
+Applications depend on classes of the JRuby implementation (`asciidoctorj-core`), which are not part of the API:
+
+* the service provider interfaces `org.asciidoctor.jruby.extension.spi.ExtensionRegistry`, `org.asciidoctor.jruby.converter.spi.ConverterRegistry` and `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry` (used to register extensions, converters and syntax highlighters automatically);
+* the directory walkers `org.asciidoctor.jruby.AsciiDocDirectoryWalker` and `org.asciidoctor.jruby.GlobDirectoryWalker` (used with `Asciidoctor#convertDirectory`);
+* the exception `org.asciidoctor.jruby.internal.AsciidoctorCoreException`, thrown when a conversion fails (the API doesn't define an exception, so the applications catch this internal class).
+
+The implementation provides them with the same names for compatibility.
+Could they move to the API (e.g., `org.asciidoctor.extension.spi`, `org.asciidoctor.util`) in 4.0?
+
+== Asciidoctor
+
+* `Asciidoctor#convert(…, Class<T> expectedResult)` and `Asciidoctor#convertFile(…, Class<T> expectedResult)` silently return null when the result doesn't have the expected type (e.g., the converted String when a `Document` is expected, or the `Document` when the output is written to a file and a String is expected).
+An exception (or a dedicated method to convert to a file) would be clearer.
+* `Asciidoctor#convert(Reader, Writer, Options)` reads the whole content in memory, so it doesn't stream.
+* The default log handler of an instance (which logs with java.util.logging) can't be unregistered: an application that handles the log records itself (e.g., the command line interface) has to silence the `asciidoctor` logger of java.util.logging.
+* The API doesn't give access to the timings of a conversion (read, parse, convert, write), which the command line interface reports with `--timings`: the command line interface uses the implementation for this option (the `timings` option is not documented by the API).
+
+== Options
+
+* `Options#map()` is deprecated, but it's the only way for an implementation to read the options (the implementation uses it).
+Should it be undeprecated, or replaced by typed getters?
+* The options of the processors (e.g., `Processor#createBlock(…, Map<Object, Object> options)`) are untyped maps whose keys and values follow Ruby conventions: a String value that starts with a colon is converted to a Ruby symbol (e.g., `":compound"`).
+As a consequence, a String option value can't start with a colon.
+The implementation applies the same rule, except for the `source` option (AsciidoctorJ also converts the lines of the source that start with a colon, e.g., an attribute entry, which looks like a bug).
+* The key types are inconsistent: `createPhraseNode(…, String text, Map<String, Object> attributes, Map<String, Object> options)` vs `createPhraseNode(…, List<String> text, Map<String, Object> attributes, Map<Object, Object> options)`, `Document#getOptions()` returns a `Map<Object, Object>`.
+
+== Ruby symbols in the API
+
+The constants of the API use the Ruby symbol syntax: `Contexts.PARAGRAPH` is `":paragraph"`, `ContentModel.COMPOUND` is `":compound"`, `LocationType.HEADER.optionValue()` is `":head"`, `FormatType.SHORT.optionValue()` is `":short"`.
+Enums (or plain names) would be more natural in Java.
+
+== Extensions
+
+* `BaseProcessor#createList(StructuralNode parent, String context, Map<Object, Object> options)` ignores the options (it calls `createList(parent, context)`), which looks like a bug.
+* `ExtensionGroup` has no `blockMacro(String, BlockMacroProcessor)` nor `inlineMacro(String, InlineMacroProcessor)`, unlike `JavaExtensionRegistry`.
+* A processor class registered without a name gets its names from the `@Name` annotations, including the meta-annotations (an annotation annotated with `@Name`), and is registered once per name with `JavaExtensionRegistry`, whereas `ExtensionGroup` only reads a direct `@Name` annotation (and fails later, when the document is converted).
+* The `ContentModel` annotation is in the `org.asciidoctor.ast` package, whereas the other annotations of the processors (`Name`, `Contexts`, etc.) are in `org.asciidoctor.extension`.
+* `Processor#setConfig` can only be called in the constructor (it throws an `IllegalStateException` once the processor is registered), whereas `getConfig()` returns a mutable map and `updateConfig` can be called anytime.
+* `Processor#createTableRow(Table parent)` doesn't use the parent.
+* The overloads of `Processor#createBlock` for a String and a List of lines are ambiguous when the content is null (e.g., an image block): `createBlock(parent, "image", (String) null, attributes)`.
+* `BlockProcessor#process` returns an `Object` (a `StructuralNode` or null), whereas `BlockMacroProcessor#process` returns a `StructuralNode`.
+* The nodes created with the `create*` methods (e.g., `createTableColumn`, `createTableRow`, `createTableCell`) must be added to their parent explicitly (e.g., `table.getColumns().add(column)`), whereas `createSection` and `createBlock` only set the parent of the node: the expectations could be documented (or made consistent).
+* The conversion of the String values that start with a colon to Ruby symbols also applies to the values of the attributes passed to the `create*` methods (e.g., the `subs` attribute of an inline node, `":normal"`).
+
+== Converters
+
+* `JavaConverterRegistry#register` requires a converter class that implements `OutputFormatWriter` (`<U, T extends Converter<U> & OutputFormatWriter<U>>`), even if the output is never written to a file (e.g., a converter that returns an object).
+* `JavaConverterRegistry#converters()` returns a mutable copy of the registered converters (modifying it has no effect).
+* `JavaConverterRegistry#register` registers the converter for the `format` of the `@ConverterFor` annotation if it's set, otherwise for its `value` (the backend).
+Since the format is the file type of the output (e.g., `html`), registering a converter for its format is surprising.
+The implementation does the same for compatibility.
+* When the output is written to an `OutputStream` passed with the `to_file` option, AsciidoctorJ closes the stream after writing the output.
+The implementation doesn't close a stream it didn't open (the caller owns it).
+
+== AST
+
+* `ContentNode#setContext` can't be implemented for inline nodes (the context of an inline node is final): the implementation throws an `UnsupportedOperationException`.
+* `StructuralNode#getContent()` and `Cell#getContent()` return an `Object`: the content of a cell is a `List<String>` of paragraphs, except for an AsciiDoc cell, whose content is a `String`.
+* `DescriptionList#getBlocks()` returns an empty list (the items are `DescriptionListEntry`, which are not structural nodes), whereas `List#getBlocks()` returns the items.
+* `StructuralNode#getLevel()` returns an `int`: a node without level (nil in Ruby) has the level 0.
+* `Footnote#getIndex()` returns a `Long` (an `int` would be enough).
+* `StructuralNode#findBy(Map<Object, Object> selector)` takes an untyped selector whose keys and values may be Ruby symbols (e.g., `":context"`, `":listing"`); a typed selector (e.g., a builder) would be easier to use.
+* `ContentNode#getAttribute(Object name)` and the related methods take an `Object` name, whereas the attribute names are Strings (`ContentNode#getAttributes()` returns a `Map<String, Object>`).

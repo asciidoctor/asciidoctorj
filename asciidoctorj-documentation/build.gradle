@@ -1,23 +1,18 @@
-jar.enabled = false
+description = 'The tests that back the code snippets of the documentation'
 
 dependencies {
-    testImplementation project(':asciidoctorj')
-    testImplementation (project(':asciidoctorj-test-support')) {
-        exclude group: 'junit', module: 'junit'
-    }
-    testImplementation "commons-io:commons-io:$commonsioVersion"
-    testImplementation "org.jsoup:jsoup:$jsoupVersion"
-    testImplementation("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion") {
-        transitive = false
-    }
+    testImplementation project(':asciidoctorj-core')
+    testImplementation project(':asciidoctorj-test-support')
+    testImplementation libs.assertj
+    testImplementation libs.jsoup
+    testImplementation libs.commons.io
 }
 
-compileTestJava {
-    // PrismJsHighlighterTest relies on Nashorn which is not supported anymore since Java 15
-    // Either include it as an external library and configure the module path accordingly as it must be included via the module path
-    // to run, or just exclude the test entirely. We're doing the latter, it's just a test.
-    def javaMajorVersion = Integer.parseInt(System.getProperty('java.version').split("[.]")[0])
-    if (javaMajorVersion >= 15) {
-        exclude('**/PrismJsHighlighter*.java')
+sourceSets {
+    test {
+        java {
+            // PrismJsHighlighter relies on Nashorn, which is not available since Java 15 (like in AsciidoctorJ)
+            exclude '**/PrismJsHighlighter*.java'
+        }
     }
 }
