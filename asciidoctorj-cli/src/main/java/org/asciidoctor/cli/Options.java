@@ -230,7 +230,7 @@ public class Options extends LinkedHashMap<String, Object> {
                     puts(System.err, "asciidoctor: FAILED: the native executable can't load classes at runtime "
                             + "(-I DIRECTORY, -r FILE.jar)");
                     puts(System.err, "  Run AsciidoctorJ with Java to load extensions, converters and syntax "
-                            + "highlighters: java -jar asciidoctorj-cli.jar");
+                            + "highlighters: java -jar asciidoctorj-native-cli.jar");
                     return 1;
                 }
                 classLoader = createClassLoader(classPath);

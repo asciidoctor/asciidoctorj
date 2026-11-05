@@ -75,7 +75,7 @@ jobs:
         run: tools/build-native.sh
       - name: Smoke test
         shell: bash
-        run: tools/native-smoke-test/run.sh asciidoctorj-cli/build/native/asciidoctorj asciidoctorj-cli/build/libs/asciidoctorj-cli-*[0-9T].jar
+        run: tools/native-smoke-test/run.sh asciidoctorj-cli/build/native/asciidoctorj asciidoctorj-cli/build/libs/asciidoctorj-native-cli-*[0-9T].jar
       - name: Upload native executable
         uses: actions/upload-artifact@v7
         with:

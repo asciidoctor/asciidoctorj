@@ -7,7 +7,7 @@ The port follows Asciidoctor Ruby at commit `52871a02` (main branch, 2026-10-11)
 
 == Summary
 
-* Gradle multi-project build: `asciidoctorj-api` (the AsciidoctorJ API, unchanged), `asciidoctorj-core` (`org.asciidoctor:asciidoctorj-native`), `asciidoctorj-cli`, `asciidoctorj-test-support`, `asciidoctorj-documentation`, `asciidoctorj-springboot-integration-test`; `options.release` 17, no runtime dependency.
+* Gradle multi-project build: `asciidoctorj-api` (the AsciidoctorJ API, unchanged), `asciidoctorj-core` (`org.asciidoctor:asciidoctorj-native`), `asciidoctorj-cli` (`org.asciidoctor:asciidoctorj-native-cli`), `asciidoctorj-test-support`, `asciidoctorj-documentation`, `asciidoctorj-springboot-integration-test`; `options.release` 17, no runtime dependency.
 * JDK: `export JAVA_HOME=~/.sdkman/candidates/java/25.0.4-tem` (not the default JDK).
 * Build: `./gradlew --offline build`, a single test class: `./gradlew --offline :asciidoctorj-core:test --tests DocumentTest`, compile only: `./gradlew -q --offline testClasses`.
 * CI: GitHub Actions (`.github/workflows/ci.yml`) on Linux, Windows and macOS.
