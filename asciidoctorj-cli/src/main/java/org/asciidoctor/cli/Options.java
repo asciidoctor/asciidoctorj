@@ -438,6 +438,7 @@ public class Options extends LinkedHashMap<String, Object> {
     }
 
     private int failToRequire(String path, Throwable cause) {
+        closeClassLoader();
         if (Boolean.TRUE.equals(get("trace"))) {
             throw new IllegalStateException("cannot load such class -- " + path, cause);
         }
@@ -517,6 +518,20 @@ public class Options extends LinkedHashMap<String, Object> {
      */
     public ClassLoader getClassLoader() {
         return classLoader;
+    }
+
+    /**
+     * Closes the class loader created for the load paths (-I) and the required JAR files (-r), if any, which releases
+     * the JAR files (they can't be deleted on Windows while they are open).
+     */
+    public void closeClassLoader() {
+        if (classLoader instanceof URLClassLoader urlClassLoader) {
+            try {
+                urlClassLoader.close();
+            } catch (IOException e) {
+                // ignore
+            }
+        }
     }
 
     /**
