@@ -69,7 +69,7 @@ jobs:
           name: jars
           # the core and API jars are copied next to the CLI jar, which references them in its manifest
           path: |
-            asciidoctorj-cli/build/libs/asciidoctorj-${{ steps.versions.outputs.version }}.jar
+            asciidoctorj-cli/build/libs/asciidoctorj-native-${{ steps.versions.outputs.version }}.jar
             asciidoctorj-cli/build/libs/asciidoctorj-api-${{ steps.versions.outputs.version }}.jar
             asciidoctorj-cli/build/libs/asciidoctorj-cli-${{ steps.versions.outputs.version }}.jar
           if-no-files-found: error

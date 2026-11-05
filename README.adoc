@@ -54,7 +54,7 @@ AsciidoctorJ is published to Maven Central:
 |Group Id |Artifact Id |Description
 
 |org.asciidoctor
-|asciidoctorj
+|asciidoctorj-native
 |The implementation (which depends on the API)
 
 |org.asciidoctor
@@ -97,7 +97,7 @@ The options are the options of the `asciidoctor` command (`asciidoctorj --help`)
 For instance, `asciidoctorj -r my-extensions.jar README.adoc` converts the document with the extensions that the jar registers as services.
 
 The native executables can't load classes at runtime: `-I` and `-r FILE.jar` fail, and `-r` can only load the classes that the executable contains.
-The command line interface can also be run with Java: `java -jar asciidoctorj-cli-{artifact-version}.jar`, with the jars of the implementation and of the API (`asciidoctorj-{artifact-version}.jar` and `asciidoctorj-api-{artifact-version}.jar`) in the same directory.
+The command line interface can also be run with Java: `java -jar asciidoctorj-cli-{artifact-version}.jar`, with the jars of the implementation and of the API (`asciidoctorj-native-{artifact-version}.jar` and `asciidoctorj-api-{artifact-version}.jar`) in the same directory.
 
 === Windows installation
 
@@ -119,7 +119,7 @@ To start using AsciidoctorJ, add the dependency to your build:
 <dependencies>
   <dependency>
     <groupId>org.asciidoctor</groupId>
-    <artifactId>asciidoctorj</artifactId>
+    <artifactId>asciidoctorj-native</artifactId>
     <version>{artifact-version}</version>
   </dependency>
 </dependencies>
@@ -130,7 +130,7 @@ To start using AsciidoctorJ, add the dependency to your build:
 .Declaring the dependency in a Gradle build file (e.g., build.gradle)
 ----
 dependencies {
-  implementation 'org.asciidoctor:asciidoctorj:{artifact-version}'
+  implementation 'org.asciidoctor:asciidoctorj-native:{artifact-version}'
 }
 ----
 
@@ -194,7 +194,7 @@ Run a single test class:
 
 [horizontal]
 `asciidoctorj-api`:: the API (`org.asciidoctor:asciidoctorj-api`)
-`asciidoctorj-core`:: the implementation (`org.asciidoctor:asciidoctorj`): the port of Asciidoctor in `org.asciidoctor.core` (a flat package mirroring `lib/asciidoctor`, plus `converter`, `extension`, `syntaxhighlighter` and `log`), the implementation of the API in `org.asciidoctor.core.api`, the test suite of Asciidoctor translated to JUnit 5 (`org.asciidoctor.core`) and the tests of the API (`org.asciidoctor`)
+`asciidoctorj-core`:: the implementation (`org.asciidoctor:asciidoctorj-native`): the port of Asciidoctor in `org.asciidoctor.core` (a flat package mirroring `lib/asciidoctor`, plus `converter`, `extension`, `syntaxhighlighter` and `log`), the implementation of the API in `org.asciidoctor.core.api`, the test suite of Asciidoctor translated to JUnit 5 (`org.asciidoctor.core`) and the tests of the API (`org.asciidoctor`)
 `asciidoctorj-cli`:: the command line interface (`org.asciidoctor:asciidoctorj-cli`), and its tests (which use the test helpers and fixtures of `asciidoctorj-core`)
 `asciidoctorj-test-support`:: JUnit 5 extensions to test AsciidoctorJ and its extensions (e.g., inject an `Asciidoctor` instance or a classpath resource)
 `asciidoctorj-documentation`:: the tests that back the code snippets of the documentation
