@@ -236,7 +236,9 @@ configure(subprojects.findAll { !it.isDistribution() && !isJavaImplementation(it
   }
 }
 
-configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.endsWith('-documentation') && !isJavaImplementation(it) }) {
+configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.endsWith('-documentation') }) {
+  // NOTE the modules of the Java implementation are configured after this block
+  apply plugin: 'java-library'
 
   java {
     withJavadocJar()
@@ -278,6 +280,11 @@ configure(subprojects.findAll { isJavaImplementation(it) }) {
     options.compilerArgs += ['-Xmaxerrs', '10000']
   }
 
+  javadoc {
+    // Oracle JDK11+ likes to fail the build over spoiled HTML
+    options.addStringOption('Xdoclint:none', '-quiet')
+  }
+
   tasks.withType(Test).configureEach {
     useJUnitPlatform()
     testLogging {
@@ -290,27 +297,5 @@ configure(subprojects.findAll { isJavaImplementation(it) }) {
         languageVersion = JavaLanguageVersion.of(project.testJavaVersion)
       }
     }
-  }
-}
-
-// the modules of the Java implementation published to a Maven repository (e.g., ./gradlew publishToMavenLocal)
-configure(subprojects.findAll { it.name in ['asciidoctorj-java', 'asciidoctorj-java-cli'] }) {
-  apply plugin: 'maven-publish'
-
-  java {
-    withSourcesJar()
-  }
-
-  publishing {
-    publications {
-      mavenJava(MavenPublication) {
-        from components.java
-      }
-    }
-  }
-
-  // NOTE the build script of the module sets the archive name after this block is applied
-  afterEvaluate {
-    publishing.publications.mavenJava.artifactId = base.archivesName.get()
   }
 }

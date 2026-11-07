@@ -4,6 +4,11 @@ base {
     archivesName = 'asciidoctorj-java'
 }
 
+ext.publicationName = 'mavenAsciidoctorJJava'
+
+apply from: rootProject.file('gradle/publish.gradle')
+apply from: rootProject.file('gradle/signing.gradle')
+
 dependencies {
     api project(':asciidoctorj-api')
     // the tests of the AsciidoctorJ API (imported from AsciidoctorJ)
