@@ -190,13 +190,11 @@ Run the tests on Java 17 (the minimum supported version, which must be installed
 `asciidoctorj-test-support`:: JUnit 5 extensions to test AsciidoctorJ and its extensions (e.g., inject an `Asciidoctor` instance or a classpath resource)
 `asciidoctorj-java-documentation`:: the tests that back the code snippets of the documentation
 `docs`:: the documentation (Antora), the migration guide, the notes about the API and the status of the port
-`tools`:: the scripts used to translate the tests of Asciidoctor (`rb2java.rb`, `fix_tests.py`, `regen.sh`) and to compare the output with Asciidoctor (`compare`)
 
 === Following Asciidoctor
 
 The implementation is a port of {uri-asciidoctor-repo}[Asciidoctor] that follows the Ruby source file by file (one Java class per Ruby class, same method order), so that the changes made to Asciidoctor can be ported easily.
 It follows the main branch of Asciidoctor (commit `52871a02`).
-The test translation tools expect Asciidoctor to be checked out next to this project (`../asciidoctor`).
 The status of the port and the improvement backlog are tracked in xref:docs/port-status.adoc[].
 
 === Continuous integration

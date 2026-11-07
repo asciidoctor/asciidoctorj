@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Regression tests for differences with Asciidoctor Ruby found by tools/compare (no Ruby counterpart).
+ * Regression tests for differences with Asciidoctor Ruby found by comparing the output of both implementations (no Ruby counterpart).
  */
 @DisplayName("HTML5 converter")
 public class Html5ConverterTest extends TestHelper {

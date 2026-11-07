@@ -36,13 +36,8 @@ The port follows Asciidoctor Ruby at commit `52871a02` (main branch, 2026-10-11)
 * CLI: `org.asciidoctor.cli.Invoker` (main class of the jar) and `cli.Options` (OptionParser clone), which convert the documents with the AsciidoctorJ API (an `Asciidoctor` instance per invocation, a `LogHandler` that writes the messages in the format of Asciidoctor and tracks the maximum severity for `--failure-level`); only `--timings` uses the implementation (`Timings`). `-r` loads a Java class (an `ExtensionRegistry`, a `ConverterRegistry` or a `SyntaxHighlighterRegistry`, registered with the instance, or a converter or an extension, registered according to its type) or a jar, `-I` adds an entry to the class path; the instance loads the services of the class path (the context class loader is set during the invocation). The native executable fails when classes must be loaded at runtime (`-I`, `-r FILE.jar`).
 * The questions about the API for the maintainers are in `asciidoctorj-java/docs/api-notes.adoc`.
 
-== Test translation tooling
+== Test helpers
 
-* `tools/rb2java.rb`: translates the Ruby AST to JUnit 5.
-* `tools/fix_tests.py`: per-test fixes (replacements, disabling with a reason, body rewrites, extra members/imports).
-* `tools/regen.sh Name...`: regenerates test classes (skips the ones containing "ported by hand", e.g., `LoggerTest`, `ConverterTest`).
-* `tools/errors.sh` (compilation errors with source line), `tools/failures.sh` (lists surefire failures).
-* `tools/compare/compare.sh <name> <dir>`: converts every AsciiDoc file of a corpus with Asciidoctor Ruby and with the Java port (HTML5), then diffs the HTML and the log messages (`ATTRS` adds attributes, `EXT` changes the file extension).
 * `TestHelper.java` holds the equivalents of the Ruby test helpers (XPath/CSS, CLI, test web server, `Ref`, etc.).
 
 == Upstream changes not ported

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Smoke test for the native image of the AsciidoctorJ CLI.
-# Usage: tools/native-smoke-test/run.sh <native-executable> [<jar>]
+# Usage: asciidoctorj-java-cli/src/native-smoke-test/run.sh <native-executable> [<jar>]
 # The .exe extension of the executable may be omitted on Windows.
 # If the jar is specified, the output of the native executable is compared with the output of the JVM.
 set -euo pipefail

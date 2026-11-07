@@ -1,3 +1,7 @@
+plugins {
+    id 'org.graalvm.buildtools.native'
+}
+
 description = 'The command line interface of AsciidoctorJ'
 
 base {
@@ -33,3 +37,28 @@ def copyRuntimeDependencies = tasks.register('copyRuntimeDependencies', Copy) {
 }
 
 assemble.dependsOn copyRuntimeDependencies
+
+// the native executable (build/native/nativeCompile/asciidoctorj): ./gradlew :asciidoctorj-java-cli:nativeCompile
+// native-image is looked up in $GRAALVM_HOME, then in $JAVA_HOME
+graalvmNative {
+    // the CLI has no third-party dependency: its metadata is in src/main/resources/META-INF/native-image
+    metadataRepository {
+        enabled = false
+    }
+    binaries {
+        main {
+            imageName = 'asciidoctorj'
+            // an executable, not a shared library (the default when the java-library plugin is applied)
+            sharedLibrary = false
+            mainClass = 'org.asciidoctor.cli.Invoker'
+            // -march=compatibility: run on any CPU of the target architecture
+            // -H:-ParseRuntimeOptions: don't let the VM consume the -D (destination dir) argument as a system property
+            buildArgs.addAll('-march=compatibility', '-H:-ParseRuntimeOptions')
+        }
+    }
+}
+
+// the native tasks read the CLI jar, in build/libs, which is also the output directory of copyRuntimeDependencies
+tasks.matching { it.name in ['generateResourcesConfigFile', 'nativeCompile'] }.configureEach {
+    mustRunAfter copyRuntimeDependencies
+}
