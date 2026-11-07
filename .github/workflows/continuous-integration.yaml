@@ -173,11 +173,11 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: gradle/actions/setup-gradle@v6
-      - name: Build native executable
-        run: ./gradlew :asciidoctorj-java-cli:assemble :asciidoctorj-java-cli:nativeCompile
+      - name: Build JVM application and native executable
+        run: ./gradlew :asciidoctorj-java-cli:installDist :asciidoctorj-java-cli:nativeCompile
       - name: Smoke test
         shell: bash
-        run: asciidoctorj-java-cli/src/native-smoke-test/run.sh asciidoctorj-java-cli/build/native/nativeCompile/asciidoctorj asciidoctorj-java-cli/build/libs/asciidoctorj-java-cli-*[0-9T].jar
+        run: asciidoctorj-java-cli/src/native-smoke-test/run.sh asciidoctorj-java-cli/build/native/nativeCompile/asciidoctorj asciidoctorj-java-cli/build/install/asciidoctorj-java-cli
       - name: Upload native executable
         uses: actions/upload-artifact@v7
         with:

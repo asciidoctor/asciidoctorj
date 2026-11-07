@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # Smoke test for the native image of the AsciidoctorJ CLI.
-# Usage: asciidoctorj-java-cli/src/native-smoke-test/run.sh <native-executable> [<jar>]
+# Usage: asciidoctorj-java-cli/src/native-smoke-test/run.sh <native-executable> [<jvm-application-dir>]
 # The .exe extension of the executable may be omitted on Windows.
-# If the jar is specified, the output of the native executable is compared with the output of the JVM.
+# If the directory of the JVM application (./gradlew installDist) is specified, the output of the native executable
+# is compared with the output of its start script.
 set -euo pipefail
 cli=$1
 if [ ! -f "$cli" ] && [ -f "$cli.exe" ]; then cli=$cli.exe; fi
-jar=${2:-}
+app=${2:-}
 dir=$(cd "$(dirname "$0")" && pwd)
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
@@ -68,10 +69,11 @@ if "$cli" "$work/does-not-exist.adoc" 2> "$work/missing.txt"; then fail 'fails o
 printf '= Title\n\n=== Out of sequence\n' > "$work/warn.adoc"
 if "$cli" --failure-level WARN -o - "$work/warn.adoc" > /dev/null 2> "$work/warn.txt"; then fail 'exits with non-zero status when failure level is reached'; else check 'exits with non-zero status when failure level is reached' "$work/warn.txt" 'section title out of sequence'; fi
 
-if [ -n "$jar" ]; then
+if [ -n "$app" ]; then
+  for f in "$app"/bin/*; do case $f in *.bat) ;; *) launcher=$f ;; esac; done
   for backend in html5 docbook5; do
     "$cli" -b $backend -a reproducible -o "$work/native.$backend" "$work/sample.adoc"
-    java -jar "$jar" -b $backend -a reproducible -o "$work/jvm.$backend" "$work/sample.adoc"
+    "$launcher" -b $backend -a reproducible -o "$work/jvm.$backend" "$work/sample.adoc"
     if diff -u "$work/jvm.$backend" "$work/native.$backend"; then pass "native output matches JVM output ($backend)"; else fail "native output matches JVM output ($backend)"; fi
   done
 fi

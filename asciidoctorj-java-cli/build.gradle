@@ -1,5 +1,6 @@
 plugins {
-    id 'org.graalvm.buildtools.native'
+    id 'application'
+    alias(libs.plugins.graalvm.native)
 }
 
 description = 'The command line interface of AsciidoctorJ'
@@ -21,22 +22,19 @@ test {
     mustRunAfter ':asciidoctorj-java:test'
 }
 
+// ./gradlew installDist: the JVM application (build/install/asciidoctorj-java-cli), with its start scripts
+application {
+    mainClass = 'org.asciidoctor.cli.Invoker'
+}
+
+// java -jar asciidoctorj-java-cli.jar, with the jars of the implementation and of the API in the same directory
 jar {
     def runtimeClasspath = configurations.runtimeClasspath
     manifest {
-        attributes 'Main-Class': 'org.asciidoctor.cli.Invoker'
-        // the core jar is expected next to the CLI jar
+        attributes 'Main-Class': application.mainClass
         attributes 'Class-Path': runtimeClasspath.elements.map { it.collect { it.asFile.name }.join(' ') }
     }
 }
-
-// copy the core jar next to the CLI jar, so that java -jar works from the build/libs directory
-def copyRuntimeDependencies = tasks.register('copyRuntimeDependencies', Copy) {
-    from configurations.runtimeClasspath
-    into layout.buildDirectory.dir('libs')
-}
-
-assemble.dependsOn copyRuntimeDependencies
 
 // the native executable (build/native/nativeCompile/asciidoctorj): ./gradlew :asciidoctorj-java-cli:nativeCompile
 // native-image is looked up in $GRAALVM_HOME, then in $JAVA_HOME
@@ -50,15 +48,9 @@ graalvmNative {
             imageName = 'asciidoctorj'
             // an executable, not a shared library (the default when the java-library plugin is applied)
             sharedLibrary = false
-            mainClass = 'org.asciidoctor.cli.Invoker'
             // -march=compatibility: run on any CPU of the target architecture
             // -H:-ParseRuntimeOptions: don't let the VM consume the -D (destination dir) argument as a system property
             buildArgs.addAll('-march=compatibility', '-H:-ParseRuntimeOptions')
         }
     }
-}
-
-// the native tasks read the CLI jar, in build/libs, which is also the output directory of copyRuntimeDependencies
-tasks.matching { it.name in ['generateResourcesConfigFile', 'nativeCompile'] }.configureEach {
-    mustRunAfter copyRuntimeDependencies
 }

@@ -31,7 +31,6 @@ plugins {
   // Moved to dependency in buildscript. See https://github.com/asciidoctor/asciidoctorj/issues/1275
   // id 'com.github.jruby-gradle.base' version '2.0.1'
   id 'codenarc'
-  id 'org.graalvm.buildtools.native' version '1.1.18' apply false
 }
 
 // TIP use -PpublishRelease=true to active release behavior regardless of the version
