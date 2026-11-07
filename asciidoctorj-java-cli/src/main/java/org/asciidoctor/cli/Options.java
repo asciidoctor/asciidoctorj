@@ -60,7 +60,8 @@ public class Options extends LinkedHashMap<String, Object> {
     private static final List<String> FAILURE_LEVELS = List.of("info", "INFO", "warning", "WARNING", "error", "ERROR",
             "fatal", "FATAL");
 
-    // NOTE classes can't be loaded at runtime by a native executable (GraalVM)
+    // true when running as a native executable (GraalVM), which can only load the classes it contains:
+    // -I and -r FILE.jar are not supported
     private static final boolean NATIVE_IMAGE = System.getProperty("org.graalvm.nativeimage.imagecode") != null;
 
     /**
