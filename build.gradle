@@ -111,7 +111,12 @@ allprojects {
   defaultTasks 'check'
 }
 
-subprojects {
+// the modules of the Java implementation are configured at the end of this file
+boolean isJavaImplementation(def project) {
+  project.name.startsWith('asciidoctorj-java')
+}
+
+configure(subprojects.findAll { !isJavaImplementation(it) }) {
   // NOTE applying Java plugin changes the status; take steps to preserve value
   def _status = status
   apply plugin: 'java-library'
@@ -219,7 +224,7 @@ boolean usesSpock(def project) {
 }
 
 // apply JRuby and sources/javadocs packaging stuff for all subprojects except the distribution
-configure(subprojects.findAll { !it.isDistribution() }) {
+configure(subprojects.findAll { !it.isDistribution() && !isJavaImplementation(it) }) {
 
   apply from: rootProject.file('gradle/eclipse.gradle')
   apply plugin: 'idea'
@@ -230,7 +235,9 @@ configure(subprojects.findAll { !it.isDistribution() }) {
   }
 }
 
-configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.endsWith('-documentation')}) {
+configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.endsWith('-documentation') }) {
+  // NOTE the modules of the Java implementation are configured after this block
+  apply plugin: 'java-library'
 
   java {
     withJavadocJar()
@@ -240,4 +247,54 @@ configure(subprojects.findAll { !it.name.endsWith('-distribution') && ! it.name.
     }
   }
 
+}
+
+// the Java implementation (a pure Java port of Asciidoctor) requires Java 17
+def junitBom = libs.junit.bom
+
+configure(subprojects.findAll { isJavaImplementation(it) }) {
+  apply plugin: 'java-library'
+
+  version = javaImplementationVersion
+
+  java {
+    toolchain {
+      languageVersion.set(JavaLanguageVersion.of(21))
+    }
+  }
+
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    testImplementation platform(junitBom)
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+  }
+
+  tasks.withType(JavaCompile).configureEach {
+    options.release = 17
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-Xmaxerrs', '10000']
+  }
+
+  javadoc {
+    // Oracle JDK11+ likes to fail the build over spoiled HTML
+    options.addStringOption('Xdoclint:none', '-quiet')
+  }
+
+  tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    testLogging {
+      events 'failed'
+      exceptionFormat = 'full'
+    }
+    // the tests can be run on the minimum supported version of Java with -PtestJavaVersion=17
+    if (project.hasProperty('testJavaVersion')) {
+      javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(project.testJavaVersion)
+      }
+    }
+  }
 }

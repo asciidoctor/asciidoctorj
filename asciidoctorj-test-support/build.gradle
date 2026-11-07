@@ -8,6 +8,11 @@ dependencies {
     testImplementation project(':asciidoctorj')
 }
 
+// the test support is used by the tests of both implementations, and of the extensions, which may target Java 11
+tasks.named('compileJava') {
+    options.release = 11
+}
+
 def javaApiUrl = "https://docs.oracle.com/javase/8/docs/api/"
 def junitURL = "https://junit.org/junit4/javadoc/latest"
 

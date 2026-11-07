@@ -1,0 +1,13 @@
+= Syntax Highlighter Test
+
+== Some sources
+
+[source,java]
+----
+System.out.println("Hello Java");
+----
+
+[source,go]
+----
+fmt.Println("Hello Go")
+----

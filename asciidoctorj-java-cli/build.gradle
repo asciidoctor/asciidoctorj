@@ -1,0 +1,56 @@
+plugins {
+    id 'application'
+    alias(libs.plugins.graalvm.native)
+}
+
+description = 'The command line interface of AsciidoctorJ'
+
+base {
+    archivesName = 'asciidoctorj-java-cli'
+}
+
+dependencies {
+    implementation project(':asciidoctorj-java')
+    testImplementation project(path: ':asciidoctorj-java', configuration: 'testArtifacts')
+}
+
+test {
+    // the tests use the fixtures of the core module (src/test/resources/fixtures)
+    workingDir = project(':asciidoctorj-java').projectDir
+    // and write (then delete) files in these fixtures, like the tests of the core module:
+    // don't run them at the same time (org.gradle.parallel)
+    mustRunAfter ':asciidoctorj-java:test'
+}
+
+// ./gradlew installDist: the JVM application (build/install/asciidoctorj-java-cli), with its start scripts
+application {
+    mainClass = 'org.asciidoctor.cli.Invoker'
+}
+
+// java -jar asciidoctorj-java-cli.jar, with the jars of the implementation and of the API in the same directory
+jar {
+    def runtimeClasspath = configurations.runtimeClasspath
+    manifest {
+        attributes 'Main-Class': application.mainClass
+        attributes 'Class-Path': runtimeClasspath.elements.map { it.collect { it.asFile.name }.join(' ') }
+    }
+}
+
+// the native executable (build/native/nativeCompile/asciidoctorj): ./gradlew :asciidoctorj-java-cli:nativeCompile
+// native-image is looked up in $GRAALVM_HOME, then in $JAVA_HOME
+graalvmNative {
+    // the CLI has no third-party dependency: its metadata is in src/main/resources/META-INF/native-image
+    metadataRepository {
+        enabled = false
+    }
+    binaries {
+        main {
+            imageName = 'asciidoctorj'
+            // an executable, not a shared library (the default when the java-library plugin is applied)
+            sharedLibrary = false
+            // -march=compatibility: run on any CPU of the target architecture
+            // -H:-ParseRuntimeOptions: don't let the VM consume the -D (destination dir) argument as a system property
+            buildArgs.addAll('-march=compatibility', '-H:-ParseRuntimeOptions')
+        }
+    }
+}

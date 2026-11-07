@@ -1,0 +1,9 @@
+description = 'The tests that back the code snippets of the documentation'
+
+dependencies {
+    testImplementation project(':asciidoctorj-java')
+    testImplementation project(':asciidoctorj-test-support')
+    testImplementation libs.assertj
+    testImplementation libs.jsoup
+    testImplementation libs.commons.io
+}

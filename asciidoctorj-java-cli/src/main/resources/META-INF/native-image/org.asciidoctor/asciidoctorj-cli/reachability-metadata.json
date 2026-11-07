@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "glob": "org/asciidoctor/data/reference/**"
+    },
+    {
+      "glob": "org/asciidoctor/man/**"
+    }
+  ]
+}

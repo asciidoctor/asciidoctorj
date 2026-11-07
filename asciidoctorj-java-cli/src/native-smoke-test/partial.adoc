@@ -1,0 +1,4 @@
+[#included]
+=== Included Section
+
+This content was included.

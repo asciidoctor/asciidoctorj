@@ -1,0 +1,7 @@
+= Example of URI
+
+.Gemfile
+[source,ruby]
+----
+include::http://example.com/asciidoctorclass.rb[]
+----
