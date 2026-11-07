@@ -90,6 +90,8 @@ The implementation doesn't close a stream it didn't open (the caller owns it).
 * `Footnote#getIndex()` returns a `Long` (an `int` would be enough).
 * `StructuralNode#findBy(Map<Object, Object> selector)` takes an untyped selector whose keys and values may be Ruby symbols (e.g., `":context"`, `":listing"`); a typed selector (e.g., a builder) would be easier to use.
 * `ContentNode#getAttribute(Object name)` and the related methods take an `Object` name, whereas the attribute names are Strings (`ContentNode#getAttributes()` returns a `Map<String, Object>`).
+* `Document` can't tell an attribute that was never set from an attribute unset by the author (e.g., `:!show-link-uri:`): `hasAttribute` returns false in both cases.
+Asciidoctor PDF adds `attr_unspecified?` to `Document` for this (`show-link-uri`, `hyphens`, `outline`, `pagenums`, etc.), which the port of the converter to Java needs, see {url-issues}/1337[#1337].
 
 == Gaps found while porting a converter
 
@@ -130,7 +132,7 @@ The API can't navigate from an inner document to its cell, nor attach data to a 
 
 === Suggested additions
 
-* `Document`: `getSyntaxHighlighter()` (returning a consumer-side interface), `getDocinfo(location, suffix)`, `getDoctitle(options)` with fallback, `getDoctype()`, `getFirstSection()`, `getParentDocument()`, `getBaseDir()`, `generateId(title)`.
+* `Document`: `isAttributeUnspecified(name)` ({url-issues}/1337[#1337]), `getSyntaxHighlighter()` (returning a consumer-side interface), `getDocinfo(location, suffix)`, `getDoctitle(options)` with fallback, `getDoctype()`, `getFirstSection()`, `getParentDocument()`, `getBaseDir()`, `generateId(title)`.
 * `ContentNode`: `getXreftext(xrefstyle)`, `setOption(name)`, `getAlt()`.
 * `StructuralNode`: `getCaptionedTitle()`.
 * `Section`: `getSectnum(delimiter, append)`.
