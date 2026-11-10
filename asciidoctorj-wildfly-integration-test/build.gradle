@@ -1,13 +1,9 @@
 jar.enabled = false
 
 ext {
-    arquillianWildflyVersion = '3.0.1.Final'
-    wildflyVersion = '26.0.1.Final'
-}
-
-repositories {
-    // Required by arquillian
-    maven { url "https://maven.repository.redhat.com/ga/" }
+    wildflyVersion = '42.0.0.Final'
+    wildflyArquillianVersion = '5.1.0.Final'
+    jakartaServletVersion = '6.1.0'
 }
 
 configurations {
@@ -17,83 +13,58 @@ configurations {
 
 dependencies {
 
-    jbossmodule(project(':asciidoctorj-api')) {
-        transitive = false
-    }
-    jbossmodule(project(':asciidoctorj')) {
-        transitive = false
-    }
-    jbossmodule "org.jruby:jruby-complete:$jrubyVersion"
+    // AsciidoctorJ and its runtime dependencies (asciidoctorj-api, JRuby...) are installed as a WildFly module
+    jbossmodule project(':asciidoctorj')
 
-    jbossdist group: 'org.wildfly', name: 'wildfly-dist', version: wildflyVersion, ext: 'zip'
+    jbossdist "org.wildfly:wildfly-dist:$wildflyVersion@zip"
 
     testCompileOnly project(':asciidoctorj')
-    testImplementation "javax:javaee-api:7.0"
-    // Arquillian Unit5 support requires 1.7.0.Alpha5
-    // https://github.com/arquillian/arquillian-core/issues/137#issuecomment-726596414
-    testImplementation("org.junit.vintage:junit-vintage-engine")
+    testImplementation "jakarta.servlet:jakarta.servlet-api:$jakartaServletVersion"
     testImplementation "org.jsoup:jsoup:$jsoupVersion"
-    testImplementation "org.jboss.arquillian.junit:arquillian-junit-container:$arquillianVersion"
-
-    testRuntimeOnly "org.wildfly.arquillian:wildfly-arquillian-container-managed:$arquillianWildflyVersion"
+    testImplementation "org.jboss.arquillian.junit5:arquillian-junit5-container:$arquillianVersion"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+    testRuntimeOnly "org.wildfly.arquillian:wildfly-arquillian-container-managed:$wildflyArquillianVersion"
 }
 
-task unpackWildfly(type: Copy) {
-    from {
-        zipTree(configurations.jbossdist.singleFile)
+def wildflyDist = layout.buildDirectory.dir('wildfly')
+def wildflyHome = wildflyDist.map { it.dir("wildfly-$wildflyVersion") }
+def moduleDir = layout.buildDirectory.dir('modules/org/asciidoctor/asciidoctorj/main')
+
+def unpackWildfly = tasks.register('unpackWildfly', Copy) {
+    from { zipTree(configurations.jbossdist.singleFile) }
+    into wildflyDist
+    doNotTrackState 'Build on Github Actions seems to fail on Windows without it'
+}
+
+def createModuleDescriptor = tasks.register('createModuleDescriptor', Copy) {
+    def moduleJars = configurations.jbossmodule.incoming.artifacts.resolvedArtifacts.map { artifacts ->
+        artifacts.collect { it.file.name }.sort()
     }
-    into "$buildDir"
-    doNotTrackState "Build on Github Actions seems to fail on Windows without it"
-}
-
-compileTestJava {
-    dependsOn unpackWildfly
-}
-
-javadocJar {
-    dependsOn unpackWildfly
-}
-
-sourcesJar {
-    dependsOn unpackWildfly
-}
-
-task createModuleDescriptor(type: Copy) {
-    from "src/test/resources/module.xml"
-    into "build/modules/org/asciidoctor/asciidoctorj/main"
+    inputs.property('moduleJars', moduleJars)
+    from 'src/test/resources/module.xml'
+    into moduleDir
     filter {
-        it
-                .replaceAll('@@version@@', project.version)
-                .replaceAll('@@jrubyVersion@@', jrubyVersion)
+        it.replace('@@resources@@', moduleJars.get().collect { "    <resource-root path=\"$it\"/>" }.join('\n'))
     }
 }
 
-task createModule(type: Copy) {
+def createModule = tasks.register('createModule', Copy) {
     from configurations.jbossmodule
-    into "build/modules/org/asciidoctor/asciidoctorj/main"
+    into moduleDir
     dependsOn createModuleDescriptor
 }
 
-test {
-    testLogging {
-        // events 'passed', 'failed', 'skipped', 'standard_out', 'standard_error'
-        // events 'standard_out', 'standard_error'
-        afterSuite { desc, result ->
-            if (!desc.parent && logger.infoEnabled) {
-                logger.info "Test results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)"
-            }
-        }
+tasks.named('test') {
+    dependsOn unpackWildfly, createModule
+
+    // run WildFly with the same Java version as the tests (the Java toolchain)
+    def wildflyJavaHome = javaLauncher.map { it.metadata.installationPath.asFile.absolutePath }
+    def jbossHome = wildflyHome.get().asFile.absolutePath
+    def modulePath = jbossHome + '/modules' + File.pathSeparator + layout.buildDirectory.dir('modules').get().asFile.absolutePath
+
+    systemProperty 'jboss.home', jbossHome
+    systemProperty 'module.path', modulePath
+    doFirst {
+        systemProperty 'wildfly.java.home', wildflyJavaHome.get()
     }
-
-    def jbossHome = file("build/wildfly-$wildflyVersion").absolutePath
-    systemProperty('jboss.home', jbossHome)
-    systemProperty('module.path', jbossHome + "/modules" + File.pathSeparator + file('build/modules').absolutePath)
-
-    if (JavaVersion.current().isJava11Compatible()) {
-        systemProperty('arquillian.launch', 'wildfly-java11')
-    }
-
-    dependsOn createModule
-    dependsOn unpackWildfly
-    dependsOn configurations.jbossmodule
 }

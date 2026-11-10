@@ -11,25 +11,24 @@ If you want to use AsciidoctorJ in an application deployed on [app]_WildFly_, yo
 .Asciidoctor module descriptor for WildFly
 ----
 <?xml version="1.0" encoding="UTF-8"?>
-<module xmlns="urn:jboss:module:1.0" name="org.asciidoctor">
+<module xmlns="urn:jboss:module:1.9" name="org.asciidoctor">
     <resources>
-        <resource-root path="asciidoctorj-api-{artifact-version}.jar"/>
         <resource-root path="asciidoctorj-{artifact-version}.jar"/>
-        <resource-root path="jcommander-1.72.jar"/>
-        <resource-root path="jruby-complete-{jruby-version}.jar"/>
+        <resource-root path="asciidoctorj-api-{artifact-version}.jar"/>
+        <resource-root path="jruby-{jruby-version}.jar"/>
+        <resource-root path="jruby-base-{jruby-version}.jar"/>
+        <resource-root path="jruby-stdlib-{jruby-version}.jar"/>
+        <!-- one resource-root for each runtime dependency of JRuby (jnr-*, jffi, joni, jcodings...) -->
     </resources>
     <dependencies>
-        <module name="sun.jdk" export="true">
-            <imports>
-                <include path="sun/misc/Unsafe" />
-            </imports>
-        </module>
-        <module name="javax.management.j2ee.api"/>
-        <module name="javax.api"/>
+        <module name="java.se"/>
+        <module name="jdk.unsupported"/>
         <module name="org.slf4j"/>
     </dependencies>
 </module>
 ----
++
+TIP: The runtime dependencies of AsciidoctorJ can be copied into the module folder with `mvn dependency:copy-dependencies -DincludeScope=runtime` on a project that depends on `org.asciidoctor:asciidoctorj`.
 . Copy the jar files into the same folder as the _module.xml_ file.
 . Make sure the version numbers of the jar files agree with what's in the current set.
 Restart WildFly for the new module to take effect.
