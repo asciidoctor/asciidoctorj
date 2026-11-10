@@ -1,0 +1,3 @@
+= Gist test
+
+gist::myaccount/1234abcd[]

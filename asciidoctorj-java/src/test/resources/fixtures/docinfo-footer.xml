@@ -1,0 +1,9 @@
+<glossary xml:id="_glossary">
+<title>Glossary</title>
+<glossentry>
+<glossterm>term</glossterm>
+<glossdef>
+<simpara>definition</simpara>
+</glossdef>
+</glossentry>
+</glossary>

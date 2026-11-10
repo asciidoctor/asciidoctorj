@@ -68,7 +68,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          sed -i "s/^version=.*/version=$RELEASE_VERSION/" gradle.properties
+          sed -i -e "s/^version=.*/version=$RELEASE_VERSION/" -e "s/^javaImplementationVersion=.*/javaImplementationVersion=$RELEASE_VERSION/" gradle.properties
           # roll the "Unreleased" section into "<version> (<date>)" and start a new "Unreleased" section
           npx --yes @bestikk/changelog@1.1.0 release "$RELEASE_VERSION" --release-heading "$CHANGELOG_RELEASE_HEADING"
           # the documentation on main describes the latest final release
@@ -90,7 +90,7 @@ jobs:
           ./gradlew --no-daemon clean build
       - name: Prepare the next development iteration
         run: |
-          sed -i "s/^version=.*/version=$NEXT_VERSION/" gradle.properties
+          sed -i -e "s/^version=.*/version=$NEXT_VERSION/" -e "s/^javaImplementationVersion=.*/javaImplementationVersion=$NEXT_VERSION/" gradle.properties
           git commit -am "Prepare next development iteration $NEXT_VERSION"
       # push before publishing, so that a release that cannot be tagged on main is never published
       - name: Push the commits and the tag

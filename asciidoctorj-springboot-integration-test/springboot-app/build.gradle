@@ -1,4 +1,3 @@
-import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
