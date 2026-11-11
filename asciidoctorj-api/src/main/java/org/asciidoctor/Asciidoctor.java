@@ -179,7 +179,12 @@ public interface Asciidoctor extends AutoCloseable {
      * Creates an Ruby extension registry ready to be used for registering Ruby extension.
      *
      * @return Extension Registry object.
+     * @deprecated Ruby extensions can only be registered with an implementation that embeds Asciidoctor (Ruby) using JRuby.
+     * With the JRuby implementation, use {@code AsciidoctorJRuby#rubyExtensionRegistry()} instead
+     * (e.g., {@code asciidoctor.unwrap(AsciidoctorJRuby.class).rubyExtensionRegistry()}).
+     * This method will be removed from the {@link Asciidoctor} interface in AsciidoctorJ 4.0.
      */
+    @Deprecated
     RubyExtensionRegistry rubyExtensionRegistry();
 
     /**

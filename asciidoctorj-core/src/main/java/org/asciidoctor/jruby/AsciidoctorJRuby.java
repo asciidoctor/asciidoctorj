@@ -25,6 +25,14 @@ public interface AsciidoctorJRuby extends Asciidoctor {
   @Override
   void requireLibraries(Collection<String> requiredLibraries);
 
+  /**
+   * Creates a Ruby extension registry ready to be used for registering Ruby extensions.
+   *
+   * @return Extension Registry object.
+   */
+  @Override
+  RubyExtensionRegistry rubyExtensionRegistry();
+
 
   /**
    * Factory for creating a new instance of Asciidoctor interface.
