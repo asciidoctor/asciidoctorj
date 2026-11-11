@@ -37,11 +37,18 @@ jar {
 }
 
 // the native executable (build/native/nativeCompile/asciidoctorj): ./gradlew :asciidoctorj-java-cli:nativeCompile
-// native-image is looked up in $GRAALVM_HOME, then in $JAVA_HOME
+// native-image comes from a GraalVM 25 Java toolchain (Gradle detects the installed JDKs),
+// the other tasks use the Java 21 toolchain
 graalvmNative {
     // the CLI has no third-party dependency: its metadata is in src/main/resources/META-INF/native-image
     metadataRepository {
         enabled = false
+    }
+    binaries.configureEach {
+        javaLauncher.set(javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(25)
+            nativeImageCapable = true
+        })
     }
     binaries {
         main {
