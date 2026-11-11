@@ -14,6 +14,14 @@ public class WhenUserRequiresTheAsciidoctorRuntimeVersion {
     private Asciidoctor asciidoctor;
 
     @Test
+    public void asciidoctorj_version_should_be_retrieved() {
+        final String version = asciidoctor.getVersion();
+
+        assertThat(version).isNotBlank();
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
     public void current_version_should_be_retrieved() {
         final String asciidoctorVersion = asciidoctor.asciidoctorVersion();
 

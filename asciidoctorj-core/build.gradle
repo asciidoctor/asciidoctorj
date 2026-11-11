@@ -103,6 +103,12 @@ version.asciidoctor: $asciidoctorGemVersion
   }
 }
 
+processResources {
+  into('META-INF') {
+    from createVersionFile
+  }
+}
+
 
 jar {
    bundle {
@@ -115,9 +121,6 @@ jar {
     attributes(
       'Automatic-Module-Name': 'org.asciidoctor.asciidoctorj'
     )
-  }
-  metaInf {
-    from createVersionFile
   }
 }
 

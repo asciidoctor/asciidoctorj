@@ -239,8 +239,23 @@ public interface Asciidoctor extends AutoCloseable {
      * Method that gets the asciidoctor version which is being used..
      *
      * @return Version number.
+     * @deprecated This method returns the version of Asciidoctor (Ruby) embedded in AsciidoctorJ,
+     * which only makes sense with an implementation that embeds Asciidoctor (Ruby) using JRuby.
+     * Use {@link #getVersion()} to get the version of AsciidoctorJ instead.
+     * This method will be removed in AsciidoctorJ 4.0.
      */
+    @Deprecated
     String asciidoctorVersion();
+
+    /**
+     * Gets the version of AsciidoctorJ (i.e., the version of this implementation of the API).
+     *
+     * @return the version of AsciidoctorJ.
+     * @throws UnsupportedOperationException if the implementation doesn't override this method.
+     */
+    default String getVersion() {
+        throw new UnsupportedOperationException("This implementation of the AsciidoctorJ API doesn't report its version");
+    }
 
 
     /**
