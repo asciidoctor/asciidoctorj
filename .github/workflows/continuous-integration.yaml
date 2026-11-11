@@ -160,6 +160,9 @@ jobs:
           - os: windows-latest
             platform: windows-amd64
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v7
       # Gradle runs on Java 21 (JAVA_HOME), native-image comes from the GraalVM 25 Java toolchain (GRAALVM_HOME):
@@ -179,7 +182,6 @@ jobs:
           ./gradlew -Porg.gradle.java.installations.fromEnv=GRAALVM_HOME
           :asciidoctorj-java-cli:installDist :asciidoctorj-java-cli:nativeCompile
       - name: Smoke test
-        shell: bash
         run: asciidoctorj-java-cli/src/native-smoke-test/run.sh asciidoctorj-java-cli/build/native/nativeCompile/asciidoctorj asciidoctorj-java-cli/build/install/asciidoctorj-java-cli
       - name: Upload native executable
         uses: actions/upload-artifact@v7
