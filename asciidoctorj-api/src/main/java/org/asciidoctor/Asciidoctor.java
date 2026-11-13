@@ -221,7 +221,13 @@ public interface Asciidoctor extends AutoCloseable {
     /**
      * This method frees all resources consumed by AsciidoctorJ module.
      * Keep in mind that if this method is called, instance becomes unusable and you should create another instance.
+     *
+     * @deprecated This method tears down the Ruby runtime, which only makes sense with an implementation
+     * that embeds Asciidoctor (Ruby) using JRuby.
+     * Use {@link #close()} instead (or a try-with-resources statement).
+     * This method will be removed in AsciidoctorJ 4.0.
      */
+    @Deprecated
     void shutdown();
 
     /**
@@ -313,6 +319,10 @@ public interface Asciidoctor extends AutoCloseable {
         throw new IllegalArgumentException("Cannot unwrap to " + clazz.getName());
     }
 
+    /**
+     * Frees all resources consumed by this instance (e.g., the Ruby runtime of the JRuby implementation).
+     * Keep in mind that if this method is called, instance becomes unusable and you should create another instance.
+     */
     @Override
     default void close() {
         // no-op
