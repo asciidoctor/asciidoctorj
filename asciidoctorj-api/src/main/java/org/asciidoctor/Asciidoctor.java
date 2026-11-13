@@ -148,14 +148,24 @@ public interface Asciidoctor extends AutoCloseable {
      * Loads the given Ruby gem(s) by name.
      *
      * @param requiredLibraries
+     * @deprecated Ruby libraries (gems) can only be loaded by an implementation that embeds Asciidoctor (Ruby) using JRuby.
+     * With the JRuby implementation, use {@code AsciidoctorJRuby#requireLibrary(String...)} instead
+     * (e.g., {@code asciidoctor.unwrap(AsciidoctorJRuby.class).requireLibrary("asciidoctor-diagram")}).
+     * This method will be removed from the {@link Asciidoctor} interface in AsciidoctorJ 4.0.
      */
+    @Deprecated
     void requireLibrary(String... requiredLibraries);
 
     /**
      * Loads the given Ruby gem in requiredLibraries by name.
      *
      * @param requiredLibraries
+     * @deprecated Ruby libraries (gems) can only be loaded by an implementation that embeds Asciidoctor (Ruby) using JRuby.
+     * With the JRuby implementation, use {@code AsciidoctorJRuby#requireLibraries(Collection)} instead
+     * (e.g., {@code asciidoctor.unwrap(AsciidoctorJRuby.class).requireLibraries(libraries)}).
+     * This method will be removed from the {@link Asciidoctor} interface in AsciidoctorJ 4.0.
      */
+    @Deprecated
     void requireLibraries(Collection<String> requiredLibraries);
 
     /**

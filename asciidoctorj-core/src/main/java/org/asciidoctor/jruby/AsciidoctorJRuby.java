@@ -4,9 +4,26 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface AsciidoctorJRuby extends Asciidoctor {
+
+  /**
+   * Loads the given Ruby gem(s) by name.
+   *
+   * @param requiredLibraries the names of the Ruby libraries (gems) to load
+   */
+  @Override
+  void requireLibrary(String... requiredLibraries);
+
+  /**
+   * Loads the given Ruby gem(s) by name.
+   *
+   * @param requiredLibraries the names of the Ruby libraries (gems) to load
+   */
+  @Override
+  void requireLibraries(Collection<String> requiredLibraries);
 
 
   /**

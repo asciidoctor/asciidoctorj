@@ -19,6 +19,7 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 * Add `ExtensionGroup#blockMacro(String, BlockMacroProcessor)` and `ExtensionGroup#inlineMacro(String, InlineMacroProcessor)`, like `JavaExtensionRegistry`
 * Add the service provider interfaces `org.asciidoctor.extension.spi.ExtensionRegistry`, `org.asciidoctor.converter.spi.ConverterRegistry` and `org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry` to the API, and deprecate the interfaces of the `org.asciidoctor.jruby` packages (their implementations are still loaded)
 * Add `AsciidoctorException` to the API, the superclass of `AsciidoctorCoreException`, so that applications don't have to catch an internal class when a conversion fails
+* Deprecate `Asciidoctor#requireLibrary(String...)` and `Asciidoctor#requireLibraries(Collection)`, which only make sense with an embedded Asciidoctor (Ruby): use the methods of `AsciidoctorJRuby` instead, e.g. `asciidoctor.unwrap(AsciidoctorJRuby.class).requireLibrary("asciidoctor-diagram")` (#1325)
 * Deprecate `Asciidoctor#shutdown()` in favor of `Asciidoctor#close()`, since there's no Ruby runtime to tear down without an embedded Asciidoctor (Ruby) (#1325)
 * Upgrade to asciidoctorj-diagram 3.2.1 (#1308)
 * Upgrade to asciidoctorj-diagram-plantuml 1.2026.2 (#1308)
