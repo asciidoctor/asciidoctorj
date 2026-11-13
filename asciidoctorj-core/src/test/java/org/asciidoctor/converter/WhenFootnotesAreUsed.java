@@ -44,14 +44,13 @@ class WhenFootnotesAreUsed {
 
         @Override
         public String convert(ContentNode node, String transform, Map<Object, Object> opts) {
-            if (node instanceof Document) {
-                Document doc = (Document) node;
+            if (node instanceof Document doc) {
                 footnotesBeforeConvert = doc.getCatalog().getFootnotes();
                 Object content = doc.getContent();
                 footnotesAfterConvert = doc.getCatalog().getFootnotes();
                 return (String) content;
-            } else if (node instanceof StructuralNode) {
-                return (String) ((StructuralNode) node).getContent();
+            } else if (node instanceof StructuralNode structuralNode) {
+                return (String) structuralNode.getContent();
             }
             return null;
         }

@@ -41,11 +41,10 @@ class CatalogOfRefsAreAvailable {
 
         @Override
         public String convert(ContentNode node, String transform, Map<Object, Object> opts) {
-            if (node instanceof Document) {
-                Document doc = (Document) node;
+            if (node instanceof Document doc) {
                 refs = doc.getCatalog().getRefs();
-            } else if (node instanceof StructuralNode) {
-                return (String) ((StructuralNode) node).getContent();
+            } else if (node instanceof StructuralNode structuralNode) {
+                return (String) structuralNode.getContent();
             }
             return null;
         }

@@ -162,8 +162,8 @@ class WhenAJavaExtensionUsesCounters {
         @Override
         public org.asciidoctor.ast.Document process(org.asciidoctor.ast.Document document) {
             List<StructuralNode> newNodes = document.getBlocks().stream().map(it -> {
-                if (it instanceof Section) {
-                    return processSection((Section) it);
+                if (it instanceof Section section) {
+                    return processSection(section);
                 } else {
                     return it;
                 }
@@ -175,8 +175,7 @@ class WhenAJavaExtensionUsesCounters {
 
         Section processSection(Section section) {
             List<StructuralNode> newNodes = section.getBlocks().stream().map(it -> {
-                if (it instanceof Block && it.getRoles().contains("count")) {
-                    Block block = (Block) it;
+                if (it instanceof Block block && it.getRoles().contains("count")) {
                     return createBlock(section, PARAGRAPH, "Counter " + block.getContent() + " has value " + block.getDocument().getAndIncrementCounter(block.getSource()));
                 } else {
                     return it;

@@ -17,8 +17,8 @@ public class TableUpdaterTreeProcessor extends Treeprocessor {
     }
 
     static void processNode(StructuralNode node) {
-        if (node instanceof Table) {
-            processTable((Table) node);
+        if (node instanceof Table table) {
+            processTable(table);
         } else {
             node.getBlocks().forEach(TableUpdaterTreeProcessor::processNode);
         }
