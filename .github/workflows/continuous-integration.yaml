@@ -3,11 +3,13 @@ on:
   push:
     branches:
       - main
+      - v3.1.x
     paths-ignore:
       - 'docs/**'
   pull_request:
     branches:
       - main
+      - v3.1.x
     paths-ignore:
       - 'docs/**'
   schedule:
