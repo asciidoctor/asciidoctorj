@@ -207,9 +207,13 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
         getExtensionsModule().callMethod("unregister_all");
     }
 
+    /**
+     * @deprecated Use {@link #close()} instead.
+     */
+    @Deprecated
     @Override
     public void shutdown() {
-        this.rubyRuntime.tearDown();
+        close();
     }
 
     @Override
