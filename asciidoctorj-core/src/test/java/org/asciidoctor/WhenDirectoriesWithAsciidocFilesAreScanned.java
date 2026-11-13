@@ -1,5 +1,7 @@
 package org.asciidoctor;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.jruby.AsciiDocDirectoryWalker;
 import org.asciidoctor.jruby.DirectoryWalker;
 import org.asciidoctor.test.ClasspathResource;
@@ -14,11 +16,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.junit.Assert.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenDirectoriesWithAsciidocFilesAreScanned {
@@ -36,14 +33,8 @@ public class WhenDirectoriesWithAsciidocFilesAreScanned {
         }
 
         final ClasspathHelper classpath = new ClasspathHelper(this.getClass());
-        assertThat(asciidocFilesPaths, hasSize(4));
-        assertThat(
-                asciidocFilesPaths,
-                containsInAnyOrder(
-                        classpath.getResource("src/documents/sample.ad").getAbsolutePath(),
-                        classpath.getResource("src/documents/sample.adoc").getAbsolutePath(),
-                        classpath.getResource("src/documents/sample.asciidoc").getAbsolutePath(),
-                        classpath.getResource("src/documents/sample.asc").getAbsolutePath()));
+        assertThat(asciidocFilesPaths).hasSize(4);
+        assertThat(asciidocFilesPaths).containsExactlyInAnyOrder(classpath.getResource("src/documents/sample.ad").getAbsolutePath(), classpath.getResource("src/documents/sample.adoc").getAbsolutePath(), classpath.getResource("src/documents/sample.asciidoc").getAbsolutePath(), classpath.getResource("src/documents/sample.asc").getAbsolutePath());
 
     }
 
@@ -52,7 +43,7 @@ public class WhenDirectoriesWithAsciidocFilesAreScanned {
         DirectoryWalker abstractDirectoryWalker = new AsciiDocDirectoryWalker(temporaryFolder.getAbsolutePath());
         List<File> asciidocFiles = abstractDirectoryWalker.scan();
 
-        assertThat(asciidocFiles, is(empty()));
+        assertThat(asciidocFiles).isEmpty();
     }
 
     @Test
@@ -60,7 +51,7 @@ public class WhenDirectoriesWithAsciidocFilesAreScanned {
         DirectoryWalker abstractDirectoryWalker = new AsciiDocDirectoryWalker("my_udirectory");
         List<File> asciidocFiles = abstractDirectoryWalker.scan();
 
-        assertThat(asciidocFiles, is(empty()));
+        assertThat(asciidocFiles).isEmpty();
     }
 
 }

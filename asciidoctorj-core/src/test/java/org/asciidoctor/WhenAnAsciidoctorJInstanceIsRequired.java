@@ -1,10 +1,10 @@
 package org.asciidoctor;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertThat;
 
 public class WhenAnAsciidoctorJInstanceIsRequired {
 
@@ -17,7 +17,7 @@ public class WhenAnAsciidoctorJInstanceIsRequired {
 
         String html = asciidoctorj.convert(DOC, Options.builder().standalone(false).build());
 
-        assertThat(html, containsString("HELLO WORLD"));
+        assertThat(html).contains("HELLO WORLD");
     }
 
 }

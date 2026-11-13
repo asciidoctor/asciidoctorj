@@ -1,5 +1,7 @@
 package org.asciidoctor.extension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.PhraseNode;
 import org.asciidoctor.ast.StructuralNode;
@@ -20,7 +22,6 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.asciidoctor.util.OptionsTestHelper.emptyOptions;
-import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
@@ -175,6 +176,6 @@ public class InlineMacroRegistrationTest {
     }
 
     private void check(String expected, String html) {
-        assertEquals(expected, Jsoup.parse(html).select("div.paragraph > p").first().text());
+        assertThat(Jsoup.parse(html).select("div.paragraph > p").first().text()).isEqualTo(expected);
     }
 }

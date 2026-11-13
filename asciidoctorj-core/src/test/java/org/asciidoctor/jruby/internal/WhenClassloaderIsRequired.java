@@ -1,11 +1,11 @@
 package org.asciidoctor.jruby.internal;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.Asciidoctor;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 class AsciiDoctorJClassloaderTestRunnable implements Runnable {
 
@@ -54,7 +54,7 @@ public class WhenClassloaderIsRequired {
         thread.setContextClassLoader(rootclassloader);
         thread.start();
         thread.join();
-        assertThat(runnable.getLoadingsucceeded(), is(false));
+        assertThat(runnable.getLoadingsucceeded()).isFalse();
     }
 
     @Test
@@ -68,7 +68,7 @@ public class WhenClassloaderIsRequired {
         thread.setContextClassLoader(rootclassloader);
         thread.start();
         thread.join();
-        assertThat(runnable.getLoadingsucceeded(), is(true));
+        assertThat(runnable.getLoadingsucceeded()).isTrue();
     }
 
 }

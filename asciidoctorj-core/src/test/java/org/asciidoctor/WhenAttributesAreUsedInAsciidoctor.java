@@ -1,5 +1,7 @@
 package org.asciidoctor;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
@@ -11,6 +13,7 @@ import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
+import org.xmlunit.assertj3.XmlAssert;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,10 +26,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.xmlmatchers.xpath.HasXPath.hasXPath;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenAttributesAreUsedInAsciidoctor {
@@ -61,7 +60,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
-        assertThat(link.text(), is("asciidoc.org"));
+        assertThat(link.text()).isEqualTo("asciidoc.org");
 
     }
 
@@ -77,7 +76,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element code = doc.getElementsByTag("code").first();
-        assertThat(code.text(), containsString("{version}"));
+        assertThat(code.text()).contains("{version}");
 
     }
 
@@ -92,7 +91,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element code = doc.getElementsByTag("code").first();
-        assertThat(code.text(), containsString("1.0.0"));
+        assertThat(code.text()).contains("1.0.0");
 
     }
 
@@ -105,7 +104,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         String content = asciidoctor.convert("read my lips", Options.builder().attributes(attributes).build());
 
-        assertThat(content, is(notNullValue()));
+        assertThat(content).isNotNull();
 
     }
 
@@ -126,7 +125,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(tempFolder, "math.html"), "UTF-8");
 
-        assertThat(doc.getElementsByAttributeValue("type", "text/x-mathjax-config").size(), is(1));
+        assertThat(doc.getElementsByAttributeValue("type", "text/x-mathjax-config").size()).isEqualTo(1);
     }
 
     @Test
@@ -148,7 +147,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 "appendix.html"), "UTF-8");
 
         Element attributeElement = doc.getElementById("_attribute_options");
-        assertThat(attributeElement.text(), startsWith("App"));
+        assertThat(attributeElement.text()).startsWith("App");
     }
 
     @Test
@@ -160,7 +159,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Element paragraph = doc.getElementsByAttributeValue("class", "paragraph").first();
-        assertThat(paragraph.getElementsByTag("br").size(), is(2));
+        assertThat(paragraph.getElementsByTag("br").size()).isEqualTo(2);
 
     }
 
@@ -180,10 +179,10 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(tempFolder, "multiple_levels.html"), "UTF-8");
 
-        assertThat(doc.getElementById("_level_1").text(), startsWith("1."));
-        assertThat(doc.getElementById("_level_2").text(), startsWith("1.1."));
-        assertThat(doc.getElementById("_level_3").text(), not(startsWith("1.1.1.")));
-        assertThat(doc.getElementById("_level_4").text(), not(startsWith("1.1.1.1.")));
+        assertThat(doc.getElementById("_level_1").text()).startsWith("1.");
+        assertThat(doc.getElementById("_level_2").text()).startsWith("1.1.");
+        assertThat(doc.getElementById("_level_3").text()).doesNotStartWith("1.1.1.");
+        assertThat(doc.getElementById("_level_4").text()).doesNotStartWith("1.1.1.1.");
     }
 
     @Test
@@ -202,7 +201,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(tempFolder, "rendersample.html"), "UTF-8");
 
-        assertThat(doc.getElementById("footer"), is(nullValue()));
+        assertThat(doc.getElementById("footer")).isNull();
 
     }
 
@@ -217,8 +216,8 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(renderSample, options));
 
-        assertEquals(1, doc.getElementsByTag("h1").size());
-        assertEquals("Document Title", doc.getElementsByTag("h1").get(0).text());
+        assertThat(doc.getElementsByTag("h1").size()).isEqualTo(1);
+        assertThat(doc.getElementsByTag("h1").get(0).text()).isEqualTo("Document Title");
     }
 
     @Test
@@ -231,8 +230,8 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(renderSample, options));
 
-        assertEquals(1, doc.getElementsByTag("h1").size());
-        assertEquals("Document Title", doc.getElementsByTag("h1").get(0).text());
+        assertThat(doc.getElementsByTag("h1").size()).isEqualTo(1);
+        assertThat(doc.getElementsByTag("h1").get(0).text()).isEqualTo("Document Title");
     }
 
     @Test
@@ -245,7 +244,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(renderSample, options));
 
-        assertEquals(0, doc.getElementsByTag("h1").size());
+        assertThat(doc.getElementsByTag("h1").size()).isEqualTo(0);
     }
 
     @Test
@@ -258,7 +257,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(renderSample, options));
 
-        assertEquals(0, doc.getElementsByTag("h1").size());
+        assertThat(doc.getElementsByTag("h1").size()).isEqualTo(0);
     }
 
     @Test
@@ -272,8 +271,8 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(renderSample, options));
 
-        assertEquals(1, doc.getElementsByTag("h1").size());
-        assertEquals("Document Title", doc.getElementsByTag("h1").get(0).text());
+        assertThat(doc.getElementsByTag("h1").size()).isEqualTo(1);
+        assertThat(doc.getElementsByTag("h1").get(0).text()).isEqualTo("Document Title");
     }
 
     @Test
@@ -287,7 +286,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(renderSample, options));
 
-        assertEquals(0, doc.getElementsByTag("h1").size());
+        assertThat(doc.getElementsByTag("h1").size()).isEqualTo(0);
     }
 
     @Test
@@ -301,7 +300,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         final Document doc = Jsoup.parse(asciidoctor.convertFile(renderSample, options));
 
-        assertEquals(0, doc.getElementsByTag("h1").size());
+        assertThat(doc.getElementsByTag("h1").size()).isEqualTo(0);
     }
 
 
@@ -321,7 +320,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(tempFolder, "rendersample.html"), "UTF-8");
         Elements link = doc.select("link");
-        assertThat(link.get(1).attr("href"), containsString("prettify.min.css"));
+        assertThat(link.get(1).attr("href")).contains("prettify.min.css");
 
     }
 
@@ -338,10 +337,10 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(tempFolder, "rendersample.html"), "UTF-8");
         Elements cssStyle = doc.select("style");
-        assertThat(cssStyle.html(), is(not("")));
+        assertThat(cssStyle.html()).isNotEqualTo("");
 
         Elements link = doc.select("link");
-        assertThat(link.html(), is("".trim()));
+        assertThat(link.html()).isEqualTo("".trim());
 
     }
 
@@ -356,7 +355,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements hrElements = doc.getElementsByTag("hr");
 
-        assertThat(hrElements.size(), is(0));
+        assertThat(hrElements.size()).isEqualTo(0);
 
     }
 
@@ -371,7 +370,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Document doc = Jsoup.parse(content, "UTF-8");
         Element anchorElement = doc.select("a[class=anchor]").first();
 
-        assertThat(anchorElement.attr("href"), is("#_section_a"));
+        assertThat(anchorElement.attr("href")).isEqualTo("#_section_a");
 
     }
 
@@ -385,7 +384,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         String renderContent = asciidoctor.convertFile(
                 sourceDocument,
                 options);
-        assertThat(renderContent, containsString("{bogus-attribute}"));
+        assertThat(renderContent).contains("{bogus-attribute}");
     }
 
     @Test
@@ -403,7 +402,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(tempFolder, "tocsample.html"), "UTF-8");
         Elements tocElement = doc.select("div.toc");
-        assertThat(tocElement.hasClass("toc"), is(true));
+        assertThat(tocElement.hasClass("toc")).isTrue();
 
     }
 
@@ -416,7 +415,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(tempFolder, "tocsample.html"), "UTF-8");
         Elements tocElement = doc.select("body.toc-left > div#header > div#toc");
-        assertThat(tocElement.size(), is(1));
+        assertThat(tocElement.size()).isEqualTo(1);
     }
 
     @Test
@@ -433,7 +432,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(tempFolder, "tocsample.html"), "UTF-8");
         Elements tocElement = doc.select("body.toc-right > div#header > div#toc");
-        assertThat(tocElement.size(), is(1));
+        assertThat(tocElement.size()).isEqualTo(1);
     }
 
     @Test
@@ -450,7 +449,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(tempFolder, "tocsample.html"), "UTF-8");
         Elements tocElement = doc.select("body.article > div#content > div#preamble > div#toc");
-        assertThat(tocElement.size(), is(1));
+        assertThat(tocElement.size()).isEqualTo(1);
     }
 
     @Test
@@ -469,7 +468,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(tempFolder, "tocsamplemacro.html"), "UTF-8");
         Elements tocElement = doc.select("body.article > div#content > div.sect1 > div.sectionbody > div#toc");
-        assertThat(tocElement.size(), is(1));
+        assertThat(tocElement.size()).isEqualTo(1);
     }
 
     @Test
@@ -481,7 +480,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         String renderContent = asciidoctor.convert("This is\n"
                 + "blah blah {foobarbaz}\n" + "all there is.", options);
 
-        assertThat(renderContent, not(containsString("{foobarbaz}")));
+        assertThat(renderContent).doesNotContain("{foobarbaz}");
 
     }
 
@@ -495,7 +494,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(renderContent, "UTF-8");
         Element paragraph = doc.getElementsByTag("p").first();
-        assertThat(paragraph.text(), is("{foo}yes"));
+        assertThat(paragraph.text()).isEqualTo("{foo}yes");
     }
 
     @Test
@@ -516,8 +515,8 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Elements body = doc.select("body");
         String classAttribute = body.attr("class");
         String[] classAttributes = classAttribute.split(" ");
-        assertThat(classAttributes, hasItemInArray("toc2"));
-        assertThat(classAttributes, hasItemInArray("toc-right"));
+        assertThat(classAttributes).contains("toc2");
+        assertThat(classAttributes).contains("toc-right");
 
         renderedFile.delete();
     }
@@ -540,10 +539,10 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(tempFolder, "rendersample.html"), "UTF-8");
         Elements cssStyle = doc.select("style");
-        assertThat(cssStyle.html(), is(not("")));
+        assertThat(cssStyle.html()).isNotEqualTo("");
 
         Elements link = doc.select("link");
-        assertThat(link.html(), is("".trim()));
+        assertThat(link.html()).isEqualTo("".trim());
 
     }
 
@@ -562,10 +561,10 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(tempFolder, "tocsample.html"), "UTF-8");
         Elements tocElement = doc.select("div.toc");
-        assertThat(tocElement.hasClass("toc"), is(true));
+        assertThat(tocElement.hasClass("toc")).isTrue();
 
         Element tocParagraph = doc.select("a[href=#_first_chapter]").first();
-        assertThat(tocParagraph.text(), startsWith("1."));
+        assertThat(tocParagraph.text()).startsWith("1.");
     }
 
     @Test
@@ -587,10 +586,10 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(tempFolder, "tocsample.html"), "UTF-8");
         Elements tocElement = doc.select("div.toc");
-        assertThat(tocElement.hasClass("toc"), is(true));
+        assertThat(tocElement.hasClass("toc")).isTrue();
 
         Element tocParagraph = doc.select("a[href=#_first_chapter]").first();
-        assertThat(tocParagraph.text(), startsWith("1."));
+        assertThat(tocParagraph.text()).startsWith("1.");
     }
 
     @Test
@@ -603,7 +602,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(renderContent, "UTF-8");
         Elements tocElement = doc.select("div.toc");
-        assertThat(tocElement.hasClass("toc"), is(false));
+        assertThat(tocElement.hasClass("toc")).isFalse();
 
     }
 
@@ -625,7 +624,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Document doc = Jsoup.parse(new File(tempFolder, "rendersample.html"), "UTF-8");
         Elements link = doc.select("link[href]");
         String attr = link.attr("href");
-        assertThat(attr, is("./mycustom.css"));
+        assertThat(attr).isEqualTo("./mycustom.css");
 
     }
 
@@ -646,7 +645,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Document doc = Jsoup.parse(new File(tempFolder, "rendersample.html"), "UTF-8");
         Elements link = doc.select("link[href]");
         String attr = link.attr("href");
-        assertThat(attr, is(""));
+        assertThat(attr).isEqualTo("");
 
     }
 
@@ -666,7 +665,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Document doc = Jsoup.parse(new File(tempFolder, "rendersample.html"), "UTF-8");
         Elements link = doc.select("link[href]");
         String attr = link.attr("href");
-        assertThat(attr, is("./styles/mycustom.css"));
+        assertThat(attr).isEqualTo("./styles/mycustom.css");
 
     }
 
@@ -688,10 +687,10 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Document doc = Jsoup.parse(new File(tempFolder, "rendersample.html"), "UTF-8");
         Elements cssStyle = doc.select("style");
-        assertThat(cssStyle.html(), is(not("")));
+        assertThat(cssStyle.html()).isNotEqualTo("");
 
         Elements link = doc.select("link");
-        assertThat(link.html(), is("".trim()));
+        assertThat(link.html()).isEqualTo("".trim());
 
     }
 
@@ -711,7 +710,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Document doc = Jsoup.parse(new File(tempFolder, "rendersample.html"), "UTF-8");
         Elements link = doc.select("link[href]");
         String attr = link.get(1).attr("href");
-        assertThat(attr, is("./asciidoctor.css"));
+        assertThat(attr).isEqualTo("./asciidoctor.css");
 
     }
 
@@ -727,7 +726,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         asciidoctor.convertFile(renderSample, options);
 
         File cssFile = new File(renderSample.getParent(), "asciidoctor.css");
-        assertThat(cssFile.exists(), is(true));
+        assertThat(cssFile.exists()).isTrue();
         cssFile.delete();
 
     }
@@ -745,9 +744,9 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         try {
             File cssFile = new File(renderSample.getParent(), "asciidoctor.css");
-            assertThat(cssFile.exists(), is(false));
+            assertThat(cssFile.exists()).isFalse();
         } catch (RuntimeException e) {
-            assertThat(e.getCause(), is(instanceOf(FileNotFoundException.class)));
+            assertThat(e.getCause()).isInstanceOf(FileNotFoundException.class);
         }
 
     }
@@ -766,9 +765,9 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         try {
             File cssFile = new File(renderSample.getParent(), "asciidoctor.css");
-            assertThat(cssFile.exists(), is(false));
+            assertThat(cssFile.exists()).isFalse();
         } catch (RuntimeException e) {
-            assertThat(e.getCause(), is(instanceOf(FileNotFoundException.class)));
+            assertThat(e.getCause()).isInstanceOf(FileNotFoundException.class);
         }
 
     }
@@ -787,7 +786,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         asciidoctor.convertFile(renderSample, options);
 
         File cssFile = new File(tempFolder, "asciidoctor.css");
-        assertThat(cssFile.exists(), is(true));
+        assertThat(cssFile.exists()).isTrue();
 
     }
 
@@ -805,7 +804,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         asciidoctor.convertFile(renderSample, options);
 
         File cssFile = new File(tempFolder, "asciidoctor.css");
-        assertThat(cssFile.exists(), is(true));
+        assertThat(cssFile.exists()).isTrue();
 
     }
 
@@ -823,7 +822,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         asciidoctor.convert("This is Asciidoctor", options);
 
         File cssFile = new File(tempFolder, "asciidoctor.css");
-        assertThat(cssFile.exists(), is(true));
+        assertThat(cssFile.exists()).isTrue();
 
     }
 
@@ -841,7 +840,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         asciidoctor.convert("This is Asciidoctor", options);
 
         File cssFile = new File(tempFolder, "asciidoctor.css");
-        assertThat(cssFile.exists(), is(true));
+        assertThat(cssFile.exists()).isTrue();
 
     }
 
@@ -893,7 +892,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Document doc = Jsoup.parse(renderContent, "UTF-8");
         Elements image = doc.select("img[src]");
         String srcValue = image.attr("src");
-        assertThat(srcValue, is("icons/note.png"));
+        assertThat(srcValue).isEqualTo("icons/note.png");
 
     }
 
@@ -910,7 +909,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Elements image = doc.select("a[target]");
 
         String targetValue = image.attr("target");
-        assertThat(targetValue, is("_blank"));
+        assertThat(targetValue).isEqualTo("_blank");
 
     }
 
@@ -925,7 +924,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Document doc = Jsoup.parse(content);
         Elements image = doc.select("kbd");
 
-        assertThat(image.text(), is("F11"));
+        assertThat(image.text()).isEqualTo("F11");
     }
 
     @Test
@@ -943,7 +942,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
 
         Elements stylesheetLinks = doc
                 .select("link[href=http://mycdn/css/font-awesome.min.css]");
-        assertThat(stylesheetLinks.size(), is(1));
+        assertThat(stylesheetLinks.size()).isEqualTo(1);
 
         expectedFile.delete();
 
@@ -955,7 +954,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
         Source renderFileSource = new DOMSource(
                 inputStream2Document(new ByteArrayInputStream(
                         renderContent.getBytes())));
-        assertThat(renderFileSource, hasXPath("//i[@class='fa icon-note']"));
+        XmlAssert.assertThat(renderFileSource).hasXPath("//i[@class='fa icon-note']");
     }
 
     private void assertRenderedAdmonitionIcon(String render_content)
@@ -964,7 +963,7 @@ public class WhenAttributesAreUsedInAsciidoctor {
                 inputStream2Document(new ByteArrayInputStream(
                         render_content.getBytes())));
 
-        assertThat(renderFileSource, hasXPath("//img[@alt='Note']"));
+        XmlAssert.assertThat(renderFileSource).hasXPath("//img[@alt='Note']");
     }
 
     private static String toString(InputStream inputStream) throws IOException {
