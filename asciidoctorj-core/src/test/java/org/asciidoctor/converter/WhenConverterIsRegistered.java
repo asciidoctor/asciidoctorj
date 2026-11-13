@@ -1,5 +1,7 @@
 package org.asciidoctor.converter;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.MemoryLogHandler;
 import org.asciidoctor.Options;
@@ -24,11 +26,6 @@ import java.net.URLClassLoader;
 import java.util.logging.Logger;
 
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenConverterIsRegistered {
@@ -40,16 +37,11 @@ public class WhenConverterIsRegistered {
     private File simpleDocument;
 
 
-//    @After
-//    public void cleanUp() {
-//        asciidoctor.javaConverterRegistry().unregisterAll();
-//    }
-
     @Test
     public void shouldCleanUpRegistry() {
         asciidoctor.javaConverterRegistry().unregisterAll();
 
-        assertThat(asciidoctor.javaConverterRegistry().converters().keySet(), empty());
+        assertThat(asciidoctor.javaConverterRegistry().converters().keySet()).isEmpty();
     }
 
     @Test
@@ -58,7 +50,7 @@ public class WhenConverterIsRegistered {
 
         String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend("test").build());
 
-        assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
+        assertThat(result).isEqualTo("== Hello ==\n\nWorld!\n\n-> a\n-> b\n");
     }
 
     @Test
@@ -69,7 +61,7 @@ public class WhenConverterIsRegistered {
 
         String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend(TextConverter.DEFAULT_FORMAT).build());
 
-        assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
+        assertThat(result).isEqualTo("== Hello ==\n\nWorld!\n\n-> a\n-> b\n");
     }
 
     @Test
@@ -79,7 +71,7 @@ public class WhenConverterIsRegistered {
 
         String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend("Undefined").build());
 
-        assertThat(result, is("Dummy"));
+        assertThat(result).isEqualTo("Dummy");
     }
 
     private MemoryLogHandler registerMemoryLogHandler() {
@@ -97,8 +89,8 @@ public class WhenConverterIsRegistered {
 
             asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend(TextConverter.DEFAULT_FORMAT).build());
 
-            assertThat(handler.getLogRecords(), hasSize(1));
-            assertThat(handler.getLogRecords().get(0).getMessage(), is("Now we're logging"));
+            assertThat(handler.getLogRecords()).hasSize(1);
+            assertThat(handler.getLogRecords().get(0).getMessage()).isEqualTo("Now we're logging");
         } finally {
             final Logger logger = Logger.getLogger("asciidoctor");
             logger.removeHandler(handler);
@@ -109,14 +101,14 @@ public class WhenConverterIsRegistered {
     @Test
     public void shouldReturnConverterRegisteredWithAnnotation() {
         asciidoctor.javaConverterRegistry().register(TextConverter.class);
-        assertEquals(TextConverter.class, asciidoctor.javaConverterRegistry().converters().get(TextConverter.DEFAULT_FORMAT));
+        assertThat(asciidoctor.javaConverterRegistry().converters().get(TextConverter.DEFAULT_FORMAT)).isEqualTo(TextConverter.class);
     }
 
 
     @Test
     public void shouldReturnRegisteredConverter() {
         asciidoctor.javaConverterRegistry().register(TextConverter.class, "test2");
-        assertEquals(TextConverter.class, asciidoctor.javaConverterRegistry().converters().get("test2"));
+        assertThat(asciidoctor.javaConverterRegistry().converters().get("test2")).isEqualTo(TextConverter.class);
     }
 
     @Test
@@ -144,8 +136,8 @@ public class WhenConverterIsRegistered {
                 "\n" +
                 "== Test2\n", Options.builder().backend("test3").standalone(false).build());
 
-        assertEquals("== 1 Test ==\n" +
-                "== 42 Test2 ==", result);
+        assertThat(result).isEqualTo("== 1 Test ==\n" +
+                "== 42 Test2 ==");
     }
 
     @Test
@@ -159,7 +151,7 @@ public class WhenConverterIsRegistered {
             asciidoctor = JRubyAsciidoctor.create();
             String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend("extensiontext").build());
 
-            assertThat(result, is("== Hello ==\n\nWorld!\n\n-> a\n-> b\n"));
+            assertThat(result).isEqualTo("== Hello ==\n\nWorld!\n\n-> a\n-> b\n");
         } finally {
             Thread.currentThread().setContextClassLoader(oldTCCL);
         }
@@ -172,8 +164,8 @@ public class WhenConverterIsRegistered {
 
         asciidoctor.convertFile(simpleDocument, Options.builder().backend(TextConverter.DEFAULT_FORMAT).toDir(tempDir).safe(SafeMode.UNSAFE).build());
 
-        assertThat(new File(tempDir, "simple.html").exists(), is(false));
-        assertThat(new File(tempDir, "simple.txt").exists(), is(true));
+        assertThat(new File(tempDir, "simple.html").exists()).isFalse();
+        assertThat(new File(tempDir, "simple.txt").exists()).isTrue();
     }
 
     @Test
@@ -182,7 +174,7 @@ public class WhenConverterIsRegistered {
 
         asciidoctor.convertFile(simpleDocument, Options.builder().backend(TextConverterWithSuffix.DEFAULT_FORMAT).toDir(tempDir).safe(SafeMode.UNSAFE).build());
 
-        assertThat(new File(tempDir, "simple.html").exists(), is(false));
-        assertThat(new File(tempDir, "simple.text").exists(), is(true));
+        assertThat(new File(tempDir, "simple.html").exists()).isFalse();
+        assertThat(new File(tempDir, "simple.text").exists()).isTrue();
     }
 }
