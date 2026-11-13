@@ -1,5 +1,7 @@
 package org.asciidoctor.integrationguide.extension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.test.AsciidoctorInstance;
@@ -11,8 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class CommentPreprocessorTest {
@@ -43,7 +43,7 @@ public class CommentPreprocessorTest {
         String result1 = asciidoctor.convertFile(comment_adoc, Options.builder().toFile(false).build());
         String result2 = asciidoctor.convertFile(comment_with_note_adoc, Options.builder().toFile(false).build());
 
-        assertThat(result1, is(result2)); // <2>
+        assertThat(result1).isEqualTo(result2); // <2>
 //end::include[]
     }
 

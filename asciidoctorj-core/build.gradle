@@ -1,5 +1,4 @@
 apply plugin: 'java-library'
-apply plugin: 'groovy'
 apply plugin: 'biz.aQute.bnd.builder'
 apply plugin: 'org.ysb33r.jruby.base'
 apply plugin: 'org.ysb33r.jruby.resolver'
@@ -37,9 +36,7 @@ dependencies {
   runtimeGems "rubygems:thread_safe:$threadSafeGemVersion"
   runtimeGems "rubygems:tilt:$tiltGemVersion"
   runtimeGems "rubygems:concurrent-ruby:$concurrentRubyGemVersion"
-  // TODO could use dependency replacement feature to fix version of Saxon-HE
-  testImplementation("org.xmlmatchers:xml-matchers:$xmlMatchersVersion") { exclude module: 'Saxon-HE' }
-  testImplementation "net.sf.saxon:Saxon-HE:$saxonVersion"
+  testImplementation libs.xmlunit.assertj
   testImplementation "org.jsoup:jsoup:$jsoupVersion"
   testImplementation "io.netty:netty-all:$nettyVersion"
   testImplementation project(':asciidoctorj-test-support')
