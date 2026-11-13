@@ -1,5 +1,7 @@
 package org.asciidoctor.cli;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.cli.jruby.AsciidoctorInvoker;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.ClasspathExtension;
@@ -19,11 +21,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.core.StringStartsWith.startsWith;
 
 @ExtendWith(ClasspathExtension.class)
 public class WhenAsciidoctorIsCalledUsingCli {
@@ -47,7 +44,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
         new AsciidoctorInvoker().invoke(inputPath);
 
         File expectedFile = new File(inputPath.replaceFirst(SOURCE_EXTENSION_PATTERN, ".html"));
-        assertThat(expectedFile.exists(), is(true));
+        assertThat(expectedFile.exists()).isTrue();
         expectedFile.delete();
     }
 
@@ -58,11 +55,11 @@ public class WhenAsciidoctorIsCalledUsingCli {
         new AsciidoctorInvoker().invoke(inputPath);
 
         File expectedFile = new File(inputPath.replaceFirst("\\.adoc$", ".html"));
-        assertThat(expectedFile.exists(), is(true));
+        assertThat(expectedFile.exists()).isTrue();
         Document doc = Jsoup.parse(expectedFile, "UTF-8");
         Elements body = doc.select("body");
         String attr = body.attr("class");
-        assertThat(attr, is("book"));
+        assertThat(attr).isEqualTo("book");
         expectedFile.delete();
     }
 
@@ -73,7 +70,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
         new AsciidoctorInvoker().invoke("-b", "docbook", inputPath);
 
         File expectedFile = new File(inputPath.replaceFirst("\\.asciidoc", ".xml"));
-        assertThat(expectedFile.exists(), is(true));
+        assertThat(expectedFile.exists()).isTrue();
         expectedFile.delete();
     }
 
@@ -86,10 +83,10 @@ public class WhenAsciidoctorIsCalledUsingCli {
         File expectedFile = new File(inputPath.replaceFirst(SOURCE_EXTENSION_PATTERN, ".html"));
         Document doc = Jsoup.parse(expectedFile, "UTF-8");
         Elements cssStyle = doc.select("style");
-        assertThat(cssStyle.html(), is(not("")));
+        assertThat(cssStyle.html()).isNotEqualTo("");
 
         Elements link = doc.select("link");
-        assertThat(link.html(), is("".trim()));
+        assertThat(link.html()).isEqualTo("".trim());
 
         expectedFile.delete();
     }
@@ -101,11 +98,11 @@ public class WhenAsciidoctorIsCalledUsingCli {
         new AsciidoctorInvoker().invoke("-a", "stylesheet=mystyles.css", "-a", "linkcss", inputPath);
 
         File expectedFile = new File(inputPath.replaceFirst(SOURCE_EXTENSION_PATTERN, ".html"));
-        assertThat(expectedFile.exists(), is(true));
+        assertThat(expectedFile.exists()).isTrue();
         String attr = Jsoup.parse(expectedFile, "UTF-8")
                 .select("link[href]")
                 .attr("href");
-        assertThat(attr, is("./mystyles.css"));
+        assertThat(attr).isEqualTo("./mystyles.css");
 
         expectedFile.delete();
     }
@@ -117,7 +114,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
         new AsciidoctorInvoker().invoke("-D", temporaryFolder.getAbsolutePath(), inputPath);
 
         File expectedFile = new File(temporaryFolder, renderSampleDocument.getName().replaceFirst(SOURCE_EXTENSION_PATTERN, ".html"));
-        assertThat(expectedFile.exists(), is(true));
+        assertThat(expectedFile.exists()).isTrue();
     }
 
 
@@ -139,7 +136,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
         } finally {
             System.setOut(oldOs);
         }
-        assertThat(os.toString(), startsWith("Asciidoctor"));
+        assertThat(os.toString()).startsWith("Asciidoctor");
     }
 
     @Test
@@ -160,11 +157,11 @@ public class WhenAsciidoctorIsCalledUsingCli {
         new AsciidoctorInvoker().invoke(inputPath1, inputPath2);
 
         File expectedFile1 = new File(inputPath1.replaceFirst(SOURCE_EXTENSION_PATTERN, ".html"));
-        assertThat(expectedFile1.exists(), is(true));
+        assertThat(expectedFile1.exists()).isTrue();
         expectedFile1.delete();
 
         File expectedFile2 = new File(inputPath2.replaceFirst(SOURCE_EXTENSION_PATTERN, ".html"));
-        assertThat(expectedFile2.exists(), is(true));
+        assertThat(expectedFile2.exists()).isTrue();
         expectedFile2.delete();
     }
 
@@ -177,7 +174,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
 
         File expectedFile = new File(inputPath.replaceFirst(SOURCE_EXTENSION_PATTERN, ".html"));
 
-        assertThat(expectedFile.exists(), is(true));
+        assertThat(expectedFile.exists()).isTrue();
         expectedFile.delete();
     }
 
@@ -188,7 +185,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
         new AsciidoctorInvoker().invoke("--help");
 
         String helpMessage = output.toString();
-        assertThat(helpMessage, startsWith("Usage: asciidoctor [options] input file"));
+        assertThat(helpMessage).startsWith("Usage: asciidoctor [options] input file");
     }
 
     @Test
@@ -198,7 +195,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
         new AsciidoctorInvoker().invoke();
 
         String helpMessage = output.toString();
-        assertThat(helpMessage, startsWith("Usage: asciidoctor [options] input file"));
+        assertThat(helpMessage).startsWith("Usage: asciidoctor [options] input file");
     }
 
     @Test
@@ -211,7 +208,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
         Document doc = Jsoup.parse(output.toString(), "UTF-8");
         Elements link = doc.select("div[class]");
         String attr = link.attr("class");
-        assertThat(attr, is("sect1"));
+        assertThat(attr).isEqualTo("sect1");
     }
 
     @Test
@@ -224,7 +221,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
         String outputConsole = output.toString();
         Assertions.assertThat(outputConsole.lines().collect(Collectors.toList()))
                 .anySatisfy(line -> Assertions.assertThat(line).startsWith("  Time to read and parse source:"));
-        assertThat(outputConsole, not(containsString("null")));
+        assertThat(outputConsole).doesNotContain("null");
     }
 
     @Test
@@ -235,7 +232,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
         new AsciidoctorInvoker().invoke("--quiet", inputPath);
 
         String outputConsole = output.toString();
-        assertThat(outputConsole.trim(), is(""));
+        assertThat(outputConsole.trim()).isEqualTo("");
     }
 
     @Test
@@ -244,7 +241,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
 
         int status = new AsciidoctorInvoker().invoke(inputPath);
 
-        assertThat(status, is(0));
+        assertThat(status).isEqualTo(0);
     }
 
     @Test
@@ -253,7 +250,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
 
         int status = new AsciidoctorInvoker().invoke("--failure-level", "warn", inputPath);
 
-        assertThat(status, is(1));
+        assertThat(status).isEqualTo(1);
     }
 
     @Test
@@ -263,7 +260,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
         new AsciidoctorInvoker().invoke(inputPath);
 
         File expectedFile = new File(inputPath.replaceFirst(SOURCE_EXTENSION_PATTERN, ".html"));
-        assertThat(expectedFile.exists(), is(true));
+        assertThat(expectedFile.exists()).isTrue();
         expectedFile.delete();
     }
 
@@ -275,7 +272,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
         new AsciidoctorInvoker().invoke("-R", srcDir.getPath(), "-D", toDir.getPath(), srcDir.getAbsolutePath() + "/**/*.adoc");
 
         File expectedFile = new File(toDir, "sub/test.html");
-        assertThat(expectedFile.exists(), is(true));
+        assertThat(expectedFile.exists()).isTrue();
         expectedFile.delete();
     }
 

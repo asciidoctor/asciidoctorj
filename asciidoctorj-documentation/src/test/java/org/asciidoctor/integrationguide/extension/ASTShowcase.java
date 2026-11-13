@@ -1,8 +1,9 @@
 package org.asciidoctor.integrationguide.extension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
-import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
@@ -14,8 +15,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class ASTShowcase {
@@ -37,9 +36,7 @@ public class ASTShowcase {
 
         asciidoctor.loadFile(astDemo, Options.builder().build());
 
-        assertThat(
-                ASTExtractorTreeprocessor.result.toString(),
-                is(Files.readString(astDemoResult).replaceAll("\\r", "")));
+        assertThat(ASTExtractorTreeprocessor.result.toString()).isEqualTo(Files.readString(astDemoResult).replaceAll("\\r", ""));
     }
 
 }
