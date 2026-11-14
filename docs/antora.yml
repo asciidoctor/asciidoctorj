@@ -1,7 +1,7 @@
 name: asciidoctorj
 title: AsciidoctorJ
 version: '4.0'
-prerelease: true
+prerelease: '-dev'
 asciidoc:
   attributes:
     release-version: 3.0.0
