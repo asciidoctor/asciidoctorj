@@ -239,7 +239,7 @@ Here's how to use a pre-release version in Maven:
 
 == Using a snapshot version
 
-Snapshot versions will be published to https://oss.jfrog.org.
+Snapshot versions are published to the Maven Central snapshot repository, https://central.sonatype.com/repository/maven-snapshots/.
 To use a snapshot version of the the AsciidoctorJ library add this repository to your project:
 
 [source,xml]
@@ -253,7 +253,7 @@ To use a snapshot version of the the AsciidoctorJ library add this repository to
         <releases>
             <enabled>false</enabled>
         </releases>
-        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        <url>https://central.sonatype.com/repository/maven-snapshots/</url>
     </repository>
 </repositories>
 ----
@@ -264,7 +264,7 @@ If you build your project using {uri-gradle}[Gradle] add the repository like thi
 ----
 repositories {
     maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        url 'https://central.sonatype.com/repository/maven-snapshots/'
     }
 }
 ----
