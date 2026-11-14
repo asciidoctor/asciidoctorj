@@ -12,7 +12,6 @@ import org.asciidoctor.SafeMode;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.LocationType;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -132,10 +131,10 @@ class WhenASyntaxHighlighterIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
 
-        Element headerDocInfo = doc.head().getElementsByTag("meta").stream()
-                .filter(it -> it.attr("name").equals("testhighlighter")).findFirst().orElse(null);
+        boolean hasHeaderDocInfo = doc.head().getElementsByTag("meta").stream()
+                .anyMatch(it -> it.attr("name").equals("testhighlighter"));
 
-        assertThat(headerDocInfo != null).isEqualTo(expectHeader);
+        assertThat(hasHeaderDocInfo).isEqualTo(expectHeader);
 
         boolean hasFooterDocInfo = !doc.body().select("div.testhighlighter").isEmpty();
 

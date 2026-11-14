@@ -17,7 +17,6 @@ class WhenADocumentIsRenderedToStream {
 
     public static final String HTML5_BACKEND = "html5";
     public static final String HELLO_WORLD = "Hello World";
-    public static final String EMPTY_STRING = "";
 
     private Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 
@@ -48,7 +47,7 @@ class WhenADocumentIsRenderedToStream {
         String result = new String(out.toByteArray());
 
         // then:
-        assertThat(result != null && !result.equals(EMPTY_STRING)).isTrue();
+        assertThat(result).isNotEmpty();
         assertThat(result).contains(HELLO_WORLD);
     }
 
@@ -76,8 +75,8 @@ class WhenADocumentIsRenderedToStream {
         String result2 = new String(out2.toByteArray());
 
         // then:
-        assertThat(result1 != null && !result1.equals(EMPTY_STRING) && result1.contains(HELLO_WORLD)).isTrue();
-        assertThat(result2 != null && !result2.equals(EMPTY_STRING) && result2.contains(HELLO_WORLD)).isTrue();
+        assertThat(result1).isNotEmpty().contains(HELLO_WORLD);
+        assertThat(result2).isNotEmpty().contains(HELLO_WORLD);
     }
 
     @Test
@@ -103,7 +102,7 @@ class WhenADocumentIsRenderedToStream {
         String result = new String(out.toByteArray());
 
         // then:
-        assertThat(result != null && !result.equals(EMPTY_STRING)).isTrue();
+        assertThat(result).isNotEmpty();
         assertThat(result).contains("-- Test --");
         assertThat(result).contains("Hello, World!");
     }
