@@ -7,3 +7,11 @@ To load a Ruby file inside the Ruby runtime, you can use `org.asciidoctor.jruby.
 You can also load a gem using an API that wraps Ruby's `require` command.
 The gem must be available inside the classpath.
 Next run `org.asciidoctor.jruby.internal.RubyUtils.requireLibrary(Ruby, String)`, passing the name of the gem as the second argument.
+
+Outside of an extension, use `org.asciidoctor.jruby.AsciidoctorJRuby#requireLibrary(String...)` to load a gem (e.g., `asciidoctor-diagram`):
+
+[source,java]
+----
+Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+asciidoctor.unwrap(AsciidoctorJRuby.class).requireLibrary("asciidoctor-diagram");
+----

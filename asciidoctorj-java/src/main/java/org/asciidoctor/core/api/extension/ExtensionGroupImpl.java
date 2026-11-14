@@ -248,66 +248,71 @@ public class ExtensionGroupImpl implements ExtensionGroup {
 
     @Override
     public ExtensionGroup requireRubyLibrary(String requiredLibrary) {
-        throw RubyExtensionRegistryImpl.unsupported();
+        throw unsupportedRubyExtension();
     }
 
     @Override
     public ExtensionGroup loadRubyClass(InputStream rubyClassStream) {
-        throw RubyExtensionRegistryImpl.unsupported();
+        throw unsupportedRubyExtension();
     }
 
     @Override
     public ExtensionGroup rubyPreprocessor(String preprocessor) {
-        throw RubyExtensionRegistryImpl.unsupported();
+        throw unsupportedRubyExtension();
     }
 
     @Override
     public ExtensionGroup rubyPostprocessor(String postprocessor) {
-        throw RubyExtensionRegistryImpl.unsupported();
+        throw unsupportedRubyExtension();
     }
 
     @Override
     public ExtensionGroup rubyDocinfoProcessor(String docinfoProcessor) {
-        throw RubyExtensionRegistryImpl.unsupported();
+        throw unsupportedRubyExtension();
     }
 
     @Override
     public ExtensionGroup rubyIncludeProcessor(String includeProcessor) {
-        throw RubyExtensionRegistryImpl.unsupported();
+        throw unsupportedRubyExtension();
     }
 
     @Override
     public ExtensionGroup rubyTreeprocessor(String treeProcessor) {
-        throw RubyExtensionRegistryImpl.unsupported();
+        throw unsupportedRubyExtension();
     }
 
     @Override
     public ExtensionGroup rubyBlock(String blockName, String blockProcessor) {
-        throw RubyExtensionRegistryImpl.unsupported();
+        throw unsupportedRubyExtension();
     }
 
     @Override
     public ExtensionGroup rubyBlock(String blockProcessor) {
-        throw RubyExtensionRegistryImpl.unsupported();
+        throw unsupportedRubyExtension();
     }
 
     @Override
     public ExtensionGroup rubyBlockMacro(String blockName, String blockMacroProcessor) {
-        throw RubyExtensionRegistryImpl.unsupported();
+        throw unsupportedRubyExtension();
     }
 
     @Override
     public ExtensionGroup rubyBlockMacro(String blockMacroProcessor) {
-        throw RubyExtensionRegistryImpl.unsupported();
+        throw unsupportedRubyExtension();
     }
 
     @Override
     public ExtensionGroup rubyInlineMacro(String macroName, String inlineMacroProcessor) {
-        throw RubyExtensionRegistryImpl.unsupported();
+        throw unsupportedRubyExtension();
     }
 
     @Override
     public ExtensionGroup rubyInlineMacro(String inlineMacroProcessor) {
-        throw RubyExtensionRegistryImpl.unsupported();
+        throw unsupportedRubyExtension();
+    }
+
+    private static UnsupportedOperationException unsupportedRubyExtension() {
+        return new UnsupportedOperationException("Ruby extensions are not supported by this implementation of "
+                + "AsciidoctorJ (there's no Ruby runtime)");
     }
 }

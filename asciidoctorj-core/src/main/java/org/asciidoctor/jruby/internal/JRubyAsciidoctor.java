@@ -6,9 +6,9 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
-import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
+import org.asciidoctor.jruby.extension.RubyExtensionRegistry;
 import org.asciidoctor.jruby.converter.internal.ConverterRegistryExecutor;
 import org.asciidoctor.jruby.extension.internal.ExtensionRegistryExecutor;
 import org.asciidoctor.jruby.log.internal.JULLogHandler;
@@ -205,11 +205,6 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     @Override
     public void unregisterAllExtensions() {
         getExtensionsModule().callMethod("unregister_all");
-    }
-
-    @Override
-    public void shutdown() {
-        this.rubyRuntime.tearDown();
     }
 
     @Override

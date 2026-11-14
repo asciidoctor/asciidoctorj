@@ -9,10 +9,12 @@ The points that can be addressed without a breaking change are proposed to Ascii
 
 == Ruby and JRuby specific API
 
-* `Asciidoctor#rubyExtensionRegistry()`, `RubyExtensionRegistry`, `Asciidoctor#requireLibrary(String...)`, `Asciidoctor#requireLibraries(Collection)` and the `ruby*` methods of `ExtensionGroup` (`requireRubyLibrary`, `loadRubyClass`, `rubyBlock`, etc.) only make sense with a Ruby runtime.
+* [.line-through]#`Asciidoctor#rubyExtensionRegistry()`, `RubyExtensionRegistry`, `Asciidoctor#requireLibrary(String...)` and `Asciidoctor#requireLibraries(Collection)` only make sense with a Ruby runtime.#
+Deprecated in 3.1 and removed from the API in 4.0: they are declared by `AsciidoctorJRuby`, and `RubyExtensionRegistry` moved to the JRuby implementation ({url-issues}/1325[#1325]).
+* The `ruby*` methods of `ExtensionGroup` (`requireRubyLibrary`, `loadRubyClass`, `rubyBlock`, etc.) only make sense with a Ruby runtime.
 The implementation throws an `UnsupportedOperationException`.
-Could they be deprecated in 3.x and removed in 4.0? ({url-issues}/1325[#1325])
-* `Asciidoctor#shutdown()` tears down the Ruby runtime: there's nothing to shut down anymore (and `close()` already exists).
+* [.line-through]#`Asciidoctor#shutdown()` tears down the Ruby runtime: there's nothing to shut down anymore (and `close()` already exists).#
+Deprecated in 3.1 and removed in 4.0: use `close()` instead.
 * `Asciidoctor#asciidoctorVersion()` returns the version of Asciidoctor (Ruby) embedded in AsciidoctorJ.
 There's no embedded Asciidoctor anymore: the implementation returns the version of AsciidoctorJ.
 Should it be renamed (e.g., `version()`) or report the version of Asciidoctor (Ruby) that the implementation follows?

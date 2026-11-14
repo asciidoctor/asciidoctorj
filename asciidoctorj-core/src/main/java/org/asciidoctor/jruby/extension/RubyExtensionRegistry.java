@@ -1,7 +1,13 @@
-package org.asciidoctor.extension;
+package org.asciidoctor.jruby.extension;
 
 import java.io.InputStream;
 
+/**
+ * A registry for Ruby extensions, which only makes sense with an implementation that embeds Asciidoctor (Ruby)
+ * using JRuby.
+ *
+ * @see org.asciidoctor.jruby.AsciidoctorJRuby#rubyExtensionRegistry()
+ */
 public interface RubyExtensionRegistry {
 
     RubyExtensionRegistry requireLibrary(String requiredLibrary);
