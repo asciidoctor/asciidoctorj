@@ -5,7 +5,6 @@ import org.asciidoctor.converter.AbstractConverter;
 import org.asciidoctor.converter.JavaConverterRegistry;
 import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
-import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterRegistry;
 
@@ -145,32 +144,11 @@ public interface Asciidoctor extends AutoCloseable {
     String[] convertFiles(Collection<File> asciidoctorFiles, Options options);
 
     /**
-     * Loads the given Ruby gem(s) by name.
-     *
-     * @param requiredLibraries
-     */
-    void requireLibrary(String... requiredLibraries);
-
-    /**
-     * Loads the given Ruby gem in requiredLibraries by name.
-     *
-     * @param requiredLibraries
-     */
-    void requireLibraries(Collection<String> requiredLibraries);
-
-    /**
      * Creates an extension registry ready to be used for registering Java extensions.
      *
      * @return Extension Registry object.
      */
     JavaExtensionRegistry javaExtensionRegistry();
-
-    /**
-     * Creates an Ruby extension registry ready to be used for registering Ruby extension.
-     *
-     * @return Extension Registry object.
-     */
-    RubyExtensionRegistry rubyExtensionRegistry();
 
     /**
      * Creates a registry for registering Java converters.
@@ -207,12 +185,6 @@ public interface Asciidoctor extends AutoCloseable {
      * Unregister all registered extensions.
      */
     void unregisterAllExtensions();
-
-    /**
-     * This method frees all resources consumed by AsciidoctorJ module.
-     * Keep in mind that if this method is called, instance becomes unusable and you should create another instance.
-     */
-    void shutdown();
 
     /**
      * Method that gets the asciidoctor version which is being used..
@@ -303,6 +275,10 @@ public interface Asciidoctor extends AutoCloseable {
         throw new IllegalArgumentException("Cannot unwrap to " + clazz.getName());
     }
 
+    /**
+     * Frees all resources consumed by this instance (e.g., the Ruby runtime of the JRuby implementation).
+     * Keep in mind that if this method is called, instance becomes unusable and you should create another instance.
+     */
     @Override
     default void close() {
         // no-op

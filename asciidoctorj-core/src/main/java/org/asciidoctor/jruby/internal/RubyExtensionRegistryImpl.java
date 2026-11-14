@@ -1,6 +1,6 @@
 package org.asciidoctor.jruby.internal;
 
-import org.asciidoctor.extension.RubyExtensionRegistry;
+import org.asciidoctor.jruby.extension.RubyExtensionRegistry;
 import org.jruby.Ruby;
 import org.jruby.RubyModule;
 

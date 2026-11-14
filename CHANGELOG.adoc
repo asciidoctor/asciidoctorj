@@ -16,6 +16,9 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 === Improvements
 
 * BREAKING: Upgrade to JRuby 10.1.1.0. Requires Java 21 (#1308)
+* BREAKING: Remove `Asciidoctor#shutdown()`, use `Asciidoctor#close()` instead (#1325)
+* BREAKING: Remove `Asciidoctor#requireLibrary(String...)`, `Asciidoctor#requireLibraries(Collection)` and `Asciidoctor#rubyExtensionRegistry()`, which only make sense with an embedded Asciidoctor (Ruby): use the methods of `AsciidoctorJRuby` instead, e.g. `asciidoctor.unwrap(AsciidoctorJRuby.class).requireLibrary("asciidoctor-diagram")` (#1325)
+* BREAKING: Move `RubyExtensionRegistry` from the API (`org.asciidoctor.extension`) to the JRuby implementation (`org.asciidoctor.jruby.extension`) (#1325)
 * Add `ExtensionGroup#blockMacro(String, BlockMacroProcessor)` and `ExtensionGroup#inlineMacro(String, InlineMacroProcessor)`, like `JavaExtensionRegistry`
 * Add the service provider interfaces `org.asciidoctor.extension.spi.ExtensionRegistry`, `org.asciidoctor.converter.spi.ConverterRegistry` and `org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry` to the API, and deprecate the interfaces of the `org.asciidoctor.jruby` packages (their implementations are still loaded)
 * Add `AsciidoctorException` to the API, the superclass of `AsciidoctorCoreException`, so that applications don't have to catch an internal class when a conversion fails
