@@ -3,6 +3,7 @@
 *** xref:api-migration-guide-v25x-to-v30.adoc[]
 *** xref:extension-migration-guide-16-to-20.adoc[]
 *** xref:extension-migration-guide-15-to-16.adoc[]
+*** xref:migrate-to-java-implementation.adoc[]
 ** Running in Frameworks
 *** xref:run-in-osgi.adoc[]
 *** xref:run-in-wildfly.adoc[]

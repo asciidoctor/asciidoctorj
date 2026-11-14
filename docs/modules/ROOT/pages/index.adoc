@@ -21,25 +21,21 @@ It needs Java 17 or newer and has no runtime dependency, other than the API.
 
 [IMPORTANT]
 ====
-An application uses one implementation or the other, not both.
+An application must use one of the implementations, not both.
 ====
 
 == Which implementation to use
 
-[cols="1,2,2"]
-|===
-| |JRuby implementation |Java implementation
+=== JRuby implementation
 
+[cols="1,3"]
+|===
 |Artifact
 |`org.asciidoctor:asciidoctorj`
-|`org.asciidoctor:asciidoctorj-java`
 
 |Minimum Java version
 |21
-|17
 |===
-
-=== JRuby implementation
 
 Pros::
 * It runs the original Asciidoctor Ruby gem, so it is 100% compliant with Asciidoctor.
@@ -52,6 +48,15 @@ Cons::
 
 === Java implementation
 
+[cols="1,3"]
+|===
+|Artifact
+|`org.asciidoctor:asciidoctorj-java`
+
+|Minimum Java version
+|17
+|===
+
 Pros::
 * Better performance, because there is no Ruby runtime to start.
 * It is easier to integrate, because it does not rely on JRuby and it has no runtime dependency other than the API.
@@ -61,6 +66,6 @@ Cons::
 * It is a port of Asciidoctor, so it can show differences from the original Asciidoctor Ruby implementation.
 Please, report any issue you detect.
 
-For more information about how to change from the JRuby implementation to the Java implementation, see the https://github.com/asciidoctor/asciidoctorj/blob/main/asciidoctorj-java/docs/migration-from-asciidoctorj.adoc[migration guide].
+For more information about how to change from the JRuby implementation to the Java implementation, see the xref:guides:migrate-to-java-implementation.adoc[migration guide].
 
 NOTE: The rest of this documentation describes the JRuby implementation, unless the text says otherwise.

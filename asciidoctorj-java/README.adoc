@@ -32,7 +32,7 @@ Using AsciidoctorJ, you can convert AsciiDoc content or analyze the structure of
 
 The Java implementation of AsciidoctorJ (`org.asciidoctor:asciidoctorj-java`) is a pure Java implementation of Asciidoctor (Java 17 or newer, no runtime dependency): it doesn't run Asciidoctor (Ruby) on JRuby.
 The JRuby implementation is still published as `org.asciidoctor:asciidoctorj` (see xref:../README.adoc[]): an application depends on one or the other, not both.
-Both implement the same API (`asciidoctorj-api`); see the xref:docs/migration-from-asciidoctorj.adoc[migration guide] for the differences.
+Both implement the same API (`asciidoctorj-api`); see the xref:../docs/modules/guides/pages/migrate-to-java-implementation.adoc[migration guide] for the differences.
 
 You can find the documentation for integrating Asciidoctor in your JVM based language of choice at the {uri-docs}/asciidoctorj/latest/[Asciidoctor Docs site].
 
