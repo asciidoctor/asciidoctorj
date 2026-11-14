@@ -1,0 +1,39 @@
+name: Publish Snapshot
+on:
+  schedule:
+    - cron: '0 3 * * *'
+      timezone: 'Europe/Berlin'
+  workflow_dispatch:
+
+concurrency: publish-snapshot
+
+env:
+  ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.GPG_KEY_ID }}
+  ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}
+  ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSPHRASE }}
+  ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.OSS_SONATYPE_USERNAME }}
+  ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.OSS_SONATYPE_PASSWORD }}
+
+jobs:
+  publish-snapshot:
+    if: github.repository == 'asciidoctor/asciidoctorj' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Check that the version is a snapshot
+        id: version
+        run: |
+          version=$(sed -n 's/^version=//p' gradle.properties)
+          echo "Version: $version"
+          if [[ "$version" == *-SNAPSHOT ]]; then
+            echo "snapshot=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Publish to the Central snapshot repository
+        if: steps.version.outputs.snapshot == 'true'
+        run: |
+          unset GEM_PATH GEM_HOME JRUBY_OPTS
+          ./gradlew --no-daemon publishToSonatype
