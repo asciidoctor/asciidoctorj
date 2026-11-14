@@ -1,5 +1,7 @@
 package org.asciidoctor;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.BlockProcessor;
@@ -13,7 +15,6 @@ import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.asciidoctor.test.extension.ClasspathExtension;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,10 +31,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenAsciidoctorLogsToConsole {
@@ -77,10 +74,10 @@ public class WhenAsciidoctorLogsToConsole {
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
 
-        assertEquals(4, memoryLogHandler.getLogRecords().size());
-        assertThat(memoryLogHandler.getLogRecords().get(0).getMessage(),
-                both(containsString("include file not found"))
-                        .and(containsString("documentwithnotexistingfile.adoc: line 3")));
+        assertThat(memoryLogHandler.getLogRecords().size()).isEqualTo(4);
+        assertThat(memoryLogHandler.getLogRecords().get(0).getMessage())
+                .contains("include file not found")
+                .contains("documentwithnotexistingfile.adoc: line 3");
     }
 
     private MemoryLogHandler registerMemoryLogHandler() {
@@ -108,17 +105,17 @@ public class WhenAsciidoctorLogsToConsole {
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
 
-        assertEquals(4, logRecords.size());
-        assertThat(logRecords.get(0).getMessage(), containsString("include file not found"));
+        assertThat(logRecords.size()).isEqualTo(4);
+        assertThat(logRecords.get(0).getMessage()).contains("include file not found");
         final Cursor cursor = logRecords.get(0).getCursor();
-        assertThat(cursor.getDir().replace('\\', '/'), is(inputFile.getParent().replace('\\', '/')));
-        assertThat(cursor.getFile(), is(inputFile.getName()));
-        assertThat(cursor.getLineNumber(), is(3));
+        assertThat(cursor.getDir().replace('\\', '/')).isEqualTo(inputFile.getParent().replace('\\', '/'));
+        assertThat(cursor.getFile()).isEqualTo(inputFile.getName());
+        assertThat(cursor.getLineNumber()).isEqualTo(3);
 
         for (LogRecord logRecord : logRecords) {
-            assertThat(logRecord.getCursor(), not(nullValue()));
-            assertThat(logRecord.getCursor().getFile(), not(nullValue()));
-            assertThat(logRecord.getCursor().getDir(), not(nullValue()));
+            assertThat(logRecord.getCursor()).isNotNull();
+            assertThat(logRecord.getCursor().getFile()).isNotNull();
+            assertThat(logRecord.getCursor().getDir()).isNotNull();
         }
 
     }
@@ -139,10 +136,10 @@ public class WhenAsciidoctorLogsToConsole {
                         .attributes(Attributes.builder().allowUriRead(true).build())
                         .build());
 
-        assertThat(logRecords, hasSize(1));
-        assertThat(logRecords.get(0).getMessage(), containsString("invalid reference: invalidref"));
+        assertThat(logRecords).hasSize(1);
+        assertThat(logRecords.get(0).getMessage()).contains("invalid reference: invalidref");
         final Cursor cursor = logRecords.get(0).getCursor();
-        assertThat(cursor, is(nullValue()));
+        assertThat(cursor).isNull();
     }
 
     @Test
@@ -166,7 +163,7 @@ public class WhenAsciidoctorLogsToConsole {
         File expectedFile1 = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile1.delete();
 
-        assertEquals(0, logRecords.size());
+        assertThat(logRecords.size()).isEqualTo(0);
 
         // Now render via first instance and check that notifications appeared.
         asciidoctor.convertFile(inputFile,
@@ -179,12 +176,12 @@ public class WhenAsciidoctorLogsToConsole {
         File expectedFile2 = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile2.delete();
 
-        assertEquals(4, logRecords.size());
-        assertThat(logRecords.get(0).getMessage(), containsString("include file not found"));
+        assertThat(logRecords.size()).isEqualTo(4);
+        assertThat(logRecords.get(0).getMessage()).contains("include file not found");
         final Cursor cursor = logRecords.get(0).getCursor();
-        assertThat(cursor.getDir().replace('\\', '/'), is(inputFile.getParent().replace('\\', '/')));
-        assertThat(cursor.getFile(), is(inputFile.getName()));
-        assertThat(cursor.getLineNumber(), is(3));
+        assertThat(cursor.getDir().replace('\\', '/')).isEqualTo(inputFile.getParent().replace('\\', '/'));
+        assertThat(cursor.getFile()).isEqualTo(inputFile.getName());
+        assertThat(cursor.getLineNumber()).isEqualTo(3);
     }
 
     @Test
@@ -206,7 +203,7 @@ public class WhenAsciidoctorLogsToConsole {
         File expectedFile = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile.delete();
 
-        assertEquals(4, logRecords.size());
+        assertThat(logRecords.size()).isEqualTo(4);
         logRecords.clear();
 
         asciidoctor.unregisterLogHandler(logHandler);
@@ -220,7 +217,7 @@ public class WhenAsciidoctorLogsToConsole {
 
         File expectedFile2 = new File(inputFile.getParent(), "documentwithnotexistingfile.html");
         expectedFile2.delete();
-        assertEquals(0, logRecords.size());
+        assertThat(logRecords.size()).isEqualTo(0);
     }
 
     @Test
@@ -241,17 +238,17 @@ public class WhenAsciidoctorLogsToConsole {
         for (LogRecord logRecord : logRecords) {
             System.err.println(">> " + logRecord.getMessage());
         }
-        assertThat(logRecords, hasSize(4));
-        assertThat(logRecords.get(0).getMessage(), containsString("include file not found"));
+        assertThat(logRecords).hasSize(4);
+        assertThat(logRecords.get(0).getMessage()).contains("include file not found");
         final Cursor cursor = logRecords.get(0).getCursor();
-        assertThat(cursor.getDir().replace('\\', '/'), is(inputFile.getParent().replace('\\', '/')));
-        assertThat(cursor.getFile(), is(inputFile.getName()));
-        assertThat(cursor.getLineNumber(), is(3));
+        assertThat(cursor.getDir().replace('\\', '/')).isEqualTo(inputFile.getParent().replace('\\', '/'));
+        assertThat(cursor.getFile()).isEqualTo(inputFile.getName());
+        assertThat(cursor.getLineNumber()).isEqualTo(3);
 
         for (LogRecord logRecord : logRecords) {
-            assertThat(logRecord.getCursor(), not(Matchers.nullValue()));
-            assertThat(logRecord.getCursor().getFile(), not(Matchers.nullValue()));
-            assertThat(logRecord.getCursor().getDir(), not(Matchers.nullValue()));
+            assertThat(logRecord.getCursor()).isNotNull();
+            assertThat(logRecord.getCursor().getFile()).isNotNull();
+            assertThat(logRecord.getCursor().getDir()).isNotNull();
         }
     }
 
@@ -280,12 +277,12 @@ public class WhenAsciidoctorLogsToConsole {
         String renderContent = asciidoctor.convert("= Test\n\n== Something different\n\n[big]\nHello World",
                 Options.builder().option("sourcemap", "true").build());
 
-        assertEquals(1, logRecords.size());
-        assertThat(logRecords.get(0).getMessage(), is("Hello Log"));
+        assertThat(logRecords.size()).isEqualTo(1);
+        assertThat(logRecords.get(0).getMessage()).isEqualTo("Hello Log");
         final Cursor cursor = logRecords.get(0).getCursor();
-        assertThat(cursor.getLineNumber(), is(3));
+        assertThat(cursor.getLineNumber()).isEqualTo(3);
 
-        assertThat(renderContent, containsString("HELLO WORLD"));
+        assertThat(renderContent).contains("HELLO WORLD");
     }
 
     @Test
@@ -302,10 +299,10 @@ public class WhenAsciidoctorLogsToConsole {
                     Options.builder().option("sourcemap", "true").build());
         } catch (Throwable t) {
             // then
-            assertThat(t.getMessage(), containsString("Failed to load AsciiDoc document"));
+            assertThat(t.getMessage()).contains("Failed to load AsciiDoc document");
             final Throwable cause = t.getCause();
-            assertThat(cause.getClass(), equalTo(RuntimeException.class));
-            assertThat(cause.getMessage(), is(errorMessage));
+            assertThat(cause.getClass()).isEqualTo(RuntimeException.class);
+            assertThat(cause.getMessage()).isEqualTo(errorMessage);
         }
     }
 }

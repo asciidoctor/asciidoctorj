@@ -1,5 +1,7 @@
 package org.asciidoctor.integrationguide;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
@@ -7,9 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class AsciidoctorInterface {
@@ -20,7 +19,7 @@ public class AsciidoctorInterface {
 
         File resultFile = new File("build/resources/test/document.html");
 
-        assertThat(resultFile.exists(), is(true));
+        assertThat(resultFile.exists()).isTrue();
     }
 
     @Test
@@ -28,7 +27,7 @@ public class AsciidoctorInterface {
 //tag::create[]
         Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 //end::create[]
-        assertThat(asciidoctor, notNullValue());
+        assertThat(asciidoctor).isNotNull();
     }
 
     @Test

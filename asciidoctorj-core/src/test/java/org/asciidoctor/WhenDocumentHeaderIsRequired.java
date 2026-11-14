@@ -1,5 +1,7 @@
 package org.asciidoctor;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.ast.Author;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.RevisionInfo;
@@ -16,9 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenDocumentHeaderIsRequired {
@@ -38,17 +37,17 @@ public class WhenDocumentHeaderIsRequired {
         final Options options = parseHeaderOnlyOptions();
         final Document document = asciidoctor.loadFile(documentHeaders, options);
 
-        assertThat(document.getDoctitle(), is("Sample Document"));
-        assertThat(document.getStructuredDoctitle().getMain(), is("Sample Document"));
+        assertThat(document.getDoctitle()).isEqualTo("Sample Document");
+        assertThat(document.getStructuredDoctitle().getMain()).isEqualTo("Sample Document");
 
         Map<String, Object> attributes = document.getAttributes();
-        assertThat((String) attributes.get("revdate"), is("2013-05-20"));
-        assertThat((String) attributes.get("revnumber"), is("1.0"));
-        assertThat((String) attributes.get("revremark"), is("First draft"));
+        assertThat((String) attributes.get("revdate")).isEqualTo("2013-05-20");
+        assertThat((String) attributes.get("revnumber")).isEqualTo("1.0");
+        assertThat((String) attributes.get("revremark")).isEqualTo("First draft");
         //attributes should be incasesensitive
-        assertThat((String) attributes.get("tags"), is("[document, example]"));
-        assertThat((String) attributes.get("author"), is("Doc Writer"));
-        assertThat((String) attributes.get("email"), is("doc.writer@asciidoc.org"));
+        assertThat((String) attributes.get("tags")).isEqualTo("[document, example]");
+        assertThat((String) attributes.get("author")).isEqualTo("Doc Writer");
+        assertThat((String) attributes.get("email")).isEqualTo("doc.writer@asciidoc.org");
     }
 
     @Test
@@ -57,14 +56,14 @@ public class WhenDocumentHeaderIsRequired {
         final Document document = asciidoctor.loadFile(documentHeaders, options);
 
         List<Author> authors = document.getAuthors();
-        assertThat(authors, hasSize(2));
+        assertThat(authors).hasSize(2);
 
         Author author = authors.get(0);
-        assertThat(author.getEmail(), is("doc.writer@asciidoc.org"));
-        assertThat(author.getFullName(), is("Doc Writer"));
-        assertThat(author.getFirstName(), is("Doc"));
-        assertThat(author.getLastName(), is("Writer"));
-        assertThat(author.getInitials(), is("DW"));
+        assertThat(author.getEmail()).isEqualTo("doc.writer@asciidoc.org");
+        assertThat(author.getFullName()).isEqualTo("Doc Writer");
+        assertThat(author.getFirstName()).isEqualTo("Doc");
+        assertThat(author.getLastName()).isEqualTo("Writer");
+        assertThat(author.getInitials()).isEqualTo("DW");
     }
 
     @Test
@@ -74,9 +73,9 @@ public class WhenDocumentHeaderIsRequired {
 
         RevisionInfo revisionInfo = document.getRevisionInfo();
 
-        assertThat(revisionInfo.getDate(), is("2013-05-20"));
-        assertThat(revisionInfo.getNumber(), is("1.0"));
-        assertThat(revisionInfo.getRemark(), is("First draft"));
+        assertThat(revisionInfo.getDate()).isEqualTo("2013-05-20");
+        assertThat(revisionInfo.getNumber()).isEqualTo("1.0");
+        assertThat(revisionInfo.getRemark()).isEqualTo("First draft");
     }
 
     @Test
@@ -86,23 +85,23 @@ public class WhenDocumentHeaderIsRequired {
         final Document document = asciidoctor.loadFile(documentHeaders, options);
 
         List<Author> authors = document.getAuthors();
-        assertThat(authors, hasSize(2));
+        assertThat(authors).hasSize(2);
 
         Author author1 = authors.get(0);
 
-        assertThat(author1.getEmail(), is("doc.writer@asciidoc.org"));
-        assertThat(author1.getFullName(), is("Doc Writer"));
-        assertThat(author1.getFirstName(), is("Doc"));
-        assertThat(author1.getLastName(), is("Writer"));
-        assertThat(author1.getInitials(), is("DW"));
+        assertThat(author1.getEmail()).isEqualTo("doc.writer@asciidoc.org");
+        assertThat(author1.getFullName()).isEqualTo("Doc Writer");
+        assertThat(author1.getFirstName()).isEqualTo("Doc");
+        assertThat(author1.getLastName()).isEqualTo("Writer");
+        assertThat(author1.getInitials()).isEqualTo("DW");
 
         Author author2 = authors.get(1);
 
-        assertThat(author2.getEmail(), is("john.smith@asciidoc.org"));
-        assertThat(author2.getFullName(), is("John Smith"));
-        assertThat(author2.getFirstName(), is("John"));
-        assertThat(author2.getLastName(), is("Smith"));
-        assertThat(author2.getInitials(), is("JS"));
+        assertThat(author2.getEmail()).isEqualTo("john.smith@asciidoc.org");
+        assertThat(author2.getFullName()).isEqualTo("John Smith");
+        assertThat(author2.getFirstName()).isEqualTo("John");
+        assertThat(author2.getLastName()).isEqualTo("Smith");
+        assertThat(author2.getInitials()).isEqualTo("JS");
     }
 
     private static Options parseHeaderOnlyOptions() {

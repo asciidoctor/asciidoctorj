@@ -1,11 +1,11 @@
 package org.asciidoctor.jruby.internal;
 
-import org.hamcrest.MatcherAssert;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.jruby.RubyString;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.is;
 
 public class WhenEnvironmentVariablesAreSet {
 
@@ -15,7 +15,7 @@ public class WhenEnvironmentVariablesAreSet {
 			IRubyObject evalScriptlet = asciidoctor.rubyRuntime.evalScriptlet("ENV['GEM_PATH']");
 
 			RubyString gemPathValue = (RubyString) evalScriptlet;
-			MatcherAssert.assertThat(gemPathValue.asJavaString(), is("My_gem_path"));
+			assertThat(gemPathValue.asJavaString()).isEqualTo("My_gem_path");
 		}
 	}
 	

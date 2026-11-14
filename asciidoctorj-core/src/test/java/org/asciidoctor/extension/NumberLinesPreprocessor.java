@@ -1,9 +1,8 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.Document;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.hamcrest.CoreMatchers.is;
+import org.asciidoctor.ast.Document;
 
 public class NumberLinesPreprocessor extends Preprocessor {
 

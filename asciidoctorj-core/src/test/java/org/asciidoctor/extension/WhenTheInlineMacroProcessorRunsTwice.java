@@ -1,5 +1,7 @@
 package org.asciidoctor.extension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.PhraseNode;
 import org.asciidoctor.ast.StructuralNode;
@@ -9,8 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.asciidoctor.util.OptionsTestHelper.emptyOptions;
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertThat;
 
 public class WhenTheInlineMacroProcessorRunsTwice {
 
@@ -26,8 +26,8 @@ public class WhenTheInlineMacroProcessorRunsTwice {
             }
 
         });
-        assertThat(convert(asciidoctor), containsString("{format=test}"));
-        assertThat(convert(asciidoctor), containsString("{format=test}"));
+        assertThat(convert(asciidoctor)).contains("{format=test}");
+        assertThat(convert(asciidoctor)).contains("{format=test}");
     }
 
     private String convert(Asciidoctor asciidoctor) {

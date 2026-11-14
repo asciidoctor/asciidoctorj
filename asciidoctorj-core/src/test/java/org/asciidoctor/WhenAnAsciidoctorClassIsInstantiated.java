@@ -1,5 +1,7 @@
 package org.asciidoctor;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.jruby.AsciiDocDirectoryWalker;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
@@ -9,6 +11,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
+import org.xmlunit.assertj3.XmlAssert;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,13 +28,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static org.asciidoctor.util.OptionsTestHelper.emptyOptions;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.collection.IsArrayWithSize.arrayWithSize;
-import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.xmlmatchers.xpath.HasXPath.hasXPath;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenAnAsciidoctorClassIsInstantiated {
@@ -53,14 +50,14 @@ public class WhenAnAsciidoctorClassIsInstantiated {
     public void should_accept_empty_string_as_empty_content_when_output_is_String() {
         String result = asciidoctor.convert("", emptyOptions());
 
-        assertThat(result, isEmptyString());
+        assertThat(result).isEmpty();
     }
 
     @Test
     public void should_accept_null_string_as_empty_content_when_output_is_String() {
         String result = asciidoctor.convert(null, emptyOptions());
 
-        assertThat(result, isEmptyString());
+        assertThat(result).isEmpty();
     }
 
     @Test
@@ -72,8 +69,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
                 .build();
         String renderContent = asciidoctor.convert(null, options);
 
-        assertThat(expectedFile.exists(), is(true));
-        assertThat(renderContent, is(nullValue()));
+        assertThat(expectedFile.exists()).isTrue();
+        assertThat(renderContent).isNull();
     }
 
     @Test
@@ -117,8 +114,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
         File expectedFile = new File(renderSampleDocument.getParent(), "rendersample.html");
 
-        assertThat(expectedFile.exists(), is(true));
-        assertThat(renderContent, is(nullValue()));
+        assertThat(expectedFile.exists()).isTrue();
+        assertThat(renderContent).isNull();
 
         expectedFile.delete();
     }
@@ -131,8 +128,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
         File expectedFile = new File(renderSampleDocument.getParent(), "rendersample.html");
 
-        assertThat(expectedFile.exists(), is(true));
-        assertThat(renderContent, is(nullValue()));
+        assertThat(expectedFile.exists()).isTrue();
+        assertThat(renderContent).isNull();
 
         expectedFile.delete();
     }
@@ -149,8 +146,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
         File expectedFile = new File(tempFolder, "rendersample.html");
 
-        assertThat(expectedFile.exists(), is(true));
-        assertThat(renderContent, is(nullValue()));
+        assertThat(expectedFile.exists()).isTrue();
+        assertThat(renderContent).isNull();
 
         expectedFile.delete();
     }
@@ -169,8 +166,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
         File renderedFile = new File(output, "rendersample.html");
 
-        assertThat(renderedFile.exists(), is(true));
-        assertThat(renderContent, is(nullValue()));
+        assertThat(renderedFile.exists()).isTrue();
+        assertThat(renderContent).isNull();
     }
 
     @Test
@@ -182,8 +179,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
         File expectedFile = new File(tempFolder, "rendersample.html");
 
-        assertThat(expectedFile.exists(), is(true));
-        assertThat(renderContent, is(nullValue()));
+        assertThat(expectedFile.exists()).isTrue();
+        assertThat(renderContent).isNull();
     }
 
     @Test
@@ -196,8 +193,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
         File expectedFile = new File(renderSampleDocument.getParent(), "rendersample.xml");
 
-        assertThat(expectedFile.exists(), is(true));
-        assertThat(renderContent, is(nullValue()));
+        assertThat(expectedFile.exists()).isTrue();
+        assertThat(renderContent).isNull();
 
         expectedFile.delete();
     }
@@ -212,8 +209,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
         File expectedFile = new File(renderSampleDocument.getParent(), "rendersample.xml");
 
-        assertThat(expectedFile.exists(), is(true));
-        assertThat(renderContent, is(nullValue()));
+        assertThat(expectedFile.exists()).isTrue();
+        assertThat(renderContent).isNull();
 
         expectedFile.delete();
     }
@@ -227,8 +224,8 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
         File expectedFile = new File(renderSampleDocument.getParent(), "rendersample.xml");
 
-        assertThat(expectedFile.exists(), is(true));
-        assertThat(renderContent, is(nullValue()));
+        assertThat(expectedFile.exists()).isTrue();
+        assertThat(renderContent).isNull();
 
         expectedFile.delete();
     }
@@ -286,7 +283,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
         String[] allRenderedFiles = asciidoctor.convertFiles(
                 List.of(renderSampleDocument), options().toFile(false).build());
-        assertThat(allRenderedFiles, is(arrayWithSize(1)));
+        assertThat(allRenderedFiles).hasSize(1);
     }
 
     @Test
@@ -300,7 +297,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
         String[] allRenderedFiles = asciidoctor.convertFiles(
                 Arrays.asList(renderSampleDocument), options);
-        assertThat(allRenderedFiles, is(arrayWithSize(0)));
+        assertThat(allRenderedFiles).hasSize(0);
 
     }
 
@@ -310,7 +307,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
         String[] allRenderedFiles = asciidoctor.convertDirectory(
                 new AsciiDocDirectoryWalker(pathToWalk.getPath()),
                 Options.builder().toFile(false).build());
-        assertThat(allRenderedFiles, is(arrayWithSize(4)));
+        assertThat(allRenderedFiles).hasSize(4);
 
     }
 
@@ -325,7 +322,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
         String[] allRenderedFiles = asciidoctor.convertDirectory(
                 new AsciiDocDirectoryWalker(pathToWalk.getAbsolutePath()),
                 options);
-        assertThat(allRenderedFiles, is(arrayWithSize(0)));
+        assertThat(allRenderedFiles).hasSize(0);
 
     }
 
@@ -345,17 +342,17 @@ public class WhenAnAsciidoctorClassIsInstantiated {
         Source convertFileSource = new DOMSource(
                 inputStream2Document(new ByteArrayInputStream(render_content.getBytes())));
 
-        assertThat(convertFileSource, hasXPath("/div/div[@class='sectionbody']/div/p", is(contentDateOrTime)));
+        XmlAssert.assertThat(convertFileSource).valueByXPath("/div/div[@class='sectionbody']/div/p").isEqualTo(contentDateOrTime);
 
     }
 
     private void assertRenderedFile(String render_file) throws IOException, SAXException, ParserConfigurationException {
         Source renderFileSource = new DOMSource(inputStream2Document(new ByteArrayInputStream(render_file.getBytes())));
 
-        assertThat(renderFileSource, hasXPath("/div[@class='sect1']"));
-        assertThat(renderFileSource, hasXPath("/div/h2[@id='_section_a']"));
-        assertThat(renderFileSource, hasXPath("/div/h2", is("Section A")));
-        assertThat(renderFileSource, hasXPath("/div/div[@class='sectionbody']"));
+        XmlAssert.assertThat(renderFileSource).hasXPath("/div[@class='sect1']");
+        XmlAssert.assertThat(renderFileSource).hasXPath("/div/h2[@id='_section_a']");
+        XmlAssert.assertThat(renderFileSource).valueByXPath("/div/h2").isEqualTo("Section A");
+        XmlAssert.assertThat(renderFileSource).hasXPath("/div/div[@class='sectionbody']");
     }
 
     private static org.w3c.dom.Document inputStream2Document(InputStream inputStream) throws IOException, SAXException,

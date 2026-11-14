@@ -1,5 +1,7 @@
 package org.asciidoctor;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.ast.*;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
@@ -19,12 +21,6 @@ import java.util.Map;
 import static java.util.stream.Collectors.toList;
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.asciidoctor.util.OptionsTestHelper.emptyOptions;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.hamcrest.collection.IsMapContaining.hasKey;
 
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
@@ -82,45 +78,45 @@ public class WhenAsciiDocIsLoadedToDocument {
 
     private static void assertEmptySources(Document document) {
         String source = document.getSource();
-        assertThat(source, isEmptyString());
+        assertThat(source).isEmpty();
         List<String> sourceLines = document.getSourceLines();
-        assertThat(sourceLines, hasSize(0));
+        assertThat(sourceLines).hasSize(0);
     }
 
     @Test
     public void should_return_section_blocks() {
         Document document = asciidoctor.load(DOCUMENT, emptyOptions());
         Section section = (Section) document.getBlocks().get(1);
-        assertThat(section.getIndex(), is(0));
-        assertThat(section.getSectionName(), either(is("sect1")).or(is("section")));
-        assertThat(section.isSpecial(), is(false));
+        assertThat(section.getIndex()).isEqualTo(0);
+        assertThat(section.getSectionName()).isIn("sect1", "section");
+        assertThat(section.isSpecial()).isFalse();
     }
 
     @Test
     public void should_return_blocks_from_a_document() {
         Document document = asciidoctor.load(DOCUMENT, emptyOptions());
-        assertThat(document.getDoctitle(), is("Document Title"));
-        assertThat(document.getBlocks(), hasSize(3));
+        assertThat(document.getDoctitle()).isEqualTo("Document Title");
+        assertThat(document.getBlocks()).hasSize(3);
     }
 
     @Test
     public void should_return_a_document_object_from_string() {
         Document document = asciidoctor.load(DOCUMENT, emptyOptions());
-        assertThat(document.getDoctitle(), is("Document Title"));
+        assertThat(document.getDoctitle()).isEqualTo("Document Title");
     }
 
     @Test
     public void should_find_all_nodes() {
         Document document = asciidoctor.load(DOCUMENT, Options.builder().sourcemap(true).build());
         List<StructuralNode> findBy = document.findBy(new HashMap<>());
-        assertThat(findBy, hasSize(17));
+        assertThat(findBy).hasSize(17);
         List<Cell> tableCells = findBy.stream()
                 .filter(Cell.class::isInstance)
                 .map(Cell.class::cast)
                 .collect(toList());
-        assertThat(tableCells, hasSize(2));
-        assertThat(tableCells.get(0).getSourceLocation().getLineNumber(), is(23));
-        assertThat(tableCells.get(1).getSourceLocation().getLineNumber(), is(24));
+        assertThat(tableCells).hasSize(2);
+        assertThat(tableCells.get(0).getSourceLocation().getLineNumber()).isEqualTo(23);
+        assertThat(tableCells.get(1).getSourceLocation().getLineNumber()).isEqualTo(24);
     }
 
     @Test
@@ -128,9 +124,9 @@ public class WhenAsciiDocIsLoadedToDocument {
         Document document = asciidoctor.load(DOCUMENT, emptyOptions());
         List<StructuralNode> findBy = document.findBy(Map.of("context", ":image"));
 
-        assertThat(findBy, hasSize(2));
-        assertThat((String) findBy.get(0).getAttributes().get("target"), is("tiger.png"));
-        assertThat(findBy.get(0).getLevel(), greaterThan(0));
+        assertThat(findBy).hasSize(2);
+        assertThat((String) findBy.get(0).getAttributes().get("target")).isEqualTo("tiger.png");
+        assertThat(findBy.get(0).getLevel()).isGreaterThan(0);
     }
 
     @Test
@@ -142,7 +138,7 @@ public class WhenAsciiDocIsLoadedToDocument {
 
         Map<Object, Object> documentOptions = document.getOptions();
 
-        assertThat((Boolean) documentOptions.get("compact"), is(true));
+        assertThat((Boolean) documentOptions.get("compact")).isTrue();
     }
 
     @Test
@@ -156,25 +152,25 @@ public class WhenAsciiDocIsLoadedToDocument {
 
         Map<Object, Object> documentOptions = document.getOptions();
 
-        assertThat((Boolean) documentOptions.get("compact"), is(true));
+        assertThat((Boolean) documentOptions.get("compact")).isTrue();
     }
 
     @Test
     public void should_return_node_name() {
         Document document = asciidoctor.load(DOCUMENT, emptyOptions());
-        assertThat(document.getNodeName(), is("document"));
+        assertThat(document.getNodeName()).isEqualTo("document");
     }
 
     @Test
     public void should_return_if_it_is_inline() {
         Document document = asciidoctor.load(DOCUMENT, emptyOptions());
-        assertThat(document.isInline(), is(false));
+        assertThat(document.isInline()).isFalse();
     }
 
     @Test
     public void should_return_if_it_is_block() {
         Document document = asciidoctor.load(DOCUMENT, emptyOptions());
-        assertThat(document.isBlock(), is(true));
+        assertThat(document.isBlock()).isTrue();
     }
 
     @Test
@@ -184,20 +180,20 @@ public class WhenAsciiDocIsLoadedToDocument {
                 .compact(true)
                 .build();
         Document document = asciidoctor.load(DOCUMENT, options);
-        assertThat(document.getAttributes(), hasKey("toc-placement"));
-        assertThat(document.hasAttribute("toc-placement"), is(true));
-        assertThat(document.isAttribute("toc-placement", "auto", false), is(true));
-        assertThat(document.getAttribute("toc-placement", "", false).toString(), is("auto"));
+        assertThat(document.getAttributes()).containsKey("toc-placement");
+        assertThat(document.hasAttribute("toc-placement")).isTrue();
+        assertThat(document.isAttribute("toc-placement", "auto", false)).isTrue();
+        assertThat(document.getAttribute("toc-placement", "", false).toString()).isEqualTo("auto");
     }
 
     @Test
     public void should_be_able_to_get_roles() {
         Document document = asciidoctor.load(ROLE, emptyOptions());
         StructuralNode abstractBlock = document.getBlocks().get(0);
-        assertThat(abstractBlock.getRole(), is("famous"));
-        assertThat(abstractBlock.hasRole("famous"), is(true));
-        assertThat(abstractBlock.isRole(), is(true));
-        assertThat(abstractBlock.getRoles(), contains("famous"));
+        assertThat(abstractBlock.getRole()).isEqualTo("famous");
+        assertThat(abstractBlock.hasRole("famous")).isTrue();
+        assertThat(abstractBlock.isRole()).isTrue();
+        assertThat(abstractBlock.getRoles()).containsExactly("famous");
     }
 
     @Test
@@ -205,9 +201,9 @@ public class WhenAsciiDocIsLoadedToDocument {
         final String tmpRole = "tmpRole";
         Document document = asciidoctor.load(ROLE, emptyOptions());
         StructuralNode abstractBlock = document.getBlocks().get(0);
-        assertThat(abstractBlock.hasRole(tmpRole), is(false));
+        assertThat(abstractBlock.hasRole(tmpRole)).isFalse();
         abstractBlock.addRole(tmpRole);
-        assertThat(abstractBlock.hasRole(tmpRole), is(true));
+        assertThat(abstractBlock.hasRole(tmpRole)).isTrue();
     }
 
     @Test
@@ -215,17 +211,17 @@ public class WhenAsciiDocIsLoadedToDocument {
         final String famousRole = "famous";
         Document document = asciidoctor.load(ROLE, emptyOptions());
         StructuralNode abstractBlock = document.getBlocks().get(0);
-        assertThat(abstractBlock.hasRole(famousRole), is(true));
+        assertThat(abstractBlock.hasRole(famousRole)).isTrue();
         abstractBlock.removeRole(famousRole);
-        assertThat(abstractBlock.hasRole(famousRole), is(false));
+        assertThat(abstractBlock.hasRole(famousRole)).isFalse();
     }
 
     @Test
     public void should_be_able_to_get_reftext() {
         Document document = asciidoctor.load(REFTEXT, emptyOptions());
         StructuralNode abstractBlock = document.getBlocks().get(0);
-        assertThat(abstractBlock.getReftext(), is("the first section"));
-        assertThat(abstractBlock.isReftext(), is(true));
+        assertThat(abstractBlock.getReftext()).isEqualTo("the first section");
+        assertThat(abstractBlock.isReftext()).isTrue();
     }
 
     @Test
@@ -235,7 +231,7 @@ public class WhenAsciiDocIsLoadedToDocument {
                 .compact(true)
                 .build();
         Document document = asciidoctor.load(DOCUMENT, options);
-        assertThat(document.iconUri("note"), is("./images/icons/note.png"));
+        assertThat(document.iconUri("note")).isEqualTo("./images/icons/note.png");
     }
 
     @Test
@@ -245,17 +241,15 @@ public class WhenAsciiDocIsLoadedToDocument {
                 .compact(true)
                 .build();
         Document document = asciidoctor.load(DOCUMENT, options);
-        assertThat(document.iconUri("note"),
-                either(
-                        is("data:image/png:base64,") // <= Asciidoctor 1.5.5
-                )
-                        .or(is("data:image/png;base64,"))); // >= Asciidoctor 1.5.6
+        assertThat(document.iconUri("note")).isIn(
+                "data:image/png:base64,", // <= Asciidoctor 1.5.5
+                "data:image/png;base64,"); // >= Asciidoctor 1.5.6
     }
 
     @Test
     public void should_be_able_to_get_media_uri() {
         Document document = asciidoctor.load(DOCUMENT, emptyOptions());
-        assertThat(document.mediaUri("target"), is("target"));
+        assertThat(document.mediaUri("target")).isEqualTo("target");
     }
 
     @Test
@@ -265,14 +259,14 @@ public class WhenAsciiDocIsLoadedToDocument {
                 .compact(true)
                 .build();
         Document document = asciidoctor.load(DOCUMENT, options);
-        assertThat(document.imageUri("target.jpg"), is("target.jpg"));
-        assertThat(document.imageUri("target.jpg", "imagesdir"), is("target.jpg"));
+        assertThat(document.imageUri("target.jpg")).isEqualTo("target.jpg");
+        assertThat(document.imageUri("target.jpg", "imagesdir")).isEqualTo("target.jpg");
     }
 
     @Test
     public void should_be_able_to_normalize_web_path() {
         Document document = asciidoctor.load(DOCUMENT, emptyOptions());
-        assertThat(document.normalizeWebPath("target", null, true), is("target"));
+        assertThat(document.normalizeWebPath("target", null, true)).isEqualTo("target");
     }
 
     @Test
@@ -286,7 +280,7 @@ public class WhenAsciiDocIsLoadedToDocument {
         Document document = asciidoctor.load(DOCUMENT, options);
 
         String content = document.readAsset(inputFile.getAbsolutePath(), new HashMap<>());
-        assertThat(content.replace("\r", ""), is(Files.readString(inputFile.toPath()).replace("\r", "")));
+        assertThat(content.replace("\r", "")).isEqualTo(Files.readString(inputFile.toPath()).replace("\r", ""));
     }
 
     @Test
@@ -294,9 +288,9 @@ public class WhenAsciiDocIsLoadedToDocument {
         final Object attributeName = "testattribute";
         final Object attributeValue = "testvalue";
         Document document = asciidoctor.load(DOCUMENT, emptyOptions());
-        assertThat(document.setAttribute(attributeName, attributeValue, true), is(true));
-        assertThat(document.getAttribute(attributeName), is(attributeValue));
-        assertThat(document.getAttributes().get(attributeName), is(attributeValue));
+        assertThat(document.setAttribute(attributeName, attributeValue, true)).isTrue();
+        assertThat(document.getAttribute(attributeName)).isEqualTo(attributeValue);
+        assertThat(document.getAttributes().get(attributeName)).isEqualTo(attributeValue);
     }
 
     @Test
@@ -305,8 +299,8 @@ public class WhenAsciiDocIsLoadedToDocument {
         final Object attributeValue = "testvalue";
         Document document = asciidoctor.load(DOCUMENT, emptyOptions());
         document.getAttributes().put(attributeName, attributeValue);
-        assertThat(document.getAttribute(attributeName), is(attributeValue));
-        assertThat(document.getAttributes().get(attributeName), is(attributeValue));
+        assertThat(document.getAttribute(attributeName)).isEqualTo(attributeValue);
+        assertThat(document.getAttributes().get(attributeName)).isEqualTo(attributeValue);
     }
 
     @Test
@@ -321,16 +315,16 @@ public class WhenAsciiDocIsLoadedToDocument {
 
         // Then
         Cursor sourceLocation1 = findBy.get(0).getSourceLocation();
-        assertThat(sourceLocation1.getLineNumber(), is(3));
-        assertThat(sourceLocation1.getPath(), is(file.getName()));
-        assertThat(sourceLocation1.getFile(), is(file.getName()));
-        assertThat(sourceLocation1.getDir(), is(file.getParent().replaceAll("\\\\", "/")));
+        assertThat(sourceLocation1.getLineNumber()).isEqualTo(3);
+        assertThat(sourceLocation1.getPath()).isEqualTo(file.getName());
+        assertThat(sourceLocation1.getFile()).isEqualTo(file.getName());
+        assertThat(sourceLocation1.getDir()).isEqualTo(file.getParent().replaceAll("\\\\", "/"));
 
         Cursor sourceLocation2 = findBy.get(1).getSourceLocation();
-        assertThat(sourceLocation2.getLineNumber(), is(8));
-        assertThat(sourceLocation2.getPath(), is(file.getName()));
-        assertThat(sourceLocation2.getFile(), is(file.getName()));
-        assertThat(sourceLocation2.getDir(), is(file.getParent().replaceAll("\\\\", "/")));
+        assertThat(sourceLocation2.getLineNumber()).isEqualTo(8);
+        assertThat(sourceLocation2.getPath()).isEqualTo(file.getName());
+        assertThat(sourceLocation2.getFile()).isEqualTo(file.getName());
+        assertThat(sourceLocation2.getDir()).isEqualTo(file.getParent().replaceAll("\\\\", "/"));
     }
 
     @Test
@@ -352,15 +346,15 @@ public class WhenAsciiDocIsLoadedToDocument {
         Section section = (Section) blocks.get(1);
         section.setAttribute("testattr", "testvalue", true);
 
-        assertThat(document.hasAttribute("testattr"), is(false));
+        assertThat(document.hasAttribute("testattr")).isFalse();
 
-        assertThat(section.hasAttribute("testattr"), is(true));
-        assertThat(section.hasAttribute("testattr", true), is(true));
-        assertThat(section.hasAttribute("testattr", false), is(true));
-        assertThat(section.isAttribute("testattr", "testvalue"), is(true));
+        assertThat(section.hasAttribute("testattr")).isTrue();
+        assertThat(section.hasAttribute("testattr", true)).isTrue();
+        assertThat(section.hasAttribute("testattr", false)).isTrue();
+        assertThat(section.isAttribute("testattr", "testvalue")).isTrue();
 
-        assertThat(section.hasAttribute("docattr", true), is(true));
-        assertThat(section.hasAttribute("docattr", false), is(false));
+        assertThat(section.hasAttribute("docattr", true)).isTrue();
+        assertThat(section.hasAttribute("docattr", false)).isFalse();
     }
 
     @Test
@@ -381,14 +375,14 @@ public class WhenAsciiDocIsLoadedToDocument {
         List<StructuralNode> blocks = document.getBlocks();
 
         StructuralNode preambleContainer = blocks.get(0);
-        assertThat(preambleContainer.getContentModel(), is("compound"));
+        assertThat(preambleContainer.getContentModel()).isEqualTo("compound");
 
-        assertThat(preambleContainer.getBlocks().get(0).getContentModel(), is("simple"));
-        assertThat(preambleContainer.getBlocks().get(1).getContentModel(), is("simple"));
+        assertThat(preambleContainer.getBlocks().get(0).getContentModel()).isEqualTo("simple");
+        assertThat(preambleContainer.getBlocks().get(1).getContentModel()).isEqualTo("simple");
 
         Section section = (Section) blocks.get(1);
-        assertThat(section.getContentModel(), is("compound"));
-        assertThat(section.getBlocks().get(0).getContentModel(), is("simple"));
+        assertThat(section.getContentModel()).isEqualTo("compound");
+        assertThat(section.getBlocks().get(0).getContentModel()).isEqualTo("simple");
     }
 
     @Test
@@ -398,7 +392,7 @@ public class WhenAsciiDocIsLoadedToDocument {
                 "Lorem ipsum dolor sit amet:\n";
 
         Document document = asciidoctor.load(content, emptyOptions());
-        assertThat(document.getParent(), nullValue());
+        assertThat(document.getParent()).isNull();
     }
 
     @Test
@@ -411,9 +405,9 @@ public class WhenAsciiDocIsLoadedToDocument {
                 "|===";
 
         Document document = asciidoctor.load(content, emptyOptions());
-        assertThat(document.getBlocks(), notNullValue());
-        assertThat(document.getBlocks().size(), is(1));
-        assertThat(document.getBlocks().get(0).getCaption(), is("Table A. "));
+        assertThat(document.getBlocks()).isNotNull();
+        assertThat(document.getBlocks().size()).isEqualTo(1);
+        assertThat(document.getBlocks().get(0).getCaption()).isEqualTo("Table A. ");
     }
 
     @Test
@@ -425,7 +419,7 @@ public class WhenAsciiDocIsLoadedToDocument {
         Document document = asciidoctor.load(content, emptyOptions());
 
         List<Author> authors = document.getAuthors();
-        assertThat(authors, hasSize(0));
+        assertThat(authors).hasSize(0);
     }
 
     @Test
@@ -438,15 +432,15 @@ public class WhenAsciiDocIsLoadedToDocument {
         Document document = asciidoctor.load(content, emptyOptions());
 
         List<Author> authors = document.getAuthors();
-        assertThat(authors, hasSize(1));
+        assertThat(authors).hasSize(1);
 
         Author author = authors.get(0);
-        assertThat(author.getEmail(), is("doc.writer@asciidoc.org"));
-        assertThat(author.getFullName(), is("Doc Writer"));
-        assertThat(author.getFirstName(), is("Doc"));
-        assertThat(author.getMiddleName(), nullValue());
-        assertThat(author.getLastName(), is("Writer"));
-        assertThat(author.getInitials(), is("DW"));
+        assertThat(author.getEmail()).isEqualTo("doc.writer@asciidoc.org");
+        assertThat(author.getFullName()).isEqualTo("Doc Writer");
+        assertThat(author.getFirstName()).isEqualTo("Doc");
+        assertThat(author.getMiddleName()).isNull();
+        assertThat(author.getLastName()).isEqualTo("Writer");
+        assertThat(author.getInitials()).isEqualTo("DW");
     }
 
     @Test
@@ -460,15 +454,15 @@ public class WhenAsciiDocIsLoadedToDocument {
         Document document = asciidoctor.load(content, emptyOptions());
 
         List<Author> authors = document.getAuthors();
-        assertThat(authors, hasSize(1));
+        assertThat(authors).hasSize(1);
 
         Author author = authors.get(0);
-        assertThat(author.getEmail(), is("doc.writer@asciidoc.org"));
-        assertThat(author.getFullName(), is("Doc Writer"));
-        assertThat(author.getFirstName(), is("Doc"));
-        assertThat(author.getMiddleName(), nullValue());
-        assertThat(author.getLastName(), is("Writer"));
-        assertThat(author.getInitials(), is("DW"));
+        assertThat(author.getEmail()).isEqualTo("doc.writer@asciidoc.org");
+        assertThat(author.getFullName()).isEqualTo("Doc Writer");
+        assertThat(author.getFirstName()).isEqualTo("Doc");
+        assertThat(author.getMiddleName()).isNull();
+        assertThat(author.getLastName()).isEqualTo("Writer");
+        assertThat(author.getInitials()).isEqualTo("DW");
     }
 
     @Test
@@ -481,23 +475,23 @@ public class WhenAsciiDocIsLoadedToDocument {
         Document document = asciidoctor.load(content, emptyOptions());
 
         List<Author> authors = document.getAuthors();
-        assertThat(authors, hasSize(2));
+        assertThat(authors).hasSize(2);
 
         Author firstAuthor = authors.get(0);
-        assertThat(firstAuthor.getEmail(), is("doc.writer@asciidoc.org"));
-        assertThat(firstAuthor.getFullName(), is("Doc Writer"));
-        assertThat(firstAuthor.getFirstName(), is("Doc"));
-        assertThat(firstAuthor.getMiddleName(), nullValue());
-        assertThat(firstAuthor.getLastName(), is("Writer"));
-        assertThat(firstAuthor.getInitials(), is("DW"));
+        assertThat(firstAuthor.getEmail()).isEqualTo("doc.writer@asciidoc.org");
+        assertThat(firstAuthor.getFullName()).isEqualTo("Doc Writer");
+        assertThat(firstAuthor.getFirstName()).isEqualTo("Doc");
+        assertThat(firstAuthor.getMiddleName()).isNull();
+        assertThat(firstAuthor.getLastName()).isEqualTo("Writer");
+        assertThat(firstAuthor.getInitials()).isEqualTo("DW");
 
         Author secondAuthor = authors.get(1);
-        assertThat(secondAuthor.getEmail(), is("john.smith@asciidoc.org"));
-        assertThat(secondAuthor.getFullName(), is("John A. Smith"));
-        assertThat(secondAuthor.getFirstName(), is("John"));
-        assertThat(secondAuthor.getMiddleName(), is("A."));
-        assertThat(secondAuthor.getLastName(), is("Smith"));
-        assertThat(secondAuthor.getInitials(), is("JAS"));
+        assertThat(secondAuthor.getEmail()).isEqualTo("john.smith@asciidoc.org");
+        assertThat(secondAuthor.getFullName()).isEqualTo("John A. Smith");
+        assertThat(secondAuthor.getFirstName()).isEqualTo("John");
+        assertThat(secondAuthor.getMiddleName()).isEqualTo("A.");
+        assertThat(secondAuthor.getLastName()).isEqualTo("Smith");
+        assertThat(secondAuthor.getInitials()).isEqualTo("JAS");
     }
 
     @Test
@@ -512,9 +506,9 @@ public class WhenAsciiDocIsLoadedToDocument {
 
         RevisionInfo revisionInfo = document.getRevisionInfo();
 
-        assertThat(revisionInfo.getDate(), is("2013-05-20"));
-        assertThat(revisionInfo.getNumber(), is("1.0"));
-        assertThat(revisionInfo.getRemark(), is("First draft"));
+        assertThat(revisionInfo.getDate()).isEqualTo("2013-05-20");
+        assertThat(revisionInfo.getNumber()).isEqualTo("1.0");
+        assertThat(revisionInfo.getRemark()).isEqualTo("First draft");
     }
 
     @Test

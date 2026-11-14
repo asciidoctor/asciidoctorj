@@ -1,5 +1,7 @@
 package org.asciidoctor.extension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
@@ -20,10 +22,6 @@ import java.util.Iterator;
 
 import static java.util.Collections.singletonList;
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenRubyExtensionIsRegistered {
@@ -53,8 +51,8 @@ public class WhenRubyExtensionIsRegistered {
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
-        assertThat(elements.size(), is(2));
-        assertThat(elements.get(1).text(), is("THE TIME IS NOW! GET A MOVE ON!"));
+        assertThat(elements.size()).isEqualTo(2);
+        assertThat(elements.get(1).text()).isEqualTo("THE TIME IS NOW! GET A MOVE ON!");
 
     }
 
@@ -76,8 +74,8 @@ public class WhenRubyExtensionIsRegistered {
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
-        assertThat(elements.size(), is(2));
-        assertThat(elements.get(1).text(), is("THE TIME IS NOW! GET A MOVE ON!"));
+        assertThat(elements.size()).isEqualTo(2);
+        assertThat(elements.get(1).text()).isEqualTo("THE TIME IS NOW! GET A MOVE ON!");
 
     }
 
@@ -95,8 +93,8 @@ public class WhenRubyExtensionIsRegistered {
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByTag("script");
-        assertThat(elements.size(), is(1));
-        assertThat(elements.get(0).attr("src"), is("https://gist.github.com/123456.js"));
+        assertThat(elements.size()).isEqualTo(1);
+        assertThat(elements.get(0).attr("src")).isEqualTo("https://gist.github.com/123456.js");
 
     }
 
@@ -114,8 +112,8 @@ public class WhenRubyExtensionIsRegistered {
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByTag("script");
-        assertThat(elements.size(), is(1));
-        assertThat(elements.get(0).attr("src"), is("https://gist.github.com/42.js"));
+        assertThat(elements.size()).isEqualTo(1);
+        assertThat(elements.get(0).attr("src")).isEqualTo("https://gist.github.com/42.js");
 
     }
 
@@ -134,8 +132,8 @@ public class WhenRubyExtensionIsRegistered {
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByTag("a");
-        assertThat(elements.size(), is(1));
-        assertThat(elements.get(0).attr("href"), is("gittutorial.html"));
+        assertThat(elements.size()).isEqualTo(1);
+        assertThat(elements.get(0).attr("href")).isEqualTo("gittutorial.html");
 
     }
 
@@ -154,8 +152,8 @@ public class WhenRubyExtensionIsRegistered {
 
         Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByTag("a");
-        assertThat(elements.size(), is(1));
-        assertThat(elements.get(0).attr("href"), is("dockertutorial.html"));
+        assertThat(elements.size()).isEqualTo(1);
+        assertThat(elements.get(0).attr("href")).isEqualTo("dockertutorial.html");
 
     }
 
@@ -177,9 +175,9 @@ public class WhenRubyExtensionIsRegistered {
 
         final Document document = Jsoup.parse(content);
         final TextNode commandElement = document.getElementsByClass("command").get(0).textNodes().get(0);
-        assertThat(commandElement.getWholeText(), is("echo \"Hello, World!\""));
+        assertThat(commandElement.getWholeText()).isEqualTo("echo \"Hello, World!\"");
         final TextNode commandElement2 = document.getElementsByClass("command").get(1).textNodes().get(0);
-        assertThat(commandElement2.getWholeText(), is("gem install asciidoctor"));
+        assertThat(commandElement2.getWholeText()).isEqualTo("gem install asciidoctor");
     }
 
     @Test
@@ -196,9 +194,7 @@ public class WhenRubyExtensionIsRegistered {
                 Options.builder().toFile(false).safe(SafeMode.SAFE).build());
 
         final Document document = Jsoup.parse(content);
-        assertThat(
-                document.getElementsByClass("paragraph").get(1).getElementsByTag("p").get(0).toString(),
-                is("<p>42</p>"));
+        assertThat(document.getElementsByClass("paragraph").get(1).getElementsByTag("p").get(0).toString()).isEqualTo("<p>42</p>");
     }
 
     @Test
@@ -214,7 +210,7 @@ public class WhenRubyExtensionIsRegistered {
                 "Read &sect;2 and it&apos;ll all be clear.",
                 Options.builder().toFile(false).build());
 
-        assertThat(content, containsString("Read &#167;2 and it&#39;ll all be clear."));
+        assertThat(content).contains("Read &#167;2 and it&#39;ll all be clear.");
     }
 
     @Test
@@ -246,10 +242,9 @@ public class WhenRubyExtensionIsRegistered {
         final Document document = Jsoup.parse(content);
         final Element contentElement = document.getElementsByClass("content").get(0);
         final Element literalElement = contentElement.getElementsByTag("pre").get(0);
-        assertThat(literalElement.toString().replace("\r", ""),
-                containsString("---\n" +
+        assertThat(literalElement.toString().replace("\r", "")).contains("---\n" +
                         "tags: [announcement, website]\n" +
-                        "---"));
+                        "---");
     }
 
     @Test
@@ -286,6 +281,6 @@ public class WhenRubyExtensionIsRegistered {
                 found = true;
             }
         }
-        assertTrue("Could not find style element that should have been added by docinfo processor:\n" + document, found);
+        assertThat(found).as("Could not find style element that should have been added by docinfo processor:\n" + document).isTrue();
     }
 }

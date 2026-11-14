@@ -1,5 +1,7 @@
 package org.asciidoctor.extension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
@@ -36,10 +38,6 @@ import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.*;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenJavaExtensionIsRegistered {
@@ -233,7 +231,7 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element metaRobots = doc.getElementsByAttributeValueContaining("name", "robots").first();
-        assertThat(metaRobots, is(notNullValue()));
+        assertThat(metaRobots).isNotNull();
     }
 
     @Test
@@ -254,7 +252,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element footer = doc.getElementById("footer");
         // Since Asciidoctor 1.5.3 the docinfo in the footer is a sibling to the footer element
-        assertEquals("robots", footer.nextElementSibling().attr("name"));
+        assertThat(footer.nextElementSibling().attr("name")).isEqualTo("robots");
     }
 
     @Test
@@ -270,7 +268,7 @@ public class WhenJavaExtensionIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
-        assertThat(doc.getElementsByTag("p").first().text(), is("sample Alex"));
+        assertThat(doc.getElementsByTag("p").first().text()).isEqualTo("sample Alex");
 
     }
 
@@ -287,7 +285,7 @@ public class WhenJavaExtensionIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
-        assertThat(doc.getElementsByTag("p").first().text(), is("sample Alex"));
+        assertThat(doc.getElementsByTag("p").first().text()).isEqualTo("sample Alex");
 
     }
 
@@ -304,7 +302,7 @@ public class WhenJavaExtensionIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
-        assertThat(doc.getElementsByTag("p").first().text(), is("sample Alex"));
+        assertThat(doc.getElementsByTag("p").first().text()).isEqualTo("sample Alex");
 
     }
 
@@ -327,7 +325,7 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
-        assertThat(footer.text(), containsString("Copyright Acme, Inc."));
+        assertThat(footer.text()).contains("Copyright Acme, Inc.");
     }
 
     @Test
@@ -349,7 +347,7 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
-        assertThat(footer.text(), containsString("Copyright Acme, Inc."));
+        assertThat(footer.text()).contains("Copyright Acme, Inc.");
     }
 
     @Test
@@ -370,7 +368,7 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
-        assertThat(footer.text(), containsString("Copyright Acme, Inc."));
+        assertThat(footer.text()).contains("Copyright Acme, Inc.");
     }
 
     @Test
@@ -451,7 +449,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByClass("bare").first();
 
-        assertThat(contentElement.text(), startsWith("sample-book.adoc"));
+        assertThat(contentElement.text()).startsWith("sample-book.adoc");
 
     }
 
@@ -470,7 +468,7 @@ public class WhenJavaExtensionIsRegistered {
 
         Element contentElement = doc.getElementsByAttributeValue("class", "paragraph IncludeBlock").first();
 
-        assertThat(contentElement.text(), startsWith("My,Positional,Attribute List"));
+        assertThat(contentElement.text()).startsWith("My,Positional,Attribute List");
 
     }
 
@@ -488,10 +486,10 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
-        assertThat(contentElement.text(), is("echo \"Hello, World!\""));
+        assertThat(contentElement.text()).isEqualTo("echo \"Hello, World!\"");
 
         contentElement = doc.getElementsByAttributeValue("class", "command").last();
-        assertThat(contentElement.text(), is("gem install asciidoctor"));
+        assertThat(contentElement.text()).isEqualTo("gem install asciidoctor");
 
     }
 
@@ -510,13 +508,13 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
-        assertThat(contentElement.text(), is("echo \"Hello, World!\""));
+        assertThat(contentElement.text()).isEqualTo("echo \"Hello, World!\"");
 
         contentElement = doc.getElementsByAttributeValue("class", "command").last();
-        assertThat(contentElement.text(), is("gem install asciidoctor"));
+        assertThat(contentElement.text()).isEqualTo("gem install asciidoctor");
 
         Element script = doc.getElementsByTag("script").first();
-        assertThat(script.attr("src"), is("https://gist.github.com/42.js"));
+        assertThat(script.attr("src")).isEqualTo("https://gist.github.com/42.js");
     }
 
     @Test
@@ -533,10 +531,10 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
-        assertThat(contentElement.text(), is("echo \"Hello, World!\""));
+        assertThat(contentElement.text()).isEqualTo("echo \"Hello, World!\"");
 
         contentElement = doc.getElementsByAttributeValue("class", "command").last();
-        assertThat(contentElement.text(), is("gem install asciidoctor"));
+        assertThat(contentElement.text()).isEqualTo("gem install asciidoctor");
 
     }
 
@@ -554,10 +552,10 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
 
         Element contentElement = doc.getElementsByAttributeValue("class", "command").first();
-        assertThat(contentElement.text(), is("echo \"Hello, World!\""));
+        assertThat(contentElement.text()).isEqualTo("echo \"Hello, World!\"");
 
         contentElement = doc.getElementsByAttributeValue("class", "command").last();
-        assertThat(contentElement.text(), is("gem install asciidoctor"));
+        assertThat(contentElement.text()).isEqualTo("gem install asciidoctor");
 
     }
 
@@ -582,13 +580,13 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element arrowsJs = doc.select("script[src=http://www.headjump.de/javascripts/arrowsandboxes.js").first();
-        assertThat(arrowsJs, is(notNullValue()));
+        assertThat(arrowsJs).isNotNull();
 
         Element arrowsCss = doc.select("link[href=http://www.headjump.de/stylesheets/arrowsandboxes.css").first();
-        assertThat(arrowsCss, is(notNullValue()));
+        assertThat(arrowsCss).isNotNull();
 
         Element arrowsAndBoxes = doc.select("pre[class=arrows-and-boxes").first();
-        assertThat(arrowsAndBoxes, is(notNullValue()));
+        assertThat(arrowsAndBoxes).isNotNull();
 
     }
 
@@ -606,7 +604,7 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element script = doc.getElementsByTag("script").first();
 
-        assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
+        assertThat(script.attr("src")).isEqualTo("https://gist.github.com/123456.js");
     }
 
     @Test
@@ -623,7 +621,7 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element script = doc.getElementsByTag("script").first();
 
-        assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
+        assertThat(script.attr("src")).isEqualTo("https://gist.github.com/123456.js");
     }
 
     @Test
@@ -640,7 +638,7 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element script = doc.getElementsByTag("script").first();
 
-        assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
+        assertThat(script.attr("src")).isEqualTo("https://gist.github.com/123456.js");
     }
 
     @Test
@@ -660,7 +658,7 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element script = doc.getElementsByTag("script").first();
 
-        assertThat(script.attr("src"), is("https://gist.github.com/123456.js"));
+        assertThat(script.attr("src")).isEqualTo("https://gist.github.com/123456.js");
     }
 
     @Test
@@ -676,10 +674,10 @@ public class WhenJavaExtensionIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
-        assertThat(link.attr("href"), is("gittutorial.html"));
+        assertThat(link.attr("href")).isEqualTo("gittutorial.html");
 
         final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
-        assertThat(logRecords, hasSize(0));
+        assertThat(logRecords).hasSize(0);
     }
 
     @Test
@@ -695,10 +693,10 @@ public class WhenJavaExtensionIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
-        assertThat(link.attr("href"), is("gittutorial.html"));
+        assertThat(link.attr("href")).isEqualTo("gittutorial.html");
 
         final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
-        assertThat(logRecords, hasSize(0));
+        assertThat(logRecords).hasSize(0);
     }
 
     @Test
@@ -718,11 +716,11 @@ public class WhenJavaExtensionIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
-        assertNotNull(link);
-        assertThat(link.attr("href"), is("gittutorial.html"));
+        assertThat(link).isNotNull();
+        assertThat(link.attr("href")).isEqualTo("gittutorial.html");
 
         final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
-        assertThat(logRecords, hasSize(0));
+        assertThat(logRecords).hasSize(0);
     }
 
     @Test
@@ -742,10 +740,10 @@ public class WhenJavaExtensionIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
-        assertNull(link);
+        assertThat(link).isNull();
 
         final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
-        assertThat(logRecords, hasSize(0));
+        assertThat(logRecords).hasSize(0);
     }
 
     @Test
@@ -764,11 +762,11 @@ public class WhenJavaExtensionIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element link = doc.getElementsByTag("a").first();
-        assertNotNull(link);
-        assertThat(link.attr("href"), is("gittutorial.html"));
+        assertThat(link).isNotNull();
+        assertThat(link.attr("href")).isEqualTo("gittutorial.html");
 
         final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
-        assertThat(logRecords, hasSize(0));
+        assertThat(logRecords).hasSize(0);
     }
 
     @Test
@@ -783,13 +781,13 @@ public class WhenJavaExtensionIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element p = doc.getElementsByTag("p").first();
-        assertThat(p, notNullValue());
+        assertThat(p).isNotNull();
         Element strong = p.getElementsByTag("strong").first();
-        assertThat(strong, notNullValue());
-        assertThat(strong.text(), is("word"));
+        assertThat(strong).isNotNull();
+        assertThat(strong.text()).isEqualTo("word");
 
         final List<LogRecord> logRecords = TestLogHandlerService.getLogRecords();
-        assertThat(logRecords, hasSize(0));
+        assertThat(logRecords).hasSize(0);
     }
 
     @Test
@@ -811,7 +809,7 @@ public class WhenJavaExtensionIsRegistered {
         org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
 
         Element footer = doc.getElementById("footer-text");
-        assertThat(footer.text(), not(containsString("Copyright Acme, Inc.")));
+        assertThat(footer.text()).doesNotContain("Copyright Acme, Inc.");
     }
 
     @Test
@@ -826,8 +824,8 @@ public class WhenJavaExtensionIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
-        assertThat(elements.size(), is(1));
-        assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
+        assertThat(elements.size()).isEqualTo(1);
+        assertThat(elements.get(0).text()).isEqualTo("THE TIME IS NOW. GET A MOVE ON.");
 
     }
 
@@ -843,8 +841,8 @@ public class WhenJavaExtensionIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
-        assertThat(elements.size(), is(1));
-        assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
+        assertThat(elements.size()).isEqualTo(1);
+        assertThat(elements.get(0).text()).isEqualTo("THE TIME IS NOW. GET A MOVE ON.");
 
     }
 
@@ -861,8 +859,8 @@ public class WhenJavaExtensionIsRegistered {
 
             org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
             Elements elements = doc.getElementsByClass("paragraph");
-            assertThat(elements.size(), is(1));
-            assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
+            assertThat(elements.size()).isEqualTo(1);
+            assertThat(elements.get(0).text()).isEqualTo("THE TIME IS NOW. GET A MOVE ON.");
         }
     }
 
@@ -881,8 +879,8 @@ public class WhenJavaExtensionIsRegistered {
                 options().toFile(false).build());
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
-        assertThat(elements.size(), is(1));
-        assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
+        assertThat(elements.size()).isEqualTo(1);
+        assertThat(elements.get(0).text()).isEqualTo("THE TIME IS NOW. GET A MOVE ON.");
 
     }
 
@@ -903,8 +901,8 @@ public class WhenJavaExtensionIsRegistered {
                     options().toFile(false).build());
             org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
             Elements elements = doc.getElementsByClass("paragraph");
-            assertThat(elements.size(), is(1));
-            assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
+            assertThat(elements.size()).isEqualTo(1);
+            assertThat(elements.get(0).text()).isEqualTo("THE TIME IS NOW. GET A MOVE ON.");
         }
     }
 
@@ -964,8 +962,8 @@ public class WhenJavaExtensionIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
-        assertThat(elements.size(), is(1));
-        assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
+        assertThat(elements.size()).isEqualTo(1);
+        assertThat(elements.get(0).text()).isEqualTo("THE TIME IS NOW. GET A MOVE ON.");
 
     }
 
@@ -984,8 +982,8 @@ public class WhenJavaExtensionIsRegistered {
                 options().toFile(false).build());
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
-        assertThat(elements.size(), is(1));
-        assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
+        assertThat(elements.size()).isEqualTo(1);
+        assertThat(elements.get(0).text()).isEqualTo("THE TIME IS NOW. GET A MOVE ON.");
 
     }
 
@@ -1013,9 +1011,9 @@ public class WhenJavaExtensionIsRegistered {
 
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Element toc = doc.getElementById("toc");
-        assertThat(toc, notNullValue());
+        assertThat(toc).isNotNull();
         Elements elements = toc.getElementsByAttributeValue("href", "#TestId");
-        assertThat(elements.size(), is(1));
+        assertThat(elements.size()).isEqualTo(1);
     }
 
     public void should_unregister_postprocessor() throws IOException {
@@ -1038,7 +1036,7 @@ public class WhenJavaExtensionIsRegistered {
             // Then: it is invoked
             org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
             Element footer = doc.getElementById("footer-text");
-            assertThat(footer.text(), not(containsString("Copyright Acme, Inc.")));
+            assertThat(footer.text()).doesNotContain("Copyright Acme, Inc.");
         }
 
         // When: I register the ExtensionGroup and render a document
@@ -1056,7 +1054,7 @@ public class WhenJavaExtensionIsRegistered {
             // Then: it is invoked
             org.jsoup.nodes.Document doc = Jsoup.parse(renderedFile, "UTF-8");
             Element footer = doc.getElementById("footer-text");
-            assertThat(footer.text(), containsString("Copyright Acme, Inc."));
+            assertThat(footer.text()).contains("Copyright Acme, Inc.");
         }
         // When: I unregister the Postprocessor and render again with the same Asciidoctor instance
         {
@@ -1073,7 +1071,7 @@ public class WhenJavaExtensionIsRegistered {
             org.jsoup.nodes.Document doc2 = Jsoup.parse(renderedFile2, "UTF-8");
 
             Element footer2 = doc2.getElementById("footer-text");
-            assertThat(footer2.text(), not(containsString("Copyright Acme, Inc.")));
+            assertThat(footer2.text()).doesNotContain("Copyright Acme, Inc.");
         }
     }
 
@@ -1093,8 +1091,8 @@ public class WhenJavaExtensionIsRegistered {
                     options().toFile(false).build());
             org.jsoup.nodes.Document docWithoutBlock = Jsoup.parse(contentWithoutBlock, "UTF-8");
             Elements elementsWithoutBlock = docWithoutBlock.getElementsByClass("paragraph");
-            assertThat(elementsWithoutBlock.size(), is(1));
-            assertThat(elementsWithoutBlock.get(0).text(), not(is("THE TIME IS NOW. GET A MOVE ON.")));
+            assertThat(elementsWithoutBlock.size()).isEqualTo(1);
+            assertThat(elementsWithoutBlock.get(0).text()).isNotEqualTo("THE TIME IS NOW. GET A MOVE ON.");
         }
 
         {
@@ -1104,8 +1102,8 @@ public class WhenJavaExtensionIsRegistered {
                     options().toFile(false).build());
             org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
             Elements elements = doc.getElementsByClass("paragraph");
-            assertThat(elements.size(), is(1));
-            assertThat(elements.get(0).text(), is("THE TIME IS NOW. GET A MOVE ON."));
+            assertThat(elements.size()).isEqualTo(1);
+            assertThat(elements.get(0).text()).isEqualTo("THE TIME IS NOW. GET A MOVE ON.");
         }
         {
             extensionGroup.unregister();
@@ -1114,8 +1112,8 @@ public class WhenJavaExtensionIsRegistered {
                     options().toFile(false).build());
             org.jsoup.nodes.Document docWithoutBlock = Jsoup.parse(contentWithoutBlock, "UTF-8");
             Elements elementsWithoutBlock = docWithoutBlock.getElementsByClass("paragraph");
-            assertThat(elementsWithoutBlock.size(), is(1));
-            assertThat(elementsWithoutBlock.get(0).text(), not(is("THE TIME IS NOW. GET A MOVE ON.")));
+            assertThat(elementsWithoutBlock.size()).isEqualTo(1);
+            assertThat(elementsWithoutBlock.get(0).text()).isNotEqualTo("THE TIME IS NOW. GET A MOVE ON.");
         }
     }
 
@@ -1125,7 +1123,7 @@ public class WhenJavaExtensionIsRegistered {
 
         @Override
         public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
-            assertSame(asciidoctor, unwrap(Asciidoctor.class));
+            assertThat(unwrap(Asciidoctor.class)).isSameAs(asciidoctor);
             List<String> processed = reader.readLines().stream()
                     .map(String::toLowerCase)
                     .collect(Collectors.toList());
@@ -1154,8 +1152,8 @@ public class WhenJavaExtensionIsRegistered {
                 options().toFile(false).build());
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
-        assertThat(elements.size(), is(1));
-        assertThat(elements.get(0).text(), is("hello world"));
+        assertThat(elements.size()).isEqualTo(1);
+        assertThat(elements.get(0).text()).isEqualTo("hello world");
 
         TestBlock.asciidoctor = null;
     }
@@ -1175,8 +1173,8 @@ public class WhenJavaExtensionIsRegistered {
                 options().toFile(false).build());
         org.jsoup.nodes.Document doc = Jsoup.parse(content, "UTF-8");
         Elements elements = doc.getElementsByClass("paragraph");
-        assertThat(elements.size(), is(1));
-        assertThat(elements.get(0).text(), is("hello again"));
+        assertThat(elements.size()).isEqualTo(1);
+        assertThat(elements.get(0).text()).isEqualTo("hello again");
 
         TestBlock.asciidoctor = null;
     }

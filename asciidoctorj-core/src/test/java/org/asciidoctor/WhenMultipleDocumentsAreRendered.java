@@ -1,26 +1,23 @@
 package org.asciidoctor;
 
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.asciidoctor.test.extension.ClasspathExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenMultipleDocumentsAreRendered {
 
-    @TempDir
-    public File tempDir;
+    private static final int RENDER_COUNT = 100;
 
     @AsciidoctorInstance
     private Asciidoctor asciidoctor;
@@ -30,19 +27,22 @@ public class WhenMultipleDocumentsAreRendered {
 
     @Test
     public void should_render_the_same_document_a_100_times() throws IOException {
-//        final MemoryLogHandler memoryLogHandler = registerMemoryLogHandler();
+        final String source = Files.readString(documentTitleDocument);
+        final Options options = Options.builder()
+                .safe(SafeMode.UNSAFE)
+                .build();
 
-        int i = 0;
-        String renderContent = null;
-        for (; i < 100; i++) {
-            renderContent = asciidoctor.convert(Files.readString(documentTitleDocument),
-                    Options.builder()
-                            .safe(SafeMode.UNSAFE)
-                            .build());
-        }
+        final String firstContent = asciidoctor.convert(source, options);
 
-        assertThat(i, equalTo(100));
-        assertThat(renderContent, not(isEmptyOrNullString()));
+        assertSoftly(softly -> {
+            softly.assertThat(firstContent).isNotEmpty();
+            for (int i = 1; i < RENDER_COUNT; i++) {
+                String content = asciidoctor.convert(source, options);
+                softly.assertThat(content)
+                        .as("render %d", i + 1)
+                        .isEqualTo(firstContent);
+            }
+        });
     }
 
 }
