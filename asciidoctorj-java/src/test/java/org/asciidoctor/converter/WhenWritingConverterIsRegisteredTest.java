@@ -2,6 +2,7 @@ package org.asciidoctor.converter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.asciidoctor.nativeimage.RegisterClass;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.file.Files;
@@ -16,6 +17,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+@RegisterClass({
+        ObjectConverter.class,
+        WritingTextConverter.class
+})
 public class WhenWritingConverterIsRegisteredTest {
 
     public static final String BACKEND_NAME_42 = "42";

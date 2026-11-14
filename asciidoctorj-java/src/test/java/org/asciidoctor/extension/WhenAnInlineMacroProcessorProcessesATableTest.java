@@ -2,6 +2,7 @@ package org.asciidoctor.extension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.asciidoctor.nativeimage.RegisterClass;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.jsoup.Jsoup;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 // Issue: https://github.com/asciidoctor/asciidoctorj/issues/448
+@RegisterClass(AnnotatedLongInlineMacroProcessor.class)
 public class WhenAnInlineMacroProcessorProcessesATableTest {
 
     public static final String UTF8 = "UTF-8";

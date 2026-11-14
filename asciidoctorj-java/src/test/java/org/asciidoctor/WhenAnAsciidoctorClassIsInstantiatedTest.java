@@ -5,6 +5,7 @@ import org.xmlunit.assertj3.XmlAssert;
 
 import org.asciidoctor.util.AsciiDocDirectoryWalker;
 import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.nativeimage.RegisterDirectory;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.asciidoctor.test.extension.ClasspathExtension;
@@ -31,6 +32,7 @@ import static org.asciidoctor.util.OptionsTestHelper.emptyOptions;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
+@RegisterDirectory("src")
 public class WhenAnAsciidoctorClassIsInstantiatedTest {
 
     @AsciidoctorInstance

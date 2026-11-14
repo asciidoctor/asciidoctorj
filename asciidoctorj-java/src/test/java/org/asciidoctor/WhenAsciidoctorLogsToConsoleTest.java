@@ -11,6 +11,7 @@ import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
 import org.asciidoctor.log.TestLogHandlerService;
+import org.asciidoctor.log.TestLogManager;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
@@ -26,7 +27,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -55,7 +55,7 @@ public class WhenAsciidoctorLogsToConsoleTest {
 
     @AfterEach
     public void cleanup() throws IOException {
-        LogManager.getLogManager().readConfiguration();
+        TestLogManager.reset();
         TestLogHandlerService.clear();
     }
 

@@ -1,7 +1,5 @@
 package org.asciidoctor.converter;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.MemoryLogHandler;
 import org.asciidoctor.Options;
@@ -10,6 +8,8 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.Treeprocessor;
+import org.asciidoctor.nativeimage.RegisterClass;
+import org.asciidoctor.nativeimage.RegisterDirectory;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
@@ -25,8 +25,17 @@ import java.net.URLClassLoader;
 import java.util.logging.Logger;
 
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
+@RegisterClass({
+        DummyConverter.class,
+        LevelConverter.class,
+        TextConverter.class,
+        TextConverterRegistryExecutor.class,
+        TextConverterWithSuffix.class
+})
+@RegisterDirectory("serviceloadertest/3")
 public class WhenConverterIsRegisteredTest {
 
     @AsciidoctorInstance(scope = PER_METHOD)
@@ -35,11 +44,6 @@ public class WhenConverterIsRegisteredTest {
     @ClasspathResource("simple.adoc")
     private File simpleDocument;
 
-
-//    @After
-//    public void cleanUp() {
-//        asciidoctor.getConverterRegistry().unregisterAll();
-//    }
 
     @Test
     public void shouldCleanUpRegistry() {

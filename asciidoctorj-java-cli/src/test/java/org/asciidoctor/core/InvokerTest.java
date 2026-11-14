@@ -1,25 +1,31 @@
 package org.asciidoctor.core;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.asciidoctor.cli.Invoker;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledInNativeImage;
+import org.junit.jupiter.api.condition.EnabledInNativeImage;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Objects;
+
+import static org.asciidoctor.core.Fixtures.relativeTestPath;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import java.util.*;
-import java.nio.charset.StandardCharsets;
-import java.io.ByteArrayInputStream;
-import java.io.StringWriter;
-import java.time.ZonedDateTime;
-
-import org.asciidoctor.cli.Invoker;
-import org.asciidoctor.core.converter.Converter;
-
-import org.junit.jupiter.api.*;
-
-@DisplayName("Invoker")
-public class InvokerTest extends CliTestHelper {
+class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should allow Options to be passed as first argument of constructor")
-    void shouldAllowOptionsToBePassedAsFirstArgumentOfConstructor() throws Exception {
+    void shouldAllowOptionsToBePassedAsFirstArgumentOfConstructor() {
         var opts = new org.asciidoctor.cli.Options(Options.of("attributes", Options.of("toc", ""), "doctype", "book", "sourcemap", true));
         var invoker = new Invoker(opts);
         assertSame(invoker.getOptions(), opts);
@@ -27,7 +33,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should allow options Hash to be passed as first argument of constructor")
-    void shouldAllowOptionsHashToBePassedAsFirstArgumentOfConstructor() throws Exception {
+    void shouldAllowOptionsHashToBePassedAsFirstArgumentOfConstructor() {
         var opts = Options.of("attributes", Options.of("toc", ""), "doctype", "book", "sourcemap", true);
         var invoker = new Invoker(opts);
         var resolvedOpts = invoker.getOptions();
@@ -38,7 +44,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should parse options from array passed as first argument of constructor")
-    void shouldParseOptionsFromArrayPassedAsFirstArgumentOfConstructor() throws Exception {
+    void shouldParseOptionsFromArrayPassedAsFirstArgumentOfConstructor() {
         var inputFile = fixturePath("basic.adoc");
         var invoker = new Invoker(list("-s", inputFile));
         var resolvedOptions = invoker.getOptions();
@@ -48,7 +54,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should parse options from multiple arguments passed to constructor")
-    void shouldParseOptionsFromMultipleArgumentsPassedToConstructor() throws Exception {
+    void shouldParseOptionsFromMultipleArgumentsPassedToConstructor() {
         var inputFile = fixturePath("basic.adoc");
         var invoker = new Invoker("-s", inputFile);
         var resolvedOptions = invoker.getOptions();
@@ -58,7 +64,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should parse source and convert to html5 article by default")
-    void shouldParseSourceAndConvertToHtml5ArticleByDefault() throws Exception {
+    void shouldParseSourceAndConvertToHtml5ArticleByDefault() {
         var invoker = new Ref<Invoker>(null);
         var output = new Ref<String>(null);
         try (var streams = redirectStreams()) {
@@ -67,7 +73,7 @@ public class InvokerTest extends CliTestHelper {
             output.set(out.getString());
         }
         assertNotNull(invoker.get());
-        var doc = (Document) ((Document) unwrap(invoker.get().getDocument()));
+        var doc = (Document) unwrap(invoker.get().getDocument());
         assertNotNull(doc);
         assertEquals("Document Title", doc.getDoctitle());
         assertEquals("Doc Writer", doc.getAttribute("author"));
@@ -86,11 +92,11 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should set implicit doc info attributes")
-    void shouldSetImplicitDocInfoAttributes() throws Exception {
+    void shouldSetImplicitDocInfoAttributes() {
         var sampleFilepath = fixturePath("sample.adoc");
         var sampleFiledir = fixturedir();
         var invoker = invokeCliToBuffer(list("-o", "/dev/null"), sampleFilepath);
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertEquals("sample", doc.getAttribute("docname"));
         assertEquals(sampleFilepath, doc.getAttribute("docfile"));
         assertEquals(sampleFiledir, doc.getAttribute("docdir"));
@@ -103,10 +109,10 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should allow docdate and doctime to be overridden")
-    void shouldAllowDocdateAndDoctimeToBeOverridden() throws Exception {
+    void shouldAllowDocdateAndDoctimeToBeOverridden() {
         var sampleFilepath = fixturePath("sample.adoc");
         var invoker = invokeCliToBuffer(list("-o", "/dev/null", "-a", "docdate=2015-01-01", "-a", "doctime=10:00:00-0700"), sampleFilepath);
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertTruthy(doc.isAttribute("docdate", "2015-01-01"));
         assertTruthy(doc.isAttribute("docyear", "2015"));
         assertTruthy(doc.isAttribute("doctime", "10:00:00-0700"));
@@ -115,9 +121,9 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should accept document from stdin and write to stdout")
-    void shouldAcceptDocumentFromStdinAndWriteToStdout() throws Exception {
+    void shouldAcceptDocumentFromStdinAndWriteToStdout() {
         var invoker = invokeCliToBuffer(list("-e"), "-", () -> "content");
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertFalsy(doc.hasAttribute("docname"));
         assertFalsy(doc.hasAttribute("docfile"));
         assertEquals(Helpers.workingDirectory(), doc.getAttribute("docdir"));
@@ -133,7 +139,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should not fail to rewind input if reading document from stdin")
-    void shouldNotFailToRewindInputIfReadingDocumentFromStdin() throws Exception {
+    void shouldNotFailToRewindInputIfReadingDocumentFromStdin() {
         var oldStdin = System.in;
         try {
             System.setIn(new ByteArrayInputStream("paragraph".getBytes(StandardCharsets.UTF_8)));
@@ -147,11 +153,11 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should accept document from stdin and write to output file")
-    void shouldAcceptDocumentFromStdinAndWriteToOutputFile() throws Exception {
+    void shouldAcceptDocumentFromStdinAndWriteToOutputFile() {
         var sampleOutpath = fixturePath("sample-output.html");
         try {
             var invoker = invokeCli(list("-e", "-o", (str(sampleOutpath))), "-", () -> "content");
-            var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+            var doc = (Document) unwrap(invoker.getDocument());
             assertFalsy(doc.hasAttribute("docname"));
             assertFalsy(doc.hasAttribute("docfile"));
             assertEquals(Helpers.workingDirectory(), doc.getAttribute("docdir"));
@@ -169,14 +175,14 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should fail if input file matches resolved output file")
-    void shouldFailIfInputFileMatchesResolvedOutputFile() throws Exception {
+    void shouldFailIfInputFileMatchesResolvedOutputFile() {
         var invoker = invokeCliToBuffer(list("-a", "outfilesuffix=.adoc"), "sample.adoc");
         assertMatch(rx("input file and output file cannot be the same"), invoker.readError());
     }
 
     @Test
     @DisplayName("should fail if input file matches specified output file")
-    void shouldFailIfInputFileMatchesSpecifiedOutputFile() throws Exception {
+    void shouldFailIfInputFileMatchesSpecifiedOutputFile() {
         var sampleOutpath = fixturePath("sample.adoc");
         var invoker = invokeCliToBuffer(list("-o", (str(sampleOutpath))), "sample.adoc");
         assertMatch(rx("input file and output file cannot be the same"), invoker.readError());
@@ -184,7 +190,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should accept input from named pipe and output to stdout")
-    void shouldAcceptInputFromNamedPipeAndOutputToStdout() throws Exception {
+    void shouldAcceptInputFromNamedPipeAndOutputToStdout() throws IOException, InterruptedException {
         assumeTrue(!isWindows());
         var sampleInpath = fixturePath("sample-pipe.adoc");
         try {
@@ -202,17 +208,17 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should allow docdir to be specified when input is a string")
-    void shouldAllowDocdirToBeSpecifiedWhenInputIsAString() throws Exception {
+    void shouldAllowDocdirToBeSpecifiedWhenInputIsAString() {
         var expectedDocdir = fixturedir();
-        var invoker = invokeCliToBuffer(list("-e", "--base-dir", "src/test/resources/fixtures", "-o", "/dev/null"), "-", () -> "content");
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var invoker = invokeCliToBuffer(list("-e", "--base-dir", relativeTestPath("fixtures"), "-o", "/dev/null"), "-", () -> "content");
+        var doc = (Document) unwrap(invoker.getDocument());
         assertEquals(expectedDocdir, doc.getAttribute("docdir"));
         assertEquals(expectedDocdir, doc.getBaseDir());
     }
 
     @Test
     @DisplayName("should display version and exit")
-    void shouldDisplayVersionAndExit() throws Exception {
+    void shouldDisplayVersionAndExit() {
         var expected = ("AsciidoctorJ " + str(Asciidoctor.VERSION) + " [https://asciidoctor.org]\nRuntime Environment (" + str(runtimeDescription()) + ")");
         for (var switch_ : list("--version", "-V")) {
             var actual = new Ref<String>(null);
@@ -228,7 +234,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should print warnings to stderr by default")
-    void shouldPrintWarningsToStderrByDefault() throws Exception {
+    void shouldPrintWarningsToStderrByDefault() {
         var input = """
                 1. first
                 3. third
@@ -244,8 +250,10 @@ public class InvokerTest extends CliTestHelper {
     }
 
     @Test
+    // Starts a JVM process with java.home, which is not available in a native image
+    @DisabledInNativeImage
     @DisplayName("should not emit any unexpected warnings")
-    void shouldNotEmitAnyUnexpectedWarnings() throws Exception {
+    void shouldNotEmitAnyUnexpectedWarnings() throws IOException, InterruptedException {
         var inputPath = fixturePath("basic.adoc");
         var output = runCommand(list(asciidoctorCmd(), "-o", "/dev/null", "-w", inputPath), out -> out.read());
         assertEmpty(output);
@@ -253,10 +261,10 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should change level on logger when --log-level is specified")
-    void shouldChangeLevelOnLoggerWhenLogLevelIsSpecified() throws Exception {
+    void shouldChangeLevelOnLoggerWhenLogLevelIsSpecified() {
         var input = """
                 skip to <<install>>
-
+                
                 . download
                 . install[[install]]
                 . run
@@ -273,10 +281,10 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should not log when --log-level and -q are both specified")
-    void shouldNotLogWhenLogLevelAndQAreBothSpecified() throws Exception {
+    void shouldNotLogWhenLogLevelAndQAreBothSpecified() {
         var input = """
                 skip to <<install>>
-
+                
                 . download
                 . install[[install]]
                 . run
@@ -293,10 +301,10 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should use specified log level when --log-level and -v are both specified")
-    void shouldUseSpecifiedLogLevelWhenLogLevelAndVAreBothSpecified() throws Exception {
+    void shouldUseSpecifiedLogLevelWhenLogLevelAndVAreBothSpecified() {
         var input = """
                 skip to <<install>>
-
+                
                 . download
                 . install[[install]]
                 . run
@@ -314,12 +322,12 @@ public class InvokerTest extends CliTestHelper {
     @Test
     @Disabled("script warnings are specific to Ruby")
     @DisplayName("should enable script warnings if -w flag is specified")
-    void shouldEnableScriptWarningsIfWFlagIsSpecified() throws Exception {
+    void shouldEnableScriptWarningsIfWFlagIsSpecified() {
     }
 
     @Test
     @DisplayName("should silence warnings if -q flag is specified")
-    void shouldSilenceWarningsIfQFlagIsSpecified() throws Exception {
+    void shouldSilenceWarningsIfQFlagIsSpecified() {
         var input = """
                 2. second
                 3. third
@@ -336,10 +344,10 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should not fail to check log level when -q flag is specified")
-    void shouldNotFailToCheckLogLevelWhenQFlagIsSpecified() throws Exception {
+    void shouldNotFailToCheckLogLevelWhenQFlagIsSpecified() {
         var input = """
                 skip to <<install>>
-
+                
                 . download
                 . install[[install]]
                 . run
@@ -352,7 +360,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should return non-zero exit code if failure level is reached")
-    void shouldReturnNonZeroExitCodeIfFailureLevelIsReached() throws Exception {
+    void shouldReturnNonZeroExitCodeIfFailureLevelIsReached() {
         var input = """
                 1. first
                 3. third
@@ -366,7 +374,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should report usage if no input file given")
-    void shouldReportUsageIfNoInputFileGiven() throws Exception {
+    void shouldReportUsageIfNoInputFileGiven() {
         try (var streams = redirectStreams()) {
             streams.out();
             var err = streams.err();
@@ -377,7 +385,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should report error if input file does not exist")
-    void shouldReportErrorIfInputFileDoesNotExist() throws Exception {
+    void shouldReportErrorIfInputFileDoesNotExist() {
         try (var streams = redirectStreams()) {
             streams.out();
             var err = streams.err();
@@ -388,8 +396,10 @@ public class InvokerTest extends CliTestHelper {
     }
 
     @Test
+    // The native executable prints one more line, which explains that it can only load the classes it contains
+    @DisabledInNativeImage
     @DisplayName("should suggest --trace option if not present when program raises error")
-    void shouldSuggestTraceOptionIfNotPresentWhenProgramRaisesError() throws Exception {
+    void shouldSuggestTraceOptionIfNotPresentWhenProgramRaisesError() {
         try (var streams = redirectStreams()) {
             streams.out();
             var err = streams.err();
@@ -401,8 +411,51 @@ public class InvokerTest extends CliTestHelper {
     }
 
     @Test
+    @EnabledInNativeImage
+    @DisplayName("should explain that the native executable can't load the class and suggest --trace option if not present when program raises error")
+    void shouldExplainThatTheNativeExecutableCantLoadTheClassAndSuggestTraceOption() {
+        try (var streams = redirectStreams()) {
+            streams.out();
+            var err = streams.err();
+            var sampleFilepath = fixturePath("sample.adoc");
+            var invoker = invokeCli(list("-r", "no-such-module"), sampleFilepath);
+            assertMatch(rx("'no-such-module' could not be loaded\\n *The native executable can only load the classes it contains; run AsciidoctorJ with Java to load other classes\\n *Use --trace to show backtrace"), err.getString());
+            assertEquals(1, invoker.getCode());
+        }
+    }
+
+    @Test
+    // The native executable prints one more line, which explains that it can only load the classes it contains
+    @DisabledInNativeImage
+    @DisplayName("should fail if the required JAR file doesn't exist")
+    void shouldFailIfTheRequiredJarFileDoesntExist() {
+        try (var streams = redirectStreams()) {
+            streams.out();
+            var err = streams.err();
+            var invoker = invokeCli(list("-r", "no-such-extensions.jar"), "sample.adoc");
+            assertMatch(rx("'no-such-extensions.jar' could not be loaded\\n *Use --trace to show backtrace"),
+                    err.getString());
+            assertEquals(1, invoker.getCode());
+        }
+    }
+
+    @Test
+    @EnabledInNativeImage
+    @DisplayName("should explain that the native executable can't load the required JAR file and suggest --trace option")
+    void shouldExplainThatTheNativeExecutableCantLoadTheRequiredJarFile() {
+        try (var streams = redirectStreams()) {
+            streams.out();
+            var err = streams.err();
+            var invoker = invokeCli(list("-r", "no-such-extensions.jar"), "sample.adoc");
+            assertMatch(rx("'no-such-extensions.jar' could not be loaded\\n *The native executable can only load the classes it contains; run AsciidoctorJ with Java to load other classes\\n *Use --trace to show backtrace"),
+                    err.getString());
+            assertEquals(1, invoker.getCode());
+        }
+    }
+
+    @Test
     @DisplayName("should raise error when --trace option is specified and program raises error")
-    void shouldRaiseErrorWhenTraceOptionIsSpecifiedAndProgramRaisesError() throws Exception {
+    void shouldRaiseErrorWhenTraceOptionIsSpecifiedAndProgramRaisesError() {
         var sampleFilepath = fixturePath("sample.adoc");
         assertThrows(IllegalStateException.class, () -> {
             invokeCli(list("--trace", "-r", "no-such-module"), sampleFilepath);
@@ -410,15 +463,17 @@ public class InvokerTest extends CliTestHelper {
     }
 
     @Test
+    // Starts a JVM process with java.home, which is not available in a native image
+    @DisabledInNativeImage
     @DisplayName("should show backtrace when --trace option is specified and program raises error")
-    void shouldShowBacktraceWhenTraceOptionIsSpecifiedAndProgramRaisesError() throws Exception {
+    void shouldShowBacktraceWhenTraceOptionIsSpecifiedAndProgramRaisesError() throws IOException, InterruptedException {
         var result = runCommand(list(asciidoctorCmd(), "-r", "no-such-module", "--trace", fixturePath("basic.adoc")), out -> out.read());
         assertMatch(rx("IllegalStateException: cannot load such class -- no-such-module\n\tat "), result);
     }
 
     @Test
     @DisplayName("should treat extra arguments as files")
-    void shouldTreatExtraArgumentsAsFiles() throws Exception {
+    void shouldTreatExtraArgumentsAsFiles() {
         try (var streams = redirectStreams()) {
             streams.out();
             var err = streams.err();
@@ -430,11 +485,11 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should output to file name based on input file name")
-    void shouldOutputToFileNameBasedOnInputFileName() throws Exception {
+    void shouldOutputToFileNameBasedOnInputFileName() {
         var sampleOutpath = fixturePath("sample.html");
         try {
             var invoker = invokeCli();
-            var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+            var doc = (Document) unwrap(invoker.getDocument());
             assertEquals(sampleOutpath, doc.getAttribute("outfile"));
             assertPathExists(sampleOutpath);
             var output = readFile(sampleOutpath);
@@ -451,13 +506,13 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should output to file in destination directory if set")
-    void shouldOutputToFileInDestinationDirectoryIfSet() throws Exception {
+    void shouldOutputToFileInDestinationDirectoryIfSet() {
         var destinationPath = joinPath(testdir(), "test_output");
         var sampleOutpath = joinPath(destinationPath, "sample.html");
         try {
             makeDir(destinationPath);
-            var invoker = invokeCli(list("-D", "src/test/resources/test_output"));
-            var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+            var invoker = invokeCli(list("-D", relativeTestPath("test_output")));
+            var doc = (Document) unwrap(invoker.getDocument());
             assertEquals(sampleOutpath, doc.getAttribute("outfile"));
             assertPathExists(sampleOutpath);
         } finally {
@@ -468,14 +523,14 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should preserve directory structure in destination directory if source directory is set")
-    void shouldPreserveDirectoryStructureInDestinationDirectoryIfSourceDirectoryIsSet() throws Exception {
+    void shouldPreserveDirectoryStructureInDestinationDirectoryIfSourceDirectoryIsSet() {
         var sampleInpath = "subdir/index.adoc";
         var destinationPath = "test_output";
         var destinationSubdirPath = joinPath(destinationPath, "subdir");
         var sampleOutpath = joinPath(destinationSubdirPath, "index.html");
         try {
             makeDir(destinationPath);
-            invokeCli(list("-D", (str(destinationPath)), "-R", "src/test/resources/fixtures"), sampleInpath);
+            invokeCli(list("-D", (str(destinationPath)), "-R", relativeTestPath("fixtures")), sampleInpath);
             assertTruthy(fileExists(destinationSubdirPath));
             assertPathExists(sampleOutpath);
         } finally {
@@ -487,11 +542,11 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should output to file specified")
-    void shouldOutputToFileSpecified() throws Exception {
+    void shouldOutputToFileSpecified() {
         var sampleOutpath = fixturePath("sample-output.html");
         try {
             var invoker = invokeCli(list("-o", (str(sampleOutpath))));
-            var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+            var doc = (Document) unwrap(invoker.getDocument());
             assertEquals(sampleOutpath, doc.getAttribute("outfile"));
             assertPathExists(sampleOutpath);
         } finally {
@@ -501,7 +556,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should copy default stylesheet to target directory if linkcss is specified")
-    void shouldCopyDefaultStylesheetToTargetDirectoryIfLinkcssIsSpecified() throws Exception {
+    void shouldCopyDefaultStylesheetToTargetDirectoryIfLinkcssIsSpecified() {
         // NOTE the CodeRay adapter is not ported (it requires a gem), so only the default stylesheet is verified
         var sampleOutpath = fixturePath("sample-output.html");
         var asciidoctorStylesheet = fixturePath("asciidoctor.css");
@@ -523,7 +578,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should not copy coderay stylesheet to target directory when no source blocks where highlighted")
-    void shouldNotCopyCoderayStylesheetToTargetDirectoryWhenNoSourceBlocksWhereHighlighted() throws Exception {
+    void shouldNotCopyCoderayStylesheetToTargetDirectoryWhenNoSourceBlocksWhereHighlighted() {
         var sampleOutpath = fixturePath("sample-output.html");
         var asciidoctorStylesheet = fixturePath("asciidoctor.css");
         var coderayStylesheet = fixturePath("coderay-asciidoctor.css");
@@ -541,7 +596,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should not copy default stylesheet to target directory if linkcss is set and copycss is unset")
-    void shouldNotCopyDefaultStylesheetToTargetDirectoryIfLinkcssIsSetAndCopycssIsUnset() throws Exception {
+    void shouldNotCopyDefaultStylesheetToTargetDirectoryIfLinkcssIsSetAndCopycssIsUnset() {
         var sampleOutpath = fixturePath("sample-output.html");
         var defaultStylesheet = fixturePath("asciidoctor.css");
         try {
@@ -556,7 +611,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should copy custom stylesheet to target directory if stylesheet and linkcss is specified")
-    void shouldCopyCustomStylesheetToTargetDirectoryIfStylesheetAndLinkcssIsSpecified() throws Exception {
+    void shouldCopyCustomStylesheetToTargetDirectoryIfStylesheetAndLinkcssIsSpecified() {
         var destdir = fixturePath("output");
         var sampleOutpath = joinPath(destdir, "sample-output.html");
         var stylesdir = joinPath(destdir, "styles");
@@ -575,7 +630,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should not copy custom stylesheet to target directory if stylesheet and linkcss are set and copycss is unset")
-    void shouldNotCopyCustomStylesheetToTargetDirectoryIfStylesheetAndLinkcssAreSetAndCopycssIsUnset() throws Exception {
+    void shouldNotCopyCustomStylesheetToTargetDirectoryIfStylesheetAndLinkcssAreSetAndCopycssIsUnset() {
         var destdir = fixturePath("output");
         var sampleOutpath = joinPath(destdir, "sample-output.html");
         var stylesdir = joinPath(destdir, "styles");
@@ -596,7 +651,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should not copy custom stylesheet to target directory if stylesdir is a URI")
-    void shouldNotCopyCustomStylesheetToTargetDirectoryIfStylesdirIsAURI() throws Exception {
+    void shouldNotCopyCustomStylesheetToTargetDirectoryIfStylesdirIsAURI() {
         var destdir = fixturePath("output");
         var sampleOutpath = joinPath(destdir, "sample-output.html");
         var stylesdir = joinPath(destdir, "http:");
@@ -615,7 +670,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should convert all passed files")
-    void shouldConvertAllPassedFiles() throws Exception {
+    void shouldConvertAllPassedFiles() {
         var basicOutpath = fixturePath("basic.html");
         var sampleOutpath = fixturePath("sample.html");
         try {
@@ -630,12 +685,12 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("options should not be modified when processing multiple files")
-    void optionsShouldNotBeModifiedWhenProcessingMultipleFiles() throws Exception {
+    void optionsShouldNotBeModifiedWhenProcessingMultipleFiles() {
         var destinationPath = joinPath(testdir(), "test_output");
         var basicOutpath = joinPath(destinationPath, "basic.htm");
         var sampleOutpath = joinPath(destinationPath, "sample.htm");
         try {
-            invokeCliWithFilenames(list("-D", "src/test/resources/test_output", "-a", "outfilesuffix=.htm"), list("basic.adoc", "sample.adoc"));
+            invokeCliWithFilenames(list("-D", relativeTestPath("test_output"), "-a", "outfilesuffix=.htm"), list("basic.adoc", "sample.adoc"));
             assertPathExists(basicOutpath);
             assertPathExists(sampleOutpath);
         } finally {
@@ -647,7 +702,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should convert all files that matches a glob expression")
-    void shouldConvertAllFilesThatMatchesAGlobExpression() throws Exception {
+    void shouldConvertAllFilesThatMatchesAGlobExpression() {
         var basicOutpath = fixturePath("basic.html");
         try {
             invokeCliToBuffer(new ArrayList<String>(), "ba*.adoc");
@@ -659,7 +714,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should convert all files that matches an absolute path glob expression")
-    void shouldConvertAllFilesThatMatchesAnAbsolutePathGlobExpression() throws Exception {
+    void shouldConvertAllFilesThatMatchesAnAbsolutePathGlobExpression() {
         var basicOutpath = fixturePath("basic.html");
         var glob = fixturePath("ba*.adoc");
         if (Objects.equals(altSeparator(), "\\")) {
@@ -675,7 +730,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should suppress header footer if specified")
-    void shouldSuppressHeaderFooterIfSpecified() throws Exception {
+    void shouldSuppressHeaderFooterIfSpecified() {
         for (var flags : list(list("-e", "-o", "-"), list("-s", "-o", "-"))) {
             var invoker = invokeCliToBuffer(flags);
             var output = invoker.readOutput();
@@ -686,7 +741,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should write page for each alternate manname")
-    void shouldWritePageForEachAlternateManname() throws Exception {
+    void shouldWritePageForEachAlternateManname() {
         var outdir = fixturedir();
         var outfile1 = joinPath(outdir, "eve.1");
         var outfile2 = joinPath(outdir, "islifeform.1");
@@ -697,13 +752,13 @@ public class InvokerTest extends CliTestHelper {
                 :doctype: manpage
                 :manmanual: EVE
                 :mansource: EVE
-
+                
                 == NAME
-
+                
                 eve, islifeform - analyzes an image to determine if it's a picture of a life form
-
+                
                 == SYNOPSIS
-
+                
                 *eve* ['OPTION']... 'FILE'...
                 """;
         try {
@@ -719,7 +774,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should output a trailing newline to stdout")
-    void shouldOutputATrailingNewlineToStdout() throws Exception {
+    void shouldOutputATrailingNewlineToStdout() {
         var invoker = new Ref<Invoker>(null);
         var output = new Ref<String>(null);
         try (var streams = redirectStreams()) {
@@ -734,9 +789,9 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should set backend to html5 if specified")
-    void shouldSetBackendToHtml5IfSpecified() throws Exception {
+    void shouldSetBackendToHtml5IfSpecified() {
         var invoker = invokeCliToBuffer(list("-b", "html5", "-o", "-"));
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertEquals("html5", doc.getAttribute("backend"));
         assertEquals(".html", doc.getAttribute("outfilesuffix"));
         var output = invoker.readOutput();
@@ -745,9 +800,9 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should set backend to docbook5 if specified")
-    void shouldSetBackendToDocbook5IfSpecified() throws Exception {
+    void shouldSetBackendToDocbook5IfSpecified() {
         var invoker = invokeCliToBuffer(list("-b", "docbook5", "-a", "xmlns", "-o", "-"));
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertEquals("docbook5", doc.getAttribute("backend"));
         assertEquals(".xml", doc.getAttribute("outfilesuffix"));
         var output = invoker.readOutput();
@@ -756,9 +811,9 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should set doctype to article if specified")
-    void shouldSetDoctypeToArticleIfSpecified() throws Exception {
+    void shouldSetDoctypeToArticleIfSpecified() {
         var invoker = invokeCliToBuffer(list("-d", "article", "-o", "-"));
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertEquals("article", doc.getAttribute("doctype"));
         var output = invoker.readOutput();
         assertXpath("/html/body[@class=\"article\"]", output, 1);
@@ -766,9 +821,9 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should set doctype to book if specified")
-    void shouldSetDoctypeToBookIfSpecified() throws Exception {
+    void shouldSetDoctypeToBookIfSpecified() {
         var invoker = invokeCliToBuffer(list("-d", "book", "-o", "-"));
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertEquals("book", doc.getAttribute("doctype"));
         var output = invoker.readOutput();
         assertXpath("/html/body[@class=\"book\"]", output, 1);
@@ -776,7 +831,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should warn if doctype is inline and the first block is not a candidate for inline conversion")
-    void shouldWarnIfDoctypeIsInlineAndTheFirstBlockIsNotACandidateForInlineConversion() throws Exception {
+    void shouldWarnIfDoctypeIsInlineAndTheFirstBlockIsNotACandidateForInlineConversion() {
         for (var input : list("== Section Title", "image::tiger.png[]")) {
             var warnings = redirectStreams((ignored, err) -> {
                 invokeCliToBuffer(list("-d", "inline"), "-", () -> input);
@@ -788,7 +843,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should not warn if doctype is inline and the document has no blocks")
-    void shouldNotWarnIfDoctypeIsInlineAndTheDocumentHasNoBlocks() throws Exception {
+    void shouldNotWarnIfDoctypeIsInlineAndTheDocumentHasNoBlocks() {
         var warnings = redirectStreams((ignored, err) -> {
             invokeCliToBuffer(list("-d", "inline"), "-", () -> "// comment");
             return err.getString();
@@ -798,7 +853,7 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should not warn if doctype is inline and the document contains multiple blocks")
-    void shouldNotWarnIfDoctypeIsInlineAndTheDocumentContainsMultipleBlocks() throws Exception {
+    void shouldNotWarnIfDoctypeIsInlineAndTheDocumentContainsMultipleBlocks() {
         var warnings = redirectStreams((ignored, err) -> {
             invokeCliToBuffer(list("-d", "inline"), "-", () -> "paragraph one\n\nparagraph two\n\nparagraph three");
             return err.getString();
@@ -808,10 +863,10 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should add source location to blocks when sourcemap option is specified")
-    void shouldAddSourceLocationToBlocksWhenSourcemapOptionIsSpecified() throws Exception {
+    void shouldAddSourceLocationToBlocksWhenSourcemapOptionIsSpecified() {
         var sampleFilepath = fixturePath("sample.adoc");
         var invoker = invokeCliToBuffer(list("--sourcemap", "-o", "-"));
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         var allBlocks = doc.findBy(AbstractBlock.Selector.any());
         assertNotEquals(0, size(allBlocks));
         for (var block : doc.findBy(AbstractBlock.Selector.any())) {
@@ -824,20 +879,20 @@ public class InvokerTest extends CliTestHelper {
     @Test
     @Disabled("custom converter templates are not supported (they require the Tilt gem)")
     @DisplayName("should locate custom templates based on template dir, template engine and backend")
-    void shouldLocateCustomTemplatesBasedOnTemplateDirTemplateEngineAndBackend() throws Exception {
+    void shouldLocateCustomTemplatesBasedOnTemplateDirTemplateEngineAndBackend() {
     }
 
     @Test
     @Disabled("custom converter templates are not supported (they require the Tilt gem)")
     @DisplayName("should load custom templates from multiple template directories")
-    void shouldLoadCustomTemplatesFromMultipleTemplateDirectories() throws Exception {
+    void shouldLoadCustomTemplatesFromMultipleTemplateDirectories() {
     }
 
     @Test
     @DisplayName("should set attribute with value")
-    void shouldSetAttributeWithValue() throws Exception {
+    void shouldSetAttributeWithValue() {
         var invoker = invokeCliToBuffer(list("--trace", "-a", "idprefix=id", "-e", "-o", "-"));
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertEquals("id", doc.getAttribute("idprefix"));
         var output = invoker.readOutput();
         assertXpath("//h2[@id=\"idsection_a\"]", output, 1);
@@ -845,9 +900,9 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should set attribute with value containing equal sign")
-    void shouldSetAttributeWithValueContainingEqualSign() throws Exception {
+    void shouldSetAttributeWithValueContainingEqualSign() {
         var invoker = invokeCliToBuffer(list("--trace", "-a", "toc", "-a", "toc-title=t=o=c", "-o", "-"));
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertEquals("t=o=c", doc.getAttribute("toc-title"));
         var output = invoker.readOutput();
         assertXpath("//*[@id=\"toctitle\"][text() = \"t=o=c\"]", output, 1);
@@ -855,9 +910,9 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should set attribute with quoted value containing a space")
-    void shouldSetAttributeWithQuotedValueContainingASpace() throws Exception {
+    void shouldSetAttributeWithQuotedValueContainingASpace() {
         var invoker = invokeCliToBuffer(list("--trace", "-a", "toc", "-a", "note-caption=Note to self:", "-o", "-"));
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertEquals("Note to self:", doc.getAttribute("note-caption"));
         var output = invoker.readOutput();
         assertXpath(("//*[" + str(containsClass("admonitionblock")) + "]//*[@class='title'][text() = 'Note to self:']"), output, 1);
@@ -865,9 +920,9 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should not set attribute ending in @ if defined in document")
-    void shouldNotSetAttributeEndingInIfDefinedInDocument() throws Exception {
+    void shouldNotSetAttributeEndingInIfDefinedInDocument() {
         var invoker = invokeCliToBuffer(list("--trace", "-a", "idprefix=id@", "-e", "-o", "-"));
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertEquals("id_", doc.getAttribute("idprefix"));
         var output = invoker.readOutput();
         assertXpath("//h2[@id=\"id_section_a\"]", output, 1);
@@ -875,9 +930,9 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should set attribute with no value")
-    void shouldSetAttributeWithNoValue() throws Exception {
+    void shouldSetAttributeWithNoValue() {
         var invoker = invokeCliToBuffer(list("-a", "icons", "-e", "-o", "-"));
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertEquals("", doc.getAttribute("icons"));
         var output = invoker.readOutput();
         assertXpath("//*[@class=\"admonitionblock note\"]//img[@alt=\"Note\"]", output, 1);
@@ -885,9 +940,9 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("should unset attribute ending in bang")
-    void shouldUnsetAttributeEndingInBang() throws Exception {
+    void shouldUnsetAttributeEndingInBang() {
         var invoker = invokeCliToBuffer(list("-a", "sectids!", "-e", "-o", "-"));
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertFalsy(doc.hasAttribute("sectids"));
         var output = invoker.readOutput();
         assertXpath("//h2[not(@id)]", output);
@@ -895,41 +950,43 @@ public class InvokerTest extends CliTestHelper {
 
     @Test
     @DisplayName("default mode for cli should be unsafe")
-    void defaultModeForCliShouldBeUnsafe() throws Exception {
+    void defaultModeForCliShouldBeUnsafe() {
         var invoker = invokeCliToBuffer(list("-o", "/dev/null"));
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertEquals(SafeMode.UNSAFE.getLevel(), doc.getSafe());
     }
 
     @Test
     @DisplayName("should set safe mode if specified")
-    void shouldSetSafeModeIfSpecified() throws Exception {
+    void shouldSetSafeModeIfSpecified() {
         var invoker = invokeCliToBuffer(list("--safe", "-o", "/dev/null"));
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertEquals(SafeMode.SAFE.getLevel(), doc.getSafe());
     }
 
     @Test
     @DisplayName("should set safe mode to specified level")
-    void shouldSetSafeModeToSpecifiedLevel() throws Exception {
+    void shouldSetSafeModeToSpecifiedLevel() {
         for (var name : SafeMode.names()) {
             var invoker = invokeCliToBuffer(list("-S", (str(name)), "-o", "/dev/null"));
-            var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+            var doc = (Document) unwrap(invoker.getDocument());
             assertEquals(SafeMode.valueForName(name), doc.getSafe());
         }
     }
 
     @Test
     @DisplayName("should set eRuby impl if specified")
-    void shouldSetERubyImplIfSpecified() throws Exception {
+    void shouldSetERubyImplIfSpecified() {
         var invoker = invokeCliToBuffer(list("--eruby", "erubi", "-o", "/dev/null"));
-        var doc = (Document) ((Document) unwrap(invoker.getDocument()));
+        var doc = (Document) unwrap(invoker.getDocument());
         assertEquals("erubi", get(doc.getOptions(), "eruby"));
     }
 
     @Test
+    // Starts a JVM process with java.home, which is not available in a native image
+    @DisabledInNativeImage
     @DisplayName("should force default external encoding to UTF-8")
-    void shouldForceDefaultExternalEncodingToUTF8() throws Exception {
+    void shouldForceDefaultExternalEncodingToUTF8() throws IOException, InterruptedException {
         var inputPath = fixturePath("encoding.adoc");
         // NOTE the output is always encoded as UTF-8, regardless of the encoding of the console
         java.util.List<String> stdoutLines = runCommand(list(asciidoctorCmd(), "-o", "-", "--trace", inputPath, Options.of("env", Options.of("LANG", "US-ASCII"))), out -> out.readLines());
@@ -941,18 +998,18 @@ public class InvokerTest extends CliTestHelper {
     @Test
     @Disabled("the encoding of the standard streams and Dir.home are specific to Ruby")
     @DisplayName("should force stdio encoding to UTF-8")
-    void shouldForceStdioEncodingToUTF8() throws Exception {
+    void shouldForceStdioEncodingToUTF8() {
     }
 
     @Test
     @Disabled("the encoding of the standard streams and Dir.home are specific to Ruby")
     @DisplayName("should not fail to load if call to Dir.home fails")
-    void shouldNotFailToLoadIfCallToDirHomeFails() throws Exception {
+    void shouldNotFailToLoadIfCallToDirHomeFails() {
     }
 
     @Test
     @DisplayName("should print timings when -t flag is specified")
-    void shouldPrintTimingsWhenTFlagIsSpecified() throws Exception {
+    void shouldPrintTimingsWhenTFlagIsSpecified() {
         var input = "Sample *AsciiDoc*";
         var invoker = new Ref<Invoker>(null);
         var error = new Ref<String>(null);
@@ -968,8 +1025,10 @@ public class InvokerTest extends CliTestHelper {
     }
 
     @Test
+    // Starts a JVM process with java.home, which is not available in a native image
+    @DisabledInNativeImage
     @DisplayName("should show timezone as UTC if system TZ is set to UTC")
-    void shouldShowTimezoneAsUTCIfSystemTZIsSetToUTC() throws Exception {
+    void shouldShowTimezoneAsUTCIfSystemTZIsSetToUTC() throws IOException, InterruptedException {
         var inputPath = fixturePath("doctime-localtime.adoc");
         var output = runCommand(list(asciidoctorCmd(), "-d", "inline", "-o", "-", "-e", inputPath, Options.of("env", Options.of("TZ", "UTC", "SOURCE_DATE_EPOCH", null, "IGNORE_SOURCE_DATE_EPOCH", "1"))), out -> out.read());
         var masgn = map(slice(lines(output), -2, 2), (String it) -> Strings.chomp(it));
@@ -980,8 +1039,10 @@ public class InvokerTest extends CliTestHelper {
     }
 
     @Test
+    // Starts a JVM process with java.home, which is not available in a native image
+    @DisabledInNativeImage
     @DisplayName("should show timezone as offset if system TZ is not set to UTC")
-    void shouldShowTimezoneAsOffsetIfSystemTZIsNotSetToUTC() throws Exception {
+    void shouldShowTimezoneAsOffsetIfSystemTZIsNotSetToUTC() throws IOException, InterruptedException {
         assumeTrue(!isWindows());
         var inputPath = fixturePath("doctime-localtime.adoc");
         var output = runCommand(list(asciidoctorCmd(), "-d", "inline", "-o", "-", "-e", inputPath, Options.of("env", Options.of("TZ", "EST+5", "SOURCE_DATE_EPOCH", null, "IGNORE_SOURCE_DATE_EPOCH", "1"))), out -> out.read());
@@ -995,18 +1056,18 @@ public class InvokerTest extends CliTestHelper {
     @Test
     @Disabled("environment variables cannot be modified in Java")
     @DisplayName("should use SOURCE_DATE_EPOCH as modified time of input file and local time")
-    void shouldUseSOURCE_DATE_EPOCHAsModifiedTimeOfInputFileAndLocalTime() throws Exception {
+    void shouldUseSOURCE_DATE_EPOCHAsModifiedTimeOfInputFileAndLocalTime() {
     }
 
     @Test
     @Disabled("environment variables cannot be modified in Java")
     @DisplayName("should ignore SOURCE_DATE_EPOCH is value is empty")
-    void shouldIgnoreSOURCE_DATE_EPOCHIsValueIsEmpty() throws Exception {
+    void shouldIgnoreSOURCE_DATE_EPOCHIsValueIsEmpty() {
     }
 
     @Test
     @Disabled("environment variables cannot be modified in Java")
     @DisplayName("should fail if SOURCE_DATE_EPOCH is malformed")
-    void shouldFailIfSOURCE_DATE_EPOCHIsMalformed() throws Exception {
+    void shouldFailIfSOURCE_DATE_EPOCHIsMalformed() {
     }
 }

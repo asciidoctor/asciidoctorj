@@ -1,5 +1,6 @@
 package org.asciidoctor.converter;
 
+import org.asciidoctor.nativeimage.RegisterClass;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.Column;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RegisterClass(TableTestConverter.class)
 class TableConverterTest {
 
     private Asciidoctor asciidoctor = Asciidoctor.Factory.create();

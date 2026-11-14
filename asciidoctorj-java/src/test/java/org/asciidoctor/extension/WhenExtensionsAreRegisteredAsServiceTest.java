@@ -1,5 +1,10 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.nativeimage.RegisterClass;
+import org.asciidoctor.nativeimage.RegisterDirectory;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.ClasspathExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
@@ -10,7 +15,6 @@ import java.net.URLClassLoader;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.test.extension.ClasspathHelper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,11 +25,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+@ExtendWith(ClasspathExtension.class)
+@RegisterClass({ExtensionRegistryExecutor1.class, ExtensionRegistryExecutor2.class, ExtensionRegistryExecutor3.class})
+@RegisterDirectory("serviceloadertest")
 public class WhenExtensionsAreRegisteredAsServiceTest {
 
     static final String FILENAME_HTML = "rendersample.html";
 
-    ClasspathHelper classpath;
     Asciidoctor asciidoctor;
     ClassLoader originalTCCL;
 
@@ -35,7 +41,6 @@ public class WhenExtensionsAreRegisteredAsServiceTest {
     @BeforeEach
     public void setup() {
         asciidoctor = Asciidoctor.Factory.create();
-        classpath = new ClasspathHelper(WhenExtensionsAreRegisteredAsServiceTest.class);
         originalTCCL = Thread.currentThread().getContextClassLoader();
     }
 
@@ -48,7 +53,8 @@ public class WhenExtensionsAreRegisteredAsServiceTest {
     @Disabled("Test is ignored because currently it is not possible to register two block extensions in same instance. This may require deep changes on Asciidoctor Extensions API")
     @Test
     @DisplayName("extensions should be correctly added")
-    public void extensionsShouldBeCorrectlyAdded() throws IOException {
+    public void extensionsShouldBeCorrectlyAdded(
+            @ClasspathResource("arrows-and-boxes-example.ad") File arrowsAndBoxesExample) throws IOException {
 
         // when:
         //To avoid registering the same extension over and over for all tests, service is instantiated manually.
@@ -60,7 +66,7 @@ public class WhenExtensionsAreRegisteredAsServiceTest {
                 .toFile(renderedFile)
                 .safe(SafeMode.UNSAFE).build();
 
-        asciidoctor.convertFile(classpath.getResource("arrows-and-boxes-example.ad"), options);
+        asciidoctor.convertFile(arrowsAndBoxesExample, options);
 
         // then:
         Document doc = Jsoup.parse(renderedFile, "UTF-8");
@@ -78,14 +84,16 @@ public class WhenExtensionsAreRegisteredAsServiceTest {
 
     @Test
     @DisplayName("the active TCCL when creating the Asciidoctor instance should be used to load extensions")
-    public void theActiveTCCLWhenCreatingTheAsciidoctorInstanceShouldBeUsedToLoadExtensions() throws Exception {
+    public void theActiveTCCLWhenCreatingTheAsciidoctorInstanceShouldBeUsedToLoadExtensions(
+            @ClasspathResource("serviceloadertest/1") File serviceLoaderTest1,
+            @ClasspathResource("serviceloadertest/2") File serviceLoaderTest2) throws Exception {
 
         // when:
-        URLClassLoader tccl1 = new URLClassLoader(new URL[] {classpath.getResource("serviceloadertest/1").toURI().toURL()});
+        URLClassLoader tccl1 = new URLClassLoader(new URL[] {serviceLoaderTest1.toURI().toURL()});
         Thread.currentThread().setContextClassLoader(tccl1);
         Asciidoctor asciidoctor1 = Asciidoctor.Factory.create();
 
-        URLClassLoader tccl2 = new URLClassLoader(new URL[] {classpath.getResource("serviceloadertest/2").toURI().toURL()});
+        URLClassLoader tccl2 = new URLClassLoader(new URL[] {serviceLoaderTest2.toURI().toURL()});
         Thread.currentThread().setContextClassLoader(tccl2);
         Asciidoctor asciidoctor2 = Asciidoctor.Factory.create();
 
@@ -99,10 +107,11 @@ public class WhenExtensionsAreRegisteredAsServiceTest {
 
     @Test
     @DisplayName("an extension registry declared with both the new and the deprecated service should be called once")
-    public void anExtensionRegistryDeclaredWithBothServicesShouldBeCalledOnce() throws Exception {
+    public void anExtensionRegistryDeclaredWithBothServicesShouldBeCalledOnce(
+            @ClasspathResource("serviceloadertest/4") File serviceLoaderTest4) throws Exception {
 
         // when:
-        URLClassLoader tccl = new URLClassLoader(new URL[] {classpath.getResource("serviceloadertest/4").toURI().toURL()});
+        URLClassLoader tccl = new URLClassLoader(new URL[] {serviceLoaderTest4.toURI().toURL()});
         Thread.currentThread().setContextClassLoader(tccl);
         Asciidoctor.Factory.create();
 

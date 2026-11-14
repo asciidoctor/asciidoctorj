@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import org.asciidoctor.nativeimage.RegisterClass;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.converter.ObjectConverter;
 import org.asciidoctor.converter.ObjectConverter.ObjectConverterResult;
@@ -23,6 +24,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * - Java converter returns custom type unless `toFile` ot `toStream` is set.
  */
 @ExtendWith(AsciidoctorExtension.class)
+@RegisterClass(ObjectConverter.class)
+@RegisterClass(value = ObjectConverter.ObjectConverterResult.class, methods = true, fields = true)
 public class WhenConvertingWithExpectedTypeTest {
 
     private static final String SAMPLE_CONTENT = "= Document Title\n\nThis is the preamble\n";
