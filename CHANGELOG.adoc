@@ -33,6 +33,7 @@ Build Improvement::
 * Add the Java implementation, a pure Java port of Asciidoctor published as `org.asciidoctor:asciidoctorj-java` and `org.asciidoctor:asciidoctorj-java-cli` (see asciidoctorj-java/README.adoc)
 * Migrate the tests to JUnit 5 and AssertJ, and remove Spock, Groovy, CodeNarc, Hamcrest and xml-matchers from the build (#1347)
 * Reactivate the WildFly integration test, upgraded to WildFly 42 (Jakarta EE) and Java 21 (#1342)
+* Publish a snapshot of the artifacts every night to the Maven Central snapshot repository, and update the documentation of the snapshot repository
 
 == 3.0.1 (2025-11-06)
 
