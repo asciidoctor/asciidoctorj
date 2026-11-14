@@ -1,5 +1,6 @@
 package org.asciidoctor.jruby.internal;
 
+import org.asciidoctor.nativeimage.RegisterClass;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.test.AsciidoctorInstance;
@@ -11,6 +12,7 @@ import unusual.extension.BoldifyPostProcessor;
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 
 @ExtendWith(AsciidoctorExtension.class)
+@RegisterClass(BoldifyPostProcessor.class)
 public class WhenLoadingExtensionFromUnusualPackageTest {
 
     @AsciidoctorInstance(scope = PER_METHOD)

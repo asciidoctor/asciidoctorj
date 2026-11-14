@@ -1,0 +1,172 @@
+{
+  "reflection": [
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncBoolean",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncCeiling",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncConcat",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncContains",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncCount",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncCurrent",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncDoclocation",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncExtElementAvailable",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncExtFunction",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncExtFunctionAvailable",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncFalse",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncFloor",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncGenerateId",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncHere",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncId",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncLang",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncLast",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncLocalPart",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncNamespace",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncNormalizeSpace",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncNot",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncNumber",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncPosition",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncQname",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncRound",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncStartsWith",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncString",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncStringLength",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncSubstring",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncSubstringAfter",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncSubstringBefore",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncSum",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncSystemProperty",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncTranslate",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncTrue",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FuncUnparsedEntityURI",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.Function",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FunctionMultiArgs",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xpath.internal.functions.FunctionOneArg",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "com.sun.org.apache.xml.internal.utils.FastStringBuffer",
+      "allDeclaredConstructors": true
+    }
+  ],
+  "bundles": [
+    {
+      "name": "com.sun.org.apache.xml.internal.res.XMLErrorResources"
+    },
+    {
+      "name": "com.sun.org.apache.xpath.internal.res.XPATHErrorResources"
+    }
+  ]
+}

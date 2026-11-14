@@ -1,5 +1,9 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.nativeimage.RegisterClass;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.ClasspathExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,7 +20,6 @@ import javax.xml.xpath.XPathFactory;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.test.extension.ClasspathHelper;
 import org.asciidoctor.util.TestHttpServer;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,6 +32,8 @@ import org.junit.jupiter.api.io.TempDir;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+@ExtendWith(ClasspathExtension.class)
+@RegisterClass(GithubContributorsBlockMacro.class)
 public class WhenABlockMacroProcessorCreatesATableTest {
 
     public static final String FIRST_TD = "td:first-child";
@@ -72,13 +77,10 @@ public class WhenABlockMacroProcessorCreatesATableTest {
             githubcontributors::asciidoctor/asciidoctorj[widths="2,3,-1"]
             """;
 
-    private ClasspathHelper classpathResources;
-
     @BeforeEach
-    public void setup() {
+    public void setup(@ClasspathResource("githubcontributors.json") File githubContributors) {
         asciidoctor = Asciidoctor.Factory.create();
-        classpathResources = new ClasspathHelper(WhenABlockMacroProcessorCreatesATableTest.class);
-        TestHttpServer.start(Map.of("http://api.github.com/repos/asciidoctor/asciidoctorj/contributors", classpathResources.getResource("githubcontributors.json")));
+        TestHttpServer.start(Map.of("http://api.github.com/repos/asciidoctor/asciidoctorj/contributors", githubContributors));
     }
 
     @AfterEach

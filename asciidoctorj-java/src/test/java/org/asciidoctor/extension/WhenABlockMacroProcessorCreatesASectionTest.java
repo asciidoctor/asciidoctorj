@@ -2,6 +2,7 @@ package org.asciidoctor.extension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.asciidoctor.nativeimage.RegisterClass;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
@@ -10,6 +11,7 @@ import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+@RegisterClass(SectionCreatorBlockMacro.class)
 public class WhenABlockMacroProcessorCreatesASectionTest {
 
     public static final String BLOCKMACRO_NAME = "section";

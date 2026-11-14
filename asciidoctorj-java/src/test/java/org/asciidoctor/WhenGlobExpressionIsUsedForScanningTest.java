@@ -1,7 +1,8 @@
 package org.asciidoctor;
 
-import org.asciidoctor.util.DirectoryWalker;
-import org.asciidoctor.util.GlobDirectoryWalker;
+import org.asciidoctor.jruby.DirectoryWalker;
+import org.asciidoctor.jruby.GlobDirectoryWalker;
+import org.asciidoctor.nativeimage.RegisterDirectory;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.asciidoctor.test.extension.ClasspathExtension;
@@ -14,6 +15,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
+@RegisterDirectory("src")
 public class WhenGlobExpressionIsUsedForScanningTest {
 
     @ClasspathResource("src")
