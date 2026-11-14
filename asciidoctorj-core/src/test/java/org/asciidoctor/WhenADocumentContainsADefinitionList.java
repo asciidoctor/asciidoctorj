@@ -42,7 +42,7 @@ class WhenADocumentContainsADefinitionList {
         // then:
         DescriptionList list = (DescriptionList) documentNode.getBlocks().get(0);
 
-        assertThat(list.getItems() != null || list.getItems().size() == 2).isTrue();
+        assertThat(list.getItems()).hasSize(2);
 
         assertThat(list.getItems().get(0)).isInstanceOf(DescriptionListEntry.class);
 

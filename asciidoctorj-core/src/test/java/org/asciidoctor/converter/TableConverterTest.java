@@ -3,10 +3,13 @@ package org.asciidoctor.converter;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
+import org.asciidoctor.ast.Column;
+import org.asciidoctor.ast.Table;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -61,6 +64,26 @@ class TableConverterTest {
                 Sum            |     Sum A     |     Sum B""".lines().collect(Collectors.toList()));
     }
 
+    @Test
+    @DisplayName("the columns of a loaded table should be numbered starting at 1")
+    void theColumnsOfALoadedTableShouldBeNumberedStartingAtOne() {
+        // given:
+        String document = """
+                = Hello Table
+
+                |====
+                | A | B | C
+                | 1 | 2 | 3
+                |====
+                """;
+
+        // when:
+        org.asciidoctor.ast.Document loaded = asciidoctor.load(document, Options.builder().standalone(false).build());
+        Table table = (Table) loaded.findBy(Map.of("context", ":table")).get(0);
+
+        // then:
+        assertThat(table.getColumns()).extracting(Column::getColumnNumber).containsExactly(1, 2, 3);
+    }
 
     @Test
     @DisplayName("should convert a table with nested asciidoctor content")

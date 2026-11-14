@@ -1,7 +1,5 @@
 package org.asciidoctor.extension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
@@ -13,8 +11,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 // Issue: https://github.com/asciidoctor/asciidoctorj/issues/196
-public class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
+class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
 
     public static final String UTF8 = "UTF-8";
     public static final String TAG_HEAD = "head";
@@ -35,67 +35,67 @@ public class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
 
     private static final String BLOCK_MACRO_DOCUMENT = """
             = Test document
-
+            
             testmacro::target[]
-
+            
             """;
 
     private static final String BLOCK_DOCUMENT = """
             = Test document
-
+            
             [yell]
             Do not touch this
-
+            
             [yell]
             ----
             This should be uppercase
             ----
-
+            
             [yell]
             --
             This should also be uppercase
             --
-
+            
             """;
 
     private static final String BLOCK_DOCUMENT_2 = """
             = Test document
-
+            
             [yell2]
             Do not touch this
-
+            
             [yell2]
             ----
             This should be uppercase
             ----
-
+            
             [yell2]
             --
             This should also be uppercase
             --
-
+            
             """;
 
     private static final String INLINE_MACRO_DOCUMENT = """
             = Test document
-
+            
             You can find infos on man:gittutorial[7] or man:git[8, 1].
-
+            
             """;
 
     private static final String INLINE_MACRO_REGEXP_DOCUMENT = """
             = Test document
-
+            
             You can find infos on man:gittutorial[7].
-
+            
             And even more infos on manpage:git[7].
-
+            
             """;
 
 
     @Test
     @DisplayName("a docinfoprocessor should be configurable via the Location annotation")
-    public void aDocinfoprocessorShouldBeConfigurableViaTheLocationAnnotation() {
+    void aDocinfoprocessorShouldBeConfigurableViaTheLocationAnnotation() {
         // when:
         asciidoctor.javaExtensionRegistry().docinfoProcessor(AnnotatedDocinfoProcessor.class);
         String result = asciidoctor.convert(DOCUMENT, options());
@@ -108,7 +108,7 @@ public class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
 
     @Test
     @DisplayName("a docinfoprocessor instance should be configurable via the Location annotation")
-    public void aDocinfoprocessorInstanceShouldBeConfigurableViaTheLocationAnnotation() {
+    void aDocinfoprocessorInstanceShouldBeConfigurableViaTheLocationAnnotation() {
         // when:
         asciidoctor.javaExtensionRegistry().docinfoProcessor(new AnnotatedDocinfoProcessor());
         String result = asciidoctor.convert(DOCUMENT, options());
@@ -122,7 +122,7 @@ public class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
     @Disabled("Option for docinfo in header changed from :header to :head in AsciidoctorJRuby. Ignore as long as these tests have to run on both Asciidoctor 1.5.2 as well as 1.5.3.dev")
     @Test
     @DisplayName("a docinfoprocessor instance can override the annotation from footer to header")
-    public void aDocinfoprocessorInstanceCanOverrideTheAnnotationFromFooterToHeader() {
+    void aDocinfoprocessorInstanceCanOverrideTheAnnotationFromFooterToHeader() {
         // when:
         asciidoctor.javaExtensionRegistry().docinfoProcessor(new AnnotatedDocinfoProcessor(LocationType.HEADER));
         String result = asciidoctor.convert(DOCUMENT, options());
@@ -134,7 +134,7 @@ public class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
 
     @Test
     @DisplayName("a docinfoprocessor instance can override the annotation from footer to footer")
-    public void aDocinfoprocessorInstanceCanOverrideTheAnnotationFromFooterToFooter() {
+    void aDocinfoprocessorInstanceCanOverrideTheAnnotationFromFooterToFooter() {
         // when:
         asciidoctor.javaExtensionRegistry().docinfoProcessor(new AnnotatedDocinfoProcessor(LocationType.FOOTER));
         String result = asciidoctor.convert(DOCUMENT, options());
@@ -147,7 +147,7 @@ public class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
 
     @Test
     @DisplayName("when registering a BlockMacroProcessor class it should be configurable via annotations")
-    public void whenRegisteringABlockMacroProcessorClassItShouldBeConfigurableViaAnnotations() {
+    void whenRegisteringABlockMacroProcessorClassItShouldBeConfigurableViaAnnotations() {
 
         // when:
         asciidoctor.javaExtensionRegistry().blockMacro(AnnotatedBlockMacroProcessor.class);
@@ -161,7 +161,7 @@ public class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
 
     @Test
     @DisplayName("when registering a BlockProcessor class it should be configurable via annotations")
-    public void whenRegisteringABlockProcessorClassItShouldBeConfigurableViaAnnotations() {
+    void whenRegisteringABlockProcessorClassItShouldBeConfigurableViaAnnotations() {
 
         // when:
         asciidoctor.javaExtensionRegistry().block(AnnotatedBlockProcessor.class);
@@ -177,7 +177,7 @@ public class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
 
     @Test
     @DisplayName("when registering a BlockProcessor instance it should be configurable via annotations")
-    public void whenRegisteringABlockProcessorInstanceItShouldBeConfigurableViaAnnotations() {
+    void whenRegisteringABlockProcessorInstanceItShouldBeConfigurableViaAnnotations() {
 
         // when:
         asciidoctor.javaExtensionRegistry().block(new AnnotatedBlockProcessor("dummy", "yell2"));
@@ -190,8 +190,45 @@ public class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
     }
 
     @Test
+    @DisplayName("when registering a BlockProcessor instance it should receive the default attributes from the annotations")
+    void whenRegisteringABlockProcessorInstanceItShouldReceiveTheDefaultAttributesFromTheAnnotations() {
+
+        // given:
+        AnnotatedBlockProcessor processor = new AnnotatedBlockProcessor("dummy", "yell2");
+        asciidoctor.javaExtensionRegistry().block(processor);
+
+        // when:
+        asciidoctor.convert(BLOCK_DOCUMENT_2, disableStandaloneOption());
+
+        // then:
+        assertThat(processor.getReceivedAttributes())
+                .isNotEmpty()
+                .allSatisfy(attributes -> assertThat(attributes).containsEntry("key", "value"));
+    }
+
+    @Test
+    @DisplayName("when registering an InlineMacroProcessor instance with long format it should receive the positional attributes")
+    void whenRegisteringAnInlineMacroProcessorInstanceWithLongFormatItShouldReceiveThePositionalAttributes() {
+
+        // given:
+        AnnotatedLongInlineMacroProcessor processor = new AnnotatedLongInlineMacroProcessor();
+        asciidoctor.javaExtensionRegistry().inlineMacro(processor);
+
+        // when:
+        asciidoctor.convert(INLINE_MACRO_DOCUMENT, disableStandaloneOption());
+
+        // then:
+        assertThat(processor.getReceivedAttributes()).hasSize(2);
+        assertThat(processor.getReceivedAttributes().get(0))
+                .containsEntry(AnnotatedLongInlineMacroProcessor.SECTION, "7");
+        assertThat(processor.getReceivedAttributes().get(1))
+                .containsEntry(AnnotatedLongInlineMacroProcessor.SECTION, "8")
+                .containsEntry(AnnotatedLongInlineMacroProcessor.SUBSECTION, "1");
+    }
+
+    @Test
     @DisplayName("when registering an InlineMacroProcessor class with long format it should be configurable via annotations")
-    public void whenRegisteringAnInlineMacroProcessorClassWithLongFormatItShouldBeConfigurableViaAnnotations() {
+    void whenRegisteringAnInlineMacroProcessorClassWithLongFormatItShouldBeConfigurableViaAnnotations() {
         // when:
         asciidoctor.javaExtensionRegistry().inlineMacro(AnnotatedLongInlineMacroProcessor.class);
         String result = asciidoctor.convert(INLINE_MACRO_DOCUMENT, disableStandaloneOption());
@@ -204,7 +241,7 @@ public class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
 
     @Test
     @DisplayName("when registering an InlineMacroProcessor class with regexp it should be configurable via annotations")
-    public void whenRegisteringAnInlineMacroProcessorClassWithRegexpItShouldBeConfigurableViaAnnotations() {
+    void whenRegisteringAnInlineMacroProcessorClassWithRegexpItShouldBeConfigurableViaAnnotations() {
         // when:
         asciidoctor.javaExtensionRegistry().inlineMacro(AnnotatedRegexpInlineMacroProcessor.class);
         String result = asciidoctor.convert(INLINE_MACRO_REGEXP_DOCUMENT, disableStandaloneOption());

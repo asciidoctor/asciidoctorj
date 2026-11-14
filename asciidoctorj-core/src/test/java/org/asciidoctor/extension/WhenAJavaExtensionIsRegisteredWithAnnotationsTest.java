@@ -1,7 +1,5 @@
 package org.asciidoctor.extension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
@@ -13,8 +11,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 // Issue: https://github.com/asciidoctor/asciidoctorj/issues/196
-class WhenAJavaExtensionIsRegisteredWithAnnotations {
+class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
 
     public static final String UTF8 = "UTF-8";
     public static final String TAG_HEAD = "head";
@@ -35,61 +35,61 @@ class WhenAJavaExtensionIsRegisteredWithAnnotations {
 
     private static final String BLOCK_MACRO_DOCUMENT = """
             = Test document
-
+            
             testmacro::target[]
-
+            
             """;
 
     private static final String BLOCK_DOCUMENT = """
             = Test document
-
+            
             [yell]
             Do not touch this
-
+            
             [yell]
             ----
             This should be uppercase
             ----
-
+            
             [yell]
             --
             This should also be uppercase
             --
-
+            
             """;
 
     private static final String BLOCK_DOCUMENT_2 = """
             = Test document
-
+            
             [yell2]
             Do not touch this
-
+            
             [yell2]
             ----
             This should be uppercase
             ----
-
+            
             [yell2]
             --
             This should also be uppercase
             --
-
+            
             """;
 
     private static final String INLINE_MACRO_DOCUMENT = """
             = Test document
-
+            
             You can find infos on man:gittutorial[7] or man:git[8, 1].
-
+            
             """;
 
     private static final String INLINE_MACRO_REGEXP_DOCUMENT = """
             = Test document
-
+            
             You can find infos on man:gittutorial[7].
-
+            
             And even more infos on manpage:git[7].
-
+            
             """;
 
 
@@ -187,6 +187,43 @@ class WhenAJavaExtensionIsRegisteredWithAnnotations {
         assertThat(result).contains(DO_NOT_TOUCH_THIS);
         assertThat(result).contains(THIS_SHOULD_BE_UPPERCASE.toUpperCase());
         assertThat(result).contains(THIS_SHOULD_ALSO_BE_UPPERCASE.toUpperCase());
+    }
+
+    @Test
+    @DisplayName("when registering a BlockProcessor instance it should receive the default attributes from the annotations")
+    void whenRegisteringABlockProcessorInstanceItShouldReceiveTheDefaultAttributesFromTheAnnotations() {
+
+        // given:
+        AnnotatedBlockProcessor processor = new AnnotatedBlockProcessor("dummy", "yell2");
+        asciidoctor.javaExtensionRegistry().block(processor);
+
+        // when:
+        asciidoctor.convert(BLOCK_DOCUMENT_2, disableStandaloneOption());
+
+        // then:
+        assertThat(processor.getReceivedAttributes())
+                .isNotEmpty()
+                .allSatisfy(attributes -> assertThat(attributes).containsEntry("key", "value"));
+    }
+
+    @Test
+    @DisplayName("when registering an InlineMacroProcessor instance with long format it should receive the positional attributes")
+    void whenRegisteringAnInlineMacroProcessorInstanceWithLongFormatItShouldReceiveThePositionalAttributes() {
+
+        // given:
+        AnnotatedLongInlineMacroProcessor processor = new AnnotatedLongInlineMacroProcessor();
+        asciidoctor.javaExtensionRegistry().inlineMacro(processor);
+
+        // when:
+        asciidoctor.convert(INLINE_MACRO_DOCUMENT, disableStandaloneOption());
+
+        // then:
+        assertThat(processor.getReceivedAttributes()).hasSize(2);
+        assertThat(processor.getReceivedAttributes().get(0))
+                .containsEntry(AnnotatedLongInlineMacroProcessor.SECTION, "7");
+        assertThat(processor.getReceivedAttributes().get(1))
+                .containsEntry(AnnotatedLongInlineMacroProcessor.SECTION, "8")
+                .containsEntry(AnnotatedLongInlineMacroProcessor.SUBSECTION, "1");
     }
 
     @Test

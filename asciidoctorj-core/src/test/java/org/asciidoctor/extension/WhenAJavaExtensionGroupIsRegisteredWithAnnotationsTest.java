@@ -1,7 +1,5 @@
 package org.asciidoctor.extension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
@@ -12,8 +10,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 // Issue: https://github.com/asciidoctor/asciidoctorj/issues/196
-class WhenAJavaExtensionGroupIsRegisteredWithAnnotations {
+class WhenAJavaExtensionGroupIsRegisteredWithAnnotationsTest {
 
     public static final String UTF8 = "UTF-8";
     public static final String TAG_HEAD = "head";
@@ -34,61 +34,61 @@ class WhenAJavaExtensionGroupIsRegisteredWithAnnotations {
 
     private static final String BLOCK_MACRO_DOCUMENT = """
             = Test document
-
+            
             testmacro::target[]
-
+            
             """;
 
     private static final String BLOCK_DOCUMENT = """
             = Test document
-
+            
             [yell]
             Do not touch this
-
+            
             [yell]
             ----
             This should be uppercase
             ----
-
+            
             [yell]
             --
             This should also be uppercase
             --
-
+            
             """;
 
     private static final String BLOCK_DOCUMENT_2 = """
             = Test document
-
+            
             [yell2]
             Do not touch this
-
+            
             [yell2]
             ----
             This should be uppercase
             ----
-
+            
             [yell2]
             --
             This should also be uppercase
             --
-
+            
             """;
 
     private static final String INLINE_MACRO_DOCUMENT = """
             = Test document
-
+            
             You can find infos on man:gittutorial[7] or man:git[8, 1].
-
+            
             """;
 
     private static final String INLINE_MACRO_REGEXP_DOCUMENT = """
             = Test document
-
+            
             You can find infos on man:gittutorial[7].
-
+            
             And even more infos on manpage:git[7].
-
+            
             """;
 
 

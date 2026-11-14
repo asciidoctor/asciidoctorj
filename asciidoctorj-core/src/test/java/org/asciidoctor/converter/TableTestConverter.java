@@ -1,17 +1,17 @@
 package org.asciidoctor.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.Table;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class TableTestConverter extends StringConverter {
 
@@ -78,10 +78,6 @@ public class TableTestConverter extends StringConverter {
                 }
             }
         };
-
-        for (int it = 1; it <= table.getColumns().size(); it++) {
-            assert table.getColumns().get(it - 1).getColumnNumber() == it;
-        }
 
         List<String> tableRows = new ArrayList<>();
 
