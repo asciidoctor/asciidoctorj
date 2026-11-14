@@ -216,9 +216,28 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
         close();
     }
 
+    /**
+     * @return the version of Asciidoctor (Ruby) embedded in AsciidoctorJ.
+     * @deprecated Use {@link #getVersion()} to get the version of AsciidoctorJ instead.
+     */
+    @Deprecated
     @Override
     public String asciidoctorVersion() {
         return RubyUtils.rubyToJava(rubyRuntime, getAsciidoctorModule().getConstant("VERSION"), String.class);
+    }
+
+    @Override
+    public String getVersion() {
+        try (InputStream in = JRubyAsciidoctor.class.getResourceAsStream("/META-INF/asciidoctorj-version.properties")) {
+            if (in == null) {
+                throw new IllegalStateException("Unable to find the version of AsciidoctorJ: META-INF/asciidoctorj-version.properties is missing");
+            }
+            Properties properties = new Properties();
+            properties.load(in);
+            return properties.getProperty("version.asciidoctorj");
+        } catch (IOException e) {
+            throw new UncheckedIOException("Unable to read the version of AsciidoctorJ", e);
+        }
     }
 
     private RubyModule getExtensionsModule() {
