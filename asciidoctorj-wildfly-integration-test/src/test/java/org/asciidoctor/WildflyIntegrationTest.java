@@ -2,15 +2,15 @@ package org.asciidoctor;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
-import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit5.ArquillianExtension;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.io.InputStream;
@@ -20,9 +20,9 @@ import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(Arquillian.class)
+@ExtendWith(ArquillianExtension.class)
 @RunAsClient
-public class WildflyIntegrationTest {
+class WildflyIntegrationTest {
 
     @Deployment
     public static WebArchive deploy() {
@@ -35,8 +35,8 @@ public class WildflyIntegrationTest {
     private URL url;
 
     @Test
-    public void test() throws Exception {
-        HttpURLConnection conn = (HttpURLConnection) new URL(url, "asciidoctor").openConnection();
+    void test() throws Exception {
+        HttpURLConnection conn = (HttpURLConnection) url.toURI().resolve("asciidoctor").toURL().openConnection();
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");
         conn.getOutputStream().write("Hello World".getBytes());
