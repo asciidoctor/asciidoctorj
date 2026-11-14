@@ -1,19 +1,23 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.ast.ContentModel;
+import org.asciidoctor.ast.StructuralNode;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import org.asciidoctor.ast.ContentModel;
-import org.asciidoctor.ast.StructuralNode;
 
 @Name("yell")
 @Contexts({Contexts.LISTING, Contexts.OPEN})
 @ContentModel(ContentModel.SIMPLE)
 @DefaultAttributes({
-    @DefaultAttribute(key = "key", value = "value")
+        @DefaultAttribute(key = "key", value = "value")
 })
 public class AnnotatedBlockProcessor extends BlockProcessor {
+
+    private final List<Map<String, Object>> receivedAttributes = new ArrayList<>();
 
     public AnnotatedBlockProcessor() {}
 
@@ -23,9 +27,13 @@ public class AnnotatedBlockProcessor extends BlockProcessor {
         super(blockName);
     }
 
+    public List<Map<String, Object>> getReceivedAttributes() {
+        return receivedAttributes;
+    }
+
     @Override
     public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
-        assert "value".equals(attributes.get("key"));
+        receivedAttributes.add(new HashMap<>(attributes));
         List<String> lines = reader.readLines();
         List<String> newLines = lines.stream().map(String::toUpperCase).collect(Collectors.toList());
 
