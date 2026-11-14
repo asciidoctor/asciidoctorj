@@ -15,7 +15,7 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 == Unreleased
 
 The Java implementation of AsciidoctorJ (`org.asciidoctor:asciidoctorj-java`) is a pure Java implementation of Asciidoctor: it doesn't run Asciidoctor (Ruby) on JRuby.
-It implements the same API as the JRuby implementation (`org.asciidoctor:asciidoctorj`); see the migration guide (asciidoctorj-java/docs/migration-from-asciidoctorj.adoc) for the differences.
+It implements the same API as the JRuby implementation (`org.asciidoctor:asciidoctorj`); see the migration guide (docs/modules/guides/pages/migrate-to-java-implementation.adoc) for the differences.
 
 Differences with the JRuby implementation::
 

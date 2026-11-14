@@ -20,7 +20,7 @@ The port follows Asciidoctor Ruby at commit `52871a02` (main branch, 2026-10-11)
 * Subpackages: `converter`, `extension`, `syntaxhighlighter`, `log` (and `cli` in the `asciidoctorj-java-cli` module).
 * Resources: `asciidoctorj-java/src/main/resources/org/asciidoctor/data/{stylesheets,locale}`; the CLI resources are in `asciidoctorj-java-cli/src/main/resources/org/asciidoctor` (`data/reference`, `man/asciidoctor.1`).
 * Test fixtures: `asciidoctorj-java/src/test/resources/fixtures` (also used by the CLI tests).
-* Migration guide: `asciidoctorj-java/docs/migration-from-asciidoctorj.adoc`.
+* Migration guide: `docs/modules/guides/pages/migrate-to-java-implementation.adoc`.
 
 == API choices
 

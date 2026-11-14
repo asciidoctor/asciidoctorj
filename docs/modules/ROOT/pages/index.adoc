@@ -1,6 +1,71 @@
 = AsciidoctorJ: Java Bindings for Asciidoctor
 
-Asciidoctor is an implementation of the AsciiDoc format in Ruby.
-Thanks to the {url-jruby}[JRuby], an implementation of the Ruby runtime in Java, Asciidoctor can also be executed on a JVM.
-{url-repo}[AsciidoctorJ] bundles all gems that are required for executing Asciidoctor and wraps it into a Java API so that Asciidoctor can be used in Java like any other Java library.
-Additionally, there is a distribution that you can simply download, unzip and execute without worrying about installing the right Ruby runtime, installing gems etc.
+Welcome to AsciidoctorJ, the official library to run Asciidoctor on the JVM.
+With AsciidoctorJ, you can convert AsciiDoc content and read the structure of AsciiDoc documents from Java and other JVM languages.
+
+AsciidoctorJ has two implementations.
+Both implementations use the same Java API (`asciidoctorj-api`), and offers a distribution that you can download, unzip and run from the command line.
+// You do not need to install a Ruby runtime or gems to run it.
+
+JRuby implementation::
+This is the current implementation (`org.asciidoctor:asciidoctorj`).
+Asciidoctor is the source implementation in Ruby.
+Thanks to {url-jruby}[JRuby], an implementation of the Ruby runtime in Java, the original Asciidoctor Ruby gem can run on a JVM.
+{url-repo}[AsciidoctorJ] bundles all the gems that Asciidoctor needs and wraps them in a Java API, so that you can use Asciidoctor like any other Java library.
+
+Java implementation::
+This is the new implementation (`org.asciidoctor:asciidoctorj-java`).
+It is a 100% Java port of Asciidoctor.
+It does not use Ruby or JRuby.
+It needs Java 17 or newer and has no runtime dependency, other than the API.
+
+[IMPORTANT]
+====
+An application must use one of the implementations, not both.
+====
+
+== Which implementation to use
+
+=== JRuby implementation
+
+[cols="1,3"]
+|===
+|Artifact
+|`org.asciidoctor:asciidoctorj`
+
+|Minimum Java version
+|21
+|===
+
+Pros::
+* It runs the original Asciidoctor Ruby gem, so it is 100% compliant with Asciidoctor.
+* It supports Ruby extensions and Ruby libraries.
+* It supports Ruby gems, for example Asciidoctor PDF, Asciidoctor EPUB3, Asciidoctor Diagram, Asciidoctor reveal.js, and the syntax highlighters and converter templates that need a gem (Rouge, CodeRay, Pygments and Tilt).
+* It is the mature implementation, with a long history of use in production.
+
+Cons::
+* It needs JRuby, which makes the dependencies bigger and can cause conflicts with other libraries or with application servers.
+
+=== Java implementation
+
+[cols="1,3"]
+|===
+|Artifact
+|`org.asciidoctor:asciidoctorj-java`
+
+|Minimum Java version
+|17
+|===
+
+Pros::
+* Better performance, because there is no Ruby runtime to start.
+* It is easier to integrate, because it does not rely on JRuby and it has no runtime dependency other than the API.
+* It supports GraalVM native compilation.
+
+Cons::
+* It is a port of Asciidoctor, so it can show differences from the original Asciidoctor Ruby implementation.
+Please, report any issue you detect.
+
+For more information about how to change from the JRuby implementation to the Java implementation, see the xref:guides:migrate-to-java-implementation.adoc[migration guide].
+
+NOTE: The rest of this documentation describes the JRuby implementation, unless the text says otherwise.
