@@ -1,13 +1,14 @@
 name: asciidoctorj
 title: AsciidoctorJ
-version: '3.0'
+version: '4.0'
+prerelease: '-dev'
 asciidoc:
   attributes:
     release-version: 3.0.0
     artifact-version: 3.0.0
     asciidoctorj-epub3-version: 1.5.1
     asciidoctorj-pdf-version: 2.3.6
-    jruby-version: 9.4.1.0
+    jruby-version: 10.1.1.0
     url-jbang: https://www.jbang.dev/
     url-jruby: https://www.jruby.org/
     url-gradle: https://gradle.org
