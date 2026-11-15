@@ -6,14 +6,14 @@ To register a _Ruby_ extension you must get a `RubyExtensionRegistry` class inst
 [source,java]
 .Register a Ruby extension in Java
 ----
-RubyExtensionRegistry rubyExtensionRegistry = this.asciidoctor.rubyExtensionRegistry(); // <1>
+RubyExtensionRegistry rubyExtensionRegistry = this.asciidoctor.unwrap(AsciidoctorJRuby.class).rubyExtensionRegistry(); // <1>
 rubyExtensionRegistry.loadClass(Class.class.getResourceAsStream("/YellRubyBlock.rb")).block("rubyyell", "YellRubyBlock"); // <2>
 
 String content = asciidoctor.convertFile(new File(
                 "target/test-classes/sample-with-ruby-yell-block.ad"),
                 Opions.builder().toFile(false).build());
 ----
-<1> `rubyExtensionRegistry` method is called to get a RubyExtensionRegistry instance.
+<1> `rubyExtensionRegistry` method of `org.asciidoctor.jruby.AsciidoctorJRuby` is called to get a `org.asciidoctor.jruby.extension.RubyExtensionRegistry` instance.
 <2> Ruby file containing a class implementing a Block extension is loaded inside the Ruby runtime. Then the block is registered with a name (rubyyell), and we pass the name of the class to be instantiated.
 
 [source,ruby]

@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.junit.jupiter.api.Test;
@@ -78,7 +79,7 @@ public class WhenAPdfDocumentIsRenderedToStream {
                 .build();
 
         // when
-        asciidoctor.requireLibrary(ASCIIDOCTOR_DIAGRAM);
+        asciidoctor.unwrap(AsciidoctorJRuby.class).requireLibrary(ASCIIDOCTOR_DIAGRAM);
         asciidoctor.convert(testDoc,
                 Options.builder()
                         .backend(BACKEND_PDF)

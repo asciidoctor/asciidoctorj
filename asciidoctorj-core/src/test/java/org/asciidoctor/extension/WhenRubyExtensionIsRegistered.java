@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
+import org.asciidoctor.jruby.extension.RubyExtensionRegistry;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;

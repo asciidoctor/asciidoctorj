@@ -32,10 +32,10 @@ public class AsciidoctorInterfaceTest {
 
     @Test
     public void destroyAsciidoctorInstance() {
-//tag::shutdown[]
+//tag::close[]
         Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-        asciidoctor.shutdown();
-//end::shutdown[]
+        asciidoctor.close();
+//end::close[]
     }
 
     @Test

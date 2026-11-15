@@ -1,0 +1,7 @@
+= AsciidoctorJ v4.0.x migration guide
+:navtitle: v4.0.x migration guide
+
+AsciidoctorJ v4.0.0 introduces breaking changes.
+This guide will provide the steps required to update a project currently using 3.x version.
+
+include::partial$removal-of-ruby-specific-methods-in-asciidoctor.adoc[]

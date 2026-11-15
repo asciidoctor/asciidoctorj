@@ -1,5 +1,6 @@
 package org.asciidoctor;
 
+import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.asciidoctor.test.extension.ClasspathExtension;
@@ -30,7 +31,7 @@ public class WhenDitaaDiagramIsRendered {
         final String document = sourceWithDiagram(imageFileName);
 
         // when
-        asciidoctor.requireLibrary(ASCIIDOCTOR_DIAGRAM);
+        asciidoctor.unwrap(AsciidoctorJRuby.class).requireLibrary(ASCIIDOCTOR_DIAGRAM);
         String result = asciidoctor.convert(document, Options.builder()
                 .toFile(false)
                 .toDir(testFolder)
@@ -58,7 +59,7 @@ public class WhenDitaaDiagramIsRendered {
         final String document = sourceWithDiagram(imageFileName);
 
         // when
-        asciidoctor.requireLibrary(ASCIIDOCTOR_DIAGRAM);
+        asciidoctor.unwrap(AsciidoctorJRuby.class).requireLibrary(ASCIIDOCTOR_DIAGRAM);
         asciidoctor.convert(document, Options.builder()
                 .toDir(testFolder)
                 .toFile(destinationFile)

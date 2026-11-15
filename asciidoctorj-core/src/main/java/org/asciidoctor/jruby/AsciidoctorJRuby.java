@@ -1,12 +1,34 @@
 package org.asciidoctor.jruby;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.extension.RubyExtensionRegistry;
+import org.asciidoctor.jruby.extension.RubyExtensionRegistry;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface AsciidoctorJRuby extends Asciidoctor {
+
+  /**
+   * Loads the given Ruby gem(s) by name.
+   *
+   * @param requiredLibraries the names of the Ruby libraries (gems) to load
+   */
+  void requireLibrary(String... requiredLibraries);
+
+  /**
+   * Loads the given Ruby gem(s) by name.
+   *
+   * @param requiredLibraries the names of the Ruby libraries (gems) to load
+   */
+  void requireLibraries(Collection<String> requiredLibraries);
+
+  /**
+   * Creates a Ruby extension registry ready to be used for registering Ruby extensions.
+   *
+   * @return Extension Registry object.
+   */
+  RubyExtensionRegistry rubyExtensionRegistry();
 
 
   /**

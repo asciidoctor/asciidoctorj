@@ -45,8 +45,8 @@ The following classes of the JRuby implementation, which are not part of the API
 
 The features that rely on Ruby are not supported:
 
-* Ruby extensions: `Asciidoctor#rubyExtensionRegistry()` and the `ruby*` methods of `ExtensionGroup` throw an `UnsupportedOperationException`;
-* Ruby libraries and gems: `Asciidoctor#requireLibrary(String...)` and `Asciidoctor#requireLibraries(Collection)` throw an `UnsupportedOperationException`.
+* Ruby extensions: the `ruby*` methods of `ExtensionGroup` throw an `UnsupportedOperationException` (`rubyExtensionRegistry()` is only declared by `AsciidoctorJRuby`);
+* Ruby libraries and gems (`requireLibrary(String...)` and `requireLibraries(Collection)` are only declared by `AsciidoctorJRuby`).
 This includes the gems wrapped by AsciidoctorJ (e.g., Asciidoctor PDF, Asciidoctor EPUB3, Asciidoctor Diagram, Asciidoctor reveal.js);
 * the syntax highlighters that require a gem (Rouge, CodeRay, Pygments): highlight.js and Prettify are supported, as well as the syntax highlighters written in Java;
 * converter templates (Tilt): the `template_dirs` option is ignored;

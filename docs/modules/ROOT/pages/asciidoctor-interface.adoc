@@ -36,16 +36,16 @@ include::example$org/asciidoctor/integrationguide/AsciidoctorInterface.java[tags
 ----
 
 As Asciidoctor instances can be created they can also be explicitly destroyed to free resources used in particular by the Ruby runtime associated with it.
-Therefore the Asciidoctor interface offers the method shutdown.
+Therefore the Asciidoctor interface offers the method `close`.
 After calling this method every other method call on the instance will fail!
 
 [source,java,indent=0]
 .Destroying an Asciidoctor instance
 ----
-include::example$org/asciidoctor/integrationguide/AsciidoctorInterface.java[tags=shutdown]
+include::example$org/asciidoctor/integrationguide/AsciidoctorInterface.java[tags=close]
 ----
 
-The Asciidoctor interface also implements the interface `java.io.AutoCloseable` which also shuts down the Ruby runtime.
+The Asciidoctor interface implements the interface `java.lang.AutoCloseable`.
 Therefore the previous example is equivalent to this:
 
 [source,java,indent=0]

@@ -90,7 +90,7 @@ public class AsciidoctorTestObserver {
     public void afterTestShutdownUnsharedAsciidoctorInstance(@Observes After after) {
         Asciidoctor asciidoctor = scopedAsciidoctor.get().getUnsharedAsciidoctor();
         if (asciidoctor != null) {
-            asciidoctor.shutdown();
+            asciidoctor.close();
             scopedAsciidoctor.get().setUnsharedAsciidoctor(null);
         }
     }
@@ -106,7 +106,7 @@ public class AsciidoctorTestObserver {
     public void afterTestClassShutdownSharedAsciidoctorInstance(@Observes AfterClass afterClass) {
         Asciidoctor asciidoctor = scopedAsciidoctor.get().getSharedAsciidoctor();
         if (asciidoctor != null) {
-            asciidoctor.shutdown();
+            asciidoctor.close();
             scopedAsciidoctor.get().setSharedAsciidoctor(null);
         }
 

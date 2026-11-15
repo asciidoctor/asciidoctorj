@@ -27,7 +27,6 @@ import org.asciidoctor.core.api.converter.ConverterProxy;
 import org.asciidoctor.core.api.converter.JavaConverterRegistryImpl;
 import org.asciidoctor.core.api.extension.ExtensionGroupImpl;
 import org.asciidoctor.core.api.extension.JavaExtensionRegistryImpl;
-import org.asciidoctor.core.api.extension.RubyExtensionRegistryImpl;
 import org.asciidoctor.core.api.log.JULLogHandler;
 import org.asciidoctor.core.api.log.LogHandlerLogger;
 import org.asciidoctor.core.api.syntaxhighlighter.SyntaxHighlighterProxy;
@@ -40,7 +39,6 @@ import org.asciidoctor.core.syntaxhighlighter.SyntaxHighlighter;
 import org.asciidoctor.core.syntaxhighlighter.SyntaxHighlighterFactory;
 import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
-import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.extension.spi.ExtensionRegistry;
 import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
 import org.asciidoctor.log.LogHandler;
@@ -151,11 +149,6 @@ public class CoreAsciidoctor implements Asciidoctor, LogHandler {
     }
 
     @Override
-    public RubyExtensionRegistry rubyExtensionRegistry() {
-        return new RubyExtensionRegistryImpl();
-    }
-
-    @Override
     public JavaConverterRegistry javaConverterRegistry() {
         return new JavaConverterRegistryImpl(this);
     }
@@ -180,28 +173,6 @@ public class CoreAsciidoctor implements Asciidoctor, LogHandler {
         extensionGroups.clear();
     }
 
-    /**
-     * Ruby libraries can't be required since there's no Ruby runtime.
-     *
-     * @throws UnsupportedOperationException always
-     */
-    @Override
-    public void requireLibrary(String... requiredLibraries) {
-        requireLibraries(List.of(requiredLibraries));
-    }
-
-    /**
-     * Ruby libraries can't be required since there's no Ruby runtime.
-     *
-     * @throws UnsupportedOperationException if a library is specified
-     */
-    @Override
-    public void requireLibraries(Collection<String> requiredLibraries) {
-        if (requiredLibraries != null && !requiredLibraries.isEmpty()) {
-            throw new UnsupportedOperationException("Ruby libraries can't be required by this implementation of "
-                    + "AsciidoctorJ (there's no Ruby runtime): " + requiredLibraries);
-        }
-    }
 
     // --- logging ---
 
@@ -379,10 +350,5 @@ public class CoreAsciidoctor implements Asciidoctor, LogHandler {
     @Override
     public String asciidoctorVersion() {
         return org.asciidoctor.core.Asciidoctor.VERSION;
-    }
-
-    @Override
-    public void shutdown() {
-        // nothing to do since there's no runtime to tear down
     }
 }

@@ -1,0 +1,37 @@
+== Removal of the Ruby specific methods in `org.asciidoctor.Asciidoctor`
+
+Several methods of `org.asciidoctor.Asciidoctor` only make sense with an implementation that embeds Asciidoctor (Ruby) using JRuby.
+They were deprecated in AsciidoctorJ 3.1 and have been removed from the interface.
+
+=== Removal of `shutdown()`
+
+Use `close()` instead, or a try-with-resources statement since `Asciidoctor` implements `java.lang.AutoCloseable`:
+
+[,java]
+----
+try (Asciidoctor asciidoctor = Asciidoctor.Factory.create()) {
+    asciidoctor.convert("Hello World", Options.builder().build());
+}
+----
+
+=== Removal of `requireLibrary(String...)`, `requireLibraries(Collection)` and `rubyExtensionRegistry()`
+
+Loading a Ruby library (gem) and registering a Ruby extension require a Ruby runtime.
+These methods are now declared by `org.asciidoctor.jruby.AsciidoctorJRuby`, so unwrap the instance to use them:
+
+[,java]
+----
+AsciidoctorJRuby asciidoctorJRuby = asciidoctor.unwrap(AsciidoctorJRuby.class);
+asciidoctorJRuby.requireLibrary("asciidoctor-diagram");
+asciidoctorJRuby.rubyExtensionRegistry()
+    .loadClass(getClass().getResourceAsStream("/YellRubyBlock.rb"))
+    .block("yell", "YellRubyBlock");
+----
+
+The `RubyExtensionRegistry` interface has moved from the `org.asciidoctor.extension` package (`asciidoctorj-api`) to the `org.asciidoctor.jruby.extension` package (`asciidoctorj`).
+To migrate, update the import:
+
+[,java]
+----
+import org.asciidoctor.jruby.extension.RubyExtensionRegistry;
+----
