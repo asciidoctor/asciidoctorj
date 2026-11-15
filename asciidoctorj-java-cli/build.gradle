@@ -9,6 +9,11 @@ base {
     archivesName = 'asciidoctorj-java-cli'
 }
 
+ext.publicationName = 'mavenAsciidoctorJJavaCli'
+
+apply from: rootProject.file('gradle/publish.gradle')
+apply from: rootProject.file('gradle/signing.gradle')
+
 dependencies {
     implementation project(':asciidoctorj-java')
     testImplementation project(path: ':asciidoctorj-java', configuration: 'testArtifacts')
