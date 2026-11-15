@@ -1,25 +1,28 @@
 package org.asciidoctor;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import org.xmlunit.assertj3.XmlAssert;
-
-import org.asciidoctor.util.AsciiDocDirectoryWalker;
-import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.nativeimage.RegisterDirectory;
+import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.asciidoctor.test.extension.ClasspathExtension;
+import org.asciidoctor.util.AsciiDocDirectoryWalker;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.xml.sax.SAXException;
+import org.xmlunit.assertj3.XmlAssert;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.Format;
@@ -29,6 +32,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static org.asciidoctor.util.OptionsTestHelper.emptyOptions;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
