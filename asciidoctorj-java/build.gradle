@@ -21,8 +21,8 @@ dependencies {
     testImplementation libs.jsoup
     testImplementation libs.xmlunit.assertj
     // the annotations @RegisterClass, @RegisterDirectory and @RegisterFile add entries to the reachability metadata of the tests
-    testCompileOnly project(':asciidoctorj-java-native-metadata')
-    testAnnotationProcessor project(':asciidoctorj-java-native-metadata')
+    testCompileOnly project(':asciidoctorj-native-metadata')
+    testAnnotationProcessor project(':asciidoctorj-native-metadata')
 }
 
 // the processor writes the entries of @RegisterClass, @RegisterDirectory and @RegisterFile to a generated metadata file in the build

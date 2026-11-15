@@ -19,5 +19,5 @@ project(':asciidoctorj').projectDir = file('asciidoctorj-core')
 include \
   'asciidoctorj-java',
   'asciidoctorj-java-cli',
-  'asciidoctorj-java-native-metadata',
+  'asciidoctorj-native-metadata',
   'asciidoctorj-java-documentation'
