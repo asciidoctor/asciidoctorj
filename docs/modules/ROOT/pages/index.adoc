@@ -4,8 +4,7 @@ Welcome to AsciidoctorJ, the official library to run Asciidoctor on the JVM.
 With AsciidoctorJ, you can convert AsciiDoc content and read the structure of AsciiDoc documents from Java and other JVM languages.
 
 AsciidoctorJ has two implementations.
-Both implementations use the same Java API (`asciidoctorj-api`), and offers a distribution that you can download, unzip and run from the command line.
-// You do not need to install a Ruby runtime or gems to run it.
+Both implementations use the same Java API (`asciidoctorj-api`), and offer a distribution that you can download, unzip and run from the command line.
 
 JRuby implementation::
 This is the current implementation (`org.asciidoctor:asciidoctorj`).
@@ -64,8 +63,8 @@ Pros::
 
 Cons::
 * It is a port of Asciidoctor, so it can show differences from the original Asciidoctor Ruby implementation.
-Please, report any issue you detect.
+Please report any differences you find.
 
 For more information about how to change from the JRuby implementation to the Java implementation, see the xref:guides:migrate-to-java-implementation.adoc[migration guide].
 
-NOTE: The rest of this documentation describes the JRuby implementation, unless the text says otherwise.
+IMPORTANT: The rest of this documentation describes the JRuby implementation, unless the text says otherwise.
