@@ -2,7 +2,7 @@ package org.asciidoctor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.asciidoctor.jruby.AsciiDocDirectoryWalker;
+import org.asciidoctor.util.AsciiDocDirectoryWalker;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
