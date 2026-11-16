@@ -27,9 +27,25 @@ test {
     mustRunAfter ':asciidoctorj-java:test'
 }
 
-// ./gradlew installDist: the JVM application (build/install/asciidoctorj-java-cli), with its start scripts
+// ./gradlew installDist: the JVM application (build/install/asciidoctorj), with its start scripts
 application {
     mainClass = 'org.asciidoctor.cli.Invoker'
+    // the start scripts are named asciidoctorj, like the native executable
+    applicationName = 'asciidoctorj'
+}
+
+distributions {
+    main {
+        // asciidoctorj-java-cli-<version>.zip
+        distributionBaseName = 'asciidoctorj-java-cli'
+    }
+}
+
+// publish the distribution (zip) with the artifact: asciidoctorj-java-cli-<version>-bin.zip
+publishing.publications.named(project.ext.publicationName) {
+    artifact(tasks.named('distZip')) {
+        classifier = 'bin'
+    }
 }
 
 // java -jar asciidoctorj-java-cli.jar, with the jars of the implementation and of the API in the same directory
