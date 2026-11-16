@@ -1,1 +1,1 @@
-../../../../asciidoctorj-documentation/src/test/resources/comment-with-note.adoc
+../../../../asciidoctorj-documentation-common/src/test/resources/comment-with-note.adoc

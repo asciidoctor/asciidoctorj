@@ -1,1 +1,1 @@
-../../../../asciidoctorj-documentation/src/test/resources/syntax-highlighting-order.adoc
+../../../../asciidoctorj-documentation-common/src/test/resources/syntax-highlighting-order.adoc

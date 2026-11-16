@@ -1,1 +1,1 @@
-../../../../../../../asciidoctorj-documentation/src/test/resources/extensionregistry/META-INF/services/org.asciidoctor.extension.spi.ExtensionRegistry
+../../../../../../../asciidoctorj-documentation-common/src/test/resources/extensionregistry/META-INF/services/org.asciidoctor.extension.spi.ExtensionRegistry

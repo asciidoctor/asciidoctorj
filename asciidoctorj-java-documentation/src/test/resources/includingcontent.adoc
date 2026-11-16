@@ -1,3 +1,0 @@
-= Including content
-
-include::includedcontent.adoc[]

@@ -20,8 +20,15 @@ asciidoctorj::
 asciidoctorj-distribution::
   Produces the distribution zip that provides the standalone `asciidoctorj` command.
 
+asciidoctorj-documentation-common::
+  Contains the code examples used for documentation that only rely on the AsciidoctorJ API.
+  They are run and tested against both the JRuby and the Java implementations.
+
 asciidoctorj-documentation::
-  Contains code examples used for documentation that are run and tested during builds.
+  Contains the code examples used for documentation that are specific to the JRuby implementation, and runs the common examples against it.
+
+asciidoctorj-java-documentation::
+  Runs the common examples against the Java implementation.
 +
 IMPORTANT: When tests are modified the gradle task `copyAllExamplesToDocs` must be executed to update documentation required files in under `/docs`.
 
@@ -61,6 +68,9 @@ asciidoctorj-core/
 asciidoctorj-distribution/
   build.gradle
 asciidoctorj-documentation/
+  build.gradle
+asciidoctorj-documentation-common/
+asciidoctorj-java-documentation/
   build.gradle
 asciidoctorj-test-support/
   build.gradle

@@ -7,3 +7,11 @@ dependencies {
     testImplementation libs.jsoup
     testImplementation libs.commons.io
 }
+
+// the examples that only rely on the AsciidoctorJ API are shared between the implementations
+sourceSets {
+    test {
+        java.srcDir rootProject.file('asciidoctorj-documentation-common/src/test/java')
+        resources.srcDir rootProject.file('asciidoctorj-documentation-common/src/test/resources')
+    }
+}
