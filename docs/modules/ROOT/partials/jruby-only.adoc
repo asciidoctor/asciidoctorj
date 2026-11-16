@@ -1,0 +1,6 @@
+[NOTE]
+====
+This page only applies to the JRuby implementation (`org.asciidoctor:asciidoctorj`).
+It is not supported by the Java implementation (`org.asciidoctor:asciidoctorj-java`).
+See the xref:guides:migrate-to-java-implementation.adoc#_not_supported[migration guide] for the list of features that are not supported.
+====

@@ -1,5 +1,7 @@
 = Running AsciidoctorJ on WildFly
 
+include::ROOT:partial$jruby-only.adoc[]
+
 If you want to use AsciidoctorJ in an application deployed on [app]_WildFly_, you have to follow the instruction below:
 
 . Create an *Asciidoctor module* for [app]_WildFly_.

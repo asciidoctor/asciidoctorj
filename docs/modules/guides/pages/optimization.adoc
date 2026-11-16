@@ -1,5 +1,7 @@
 = Optimization
 
+include::ROOT:partial$jruby-only.adoc[]
+
 JRuby may start slower than expected versus the C-based Ruby implementation (MRI).
 Fortunately, JRuby offers flags that can improve the start time and tune applications.
 Several Java flags can also be used in conjunction with or apart from the JRuby flags in order to improve the start time even more.

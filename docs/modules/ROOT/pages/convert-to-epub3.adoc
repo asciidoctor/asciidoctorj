@@ -1,5 +1,7 @@
 = Converting to EPUB3
 
+include::ROOT:partial$jruby-only.adoc[]
+
 The Asciidoctor EPUB3 gem (asciidoctor-epub3) is bundled inside the AsciidoctorJ EPUB3 jar (asciidoctorj-epub3).
 To use it, simply add the asciidoctorj-epub3 jar to your dependencies.
 The version of the AsciidoctorJ EPUB3 jar aligns with the version of the Asciidoctor EPUB3 gem.
