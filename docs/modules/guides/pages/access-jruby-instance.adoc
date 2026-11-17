@@ -1,5 +1,7 @@
 = Accessing the JRuby Instance
 
+include::ROOT:partial$jruby-only.adoc[]
+
 Sometimes you may need the Ruby runtime used inside AsciidoctorJ.
 One reason is because you are using JRuby outside AsciidoctorJ and you want to reuse the same instance.
 Another reason is that you need to instantiate by yourself an Asciidoctor Ruby object.

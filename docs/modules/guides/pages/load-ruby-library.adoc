@@ -1,5 +1,7 @@
 = Loading Ruby Libraries
 
+include::ROOT:partial$jruby-only.adoc[]
+
 Most extensions can be fully implemented in Java, but some complex ones may require mixing Ruby and Java code.
 This means that you may need to execute a Ruby file or a RubyGem (i.e., gem) inside your extension.
 

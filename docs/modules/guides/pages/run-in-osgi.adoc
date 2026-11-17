@@ -1,5 +1,7 @@
 = Using AsciidoctorJ in an OSGi environment
 
+include::ROOT:partial$jruby-only.adoc[]
+
 In a non OSGi context, the following snippet will successfully create an Asciidoctor object:
 
 [source,java]

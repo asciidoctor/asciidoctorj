@@ -1,5 +1,7 @@
 = Ruby Runtime
 
+include::ROOT:partial$jruby-only.adoc[]
+
 Asciidoctor itself is implemented in Ruby and AsciidoctorJ is a wrapper that encapsulates Asciidoctor in a JRuby runtime.
 Even though AsciidoctorJ tries to hide as much as possible there are some points that you have to know and consider when using AsciidoctorJ.
 

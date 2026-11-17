@@ -1,5 +1,7 @@
 = Loading External Gems with GEM_PATH
 
+include::ROOT:partial$jruby-only.adoc[]
+
 By default, AsciidoctorJ comes with all required gems bundled within the jar.
 But in some circumstances like xref:run-in-osgi.adoc[OSGi] environments you may require to store gems in an external folder and be loaded by AsciidoctorJ.
 

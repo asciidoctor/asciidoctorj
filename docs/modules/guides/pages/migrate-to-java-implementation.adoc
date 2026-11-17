@@ -46,6 +46,7 @@ The following classes of the JRuby implementation, which are not part of the API
 * the deprecated directory walkers `org.asciidoctor.jruby.DirectoryWalker`, `org.asciidoctor.jruby.AbstractDirectoryWalker`, `org.asciidoctor.jruby.AsciiDocDirectoryWalker` and `org.asciidoctor.jruby.GlobDirectoryWalker` (the ones of the API, in `org.asciidoctor.util`, should be used instead);
 * the exception thrown when a conversion fails, `org.asciidoctor.jruby.internal.AsciidoctorCoreException` (applications should catch its superclass of the API, `org.asciidoctor.AsciidoctorException`).
 
+[#not-supported]
 == Not supported
 
 The features that rely on Ruby are not supported:

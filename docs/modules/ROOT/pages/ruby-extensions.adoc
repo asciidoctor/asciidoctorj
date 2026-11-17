@@ -1,5 +1,7 @@
 = Register a Ruby Extension
 
+include::ROOT:partial$jruby-only.adoc[]
+
 You can even register extensions written in Ruby using AsciidoctorJ.
 To register a _Ruby_ extension you must get a `RubyExtensionRegistry` class instead of `JavaExtensionRegistry`.
 
