@@ -5,6 +5,9 @@ You obtain an instance from the factory class `Asciidoctor.Factory` that provide
 
 If you need to get an instance of Asciidoctor using a certain gem path the factory `org.asciidoctor.jruby.AsciidoctorJRuby.Factory` provides multiple create methods to get an instance with a certain gem or load path:
 
+NOTE: `org.asciidoctor.jruby.AsciidoctorJRuby` is only available in the JRuby implementation.
+The Java implementation only provides `Asciidoctor.Factory.create()`.
+
 .Methods to create an Asciidoctor instance
 [cols="1m,2"]
 |===

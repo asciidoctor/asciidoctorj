@@ -2,6 +2,8 @@
 :url-springboot-docs: https://docs.spring.io/spring-boot/
 :url-asciidoctor-gh-org: https://github.com/asciidoctor
 
+NOTE: This page applies to the JRuby implementation (`org.asciidoctor:asciidoctorj`), which loads its gems from the jars.
+
 Due to Spring Boot's packaging system, Asciidoctorj won't work out of the box from a single JAR application.
 Luckily Spring Boot plugins for Gradle and Maven provide options to fix it.
 

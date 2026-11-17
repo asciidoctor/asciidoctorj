@@ -3,6 +3,10 @@
 :url-chocolatey: https://chocolatey.org
 :url-sdkman: https://sdkman.io
 
+NOTE: This page describes the command line interface of the JRuby implementation (`asciidoctorj-cli`), which bundles the PDF converter (Asciidoctor PDF).
+The Java implementation has its own command line interface (`asciidoctorj-java-cli`), which doesn't support the `pdf` backend and loads Java classes with `-r` instead of Ruby libraries.
+See the xref:guides:migrate-to-java-implementation.adoc[migration guide] for the differences.
+
 There are three basic ways to make AsciidoctorJ available as a command line tool.
 
 * Manual installation using the binary distribution.

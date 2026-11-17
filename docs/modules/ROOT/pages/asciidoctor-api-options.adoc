@@ -105,6 +105,9 @@ Attributes.builder()
 Defines the target format for which the document should be converted.
 Among the possible values are `html5`, `pdf` or `docbook`.
 
+NOTE: The `pdf` backend is provided by the AsciidoctorJ PDF jar (`asciidoctorj-pdf`), which bundles the Asciidoctor PDF gem.
+It's only available with the JRuby implementation.
+
 [source,java,indent=0]
 .Converting a document to PDF
 ----
@@ -191,6 +194,9 @@ NOTE: This option replaces and works in the same way as the previous `headerFoot
 == templateDirs
 
 Specifies a directory of {url-tilt}[Tilt]-compatible templates to be used instead of the default built-in templates.
+
+NOTE: Templates require the Tilt gem, so this option is only supported by the JRuby implementation.
+The Java implementation ignores it.
 
 [source,java]
 .Setting templateDirs option

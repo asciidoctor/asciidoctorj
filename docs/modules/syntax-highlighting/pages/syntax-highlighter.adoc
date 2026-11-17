@@ -1,6 +1,9 @@
 = Syntax Highlighter API
 
 Asciidoctor supports a range of different syntax highlighters: Coderay, HighlightJs, Rouge, Pygments and Prettify.
+
+NOTE: Coderay, Rouge and Pygments are provided by Ruby gems, so they are only available with the JRuby implementation.
+HighlightJs, Prettify and the syntax highlighters written in Java are supported by both implementations.
 Since version 2.0.0 Asciidoctor also supports to adapt and plug in other syntax highlighters when rendering to HTML.
 
 AsciidoctorJ offers this as well since version 2.1.0.
