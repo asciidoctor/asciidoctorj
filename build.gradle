@@ -209,8 +209,6 @@ def junitBom = libs.junit.bom
 configure(subprojects.findAll { isJavaImplementation(it) }) {
   apply plugin: 'java-library'
 
-  version = javaImplementationVersion
-
   java {
     toolchain {
       languageVersion.set(JavaLanguageVersion.of(21))
