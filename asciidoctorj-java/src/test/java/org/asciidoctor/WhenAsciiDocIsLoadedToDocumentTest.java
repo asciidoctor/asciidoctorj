@@ -602,4 +602,20 @@ public class WhenAsciiDocIsLoadedToDocumentTest {
                 "=== Section A Subsection\n\n" +
                 "Section A 'subsection' paragraph.\n\n";
     }
+
+    @Test
+    public void should_tell_if_an_attribute_has_been_specified() {
+        Attributes attributes = Attributes.builder()
+                .attribute("api-set", "value")
+                .attribute("soft-set@", "value")
+                .build();
+        Document document = asciidoctor.load(":!header-unset:\n:header-set: value\n\ncontent",
+                Options.builder().attributes(attributes).build());
+
+        assertThat(document.isAttributeSpecified("api-set")).isTrue();
+        assertThat(document.isAttributeSpecified("soft-set")).isTrue();
+        assertThat(document.isAttributeSpecified("header-set")).isTrue();
+        assertThat(document.isAttributeSpecified("header-unset")).isTrue();
+        assertThat(document.isAttributeSpecified("never-set")).isFalse();
+    }
 }

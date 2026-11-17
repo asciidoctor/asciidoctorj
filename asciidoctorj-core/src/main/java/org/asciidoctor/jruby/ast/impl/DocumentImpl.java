@@ -4,6 +4,7 @@ import org.asciidoctor.ast.*;
 import org.asciidoctor.jruby.internal.RubyHashMapDecorator;
 import org.asciidoctor.jruby.internal.RubyHashUtil;
 import org.jruby.*;
+import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.List;
@@ -29,6 +30,49 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
     @Override
     public boolean isBasebackend(String backend) {
         return getBoolean("basebackend?", backend);
+    }
+
+    @Override
+    public boolean isAttributeSpecified(String name) {
+        // NOTE Asciidoctor (Ruby) doesn't provide such a method yet, see https://github.com/asciidoctor/asciidoctor/issues/4889
+        // the implementation is the same as Document#attr_unspecified? in Asciidoctor PDF
+        if (getBoolean("attribute_locked?", name)) {
+            return true;
+        }
+        ThreadContext context = getRuntime().getCurrentContext();
+        IRubyObject attributesModified = getRubyProperty("@attributes_modified");
+        if (!attributesModified.isNil() && attributesModified.callMethod(context, "include?", getRuntime().newString(name)).isTrue()) {
+            return true;
+        }
+        if (getBoolean("nested?")) {
+            return new DocumentImpl(getRubyProperty("@parent_document")).isAttributeSpecified(name);
+        }
+        IRubyObject options = getRubyProperty("@options");
+        if (options instanceof RubyHash optionsHash) {
+            Object attributes = optionsHash.get(RubySymbol.newSymbol(getRuntime(), "attributes"));
+            if (attributes instanceof RubyHash attributesHash) {
+                String normalizedName = name.toLowerCase();
+                for (Object key : attributesHash.keySet()) {
+                    // a soft set or soft unset attribute (e.g., name@) is not locked, so the document can still change it
+                    if (isNamedBy(key.toString(), normalizedName)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean isNamedBy(String key, String name) {
+        if (key.endsWith("@")) {
+            key = key.substring(0, key.length() - 1);
+        }
+        if (key.startsWith("!")) {
+            key = key.substring(1);
+        } else if (key.endsWith("!")) {
+            key = key.substring(0, key.length() - 1);
+        }
+        return key.toLowerCase().equals(name);
     }
 
     @Override
