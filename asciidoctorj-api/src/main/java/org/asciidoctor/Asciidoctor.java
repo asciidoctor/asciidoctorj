@@ -124,7 +124,7 @@ public interface Asciidoctor extends AutoCloseable {
 
     /**
      * Convert all AsciiDoc files found in directoryWalker.
-     * See {@code AsciiDocDirectoryWalker} for reference strategy.
+     * See {@link org.asciidoctor.util.AsciiDocDirectoryWalker} for reference strategy.
      *
      * @param directoryWalker strategy used to retrieve all files to be rendered.
      * @param options         options to control processing (default: empty).

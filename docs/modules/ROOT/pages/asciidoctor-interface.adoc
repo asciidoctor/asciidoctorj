@@ -138,6 +138,8 @@ If the converted content is not written into files, `convertDirectory` will retu
 [source,java]
 .Converting all AsciiDoc files in a directory
 ----
+import org.asciidoctor.util.AsciiDocDirectoryWalker;
+
 Options emptyOptions = Options.builder().build();
 String[] result = asciidoctor.convertDirectory(
     new AsciiDocDirectoryWalker("src/asciidoc"),
