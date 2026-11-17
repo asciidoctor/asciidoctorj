@@ -8,7 +8,6 @@ import java.util.Map;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.ast.Document;
 import org.jsoup.Jsoup;
 import org.junit.jupiter.api.DisplayName;

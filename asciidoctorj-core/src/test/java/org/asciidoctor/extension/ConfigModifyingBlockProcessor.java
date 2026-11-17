@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.ast.StructuralNode;
 
 public class ConfigModifyingBlockProcessor extends BlockProcessor {

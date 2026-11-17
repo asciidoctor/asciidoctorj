@@ -1,6 +1,6 @@
 package org.asciidoctor.extension;
 
-import static org.asciidoctor.ast.ContentModel.SIMPLE;
+import static org.asciidoctor.extension.ContentModel.SIMPLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -11,7 +11,6 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.jsoup.Jsoup;

@@ -1,4 +1,4 @@
-package org.asciidoctor.ast;
+package org.asciidoctor.extension;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
