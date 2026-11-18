@@ -172,11 +172,23 @@ public interface Asciidoctor extends AutoCloseable {
      * Creates an extension registry ready to be used for registering Java extensions.
      *
      * @return Extension Registry object.
+     * @deprecated Use {@link #getExtensionRegistry()} instead.
+     * This method will be removed in AsciidoctorJ 4.0.
      */
+    @Deprecated
     JavaExtensionRegistry javaExtensionRegistry();
 
     /**
-     * Creates an Ruby extension registry ready to be used for registering Ruby extension.
+     * Creates an extension registry ready to be used for registering Java extensions.
+     *
+     * @return Extension Registry object.
+     */
+    default JavaExtensionRegistry getExtensionRegistry() {
+        return javaExtensionRegistry();
+    }
+
+    /**
+     * Creates a Ruby extension registry ready to be used for registering Ruby extension.
      *
      * @return Extension Registry object.
      * @deprecated Ruby extensions can only be registered with an implementation that embeds Asciidoctor (Ruby) using JRuby.
@@ -191,8 +203,20 @@ public interface Asciidoctor extends AutoCloseable {
      * Creates a registry for registering Java converters.
      *
      * @return Converter Registry object.
+     * @deprecated Use {@link #getConverterRegistry()} instead.
+     * This method will be removed in AsciidoctorJ 4.0.
      */
+    @Deprecated
     JavaConverterRegistry javaConverterRegistry();
+
+    /**
+     * Creates a registry for registering Java converters.
+     *
+     * @return Converter Registry object.
+     */
+    default JavaConverterRegistry getConverterRegistry() {
+        return javaConverterRegistry();
+    }
 
     /**
      * Creates a registry for registering Java syntax highlighter.
@@ -200,8 +224,22 @@ public interface Asciidoctor extends AutoCloseable {
      * <p>This API is experimental and might change in an incompatible way in a minor version update!</p>
      *
      * @return Converter Registry object.
+     * @deprecated Use {@link #getSyntaxHighlighterRegistry()} instead.
+     * This method will be removed in AsciidoctorJ 4.0.
      */
+    @Deprecated
     SyntaxHighlighterRegistry syntaxHighlighterRegistry();
+
+    /**
+     * Creates a registry for registering Java syntax highlighter.
+     *
+     * <p>This API is experimental and might change in an incompatible way in a minor version update!</p>
+     *
+     * @return Syntax Highlighter Registry object.
+     */
+    default SyntaxHighlighterRegistry getSyntaxHighlighterRegistry() {
+        return syntaxHighlighterRegistry();
+    }
 
     /**
      * Creates an ExtensionGroup that can be used to register and unregister multiples extensions all at once.
