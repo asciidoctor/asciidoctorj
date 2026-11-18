@@ -73,7 +73,7 @@ public interface StructuralNode extends ContentNode {
     /**
      * Returns the content model.
      *
-     * @see ContentModel
+     * @see org.asciidoctor.extension.ContentModel
      *
      * @return the content model
      */

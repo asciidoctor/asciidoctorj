@@ -1,6 +1,6 @@
 package org.asciidoctor.integrationguide.extension;
 
-import org.asciidoctor.ast.ContentModel;
+import org.asciidoctor.extension.ContentModel;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.BlockProcessor;
 import org.asciidoctor.extension.Contexts;

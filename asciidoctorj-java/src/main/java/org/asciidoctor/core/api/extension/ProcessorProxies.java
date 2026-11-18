@@ -74,9 +74,9 @@ final class ProcessorProxies {
         if (contexts != null) {
             config.put(Contexts.KEY, new ArrayList<>(Arrays.asList(contexts.value())));
         }
-        org.asciidoctor.ast.ContentModel contentModel = type.getAnnotation(org.asciidoctor.ast.ContentModel.class);
+        org.asciidoctor.extension.ContentModel contentModel = type.getAnnotation(org.asciidoctor.extension.ContentModel.class);
         if (contentModel != null) {
-            config.put(org.asciidoctor.ast.ContentModel.KEY, contentModel.value());
+            config.put(org.asciidoctor.extension.ContentModel.KEY, contentModel.value());
         }
         PositionalAttributes positionalAttributes = type.getAnnotation(PositionalAttributes.class);
         if (positionalAttributes != null) {

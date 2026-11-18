@@ -4,7 +4,7 @@ import org.asciidoctor.Options;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.Column;
-import org.asciidoctor.ast.ContentModel;
+import org.asciidoctor.extension.ContentModel;
 import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.ast.Document;

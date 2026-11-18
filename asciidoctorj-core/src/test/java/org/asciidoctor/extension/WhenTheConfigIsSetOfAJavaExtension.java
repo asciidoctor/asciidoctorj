@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
-import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

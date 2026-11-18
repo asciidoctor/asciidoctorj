@@ -1,6 +1,5 @@
 package org.asciidoctor.extension;
 
-import org.asciidoctor.ast.ContentModel;
 import org.asciidoctor.ast.StructuralNode;
 
 import java.util.ArrayList;

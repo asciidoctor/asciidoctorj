@@ -62,8 +62,8 @@ Fixed in 3.x ({url-issues}/1326[#1326], {url-issues}/1327[#1327]).
 * [.line-through]#`ExtensionGroup` has no `blockMacro(String, BlockMacroProcessor)` nor `inlineMacro(String, InlineMacroProcessor)`, unlike `JavaExtensionRegistry`.#
 Added in 3.x ({url-issues}/1328[#1328], {url-issues}/1329[#1329]).
 * A processor class registered without a name gets its names from the `@Name` annotations, including the meta-annotations (an annotation annotated with `@Name`), and is registered once per name with `JavaExtensionRegistry`, whereas `ExtensionGroup` only reads a direct `@Name` annotation (and fails later, when the document is converted), see {url-issues}/1335[#1335].
-* The `ContentModel` annotation is in the `org.asciidoctor.ast` package, whereas the other annotations of the processors (`Name`, `Contexts`, etc.) are in `org.asciidoctor.extension`.
-Moving it is a breaking change (ambiguous reference when both packages are imported on demand), see {url-issues}/1336[#1336].
+* [.line-through]#The `ContentModel` annotation is in the `org.asciidoctor.ast` package, whereas the other annotations of the processors (`Name`, `Contexts`, etc.) are in `org.asciidoctor.extension`.#
+Moved to `org.asciidoctor.extension` in 4.0 ({url-issues}/1336[#1336]).
 * `Processor#setConfig` can only be called in the constructor (it throws an `IllegalStateException` once the processor is registered), whereas `getConfig()` returns a mutable map and `updateConfig` can be called anytime.
 * `Processor#createTableRow(Table parent)` doesn't use the parent.
 * The overloads of `Processor#createBlock` for a String and a List of lines are ambiguous when the content is null (e.g., an image block): `createBlock(parent, "image", (String) null, attributes)`.

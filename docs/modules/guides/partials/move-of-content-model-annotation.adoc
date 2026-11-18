@@ -1,0 +1,16 @@
+== `@ContentModel` moved to `org.asciidoctor.extension`
+
+The `@ContentModel` annotation, which configures a block processor, was in the `org.asciidoctor.ast` package.
+It is now in the `org.asciidoctor.extension` package, like the other annotations of the processors (`@Name`, `@Contexts`, `@Format`, etc.).
+
+Update the import:
+
+[,java]
+----
+// before
+import org.asciidoctor.ast.ContentModel;
+// after
+import org.asciidoctor.extension.ContentModel;
+----
+
+If the processor imports the packages on demand, there's nothing to change as long as `org.asciidoctor.extension` is imported.

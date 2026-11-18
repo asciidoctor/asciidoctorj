@@ -1,6 +1,6 @@
 package org.asciidoctor.jruby.extension.processorproxies;
 
-import org.asciidoctor.ast.ContentModel;
+import org.asciidoctor.extension.ContentModel;
 import org.asciidoctor.extension.Contexts;
 import org.asciidoctor.extension.DefaultAttribute;
 import org.asciidoctor.extension.DefaultAttributes;
