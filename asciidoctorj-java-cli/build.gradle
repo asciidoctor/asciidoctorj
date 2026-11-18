@@ -53,6 +53,8 @@ publishing.publications.named(project.ext.publicationName) {
 // java -jar asciidoctorj-java-cli.jar, with the jars of the implementation and of the API in the same directory
 jar {
     def runtimeClasspath = configurations.runtimeClasspath
+    // the jars of the classpath must be built before the manifest is computed
+    inputs.files(runtimeClasspath)
     manifest {
         attributes 'Main-Class': application.mainClass
         attributes 'Class-Path': runtimeClasspath.elements.map { it.collect { it.asFile.name }.join(' ') }
