@@ -1,7 +1,7 @@
 = Using a Snapshot Version
 
 Snapshot versions are published to the Maven Central snapshot repository, https://central.sonatype.com/repository/maven-snapshots/.
-To use a snapshot version of the the AsciidoctorJ library add this repository to your project:
+To use a snapshot version of the AsciidoctorJ library add this repository to your project:
 
 [source,xml]
 ----
@@ -31,4 +31,4 @@ repositories {
 ----
 
 
-You can also download a snapshot version of the distribution from here: https://central.sonatype.com/repository/maven-snapshots/org/asciidoctor/asciidoctorj/.
+You can also download a snapshot version of the distribution ZIP from here: https://central.sonatype.com/repository/maven-snapshots/org/asciidoctor/asciidoctorj/{next-version}/.

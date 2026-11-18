@@ -91,6 +91,7 @@ jobs:
       - name: Prepare the next development iteration
         run: |
           sed -i -e "s/^version=.*/version=$NEXT_VERSION/" gradle.properties
+          sed -i -E -e "s/^(    next-version:).*/\\1 $NEXT_VERSION/" docs/antora.yml
           git commit -am "Prepare next development iteration $NEXT_VERSION"
       # push before publishing, so that a release that cannot be tagged on main is never published
       - name: Push the commits and the tag
