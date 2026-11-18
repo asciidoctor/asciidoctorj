@@ -1,4 +1,5 @@
 plugins {
+    id 'java-library'
     id 'application'
     alias(libs.plugins.graalvm.native)
 }
@@ -15,7 +16,8 @@ apply from: rootProject.file('gradle/publish.gradle')
 apply from: rootProject.file('gradle/signing.gradle')
 
 dependencies {
-    implementation project(':asciidoctorj-java')
+    // api: the CLI can be extended (e.g. a CLI dedicated to a converter), so the Java implementation is on the compile classpath of the consumers
+    api project(':asciidoctorj-java')
     testImplementation project(path: ':asciidoctorj-java', configuration: 'testArtifacts')
 }
 
@@ -27,14 +29,32 @@ test {
     mustRunAfter ':asciidoctorj-java:test'
 }
 
-// ./gradlew installDist: the JVM application (build/install/asciidoctorj-java-cli), with its start scripts
+// ./gradlew installDist: the JVM application (build/install/asciidoctorj), with its start scripts
 application {
     mainClass = 'org.asciidoctor.cli.Invoker'
+    // the start scripts are named asciidoctorj, like the native executable
+    applicationName = 'asciidoctorj'
+}
+
+distributions {
+    main {
+        // asciidoctorj-java-cli-<version>.zip
+        distributionBaseName = 'asciidoctorj-java-cli'
+    }
+}
+
+// publish the distribution (zip) with the artifact: asciidoctorj-java-cli-<version>-bin.zip
+publishing.publications.named(project.ext.publicationName) {
+    artifact(tasks.named('distZip')) {
+        classifier = 'bin'
+    }
 }
 
 // java -jar asciidoctorj-java-cli.jar, with the jars of the implementation and of the API in the same directory
 jar {
     def runtimeClasspath = configurations.runtimeClasspath
+    // the jars of the classpath must be built before the manifest is computed
+    inputs.files(runtimeClasspath)
     manifest {
         attributes 'Main-Class': application.mainClass
         attributes 'Class-Path': runtimeClasspath.elements.map { it.collect { it.asFile.name }.join(' ') }
