@@ -1,4 +1,5 @@
 plugins {
+    id 'java-library'
     id 'application'
     alias(libs.plugins.graalvm.native)
 }
@@ -15,7 +16,8 @@ apply from: rootProject.file('gradle/publish.gradle')
 apply from: rootProject.file('gradle/signing.gradle')
 
 dependencies {
-    implementation project(':asciidoctorj-java')
+    // api: the CLI can be extended (e.g. a CLI dedicated to a converter), so the Java implementation is on the compile classpath of the consumers
+    api project(':asciidoctorj-java')
     testImplementation project(path: ':asciidoctorj-java', configuration: 'testArtifacts')
 }
 
