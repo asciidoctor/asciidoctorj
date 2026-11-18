@@ -29,7 +29,7 @@ Applications depend on classes of the JRuby implementation (`asciidoctorj-core`)
 Added to the API in 3.x as `org.asciidoctor.extension.spi.ExtensionRegistry`, `org.asciidoctor.converter.spi.ConverterRegistry` and `org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry`; the interfaces of the `org.asciidoctor.jruby` packages extend them and are deprecated ({url-issues}/1333[#1333], {url-issues}/1332[#1332]).
 Like the JRuby implementation, `CoreAsciidoctor` loads the services of the API, and still loads the deprecated ones (once if a class is declared with both services);
 * [.line-through]#the exception `org.asciidoctor.jruby.internal.AsciidoctorCoreException`, thrown when a conversion fails (the API doesn't define an exception, so the applications catch this internal class).#
-Added to the API in 3.x as `org.asciidoctor.AsciidoctorException`, the superclass of `AsciidoctorCoreException` ({url-issues}/1330[#1330], {url-issues}/1331[#1331]);
+Added to the API in 3.x as `org.asciidoctor.AsciidoctorException`, the superclass of `AsciidoctorCoreException` ({url-issues}/1330[#1330], {url-issues}/1331[#1331]), and thrown as is by the Java implementation;
 * [.line-through]#the directory walkers `org.asciidoctor.jruby.AsciiDocDirectoryWalker` and `org.asciidoctor.jruby.GlobDirectoryWalker` (used with `Asciidoctor#convertDirectory`).#
 Added to the API in 3.x as `org.asciidoctor.util.DirectoryWalker`, `org.asciidoctor.util.AbstractDirectoryWalker`, `org.asciidoctor.util.AsciiDocDirectoryWalker` and `org.asciidoctor.util.GlobDirectoryWalker`; the classes of the `org.asciidoctor.jruby` package extend them and are deprecated ({url-issues}/1334[#1334]).
 

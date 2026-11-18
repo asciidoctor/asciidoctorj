@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.PhraseNode;
 import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
+import org.asciidoctor.AsciidoctorException;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.asciidoctor.test.extension.ClasspathExtension;
@@ -114,7 +114,7 @@ public class InlineMacroRegistrationTest {
 
     @Test
     public void testRegisterClassAsInstance() {
-        assertThrows(AsciidoctorCoreException.class, () -> {
+        assertThrows(AsciidoctorException.class, () -> {
             asciidoctor.javaExtensionRegistry().inlineMacro(new AbstractTestProcessor());
             asciidoctor.convert(document("foo", "HelloExplicitInstance"), emptyOptions());
         });
