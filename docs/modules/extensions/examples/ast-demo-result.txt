@@ -1,1 +1,1 @@
-../../../../asciidoctorj-documentation/src/test/resources/ast-demo-result.txt
+../../../../asciidoctorj-documentation-common/src/test/resources/ast-demo-result.txt

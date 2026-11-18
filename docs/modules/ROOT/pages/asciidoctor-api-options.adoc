@@ -111,7 +111,7 @@ It's only available with the JRuby implementation.
 [source,java,indent=0]
 .Converting a document to PDF
 ----
-include::example$org/asciidoctor/integrationguide/OptionsTest.java[tags=optionsPDFBackend]
+include::example$org/asciidoctor/integrationguide/PdfOptionsTest.java[tags=optionsPDFBackend]
 ----
 
 == inPlace

@@ -1,1 +1,1 @@
-../../../../../../../../asciidoctorj-documentation/src/test/java/org/asciidoctor/integrationguide/syntaxhighlighter/HighlightJsHighlighter.java
+../../../../../../../../asciidoctorj-documentation-common/src/test/java/org/asciidoctor/integrationguide/syntaxhighlighter/HighlightJsHighlighter.java

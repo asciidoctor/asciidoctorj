@@ -1,1 +1,1 @@
-../../../../asciidoctorj-documentation/src/test/resources/sources.adoc
+../../../../asciidoctorj-documentation-common/src/test/resources/sources.adoc

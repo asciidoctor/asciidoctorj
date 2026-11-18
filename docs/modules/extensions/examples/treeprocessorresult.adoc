@@ -1,1 +1,1 @@
-../../../../asciidoctorj-documentation/src/test/resources/treeprocessorresult.adoc
+../../../../asciidoctorj-documentation-common/src/test/resources/treeprocessorresult.adoc

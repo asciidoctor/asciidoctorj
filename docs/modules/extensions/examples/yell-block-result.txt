@@ -1,1 +1,1 @@
-../../../../asciidoctorj-documentation/src/test/resources/yell-block-result.txt
+../../../../asciidoctorj-documentation-common/src/test/resources/yell-block-result.txt
