@@ -8,7 +8,9 @@ import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class DocumentImpl extends StructuralNodeImpl implements Document {
@@ -34,6 +36,8 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
 
     @Override
     public boolean isAttributeSpecified(String name) {
+        Objects.requireNonNull(name, "name");
+        // TODO replace with a call to Document#attr_specified? once based on Asciidoctor 2.1 (#1379)
         // NOTE Asciidoctor (Ruby) doesn't provide such a method yet, see https://github.com/asciidoctor/asciidoctor/issues/4889
         // the implementation is the same as Document#attr_unspecified? in Asciidoctor PDF
         if (getBoolean("attribute_locked?", name)) {
@@ -51,7 +55,7 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
         if (options instanceof RubyHash optionsHash) {
             Object attributes = optionsHash.get(RubySymbol.newSymbol(getRuntime(), "attributes"));
             if (attributes instanceof RubyHash attributesHash) {
-                String normalizedName = name.toLowerCase();
+                String normalizedName = name.toLowerCase(Locale.ROOT);
                 for (Object key : attributesHash.keySet()) {
                     // a soft set or soft unset attribute (e.g., name@) is not locked, so the document can still change it
                     if (isNamedBy(key.toString(), normalizedName)) {
@@ -72,7 +76,7 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
         } else if (key.endsWith("!")) {
             key = key.substring(0, key.length() - 1);
         }
-        return key.toLowerCase().equals(name);
+        return key.toLowerCase(Locale.ROOT).equals(name);
     }
 
     @Override

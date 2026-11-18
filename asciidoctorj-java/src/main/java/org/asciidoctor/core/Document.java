@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -460,7 +461,7 @@ public class Document extends AbstractBlock {
                     val = "@".equals(val) ? false : null;
                 }
                 attrOverrides.put(key.toLowerCase(), val);
-                attributesOptionNames.add(key.toLowerCase());
+                attributesOptionNames.add(key.toLowerCase(Locale.ROOT));
             }
             if (options.get("to_file") instanceof String toFile) {
                 attrOverrides.put("outfilesuffix", Helpers.extname(toFile));
@@ -1384,6 +1385,7 @@ public class Document extends AbstractBlock {
      * @return true if the attribute has been specified, false if it has never been set or unset
      */
     public boolean isAttributeSpecified(String name) {
+        Objects.requireNonNull(name, "name");
         if (isAttributeLocked(name) || attributesModified.contains(name)) {
             return true;
         }
@@ -1391,7 +1393,7 @@ public class Document extends AbstractBlock {
             return parentDocument.isAttributeSpecified(name);
         }
         // a soft set or soft unset attribute (e.g., name@) is not locked, so the document can still change it
-        return attributesOptionNames.contains(name.toLowerCase());
+        return attributesOptionNames.contains(name.toLowerCase(Locale.ROOT));
     }
 
     /**

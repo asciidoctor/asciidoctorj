@@ -86,7 +86,8 @@ public interface Document extends StructuralNode {
      *
      * @param name The name of the attribute
      * @return true if the attribute has been set or unset (explicitly or by an option), false if it has never been
-     *         specified
+     *         specified (or if the name is empty)
+     * @throws NullPointerException if the name is null
      * @since 4.0
      */
     boolean isAttributeSpecified(String name);
