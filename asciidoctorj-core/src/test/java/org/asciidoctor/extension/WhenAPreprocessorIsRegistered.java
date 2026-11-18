@@ -32,7 +32,7 @@ class WhenAPreprocessorIsRegistered {
 
         AtomicBoolean preprocessorCalled = new AtomicBoolean(false);
 
-        asciidoctor.javaExtensionRegistry().preprocessor(new Preprocessor() {
+        asciidoctor.getExtensionRegistry().preprocessor(new Preprocessor() {
             @Override
             public Reader process(Document doc, PreprocessorReader reader) {
                 preprocessorCalled.set(true);
@@ -66,7 +66,7 @@ class WhenAPreprocessorIsRegistered {
 
         AtomicBoolean preprocessorCalled = new AtomicBoolean(false);
 
-        asciidoctor.javaExtensionRegistry().preprocessor(new Preprocessor() {
+        asciidoctor.getExtensionRegistry().preprocessor(new Preprocessor() {
             @Override
             public Reader process(Document doc, PreprocessorReader reader) {
                 preprocessorCalled.set(true);
@@ -101,7 +101,7 @@ class WhenAPreprocessorIsRegistered {
 
         AtomicBoolean preprocessorCalled = new AtomicBoolean(false);
 
-        asciidoctor.javaExtensionRegistry().preprocessor(new Preprocessor() {
+        asciidoctor.getExtensionRegistry().preprocessor(new Preprocessor() {
             @Override
             public Reader process(Document doc, PreprocessorReader reader) {
                 preprocessorCalled.set(true);
@@ -129,7 +129,7 @@ class WhenAPreprocessorIsRegistered {
 
         String anotherLine = "Another line";
 
-        asciidoctor.javaExtensionRegistry().preprocessor(new Preprocessor() {
+        asciidoctor.getExtensionRegistry().preprocessor(new Preprocessor() {
             @Override
             public Reader process(Document doc, PreprocessorReader reader) {
                 preprocessorCalled.set(true);
@@ -163,7 +163,7 @@ class WhenAPreprocessorIsRegistered {
         String anotherFirstLine = "Another first line";
         String anotherSecondLine = "Another second line";
 
-        asciidoctor.javaExtensionRegistry().preprocessor(new Preprocessor() {
+        asciidoctor.getExtensionRegistry().preprocessor(new Preprocessor() {
             @Override
             public Reader process(Document doc, PreprocessorReader reader) {
                 preprocessorCalled.set(true);
@@ -197,7 +197,7 @@ class WhenAPreprocessorIsRegistered {
         AtomicReference<String> source = new AtomicReference<>("");
         AtomicReference<List<String>> sourceLines = new AtomicReference<>(new ArrayList<>());
 
-        asciidoctor.javaExtensionRegistry().preprocessor(new Preprocessor() {
+        asciidoctor.getExtensionRegistry().preprocessor(new Preprocessor() {
             @Override
             public Reader process(Document doc, PreprocessorReader reader) {
                 source.set(reader.getSource());

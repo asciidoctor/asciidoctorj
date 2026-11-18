@@ -148,14 +148,14 @@ public interface Asciidoctor extends AutoCloseable {
      *
      * @return Extension Registry object.
      */
-    JavaExtensionRegistry javaExtensionRegistry();
+    JavaExtensionRegistry getExtensionRegistry();
 
     /**
      * Creates a registry for registering Java converters.
      *
      * @return Converter Registry object.
      */
-    JavaConverterRegistry javaConverterRegistry();
+    JavaConverterRegistry getConverterRegistry();
 
     /**
      * Creates a registry for registering Java syntax highlighter.
@@ -164,7 +164,7 @@ public interface Asciidoctor extends AutoCloseable {
      *
      * @return Converter Registry object.
      */
-    SyntaxHighlighterRegistry syntaxHighlighterRegistry();
+    SyntaxHighlighterRegistry getSyntaxHighlighterRegistry();
 
     /**
      * Creates an ExtensionGroup that can be used to register and unregister multiples extensions all at once.
@@ -187,11 +187,11 @@ public interface Asciidoctor extends AutoCloseable {
     void unregisterAllExtensions();
 
     /**
-     * Method that gets the asciidoctor version which is being used..
+     * Gets the version of AsciidoctorJ (i.e., the version of this implementation of the API).
      *
-     * @return Version number.
+     * @return the version of AsciidoctorJ.
      */
-    String asciidoctorVersion();
+    String getVersion();
 
 
     /**

@@ -46,7 +46,7 @@ public class OrderTest {
         File toDir = // ...
                 tempDir;
 
-        asciidoctor.syntaxHighlighterRegistry()
+        asciidoctor.getSyntaxHighlighterRegistry()
                 .register(OrderDocumentingHighlighter.class, "order");
 
         asciidoctor.convertFile(sources_adoc,

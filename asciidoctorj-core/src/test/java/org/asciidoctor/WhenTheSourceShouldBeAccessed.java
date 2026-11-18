@@ -163,7 +163,7 @@ class WhenTheSourceShouldBeAccessed {
 
                 """;
         // when:
-        asciidoctor.javaExtensionRegistry().treeprocessor(new Treeprocessor() {
+        asciidoctor.getExtensionRegistry().treeprocessor(new Treeprocessor() {
             @Override
             public Document process(Document doc) {
                 ((Block) doc.getBlocks().get(0).getBlocks().get(0)).setSource(SOURCE);
@@ -194,7 +194,7 @@ class WhenTheSourceShouldBeAccessed {
 
                 """;
         // when:
-        asciidoctor.javaExtensionRegistry().treeprocessor(new Treeprocessor() {
+        asciidoctor.getExtensionRegistry().treeprocessor(new Treeprocessor() {
             @Override
             public Document process(Document doc) {
                 ((ListItem) ((List) doc.getBlocks().get(0).getBlocks().get(0)).getItems().get(0)).setSource(SOURCE);
@@ -227,7 +227,7 @@ class WhenTheSourceShouldBeAccessed {
 
                 """;
         // when:
-        asciidoctor.javaExtensionRegistry().treeprocessor(new Treeprocessor() {
+        asciidoctor.getExtensionRegistry().treeprocessor(new Treeprocessor() {
             @Override
             public Document process(Document doc) {
                 Table table = (Table) doc.getBlocks().get(0).getBlocks().get(0);

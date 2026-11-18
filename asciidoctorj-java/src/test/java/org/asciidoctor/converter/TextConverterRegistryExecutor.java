@@ -7,7 +7,7 @@ public class TextConverterRegistryExecutor implements ConverterRegistry {
 
     @Override
     public void register(Asciidoctor asciidoctor) {
-        asciidoctor.javaConverterRegistry().register(TextConverter.class, "extensiontext");
+        asciidoctor.getConverterRegistry().register(TextConverter.class, "extensiontext");
     }
 
 }

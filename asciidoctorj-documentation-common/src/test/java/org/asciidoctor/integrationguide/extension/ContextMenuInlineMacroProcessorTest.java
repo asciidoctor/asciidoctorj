@@ -15,7 +15,7 @@ public class ContextMenuInlineMacroProcessorTest {
     @Test
     public void should_create_context_menu() {
 
-        asciidoctor.javaExtensionRegistry().inlineMacro(ContextMenuInlineMacroProcessor.class);
+        asciidoctor.getExtensionRegistry().inlineMacro(ContextMenuInlineMacroProcessor.class);
 
         String result = asciidoctor.convert("rightclick:New|Class[]", Options.builder().toFile(false).safe(SafeMode.UNSAFE).build());
 

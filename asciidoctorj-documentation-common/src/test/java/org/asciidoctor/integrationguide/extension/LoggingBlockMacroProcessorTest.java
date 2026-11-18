@@ -38,7 +38,7 @@ public class LoggingBlockMacroProcessorTest {
 //tag::include[]
         List<LogRecord> logRecords = new ArrayList<>();
         asciidoctor.registerLogHandler(logRecords::add);
-        asciidoctor.javaExtensionRegistry().blockMacro(LoggingBlockMacroProcessor.class);      // <1>
+        asciidoctor.getExtensionRegistry().blockMacro(LoggingBlockMacroProcessor.class);      // <1>
 
         asciidoctor.convertFile(loggingmacro_adoc,
                 Options.builder()

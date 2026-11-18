@@ -121,7 +121,7 @@ class WhenASyntaxHighlighterIsRegistered {
             boolean expectHeader, boolean expectFooter) {
 
         // expect:
-        asciidoctor.syntaxHighlighterRegistry().register(highlighter, NAME_SYNTAXHIGHLIGHTER);
+        asciidoctor.getSyntaxHighlighterRegistry().register(highlighter, NAME_SYNTAXHIGHLIGHTER);
         String html = asciidoctor.convert(DOC, Options.builder()
                 .safe(SafeMode.UNSAFE)
                 .standalone(true)

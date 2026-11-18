@@ -38,7 +38,7 @@ class WhenABlockMacroProcessorCreatesAList {
     void theOrderedListShouldAppearInTheResultingDocument(boolean attributesInOptions) {
 
         // given:
-        asciidoctor.javaExtensionRegistry().blockMacro(LISTMACRO_NAME, new ListCreatorBlockMacro("olist", attributesInOptions));
+        asciidoctor.getExtensionRegistry().blockMacro(LISTMACRO_NAME, new ListCreatorBlockMacro("olist", attributesInOptions));
 
         // when:
         Options standalone = Options.builder().safe(SafeMode.SAFE).toFile(false).standalone(false).build();
@@ -61,7 +61,7 @@ class WhenABlockMacroProcessorCreatesAList {
     void theUnorderedListShouldAppearInTheResultingDocument() {
 
         // given:
-        asciidoctor.javaExtensionRegistry().blockMacro(LISTMACRO_NAME, new ListCreatorBlockMacro("ulist"));
+        asciidoctor.getExtensionRegistry().blockMacro(LISTMACRO_NAME, new ListCreatorBlockMacro("ulist"));
 
         // when:
         Options options = Options.builder().safe(SafeMode.SAFE).toFile(false).standalone(false).build();

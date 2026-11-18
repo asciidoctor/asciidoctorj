@@ -352,7 +352,7 @@ public class JRubyProcessor implements Processor {
      * <pre>
      *     <verbatim>
      * Asciidoctor asciidoctor = ...
-     * asciidoctor.javaExtensionRegistry().treeprocessor(new Treeprocessor() {
+     * asciidoctor.getExtensionRegistry().treeprocessor(new Treeprocessor() {
      *     DocumentRuby process(DocumentRuby document) {
      *         for (AbstractBlock block: document.getBlocks()) {
      *             if (block instanceof Section) {

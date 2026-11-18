@@ -12,12 +12,10 @@ import org.jruby.Main;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class AsciidoctorInvoker {
@@ -36,7 +34,7 @@ public class AsciidoctorInvoker {
             JRubyAsciidoctor asciidoctor = buildAsciidoctorJInstance(asciidoctorCliOptions);
 
             if (asciidoctorCliOptions.isVersion()) {
-                System.out.println("AsciidoctorJ " + getAsciidoctorJVersion() + " (Asciidoctor " + asciidoctor.asciidoctorVersion() + ") [https://asciidoctor.org]");
+                System.out.println("AsciidoctorJ " + asciidoctor.getVersion() + " (Asciidoctor " + asciidoctor.asciidoctorVersion() + ") [https://asciidoctor.org]");
                 Object rubyVersionString = JRubyRuntimeContext.get(asciidoctor).evalScriptlet("\"#{JRUBY_VERSION} (#{RUBY_VERSION})\"");
                 System.out.println("Runtime Environment: jruby " + rubyVersionString);
                 return 0;
@@ -73,17 +71,6 @@ public class AsciidoctorInvoker {
 
         }
         return 0;
-    }
-
-    private String getAsciidoctorJVersion() {
-        InputStream in = getClass().getResourceAsStream("/META-INF/asciidoctorj-version.properties");
-        Properties versionProps = new Properties();
-        try {
-            versionProps.load(in);
-            return versionProps.getProperty("version.asciidoctorj");
-        } catch (IOException e) {
-            return "N/A";
-        }
     }
 
     private void setVerboseLevel(JRubyAsciidoctor asciidoctor, AsciidoctorCliOptions asciidoctorCliOptions) {

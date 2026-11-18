@@ -544,9 +544,9 @@ public class Options extends LinkedHashMap<String, Object> {
         converterRegistries.forEach(registry -> registry.register(asciidoctor));
         syntaxHighlighterRegistries.forEach(registry -> registry.register(asciidoctor));
         for (Class<?> converterClass : converterClasses) {
-            asciidoctor.javaConverterRegistry().register((Class) converterClass);
+            asciidoctor.getConverterRegistry().register((Class) converterClass);
         }
-        processorRegistrations.forEach(registration -> registration.accept(asciidoctor.javaExtensionRegistry()));
+        processorRegistrations.forEach(registration -> registration.accept(asciidoctor.getExtensionRegistry()));
     }
 
     private static boolean isFile(String path) {
@@ -621,7 +621,7 @@ public class Options extends LinkedHashMap<String, Object> {
     public int printVersion(PrintStream os) {
         String version;
         try (Asciidoctor asciidoctor = Asciidoctor.Factory.create()) {
-            version = asciidoctor.asciidoctorVersion();
+            version = asciidoctor.getVersion();
         }
         puts(os, "AsciidoctorJ " + version + " [https://asciidoctor.org]");
         Map<String, String> encodings = new LinkedHashMap<>();

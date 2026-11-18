@@ -48,7 +48,7 @@ public class WhenTheConfigIsSetOfAJavaExtensionTest {
         config.put(ContentModel.KEY, ContentModel.SIMPLE);
         blockProcessor.setConfig(config);
 
-        asciidoctor.javaExtensionRegistry().block(blockProcessor);
+        asciidoctor.getExtensionRegistry().block(blockProcessor);
 
         // when:
         Exception e = assertThrows(Exception.class, () -> asciidoctor.convert(document, Options.builder().toFile(false).build()));
@@ -64,7 +64,7 @@ public class WhenTheConfigIsSetOfAJavaExtensionTest {
         // given:
         Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 
-        asciidoctor.javaExtensionRegistry().block("modify", ConfigModifyingBlockProcessor.class);
+        asciidoctor.getExtensionRegistry().block("modify", ConfigModifyingBlockProcessor.class);
 
         // when:
         Exception e = assertThrows(Exception.class, () -> asciidoctor.convert(document, Options.builder().toFile(false).build()));

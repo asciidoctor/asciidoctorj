@@ -57,7 +57,7 @@ public class WhenAServerSideSyntaxHighlighterIsRegisteredTest {
                 ----
                 """;
 
-        asciidoctor.syntaxHighlighterRegistry().register(TestHighlighter.class, NAME_SYNTAXHIGHLIGHTER);
+        asciidoctor.getSyntaxHighlighterRegistry().register(TestHighlighter.class, NAME_SYNTAXHIGHLIGHTER);
 
         // when:
         String html = asciidoctor.convert(doc, Options.builder()

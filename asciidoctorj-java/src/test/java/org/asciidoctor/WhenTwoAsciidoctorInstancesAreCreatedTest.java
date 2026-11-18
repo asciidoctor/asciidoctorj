@@ -30,7 +30,7 @@ public class WhenTwoAsciidoctorInstancesAreCreatedTest {
         Asciidoctor asciidoctor1 = Asciidoctor.Factory.create();
         Asciidoctor asciidoctor2 = Asciidoctor.Factory.create();
 
-        asciidoctor1.javaExtensionRegistry().blockMacro("testmacro", TestBlockMacroProcessor.class);
+        asciidoctor1.getExtensionRegistry().blockMacro("testmacro", TestBlockMacroProcessor.class);
 
         // then:
         Options standaloneDisabledOptions = Options.builder().standalone(false).build();

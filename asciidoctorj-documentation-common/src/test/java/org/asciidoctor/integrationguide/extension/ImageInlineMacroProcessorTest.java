@@ -21,7 +21,7 @@ public class ImageInlineMacroProcessorTest {
     @Test
     public void should_create_context_menu() {
 
-        asciidoctor.javaExtensionRegistry().inlineMacro(ImageInlineMacroProcessor.class);
+        asciidoctor.getExtensionRegistry().inlineMacro(ImageInlineMacroProcessor.class);
 
         String result = asciidoctor.convert("foo:1234[]", Options.builder().toFile(false).safe(SafeMode.UNSAFE).build());
 

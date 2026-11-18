@@ -70,7 +70,7 @@ public class InlineMacroRegistrationTest {
 
     @Test
     public void testRegisterNamedClassAsClass() {
-        asciidoctor.javaExtensionRegistry().inlineMacro(AnnotatedTestProcessor.class);
+        asciidoctor.getExtensionRegistry().inlineMacro(AnnotatedTestProcessor.class);
         final String result = asciidoctor.convert(document(AnnotatedTestProcessor.NAME, "World"), emptyOptions());
         check("Hello WORLD", result);
     }
@@ -78,14 +78,14 @@ public class InlineMacroRegistrationTest {
     @Test
     public void testRegisterNamedClassAsClassWithExplicitName() {
         final String explicitblockname = "explicitblockname";
-        asciidoctor.javaExtensionRegistry().inlineMacro(explicitblockname, AnnotatedTestProcessor.class);
+        asciidoctor.getExtensionRegistry().inlineMacro(explicitblockname, AnnotatedTestProcessor.class);
         final String result = asciidoctor.convert(document(explicitblockname, "Explicit"), emptyOptions());
         check("Hello EXPLICIT", result);
     }
 
     @Test
     public void testRegisterNamedClassAsInstance() {
-        asciidoctor.javaExtensionRegistry().inlineMacro(new AnnotatedTestProcessor());
+        asciidoctor.getExtensionRegistry().inlineMacro(new AnnotatedTestProcessor());
         final String result = asciidoctor.convert(document(AnnotatedTestProcessor.NAME, "AnotherTest"), emptyOptions());
         check("Hello ANOTHER TEST", result);
     }
@@ -93,21 +93,21 @@ public class InlineMacroRegistrationTest {
     @Test
     public void testRegisterNamedClassAsInstanceWithExplicitName() {
         final String blockName = "somename";
-        asciidoctor.javaExtensionRegistry().inlineMacro(blockName, new AnnotatedTestProcessor());
+        asciidoctor.getExtensionRegistry().inlineMacro(blockName, new AnnotatedTestProcessor());
         final String result = asciidoctor.convert(document(blockName, "YetAnotherTest"), emptyOptions());
         check("Hello YET ANOTHER TEST", result);
     }
 
     @Test
     public void testRegisterClassWithoutExplicitName() {
-        assertThrows(IllegalArgumentException.class, () -> asciidoctor.javaExtensionRegistry().inlineMacro(AbstractTestProcessor.class));
+        assertThrows(IllegalArgumentException.class, () -> asciidoctor.getExtensionRegistry().inlineMacro(AbstractTestProcessor.class));
     }
 
 
     @Test
     public void testRegisterClassAsClassWithExplicitName() {
         final String explicitblockname = "anotherexplicitname";
-        asciidoctor.javaExtensionRegistry().inlineMacro(explicitblockname, AbstractTestProcessor.class);
+        asciidoctor.getExtensionRegistry().inlineMacro(explicitblockname, AbstractTestProcessor.class);
         final String result = asciidoctor.convert(document(explicitblockname, "ExplicitClass"), emptyOptions());
         check("Hello EXPLICIT CLASS", result);
     }
@@ -115,7 +115,7 @@ public class InlineMacroRegistrationTest {
     @Test
     public void testRegisterClassAsInstance() {
         assertThrows(AsciidoctorException.class, () -> {
-            asciidoctor.javaExtensionRegistry().inlineMacro(new AbstractTestProcessor());
+            asciidoctor.getExtensionRegistry().inlineMacro(new AbstractTestProcessor());
             asciidoctor.convert(document("foo", "HelloExplicitInstance"), emptyOptions());
         });
     }
@@ -123,7 +123,7 @@ public class InlineMacroRegistrationTest {
     @Test
     public void testRegisterClassAsInstanceWithExplicitName() {
         final String explicitblockname = "someexplicitname";
-        asciidoctor.javaExtensionRegistry().inlineMacro(explicitblockname, new AbstractTestProcessor());
+        asciidoctor.getExtensionRegistry().inlineMacro(explicitblockname, new AbstractTestProcessor());
         final String result = asciidoctor.convert(document(explicitblockname, "ExplicitInstance"), emptyOptions());
         check("Hello EXPLICIT INSTANCE", result);
     }
@@ -131,20 +131,20 @@ public class InlineMacroRegistrationTest {
 
     @Test
     public void testRegisterClassWithNameAsClass() {
-        assertThrows(IllegalArgumentException.class, () -> asciidoctor.javaExtensionRegistry().inlineMacro(TestProcessorWithName.class));
+        assertThrows(IllegalArgumentException.class, () -> asciidoctor.getExtensionRegistry().inlineMacro(TestProcessorWithName.class));
     }
 
     @Test
     public void testRegisterClassWithNameAsClassWithExplicitName() {
         final String explicitblockname = "explicitblockname";
-        asciidoctor.javaExtensionRegistry().inlineMacro(explicitblockname, TestProcessorWithName.class);
+        asciidoctor.getExtensionRegistry().inlineMacro(explicitblockname, TestProcessorWithName.class);
         final String result = asciidoctor.convert(document(explicitblockname, "Explicit"), emptyOptions());
         check("Hello EXPLICIT", result);
     }
 
     @Test
     public void testRegisterClassWithNameAsInstance() {
-        asciidoctor.javaExtensionRegistry().inlineMacro(new TestProcessorWithName());
+        asciidoctor.getExtensionRegistry().inlineMacro(new TestProcessorWithName());
         final String result = asciidoctor.convert(document(TestProcessorWithName.NAME, "AnotherTest"), emptyOptions());
         check("Hello ANOTHER TEST", result);
     }
@@ -152,7 +152,7 @@ public class InlineMacroRegistrationTest {
     @Test
     public void testRegisterClassWithNameAsInstanceWithExplicitName() {
         final String blockName = "somename";
-        asciidoctor.javaExtensionRegistry().inlineMacro(blockName, new TestProcessorWithName());
+        asciidoctor.getExtensionRegistry().inlineMacro(blockName, new TestProcessorWithName());
         final String result = asciidoctor.convert(document(blockName, "YetAnotherTest"), emptyOptions());
         check("Hello YET ANOTHER TEST", result);
     }

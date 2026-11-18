@@ -85,7 +85,7 @@ class WhenADocumentIsRenderedToStream {
 
         // given:
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        asciidoctor.javaConverterRegistry().register(TestConverter.class, TestConverter.TEST_BACKEND_NAME);
+        asciidoctor.getConverterRegistry().register(TestConverter.class, TestConverter.TEST_BACKEND_NAME);
         String testDoc = """
                 == Test
 

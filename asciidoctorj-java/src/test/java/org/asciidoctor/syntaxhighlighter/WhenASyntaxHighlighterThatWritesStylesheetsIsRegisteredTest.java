@@ -90,7 +90,7 @@ public class WhenASyntaxHighlighterThatWritesStylesheetsIsRegisteredTest {
                 """.formatted(lang);
 
         File toDir = tempDir;
-        asciidoctor.syntaxHighlighterRegistry().register(TestHighlighter.class, NAME_SYNTAXHIGHLIGHTER);
+        asciidoctor.getSyntaxHighlighterRegistry().register(TestHighlighter.class, NAME_SYNTAXHIGHLIGHTER);
 
         // when:
         asciidoctor.convert(doc, Options.builder()

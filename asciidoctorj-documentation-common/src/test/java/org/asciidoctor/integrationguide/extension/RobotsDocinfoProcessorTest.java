@@ -26,7 +26,7 @@ public class RobotsDocinfoProcessorTest {
 //tag::include[]
         String src = "= Irrelevant content";
 
-        asciidoctor.javaExtensionRegistry()
+        asciidoctor.getExtensionRegistry()
                 .docinfoProcessor(RobotsDocinfoProcessor.class); // <1>
 
         String result = asciidoctor.convert(

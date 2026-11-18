@@ -18,7 +18,7 @@ public abstract class InlineMacroProcessor extends MacroProcessor<PhraseNode> {
      * Map&lt;String, Object&gt; config = new HashMap&lt;&gt;();
      * config.put(REGEXP, "man:([A-Za-z0-9]+)\\[(.*?)\\]");
      * InlineMacroProcessor inlineMacroProcessor = new InlineMacroProcessor("man", config);
-     * asciidoctor.javaExtensionRegistry().inlineMacro(inlineMacroProcessor);
+     * asciidoctor.getExtensionRegistry().inlineMacro(inlineMacroProcessor);
      * </verbatim>
      * </pre>
      * </p>

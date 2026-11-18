@@ -25,7 +25,7 @@ public class PreprocessorTest {
     @Test
     public void shouldRemoveFrontMatter() {
         // Given: the FrontMatterPreprocessor
-        asciidoctor.javaExtensionRegistry().preprocessor(FrontMatterPreprocessor.class);
+        asciidoctor.getExtensionRegistry().preprocessor(FrontMatterPreprocessor.class);
 
         // And a document with a front matter
         String document = "---\n" +
@@ -69,7 +69,7 @@ public class PreprocessorTest {
     @Test
     public void shouldUseNewReader() {
         // Given: the HardBreakPreprocessor
-        asciidoctor.javaExtensionRegistry().preprocessor(HardBreakPreprocessor.class);
+        asciidoctor.getExtensionRegistry().preprocessor(HardBreakPreprocessor.class);
 
         // And a document
         String document = "Ruby is red.\n" +

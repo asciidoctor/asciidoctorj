@@ -55,7 +55,7 @@ class WhenALayoutingSyntaxHighlighterIsRegistered {
                 ----
                 """;
 
-        asciidoctor.syntaxHighlighterRegistry().register(AllGoHighlighter.class, NAME_SYNTAXHIGHLIGHTER);
+        asciidoctor.getSyntaxHighlighterRegistry().register(AllGoHighlighter.class, NAME_SYNTAXHIGHLIGHTER);
 
         // when:
         String html = asciidoctor.convert(doc, Options.builder()

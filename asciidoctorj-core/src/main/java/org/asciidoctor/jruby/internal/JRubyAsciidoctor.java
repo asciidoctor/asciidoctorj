@@ -184,7 +184,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     }
 
     @Override
-    public JavaExtensionRegistry javaExtensionRegistry() {
+    public JavaExtensionRegistry getExtensionRegistry() {
         return new JavaExtensionRegistryImpl(this);
     }
 
@@ -193,12 +193,12 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     }
 
     @Override
-    public JavaConverterRegistry javaConverterRegistry() {
+    public JavaConverterRegistry getConverterRegistry() {
         return new JavaConverterRegistryImpl(this);
     }
 
     @Override
-    public SyntaxHighlighterRegistry syntaxHighlighterRegistry() {
+    public SyntaxHighlighterRegistry getSyntaxHighlighterRegistry() {
         return new SyntaxHighlighterRegistryImpl(this);
     }
 
@@ -210,6 +210,20 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
     @Override
     public String asciidoctorVersion() {
         return RubyUtils.rubyToJava(rubyRuntime, getAsciidoctorModule().getConstant("VERSION"), String.class);
+    }
+
+    @Override
+    public String getVersion() {
+        try (InputStream in = JRubyAsciidoctor.class.getResourceAsStream("/META-INF/asciidoctorj-version.properties")) {
+            if (in == null) {
+                throw new IllegalStateException("Unable to find the version of AsciidoctorJ: META-INF/asciidoctorj-version.properties is missing");
+            }
+            Properties properties = new Properties();
+            properties.load(in);
+            return properties.getProperty("version.asciidoctorj");
+        } catch (IOException e) {
+            throw new UncheckedIOException("Unable to read the version of AsciidoctorJ", e);
+        }
     }
 
     private RubyModule getExtensionsModule() {

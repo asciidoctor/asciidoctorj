@@ -97,7 +97,7 @@ class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
     @DisplayName("a docinfoprocessor should be configurable via the Location annotation")
     void aDocinfoprocessorShouldBeConfigurableViaTheLocationAnnotation() {
         // when:
-        asciidoctor.javaExtensionRegistry().docinfoProcessor(AnnotatedDocinfoProcessor.class);
+        asciidoctor.getExtensionRegistry().docinfoProcessor(AnnotatedDocinfoProcessor.class);
         String result = asciidoctor.convert(DOCUMENT, options());
 
         // then:
@@ -110,7 +110,7 @@ class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
     @DisplayName("a docinfoprocessor instance should be configurable via the Location annotation")
     void aDocinfoprocessorInstanceShouldBeConfigurableViaTheLocationAnnotation() {
         // when:
-        asciidoctor.javaExtensionRegistry().docinfoProcessor(new AnnotatedDocinfoProcessor());
+        asciidoctor.getExtensionRegistry().docinfoProcessor(new AnnotatedDocinfoProcessor());
         String result = asciidoctor.convert(DOCUMENT, options());
 
         // then:
@@ -124,7 +124,7 @@ class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
     @DisplayName("a docinfoprocessor instance can override the annotation from footer to header")
     void aDocinfoprocessorInstanceCanOverrideTheAnnotationFromFooterToHeader() {
         // when:
-        asciidoctor.javaExtensionRegistry().docinfoProcessor(new AnnotatedDocinfoProcessor(LocationType.HEADER));
+        asciidoctor.getExtensionRegistry().docinfoProcessor(new AnnotatedDocinfoProcessor(LocationType.HEADER));
         String result = asciidoctor.convert(DOCUMENT, options());
 
         // then:
@@ -136,7 +136,7 @@ class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
     @DisplayName("a docinfoprocessor instance can override the annotation from footer to footer")
     void aDocinfoprocessorInstanceCanOverrideTheAnnotationFromFooterToFooter() {
         // when:
-        asciidoctor.javaExtensionRegistry().docinfoProcessor(new AnnotatedDocinfoProcessor(LocationType.FOOTER));
+        asciidoctor.getExtensionRegistry().docinfoProcessor(new AnnotatedDocinfoProcessor(LocationType.FOOTER));
         String result = asciidoctor.convert(DOCUMENT, options());
 
         // then:
@@ -150,7 +150,7 @@ class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
     void whenRegisteringABlockMacroProcessorClassItShouldBeConfigurableViaAnnotations() {
 
         // when:
-        asciidoctor.javaExtensionRegistry().blockMacro(AnnotatedBlockMacroProcessor.class);
+        asciidoctor.getExtensionRegistry().blockMacro(AnnotatedBlockMacroProcessor.class);
         String result = asciidoctor.convert(BLOCK_MACRO_DOCUMENT, disableStandaloneOption());
 
         // then:
@@ -164,7 +164,7 @@ class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
     void whenRegisteringABlockProcessorClassItShouldBeConfigurableViaAnnotations() {
 
         // when:
-        asciidoctor.javaExtensionRegistry().block(AnnotatedBlockProcessor.class);
+        asciidoctor.getExtensionRegistry().block(AnnotatedBlockProcessor.class);
         String result = asciidoctor.convert(BLOCK_DOCUMENT, disableStandaloneOption());
 
         // then:
@@ -180,7 +180,7 @@ class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
     void whenRegisteringABlockProcessorInstanceItShouldBeConfigurableViaAnnotations() {
 
         // when:
-        asciidoctor.javaExtensionRegistry().block(new AnnotatedBlockProcessor("dummy", "yell2"));
+        asciidoctor.getExtensionRegistry().block(new AnnotatedBlockProcessor("dummy", "yell2"));
         String result = asciidoctor.convert(BLOCK_DOCUMENT_2, disableStandaloneOption());
 
         // then:
@@ -195,7 +195,7 @@ class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
 
         // given:
         AnnotatedBlockProcessor processor = new AnnotatedBlockProcessor("dummy", "yell2");
-        asciidoctor.javaExtensionRegistry().block(processor);
+        asciidoctor.getExtensionRegistry().block(processor);
 
         // when:
         asciidoctor.convert(BLOCK_DOCUMENT_2, disableStandaloneOption());
@@ -212,7 +212,7 @@ class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
 
         // given:
         AnnotatedLongInlineMacroProcessor processor = new AnnotatedLongInlineMacroProcessor();
-        asciidoctor.javaExtensionRegistry().inlineMacro(processor);
+        asciidoctor.getExtensionRegistry().inlineMacro(processor);
 
         // when:
         asciidoctor.convert(INLINE_MACRO_DOCUMENT, disableStandaloneOption());
@@ -230,7 +230,7 @@ class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
     @DisplayName("when registering an InlineMacroProcessor class with long format it should be configurable via annotations")
     void whenRegisteringAnInlineMacroProcessorClassWithLongFormatItShouldBeConfigurableViaAnnotations() {
         // when:
-        asciidoctor.javaExtensionRegistry().inlineMacro(AnnotatedLongInlineMacroProcessor.class);
+        asciidoctor.getExtensionRegistry().inlineMacro(AnnotatedLongInlineMacroProcessor.class);
         String result = asciidoctor.convert(INLINE_MACRO_DOCUMENT, disableStandaloneOption());
 
         // then:
@@ -243,7 +243,7 @@ class WhenAJavaExtensionIsRegisteredWithAnnotationsTest {
     @DisplayName("when registering an InlineMacroProcessor class with regexp it should be configurable via annotations")
     void whenRegisteringAnInlineMacroProcessorClassWithRegexpItShouldBeConfigurableViaAnnotations() {
         // when:
-        asciidoctor.javaExtensionRegistry().inlineMacro(AnnotatedRegexpInlineMacroProcessor.class);
+        asciidoctor.getExtensionRegistry().inlineMacro(AnnotatedRegexpInlineMacroProcessor.class);
         String result = asciidoctor.convert(INLINE_MACRO_REGEXP_DOCUMENT, disableStandaloneOption());
 
         // then:

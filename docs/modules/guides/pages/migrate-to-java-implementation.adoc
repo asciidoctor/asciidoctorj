@@ -62,7 +62,6 @@ This includes the gems wrapped by AsciidoctorJ (e.g., Asciidoctor PDF, Asciidoct
 
 == Behavior changes
 
-* `Asciidoctor#asciidoctorVersion()` returns the version of AsciidoctorJ, since there's no embedded Asciidoctor (Ruby).
 * When the output is written to an `OutputStream` (`Options.builder().toStream(…)`), the stream is not closed after the output is written.
 * `LogRecord#getSourceFileName()` and `LogRecord#getSourceMethodName()` are null (they were extracted from the Ruby backtrace).
 * A String option that starts with a colon (e.g., `":compound"`) is still interpreted as a Ruby symbol, except the `source` option of `Processor#createBlock` (the JRuby implementation also converted the lines of the source that start with a colon).

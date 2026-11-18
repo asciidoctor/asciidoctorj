@@ -26,7 +26,7 @@ public class WhenABlockShouldBeDuplicatedTest {
 
         // given:
         String newSource = "a source";
-        asciidoctor.javaExtensionRegistry().treeprocessor(new BlockDuplicator("paragraph", newSource));
+        asciidoctor.getExtensionRegistry().treeprocessor(new BlockDuplicator("paragraph", newSource));
 
         final String asciidoctorSource = "\n\n  This will be ignored\n\n    ";
 
@@ -46,7 +46,7 @@ public class WhenABlockShouldBeDuplicatedTest {
 
         // given:
         String newSource = "Asciidoctor asciidoctor = ...";
-        asciidoctor.javaExtensionRegistry().treeprocessor(new BlockDuplicator("listing", newSource));
+        asciidoctor.getExtensionRegistry().treeprocessor(new BlockDuplicator("listing", newSource));
 
         final String asciidoctorSource = "\n[source,java,subs=\"replacements\"]\n----\nThis will be ignored\n----\n\n    ";
 

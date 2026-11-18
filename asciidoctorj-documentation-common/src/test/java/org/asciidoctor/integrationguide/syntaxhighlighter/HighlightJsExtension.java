@@ -7,7 +7,7 @@ import org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry;
 public class HighlightJsExtension implements SyntaxHighlighterRegistry { // <1>
     @Override
     public void register(Asciidoctor asciidoctor) { // <2>
-        asciidoctor.syntaxHighlighterRegistry()     // <3>
+        asciidoctor.getSyntaxHighlighterRegistry()     // <3>
             .register(HighlightJsHighlighter.class, "autoloadedHighlightJs");
     }
 }

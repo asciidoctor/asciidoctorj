@@ -31,7 +31,7 @@ public class IssueInlineMacroProcessorTest {
                 issueinlinemacro;
 
 //tag::include[]
-        asciidoctor.javaExtensionRegistry().inlineMacro(IssueInlineMacroProcessor.class);       // <1>
+        asciidoctor.getExtensionRegistry().inlineMacro(IssueInlineMacroProcessor.class);       // <1>
 
         String result = asciidoctor.convertFile(issueinlinemacro_adoc, Options.builder().toFile(false).build());
 
@@ -50,7 +50,7 @@ public class IssueInlineMacroProcessorTest {
         File issueinlinemacro_adoc = //...
                 issueinlinemacro;
 
-        asciidoctor.javaExtensionRegistry().inlineMacro(IssueInlineMacroPositionalAttributesProcessor.class);
+        asciidoctor.getExtensionRegistry().inlineMacro(IssueInlineMacroPositionalAttributesProcessor.class);
 
         String result = asciidoctor.convertFile(issueinlinemacro_adoc, Options.builder().toFile(false).build());
 

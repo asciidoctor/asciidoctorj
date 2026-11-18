@@ -43,7 +43,7 @@ class WhenAnInlineMacroProcessorProcessesATable {
     @DisplayName("a InlineMacroProcessor should be able to process table cells")
     void aInlineMacroProcessorShouldBeAbleToProcessTableCells() {
         // when:
-        asciidoctor.javaExtensionRegistry().inlineMacro(AnnotatedLongInlineMacroProcessor.class);
+        asciidoctor.getExtensionRegistry().inlineMacro(AnnotatedLongInlineMacroProcessor.class);
         String result = asciidoctor.convert(INLINE_MACRO_DOCUMENT, Options.builder().standalone(false).build());
 
         // then:
@@ -56,7 +56,7 @@ class WhenAnInlineMacroProcessorProcessesATable {
     @DisplayName("a InlineMacroProcessor should be able to process table cells with asciidoc style")
     void aInlineMacroProcessorShouldBeAbleToProcessTableCellsWithAsciidocStyle() {
         // when:
-        asciidoctor.javaExtensionRegistry().inlineMacro(AnnotatedLongInlineMacroProcessor.class);
+        asciidoctor.getExtensionRegistry().inlineMacro(AnnotatedLongInlineMacroProcessor.class);
         String result = asciidoctor.convert(INLINE_MACRO_DOCUMENT_ASCIIDOC_STYLE, Options.builder().standalone(false).build());
 
         // then:

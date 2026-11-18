@@ -15,9 +15,8 @@ Deprecated in 3.1 and removed from the API in 4.0: they are declared by `Asciido
 The implementation throws an `UnsupportedOperationException`.
 * [.line-through]#`Asciidoctor#shutdown()` tears down the Ruby runtime: there's nothing to shut down anymore (and `close()` already exists).#
 Deprecated in 3.1 and removed in 4.0: use `close()` instead.
-* `Asciidoctor#asciidoctorVersion()` returns the version of Asciidoctor (Ruby) embedded in AsciidoctorJ.
-There's no embedded Asciidoctor anymore: the implementation returns the version of AsciidoctorJ.
-Should it be renamed (e.g., `version()`) or report the version of Asciidoctor (Ruby) that the implementation follows?
+* [.line-through]#`Asciidoctor#asciidoctorVersion()` returns the version of Asciidoctor (Ruby) embedded in AsciidoctorJ.#
+Replaced in 4.0 by `Asciidoctor#getVersion()`, which returns the version of AsciidoctorJ. `AsciidoctorJRuby#asciidoctorVersion()` still returns the version of Asciidoctor (Ruby).
 * `LogRecord#getSourceFileName()` and `LogRecord#getSourceMethodName()` are extracted from the Ruby backtrace.
 They are always null (they could report the Java class and method that logged the message, but it's costly).
 

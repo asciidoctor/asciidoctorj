@@ -68,7 +68,7 @@ class WhenSubstitutionsAreUsed {
                 """;
 
         // when:
-        asciidoctor.javaExtensionRegistry().treeprocessor(TestTreeprocessor.class);
+        asciidoctor.getExtensionRegistry().treeprocessor(TestTreeprocessor.class);
         Document doc = asciidoctor.load(document, emptyOptions());
         Block firstparagraph = (Block) doc.getBlocks().get(0).getBlocks().get(0);
         Block secondparagraph = (Block) doc.getBlocks().get(0).getBlocks().get(1);
@@ -106,7 +106,7 @@ class WhenSubstitutionsAreUsed {
                 """;
 
         // when:
-        asciidoctor.javaExtensionRegistry().treeprocessor(TestTreeprocessor.class);
+        asciidoctor.getExtensionRegistry().treeprocessor(TestTreeprocessor.class);
         Document doc = asciidoctor.load(document, emptyOptions());
         Block firstparagraph = (Block) doc.getBlocks().get(0).getBlocks().get(0);
         Block secondparagraph = (Block) doc.getBlocks().get(0).getBlocks().get(1);
@@ -155,7 +155,7 @@ class WhenSubstitutionsAreUsed {
                 """;
 
         // when:
-        asciidoctor.javaExtensionRegistry().treeprocessor(PrependSubstitutionTestTreeprocessor.class);
+        asciidoctor.getExtensionRegistry().treeprocessor(PrependSubstitutionTestTreeprocessor.class);
         Document doc = asciidoctor.load(document, emptyOptions());
         Block firstparagraph = (Block) doc.getBlocks().get(0).getBlocks().get(0);
 
@@ -196,7 +196,7 @@ class WhenSubstitutionsAreUsed {
                 """;
 
         // when:
-        asciidoctor.javaExtensionRegistry().treeprocessor(SetSubstitutionTestTreeprocessor.class);
+        asciidoctor.getExtensionRegistry().treeprocessor(SetSubstitutionTestTreeprocessor.class);
         Document doc = asciidoctor.load(document, emptyOptions());
         Block firstparagraph = (Block) doc.getBlocks().get(0).getBlocks().get(0);
 

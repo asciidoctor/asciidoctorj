@@ -144,17 +144,17 @@ public class CoreAsciidoctor implements Asciidoctor, LogHandler {
     }
 
     @Override
-    public JavaExtensionRegistry javaExtensionRegistry() {
+    public JavaExtensionRegistry getExtensionRegistry() {
         return new JavaExtensionRegistryImpl(this);
     }
 
     @Override
-    public JavaConverterRegistry javaConverterRegistry() {
+    public JavaConverterRegistry getConverterRegistry() {
         return new JavaConverterRegistryImpl(this);
     }
 
     @Override
-    public SyntaxHighlighterRegistry syntaxHighlighterRegistry() {
+    public SyntaxHighlighterRegistry getSyntaxHighlighterRegistry() {
         return new SyntaxHighlighterRegistryImpl(this);
     }
 
@@ -348,7 +348,7 @@ public class CoreAsciidoctor implements Asciidoctor, LogHandler {
      * @return the version of AsciidoctorJ (this implementation doesn't embed Asciidoctor Ruby)
      */
     @Override
-    public String asciidoctorVersion() {
+    public String getVersion() {
         return org.asciidoctor.core.Asciidoctor.VERSION;
     }
 }

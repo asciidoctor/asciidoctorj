@@ -38,7 +38,7 @@ public class HighlightJsHighlighterTest {
 
         //tag::include[]
 
-        asciidoctor.syntaxHighlighterRegistry()
+        asciidoctor.getSyntaxHighlighterRegistry()
             .register(HighlightJsHighlighter.class, "myhighlightjs"); // <1>
 
         String result = asciidoctor.convertFile(sources_adoc,
@@ -56,7 +56,7 @@ public class HighlightJsHighlighterTest {
     public void should_invoke_syntax_highlighter_with_3_params() {
         File sources_adoc = sourcesDocument;
 
-        asciidoctor.syntaxHighlighterRegistry()
+        asciidoctor.getSyntaxHighlighterRegistry()
             .register(org.asciidoctor.integrationguide.syntaxhighlighter.threeparams.HighlightJsHighlighter.class, "myhighlightjs");
 
         String result = asciidoctor.convertFile(sources_adoc,
@@ -77,7 +77,7 @@ public class HighlightJsHighlighterTest {
 
 //tag::includeformatter[]
 
-        asciidoctor.syntaxHighlighterRegistry()
+        asciidoctor.getSyntaxHighlighterRegistry()
             .register(HighlightJsWithLanguageHighlighter.class, "myhighlightjs");
 
         String result = asciidoctor.convertFile(sources_adoc,
@@ -104,7 +104,7 @@ public class HighlightJsHighlighterTest {
             tempDir;
 //tag::includestylesheetwriter[]
 
-        asciidoctor.syntaxHighlighterRegistry()
+        asciidoctor.getSyntaxHighlighterRegistry()
             .register(HighlightJsWithOfflineStylesHighlighter.class, "myhighlightjs");
 
         asciidoctor.convertFile(sources_adoc,

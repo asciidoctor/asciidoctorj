@@ -54,7 +54,7 @@ public class CatalogOfRefsAreAvailableTest {
     @BeforeEach
     public void setup() {
         refs = null;
-        asciidoctor.javaConverterRegistry().register(Converter.class, CONVERTER_BACKEND);
+        asciidoctor.getConverterRegistry().register(Converter.class, CONVERTER_BACKEND);
     }
 
     private String convert(String document) {
