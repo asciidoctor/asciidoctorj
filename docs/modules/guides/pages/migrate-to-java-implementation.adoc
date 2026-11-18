@@ -48,6 +48,8 @@ The following classes of the JRuby implementation, which are not part of the API
 The exception thrown when a conversion fails is `org.asciidoctor.AsciidoctorException` (of the API).
 `org.asciidoctor.jruby.internal.AsciidoctorCoreException` doesn't exist in the Java implementation: applications that catch it have to catch `AsciidoctorException` instead, which is also the superclass of `AsciidoctorCoreException` in the JRuby implementation.
 
+include::partial$renamed-methods-in-asciidoctor.adoc[]
+
 [#not-supported]
 == Not supported
 
@@ -58,6 +60,7 @@ The features that rely on Ruby are not supported:
 This includes the gems wrapped by AsciidoctorJ (e.g., Asciidoctor PDF, Asciidoctor EPUB3, Asciidoctor Diagram, Asciidoctor reveal.js);
 * the syntax highlighters that require a gem (Rouge, CodeRay, Pygments): highlight.js and Prettify are supported, as well as the syntax highlighters written in Java;
 * converter templates ({url-tilt}[Tilt]): the `template_dirs` option is ignored;
+* the version of Asciidoctor (Ruby): `asciidoctorVersion()` is only declared by `AsciidoctorJRuby`;
 * the JRuby specific classes (see xref:access-jruby-instance.adoc[]): `AsciidoctorJRuby` and `JRubyAsciidoctor` (e.g., to create an instance with a gem path, load paths or a class loader).
 
 == Behavior changes

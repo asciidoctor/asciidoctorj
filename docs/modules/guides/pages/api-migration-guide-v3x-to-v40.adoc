@@ -6,4 +6,6 @@ This guide will provide the steps required to update a project currently using 3
 
 include::partial$removal-of-ruby-specific-methods-in-asciidoctor.adoc[]
 
+include::partial$renamed-methods-in-asciidoctor.adoc[]
+
 include::partial$move-of-content-model-annotation.adoc[]

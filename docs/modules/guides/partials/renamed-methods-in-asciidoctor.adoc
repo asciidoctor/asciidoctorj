@@ -1,0 +1,31 @@
+== Renamed methods
+
+The following methods of `org.asciidoctor.Asciidoctor` have a new name that follows the Java naming conventions.
+The old names are removed from all implementations, so an application must use the new names with the JRuby implementation and with the Java implementation.
+
+[cols="1,1"]
+|===
+|3.x |4.0
+
+|`javaExtensionRegistry()`
+|`getExtensionRegistry()`
+
+|`javaConverterRegistry()`
+|`getConverterRegistry()`
+
+|`syntaxHighlighterRegistry()`
+|`getSyntaxHighlighterRegistry()`
+
+|`asciidoctorVersion()`
+|`getVersion()`
+|===
+
+To migrate, use the new names:
+
+[,java]
+----
+asciidoctor.getExtensionRegistry().block(YellBlockProcessor.class);
+asciidoctor.getConverterRegistry().register(TextConverter.class);
+asciidoctor.getSyntaxHighlighterRegistry().register(MySyntaxHighlighter.class, "mysyntaxhighlighter");
+String version = asciidoctor.getVersion();
+----

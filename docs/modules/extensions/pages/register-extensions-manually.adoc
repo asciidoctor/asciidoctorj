@@ -1,4 +1,4 @@
-= Manually Registering Extensions with getExtensionRegistry
+= Manually Registering Extensions
 
 Extensions can be registered individually accessing the default extension registry directly from the Asciidoctor instance.
 
