@@ -38,7 +38,7 @@ public @interface ContentModel {
      * Map&lt;String, Object&gt; config = new HashMap&lt;&gt;();
      * config.put(ContentModel.KEY, ContentModel.COMPOUND);
      * BlockProcessor blockProcessor = new BlockProcessor("foo", config);
-     * asciidoctor.javaExtensionRegistry().block(blockProcessor);
+     * asciidoctor.getExtensionRegistry().block(blockProcessor);
      * </verbatim>
      * </pre>
      * </p>
