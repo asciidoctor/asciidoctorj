@@ -75,7 +75,7 @@ public class RequireTest extends CliTestHelper {
                     public class FooterExtensionRegistry implements ExtensionRegistry {
                         @Override
                         public void register(Asciidoctor asciidoctor) {
-                            asciidoctor.javaExtensionRegistry().postprocessor(FooterPostprocessor.class);
+                            asciidoctor.getExtensionRegistry().postprocessor(FooterPostprocessor.class);
                         }
                     }
                     """),
@@ -110,7 +110,7 @@ public class RequireTest extends CliTestHelper {
                     public class TextConverterRegistry implements ConverterRegistry {
                         @Override
                         public void register(Asciidoctor asciidoctor) {
-                            asciidoctor.javaConverterRegistry().register(TextConverter.class, "plain");
+                            asciidoctor.getConverterRegistry().register(TextConverter.class, "plain");
                         }
                     }
                     """));

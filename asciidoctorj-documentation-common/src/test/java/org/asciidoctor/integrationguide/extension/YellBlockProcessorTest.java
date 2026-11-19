@@ -31,7 +31,7 @@ public class YellBlockProcessorTest {
 
         //tag::include[]
 
-        asciidoctor.javaExtensionRegistry().block(YellBlockProcessor.class); // <1>
+        asciidoctor.getExtensionRegistry().block(YellBlockProcessor.class); // <1>
 
         String result = asciidoctor.convertFile(yellblock_adoc, Options.builder().toFile(false).build());
 
@@ -44,7 +44,7 @@ public class YellBlockProcessorTest {
         File yellblock_adoc = //...
             yellBlock;
 
-        asciidoctor.javaExtensionRegistry().block(YellBlockProcessorWithAttributes.class);
+        asciidoctor.getExtensionRegistry().block(YellBlockProcessorWithAttributes.class);
 
         String result = asciidoctor.convertFile(yellblock_adoc, Options.builder().toFile(false).build());
 
@@ -56,7 +56,7 @@ public class YellBlockProcessorTest {
         File yellblock_adoc = //...
             yellBlock;
 
-        asciidoctor.javaExtensionRegistry().block(YellBlockProcessorWithPositionalAttributes.class);
+        asciidoctor.getExtensionRegistry().block(YellBlockProcessorWithPositionalAttributes.class);
 
         String result = asciidoctor.convertFile(yellblock_adoc, Options.builder().toFile(false).build());
 

@@ -51,7 +51,7 @@ class WhenAJavaExtensionUsesCounters {
 
                 """;
         // when:
-        asciidoctor.javaExtensionRegistry().blockMacro(TestBlockMacroProcessor.class);
+        asciidoctor.getExtensionRegistry().blockMacro(TestBlockMacroProcessor.class);
         String result = asciidoctor.convert(document, Options.builder().standalone(true).safe(SafeMode.SERVER).build());
 
         // then:
@@ -86,7 +86,7 @@ class WhenAJavaExtensionUsesCounters {
 
                 """;
         // when:
-        asciidoctor.javaExtensionRegistry().treeprocessor(TestTreeProcessor.class);
+        asciidoctor.getExtensionRegistry().treeprocessor(TestTreeProcessor.class);
         String result = asciidoctor.convert(document, Options.builder().standalone(true).safe(SafeMode.SERVER).build());
 
         // then:
@@ -115,7 +115,7 @@ class WhenAJavaExtensionUsesCounters {
 
                 """;
         // when:
-        asciidoctor.javaExtensionRegistry().blockMacro(TestBlockMacroWithInitialCounterProcessor.class);
+        asciidoctor.getExtensionRegistry().blockMacro(TestBlockMacroWithInitialCounterProcessor.class);
         String result = asciidoctor.convert(document, Options.builder().standalone(true).safe(SafeMode.SERVER).build());
 
         // then:

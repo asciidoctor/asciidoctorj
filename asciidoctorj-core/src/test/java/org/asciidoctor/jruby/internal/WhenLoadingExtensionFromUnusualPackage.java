@@ -18,19 +18,19 @@ public class WhenLoadingExtensionFromUnusualPackage {
 
     @Test
     public void shouldAllowLoadingUsingInstance() {
-        final JavaExtensionRegistry registry = asciidoctor.javaExtensionRegistry();
+        final JavaExtensionRegistry registry = asciidoctor.getExtensionRegistry();
         registry.postprocessor(new unusual.extension.BoldifyPostProcessor());
     }
 
     @Test
     public void shouldAllowLoadingByClassName() {
-        final JavaExtensionRegistry registry = asciidoctor.javaExtensionRegistry();
+        final JavaExtensionRegistry registry = asciidoctor.getExtensionRegistry();
         registry.postprocessor(BoldifyPostProcessor.class.getCanonicalName());
     }
 
     @Test
     public void shouldAllowLoadingByClass() {
-        final JavaExtensionRegistry registry = asciidoctor.javaExtensionRegistry();
+        final JavaExtensionRegistry registry = asciidoctor.getExtensionRegistry();
         registry.postprocessor(BoldifyPostProcessor.class);
     }
 }

@@ -30,7 +30,7 @@ public class WhenATreeProcessorWorksOnTablesTest {
     public void thenTheExtensionShouldBeAbleToCreateTables() {
 
         // given: an empty document and a tree processor that creates a simple table
-        asciidoctor.javaExtensionRegistry().treeprocessor(TableCreatorTreeProcessor.class);
+        asciidoctor.getExtensionRegistry().treeprocessor(TableCreatorTreeProcessor.class);
 
         // when: the document is rendered
         String content = asciidoctor.convert(EMPTY_DOCUMENT, Options.builder().standalone(false).build());
@@ -65,7 +65,7 @@ public class WhenATreeProcessorWorksOnTablesTest {
     public void thenItShouldBeAbleToUpdateTheTextOfACell() {
 
         // given: an document with a table and a tree processor that updates tables
-        asciidoctor.javaExtensionRegistry().treeprocessor(TableUpdaterTreeProcessor.class);
+        asciidoctor.getExtensionRegistry().treeprocessor(TableUpdaterTreeProcessor.class);
 
         // when: the document is rendered
         String content = asciidoctor.convert("""

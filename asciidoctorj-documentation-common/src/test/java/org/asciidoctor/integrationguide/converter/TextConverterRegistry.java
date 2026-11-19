@@ -7,7 +7,7 @@ public class TextConverterRegistry implements ConverterRegistry {
     @Override
     public void register(Asciidoctor asciidoctor) {
 
-        asciidoctor.javaConverterRegistry().register(TextConverter.class);
+        asciidoctor.getConverterRegistry().register(TextConverter.class);
 
     }
 }

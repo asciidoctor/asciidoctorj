@@ -50,7 +50,7 @@ public class WhenReadingImagesFromCatalogAssetFromConverterTest {
 
     @BeforeEach
     public void beforeEach() {
-        final var javaConverterRegistry = asciidoctor.javaConverterRegistry();
+        final var javaConverterRegistry = asciidoctor.getConverterRegistry();
         javaConverterRegistry.converters().clear();
         javaConverterRegistry.register(TestConverter.class, CONVERTER_BACKEND);
 

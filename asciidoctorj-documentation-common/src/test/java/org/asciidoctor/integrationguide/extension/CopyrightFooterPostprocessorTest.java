@@ -32,7 +32,7 @@ public class CopyrightFooterPostprocessorTest {
             commentDocument;
 
 //tag::include[]
-        asciidoctor.javaExtensionRegistry().postprocessor(CopyrightFooterPostprocessor.class); // <1>
+        asciidoctor.getExtensionRegistry().postprocessor(CopyrightFooterPostprocessor.class); // <1>
 
         String result =
                 asciidoctor.convertFile(doc,

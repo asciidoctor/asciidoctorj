@@ -75,8 +75,8 @@ class WhenABlockProcessorCreatesABlockThatATreeProcessorVisits {
     @DisplayName("execution should not throw class cast exception")
     void executionShouldNotThrowClassCastException() {
         // given:
-        asciidoctor.javaExtensionRegistry().block(BlockCreator.class);
-        asciidoctor.javaExtensionRegistry().treeprocessor(BlockVisitor.class);
+        asciidoctor.getExtensionRegistry().block(BlockCreator.class);
+        asciidoctor.getExtensionRegistry().treeprocessor(BlockVisitor.class);
 
         // when:
         Options options = Options.builder().safe(SafeMode.SAFE).toFile(false).standalone(true).build();

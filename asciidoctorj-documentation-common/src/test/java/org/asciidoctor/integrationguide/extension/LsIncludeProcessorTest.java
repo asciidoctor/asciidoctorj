@@ -36,7 +36,7 @@ public class LsIncludeProcessorTest {
 
         String firstFileName = new File(".").listFiles()[0].getName();
 
-        asciidoctor.javaExtensionRegistry().includeProcessor(LsIncludeProcessor.class);       // <1>
+        asciidoctor.getExtensionRegistry().includeProcessor(LsIncludeProcessor.class);       // <1>
 
         String result = asciidoctor.convertFile(lsinclude_adoc, Options.builder().toFile(false).build());
 

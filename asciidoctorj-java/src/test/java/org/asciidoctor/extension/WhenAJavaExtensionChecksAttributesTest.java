@@ -27,7 +27,7 @@ class WhenAJavaExtensionChecksAttributesTest {
     void aBlockProcessorShouldOnlyGetStringAttributeKeys() {
         // given:
         AttributeCheckingBlockProcessor processor = new AttributeCheckingBlockProcessor();
-        asciidoctor.javaExtensionRegistry().block(processor);
+        asciidoctor.getExtensionRegistry().block(processor);
 
         // when:
         assertThatCode(() -> asciidoctor.convert(DOCUMENT, Options.builder().standalone(true).safe(SafeMode.SERVER).build()))

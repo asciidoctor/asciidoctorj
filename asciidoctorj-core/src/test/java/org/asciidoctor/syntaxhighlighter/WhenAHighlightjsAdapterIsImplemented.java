@@ -42,7 +42,7 @@ class WhenAHighlightjsAdapterIsImplemented {
 
         // given:
 
-        asciidoctor.syntaxHighlighterRegistry().register(HighlightJsHighlighter.class, NAME_SYNTAXHIGHLIGHTER);
+        asciidoctor.getSyntaxHighlighterRegistry().register(HighlightJsHighlighter.class, NAME_SYNTAXHIGHLIGHTER);
 
         // when:
         String html = asciidoctor.convert(doc, Options.builder()

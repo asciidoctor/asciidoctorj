@@ -44,7 +44,7 @@ class TableConverterTest {
                 | Sum   | Sum A    | Sum B
                 |====
                 """;
-        asciidoctor.javaConverterRegistry().register(TableTestConverter.class, "tabletestconverter");
+        asciidoctor.getConverterRegistry().register(TableTestConverter.class, "tabletestconverter");
 
         // when:
         Options options = Options.builder().standalone(false).backend("tabletestconverter").build();
@@ -101,7 +101,7 @@ class TableConverterTest {
                 | Second column
                 |====
                 """;
-        asciidoctor.javaConverterRegistry().register(TableTestConverter.class, "tabletestconverter");
+        asciidoctor.getConverterRegistry().register(TableTestConverter.class, "tabletestconverter");
 
         // when:
         Options options = Options.builder().standalone(false).backend("tabletestconverter").build();

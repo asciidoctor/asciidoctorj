@@ -44,7 +44,7 @@ public class PrismJsHighlighterTest {
             tempDir;
 
 //tag::include[]
-        asciidoctor.syntaxHighlighterRegistry()
+        asciidoctor.getSyntaxHighlighterRegistry()
             .register(PrismJsHighlighter.class, "prismjs"); // <1>
 
         asciidoctor.convertFile(sources_adoc,

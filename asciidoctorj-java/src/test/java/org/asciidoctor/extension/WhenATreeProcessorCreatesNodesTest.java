@@ -50,7 +50,7 @@ public class WhenATreeProcessorCreatesNodesTest {
                 return null;
             }
         };
-        asciidoctor.javaExtensionRegistry().treeprocessor(tp);
+        asciidoctor.getExtensionRegistry().treeprocessor(tp);
 
         // when: The document is converted
         String html = asciidoctor.convert(document, Options.builder().standalone(true).build());

@@ -21,6 +21,8 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 * BREAKING: Move `RubyExtensionRegistry` from the API (`org.asciidoctor.extension`) to the JRuby implementation (`org.asciidoctor.jruby.extension`) (#1325)
 * BREAKING: Move the `@ContentModel` annotation from `org.asciidoctor.ast` to `org.asciidoctor.extension`, like the other annotations of the processors: update the import (#1336)
 * Add `Document#isAttributeSpecified(String)` to tell an attribute that has never been set from one that has been explicitly set or unset (#1337)
+* BREAKING: Rename `Asciidoctor#javaExtensionRegistry()`, `Asciidoctor#javaConverterRegistry()` and `Asciidoctor#syntaxHighlighterRegistry()` to `getExtensionRegistry()`, `getConverterRegistry()` and `getSyntaxHighlighterRegistry()`, to follow the Java naming conventions (#1349)
+* BREAKING: Replace `Asciidoctor#asciidoctorVersion()` by `Asciidoctor#getVersion()`, which returns the version of AsciidoctorJ. The version of Asciidoctor (Ruby) is still available with `AsciidoctorJRuby#asciidoctorVersion()` (#1349)
 * Add `ExtensionGroup#blockMacro(String, BlockMacroProcessor)` and `ExtensionGroup#inlineMacro(String, InlineMacroProcessor)`, like `JavaExtensionRegistry`
 * Add the service provider interfaces `org.asciidoctor.extension.spi.ExtensionRegistry`, `org.asciidoctor.converter.spi.ConverterRegistry` and `org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry` to the API, and deprecate the interfaces of the `org.asciidoctor.jruby` packages (their implementations are still loaded)
 * Add `AsciidoctorException` to the API, the superclass of `AsciidoctorCoreException`, so that applications don't have to catch an internal class when a conversion fails

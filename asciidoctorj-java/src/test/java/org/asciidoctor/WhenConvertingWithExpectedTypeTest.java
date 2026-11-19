@@ -114,7 +114,7 @@ public class WhenConvertingWithExpectedTypeTest {
                 .backend(ObjectConverter.BACKEND)
                 .build();
 
-        asciidoctor.javaConverterRegistry().register(ObjectConverter.class);
+        asciidoctor.getConverterRegistry().register(ObjectConverter.class);
         ObjectConverterResult document = asciidoctor.convert(SAMPLE_CONTENT, options, ObjectConverterResult.class);
 
         assertThat(document)
@@ -131,7 +131,7 @@ public class WhenConvertingWithExpectedTypeTest {
                 .toFile(outputFile())
                 .build();
 
-        asciidoctor.javaConverterRegistry().register(ObjectConverter.class);
+        asciidoctor.getConverterRegistry().register(ObjectConverter.class);
         ObjectConverterResult document = asciidoctor.convert(SAMPLE_CONTENT, options, ObjectConverterResult.class);
 
         assertThat(document).isNull();
@@ -144,7 +144,7 @@ public class WhenConvertingWithExpectedTypeTest {
                 .toStream(new ByteArrayOutputStream())
                 .build();
 
-        asciidoctor.javaConverterRegistry().register(ObjectConverter.class);
+        asciidoctor.getConverterRegistry().register(ObjectConverter.class);
         ObjectConverterResult document = asciidoctor.convert(SAMPLE_CONTENT, options, ObjectConverterResult.class);
 
         assertThat(document).isNull();

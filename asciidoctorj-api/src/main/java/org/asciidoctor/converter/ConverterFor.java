@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
  *     ...
  * }
  *
- * asciidoctor.javaConverterRegistry().register(MyConverter.class);
+ * asciidoctor.getConverterRegistry().register(MyConverter.class);
  * </code>
  * </pre>
  */

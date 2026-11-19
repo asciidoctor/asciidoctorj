@@ -41,7 +41,7 @@ public class WhenWritingConverterIsRegisteredTest {
         // given:
         WritingTextConverter.called = false;
         // Register as default converter
-        asciidoctor.javaConverterRegistry().register(WritingTextConverter.class);
+        asciidoctor.getConverterRegistry().register(WritingTextConverter.class);
 
         File file = new File(tmp, "target.txt");
 
@@ -81,7 +81,7 @@ public class WhenWritingConverterIsRegisteredTest {
     @DisplayName("should convert to object format")
     public void shouldConvertToObjectFormat() {
         // given:
-        asciidoctor.javaConverterRegistry().register(ObjectConverter.class);
+        asciidoctor.getConverterRegistry().register(ObjectConverter.class);
 
         // when:
         ObjectConverterResult result = asciidoctor.convert(DONT_CARE_DOCUMENT, Options.builder().backend(BACKEND_NAME_42).build(), ObjectConverterResult.class);
@@ -95,7 +95,7 @@ public class WhenWritingConverterIsRegisteredTest {
     @DisplayName("should write to stream")
     public void shouldWriteToStream() {
         // given:
-        asciidoctor.javaConverterRegistry().register(ObjectConverter.class);
+        asciidoctor.getConverterRegistry().register(ObjectConverter.class);
 
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
 

@@ -18,7 +18,7 @@ public class WhenTheInlineMacroProcessorRunsTwice {
     @Test
     public void inlineMacroAttributes() {
         Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-        asciidoctor.javaExtensionRegistry().inlineMacro(new InlineMacroProcessor("example") {
+        asciidoctor.getExtensionRegistry().inlineMacro(new InlineMacroProcessor("example") {
 
             @Override
             public PhraseNode process(StructuralNode parent, String target, Map<String, Object> attributes) {

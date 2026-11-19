@@ -30,7 +30,7 @@ public class GistBlockMacroProcessorTest {
                 gistMacroDocument;
 
 //tag::include[]
-        asciidoctor.javaExtensionRegistry().blockMacro(GistBlockMacroProcessor.class);      // <1>
+        asciidoctor.getExtensionRegistry().blockMacro(GistBlockMacroProcessor.class);      // <1>
 
         String result = asciidoctor.convertFile(gistmacro_adoc, Options.builder().toFile(false).build());
 
@@ -41,7 +41,7 @@ public class GistBlockMacroProcessorTest {
     @Test
     public void should_create_script_element_for_block_macro_with_positional_attributes(@ClasspathResource("gist-macro-attributes.adoc") File gistmacro_adoc) {
 
-        asciidoctor.javaExtensionRegistry().blockMacro(GistBlockMacroPositionalAttributesProcessor.class);
+        asciidoctor.getExtensionRegistry().blockMacro(GistBlockMacroPositionalAttributesProcessor.class);
 
         String result = asciidoctor.convertFile(gistmacro_adoc, Options.builder().toFile(false).build());
 

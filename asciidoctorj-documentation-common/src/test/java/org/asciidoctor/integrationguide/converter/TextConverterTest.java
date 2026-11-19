@@ -36,7 +36,7 @@ public class TextConverterTest {
 
 //tag::include[]
 
-        asciidoctor.javaConverterRegistry().register(TextConverter.class); // <1>
+        asciidoctor.getConverterRegistry().register(TextConverter.class); // <1>
 
         String result = asciidoctor.convertFile(
                 test_adoc,

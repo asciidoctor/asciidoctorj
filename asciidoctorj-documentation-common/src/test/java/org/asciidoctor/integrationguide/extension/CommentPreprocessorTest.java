@@ -38,7 +38,7 @@ public class CommentPreprocessorTest {
 //end::include[]
                 commentWithNoteDocument;
 //tag::include[]
-        asciidoctor.javaExtensionRegistry().preprocessor(CommentPreprocessor.class);      // <1>
+        asciidoctor.getExtensionRegistry().preprocessor(CommentPreprocessor.class);      // <1>
 
         String result1 = asciidoctor.convertFile(comment_adoc, Options.builder().toFile(false).build());
         String result2 = asciidoctor.convertFile(comment_with_note_adoc, Options.builder().toFile(false).build());

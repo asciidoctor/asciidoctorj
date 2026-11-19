@@ -28,7 +28,7 @@ public class WhenReaderIsManipulatedInExtension {
 
     @Test
     public void currentLineNumberShouldBeReturned() {
-        var javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
+        var javaExtensionRegistry = asciidoctor.getExtensionRegistry();
         javaExtensionRegistry.preprocessor(NumberLinesPreprocessor.class);
 
         asciidoctor.convertFile(renderSample, emptyOptions());
@@ -39,7 +39,7 @@ public class WhenReaderIsManipulatedInExtension {
 
     @Test
     public void hasMoreLinesShouldBeReturned() {
-        var javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
+        var javaExtensionRegistry = asciidoctor.getExtensionRegistry();
         javaExtensionRegistry.preprocessor(HasMoreLinesPreprocessor.class);
 
         asciidoctor.convertFile(renderSample, emptyOptions());
@@ -50,7 +50,7 @@ public class WhenReaderIsManipulatedInExtension {
 
     @Test
     public void isNextLineEmptyShouldBeReturned() {
-        var javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
+        var javaExtensionRegistry = asciidoctor.getExtensionRegistry();
         javaExtensionRegistry.preprocessor(NextLineEmptyPreprocessor.class);
 
         asciidoctor.convertFile(renderSample, emptyOptions());

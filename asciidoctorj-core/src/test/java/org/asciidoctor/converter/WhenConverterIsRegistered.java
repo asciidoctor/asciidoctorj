@@ -39,14 +39,14 @@ public class WhenConverterIsRegistered {
 
     @Test
     public void shouldCleanUpRegistry() {
-        asciidoctor.javaConverterRegistry().unregisterAll();
+        asciidoctor.getConverterRegistry().unregisterAll();
 
-        assertThat(asciidoctor.javaConverterRegistry().converters().keySet()).isEmpty();
+        assertThat(asciidoctor.getConverterRegistry().converters().keySet()).isEmpty();
     }
 
     @Test
     public void shouldRegisterAndExecuteGivenConverter() {
-        asciidoctor.javaConverterRegistry().register(TextConverter.class, "test");
+        asciidoctor.getConverterRegistry().register(TextConverter.class, "test");
 
         String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend("test").build());
 
@@ -56,8 +56,8 @@ public class WhenConverterIsRegistered {
     @Test
     public void shouldRegisterWithBackendNameFromAnnotation() {
         // Register as default converter
-        asciidoctor.javaConverterRegistry().register(TextConverter.class);
-        asciidoctor.javaConverterRegistry().register(DummyConverter.class);
+        asciidoctor.getConverterRegistry().register(TextConverter.class);
+        asciidoctor.getConverterRegistry().register(DummyConverter.class);
 
         String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend(TextConverter.DEFAULT_FORMAT).build());
 
@@ -67,7 +67,7 @@ public class WhenConverterIsRegistered {
     @Test
     public void shouldUseDefaultBackend() {
         // Register as default converter
-        asciidoctor.javaConverterRegistry().register(DummyConverter.class);
+        asciidoctor.getConverterRegistry().register(DummyConverter.class);
 
         String result = asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend("Undefined").build());
 
@@ -85,7 +85,7 @@ public class WhenConverterIsRegistered {
     public void shouldBeAbleToLog() {
         MemoryLogHandler handler = registerMemoryLogHandler();
         try {
-            asciidoctor.javaConverterRegistry().register(TextConverter.class);
+            asciidoctor.getConverterRegistry().register(TextConverter.class);
 
             asciidoctor.convert("== Hello\n\nWorld!\n\n- a\n- b", Options.builder().backend(TextConverter.DEFAULT_FORMAT).build());
 
@@ -100,21 +100,21 @@ public class WhenConverterIsRegistered {
 
     @Test
     public void shouldReturnConverterRegisteredWithAnnotation() {
-        asciidoctor.javaConverterRegistry().register(TextConverter.class);
-        assertThat(asciidoctor.javaConverterRegistry().converters().get(TextConverter.DEFAULT_FORMAT)).isEqualTo(TextConverter.class);
+        asciidoctor.getConverterRegistry().register(TextConverter.class);
+        assertThat(asciidoctor.getConverterRegistry().converters().get(TextConverter.DEFAULT_FORMAT)).isEqualTo(TextConverter.class);
     }
 
 
     @Test
     public void shouldReturnRegisteredConverter() {
-        asciidoctor.javaConverterRegistry().register(TextConverter.class, "test2");
-        assertThat(asciidoctor.javaConverterRegistry().converters().get("test2")).isEqualTo(TextConverter.class);
+        asciidoctor.getConverterRegistry().register(TextConverter.class, "test2");
+        assertThat(asciidoctor.getConverterRegistry().converters().get("test2")).isEqualTo(TextConverter.class);
     }
 
     @Test
     public void shouldReceiveChangedLevels() {
-        asciidoctor.javaConverterRegistry().register(LevelConverter.class, "test3");
-        asciidoctor.javaExtensionRegistry().treeprocessor(new Treeprocessor() {
+        asciidoctor.getConverterRegistry().register(LevelConverter.class, "test3");
+        asciidoctor.getExtensionRegistry().treeprocessor(new Treeprocessor() {
             @Override
             public Document process(Document document) {
                 processNode(document);
@@ -160,7 +160,7 @@ public class WhenConverterIsRegistered {
 
     @Test
     public void shouldWriteFileWithSuffixFromConverterWithAnnotation(@TempDir File tempDir) {
-        asciidoctor.javaConverterRegistry().register(TextConverter.class);
+        asciidoctor.getConverterRegistry().register(TextConverter.class);
 
         asciidoctor.convertFile(simpleDocument, Options.builder().backend(TextConverter.DEFAULT_FORMAT).toDir(tempDir).safe(SafeMode.UNSAFE).build());
 
@@ -170,7 +170,7 @@ public class WhenConverterIsRegistered {
 
     @Test
     public void shouldWriteFileWithSuffixFromConverterThatInvokesSetOutfileSuffix(@TempDir File tempDir) {
-        asciidoctor.javaConverterRegistry().register(TextConverterWithSuffix.class);
+        asciidoctor.getConverterRegistry().register(TextConverterWithSuffix.class);
 
         asciidoctor.convertFile(simpleDocument, Options.builder().backend(TextConverterWithSuffix.DEFAULT_FORMAT).toDir(tempDir).safe(SafeMode.UNSAFE).build());
 

@@ -33,7 +33,7 @@ public class ASTShowcase {
     @Test
     public void createAstStructure() throws Exception {
 
-        asciidoctor.javaExtensionRegistry().treeprocessor(ASTExtractorTreeprocessor.class);
+        asciidoctor.getExtensionRegistry().treeprocessor(ASTExtractorTreeprocessor.class);
 
         asciidoctor.loadFile(astDemo, Options.builder().build());
 

@@ -35,7 +35,7 @@ class WhenACoderayAdapterIsImplemented {
                 ----
                 """;
 
-        asciidoctor.syntaxHighlighterRegistry().register(CoderayHighlighter.class, NAME_SYNTAXHIGHLIGHTER);
+        asciidoctor.getSyntaxHighlighterRegistry().register(CoderayHighlighter.class, NAME_SYNTAXHIGHLIGHTER);
 
         String htmlJava = asciidoctor.convert(doc, Options.builder()
                 .safe(SafeMode.UNSAFE)

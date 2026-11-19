@@ -33,7 +33,7 @@ import java.util.Map;
  * {@link SyntaxHighlighterRegistry}:
  * <pre><code>
  *     Asciidoctor asciidoctor;
- *     asciidoctor.syntaxHighlighterRegistry().register(MySyntaxHighligher.class, "mysyntaxhighighter");
+ *     asciidoctor.getSyntaxHighlighterRegistry().register(MySyntaxHighligher.class, "mysyntaxhighighter");
  *     asciidoctor.convert(doc,
  *         Options.builder()
  *             .attributes(Attributes.builder()

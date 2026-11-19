@@ -1,4 +1,4 @@
-= Manually Registering Extensions with javaExtensionRegistry
+= Manually Registering Extensions
 
 Extensions can be registered individually accessing the default extension registry directly from the Asciidoctor instance.
 
@@ -6,7 +6,7 @@ Extensions can be registered individually accessing the default extension regist
 ----
 Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 
-asciidoctor.javaExtensionRegistry()
+asciidoctor.getExtensionRegistry()
          .treeprocessor(Tre.class);
 ----
 
@@ -14,25 +14,25 @@ There is a method in the API for each extension point.
 
 [source,java]
 ----
-asciidoctor.javaExtensionRegistry()
+asciidoctor.getExtensionRegistry()
         .blockMacro(GistBlockMacroProcessor.class);
 
-asciidoctor.javaExtensionRegistry()
+asciidoctor.getExtensionRegistry()
         .inlineMacro(IssueInlineMacroProcessor.class);
 
-asciidoctor.javaExtensionRegistry()
+asciidoctor.getExtensionRegistry()
         .block(YellBlockProcessor.class);
 
-asciidoctor.javaExtensionRegistry()
+asciidoctor.getExtensionRegistry()
         .includeProcessor(LsIncludeProcessor.class);
 
-asciidoctor.javaExtensionRegistry()
+asciidoctor.getExtensionRegistry()
         .preprocessor(CommentPreprocessor.class);
 
-asciidoctor.javaExtensionRegistry()
+asciidoctor.getExtensionRegistry()
         .postprocessor(CopyrightFooterPostprocessor.class);
 
-asciidoctor.javaExtensionRegistry()
+asciidoctor.getExtensionRegistry()
         .treeprocessor(TerminalCommandTreeprocessor.class);
 
 extensionRegistry

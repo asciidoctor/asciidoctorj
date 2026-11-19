@@ -110,7 +110,7 @@ public class WhenABlockMacroProcessorCreatesATableTest {
     @DisplayName("the table should be rendered to html")
     public void theTableShouldBeRenderedToHtml() throws Exception {
         // given:
-        asciidoctor.javaExtensionRegistry().blockMacro(BLOCKMACRO_NAME, GithubContributorsBlockMacro.class);
+        asciidoctor.getExtensionRegistry().blockMacro(BLOCKMACRO_NAME, GithubContributorsBlockMacro.class);
         File resultFile = new File(tempDir, "result.html");
 
         // when:
@@ -139,7 +139,7 @@ public class WhenABlockMacroProcessorCreatesATableTest {
     @DisplayName("the table should be rendered to html with negative widths")
     public void theTableShouldBeRenderedToHtmlWithNegativeWidths() throws Exception {
         // given:
-        asciidoctor.javaExtensionRegistry().blockMacro(BLOCKMACRO_NAME, GithubContributorsBlockMacro.class);
+        asciidoctor.getExtensionRegistry().blockMacro(BLOCKMACRO_NAME, GithubContributorsBlockMacro.class);
         File resultFile = new File(tempDir, "resultWithNegativeWidth.html");
 
         // when:
@@ -168,7 +168,7 @@ public class WhenABlockMacroProcessorCreatesATableTest {
     @DisplayName("the table should be rendered to docbook")
     public void theTableShouldBeRenderedToDocbook() throws Exception {
         // given:
-        asciidoctor.javaExtensionRegistry().blockMacro(BLOCKMACRO_NAME, GithubContributorsBlockMacro.class);
+        asciidoctor.getExtensionRegistry().blockMacro(BLOCKMACRO_NAME, GithubContributorsBlockMacro.class);
         File resultFile = new File(tempDir, "result.db");
 
         // when:

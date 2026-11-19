@@ -8,7 +8,7 @@ public class HighlightJsExtension implements org.asciidoctor.jruby.syntaxhighlig
 
     @Override
     public void register(Asciidoctor asciidoctor) {
-        asciidoctor.syntaxHighlighterRegistry()
+        asciidoctor.getSyntaxHighlighterRegistry()
             .register(ObservableHighlightJsHighlighter.class, NAME_HIGHLIGHTER);
     }
 

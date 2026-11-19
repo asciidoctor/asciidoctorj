@@ -21,7 +21,7 @@ public class KeyboardInlineMacroProcessorTest {
     @Test
     public void should_create_keyboard_elements() {
 
-        asciidoctor.javaExtensionRegistry().inlineMacro(KeyboardInlineMacroProcessor.class);       // <1>
+        asciidoctor.getExtensionRegistry().inlineMacro(KeyboardInlineMacroProcessor.class);       // <1>
 
         String result = asciidoctor.convert("ctrl:S[]", Options.builder().toFile(false).safe(SafeMode.UNSAFE).build());
 

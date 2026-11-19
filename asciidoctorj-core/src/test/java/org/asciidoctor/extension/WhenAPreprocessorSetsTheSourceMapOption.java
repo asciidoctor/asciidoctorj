@@ -55,7 +55,7 @@ class WhenAPreprocessorSetsTheSourceMapOption {
         TestTreeprocessor treeprocessor = new TestTreeprocessor();
 
         // when:
-        asciidoctor.javaExtensionRegistry()
+        asciidoctor.getExtensionRegistry()
                 .preprocessor(new SourceMapOptionPreprocessor())
                 .treeprocessor(treeprocessor);
         Document doc = asciidoctor.load(DOCUMENT, Options.builder().build());
@@ -73,7 +73,7 @@ class WhenAPreprocessorSetsTheSourceMapOption {
         TestTreeprocessor treeprocessor = new TestTreeprocessor();
 
         // when:
-        asciidoctor.javaExtensionRegistry()
+        asciidoctor.getExtensionRegistry()
                 .treeprocessor(treeprocessor);
         Document doc = asciidoctor.load(DOCUMENT, Options.builder().build());
 

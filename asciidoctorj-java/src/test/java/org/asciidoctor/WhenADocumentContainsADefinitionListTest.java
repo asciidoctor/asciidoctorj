@@ -125,7 +125,7 @@ public class WhenADocumentContainsADefinitionListTest {
                 """;
 
         // when:
-        asciidoctor.javaConverterRegistry().register(TestConverter.class, TestConverter.NAME);
+        asciidoctor.getConverterRegistry().register(TestConverter.class, TestConverter.NAME);
         String result = asciidoctor.convert(document, Options.builder().backend(TestConverter.NAME).standalone(false).build());
 
         // then:
@@ -151,7 +151,7 @@ public class WhenADocumentContainsADefinitionListTest {
                 """;
 
         // when:
-        asciidoctor.javaConverterRegistry().register(TestConverter.class, TestConverter.NAME);
+        asciidoctor.getConverterRegistry().register(TestConverter.class, TestConverter.NAME);
         String result = asciidoctor.convert(document, Options.builder().backend(TestConverter.NAME).standalone(false).build());
 
         // then:
@@ -178,7 +178,7 @@ public class WhenADocumentContainsADefinitionListTest {
         String newDescription = "A nice description";
 
         // when:
-        asciidoctor.javaExtensionRegistry().treeprocessor(new Treeprocessor() {
+        asciidoctor.getExtensionRegistry().treeprocessor(new Treeprocessor() {
             @Override
             public Document process(Document doc) {
                 DescriptionList dl = (DescriptionList) doc.getBlocks().get(0);

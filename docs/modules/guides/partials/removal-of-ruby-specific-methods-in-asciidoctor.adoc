@@ -14,6 +14,18 @@ try (Asciidoctor asciidoctor = Asciidoctor.Factory.create()) {
 }
 ----
 
+=== Replacement of `asciidoctorVersion()` by `getVersion()`
+
+`asciidoctorVersion()` returned the version of Asciidoctor (Ruby), which only makes sense with an embedded Asciidoctor.
+Use `getVersion()` to get the version of AsciidoctorJ.
+To get the version of Asciidoctor (Ruby), unwrap the instance:
+
+[,java]
+----
+String version = asciidoctor.getVersion();
+String rubyVersion = asciidoctor.unwrap(AsciidoctorJRuby.class).asciidoctorVersion();
+----
+
 === Removal of `requireLibrary(String...)`, `requireLibraries(Collection)` and `rubyExtensionRegistry()`
 
 Loading a Ruby library (gem) and registering a Ruby extension require a Ruby runtime.

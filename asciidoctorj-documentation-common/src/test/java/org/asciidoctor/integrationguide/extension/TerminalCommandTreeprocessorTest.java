@@ -47,7 +47,7 @@ public class TerminalCommandTreeprocessorTest {
                 treeprocessorContent;
 
 //tag::include[]
-        asciidoctor.javaExtensionRegistry()
+        asciidoctor.getExtensionRegistry()
                 .treeprocessor(TerminalCommandTreeprocessor.class); // <1>
         String result = asciidoctor.convertFile(
                 src,

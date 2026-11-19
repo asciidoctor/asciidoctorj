@@ -272,7 +272,7 @@ public class WhenAsciidoctorLogsToConsole {
         final List<LogRecord> logRecords = new ArrayList<>();
 
         asciidoctor.registerLogHandler(logRecords::add);
-        asciidoctor.javaExtensionRegistry().block(LoggingProcessor.class);
+        asciidoctor.getExtensionRegistry().block(LoggingProcessor.class);
 
         String renderContent = asciidoctor.convert("= Test\n\n== Something different\n\n[big]\nHello World",
                 Options.builder().option("sourcemap", "true").build());

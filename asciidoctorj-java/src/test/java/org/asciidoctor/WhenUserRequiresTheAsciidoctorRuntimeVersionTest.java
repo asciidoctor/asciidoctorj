@@ -14,8 +14,8 @@ public class WhenUserRequiresTheAsciidoctorRuntimeVersionTest {
     private Asciidoctor asciidoctor;
 
     @Test
-    public void current_version_should_be_retrieved() {
-        final String asciidoctorVersion = asciidoctor.asciidoctorVersion();
+    public void asciidoctorj_version_should_be_retrieved() {
+        final String asciidoctorVersion = asciidoctor.getVersion();
 
         assertThat(asciidoctorVersion).isNotNull();
     }

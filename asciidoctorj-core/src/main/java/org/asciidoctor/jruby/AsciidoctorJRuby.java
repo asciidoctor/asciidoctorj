@@ -30,6 +30,13 @@ public interface AsciidoctorJRuby extends Asciidoctor {
    */
   RubyExtensionRegistry rubyExtensionRegistry();
 
+  /**
+   * Gets the version of the Asciidoctor (Ruby) embedded in AsciidoctorJ.
+   *
+   * @return the version of Asciidoctor (Ruby).
+   */
+  String asciidoctorVersion();
+
 
   /**
    * Factory for creating a new instance of Asciidoctor interface.

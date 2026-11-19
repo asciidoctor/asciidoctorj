@@ -33,7 +33,7 @@ public class WhenABlockMacroProcessorCreatesASectionTest {
     public void theSectionShouldAppearInTheResultingDocument() {
 
         // given:
-        asciidoctor.javaExtensionRegistry().blockMacro(BLOCKMACRO_NAME, SectionCreatorBlockMacro.class);
+        asciidoctor.getExtensionRegistry().blockMacro(BLOCKMACRO_NAME, SectionCreatorBlockMacro.class);
 
         // when:
         Options options = Options.builder().safe(SafeMode.SAFE).toFile(false).standalone(true).build();
