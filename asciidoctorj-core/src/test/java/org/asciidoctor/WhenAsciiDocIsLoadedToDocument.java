@@ -1,6 +1,7 @@
 package org.asciidoctor;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.asciidoctor.ast.*;
 import org.asciidoctor.test.AsciidoctorInstance;
@@ -601,5 +602,36 @@ public class WhenAsciiDocIsLoadedToDocument {
                 "Section A paragraph.\n\n" +
                 "=== Section A Subsection\n\n" +
                 "Section A 'subsection' paragraph.\n\n";
+    }
+
+    @Test
+    public void should_tell_if_an_attribute_has_been_specified() {
+        Attributes attributes = Attributes.builder()
+                .attribute("api-set", "value")
+                .attribute("soft-set@", "value")
+                .build();
+        Document document = asciidoctor.load(":!header-unset:\n:header-set: value\n\ncontent",
+                Options.builder().attributes(attributes).build());
+
+        assertThat(document.isAttributeSpecified("api-set")).isTrue();
+        assertThat(document.isAttributeSpecified("soft-set")).isTrue();
+        assertThat(document.isAttributeSpecified("header-set")).isTrue();
+        assertThat(document.isAttributeSpecified("header-unset")).isTrue();
+        assertThat(document.isAttributeSpecified("never-set")).isFalse();
+    }
+
+    @Test
+    public void should_throw_a_null_pointer_exception_when_asking_if_a_null_attribute_is_specified() {
+        Document document = asciidoctor.load("content", Options.builder().build());
+
+        assertThatThrownBy(() -> document.isAttributeSpecified(null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    public void should_not_specify_an_empty_attribute_name() {
+        Document document = asciidoctor.load("content", Options.builder().build());
+
+        assertThat(document.isAttributeSpecified("")).isFalse();
     }
 }

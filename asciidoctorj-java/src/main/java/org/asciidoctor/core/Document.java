@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -353,6 +354,8 @@ public class Document extends AbstractBlock {
     private Registry extensions;
     private final Map<String, Object> attributeOverrides;
     private final Set<String> attributesModified = new HashSet<>();
+    /** The (normalized) names of the attributes passed in the attributes option, empty for a nested document. */
+    private final Set<String> attributesOptionNames = new HashSet<>();
     private final Map<String, Object> docinfoProcessorExtensions = new LinkedHashMap<>();
     private Map<String, Object> headerAttributes;
     private Map<String, String> reftexts;
@@ -458,6 +461,7 @@ public class Document extends AbstractBlock {
                     val = "@".equals(val) ? false : null;
                 }
                 attrOverrides.put(key.toLowerCase(), val);
+                attributesOptionNames.add(key.toLowerCase(Locale.ROOT));
             }
             if (options.get("to_file") instanceof String toFile) {
                 attrOverrides.put("outfilesuffix", Helpers.extname(toFile));
@@ -1371,6 +1375,25 @@ public class Document extends AbstractBlock {
         attributes.remove(name);
         attributesModified.add(name);
         return true;
+    }
+
+    /**
+     * Determine if the attribute has been set or unset, either in the document (e.g., {@code :!name:} in the
+     * header) or in the options (API, CLI), including in the parent document of a nested document.
+     *
+     * @param name The attribute key to check
+     * @return true if the attribute has been specified, false if it has never been set or unset
+     */
+    public boolean isAttributeSpecified(String name) {
+        Objects.requireNonNull(name, "name");
+        if (isAttributeLocked(name) || attributesModified.contains(name)) {
+            return true;
+        }
+        if (parentDocument != null) {
+            return parentDocument.isAttributeSpecified(name);
+        }
+        // a soft set or soft unset attribute (e.g., name@) is not locked, so the document can still change it
+        return attributesOptionNames.contains(name.toLowerCase(Locale.ROOT));
     }
 
     /**

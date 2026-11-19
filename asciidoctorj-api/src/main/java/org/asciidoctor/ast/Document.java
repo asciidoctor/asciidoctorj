@@ -78,6 +78,21 @@ public interface Document extends StructuralNode {
     boolean isSourcemap();
 
     /**
+     * Determine if the attribute has been set or unset, either in the document (e.g., {@code :!name:} in the
+     * header) or in the options (API, CLI), including in the parent document of a nested document.
+     *
+     * <p>Unlike {@link #hasAttribute(Object)}, this method makes it possible to tell an attribute that has never
+     * been specified (so a default can be applied) from an attribute that has been explicitly unset.
+     *
+     * @param name The name of the attribute
+     * @return true if the attribute has been set or unset (explicitly or by an option), false if it has never been
+     *         specified (or if the name is empty)
+     * @throws NullPointerException if the name is null
+     * @since 4.0
+     */
+    boolean isAttributeSpecified(String name);
+
+    /**
      * Toggles the sourcemap option.
      * <p>
      * This method must be called before the document is parsed, such as

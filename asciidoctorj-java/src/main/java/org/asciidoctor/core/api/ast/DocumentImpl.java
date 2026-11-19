@@ -71,6 +71,11 @@ public class DocumentImpl extends StructuralNodeImpl<org.asciidoctor.core.Docume
     }
 
     @Override
+    public boolean isAttributeSpecified(String name) {
+        return delegate.isAttributeSpecified(name);
+    }
+
+    @Override
     public void setSourcemap(boolean state) {
         delegate.setSourcemap(state);
     }
