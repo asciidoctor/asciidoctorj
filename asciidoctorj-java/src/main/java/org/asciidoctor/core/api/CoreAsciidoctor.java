@@ -40,7 +40,7 @@ import org.asciidoctor.core.syntaxhighlighter.SyntaxHighlighterFactory;
 import org.asciidoctor.extension.ExtensionGroup;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.spi.ExtensionRegistry;
-import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
+import org.asciidoctor.AsciidoctorException;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.syntaxhighlighter.SyntaxHighlighterAdapter;
@@ -238,11 +238,11 @@ public class CoreAsciidoctor implements Asciidoctor, LogHandler {
      * @return the exception thrown when a conversion fails: when the processor reports that the document failed to
      * load (like Asciidoctor does), the exception has its message and the cause of the failure
      */
-    private static AsciidoctorCoreException coreException(RuntimeException e) {
+    private static AsciidoctorException coreException(RuntimeException e) {
         if (e.getCause() != null && e.getMessage() != null && e.getMessage().startsWith("asciidoctor: FAILED: ")) {
-            return new AsciidoctorCoreException(e.getMessage(), e.getCause());
+            return new AsciidoctorException(e.getMessage(), e.getCause());
         }
-        return new AsciidoctorCoreException(e);
+        return new AsciidoctorException(e);
     }
 
     /**

@@ -6,7 +6,7 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
+import org.asciidoctor.AsciidoctorException;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.asciidoctor.test.extension.ClasspathExtension;
@@ -144,7 +144,7 @@ public class BlockMacroRegistrationTest {
 
     @Test
     public void testRegisterClassAsInstance() {
-        assertThrows(AsciidoctorCoreException.class, () -> {
+        assertThrows(AsciidoctorException.class, () -> {
             asciidoctor.javaExtensionRegistry().blockMacro(new AbstractTestProcessor());
             asciidoctor.convert(document("foo", "Hello Explicit Instance"), emptyOptions());
         });

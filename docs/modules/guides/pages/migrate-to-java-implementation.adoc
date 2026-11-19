@@ -44,7 +44,9 @@ The following classes of the JRuby implementation, which are not part of the API
 
 * the deprecated service provider interfaces `org.asciidoctor.jruby.extension.spi.ExtensionRegistry`, `org.asciidoctor.jruby.converter.spi.ConverterRegistry` and `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry` (the ones of the API, `org.asciidoctor.extension.spi.ExtensionRegistry`, `org.asciidoctor.converter.spi.ConverterRegistry` and `org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry`, should be used instead);
 * the deprecated directory walkers `org.asciidoctor.jruby.DirectoryWalker`, `org.asciidoctor.jruby.AbstractDirectoryWalker`, `org.asciidoctor.jruby.AsciiDocDirectoryWalker` and `org.asciidoctor.jruby.GlobDirectoryWalker` (the ones of the API, in `org.asciidoctor.util`, should be used instead);
-* the exception thrown when a conversion fails, `org.asciidoctor.jruby.internal.AsciidoctorCoreException` (applications should catch its superclass of the API, `org.asciidoctor.AsciidoctorException`).
+
+The exception thrown when a conversion fails is `org.asciidoctor.AsciidoctorException` (of the API).
+`org.asciidoctor.jruby.internal.AsciidoctorCoreException` doesn't exist in the Java implementation: applications that catch it have to catch `AsciidoctorException` instead, which is also the superclass of `AsciidoctorCoreException` in the JRuby implementation.
 
 [#not-supported]
 == Not supported

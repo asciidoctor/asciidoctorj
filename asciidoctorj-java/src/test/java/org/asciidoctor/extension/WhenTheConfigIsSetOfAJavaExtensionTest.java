@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
-import org.asciidoctor.jruby.internal.AsciidoctorCoreException;
+import org.asciidoctor.AsciidoctorException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -54,7 +54,7 @@ public class WhenTheConfigIsSetOfAJavaExtensionTest {
         Exception e = assertThrows(Exception.class, () -> asciidoctor.convert(document, Options.builder().toFile(false).build()));
 
         // then:
-        assertThat(e instanceof AsciidoctorCoreException || e instanceof IllegalStateException).isTrue();
+        assertThat(e instanceof AsciidoctorException || e instanceof IllegalStateException).isTrue();
     }
 
     @Test
@@ -70,7 +70,7 @@ public class WhenTheConfigIsSetOfAJavaExtensionTest {
         Exception e = assertThrows(Exception.class, () -> asciidoctor.convert(document, Options.builder().toFile(false).build()));
 
         // then:
-        assertThat(e instanceof AsciidoctorCoreException || e instanceof IllegalStateException).isTrue();
+        assertThat(e instanceof AsciidoctorException || e instanceof IllegalStateException).isTrue();
     }
 
 }
