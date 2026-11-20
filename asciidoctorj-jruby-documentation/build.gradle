@@ -1,7 +1,7 @@
 jar.enabled = false
 
 dependencies {
-    testImplementation project(':asciidoctorj')
+    testImplementation project(':asciidoctorj-jruby')
     testImplementation (project(':asciidoctorj-test-support')) {
         exclude group: 'junit', module: 'junit'
     }

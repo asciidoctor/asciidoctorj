@@ -22,7 +22,7 @@ They are always null (they could report the Java class and method that logged th
 
 == Classes outside of the API
 
-Applications depend on classes of the JRuby implementation (`asciidoctorj-core`), which are not part of the API:
+Applications depend on classes of the JRuby implementation (`asciidoctorj-jruby`), which are not part of the API:
 
 * [.line-through]#the service provider interfaces `org.asciidoctor.jruby.extension.spi.ExtensionRegistry`, `org.asciidoctor.jruby.converter.spi.ConverterRegistry` and `org.asciidoctor.jruby.syntaxhighlighter.spi.SyntaxHighlighterRegistry` (used to register extensions, converters and syntax highlighters automatically).#
 Added to the API in 3.x as `org.asciidoctor.extension.spi.ExtensionRegistry`, `org.asciidoctor.converter.spi.ConverterRegistry` and `org.asciidoctor.syntaxhighlighter.spi.SyntaxHighlighterRegistry`; the interfaces of the `org.asciidoctor.jruby` packages extend them and are deprecated ({url-issues}/1333[#1333], {url-issues}/1332[#1332]).

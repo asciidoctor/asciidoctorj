@@ -12,19 +12,23 @@ asciidoctorj-api::
   Other implementations for different platforms than JRuby may reuse and implement this API.
   Produces the asciidoctorj-api.jar
 
-asciidoctorj::
-  The main Java bindings for the Asciidoctor RubyGem (asciidoctor) running on JRuby.
+asciidoctorj-jruby::
+  The JRuby implementation: the Java bindings for the Asciidoctor RubyGem (asciidoctor) running on JRuby.
   Also bundles optional RubyGems needed at runtime, such as coderay, tilt, haml and slim.
-  Produces the asciidoctorj jar.
+  Produces the asciidoctorj-jruby jar.
 
-asciidoctorj-distribution::
+asciidoctorj-jruby-cli::
+  The command line interface of the JRuby implementation.
+  Produces the asciidoctorj-jruby-cli jar.
+
+asciidoctorj-jruby-distribution::
   Produces the distribution zip that provides the standalone `asciidoctorj` command.
 
 asciidoctorj-documentation-common::
   Contains the code examples used for documentation that only rely on the AsciidoctorJ API.
   They are run and tested against both the JRuby and the Java implementations.
 
-asciidoctorj-documentation::
+asciidoctorj-jruby-documentation::
   Contains the code examples used for documentation that are specific to the JRuby implementation, and runs the common examples against it.
 
 asciidoctorj-java-documentation::
@@ -63,11 +67,13 @@ asciidoctorj-arquillian-extension/
   build.gradle
 asciidoctorj-api/
   build.gradle
-asciidoctorj-core/
+asciidoctorj-jruby/
   build.gradle
-asciidoctorj-distribution/
+asciidoctorj-jruby-cli/
   build.gradle
-asciidoctorj-documentation/
+asciidoctorj-jruby-distribution/
+  build.gradle
+asciidoctorj-jruby-documentation/
   build.gradle
 asciidoctorj-documentation-common/
 asciidoctorj-java-documentation/

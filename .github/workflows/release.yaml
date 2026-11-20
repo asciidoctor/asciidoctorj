@@ -109,7 +109,7 @@ jobs:
           gh release create "v$RELEASE_VERSION" --title "v$RELEASE_VERSION" --notes-file "$RUNNER_TEMP/release-notes.md" $prerelease
       - name: Wait for the distribution on Maven Central
         run: |
-          url="https://repo1.maven.org/maven2/org/asciidoctor/asciidoctorj/$RELEASE_VERSION/asciidoctorj-$RELEASE_VERSION-bin.zip"
+          url="https://repo1.maven.org/maven2/org/asciidoctor/asciidoctorj-jruby/$RELEASE_VERSION/asciidoctorj-jruby-$RELEASE_VERSION-bin.zip"
           for _ in $(seq 120); do
             curl -sfI -o /dev/null "$url" && exit 0
             sleep 30
@@ -124,4 +124,4 @@ jobs:
           unset GEM_PATH GEM_HOME JRUBY_OPTS
           # a pre-release is not made the default version
           task=$([[ "$RELEASE_VERSION" == *-* ]] && echo sdkMinorRelease || echo sdkMajorRelease)
-          ./gradlew --no-daemon ":asciidoctorj-distribution:$task"
+          ./gradlew --no-daemon ":asciidoctorj-jruby-distribution:$task"

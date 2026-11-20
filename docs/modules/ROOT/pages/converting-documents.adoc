@@ -17,7 +17,7 @@ The following snippets show what you have to add in case you use Maven, Gradle, 
 <dependencies>
   <dependency>
     <groupId>org.asciidoctor</groupId>
-    <artifactId>asciidoctorj</artifactId>
+    <artifactId>asciidoctorj-jruby</artifactId>
     <version>{artifact-version}</version> <!--1-->
   </dependency>
 </dependencies>
@@ -28,7 +28,7 @@ The following snippets show what you have to add in case you use Maven, Gradle, 
 .Declaring the dependency in a Gradle build file (e.g., build.gradle)
 ----
 dependencies {
-  compile 'org.asciidoctor:asciidoctorj:{artifact-version}' // <1>
+  compile 'org.asciidoctor:asciidoctorj-jruby:{artifact-version}' // <1>
 }
 ----
 
@@ -36,14 +36,14 @@ dependencies {
 [subs="specialcharacters,attributes,callouts"]
 .Declaring the dependency in an Ivy dependency descriptor (e.g., ivy.xml)
 ----
-<dependency org="org.asciidoctor" name="asciidoctorj" rev="{artifact-version}" /> <!--1-->
+<dependency org="org.asciidoctor" name="asciidoctorj-jruby" rev="{artifact-version}" /> <!--1-->
 ----
 
 [source,scala]
 [subs="specialcharacters,attributes,callouts"]
 .Declaring the dependency in an SBT build file (e.g., build.sbt)
 ----
-libraryDependencies += "org.asciidoctor" % "asciidoctorj" % "{artifact-version}" // <1>
+libraryDependencies += "org.asciidoctor" % "asciidoctorj-jruby" % "{artifact-version}" // <1>
 ----
 <1> Specifying the version of AsciidoctorJ implicitly selects the version of Asciidoctor
 

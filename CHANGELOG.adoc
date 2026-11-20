@@ -16,6 +16,7 @@ For a detailed view of what has changed, refer to the {url-repo}/commits/main[co
 === Improvements
 
 * BREAKING: Upgrade to JRuby 10.1.1.0. Requires Java 21 (#1308)
+* BREAKING: Rename the artifacts of the JRuby implementation: `org.asciidoctor:asciidoctorj` is now `org.asciidoctor:asciidoctorj-jruby` and `org.asciidoctor:asciidoctorj-cli` is now `org.asciidoctor:asciidoctorj-jruby-cli`. The distribution is published as `org.asciidoctor:asciidoctorj-jruby:<version>:bin@zip`. `org.asciidoctor:asciidoctorj` and `org.asciidoctor:asciidoctorj-cli` are not published anymore, so that the choice of the implementation is explicit. With Gradle, both implementations provide the capability `org.asciidoctor:asciidoctorj`, so the build fails when two implementations, or an implementation and `org.asciidoctor:asciidoctorj` 3.x, are on the class path (#1357)
 * BREAKING: Remove `Asciidoctor#shutdown()`, use `Asciidoctor#close()` instead (#1325)
 * BREAKING: Remove `Asciidoctor#requireLibrary(String...)`, `Asciidoctor#requireLibraries(Collection)` and `Asciidoctor#rubyExtensionRegistry()`, which only make sense with an embedded Asciidoctor (Ruby): use the methods of `AsciidoctorJRuby` instead, e.g. `asciidoctor.unwrap(AsciidoctorJRuby.class).requireLibrary("asciidoctor-diagram")` (#1325)
 * BREAKING: Move `RubyExtensionRegistry` from the API (`org.asciidoctor.extension`) to the JRuby implementation (`org.asciidoctor.jruby.extension`) (#1325)

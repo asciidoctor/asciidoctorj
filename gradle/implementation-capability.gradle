@@ -1,0 +1,13 @@
+// Both implementations of AsciidoctorJ (asciidoctorj-jruby and asciidoctorj-java) provide the capability org.asciidoctor:asciidoctorj,
+// which is also the implicit capability of org.asciidoctor:asciidoctorj (the JRuby implementation before 4.0).
+// Gradle fails at build time when a class path gets two of them, for instance:
+// - org.asciidoctor:asciidoctorj-jruby and org.asciidoctor:asciidoctorj-java
+// - org.asciidoctor:asciidoctorj-jruby (or org.asciidoctor:asciidoctorj-java) and org.asciidoctor:asciidoctorj 3.x
+// (Maven doesn't support capabilities: the conflict is reported at runtime.)
+configurations.matching { it.name in ['apiElements', 'runtimeElements'] }.configureEach {
+  outgoing {
+    // declaring a capability replaces the implicit one, so declare it as well
+    capability("${project.group}:${project.name}:${project.version}")
+    capability("${project.group}:asciidoctorj:${project.version}")
+  }
+}

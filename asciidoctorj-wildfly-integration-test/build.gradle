@@ -14,11 +14,11 @@ configurations {
 dependencies {
 
     // AsciidoctorJ and its runtime dependencies (asciidoctorj-api, JRuby...) are installed as a WildFly module
-    jbossmodule project(':asciidoctorj')
+    jbossmodule project(':asciidoctorj-jruby')
 
     jbossdist "org.wildfly:wildfly-dist:$wildflyVersion@zip"
 
-    testCompileOnly project(':asciidoctorj')
+    testCompileOnly project(':asciidoctorj-jruby')
     testImplementation "jakarta.servlet:jakarta.servlet-api:$jakartaServletVersion"
     testImplementation "org.jsoup:jsoup:$jsoupVersion"
     testImplementation "org.jboss.arquillian.junit5:arquillian-junit5-container:$arquillianVersion"

@@ -39,7 +39,7 @@ If you have installed AsciidoctorJ as xref:ROOT:cli.adoc[CLI], the asciidoctorj 
 
 If you have downloaded the distribution jars only, use a command like:
 
- $ java -cp lib/jruby-complete-{jruby-version}.jar;lib/asciidoctorj-cli-{artifact-version}.jar;lib/asciidoctorj-api-{artifact-version}.jar;lib/asciidoctorj-{artifact-version}.jar;lib/jcommander-{jcommander-version}.jar;lib/myextension.jar org.asciidoctor.cli.jruby.AsciidoctorInvoker test.adoc
+ $ java -cp lib/jruby-complete-{jruby-version}.jar;lib/asciidoctorj-jruby-cli-{artifact-version}.jar;lib/asciidoctorj-api-{artifact-version}.jar;lib/asciidoctorj-jruby-{artifact-version}.jar;lib/jcommander-{jcommander-version}.jar;lib/myextension.jar org.asciidoctor.cli.jruby.AsciidoctorInvoker test.adoc
 
 These commands are for the JRuby implementation.
 With the Java implementation, use the `-r` option of the Java command line interface, which also loads the services of a jar:

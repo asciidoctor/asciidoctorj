@@ -8,6 +8,7 @@ import org.ysb33r.gradle.jruby.api.base.tasks.JRubyPrepare
 project.ext.publicationName = "mavenAsciidoctorJ"
 
 apply from: rootProject.file('gradle/publish.gradle')
+apply from: rootProject.file('gradle/implementation-capability.gradle')
 apply from: rootProject.file('gradle/signing.gradle')
 
 repositories {
@@ -109,7 +110,7 @@ processResources {
 jar {
    bundle {
     bnd(
-      'Bundle-Name': 'asciidoctorj',
+      'Bundle-Name': 'asciidoctorj-jruby',
       'Bundle-SymbolicName': 'org.asciidoctor.asciidoctorj'
     )
   }

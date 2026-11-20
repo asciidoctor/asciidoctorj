@@ -1,0 +1,74 @@
+== Renamed artifacts
+
+AsciidoctorJ v4.0.0 has two implementations, the JRuby implementation and the Java implementation.
+The artifacts of the JRuby implementation are renamed, so that the name tells which implementation is used:
+
+[cols="1,1"]
+|===
+|3.x |4.0
+
+|`org.asciidoctor:asciidoctorj`
+|`org.asciidoctor:asciidoctorj-jruby`
+
+|`org.asciidoctor:asciidoctorj-cli`
+|`org.asciidoctor:asciidoctorj-jruby-cli`
+
+|`org.asciidoctor:asciidoctorj:<version>:bin@zip` (distribution)
+|`org.asciidoctor:asciidoctorj-jruby:<version>:bin@zip`
+|===
+
+`org.asciidoctor:asciidoctorj-api` is not renamed, since it's shared by both implementations.
+
+Update the dependency:
+
+[,xml]
+----
+<dependency>
+  <groupId>org.asciidoctor</groupId>
+  <artifactId>asciidoctorj-jruby</artifactId>
+  <version>4.0.0</version>
+</dependency>
+----
+
+`org.asciidoctor:asciidoctorj` and `org.asciidoctor:asciidoctorj-cli` are not published anymore, so a dependency on `org.asciidoctor:asciidoctorj:4.0.0` fails to resolve.
+This is on purpose, since you have to choose between the JRuby implementation (`org.asciidoctor:asciidoctorj-jruby`) and the Java implementation (`org.asciidoctor:asciidoctorj-java`).
+See xref:ROOT:index.adoc[] to choose one.
+
+An application must use one implementation only, and must not keep `org.asciidoctor:asciidoctorj` 3.x next to it.
+With Gradle, both implementations provide the capability `org.asciidoctor:asciidoctorj`, so the build fails when the class path gets two of them, for instance:
+
+----
+Module 'org.asciidoctor:asciidoctorj-jruby' has been rejected:
+  Cannot select module because of conflict with org.asciidoctor:asciidoctorj-java:4.0.0 (runtimeElements). Both provide capability 'org.asciidoctor:asciidoctorj:4.0.0'.
+----
+
+Maven doesn't support capabilities, so the conflict is only reported at runtime:
+
+* with both implementations of 4.0, `Asciidoctor.Factory.create()` throws `Found multiple Asciidoctor implementations in the classpath`
+* with `org.asciidoctor:asciidoctorj` 3.x and an implementation of 4.0, it throws a `java.util.ServiceConfigurationError` (`Unable to get public no-arg constructor`)
+
+If `org.asciidoctor:asciidoctorj` 3.x comes from a library that your project depends on, exclude it, for example with Gradle:
+
+[,groovy]
+----
+configurations.configureEach {
+  exclude group: 'org.asciidoctor', module: 'asciidoctorj'
+}
+----
+
+or with Maven:
+
+[,xml]
+----
+<exclusions>
+  <exclusion>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctorj</artifactId>
+  </exclusion>
+</exclusions>
+----
+
+The distribution zip now expands into an `asciidoctorj-jruby-<version>` directory.
+The command is still named `asciidoctorj`.
+
+NOTE: If you want to run AsciidoctorJ without JRuby, see xref:migrate-to-java-implementation.adoc[], which uses `org.asciidoctor:asciidoctorj-java`.

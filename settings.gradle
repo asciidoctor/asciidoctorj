@@ -1,19 +1,17 @@
 rootProject.name = 'asciidoctorj'
 
+// the JRuby implementation (Asciidoctor running on JRuby), published as org.asciidoctor:asciidoctorj-jruby
 include \
-  'asciidoctorj',
+  'asciidoctorj-jruby',
   'asciidoctorj-arquillian-extension',
   'asciidoctorj-api',
-  'asciidoctorj-cli',
-  'asciidoctorj-distribution',
-  'asciidoctorj-documentation',
+  'asciidoctorj-jruby-cli',
+  'asciidoctorj-jruby-distribution',
+  'asciidoctorj-jruby-documentation',
   'asciidoctorj-wildfly-integration-test',
   'asciidoctorj-test-support',
   'asciidoctorj-springboot-integration-test',
   'asciidoctorj-springboot-integration-test:springboot-app'
-
-project(':asciidoctorj').projectDir = file('asciidoctorj-core')
-
 
 // the Java implementation (a pure Java port of Asciidoctor), published as org.asciidoctor:asciidoctorj-java
 include \

@@ -29,10 +29,10 @@ To only execute the tests, run:
 
 You can also run tests for a single module:
 
- $ cd asciidoctorj-core
+ $ cd asciidoctorj-jruby
    ../gradlew check
 
-To run a single test in the asciidoctorj-core subproject, use:
+To run a single test in the asciidoctorj-jruby subproject, use:
 
  $ ../gradlew -Dsingle.test=NameOfTestClass test
 
@@ -42,7 +42,7 @@ To create the distribution containing all files, run:
 
  $ ./gradlew distZip
 
-You can find the distribution in the [path]_asciidoctorj-distribution/build/distributions_ folder.
+You can find the distribution in the [path]_asciidoctorj-jruby-distribution/build/distributions_ folder.
 
 == Locally install the artifacts
 

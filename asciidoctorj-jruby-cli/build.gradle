@@ -3,7 +3,7 @@ apply plugin: 'biz.aQute.bnd.builder'
 
 dependencies {
   api project(':asciidoctorj-api')
-  api project(':asciidoctorj')
+  api project(':asciidoctorj-jruby')
   implementation "org.jcommander:jcommander:$jcommanderVersion"
 
   testImplementation (project(':asciidoctorj-test-support')) {
@@ -20,7 +20,7 @@ apply from: rootProject.file('gradle/signing.gradle')
 jar {
   bundle {
     bnd(
-      'Bundle-Name': 'asciidoctorj-cli',
+      'Bundle-Name': 'asciidoctorj-jruby-cli',
       'Bundle-SymbolicName': 'org.asciidoctor.asciidoctorj-cli',
       'Import-Package': 'com.beust.jcommander;resolution:=optional, *'
     )

@@ -3,7 +3,7 @@
 :url-chocolatey: https://chocolatey.org
 :url-sdkman: https://sdkman.io
 
-NOTE: This page describes the command line interface of the JRuby implementation (`asciidoctorj-cli`), which bundles the PDF converter (Asciidoctor PDF).
+NOTE: This page describes the command line interface of the JRuby implementation (`asciidoctorj-jruby-cli`), which bundles the PDF converter (Asciidoctor PDF).
 The Java implementation has its own command line interface (`asciidoctorj-java-cli`), which doesn't support the `pdf` backend and loads Java classes with `-r` instead of Ruby libraries.
 See the xref:guides:migrate-to-java-implementation.adoc[migration guide] for the differences.
 
@@ -18,7 +18,7 @@ There are three basic ways to make AsciidoctorJ available as a command line tool
 If you download from a xref:distribution.adoc[distribution] (zip or tar), you can get started straight away from the command line.
 
 First, extract the downloaded file.
-That puts everything in directory `asciidoctorj-{artifact-version}`.
+That puts everything in directory `asciidoctorj-jruby-{artifact-version}`.
 Within that directory are the `bin` and `lib` directories.
 
 * `bin` contains the executables -- `asciidoctorj` for Linux and macOS, and `asciidoctorj.bat` for Windows.
@@ -30,8 +30,8 @@ it should display the various run options available (i.e., help).
 [source]
 [subs="specialcharacters,attributes,callouts"]
 ----
-Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj
-Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat
+Linux: asciidoctorj-jruby-{artifact-version}/bin/asciidoctorj
+Windows: asciidoctorj-jruby-{artifact-version}\bin\asciidoctorj.bat
 ----
 
 Next, say you want to convert an AsciiDoc (.adoc) file to a pdf.
@@ -39,8 +39,8 @@ Next, say you want to convert an AsciiDoc (.adoc) file to a pdf.
 [source]
 [subs="specialcharacters,attributes,callouts"]
 ----
-Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj -b pdf README.adoc
-Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat -b pdf README.adoc
+Linux: asciidoctorj-jruby-{artifact-version}/bin/asciidoctorj -b pdf README.adoc
+Windows: asciidoctorj-jruby-{artifact-version}\bin\asciidoctorj.bat -b pdf README.adoc
 ----
 
 Boom! That should convert the README to a PDF named README.pdf.
@@ -49,8 +49,8 @@ To create a PDF with a different name -- say, READTHIS.pdf -- just add the -o sw
 [source]
 [subs="specialcharacters,attributes,callouts"]
 ----
-Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj -b pdf -o READTHIS.pdf README.adoc
-Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat -b pdf -o READTHIS.pdf README.adoc
+Linux: asciidoctorj-jruby-{artifact-version}/bin/asciidoctorj -b pdf -o READTHIS.pdf README.adoc
+Windows: asciidoctorj-jruby-{artifact-version}\bin\asciidoctorj.bat -b pdf -o READTHIS.pdf README.adoc
 ----
 
 == Automated distribution installation
@@ -66,7 +66,7 @@ This will install the binary distribution and set up the PATH automatically.
 === Windows
 
 A {url-chocolatey}[Chocolatey] package is available which installs the
-asciidoctorj-{artifact-version}-bin.zip Maven artifact along with a
+asciidoctorj-jruby-{artifact-version}-bin.zip Maven artifact along with a
 binary shim in %ChocolateyInstall%\bin which lets you run AsciidoctorJ
 from the command line.
 
