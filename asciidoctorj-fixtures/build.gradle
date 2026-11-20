@@ -1,0 +1,18 @@
+plugins {
+    id 'base'
+}
+
+description = 'The test fixtures shared by the tests of the Java implementation (not published)'
+
+configurations {
+    fixtures {
+        canBeConsumed = true
+        canBeResolved = false
+    }
+}
+
+artifacts {
+    fixtures(layout.projectDirectory.dir('src/fixtures')) {
+        type = 'directory'
+    }
+}

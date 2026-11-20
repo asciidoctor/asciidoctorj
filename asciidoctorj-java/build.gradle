@@ -9,7 +9,16 @@ ext.publicationName = 'mavenAsciidoctorJJava'
 apply from: rootProject.file('gradle/publish.gradle')
 apply from: rootProject.file('gradle/signing.gradle')
 
+configurations {
+    // the fixtures of the module asciidoctorj-fixtures
+    fixtures {
+        canBeConsumed = false
+        canBeResolved = true
+    }
+}
+
 dependencies {
+    fixtures project(path: ':asciidoctorj-fixtures', configuration: 'fixtures')
     api project(':asciidoctorj-api')
     // the tests of the AsciidoctorJ API (imported from AsciidoctorJ)
     testImplementation project(':asciidoctorj-test-support')
@@ -25,6 +34,22 @@ processResources {
     filesMatching('org/asciidoctor/asciidoctorj.properties') {
         expand version: version
     }
+}
+
+// the tests write files next to the fixtures: they work on a copy in the build directory
+def copyFixtures = tasks.register('copyFixtures', Sync) {
+    from('src/test/resources')
+    from(configurations.fixtures) {
+        into 'fixtures'
+    }
+    into layout.buildDirectory.dir('test-fixtures/src/test/resources')
+}
+
+sourceSets.test.resources.setSrcDirs([copyFixtures])
+
+tasks.named('test') {
+    // the tests use the relative path src/test/resources
+    workingDir = layout.buildDirectory.dir('test-fixtures').get().asFile
 }
 
 // share the test helpers (and fixtures) with the CLI tests
