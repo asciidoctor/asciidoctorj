@@ -30,8 +30,18 @@ Update the dependency:
 </dependency>
 ----
 
-`org.asciidoctor:asciidoctorj` is still published as a relocation to `org.asciidoctor:asciidoctorj-jruby`, so a build that depends on it keeps working.
-Update the dependency anyway, since the relocation may be removed in a future version.
+`org.asciidoctor:asciidoctorj` and `org.asciidoctor:asciidoctorj-cli` are still published as relocations to `org.asciidoctor:asciidoctorj-jruby` and `org.asciidoctor:asciidoctorj-jruby-cli`, so a build that depends on them keeps working.
+Update the dependency anyway, since the relocations may be removed in a future version.
+
+If a library that your project depends on still brings `org.asciidoctor:asciidoctorj` 3.x, your build gets both `org.asciidoctor:asciidoctorj` 3.x and `org.asciidoctor:asciidoctorj-jruby` 4.0, and the class path contains two versions of the same classes.
+Exclude `org.asciidoctor:asciidoctorj` from that library, for example with Gradle:
+
+[,groovy]
+----
+configurations.configureEach {
+  exclude group: 'org.asciidoctor', module: 'asciidoctorj'
+}
+----
 
 The distribution zip now expands into an `asciidoctorj-jruby-<version>` directory.
 The command is still named `asciidoctorj`.

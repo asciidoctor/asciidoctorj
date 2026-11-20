@@ -9,22 +9,8 @@ project.ext.publicationName = "mavenAsciidoctorJ"
 
 apply from: rootProject.file('gradle/publish.gradle')
 
-// org.asciidoctor:asciidoctorj was renamed to org.asciidoctor:asciidoctorj-jruby in 4.0:
-// publish a relocation POM, so that the builds that depend on org.asciidoctor:asciidoctorj get the JRuby implementation
-publishing.publications.create('mavenAsciidoctorJRelocation', MavenPublication) {
-  artifactId = 'asciidoctorj'
-  pom {
-    name = 'asciidoctorj'
-    description = 'Relocated to org.asciidoctor:asciidoctorj-jruby'
-    packaging = 'pom'
-    distributionManagement {
-      relocation {
-        artifactId = 'asciidoctorj-jruby'
-        message = 'org.asciidoctor:asciidoctorj is now org.asciidoctor:asciidoctorj-jruby, the JRuby implementation of AsciidoctorJ. The Java implementation is org.asciidoctor:asciidoctorj-java.'
-      }
-    }
-  }
-}
+project.ext.relocatedFrom = 'asciidoctorj'
+apply from: rootProject.file('gradle/relocation.gradle')
 
 apply from: rootProject.file('gradle/signing.gradle')
 
