@@ -15,10 +15,6 @@ dependencies {
 project.ext.publicationName = "mavenAsciidoctorJCli"
 
 apply from: rootProject.file('gradle/publish.gradle')
-
-project.ext.relocatedFrom = 'asciidoctorj-cli'
-apply from: rootProject.file('gradle/relocation.gradle')
-
 apply from: rootProject.file('gradle/signing.gradle')
 
 jar {

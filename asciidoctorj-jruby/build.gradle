@@ -8,10 +8,7 @@ import org.ysb33r.gradle.jruby.api.base.tasks.JRubyPrepare
 project.ext.publicationName = "mavenAsciidoctorJ"
 
 apply from: rootProject.file('gradle/publish.gradle')
-
-project.ext.relocatedFrom = 'asciidoctorj'
-apply from: rootProject.file('gradle/relocation.gradle')
-
+apply from: rootProject.file('gradle/implementation-capability.gradle')
 apply from: rootProject.file('gradle/signing.gradle')
 
 repositories {

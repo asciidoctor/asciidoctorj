@@ -30,17 +30,42 @@ Update the dependency:
 </dependency>
 ----
 
-`org.asciidoctor:asciidoctorj` and `org.asciidoctor:asciidoctorj-cli` are still published as relocations to `org.asciidoctor:asciidoctorj-jruby` and `org.asciidoctor:asciidoctorj-jruby-cli`, so a build that depends on them keeps working.
-Update the dependency anyway, since the relocations may be removed in a future version.
+`org.asciidoctor:asciidoctorj` and `org.asciidoctor:asciidoctorj-cli` are not published anymore, so a dependency on `org.asciidoctor:asciidoctorj:4.0.0` fails to resolve.
+This is on purpose, since you have to choose between the JRuby implementation (`org.asciidoctor:asciidoctorj-jruby`) and the Java implementation (`org.asciidoctor:asciidoctorj-java`).
+See xref:ROOT:index.adoc[] to choose one.
 
-If a library that your project depends on still brings `org.asciidoctor:asciidoctorj` 3.x, your build gets both `org.asciidoctor:asciidoctorj` 3.x and `org.asciidoctor:asciidoctorj-jruby` 4.0, and the class path contains two versions of the same classes.
-Exclude `org.asciidoctor:asciidoctorj` from that library, for example with Gradle:
+An application must use one implementation only, and must not keep `org.asciidoctor:asciidoctorj` 3.x next to it.
+With Gradle, both implementations provide the capability `org.asciidoctor:asciidoctorj`, so the build fails when the class path gets two of them, for instance:
+
+----
+Module 'org.asciidoctor:asciidoctorj-jruby' has been rejected:
+  Cannot select module because of conflict with org.asciidoctor:asciidoctorj-java:4.0.0 (runtimeElements). Both provide capability 'org.asciidoctor:asciidoctorj:4.0.0'.
+----
+
+Maven doesn't support capabilities, so the conflict is only reported at runtime:
+
+* with both implementations of 4.0, `Asciidoctor.Factory.create()` throws `Found multiple Asciidoctor implementations in the classpath`
+* with `org.asciidoctor:asciidoctorj` 3.x and an implementation of 4.0, it throws a `java.util.ServiceConfigurationError` (`Unable to get public no-arg constructor`)
+
+If `org.asciidoctor:asciidoctorj` 3.x comes from a library that your project depends on, exclude it, for example with Gradle:
 
 [,groovy]
 ----
 configurations.configureEach {
   exclude group: 'org.asciidoctor', module: 'asciidoctorj'
 }
+----
+
+or with Maven:
+
+[,xml]
+----
+<exclusions>
+  <exclusion>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctorj</artifactId>
+  </exclusion>
+</exclusions>
 ----
 
 The distribution zip now expands into an `asciidoctorj-jruby-<version>` directory.
