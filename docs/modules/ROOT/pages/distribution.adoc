@@ -1,9 +1,9 @@
 = Distribution
 
 :asciidoctorj-group-id: org.asciidoctor
-:url-maven-artifact-query: https://central.sonatype.com/artifact/{asciidoctorj-group-id}/asciidoctorj/{artifact-version}/versions
-:url-maven-artifact-detail: https://central.sonatype.com/artifact/{asciidoctorj-group-id}/asciidoctorj/{artifact-version}
-:url-maven-artifact-file: https://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
+:url-maven-artifact-query: https://central.sonatype.com/artifact/{asciidoctorj-group-id}/asciidoctorj-jruby/{artifact-version}/versions
+:url-maven-artifact-detail: https://central.sonatype.com/artifact/{asciidoctorj-group-id}/asciidoctorj-jruby/{artifact-version}
+:url-maven-artifact-file: https://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj-jruby/{artifact-version}/asciidoctorj-jruby-{artifact-version}
 
 :url-maven-artifact-api-query: https://central.sonatype.com/artifact/{asciidoctorj-group-id}/asciidoctorj-api/{artifact-version}/versions
 :url-maven-artifact-api-detail: https://central.sonatype.com/artifact/{asciidoctorj-group-id}/asciidoctorj-api/{artifact-version}
@@ -18,7 +18,7 @@ The artifact information can be found in the tables below.
 |Group Id |Artifact Id |Version |Download
 
 |{asciidoctorj-group-id}
-|{url-maven-artifact-query}[asciidoctorj]
+|{url-maven-artifact-query}[asciidoctorj-jruby]
 |{url-maven-artifact-detail}[{artifact-version}]
 |{url-maven-artifact-file}.pom[pom] {url-maven-artifact-file}.jar[jar] {url-maven-artifact-file}-javadoc.jar[javadoc (jar)] {url-maven-artifact-file}-sources.jar[sources (jar)] {url-maven-artifact-file}-bin.zip[distribution (zip)]
 

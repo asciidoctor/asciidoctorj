@@ -16,6 +16,6 @@ void sign(Project project) {
         } else if (signingKey) {
             useInMemoryPgpKeys(signingKey, signingPassword)
         }
-        sign publishing.publications[project.ext.publicationName]
+        sign publishing.publications
     }
 }

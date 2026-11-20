@@ -9,7 +9,7 @@ For more information, see the https://www.jetbrains.com/idea/help/gradle.html[Gr
 
 To open the project in Eclipse, first generate the Eclipse project files:
 
- $ cd asciidoctorj-core
+ $ cd asciidoctorj-jruby
    ./gradlew eclipse
 
 Then, import the project into Eclipse using menu:File[Import,General,Existing Project into Workspace].

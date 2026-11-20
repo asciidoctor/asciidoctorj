@@ -32,9 +32,9 @@ ifndef::awestruct[:uri-docs: https://asciidoctor.org/docs]
 :artifact-version: 2.5.7
 :asciidoctorj-epub3-version: 1.5.1
 :asciidoctorj-pdf-version: 1.6.2
-:uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj%22%20AND%20v%3A%22{artifact-version}%22
-:uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj%7C{artifact-version}%7Cjar
-:uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj/{artifact-version}/asciidoctorj-{artifact-version}
+:uri-maven-artifact-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj-jruby%22%20AND%20v%3A%22{artifact-version}%22
+:uri-maven-artifact-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj-jruby%7C{artifact-version}%7Cjar
+:uri-maven-artifact-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj-jruby/{artifact-version}/asciidoctorj-jruby-{artifact-version}
 :uri-maven-artifact-api-query: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.asciidoctor%22%20AND%20a%3A%22asciidoctorj-api%22%20AND%20v%3A%22{artifact-version}%22
 :uri-maven-artifact-api-detail: http://search.maven.org/#artifactdetails%7Corg.asciidoctor%7Casciidoctorj-api%7C{artifact-version}%7Cjar
 :uri-maven-artifact-api-file: http://search.maven.org/remotecontent?filepath=org/asciidoctor/asciidoctorj-api/{artifact-version}/asciidoctorj-api-{artifact-version}
@@ -52,7 +52,9 @@ You can find the documentation for integrating Asciidoctor in your JVM based lan
 
 [NOTE]
 ====
-This repository also contains a Java implementation of AsciidoctorJ: a pure Java port of Asciidoctor, which doesn't require JRuby.
+This repository contains two implementations of AsciidoctorJ.
+The JRuby implementation runs the Asciidoctor RubyGem on JRuby and is published as `org.asciidoctor:asciidoctorj-jruby` (`org.asciidoctor:asciidoctorj` before 4.0).
+The Java implementation is a pure Java port of Asciidoctor, which doesn't require JRuby.
 It implements the same API (`asciidoctorj-api`) and is published as `org.asciidoctor:asciidoctorj-java` (and `org.asciidoctor:asciidoctorj-java-cli` for the command line interface).
 An application depends on one implementation or the other, not both.
 See link:asciidoctorj-java/README.adoc[].
@@ -78,7 +80,7 @@ The artifact information can be found in the tables below.
 |Group Id |Artifact Id |Version |Download
 
 |org.asciidoctor
-|{uri-maven-artifact-query}[asciidoctorj]
+|{uri-maven-artifact-query}[asciidoctorj-jruby]
 |{uri-maven-artifact-detail}[{artifact-version}]
 |{uri-maven-artifact-file}.pom[pom] {uri-maven-artifact-file}.jar[jar] {uri-maven-artifact-file}-javadoc.jar[javadoc (jar)] {uri-maven-artifact-file}-sources.jar[sources (jar)] distribution ({uri-maven-artifact-file}-bin.zip[zip] {uri-maven-artifact-file}-bin.tar[tar])
 
@@ -104,7 +106,7 @@ CAUTION: The artifactId changed to `asciidoctorj` starting in 1.5.0.
 
 If you download from a distribution link above (zip or tar), you can get started straight away from the command line.
 
-First, expand the downloaded file. That puts everything in directory `asciidoctorj-{artifact-version}`.
+First, expand the downloaded file. That puts everything in directory `asciidoctorj-jruby-{artifact-version}`.
 Within that directory are `bin` and `lib` directories.  `bin` contains the executables -- `asciidoctorj` for
 Linux and macOS, and `asciidoctorj.bat` for Windows.  `lib` contains the supporting libraries.
 
@@ -114,8 +116,8 @@ it should display the various run options available (i.e., help).
 [source]
 [subs="specialcharacters,attributes,callouts"]
 ----
-Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj
-Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat
+Linux: asciidoctorj-jruby-{artifact-version}/bin/asciidoctorj
+Windows: asciidoctorj-jruby-{artifact-version}\bin\asciidoctorj.bat
 ----
 
 Next, say you want to convert an ASCIIDOC (.adoc) file -- such as this README -- to a pdf.
@@ -123,8 +125,8 @@ Next, say you want to convert an ASCIIDOC (.adoc) file -- such as this README --
 [source]
 [subs="specialcharacters,attributes,callouts"]
 ----
-Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj -b pdf README.adoc
-Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat -b pdf README.adoc
+Linux: asciidoctorj-jruby-{artifact-version}/bin/asciidoctorj -b pdf README.adoc
+Windows: asciidoctorj-jruby-{artifact-version}\bin\asciidoctorj.bat -b pdf README.adoc
 ----
 
 Boom! That should convert the README to a PDF named README.pdf.
@@ -133,8 +135,8 @@ To create a PDF with a different name -- say, READTHIS.pdf -- just add the -o sw
 [source]
 [subs="specialcharacters,attributes,callouts"]
 ----
-Linux: asciidoctorj-{artifact-version}/bin/asciidoctorj -b pdf -o READTHIS.pdf README.adoc
-Windows: asciidoctorj-{artifact-version}\bin\asciidoctorj.bat -b pdf -o READTHIS.pdf README.adoc
+Linux: asciidoctorj-jruby-{artifact-version}/bin/asciidoctorj -b pdf -o READTHIS.pdf README.adoc
+Windows: asciidoctorj-jruby-{artifact-version}\bin\asciidoctorj.bat -b pdf -o READTHIS.pdf README.adoc
 ----
 
 The rest of the document addresses the asciidoctorj API, for doing more complex conversions
@@ -154,7 +156,7 @@ If you don't use a Dependency Management system please check the dependency grap
 <dependencies>
   <dependency>
     <groupId>org.asciidoctor</groupId>
-    <artifactId>asciidoctorj</artifactId>
+    <artifactId>asciidoctorj-jruby</artifactId>
     <version>{artifact-version}</version> <!--1-->
   </dependency>
 </dependencies>
@@ -165,7 +167,7 @@ If you don't use a Dependency Management system please check the dependency grap
 .Declaring the dependency in a Gradle build file (e.g., build.gradle)
 ----
 dependencies {
-  compile 'org.asciidoctor:asciidoctorj:{artifact-version}'
+  compile 'org.asciidoctor:asciidoctorj-jruby:{artifact-version}'
 }
 ----
 
@@ -173,7 +175,7 @@ dependencies {
 [subs="specialcharacters,attributes,callouts"]
 .Declaring the dependency in an SBT build file (e.g., build.sbt)
 ----
-libraryDependencies += "org.asciidoctor" % "asciidoctorj" % "{artifact-version}" // <1>
+libraryDependencies += "org.asciidoctor" % "asciidoctorj-jruby" % "{artifact-version}" // <1>
 ----
 
 <1> Specifying the version of AsciidoctorJ implicitly selects the version of Asciidoctor
@@ -182,7 +184,7 @@ libraryDependencies += "org.asciidoctor" % "asciidoctorj" % "{artifact-version}"
 [subs="specialcharacters,attributes,callouts"]
 .Declaring the dependency in a Leiningen build file (e.g., project.clj)
 ----
-:dependencies [[org.asciidoctor/asciidoctorj "{artifact-version}"]]
+:dependencies [[org.asciidoctor/asciidoctorj-jruby "{artifact-version}"]]
 ----
 
 // DA: Should we mention how to download if you just want to use the asciidoctorj command?
@@ -204,7 +206,7 @@ If you use the distribution you can call `asciidoctorj --version` to get the ver
 === Windows Installation
 
 A {uri-chocolatey}[Chocolatey] package is available which installs the
-asciidoctorj-{artifact-version}-bin.zip Maven artifact along with a
+asciidoctorj-jruby-{artifact-version}-bin.zip Maven artifact along with a
 binary shim in %ChocolateyInstall%\bin which lets you run AsciidoctorJ
 from the command line.
 
@@ -287,16 +289,16 @@ asciidoctorj-api::
   Other implementations for different platforms than JRuby may reuse and implement this API.
   Produces the asciidoctorj-api.jar
 
-asciidoctorj::
-  The main Java bindings for the Asciidoctor RubyGem (asciidoctor) running on JRuby.
+asciidoctorj-jruby::
+  The JRuby implementation: the Java bindings for the Asciidoctor RubyGem (asciidoctor) running on JRuby.
   Also bundles optional RubyGems needed at runtime, such as coderay, tilt, haml and slim.
-  Produces the asciidoctorj jar.
+  Produces the asciidoctorj-jruby jar.
 
-asciidoctorj-cli::
+asciidoctorj-jruby-cli::
   `asciidoctorj` command Java components.
-  Produces the asciidoctorj-cli.
+  Produces the asciidoctorj-jruby-cli jar.
 
-asciidoctorj-distribution::
+asciidoctorj-jruby-distribution::
   Produces the distribution zip that provides the standalone `asciidoctorj` command including Java components,
   launch scripts and required libraries.
 
@@ -323,11 +325,11 @@ asciidoctorj-arquillian-extension/
   build.gradle
 asciidoctorj-api/
   build.gradle
-asciidoctorj-cli/
+asciidoctorj-jruby/
   build.gradle
-asciidoctorj-core/
+asciidoctorj-jruby-cli/
   build.gradle
-asciidoctorj-distribution/
+asciidoctorj-jruby-distribution/
   build.gradle
 asciidoctorj-test-support/
   build.gradle
@@ -357,10 +359,10 @@ To only execute the tests, run:
 
 You can also run tests for a single module:
 
- $ cd asciidoctorj-core
+ $ cd asciidoctorj-jruby
    ../gradlew check
 
-To run a single test in the asciidoctorj-core subproject, use:
+To run a single test in the asciidoctorj-jruby subproject, use:
 
  $ ../gradlew -Dsingle.test=NameOfTestClass test
 
@@ -368,7 +370,7 @@ To create the distribution, run:
 
  $ ./gradlew distZip
 
-You can find the distribution in the [path]_asciidoctorj-distribution/build/distributions_ folder.
+You can find the distribution in the [path]_asciidoctorj-jruby-distribution/build/distributions_ folder.
 
 === Develop in an IDE
 
@@ -381,7 +383,7 @@ For more information, see the https://www.jetbrains.com/idea/help/gradle.html[Gr
 
 To open the project in Eclipse, first generate the Eclipse project files:
 
- $ cd asciidoctorj-core
+ $ cd asciidoctorj-jruby
    ./gradlew eclipse
 
 Then, import the project into Eclipse using menu:File[Import,General,Existing Project into Workspace].
@@ -443,7 +445,7 @@ Alternatively you can release it with
 . Publish the new version to sdkman with
 +
 ----
-# ./gradlew asciidoctorj-distribution:sdkMajorRelease
+# ./gradlew asciidoctorj-jruby-distribution:sdkMajorRelease
 ----
 . Commit everything and assign a tag:
 +

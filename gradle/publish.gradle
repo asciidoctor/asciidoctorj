@@ -2,9 +2,11 @@ apply plugin: 'maven-publish'
 
 publishing {
     publications.create(project.ext.publicationName, MavenPublication) {
-
         from components.java
+    }
 
+    // Maven Central requires this metadata in every POM, including relocation POMs
+    publications.withType(MavenPublication).configureEach {
         pom {
             name = project.name
             description = project.description

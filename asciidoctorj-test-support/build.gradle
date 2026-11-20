@@ -5,7 +5,7 @@ dependencies {
     api "org.junit.jupiter:junit-jupiter-api"
 
     implementation project(':asciidoctorj-api')
-    testImplementation project(':asciidoctorj')
+    testImplementation project(':asciidoctorj-jruby')
 }
 
 // the test support is used by the tests of both implementations, and of the extensions, which may target Java 11

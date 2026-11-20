@@ -4,6 +4,8 @@
 AsciidoctorJ v4.0.0 introduces breaking changes.
 This guide will provide the steps required to update a project currently using 3.x version.
 
+include::partial$renamed-artifacts.adoc[]
+
 include::partial$removal-of-ruby-specific-methods-in-asciidoctor.adoc[]
 
 include::partial$renamed-methods-in-asciidoctor.adoc[]

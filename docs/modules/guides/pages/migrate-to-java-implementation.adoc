@@ -3,7 +3,7 @@
 
 The Java implementation of AsciidoctorJ (`org.asciidoctor:asciidoctorj-java`) is a pure Java implementation of Asciidoctor: it doesn't run the Ruby implementation on JRuby.
 It implements the same API (`asciidoctorj-api`) as the JRuby implementation, so most applications and extensions should work without any change.
-The JRuby implementation is still published as `org.asciidoctor:asciidoctorj`: an application depends on one or the other, not both.
+The JRuby implementation is published as `org.asciidoctor:asciidoctorj-jruby` (`org.asciidoctor:asciidoctorj` before 4.0): an application depends on one or the other, not both.
 This guide lists what changes when an application switches from the JRuby implementation to the Java implementation.
 
 == Coordinates
@@ -13,7 +13,7 @@ This guide lists what changes when an application switches from the JRuby implem
 | |JRuby implementation |Java implementation
 
 |Maven coordinates
-|`org.asciidoctor:asciidoctorj` (+ `asciidoctorj-api`, JRuby and the gems)
+|`org.asciidoctor:asciidoctorj-jruby` (+ `asciidoctorj-api`, JRuby and the gems)
 |`org.asciidoctor:asciidoctorj-java` (+ `asciidoctorj-api`, no other dependency)
 
 |Java version
@@ -21,7 +21,7 @@ This guide lists what changes when an application switches from the JRuby implem
 |17+
 
 |Command line interface
-|`org.asciidoctor:asciidoctorj-cli` (+ JCommander), distribution (zip)
+|`org.asciidoctor:asciidoctorj-jruby-cli` (+ JCommander), distribution (zip)
 |`org.asciidoctor:asciidoctorj-java-cli` (no dependency)
 |===
 

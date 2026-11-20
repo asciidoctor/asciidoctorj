@@ -70,24 +70,24 @@ jobs:
         shell: cmd
         run: |
           gradlew.bat -i -S check
-      - name: Upload asciidoctorj-core reports
+      - name: Upload asciidoctorj-jruby reports
         uses: actions/upload-artifact@v7
         env:
           os_name: ${{ matrix.os }}
           java_version: ${{ matrix.java }}
         if: always()
         with:
-          name: asciidoctorj-core-reports-${{ env.os_name }}-${{ env.java_version }}
-          path: asciidoctorj-core/build/reports/*
-      - name: Upload asciidoctorj-documentation reports
+          name: asciidoctorj-jruby-reports-${{ env.os_name }}-${{ env.java_version }}
+          path: asciidoctorj-jruby/build/reports/*
+      - name: Upload asciidoctorj-jruby-documentation reports
         uses: actions/upload-artifact@v7
         if: always()
         env:
           os_name: ${{ matrix.os }}
           java_version: ${{ matrix.java }}
         with:
-          name: asciidoctorj-documentation-reports-${{ env.os_name }}-${{ env.java_version }}
-          path: asciidoctorj-documentation/build/reports/*
+          name: asciidoctorj-jruby-documentation-reports-${{ env.os_name }}-${{ env.java_version }}
+          path: asciidoctorj-jruby-documentation/build/reports/*
   test-asciidoctor-upstream:
     name: Test Asciidoctor Upstream
     needs:
@@ -118,15 +118,15 @@ jobs:
         run: |
           unset GEM_PATH GEM_HOME JRUBY_OPTS
           ./ci/test-asciidoctor-upstream.sh
-      - name: Upload asciidoctorj-core reports
+      - name: Upload asciidoctorj-jruby reports
         uses: actions/upload-artifact@v7
         if: always()
         env:
           os_name: ${{ matrix.os }}
           java_version: ${{ matrix.java }}
         with:
-          name: asciidoctorj-core-reports-upstream-${{ env.os_name }}-${{ env.java_version }}
-          path: asciidoctorj-core/build/reports/*
+          name: asciidoctorj-jruby-reports-upstream-${{ env.os_name }}-${{ env.java_version }}
+          path: asciidoctorj-jruby/build/reports/*
   test-java-17:
     name: Test Java implementation on Java 17
     runs-on: ubuntu-latest

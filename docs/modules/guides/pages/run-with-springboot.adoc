@@ -2,7 +2,7 @@
 :url-springboot-docs: https://docs.spring.io/spring-boot/
 :url-asciidoctor-gh-org: https://github.com/asciidoctor
 
-NOTE: This page applies to the JRuby implementation (`org.asciidoctor:asciidoctorj`), which loads its gems from the jars.
+NOTE: This page applies to the JRuby implementation (`org.asciidoctor:asciidoctorj-jruby`), which loads its gems from the jars.
 
 Due to Spring Boot's packaging system, Asciidoctorj won't work out of the box from a single JAR application.
 Luckily Spring Boot plugins for Gradle and Maven provide options to fix it.
@@ -39,7 +39,7 @@ See this https://github.com/asciidoctor/asciidoctorj/issues/1286#issuecomment-23
         <requiresUnpack>
             <dependency>
                 <groupId>org.asciidoctor</groupId>
-                <artifactId>asciidoctorj</artifactId>
+                <artifactId>asciidoctorj-jruby</artifactId>
             </dependency>
         </requiresUnpack>
     </configuration>

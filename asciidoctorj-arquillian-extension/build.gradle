@@ -1,5 +1,5 @@
 dependencies {
-  compileOnly project(':asciidoctorj')
+  compileOnly project(':asciidoctorj-jruby')
   implementation(project(':asciidoctorj-test-support')) { transitive = false }
   api "org.jboss.arquillian.container:arquillian-container-spi:$arquillianVersion"
   api "org.jboss.arquillian.container:arquillian-container-test-spi:$arquillianVersion"

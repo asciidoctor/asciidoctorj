@@ -24,7 +24,7 @@ The workflow:
 . pushes the commits and the tag to `main`
 . publishes the artifacts to Maven Central with `./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository`
 . creates the GitHub release, using the section of `CHANGELOG.adoc` converted to Markdown by bestikk-changelog as release notes
-. waits until the distribution is available on Maven Central and publishes it to SDKMAN with `./gradlew asciidoctorj-distribution:sdkMajorRelease` (`sdkMinorRelease` for a pre-release, so that it is not made the default version)
+. waits until the distribution is available on Maven Central and publishes it to SDKMAN with `./gradlew asciidoctorj-jruby-distribution:sdkMajorRelease` (`sdkMinorRelease` for a pre-release, so that it is not made the default version)
 
 The workflow runs in the `release` environment, which provides the following secrets:
 
@@ -78,7 +78,7 @@ Roll the `== Unreleased` section of `CHANGELOG.adoc` into `== 3.0.2 (<date>)`, t
 . Once the distribution is available on Maven Central, publish the new version to sdkman with
 +
 ----
-# ./gradlew asciidoctorj-distribution:sdkMajorRelease
+# ./gradlew asciidoctorj-jruby-distribution:sdkMajorRelease
 ----
 . Upgrade the version to the next version by changing the version property in gradle.properties to `version=3.0.3-SNAPSHOT`, commit and push the commits and the tag:
 +

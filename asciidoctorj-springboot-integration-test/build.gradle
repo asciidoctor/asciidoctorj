@@ -1,7 +1,7 @@
 jar.enabled = false
 
 dependencies {
-    testCompileOnly project(':asciidoctorj')
+    testCompileOnly project(':asciidoctorj-jruby')
 
     testImplementation "commons-io:commons-io:$commonsioVersion"
     testImplementation "org.awaitility:awaitility:4.2.0"
