@@ -1,7 +1,5 @@
 package org.asciidoctor;
 
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
-
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
@@ -12,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
@@ -34,15 +34,13 @@ public class WhenMultipleDocumentsAreRenderedTest {
 
         final String firstContent = asciidoctor.convert(source, options);
 
-        assertSoftly(softly -> {
-            softly.assertThat(firstContent).isNotEmpty();
-            for (int i = 1; i < RENDER_COUNT; i++) {
-                String content = asciidoctor.convert(source, options);
-                softly.assertThat(content)
-                        .as("render %d", i + 1)
-                        .isEqualTo(firstContent);
-            }
-        });
+        assertThat(firstContent).isNotEmpty();
+        for (int i = 1; i < RENDER_COUNT; i++) {
+            String content = asciidoctor.convert(source, options);
+            assertThat(content)
+                    .as("render %d", i + 1)
+                    .isEqualTo(firstContent);
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.nativeimage.RegisterClass;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
@@ -15,6 +16,11 @@ import static org.asciidoctor.util.OptionsTestHelper.emptyOptions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
+@RegisterClass({
+        HasMoreLinesPreprocessor.class,
+        NextLineEmptyPreprocessor.class,
+        NumberLinesPreprocessor.class
+})
 public class WhenReaderIsManipulatedInExtensionTest {
 
     private static final String RENDERSAMPLE = "rendersample.asciidoc";

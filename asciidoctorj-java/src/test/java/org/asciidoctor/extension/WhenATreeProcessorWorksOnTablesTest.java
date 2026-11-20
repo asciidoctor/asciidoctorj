@@ -2,6 +2,7 @@ package org.asciidoctor.extension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.asciidoctor.nativeimage.RegisterClass;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.jsoup.Jsoup;
@@ -9,6 +10,10 @@ import org.jsoup.select.Elements;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+@RegisterClass({
+        TableCreatorTreeProcessor.class,
+        TableUpdaterTreeProcessor.class
+})
 public class WhenATreeProcessorWorksOnTablesTest {
 
     private static final String EMPTY_DOCUMENT = "= Document without table";

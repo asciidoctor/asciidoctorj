@@ -1,12 +1,12 @@
 package org.asciidoctor.core;
 
+import org.asciidoctor.cli.Invoker;
+import org.asciidoctor.core.api.ast.NodeConverter;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-
-import org.asciidoctor.cli.Invoker;
-import org.asciidoctor.core.api.ast.NodeConverter;
 
 /**
  * The base class of the CLI tests, which provides the CLI helpers of the Ruby test suite (test_helper.rb).
@@ -20,6 +20,7 @@ public abstract class CliTestHelper extends TestHelper {
     public static <T extends AbstractNode> T unwrap(Object node) {
         return NodeConverter.unwrap(node);
     }
+
     /**
      * @return the command (and arguments) to run the CLI in a separate process
      */
@@ -59,26 +60,18 @@ public abstract class CliTestHelper extends TestHelper {
         return invokeCliToBuffer(argv, filename, null);
     }
 
-    public static Invoker invokeCliToBuffer(List<String> argv, Supplier<?> stdin) {
-        return invokeCliToBuffer(argv, "sample.adoc", stdin);
-    }
-
     public static Invoker invokeCliToBuffer(List<String> argv) {
         return invokeCliToBuffer(argv, "sample.adoc", null);
-    }
-
-    public static Invoker invokeCliToBuffer() {
-        return invokeCliToBuffer(List.of());
     }
 
     /**
      * Invokes the CLI with the arguments and the file (resolved from the fixtures directory if relative).
      *
      * @param buffers the targets of the output and error streams, or null to use the standard streams
-     * @param stdin the function that supplies the standard input, or null
+     * @param stdin   the function that supplies the standard input, or null
      */
     public static Invoker invokeCli(List<String> argv, String filename, List<? extends Appendable> buffers,
-            Supplier<?> stdin) {
+                                    Supplier<?> stdin) {
         // NOTE the filename may be a glob pattern, which is not a valid path on Windows
         String filepath = filename == null || filename.equals("-") || new PathResolver().isAbsolutePath(filename) ? filename
                 : fixturePath(filename);
@@ -100,10 +93,6 @@ public abstract class CliTestHelper extends TestHelper {
 
     public static Invoker invokeCli(List<String> argv, String filename) {
         return invokeCli(argv, filename, null, null);
-    }
-
-    public static Invoker invokeCli(List<String> argv, Supplier<?> stdin) {
-        return invokeCli(argv, "sample.adoc", null, stdin);
     }
 
     public static Invoker invokeCli(List<String> argv) {

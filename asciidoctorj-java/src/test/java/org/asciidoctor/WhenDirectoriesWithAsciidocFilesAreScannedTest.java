@@ -2,12 +2,12 @@ package org.asciidoctor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.asciidoctor.util.AsciiDocDirectoryWalker;
-import org.asciidoctor.util.DirectoryWalker;
+import org.asciidoctor.jruby.AsciiDocDirectoryWalker;
+import org.asciidoctor.jruby.DirectoryWalker;
+import org.asciidoctor.nativeimage.RegisterDirectory;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.asciidoctor.test.extension.ClasspathExtension;
-import org.asciidoctor.test.extension.ClasspathHelper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
@@ -18,23 +18,27 @@ import java.util.List;
 
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
+@RegisterDirectory("src/documents/")
 public class WhenDirectoriesWithAsciidocFilesAreScannedTest {
 
     @Test
-    public void only_asciidoc_files_should_be_returned(@ClasspathResource("src/documents") File documentsFolder) {
+    public void only_asciidoc_files_should_be_returned(@ClasspathResource("src/documents/") File documentsFolder) {
 
         DirectoryWalker abstractDirectoryWalker = new AsciiDocDirectoryWalker(documentsFolder.getPath());
         List<File> asciidocFiles = abstractDirectoryWalker.scan();
 
-        // Converto to absolute paths, otherwise Hamcrest's matchers fails
+        // Convert to absolute paths, otherwise Hamcrest's matchers fails
         List<String> asciidocFilesPaths = new ArrayList<>();
         for (File f : asciidocFiles) {
             asciidocFilesPaths.add(f.getAbsolutePath());
         }
 
-        final ClasspathHelper classpath = new ClasspathHelper(this.getClass());
         assertThat(asciidocFilesPaths).hasSize(4);
-        assertThat(asciidocFilesPaths).containsExactlyInAnyOrder(classpath.getResource("src/documents/sample.ad").getAbsolutePath(), classpath.getResource("src/documents/sample.adoc").getAbsolutePath(), classpath.getResource("src/documents/sample.asciidoc").getAbsolutePath(), classpath.getResource("src/documents/sample.asc").getAbsolutePath());
+        assertThat(asciidocFilesPaths).containsExactlyInAnyOrder(
+                new File(documentsFolder, "sample.ad").getAbsolutePath(),
+                new File(documentsFolder, "sample.adoc").getAbsolutePath(),
+                new File(documentsFolder, "sample.asciidoc").getAbsolutePath(),
+                new File(documentsFolder, "sample.asc").getAbsolutePath());
 
     }
 

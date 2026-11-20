@@ -19,6 +19,7 @@ dependencies {
     // api: the CLI can be extended (e.g. a CLI dedicated to a converter), so the Java implementation is on the compile classpath of the consumers
     api project(':asciidoctorj-java')
     testImplementation project(path: ':asciidoctorj-java', configuration: 'testArtifacts')
+    testImplementation libs.assertj
 }
 
 test {
@@ -65,11 +66,8 @@ jar {
 // native-image comes from a GraalVM 25 Java toolchain (Gradle detects the installed JDKs),
 // the other tasks use the Java 21 toolchain
 graalvmNative {
-    // the CLI has no third-party dependency: its metadata is in src/main/resources/META-INF/native-image
-    metadataRepository {
-        enabled = false
-    }
     binaries.configureEach {
+        buildArgs.add('--enable-url-protocols=http,https')
         javaLauncher.set(javaToolchains.launcherFor {
             languageVersion = JavaLanguageVersion.of(25)
             nativeImageCapable = true
@@ -83,6 +81,11 @@ graalvmNative {
             // -march=compatibility: run on any CPU of the target architecture
             // -H:-ParseRuntimeOptions: don't let the VM consume the -D (destination dir) argument as a system property
             buildArgs.addAll('-march=compatibility', '-H:-ParseRuntimeOptions')
+        }
+        test {
+            // nativeTest cannot set the working directory (the task test uses the directory of the module asciidoctorj-java):
+            // the tests find the fixtures of the module asciidoctorj-java with this system property
+            runtimeArgs.add("-Dasciidoctorj.test.resources=${project(':asciidoctorj-java').file('src/test/resources')}")
         }
     }
 }

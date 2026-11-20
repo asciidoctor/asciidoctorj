@@ -1,3 +1,7 @@
+plugins {
+    alias(libs.plugins.graalvm.native)
+}
+
 description = 'A pure Java port of the Asciidoctor AsciiDoc processor'
 
 base {
@@ -16,6 +20,31 @@ dependencies {
     testImplementation libs.assertj
     testImplementation libs.jsoup
     testImplementation libs.xmlunit.assertj
+    // the annotations @RegisterClass, @RegisterDirectory and @RegisterFile add entries to the reachability metadata of the tests
+    testCompileOnly project(':asciidoctorj-native-metadata')
+    testAnnotationProcessor project(':asciidoctorj-native-metadata')
+}
+
+// the processor writes the entries of @RegisterClass, @RegisterDirectory and @RegisterFile to a generated metadata file in the build
+// directory (not in the sources), which is a resources directory of the tests
+def generatedTestResources = layout.buildDirectory.dir('generated/native-metadata')
+def generatedMetadata = generatedTestResources.map {
+    it.file("META-INF/native-image/${project.group}/${project.name}-tests-generated/reachability-metadata.json")
+}
+
+sourceSets.test.resources.srcDir generatedTestResources
+
+tasks.named('compileTestJava') {
+    options.compilerArgs << "-AnativeMetadata=${generatedMetadata.get().asFile}"
+    // the processor adds entries to the file: start with an empty file
+    doFirst {
+        delete generatedMetadata
+    }
+}
+
+tasks.named('processTestResources') {
+    // the generated file must exist before the resources are copied
+    dependsOn tasks.named('compileTestJava')
 }
 
 // inject the project version, which is reported by Asciidoctor.VERSION
@@ -42,4 +71,26 @@ tasks.register('testJar', Jar) {
 
 artifacts {
     testArtifacts testJar
+}
+
+graalvmNative {
+    binaries.named('test') {
+        buildArgs.add('--enable-url-protocols=http,https')
+    }
+    binaries.configureEach {
+        javaLauncher.set(javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(25)
+            nativeImageCapable = true
+        })
+    }
+}
+
+// ./gradlew :asciidoctorj-java:nativeTest -PnativeTestClass=org.asciidoctor.core.Html5ConverterTest: run only one test class
+// (the native tests are the tests that the JVM test task runs)
+test {
+    if (project.hasProperty('nativeTestClass')) {
+        filter {
+            includeTestsMatching project.property('nativeTestClass')
+        }
+    }
 }

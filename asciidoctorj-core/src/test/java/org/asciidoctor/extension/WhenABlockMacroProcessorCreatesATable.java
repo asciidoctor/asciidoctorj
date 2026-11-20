@@ -1,22 +1,10 @@
 package org.asciidoctor.extension;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.test.extension.ClasspathHelper;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.asciidoctor.util.TestHttpServer;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,10 +13,24 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@ExtendWith(ClasspathExtension.class)
 class WhenABlockMacroProcessorCreatesATable {
 
     public static final String FIRST_TD = "td:first-child";
@@ -72,13 +74,10 @@ class WhenABlockMacroProcessorCreatesATable {
             githubcontributors::asciidoctor/asciidoctorj[widths="2,3,-1"]
             """;
 
-    private ClasspathHelper classpathResources;
-
     @BeforeEach
-    void setup() {
+    void setup(@ClasspathResource("githubcontributors.json") File githubContributors) {
         asciidoctor = Asciidoctor.Factory.create();
-        classpathResources = new ClasspathHelper(WhenABlockMacroProcessorCreatesATable.class);
-        TestHttpServer.start(Map.of("http://api.github.com/repos/asciidoctor/asciidoctorj/contributors", classpathResources.getResource("githubcontributors.json")));
+        TestHttpServer.start(Map.of("http://api.github.com/repos/asciidoctor/asciidoctorj/contributors", githubContributors));
     }
 
     @AfterEach

@@ -1,6 +1,7 @@
 package org.asciidoctor;
 
 import org.asciidoctor.test.AsciidoctorInstance;
+import org.asciidoctor.nativeimage.RegisterDirectory;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.asciidoctor.test.extension.ClasspathExtension;
@@ -17,6 +18,7 @@ import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
+@RegisterDirectory("src/custom-backends/haml/html5-tweaks")
 public class WhenCustomTemplatesAreUsedTest {
 
     @AsciidoctorInstance(scope = PER_METHOD)
