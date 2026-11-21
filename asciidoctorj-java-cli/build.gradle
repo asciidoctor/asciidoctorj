@@ -14,19 +14,12 @@ ext.publicationName = 'mavenAsciidoctorJJavaCli'
 
 apply from: rootProject.file('gradle/publish.gradle')
 apply from: rootProject.file('gradle/signing.gradle')
+apply from: rootProject.file('gradle/fixtures.gradle')
 
 dependencies {
     // api: the CLI can be extended (e.g. a CLI dedicated to a converter), so the Java implementation is on the compile classpath of the consumers
     api project(':asciidoctorj-java')
     testImplementation project(path: ':asciidoctorj-java', configuration: 'testArtifacts')
-}
-
-test {
-    // the tests use the fixtures of the core module (src/test/resources/fixtures)
-    workingDir = project(':asciidoctorj-java').projectDir
-    // and write (then delete) files in these fixtures, like the tests of the core module:
-    // don't run them at the same time (org.gradle.parallel)
-    mustRunAfter ':asciidoctorj-java:test'
 }
 
 // ./gradlew installDist: the JVM application (build/install/asciidoctorj), with its start scripts

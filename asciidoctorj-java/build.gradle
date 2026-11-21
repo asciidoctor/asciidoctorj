@@ -9,6 +9,7 @@ ext.publicationName = 'mavenAsciidoctorJJava'
 apply from: rootProject.file('gradle/publish.gradle')
 apply from: rootProject.file('gradle/implementation-capability.gradle')
 apply from: rootProject.file('gradle/signing.gradle')
+apply from: rootProject.file('gradle/fixtures.gradle')
 
 dependencies {
     api project(':asciidoctorj-api')

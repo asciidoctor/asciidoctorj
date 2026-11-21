@@ -1,0 +1,32 @@
+// The tests write files next to the fixtures, so each module works on its own copy in the build directory.
+// The task copyFixtures puts the fixtures (module asciidoctorj-fixtures) and the src/test/resources of the module
+// in build/test-fixtures/src/test/resources. This gives two copies of the test resources:
+// 1. build/test-fixtures/src/test/resources: for the tests that read files by path (eg. OptionsTest).
+//    The test task runs in build/test-fixtures, so the relative path src/test/resources/fixtures is valid.
+// 2. build/resources/test (the normal folder, on the test classpath): for the tests that read from the classpath.
+//    processTestResources takes its input from copy 1 (setSrcDirs), and not from src/test/resources.
+
+configurations {
+    fixtures {
+        canBeConsumed = false
+        canBeResolved = true
+    }
+}
+
+dependencies {
+    fixtures project(path: ':asciidoctorj-fixtures', configuration: 'fixtures')
+}
+
+def copyFixtures = tasks.register('copyFixtures', Sync) {
+    from('src/test/resources')
+    from(configurations.fixtures) {
+        into 'fixtures'
+    }
+    into layout.buildDirectory.dir('test-fixtures/src/test/resources')
+}
+
+sourceSets.test.resources.setSrcDirs([copyFixtures])
+
+tasks.named('test') {
+    workingDir = layout.buildDirectory.dir('test-fixtures').get().asFile
+}

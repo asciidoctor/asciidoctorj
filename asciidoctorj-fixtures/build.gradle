@@ -1,0 +1,16 @@
+plugins {
+    id 'base'
+}
+
+configurations {
+    fixtures {
+        canBeConsumed = true
+        canBeResolved = false
+    }
+}
+
+artifacts {
+    fixtures(layout.projectDirectory.dir('src/fixtures')) {
+        type = 'directory'
+    }
+}

@@ -15,6 +15,7 @@ include \
 
 // the Java implementation (a pure Java port of Asciidoctor), published as org.asciidoctor:asciidoctorj-java
 include \
+  'asciidoctorj-fixtures',
   'asciidoctorj-java',
   'asciidoctorj-java-cli',
   'asciidoctorj-java-documentation'
