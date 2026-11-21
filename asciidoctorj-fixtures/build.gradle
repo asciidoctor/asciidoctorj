@@ -2,8 +2,6 @@ plugins {
     id 'base'
 }
 
-description = 'The test fixtures shared by the tests of the Java implementation (not published)'
-
 configurations {
     fixtures {
         canBeConsumed = true
