@@ -1,7 +1,5 @@
 description = 'Annotations and an annotation processor that write the GraalVM reachability metadata'
 
-// this module is only used when the project is built: it is not published
-
 dependencies {
     testImplementation libs.assertj
 }

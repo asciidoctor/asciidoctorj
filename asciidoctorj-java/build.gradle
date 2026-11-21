@@ -17,12 +17,12 @@ apply from: rootProject.file('gradle/fixtures.gradle')
 
 dependencies {
     api project(':asciidoctorj-api')
-    // the tests of the AsciidoctorJ API (imported from AsciidoctorJ)
+
     testImplementation project(':asciidoctorj-test-support')
     testImplementation libs.assertj
     testImplementation libs.jsoup
     testImplementation libs.xmlunit.assertj
-    // the annotations @RegisterClass, @RegisterDirectory and @RegisterFile add entries to the reachability metadata of the tests
+
     testCompileOnly project(':asciidoctorj-native-metadata')
     testAnnotationProcessor project(':asciidoctorj-native-metadata')
 }

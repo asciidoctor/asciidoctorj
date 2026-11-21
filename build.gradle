@@ -106,7 +106,6 @@ allprojects {
 
 // the modules of the Java implementation are configured at the end of this file
 boolean isJavaImplementation(def project) {
-  // asciidoctorj-native-metadata is only used to build the tests of the Java implementation: it has the same configuration
   project.name.startsWith('asciidoctorj-java') || project.name == 'asciidoctorj-native-metadata'
 }
 
