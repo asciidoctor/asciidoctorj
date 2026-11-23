@@ -217,7 +217,6 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: gradle/actions/setup-gradle@v6
-      # The tests of the CLI write files in the fixtures of asciidoctorj-java: run the tasks one after the other
       - name: Native tests of asciidoctorj-java
         run: ./gradlew -Porg.gradle.java.installations.fromEnv=GRAALVM_HOME :asciidoctorj-java:nativeTest
       - name: Native tests of asciidoctorj-java-cli
