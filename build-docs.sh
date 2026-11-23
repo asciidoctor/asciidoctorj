@@ -17,6 +17,8 @@
 # The exit code is 0 if the build passes, and not 0 if the build fails.
 # Each build uses a new random work folder. The script prints its path.
 # The script does not delete the work folder, so you can read the output and the log.
+# The terminal shows the Antora messages in a readable format (this needs jq).
+# The file build.log in the work folder has the raw JSON messages.
 #
 # Environment variables:
 #   PLAYBOOK_URL   Repository of the playbook.          Default: upstream docs.asciidoctor.org
@@ -80,6 +82,26 @@ init_paths() {
   OUTPUT_DIR="$WORK_DIR/public"
   LOG_FILE="$WORK_DIR/build.log"
   echo "Work folder: $WORK_DIR"
+}
+
+# Show the JSON log lines of Antora in a readable format: LEVEL file[:line]: message
+# Lines that are not JSON are not changed. Without jq, all lines are not changed.
+# The log file always has the raw JSON lines.
+format_log() {
+  if command -v jq >/dev/null 2>&1; then
+    jq -R -r '
+      (fromjson? // .) as $entry
+      | if ($entry | type) == "object" and ($entry.msg != null) then
+          "\($entry.level | ascii_upcase)  "
+          + (($entry.file.path // "-") | sub("^/asciidoctorj/docs/modules/"; "") | sub("^/asciidoctorj/"; ""))
+          + (if $entry.file.line then ":\($entry.file.line)" else "" end)
+          + ": \($entry.msg)"
+        else
+          $entry | if type == "string" then . else tojson end
+        end'
+  else
+    cat
+  fi
 }
 
 # Run a command in the Antora image.
@@ -157,6 +179,8 @@ build() {
   echo "Docker image: $ANTORA_IMAGE"
   echo "Output folder: $OUTPUT_DIR"
   echo "Log: $LOG_FILE"
+  echo
+
   local status
   set +e
   # Same options as the Netlify production build, without the Algolia and PDF extensions.
@@ -165,7 +189,7 @@ build() {
     --html-url-extension-style=indexify \
     --redirect-facility=netlify \
     --to-dir "$CONTAINER_WORK/public" \
-    build-playbook.yml 2>&1 | tee "$LOG_FILE"
+    build-playbook.yml 2>&1 | tee "$LOG_FILE" | format_log
   status="${PIPESTATUS[0]}"
   set -e
   echo
