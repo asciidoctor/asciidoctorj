@@ -9,12 +9,21 @@
 # The script checks out the real playbook, antora-playbook.yml, from the
 # docs.asciidoctor.org repository. It keeps all settings and extensions of that playbook.
 # It changes only these things, so that the build contains only the AsciidoctorJ docs:
-#   - content.sources is replaced with the local AsciidoctorJ repository.
+#   - content.sources is replaced with the local AsciidoctorJ repository and the
+#     sources of the playbook for the Maven plugin (the component maven-tools) and
+#     for the AsciiDoc language docs (the component asciidoc).
+#     The AsciidoctorJ docs link to these docs.
 #   - site.start_page is removed, because the ROOT component is not in the build.
+#   - runtime.log.failure_level is set to fatal. The script decides about success itself (see below).
 #
 # Usage: ./build-docs.sh [build|clean <work-folder>]
 #
-# The exit code is 0 if the build passes, and not 0 if the build fails.
+# The build contains docs of other projects, and these docs can have their own problems.
+# The script prints all warnings and errors, but only those of the AsciidoctorJ docs fail the build:
+#   - Exit code 0: Antora finished, and the AsciidoctorJ docs have no warning and no error.
+#     Messages of other sources are marked with "(ignored)".
+#   - Exit code 1: the AsciidoctorJ docs have at least one warning or error.
+#   - Other exit code: Antora stopped with a fatal error (exit code of Antora).
 # Each build uses a new random work folder. The script prints its path.
 # The script does not delete the work folder, so you can read the output and the log.
 # The terminal shows the Antora messages in a readable format (this needs jq).
@@ -23,6 +32,11 @@
 # Environment variables:
 #   PLAYBOOK_URL   Repository of the playbook.          Default: upstream docs.asciidoctor.org
 #   PLAYBOOK_REF   Branch of the playbook repository.    Default: main
+#   KEEP_SOURCES   Sources of the playbook to keep.     Default: asciidoctor-maven-plugin,asciidoc-lang.git
+#                  This is a list of repository names (commas or spaces between the names).
+#                  A name must be exactly the last part of the source URL.
+#                  If the URL ends with ".git", the name must also end with ".git".
+#                  Set it to an empty value to build only the AsciidoctorJ docs.
 #   INCLUDE_DEV    Set to 1 to keep "-dev" versions.     Default: unset (same as Netlify)
 #   ANTORA_IMAGE   Antora Docker image.                  Default: docker.io/antora/antora:latest
 #   TABS_VERSION   Version of @asciidoctor/tabs.        Default: 1.0.0-beta.6 (as in the playbook repo)
@@ -38,6 +52,7 @@ set -euo pipefail
 
 PLAYBOOK_URL="${PLAYBOOK_URL:-https://github.com/asciidoctor/docs.asciidoctor.org.git}"
 PLAYBOOK_REF="${PLAYBOOK_REF:-main}"
+KEEP_SOURCES="${KEEP_SOURCES:-asciidoctor-maven-plugin,asciidoc-lang}"
 INCLUDE_DEV="${INCLUDE_DEV:-}"
 ANTORA_IMAGE="${ANTORA_IMAGE:-docker.io/antora/antora:latest}"
 TABS_VERSION="${TABS_VERSION:-1.0.0-beta.6}"
@@ -53,7 +68,7 @@ die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 
 check_tools() {
   local tool
-  for tool in git docker awk sed; do
+  for tool in git docker awk sed jq; do
     command -v "$tool" >/dev/null 2>&1 || die "'$tool' is not installed."
   done
   docker info >/dev/null 2>&1 || die "The Docker daemon is not running or you cannot access it."
@@ -84,24 +99,42 @@ init_paths() {
   echo "Work folder: $WORK_DIR"
 }
 
-# Show the JSON log lines of Antora in a readable format: LEVEL file[:line]: message
-# Lines that are not JSON are not changed. Without jq, all lines are not changed.
-# The log file always has the raw JSON lines.
+# jq function: true if a log entry belongs to the AsciidoctorJ docs (the local source).
+# Entries without a source are also counted, because the script cannot know their origin.
+JQ_OURS='def ours: (.source == null) or (.source.worktree == $src) or ((.source.local // "") | startswith($src + "/"));
+         def problem: (.level | IN("warn", "error", "fatal"));'
+
+# Show the JSON log lines of Antora in a readable format:
+#   LEVEL  [source:module] file[:line]: message
+# The source is the repository name, and the module is the Antora module of the file.
+# A warning or error of another source has "(ignored)" after the level.
+# Lines that are not JSON are not changed. The log file always has the raw JSON lines.
 format_log() {
-  if command -v jq >/dev/null 2>&1; then
-    jq -R -r '
-      (fromjson? // .) as $entry
-      | if ($entry | type) == "object" and ($entry.msg != null) then
-          "\($entry.level | ascii_upcase)  "
-          + (($entry.file.path // "-") | sub("^/asciidoctorj/docs/modules/"; "") | sub("^/asciidoctorj/"; ""))
+  jq -R -r --arg src "$CONTAINER_SOURCE" "$JQ_OURS"'
+    (fromjson? // .) as $entry
+    | if ($entry | type) == "object" and ($entry.msg != null) then
+        ($entry.file.path // "") as $path
+        | ($path | capture("modules/(?<module>[^/]+)/(?<rest>.*)")? // {module: "", rest: ($path | sub("^/asciidoctorj/"; ""))}) as $location
+        | ($entry.source.url // "" | sub("/+$"; "") | sub(".*/"; "") | sub("\\.git$"; "")) as $source
+        | ([$source, $location.module] | map(select(. != "")) | join(":")) as $origin
+        | (if ($entry | problem) and (($entry | ours) | not) then "(ignored)" else "" end) as $ignored
+        | "\($entry.level | ascii_upcase)\($ignored)  "
+          + (if $origin != "" then "[\($origin)] " else "" end)
+          + (if $location.rest != "" then $location.rest else "-" end)
           + (if $entry.file.line then ":\($entry.file.line)" else "" end)
           + ": \($entry.msg)"
-        else
-          $entry | if type == "string" then . else tojson end
-        end'
-  else
-    cat
-  fi
+      else
+        $entry | if type == "string" then . else tojson end
+      end'
+}
+
+# Count the warnings and errors in the log file.
+# Argument: "ours" for the AsciidoctorJ docs, or "others" for all other sources.
+count_problems() {
+  local which="$1" filter
+  if [ "$which" = "ours" ]; then filter='select(ours)'; else filter='select(ours | not)'; fi
+  jq -R -r --arg src "$CONTAINER_SOURCE" "$JQ_OURS"'
+    fromjson? | select(type == "object" and problem) | '"$filter"' | 1' "$LOG_FILE" | wc -l | tr -d ' '
 }
 
 # Run a command in the Antora image.
@@ -147,19 +180,43 @@ write_playbook() {
   local output="$PLAYBOOK_DIR/build-playbook.yml"
   [ -f "$input" ] || die "The playbook repository has no antora-playbook.yml."
 
-  awk -v url="$CONTAINER_SOURCE" '
+  awk -v url="$CONTAINER_SOURCE" -v keep="$KEEP_SOURCES" '
+    BEGIN {
+      n = split(keep, names, /[ ,|]+/)
+      for (i = 1; i <= n; i++) if (names[i] != "") wanted[names[i]] = 1
+    }
+    # The repository name is the last part of the URL (this includes ".git" if the URL has it).
+    function repository(line,   name) {
+      name = line
+      sub(/^  - url:[ \t]*/, "", name)
+      sub(/[ \t]+$/, "", name)
+      sub(/\/+$/, "", name)
+      sub(/.*\//, "", name)
+      return name
+    }
+    function flush() {
+      if (block != "" && (block_name in wanted)) printf "%s", block
+      block = ""
+    }
     /^content:/ {
       print "content:"
       print "  sources:"
       print "  - url: " url
       print "    branches: HEAD"
       print "    start_path: docs"
-      skip = 1
+      in_content = 1
       next
     }
-    skip && /^[^ #]/ { skip = 0 }
-    !skip { print }
+    in_content && /^[^ #]/ { flush(); in_content = 0 }
+    in_content && /^  - url:/ { flush(); block_name = repository($0); block = $0 "\n"; next }
+    in_content && /^    / { if (block != "") block = block $0 "\n"; next }
+    in_content { next }
+    { print }
   ' "$input" | sed '/^  start_page:/d' >"$output"
+
+  # Antora must not stop for warnings and errors. The script reads the log and decides.
+  sed -i 's/^    failure_level: .*/    failure_level: fatal/' "$output"
+  grep -q '^    failure_level: fatal' "$output" || die "Could not change failure_level in the playbook."
 
   if [ -n "$INCLUDE_DEV" ]; then
     sed -i '/exclude-dev-version\.js/d' "$output"
@@ -167,6 +224,8 @@ write_playbook() {
 
   grep -q 'url: '"$CONTAINER_SOURCE" "$output" || die "Could not change content.sources in the playbook."
   echo "Playbook: $output"
+  echo "Sources of the build:"
+  grep -E '^  - url:' <(sed -n '/^content:/,/^[a-z]/p' "$output") | sed 's/^  - url: /  - /'
 }
 
 build() {
@@ -193,12 +252,21 @@ build() {
   status="${PIPESTATUS[0]}"
   set -e
   echo
-  if [ "$status" = "0" ]; then
-    echo "RESULT: build passed. Output: $OUTPUT_DIR"
-  else
-    echo "RESULT: build failed (exit code $status). See $LOG_FILE"
+  if [ "$status" != "0" ]; then
+    echo "RESULT: Antora stopped with a fatal error (exit code $status). See $LOG_FILE"
+    return "$status"
   fi
-  return "$status"
+  local ours others
+  ours="$(count_problems ours)"
+  others="$(count_problems others)"
+  echo "AsciidoctorJ docs: $ours warnings and errors"
+  echo "Other sources: $others warnings and errors (ignored)"
+  if [ "$ours" = "0" ]; then
+    echo "RESULT: build passed. Output: $OUTPUT_DIR"
+    return 0
+  fi
+  echo "RESULT: build failed, the AsciidoctorJ docs have problems. See $LOG_FILE"
+  return 1
 }
 
 case "${1:-build}" in
