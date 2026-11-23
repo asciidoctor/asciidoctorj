@@ -1,1 +1,1 @@
-../../../../../../../asciidoctorj-documentation/src/test/java/org/asciidoctor/integrationguide/PdfOptionsTest.java
+../../../../../../../asciidoctorj-jruby-documentation/src/test/java/org/asciidoctor/integrationguide/PdfOptionsTest.java
