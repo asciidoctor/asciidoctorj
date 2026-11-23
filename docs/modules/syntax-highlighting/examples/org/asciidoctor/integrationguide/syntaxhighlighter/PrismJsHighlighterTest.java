@@ -1,1 +1,1 @@
-../../../../../../../../asciidoctorj-documentation/src/test/java/org/asciidoctor/integrationguide/syntaxhighlighter/PrismJsHighlighterTest.java
+../../../../../../../../asciidoctorj-jruby-documentation/src/test/java/org/asciidoctor/integrationguide/syntaxhighlighter/PrismJsHighlighterTest.java
