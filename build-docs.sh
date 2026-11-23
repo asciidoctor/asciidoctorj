@@ -9,9 +9,10 @@
 # The script checks out the real playbook, antora-playbook.yml, from the
 # docs.asciidoctor.org repository. It keeps all settings and extensions of that playbook.
 # It changes only these things, so that the build contains only the AsciidoctorJ docs:
-#   - content.sources is replaced with the local AsciidoctorJ repository and the
-#     sources of the playbook for the Maven plugin (the component maven-tools) and
-#     for the AsciiDoc language docs (the component asciidoc).
+#   - content.sources keeps only the sources in KEEP_SOURCES. The source "asciidoctorj" uses
+#     the local repository (branches: HEAD) in place of the URL and the branches of the playbook.
+#     By default, the build also has the sources for the Maven plugin (the component
+#     maven-tools) and for the AsciiDoc language docs (the component asciidoc).
 #     The AsciidoctorJ docs link to these docs.
 #   - site.start_page is removed, because the ROOT component is not in the build.
 #   - runtime.log.failure_level is set to fatal. The script decides about success itself (see below).
@@ -32,11 +33,12 @@
 # Environment variables:
 #   PLAYBOOK_URL   Repository of the playbook.          Default: upstream docs.asciidoctor.org
 #   PLAYBOOK_REF   Branch of the playbook repository.    Default: main
-#   KEEP_SOURCES   Sources of the playbook to keep.     Default: asciidoctor-maven-plugin,asciidoc-lang.git
-#                  This is a list of repository names (commas or spaces between the names).
-#                  A name must be exactly the last part of the source URL.
-#                  If the URL ends with ".git", the name must also end with ".git".
-#                  Set it to an empty value to build only the AsciidoctorJ docs.
+#   KEEP_SOURCES   The sources to build.             Default: asciidoctorj,asciidoctor-maven-plugin,asciidoc-lang.git
+#                  This is a list of names of the sources of the playbook
+#                  (commas or spaces between the names). A name must be exactly the last
+#                  part of the source URL. If the URL ends with ".git", the name must also
+#                  end with ".git". The source "asciidoctorj" is not taken from the
+#                  playbook. The script builds the local repository from HEAD instead.
 #   INCLUDE_DEV    Set to 1 to keep "-dev" versions.     Default: unset (same as Netlify)
 #   ANTORA_IMAGE   Antora Docker image.                  Default: docker.io/antora/antora:latest
 #   TABS_VERSION   Version of @asciidoctor/tabs.        Default: 1.0.0-beta.6 (as in the playbook repo)
@@ -52,7 +54,7 @@ set -euo pipefail
 
 PLAYBOOK_URL="${PLAYBOOK_URL:-https://github.com/asciidoctor/docs.asciidoctor.org.git}"
 PLAYBOOK_REF="${PLAYBOOK_REF:-main}"
-KEEP_SOURCES="${KEEP_SOURCES:-asciidoctor-maven-plugin,asciidoc-lang}"
+KEEP_SOURCES="${KEEP_SOURCES:-asciidoctorj,asciidoctor-maven-plugin,asciidoc-lang.git}"
 INCLUDE_DEV="${INCLUDE_DEV:-}"
 ANTORA_IMAGE="${ANTORA_IMAGE:-docker.io/antora/antora:latest}"
 TABS_VERSION="${TABS_VERSION:-1.0.0-beta.6}"
@@ -194,16 +196,25 @@ write_playbook() {
       sub(/.*\//, "", name)
       return name
     }
-    function flush() {
-      if (block != "" && (block_name in wanted)) printf "%s", block
+    # Print the source if it is in the list. For asciidoctorj, use the local repository from HEAD.
+    function flush(   i, count, lines) {
+      if (block != "" && (block_name in wanted)) {
+        if (block_name == "asciidoctorj") {
+          count = split(block, lines, "\n")
+          for (i = 1; i < count; i++) {
+            if (lines[i] ~ /^  - url:/) print "  - url: " url
+            else if (lines[i] ~ /^    branches:/) print "    branches: HEAD"
+            else print lines[i]
+          }
+        } else {
+          printf "%s", block
+        }
+      }
       block = ""
     }
     /^content:/ {
       print "content:"
       print "  sources:"
-      print "  - url: " url
-      print "    branches: HEAD"
-      print "    start_path: docs"
       in_content = 1
       next
     }
