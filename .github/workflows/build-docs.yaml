@@ -8,6 +8,7 @@ on:
       - 'asciidoctorj-documentation-common/**'
       - 'asciidoctorj-java-documentation/**'
       - 'asciidoctorj-jruby-documentation/**'
+      - 'ci/build-docs.sh'
 
 concurrency:
   group: build-docs-${{ github.event.pull_request.number }}
