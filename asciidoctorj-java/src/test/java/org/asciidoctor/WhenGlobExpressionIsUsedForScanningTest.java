@@ -1,7 +1,7 @@
 package org.asciidoctor;
 
-import org.asciidoctor.jruby.DirectoryWalker;
-import org.asciidoctor.jruby.GlobDirectoryWalker;
+import org.asciidoctor.util.DirectoryWalker;
+import org.asciidoctor.util.GlobDirectoryWalker;
 import org.asciidoctor.nativeimage.RegisterDirectory;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
