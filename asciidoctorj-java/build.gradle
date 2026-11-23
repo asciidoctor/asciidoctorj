@@ -78,6 +78,8 @@ artifacts {
 graalvmNative {
     binaries.named('test') {
         buildArgs.add('--enable-url-protocols=http,https')
+        // A native image has no java.home, so LogManager.readConfiguration() needs this file (copied by copyFixtures)
+        runtimeArgs.add("-Djava.util.logging.config.file=${layout.buildDirectory.dir('test-fixtures/src/test/resources/test-logging.properties').get().asFile}")
     }
     binaries.configureEach {
         javaLauncher.set(javaToolchains.launcherFor {

@@ -8,7 +8,6 @@ import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.TestLogHandlerService;
-import org.asciidoctor.log.TestLogManager;
 import org.asciidoctor.nativeimage.RegisterClass;
 import org.asciidoctor.test.AsciidoctorInstance;
 import org.asciidoctor.test.ClasspathResource;
@@ -41,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.LogManager;
 
 import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -109,7 +109,7 @@ public class WhenJavaExtensionGroupIsRegisteredTest {
         if (TestHttpServer.getInstance() != null) {
             TestHttpServer.getInstance().stop();
         }
-        TestLogManager.reset();
+        LogManager.getLogManager().readConfiguration();
         TestLogHandlerService.clear();
     }
 
