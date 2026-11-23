@@ -1,4 +1,4 @@
-2#!/usr/bin/env bash
+#!/usr/bin/env bash
 #
 # Build the AsciidoctorJ docs with the Antora Docker image, to check that the docs are not broken.
 # Run the script from the AsciidoctorJ repository (any folder in it).
