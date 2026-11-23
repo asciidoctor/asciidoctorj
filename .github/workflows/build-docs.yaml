@@ -1,0 +1,32 @@
+name: Build Docs
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'asciidoctorj-documentation-common/**'
+      - 'asciidoctorj-java-documentation/**'
+      - 'asciidoctorj-jruby-documentation/**'
+
+concurrency:
+  group: build-docs-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-docs:
+    name: Build Docs
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+      - name: Build docs
+        env:
+          CONTENT_SOURCES: 'asciidoctorj,asciidoctor-maven-plugin,asciidoc-lang.git'
+          INCLUDE_DEV: '1'
+        run: ./ci/build-docs.sh

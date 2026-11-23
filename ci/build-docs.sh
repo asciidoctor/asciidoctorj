@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 #
 # Build the AsciidoctorJ docs with the Antora Docker image, to check that the docs are not broken.
-# Run the script from the AsciidoctorJ repository (any folder in it).
-#
 # The script builds the docs of the local copy, from the files in the working tree.
-# This includes changes that are not committed. In CI, this is the checked-out commit.
 #
 # The script checks out the real playbook, antora-playbook.yml, from the
 # docs.asciidoctor.org repository. It keeps all settings and extensions of that playbook.
 # It changes only these things, so that the build contains only the AsciidoctorJ docs:
-#   - content.sources keeps only the sources in KEEP_SOURCES. The source "asciidoctorj" uses
+#   - content.sources keeps only the sources in CONTENT_SOURCES. The source "asciidoctorj" uses
 #     the local repository (branches: HEAD) in place of the URL and the branches of the playbook.
 #     By default, the build also has the sources for the Maven plugin (the component
 #     maven-tools) and for the AsciiDoc language docs (the component asciidoc).
@@ -17,7 +14,7 @@
 #   - site.start_page is removed, because the ROOT component is not in the build.
 #   - runtime.log.failure_level is set to fatal. The script decides about success itself (see below).
 #
-# Usage: ./build-docs.sh [build|clean <work-folder>]
+# Usage: ./ci/build-docs.sh [build|clean <work-folder>]
 #
 # The build contains docs of other projects, and these docs can have their own problems.
 # The script prints all warnings and errors, but only those of the AsciidoctorJ docs fail the build:
@@ -25,36 +22,26 @@
 #     Messages of other sources are marked with "(ignored)".
 #   - Exit code 1: the AsciidoctorJ docs have at least one warning or error.
 #   - Other exit code: Antora stopped with a fatal error (exit code of Antora).
-# Each build uses a new random work folder. The script prints its path.
-# The script does not delete the work folder, so you can read the output and the log.
-# The terminal shows the Antora messages in a readable format (this needs jq).
-# The file build.log in the work folder has the raw JSON messages.
 #
 # Environment variables:
-#   PLAYBOOK_URL   Repository of the playbook.          Default: upstream docs.asciidoctor.org
-#   PLAYBOOK_REF   Branch of the playbook repository.    Default: main
-#   KEEP_SOURCES   The sources to build.             Default: asciidoctorj,asciidoctor-maven-plugin,asciidoc-lang.git
-#                  This is a list of names of the sources of the playbook
-#                  (commas or spaces between the names). A name must be exactly the last
-#                  part of the source URL. If the URL ends with ".git", the name must also
-#                  end with ".git". The source "asciidoctorj" is not taken from the
-#                  playbook. The script builds the local repository from HEAD instead.
-#   INCLUDE_DEV    Set to 1 to keep "-dev" versions.     Default: unset (same as Netlify)
-#   ANTORA_IMAGE   Antora Docker image.                  Default: docker.io/antora/antora:latest
-#   TABS_VERSION   Version of @asciidoctor/tabs.        Default: 1.0.0-beta.6 (as in the playbook repo)
-#   WORK_DIR       Folder for all generated files.       Default: a new random folder in $RUNNER_TEMP or $TMPDIR
-#
-# NOTE: The playbook uses the extension ext/exclude-dev-version.js.
-# It removes versions with a prerelease that ends with "-dev".
-# The docs of "main" have the prerelease "-dev", so Netlify does not publish them.
-# The extension runs after Antora reads the files, so broken files are still found.
-# Set INCLUDE_DEV=1 to remove this extension and to get a site with the docs of this repository.
+#   PLAYBOOK_URL     Repository of the playbook.          Default: upstream docs.asciidoctor.org
+#   PLAYBOOK_REF     Branch of the playbook repository.    Default: main
+#   CONTENT_SOURCES  The sources to build.              Default: asciidoctorj,asciidoctor-maven-plugin,asciidoc-lang.git
+#                    This is a list of names of the sources of the playbook
+#                    (commas or spaces between the names). A name must be exactly the last
+#                    part of the source URL. If the URL ends with ".git", the name must also
+#                    end with ".git". The source "asciidoctorj" is not taken from the
+#                    playbook. The script builds the local repository from HEAD instead.
+#   INCLUDE_DEV      Set to 1 to keep "-dev" versions.     Default: unset (same as Netlify)
+#   ANTORA_IMAGE     Antora Docker image.                  Default: docker.io/antora/antora:latest
+#   TABS_VERSION     Version of @asciidoctor/tabs.        Default: 1.0.0-beta.6 (as in the playbook repo)
+#   WORK_DIR         Folder for all generated files.       Default: a new random folder in $RUNNER_TEMP or $TMPDIR
 
 set -euo pipefail
 
 PLAYBOOK_URL="${PLAYBOOK_URL:-https://github.com/asciidoctor/docs.asciidoctor.org.git}"
 PLAYBOOK_REF="${PLAYBOOK_REF:-main}"
-KEEP_SOURCES="${KEEP_SOURCES:-asciidoctorj,asciidoctor-maven-plugin,asciidoc-lang.git}"
+CONTENT_SOURCES="${CONTENT_SOURCES:-asciidoctorj,asciidoctor-maven-plugin,asciidoc-lang.git}"
 INCLUDE_DEV="${INCLUDE_DEV:-}"
 ANTORA_IMAGE="${ANTORA_IMAGE:-docker.io/antora/antora:latest}"
 TABS_VERSION="${TABS_VERSION:-1.0.0-beta.6}"
@@ -90,7 +77,7 @@ find_source() {
 # Create the work folder (random name unless WORK_DIR is set) and set the paths on the host.
 init_paths() {
   if [ -z "$WORK_DIR" ]; then
-    WORK_DIR="$(mktemp -d "${RUNNER_TEMP:-${TMPDIR:-/tmp}}/asciidoctorj-docs-build.XXXXXX")"
+    WORK_DIR="$(mktemp -d "${RUNNER_TEMP:-${TMPDIR:-/tmp}}/asciidoctorj-build-docs.XXXXXX")"
   else
     mkdir -p "$WORK_DIR"
   fi
@@ -168,7 +155,7 @@ setup_playbook() {
 
   # The playbook needs this extension. Install it next to the playbook, so that Antora finds it.
   log "Installing @asciidoctor/tabs $TABS_VERSION in the image"
-  echo '{ "name": "asciidoctorj-docs-build", "private": true }' >"$PLAYBOOK_DIR/package.json"
+  echo '{ "name": "asciidoctorj-build-docs", "private": true }' >"$PLAYBOOK_DIR/package.json"
   docker_run npm install --no-audit --no-fund "@asciidoctor/tabs@$TABS_VERSION"
   echo "Antora version in the image: $(docker_run antora --version | head -n 1)"
 }
@@ -182,7 +169,7 @@ write_playbook() {
   local output="$PLAYBOOK_DIR/build-playbook.yml"
   [ -f "$input" ] || die "The playbook repository has no antora-playbook.yml."
 
-  awk -v url="$CONTAINER_SOURCE" -v keep="$KEEP_SOURCES" '
+  awk -v url="$CONTAINER_SOURCE" -v keep="$CONTENT_SOURCES" '
     BEGIN {
       n = split(keep, names, /[ ,|]+/)
       for (i = 1; i <= n; i++) if (names[i] != "") wanted[names[i]] = 1
