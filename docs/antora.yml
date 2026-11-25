@@ -6,6 +6,7 @@ asciidoc:
   attributes:
     release-version: 3.0.0
     artifact-version: 3.0.0
+    next-version: 4.0.0-SNAPSHOT
     asciidoctorj-epub3-version: 1.5.1
     asciidoctorj-pdf-version: 2.3.6
     jruby-version: 10.1.1.0

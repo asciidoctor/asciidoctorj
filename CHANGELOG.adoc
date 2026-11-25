@@ -44,6 +44,7 @@ Build Improvement::
 * Migrate the tests to JUnit 5 and AssertJ, and remove Spock, Groovy, CodeNarc, Hamcrest and xml-matchers from the build (#1347)
 * Share the documentation examples that only rely on the API between the JRuby and the Java implementations (#1357)
 * Reactivate the WildFly integration test, upgraded to WildFly 42 (Jakarta EE) and Java 21 (#1342)
+* Publish a snapshot of the artifacts on every commit to the Maven Central snapshot repository
 
 == 3.0.1 (2025-11-06)
 

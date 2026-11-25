@@ -80,7 +80,7 @@ Roll the `== Unreleased` section of `CHANGELOG.adoc` into `== 3.0.2 (<date>)`, t
 ----
 # ./gradlew asciidoctorj-jruby-distribution:sdkMajorRelease
 ----
-. Upgrade the version to the next version by changing the version property in gradle.properties to `version=3.0.3-SNAPSHOT`, commit and push the commits and the tag:
+. Upgrade the version to the next version by changing the version property in gradle.properties to `version=3.0.3-SNAPSHOT` and the `next-version` attribute in `docs/antora.yml` to `3.0.3-SNAPSHOT`, commit and push the commits and the tag:
 +
 ----
 # git commit -am "Prepare next development iteration 3.0.3-SNAPSHOT"

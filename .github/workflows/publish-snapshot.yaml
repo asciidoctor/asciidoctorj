@@ -1,0 +1,52 @@
+name: Publish Snapshot
+on:
+  schedule:
+    - cron: '0 3 * * *'
+      timezone: 'Europe/Berlin'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-snapshot
+  cancel-in-progress: true
+
+env:
+  ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.GPG_KEY_ID }}
+  ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}
+  ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSPHRASE }}
+  ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.OSS_SONATYPE_USERNAME }}
+  ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.OSS_SONATYPE_PASSWORD }}
+
+jobs:
+  publish-snapshot:
+    if: github.repository == 'asciidoctor/asciidoctorj' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Calculate the snapshot version
+        id: version
+        run: |
+          # keep a snapshot version, otherwise use the next patch version as snapshot
+          value=$(sed -n 's/^version=//p' gradle.properties)
+          if [[ "$value" == *-SNAPSHOT ]]; then
+            version="$value"
+          elif [[ "$value" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+            version="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.$((BASH_REMATCH[3] + 1))-SNAPSHOT"
+          else
+            echo "::error::Cannot calculate a snapshot version from version=$value" >&2
+            exit 1
+          fi
+          echo "Version: $version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - name: Publish to the Central snapshot repository
+        run: |
+          unset GEM_PATH GEM_HOME JRUBY_OPTS
+          ./gradlew --no-daemon \
+            -Pversion=${{ steps.version.outputs.version }} \
+            publishToSonatype
