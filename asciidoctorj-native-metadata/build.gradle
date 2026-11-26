@@ -1,0 +1,5 @@
+description = 'Annotations and an annotation processor that write the GraalVM reachability metadata'
+
+dependencies {
+    testImplementation libs.assertj
+}

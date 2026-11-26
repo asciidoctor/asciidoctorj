@@ -1,11 +1,11 @@
 package org.asciidoctor.core;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import org.asciidoctor.core.MemoryLogger.Message;
+import org.asciidoctor.core.Reader.Cursor;
+import org.asciidoctor.nativeimage.RegisterClass;
+import org.xml.sax.InputSource;
 
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -27,22 +27,30 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.xml.sax.InputSource;
-
-import org.asciidoctor.core.MemoryLogger.Message;
-import org.asciidoctor.core.Reader.Cursor;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * The base class of the tests, which provides the helpers of the Ruby test suite (test_helper.rb) as well as helpers
  * that mirror the Ruby core methods used by the translated tests.
  */
+// the helpers call the methods and read the fields of these classes by reflection
+@RegisterClass(value = {
+        Block.class,
+        Document.ImageReference.class,
+        Parser.AttributeEntryResult.class,
+        Section.class,
+        Substitutors.Passthrough.class,
+        XmlNode.class
+}, constructors = false, methods = true)
+@RegisterClass(value = Document.Catalog.class, constructors = false, fields = true)
 public abstract class TestHelper {
     private static final Pattern RE_XMLNS_ATTRIBUTE = Pattern.compile(" xmlns=\"[^\"]+\"");
 
@@ -345,7 +353,9 @@ public abstract class TestHelper {
      * @return the absolute path of the test directory (which contains the fixtures directory)
      */
     public static String testdir() {
-        return Path.of("src/test/resources").toAbsolutePath().normalize().toString().replace('\\', '/');
+        // NOTE the tests of other modules, which cannot set the working directory, set the location of the resources
+        return Path.of(System.getProperty("asciidoctorj.test.resources", "src/test/resources")).toAbsolutePath()
+                .normalize().toString().replace('\\', '/');
     }
 
     public static String fixturedir() {

@@ -19,7 +19,9 @@ apply from: rootProject.file('gradle/fixtures.gradle')
 dependencies {
     // api: the CLI can be extended (e.g. a CLI dedicated to a converter), so the Java implementation is on the compile classpath of the consumers
     api project(':asciidoctorj-java')
+
     testImplementation project(path: ':asciidoctorj-java', configuration: 'testArtifacts')
+    testImplementation libs.assertj
 }
 
 // ./gradlew installDist: the JVM application (build/install/asciidoctorj), with its start scripts
@@ -54,15 +56,9 @@ jar {
     }
 }
 
-// the native executable (build/native/nativeCompile/asciidoctorj): ./gradlew :asciidoctorj-java-cli:nativeCompile
-// native-image comes from a GraalVM 25 Java toolchain (Gradle detects the installed JDKs),
-// the other tasks use the Java 21 toolchain
 graalvmNative {
-    // the CLI has no third-party dependency: its metadata is in src/main/resources/META-INF/native-image
-    metadataRepository {
-        enabled = false
-    }
     binaries.configureEach {
+        buildArgs.add('--enable-url-protocols=http,https')
         javaLauncher.set(javaToolchains.launcherFor {
             languageVersion = JavaLanguageVersion.of(25)
             nativeImageCapable = true

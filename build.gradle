@@ -106,7 +106,7 @@ allprojects {
 
 // the modules of the Java implementation are configured at the end of this file
 boolean isJavaImplementation(def project) {
-  project.name.startsWith('asciidoctorj-java')
+  project.name.startsWith('asciidoctorj-java') || project.name == 'asciidoctorj-native-metadata'
 }
 
 configure(subprojects.findAll { !isJavaImplementation(it) }) {

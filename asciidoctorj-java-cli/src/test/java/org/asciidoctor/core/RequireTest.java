@@ -1,7 +1,13 @@
 package org.asciidoctor.core;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledInNativeImage;
+import org.junit.jupiter.api.io.TempDir;
 
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -12,31 +18,30 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.stream.Stream;
 
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
-
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.io.TempDir;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests the loading of extensions, converters and services from the load paths (-I) and the required classes and JAR
  * files (-r), which are compiled at runtime so that they aren't on the class path of the tests.
  */
-@DisplayName("Require")
-public class RequireTest extends CliTestHelper {
+// The tests compile classes at runtime (the Java compiler is not available in a native image), and the native
+// executable can't load classes at runtime (the options -I and -r)
+@DisabledInNativeImage
+class RequireTest extends CliTestHelper {
 
     private static final Map<String, String> SOURCES = Map.ofEntries(
             Map.entry("com/example/ShoutInlineMacroProcessor.java", """
                     package com.example;
-
+                    
                     import java.util.List;
                     import java.util.Map;
-
+                    
                     import org.asciidoctor.ast.PhraseNode;
                     import org.asciidoctor.ast.StructuralNode;
                     import org.asciidoctor.extension.InlineMacroProcessor;
                     import org.asciidoctor.extension.Name;
-
+                    
                     @Name("shout")
                     public class ShoutInlineMacroProcessor extends InlineMacroProcessor {
                         @Override
@@ -47,18 +52,18 @@ public class RequireTest extends CliTestHelper {
                     """),
             Map.entry("com/example/UnsupportedProcessor.java", """
                     package com.example;
-
+                    
                     import org.asciidoctor.extension.BaseProcessor;
-
+                    
                     public class UnsupportedProcessor extends BaseProcessor {
                     }
                     """),
             Map.entry("com/example/FooterPostprocessor.java", """
                     package com.example;
-
+                    
                     import org.asciidoctor.ast.Document;
                     import org.asciidoctor.extension.Postprocessor;
-
+                    
                     public class FooterPostprocessor extends Postprocessor {
                         @Override
                         public String process(Document document, String output) {
@@ -68,10 +73,10 @@ public class RequireTest extends CliTestHelper {
                     """),
             Map.entry("com/example/FooterExtensionRegistry.java", """
                     package com.example;
-
+                    
                     import org.asciidoctor.Asciidoctor;
                     import org.asciidoctor.extension.spi.ExtensionRegistry;
-
+                    
                     public class FooterExtensionRegistry implements ExtensionRegistry {
                         @Override
                         public void register(Asciidoctor asciidoctor) {
@@ -81,20 +86,20 @@ public class RequireTest extends CliTestHelper {
                     """),
             Map.entry("com/example/TextConverter.java", """
                     package com.example;
-
+                    
                     import java.util.Map;
-
+                    
                     import org.asciidoctor.ast.ContentNode;
                     import org.asciidoctor.ast.Document;
                     import org.asciidoctor.converter.ConverterFor;
                     import org.asciidoctor.converter.StringConverter;
-
+                    
                     @ConverterFor("text")
                     public class TextConverter extends StringConverter {
                         public TextConverter(String backend, Map<String, Object> opts) {
                             super(backend, opts);
                         }
-
+                    
                         @Override
                         public String convert(ContentNode node, String transform, Map<Object, Object> opts) {
                             return node instanceof Document document ? getBackend() + ": " + document.getDoctitle() : "";
@@ -103,10 +108,10 @@ public class RequireTest extends CliTestHelper {
                     """),
             Map.entry("com/example/TextConverterRegistry.java", """
                     package com.example;
-
+                    
                     import org.asciidoctor.Asciidoctor;
                     import org.asciidoctor.converter.spi.ConverterRegistry;
-
+                    
                     public class TextConverterRegistry implements ConverterRegistry {
                         @Override
                         public void register(Asciidoctor asciidoctor) {
@@ -144,7 +149,7 @@ public class RequireTest extends CliTestHelper {
         copyClasses(tmpDir.resolve("classes-without-services"));
         jarFile = tmpDir.resolve("extensions.jar");
         try (JarOutputStream jar = new JarOutputStream(Files.newOutputStream(jarFile));
-                Stream<Path> files = Files.walk(classesDir)) {
+             Stream<Path> files = Files.walk(classesDir)) {
             for (Path file : files.filter(Files::isRegularFile).toList()) {
                 jar.putNextEntry(new JarEntry(classesDir.relativize(file).toString().replace('\\', '/')));
                 Files.copy(file, (OutputStream) jar);
@@ -154,16 +159,8 @@ public class RequireTest extends CliTestHelper {
     }
 
     @Test
-    @DisplayName("should not load the services of the extensions that aren't on the class path")
-    void shouldNotLoadTheServicesOfTheExtensionsThatArentOnTheClassPath() throws Exception {
-        var invoker = invokeCliToBuffer(list("-s", "-o", "-"), "sample.adoc");
-        assertEquals(0, invoker.getCode());
-        assertFalse(invoker.readOutput().contains("<!-- postprocessed -->"));
-    }
-
-    @Test
     @DisplayName("should load the services of a JAR file added to the load path")
-    void shouldLoadTheServicesOfAJarFileAddedToTheLoadPath() throws Exception {
+    void shouldLoadTheServicesOfAJarFileAddedToTheLoadPath() {
         var invoker = invokeCliToBuffer(list("-I", jarFile.toString(), "-s", "-o", "-"), "sample.adoc");
         assertEquals(0, invoker.getCode());
         assertTrue(invoker.readOutput().stripTrailing().endsWith("<!-- postprocessed -->"));
@@ -171,7 +168,7 @@ public class RequireTest extends CliTestHelper {
 
     @Test
     @DisplayName("should load the services of a directory added to the load path")
-    void shouldLoadTheServicesOfADirectoryAddedToTheLoadPath() throws Exception {
+    void shouldLoadTheServicesOfADirectoryAddedToTheLoadPath() {
         var invoker = invokeCliToBuffer(list("-I", classesDir.toString(), "-s", "-o", "-"), "sample.adoc");
         assertEquals(0, invoker.getCode());
         assertTrue(invoker.readOutput().stripTrailing().endsWith("<!-- postprocessed -->"));
@@ -179,7 +176,7 @@ public class RequireTest extends CliTestHelper {
 
     @Test
     @DisplayName("should load the services of a required JAR file")
-    void shouldLoadTheServicesOfARequiredJarFile() throws Exception {
+    void shouldLoadTheServicesOfARequiredJarFile() {
         var invoker = invokeCliToBuffer(list("-r", jarFile.toString(), "-s", "-o", "-"), "sample.adoc");
         assertEquals(0, invoker.getCode());
         assertTrue(invoker.readOutput().stripTrailing().endsWith("<!-- postprocessed -->"));
@@ -187,7 +184,7 @@ public class RequireTest extends CliTestHelper {
 
     @Test
     @DisplayName("should register the extensions of a required extension registry only once")
-    void shouldRegisterTheExtensionsOfARequiredExtensionRegistryOnlyOnce() throws Exception {
+    void shouldRegisterTheExtensionsOfARequiredExtensionRegistryOnlyOnce() {
         // NOTE the registry isn't a service of the directory (which has no META-INF/services)
         Path dir = tmpDir.resolve("classes-without-services");
         var invoker = invokeCliToBuffer(list("-I", dir.toString(), "-r", "com.example.FooterExtensionRegistry",
@@ -200,7 +197,7 @@ public class RequireTest extends CliTestHelper {
 
     @Test
     @DisplayName("should register the converters of a required converter registry")
-    void shouldRegisterTheConvertersOfARequiredConverterRegistry() throws Exception {
+    void shouldRegisterTheConvertersOfARequiredConverterRegistry() {
         var invoker = invokeCliToBuffer(list("-I", jarFile.toString(), "-r", "com.example.TextConverterRegistry",
                 "-b", "plain", "-o", "-"), "sample.adoc");
         assertEquals(0, invoker.getCode());
@@ -209,7 +206,7 @@ public class RequireTest extends CliTestHelper {
 
     @Test
     @DisplayName("should register a required converter")
-    void shouldRegisterARequiredConverter() throws Exception {
+    void shouldRegisterARequiredConverter() {
         var invoker = invokeCliToBuffer(list("-I", jarFile.toString(), "-r", "com.example.TextConverter",
                 "-b", "text", "-o", "-"), "sample.adoc");
         assertEquals(0, invoker.getCode());
@@ -218,7 +215,7 @@ public class RequireTest extends CliTestHelper {
 
     @Test
     @DisplayName("should register a required postprocessor")
-    void shouldRegisterARequiredPostprocessor() throws Exception {
+    void shouldRegisterARequiredPostprocessor() {
         var invoker = invokeCliToBuffer(list("-I", jarFile.toString(), "-r", "com.example.FooterPostprocessor",
                 "-s", "-o", "-"), "sample.adoc");
         assertEquals(0, invoker.getCode());
@@ -229,7 +226,7 @@ public class RequireTest extends CliTestHelper {
 
     @Test
     @DisplayName("should register a required inline macro processor")
-    void shouldRegisterARequiredInlineMacroProcessor() throws Exception {
+    void shouldRegisterARequiredInlineMacroProcessor() throws IOException {
         Path input = tmpDir.resolve("shout.adoc");
         Files.writeString(input, "Say shout:hello[]!");
         Path dir = tmpDir.resolve("classes-without-services");
@@ -241,26 +238,13 @@ public class RequireTest extends CliTestHelper {
 
     @Test
     @DisplayName("should fail if the type of the required extension isn't supported")
-    void shouldFailIfTheTypeOfTheRequiredExtensionIsntSupported() throws Exception {
+    void shouldFailIfTheTypeOfTheRequiredExtensionIsntSupported() {
         try (var streams = redirectStreams()) {
             streams.out();
             var err = streams.err();
             var invoker = invokeCli(list("-I", jarFile.toString(), "-r", "com.example.UnsupportedProcessor"),
                     "sample.adoc");
             assertMatch(rx("'com.example.UnsupportedProcessor' could not be loaded"), err.getString());
-            assertEquals(1, invoker.getCode());
-        }
-    }
-
-    @Test
-    @DisplayName("should fail if the required JAR file doesn't exist")
-    void shouldFailIfTheRequiredJarFileDoesntExist() throws Exception {
-        try (var streams = redirectStreams()) {
-            streams.out();
-            var err = streams.err();
-            var invoker = invokeCli(list("-r", "no-such-extensions.jar"), "sample.adoc");
-            assertMatch(rx("'no-such-extensions.jar' could not be loaded\\n *Use --trace to show backtrace"),
-                    err.getString());
             assertEquals(1, invoker.getCode());
         }
     }

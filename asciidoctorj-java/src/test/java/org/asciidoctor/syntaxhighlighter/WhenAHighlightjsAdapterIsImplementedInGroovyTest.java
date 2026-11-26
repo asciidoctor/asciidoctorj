@@ -2,6 +2,7 @@ package org.asciidoctor.syntaxhighlighter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.asciidoctor.nativeimage.RegisterClass;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
@@ -12,6 +13,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 // NOTE converted from Groovy (the name of the test is kept)
+@RegisterClass({
+        HighlightJsHighlighter.class,
+        ObservableHighlightJsHighlighter.class
+})
 public class WhenAHighlightjsAdapterIsImplementedInGroovyTest {
 
     public static final String NAME_SYNTAXHIGHLIGHTER = "highlight4J";

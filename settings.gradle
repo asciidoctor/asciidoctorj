@@ -18,4 +18,5 @@ include \
   'asciidoctorj-fixtures',
   'asciidoctorj-java',
   'asciidoctorj-java-cli',
+  'asciidoctorj-native-metadata',
   'asciidoctorj-java-documentation'

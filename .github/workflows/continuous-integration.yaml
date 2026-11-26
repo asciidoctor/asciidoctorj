@@ -165,8 +165,6 @@ jobs:
         shell: bash
     steps:
       - uses: actions/checkout@v7
-      # Gradle runs on Java 21 (JAVA_HOME), native-image comes from the GraalVM 25 Java toolchain (GRAALVM_HOME):
-      # the runner does not keep the JDKs in a location that Gradle detects, thus fromEnv=GRAALVM_HOME
       - uses: graalvm/setup-graalvm@v1
         with:
           java-version: '25'
@@ -188,3 +186,47 @@ jobs:
         with:
           name: asciidoctorj-java-${{ matrix.platform }}
           path: asciidoctorj-java-cli/build/native/nativeCompile/asciidoctorj${{ runner.os == 'Windows' && '.exe' || '' }}
+  test-native:
+    name: Test native image (${{ matrix.platform }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux-amd64
+          - os: ubuntu-24.04-arm
+            platform: linux-arm64
+          - os: macos-latest
+            platform: macos-arm64
+          - os: windows-latest
+            platform: windows-amd64
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '25'
+          distribution: graalvm-community
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Native tests of asciidoctorj-java
+        run: ./gradlew -Porg.gradle.java.installations.fromEnv=GRAALVM_HOME :asciidoctorj-java:nativeTest
+      - name: Native tests of asciidoctorj-java-cli
+        if: ${{ !cancelled() }}
+        run: ./gradlew -Porg.gradle.java.installations.fromEnv=GRAALVM_HOME :asciidoctorj-java-cli:nativeTest
+      - name: Upload native test reports
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: native-test-reports-${{ matrix.platform }}
+          path: |
+            asciidoctorj-java/build/test-results/test-native
+            asciidoctorj-java-cli/build/test-results/test-native

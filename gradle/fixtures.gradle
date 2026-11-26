@@ -30,3 +30,15 @@ sourceSets.test.resources.setSrcDirs([copyFixtures])
 tasks.named('test') {
     workingDir = layout.buildDirectory.dir('test-fixtures').get().asFile
 }
+
+// nativeTest cannot set the working directory: the tests find the fixtures (copied by copyFixtures) with this system property
+plugins.withId('org.graalvm.buildtools.native') {
+    graalvmNative {
+        binaries.named('test') {
+            runtimeArgs.add("-Dasciidoctorj.test.resources=${layout.buildDirectory.dir('test-fixtures/src/test/resources').get().asFile}")
+        }
+    }
+    tasks.named('nativeTest') {
+        dependsOn copyFixtures
+    }
+}

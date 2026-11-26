@@ -1,5 +1,6 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.nativeimage.RegisterClass;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.Document;
@@ -17,6 +18,10 @@ import static org.asciidoctor.test.AsciidoctorInstance.InstanceScope.PER_METHOD;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
+@RegisterClass({
+        FrontMatterPreprocessor.class,
+        HardBreakPreprocessor.class
+})
 public class PreprocessorTest {
 
     @AsciidoctorInstance(scope = PER_METHOD)

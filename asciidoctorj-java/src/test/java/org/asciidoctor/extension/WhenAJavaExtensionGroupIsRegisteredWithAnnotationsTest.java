@@ -1,5 +1,6 @@
 package org.asciidoctor.extension;
 
+import org.asciidoctor.nativeimage.RegisterClass;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
@@ -13,6 +14,13 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 // Issue: https://github.com/asciidoctor/asciidoctorj/issues/196
+@RegisterClass({
+        AnnotatedBlockMacroProcessor.class,
+        AnnotatedBlockProcessor.class,
+        AnnotatedDocinfoProcessor.class,
+        AnnotatedLongInlineMacroProcessor.class,
+        AnnotatedRegexpInlineMacroProcessor.class
+})
 class WhenAJavaExtensionGroupIsRegisteredWithAnnotationsTest {
 
     public static final String UTF8 = "UTF-8";
