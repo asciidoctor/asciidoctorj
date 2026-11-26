@@ -22,8 +22,15 @@ env:
 jobs:
   publish-snapshot:
     if: github.repository == 'asciidoctor/asciidoctorj' && github.ref == 'refs/heads/main'
+    environment: release
     runs-on: ubuntu-latest
     steps:
+      - name: Check credentials
+        run: |
+          if [[ -z "$ORG_GRADLE_PROJECT_sonatypeUsername" || -z "$ORG_GRADLE_PROJECT_sonatypePassword" ]]; then
+            echo "::error::The Sonatype credentials are empty. Check the secrets of the job environment."
+            exit 1
+          fi
       - uses: actions/checkout@v7
       - uses: actions/setup-java@v6
         with:
