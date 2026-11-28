@@ -393,6 +393,37 @@ Then, import the project into Eclipse using menu:File[Import,General,Existing Pr
 Continuous integration for the AsciidoctorJ project is performed by GitHub Actions.
 You can find recent build results, including the build status of pull requests, on the https://github.com/asciidoctor/asciidoctorj/actions[asciidoctor/asciidoctorj] page.
 
+=== Native image tests
+
+The tests of `asciidoctorj-java` and `asciidoctorj-java-cli` also run as a GraalVM native image (the `test-native` job of the GitHub Actions workflow).
+This needs a GraalVM with `native-image` for Java 25.
+From the root of the project run:
+
+ $ ./gradlew nativeTest
+
+The CI job additionally passes `-Porg.gradle.java.installations.fromEnv=GRAALVM_HOME`, because several JVMs are installed there.
+This is only needed when Gradle does not find a suitable GraalVM by itself.
+
+To run a single test class of `asciidoctorj-java` in the native image, select the module and add `-PnativeTestClass=<class>`, for example (without the module, the tests of the other modules run too):
+
+ $ ./gradlew :asciidoctorj-java:nativeTest -PnativeTestClass=org.asciidoctor.core.Html5ConverterTest
+
+A native image only contains what is registered for it, so a new test can pass on the JVM and fail in the native image.
+The usual causes are reflection on a class and a resource that is read from the class path.
+The annotations of the `asciidoctorj-native-metadata` module register what a test needs:
+
+`@RegisterClass`::
+  Registers classes for reflection, for example `@RegisterClass(MyExtension.class)`.
+  Constructors are registered by default; set `methods = true` for the public methods and `fields = true` for the declared fields.
+
+`@RegisterDirectory`::
+  Registers a directory and all its content as resources, for example `@RegisterDirectory("src")`.
+
+`@RegisterFile`::
+  Registers files or globs as resources, for example `@RegisterFile("data/**.json")`.
+
+A test that cannot work in a native image can be skipped with the JUnit annotation `@DisabledInNativeImage`; say why in a comment.
+
 === Release and publish the artifacts
 
 To build and publish a release the following properties have to be set, for example in the file ~/.gradle/gradle.properties:
