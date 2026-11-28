@@ -404,9 +404,9 @@ From the root of the project run:
 The CI job additionally passes `-Porg.gradle.java.installations.fromEnv=GRAALVM_HOME`, because several JVMs are installed there.
 This is only needed when Gradle does not find a suitable GraalVM by itself.
 
-To run a single test class of `asciidoctorj-java` in the native image, add `-PnativeTestClass=<class>`, for example:
+To run a single test class of `asciidoctorj-java` in the native image, select the module and add `-PnativeTestClass=<class>`, for example (without the module, the tests of the other modules run too):
 
- $ ./gradlew nativeTest -PnativeTestClass=org.asciidoctor.core.Html5ConverterTest
+ $ ./gradlew :asciidoctorj-java:nativeTest -PnativeTestClass=org.asciidoctor.core.Html5ConverterTest
 
 A native image only contains what is registered for it, so a new test can pass on the JVM and fail in the native image.
 The usual causes are reflection on a class and a resource that is read from the class path.
